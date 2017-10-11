@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -57,11 +56,14 @@ import butterknife.OnClick;
  * Created by SHEROES-TECH on 20-02-2017.
  */
 
-public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnOffsetChangedListener {
+public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
+
     private static final String SCREEN_LABEL = "Job Details Screen";
     private final String TAG = LogUtils.makeLogTag(JobDetailActivity.class);
     private static final String LEFT_NEW = "<font color='#50e3c2'>";
     private static final String RIGHT_NEW = "</font>";
+
+    //region Butterknife bindings
     @Bind(R.id.app_bar_job_detail)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.iv_job_detail)
@@ -70,7 +72,6 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     public TextView mTvJobDetailBookmark;
     @Bind(R.id.view_pager_job_detail)
     ViewPager mViewPagerJobDetail;
-    ViewPagerAdapter mViewPagerAdapter;
     @Bind(R.id.toolbar_job_detail)
     Toolbar mToolbarJobDetail;
     @Bind(R.id.tv_job_title)
@@ -87,17 +88,23 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     TextView mTv_job_comp_nm;
     @Bind(R.id.iv_job_comp_logo)
     RoundedImageView mIv_job_comp_logo;
+    @Bind(R.id.li_header)
+    public LinearLayout mLiHeader;
+    //endregion
+
+    ViewPagerAdapter mViewPagerAdapter;
     private FeedDetail mFeedDetail;
     int mlogoflag = 0;
     long mJobId = 0;
     int feedDetailPosition;
-    @Bind(R.id.li_header)
-    public LinearLayout mLiHeader;
+
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
     private long startedTime;
     private int mFromNotification;
+
+    //region Activity Lifecycle Methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,69 +115,47 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        startedTime=System.currentTimeMillis();
+        startedTime = System.currentTimeMillis();
         mAppBarLayout.addOnOffsetChangedListener(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
-                mJobId = getIntent().getExtras().getLong(AppConstants.JOB_ID);
-                if (mJobId > 0) {
-                    mFeedDetail = new FeedDetail();
-                    mFeedDetail.setIdOfEntityOrParticipant(mJobId);
-                }else {
-                    mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
-                }
+            mJobId = getIntent().getExtras().getLong(AppConstants.JOB_ID);
+            if (mJobId > 0) {
+                mFeedDetail = new FeedDetail();
+                mFeedDetail.setIdOfEntityOrParticipant(mJobId);
+            } else {
+                mFeedDetail = getIntent().getParcelableExtra(AppConstants.JOB_DETAIL);
+            }
         }
         setPagerAndLayouts();
-        if(null!=mFeedDetail) {
+        if (null != mFeedDetail) {
             moEngageData(mFeedDetail);
         }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
     }
 
+    @Override
+    public void onBackPressed() {
+        onBackClick();
+    }
+    //endregion
+
+    //region OnClick Methods
     @OnClick(R.id.iv_job_detail_back)
     public void onBackClick() {
-        if(mJobId>0) {
+        if (mJobId > 0) {
             if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
             } else {
                 deepLinkBackPress();
             }
-        }else {
+        } else {
             deepLinkBackPress();
         }
         finish();
 
         overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
-    }
-    private void deepLinkBackPress()
-    {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-    }
-    private void moEngageData(FeedDetail feedDetail) {
-        StringBuilder mergeJobTypes=new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(feedDetail.getSearchTextJobEmpTypes())) {
-            List<String> jobTypes = feedDetail.getSearchTextJobEmpTypes();
-            for (String jobType : jobTypes) {
-                mergeJobTypes.append(jobType).append(AppConstants.PIPE);
-            }
-        }
-        StringBuilder mergeJobSkills = new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
-            List<String> jobSkills = mFeedDetail.getSearchTextJobSkills();
-
-            for (String skill : jobSkills) {
-                mergeJobSkills.append(skill);
-                mergeJobSkills.append(AppConstants.COMMA);
-            }
-        }
-        long timeSpent=System.currentTimeMillis()-startedTime;
-        moEngageUtills.entityMoEngageJobDetail(this, mMoEHelper, payloadBuilder,timeSpent,feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getAuthorName(), feedDetail.getAuthorCityName(),mergeJobTypes.toString(),mergeJobTypes.toString(),AppConstants.EMPTY_STRING,AppConstants.EMPTY_STRING,mergeJobSkills.toString());
-
     }
 
     @OnClick(R.id.tv_job_detail_share)
@@ -179,9 +164,9 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, mFeedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(),mMoEHelper,payloadBuilder,mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
-        ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
-        ((SheroesApplication)this.getApplication()).trackScreenView(getString(R.string.ID_REFER_SHARE_JOB));
+        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, mFeedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_REFER_SHARE_JOB));
 
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
@@ -193,26 +178,30 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         trackEvent(Event.JOBS_SHARED, properties);
     }
 
-    private void setPagerAndLayouts() {
-        setSupportActionBar(mToolbarJobDetail);
-        mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
-        if (null != mFeedDetail) {
-            feedDetailPosition = mFeedDetail.getItemPosition();
-            mCustomCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
-            mCustomCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
-            mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_JOB));
-            mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
-            setBackGroundImage(mFeedDetail);
+    @OnClick(R.id.tv_job_detail_bookmark)
+    public void onBookMarkClick() {
+        mTvJobDetailBookmark.setEnabled(false);
+        bookmarkCall();
+        if (!mFeedDetail.isBookmarked()) {
+            mFeedDetail.setBookmarked(true);
+            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
+        } else {
+            mFeedDetail.setBookmarked(false);
+            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         }
+        setBookMarkImage();
+
     }
+    //endregion
+
+    //region Public Methods
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void setBackGroundImage(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
         mTv_job_comp_nm.setText(mFeedDetail.getAuthorName());
         mTvJobDetailSubTitle.setText(mFeedDetail.getAuthorName());
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-            StringBuilder stringBuilder=new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             if (!mFeedDetail.isApplied() && !mFeedDetail.isViewed()) {
                 stringBuilder.append(mFeedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(getString(R.string.ID_NEW)).append(RIGHT_NEW);
             } else {
@@ -261,27 +250,20 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         }
     }
 
-    private void setBookMarkImage() {
-        if (mFeedDetail.isBookmarked()) {
+    public void onJobBookmarkClick(FeedDetail feedDetail) {
+        mTvJobDetailBookmark.setEnabled(true);
+        if (!feedDetail.isBookmarked()) {
+            feedDetail.setBookmarked(true);
             mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
         } else {
+            feedDetail.setBookmarked(false);
             mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
         }
+        mFeedDetail = feedDetail;
     }
-    private void initActivityTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide transition = new Slide();
-            transition.excludeTarget(android.R.id.statusBarBackground, true);
-            getWindow().setEnterTransition(transition);
-            getWindow().setReturnTransition(transition);
-        }
-    }
+    //endregion
 
-    private void applyPalette(Palette palette) {
-        supportStartPostponedEnterTransition();
-    }
-
-
+    //region BaseActivity Methods
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
@@ -290,54 +272,6 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         }
     }
 
-    private void jobDetailHandled(View view, FeedDetail feedDetail) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_article_detail_user_comment:
-                break;
-
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        onBackClick();
-    }
-
-    @OnClick(R.id.tv_job_detail_bookmark)
-    public void onBookMarkClick() {
-        mTvJobDetailBookmark.setEnabled(false);
-        bookmarkCall();
-        if (!mFeedDetail.isBookmarked()) {
-            mFeedDetail.setBookmarked(true);
-            ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
-        } else {
-            mFeedDetail.setBookmarked(false);
-            ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
-        }
-        setBookMarkImage();
-
-    }
-
-    private void bookmarkCall() {
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPagerJobDetail, 0);
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((JobDetailFragment) fragment).bookMarkForDetailCard(mFeedDetail);
-        }
-    }
-    public void onJobBookmarkClick(FeedDetail feedDetail) {
-            mTvJobDetailBookmark.setEnabled(true);
-            if (!feedDetail.isBookmarked()) {
-                feedDetail.setBookmarked(true);
-                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
-            } else {
-                feedDetail.setBookmarked(false);
-                mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
-            }
-        mFeedDetail = feedDetail;
-    }
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
@@ -353,6 +287,7 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
         }
 
     }
+
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
@@ -383,4 +318,91 @@ public class JobDetailActivity extends BaseActivity implements  AppBarLayout.OnO
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+    //endregion
+
+    //region Private Methods
+    private void deepLinkBackPress() {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+    }
+
+    private void moEngageData(FeedDetail feedDetail) {
+        StringBuilder mergeJobTypes = new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(feedDetail.getSearchTextJobEmpTypes())) {
+            List<String> jobTypes = feedDetail.getSearchTextJobEmpTypes();
+            for (String jobType : jobTypes) {
+                mergeJobTypes.append(jobType).append(AppConstants.PIPE);
+            }
+        }
+        StringBuilder mergeJobSkills = new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
+            List<String> jobSkills = mFeedDetail.getSearchTextJobSkills();
+
+            for (String skill : jobSkills) {
+                mergeJobSkills.append(skill);
+                mergeJobSkills.append(AppConstants.COMMA);
+            }
+        }
+        long timeSpent = System.currentTimeMillis() - startedTime;
+        moEngageUtills.entityMoEngageJobDetail(this, mMoEHelper, payloadBuilder, timeSpent, feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getAuthorName(), feedDetail.getAuthorCityName(), mergeJobTypes.toString(), mergeJobTypes.toString(), AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING, mergeJobSkills.toString());
+
+    }
+
+    private void setPagerAndLayouts() {
+        setSupportActionBar(mToolbarJobDetail);
+        mCustomCollapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplication(), android.R.color.transparent));
+        if (null != mFeedDetail) {
+            feedDetailPosition = mFeedDetail.getItemPosition();
+            mCustomCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
+            mCustomCollapsingToolbarLayout.setSubtitle(AppConstants.EMPTY_STRING);
+            mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+            mViewPagerAdapter.addFragment(JobDetailFragment.createInstance(mFeedDetail), getString(R.string.ID_JOB));
+            mViewPagerJobDetail.setAdapter(mViewPagerAdapter);
+            setBackGroundImage(mFeedDetail);
+        }
+    }
+
+    private void jobDetailHandled(View view, FeedDetail feedDetail) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.tv_article_detail_user_comment:
+                break;
+
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
+        }
+    }
+
+    private void bookmarkCall() {
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPagerJobDetail, 0);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((JobDetailFragment) fragment).bookMarkForDetailCard(mFeedDetail);
+        }
+    }
+
+    private void setBookMarkImage() {
+        if (mFeedDetail.isBookmarked()) {
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_active, 0, 0, 0);
+        } else {
+            mTvJobDetailBookmark.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_bookmark_detail_white, 0, 0, 0);
+        }
+    }
+
+    private void initActivityTransitions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Slide transition = new Slide();
+            transition.excludeTarget(android.R.id.statusBarBackground, true);
+            getWindow().setEnterTransition(transition);
+            getWindow().setReturnTransition(transition);
+        }
+    }
+
+    private void applyPalette(Palette palette) {
+        supportStartPostponedEnterTransition();
+    }
+    //endregion
+
 }
