@@ -64,7 +64,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityDetailRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /**
@@ -193,19 +192,23 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                     mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
-                    FeedRequestPojo feedRequestPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
+                    FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
                     feedRequestPojo.setIdForFeedDetail(null);
                     Integer autherId = (int) mFeedDetail.getIdOfEntityOrParticipant();
                     feedRequestPojo.setAutherId(autherId);
+                    feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                     mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                 } else {
                     mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
-                    mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId));
+                    FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
+                    feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+                    mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                 }
             } else {
                 mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
-                mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+                FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
             }
             if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&&null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
@@ -245,10 +248,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-            FeedRequestPojo feedRequestPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
+            FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
             feedRequestPojo.setIdForFeedDetail(null);
             Integer autherId = (int) mFeedDetail.getIdOfEntityOrParticipant();
             feedRequestPojo.setAutherId(autherId);
+            feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getFeedFromPresenter(feedRequestPojo);
         } else {
             mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
@@ -360,7 +364,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITY_POST_FRAGMENT) && mCommunityPostId > 0) {
                     mCommunityPostDetail = feedDetailList.get(0);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
-                    mHomePresenter.getFeedFromPresenter(userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId()));
+                    FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                    mHomePresenter.getFeedFromPresenter(feedRequestPojo);
                 } else if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getSearchStringName()) && mFragmentListRefreshData.getSearchStringName().equalsIgnoreCase(AppConstants.COMMUNITIES_DETAIL)) {
                     mFeedDetail = feedDetailList.get(0);
                     mFeedDetail.setItemPosition(positionOfFeedDetail);

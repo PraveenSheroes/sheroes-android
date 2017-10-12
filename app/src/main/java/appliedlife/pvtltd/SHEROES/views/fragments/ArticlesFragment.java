@@ -153,6 +153,7 @@ public class ArticlesFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
+        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
     }
 

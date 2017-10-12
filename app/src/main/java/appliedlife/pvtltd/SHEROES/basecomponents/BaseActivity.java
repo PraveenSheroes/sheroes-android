@@ -875,18 +875,19 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
         }
     }
-
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        ImageFullViewDialogFragment imageFullViewDialogFragment = (ImageFullViewDialogFragment) getFragmentManager().findFragmentByTag(ImageFullViewDialogFragment.class.getName());
-        if (imageFullViewDialogFragment == null) {
-            imageFullViewDialogFragment = new ImageFullViewDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
-            imageFullViewDialogFragment.setArguments(bundle);
-        }
-        if (!imageFullViewDialogFragment.isVisible() && !imageFullViewDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            imageFullViewDialogFragment.show(getFragmentManager(), ImageFullViewDialogFragment.class.getName());
+        if (StringUtil.isNotEmptyCollection(feedDetail.getImageUrls())) {
+            ImageFullViewDialogFragment imageFullViewDialogFragment = (ImageFullViewDialogFragment) getFragmentManager().findFragmentByTag(ImageFullViewDialogFragment.class.getName());
+            if (imageFullViewDialogFragment == null) {
+                imageFullViewDialogFragment = new ImageFullViewDialogFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+                bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
+                imageFullViewDialogFragment.setArguments(bundle);
+            }
+            if (!imageFullViewDialogFragment.isVisible() && !imageFullViewDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+                imageFullViewDialogFragment.show(getFragmentManager(), ImageFullViewDialogFragment.class.getName());
+            }
         }
     }
 

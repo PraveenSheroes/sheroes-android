@@ -72,6 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|right"
         android:layout_marginRight="@dimen/dp_size_50"
+        android:visibility="gone"
         android:src="@drawable/make_india_active"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"

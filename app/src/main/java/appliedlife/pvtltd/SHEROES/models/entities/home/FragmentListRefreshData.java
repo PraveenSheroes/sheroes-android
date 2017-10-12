@@ -18,6 +18,7 @@ public class FragmentListRefreshData {
     private String searchStringName;
     private String callForNameUser;
     private String postedDate;
+    private int challengePosition=-1;
     public FragmentListRefreshData() {
 
     }
@@ -125,5 +126,13 @@ public class FragmentListRefreshData {
 
     public void setPostedDate(String postedDate) {
         this.postedDate = postedDate;
+    }
+
+    public int getChallengePosition() {
+        return challengePosition;
+    }
+
+    public void setChallengePosition(int challengePosition) {
+        this.challengePosition = challengePosition;
     }
 }

@@ -21,7 +21,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityDetailRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /*
@@ -190,7 +189,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
                         if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallForNameUser()) && mFragmentListRefreshData.getCallForNameUser().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                            FeedRequestPojo feedRequestCommunnityDetailPojo = userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                            FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
                             feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
                             Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
                             feedRequestCommunnityDetailPojo.setAutherId(autherId);

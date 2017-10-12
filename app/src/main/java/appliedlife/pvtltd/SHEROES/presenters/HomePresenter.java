@@ -660,26 +660,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
-    public void getChallengeListFromPresenter(ChallengeRequest challengeRequest) {
-        Subscription subscription = mHomeModel.getChallengeListFromModel(challengeRequest).subscribe(new Subscriber<ChallengeListResponse>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-
-            @Override
-            public void onNext(ChallengeListResponse challengeListResponse) {
-                if (null != challengeListResponse) {
-                    getMvpView().getNotificationReadCountSuccess(challengeListResponse,CHALLENGE_LIST);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
 
     public void getChallengeAcceptFromPresenter(ChallengeAcceptRequest challengeAcceptRequest) {
         Subscription subscription = mHomeModel.getChallengeAcceptFromModel(challengeAcceptRequest).subscribe(new Subscriber<ChallengeListResponse>() {
@@ -701,26 +681,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
-    public void getAppIntroFromPresenter(AppIntroScreenRequest appIntroScreenRequest) {
-        Subscription subscription = mHomeModel.getAppIntroFromModel(appIntroScreenRequest).subscribe(new Subscriber<AppIntroScreenResponse>() {
-            @Override
-            public void onCompleted() {
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-
-            @Override
-            public void onNext(AppIntroScreenResponse appIntroScreenResponse) {
-                if (null != appIntroScreenResponse) {
-                    getMvpView().getNotificationReadCountSuccess(appIntroScreenResponse,APP_INTRO);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
     public void getPublicProfileMentorListFromPresenter(final PublicProfileListRequest publicProfileListRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);

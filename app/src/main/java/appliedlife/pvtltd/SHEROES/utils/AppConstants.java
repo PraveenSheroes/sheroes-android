@@ -27,7 +27,7 @@ public class AppConstants {
     public static final int MINUTES_IN_HOUR = 60;
     public static final int HOURS_IN_DAY = 24;
     public static final int CACHE_VALID_DAYS = 14;
-
+    public static final int FEED_FIRST_TIME = 5;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DATE_FORMAT_FOR_JOB = "dd MMM, yyyy";
     public static final String COMMENT_DATE_TIME = "dd MMM, yyyy h:mm a";

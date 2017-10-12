@@ -158,8 +158,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTvSetting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
-    @Bind(R.id.tv_make_india_safe)
-    ImageView mTvMakeIndiaSafe;
+   // @Bind(R.id.tv_make_india_safe)
+   // ImageView mTvMakeIndiaSafe;
     @Bind(R.id.tv_communities)
     TextView mTvCommunities;
     @Bind(R.id.li_article_spinner_icon)
@@ -231,7 +231,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mTitleText.setText(getString(R.string.ID_APP_NAME));
             mTitleText.setVisibility(View.VISIBLE);
             mICSheroes.setVisibility(View.GONE);
-            mTvMakeIndiaSafe.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
@@ -897,7 +896,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
         mJobFragment.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
@@ -929,7 +927,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
         mTvHome.setText(getString(R.string.ID_FEED));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
         mJobFragment.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
@@ -960,7 +957,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void articleUi()
     {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
-        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
         mJobFragment.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
@@ -1014,7 +1010,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
-        mTvMakeIndiaSafe.setVisibility(View.VISIBLE);
         mJobFragment.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
@@ -1061,7 +1056,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void jobUi()
     {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvMakeIndiaSafe.setVisibility(View.GONE);
         mJobFragment.setVisibility(View.VISIBLE);
         mTvSearchBox.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
