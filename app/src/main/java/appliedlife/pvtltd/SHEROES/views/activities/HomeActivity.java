@@ -158,8 +158,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTvSetting;
     @Bind(R.id.tv_home)
     TextView mTvHome;
-   // @Bind(R.id.tv_make_india_safe)
-   // ImageView mTvMakeIndiaSafe;
     @Bind(R.id.tv_communities)
     TextView mTvCommunities;
     @Bind(R.id.li_article_spinner_icon)
@@ -1124,19 +1122,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
-
-    @OnClick(R.id.tv_make_india_safe)
-    public void tvOnClickMakeIndiasafe() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getString(R.string.ID_MAKE_INDIA_SAFE_DIALOG));
-        mProgressDialog.setCancelable(true);
-        mProgressDialog.show();
-        Intent mapIntent = new Intent(this, MakeIndiaSafeMapActivity.class);
-        Bundle bundle = new Bundle();
-        mapIntent.putExtras(bundle);
-        startActivityForResult(mapIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_MAP);
-    }
-
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
@@ -1216,9 +1201,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     checkPublicProfileMentorFollow(intent);
                     break;
-                case AppConstants.REQUEST_CODE_FOR_GOOGLE_MAP:
-                    checkMapData(intent);
-                    break;
                 case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                     CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                     if (resultCode == RESULT_OK) {
@@ -1244,13 +1226,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
         if (null != mProgressDialog) {
             mProgressDialog.dismiss();
-        }
-    }
-
-    private void checkMapData(Intent intent) {
-        if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.MAKE_INDIA_SAFE)) {
-            String string = intent.getExtras().getString(AppConstants.MAKE_INDIA_SAFE);
-            homeOnClick();
         }
     }
 

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeDetail;
 
 /**
  * Created by Praveen_Singh on 30-01-2017.
@@ -92,12 +90,4 @@ public class CustomeDataList {
         return drawerItemsList;
     }
 
-    public static List<MakeIndiaSafeDetail> makeIndiaSafeItemList(LatLongWithLocation latLongWithLocation) {
-        List<MakeIndiaSafeDetail> makeItemsList = new ArrayList<>();
-        MakeIndiaSafeDetail firstItem = new MakeIndiaSafeDetail();
-        firstItem.setId(1);
-        firstItem.setLatLongWithLocation(latLongWithLocation);
-        makeItemsList.add(firstItem);
-        return makeItemsList;
-    }
 }

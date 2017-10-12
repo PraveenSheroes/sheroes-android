@@ -109,8 +109,6 @@ public class GoogleAnalyticsEventActions {
     public static final String DEEP_LINK_TO_JOB = "external deep link to job";
     public static final String BELL_NOTIFICATION_TO_ARTICLE = "bellnotification to article";
     public static final String DEEP_LINK_TO_ARTICLE= "external deep link to article";
-    public static final String BELL_NOTIFICATION_TO_MAKE_INDIA_SAFE = "bellnotification to make india safe";
-    public static final String DEEP_LINK_TO_MAKE_INDIA_SAFE= "external deep link to make india safe";
     public static final String BELL_NOTIFICATION_TO_HELP_LINE = "bellnotification to help line";
     public static final String DEEP_LINK_TO_HELP_LINE= "external deep link to help line";
     public static final String BELL_NOTIFICATION_TO_HOME_CHALLENGE = "bellnotification to home challenge";

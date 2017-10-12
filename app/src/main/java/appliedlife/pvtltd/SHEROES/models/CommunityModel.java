@@ -15,8 +15,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -47,18 +45,6 @@ public class CommunityModel {
 
                         return communityTagsListResponse;
 
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<MakeIndiaSafeResponse> getMakeIndiaSafeFromModel(MakeIndiaSafeRequest makeIndiaSafeRequest){
-        LogUtils.info(TAG,"**********Make India Safe*********"+new Gson().toJson(makeIndiaSafeRequest));
-        return sheroesAppServiceApi.getMakeIndiaSafeFromApi(makeIndiaSafeRequest)
-                .map(new Func1<MakeIndiaSafeResponse, MakeIndiaSafeResponse>() {
-                    @Override
-                    public MakeIndiaSafeResponse call(MakeIndiaSafeResponse makeIndiaSafeResponse) {
-                        return makeIndiaSafeResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
