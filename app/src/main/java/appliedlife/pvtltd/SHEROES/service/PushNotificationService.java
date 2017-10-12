@@ -65,6 +65,10 @@ public class PushNotificationService extends GcmListenerService {
                 ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
             }
+
+            if(action.equalsIgnoreCase("nothing")){
+                return;
+            }
         }
 
         if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
