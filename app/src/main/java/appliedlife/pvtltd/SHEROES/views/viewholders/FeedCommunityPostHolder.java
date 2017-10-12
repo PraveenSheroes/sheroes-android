@@ -139,8 +139,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     ImageView ivFeedCommunityPostMenu;
     @Bind(R.id.tv_feed_community_post_text)
     TextView tvFeedCommunityPostText;
-    @Bind(R.id.tv_feed_community_post_text_full_view)
-    TextView tvFeedCommunityPostTextFullView;
     @Bind(R.id.tv_feed_community_post_user_menu)
     TextView tvFeedCommunityPostUserMenu;
     @Bind(R.id.tv_feed_community_post_reaction1)
@@ -236,10 +234,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void normalCommunityPostUi(long userId,int adminId)
     {
         liCommunityPostMainLayout.setVisibility(View.VISIBLE);
-        mViewMore = mContext.getString(R.string.ID_VIEW_MORE);
-        mLess = mContext.getString(R.string.ID_LESS);
-        tvFeedCommunityPostText.setTag(mViewMore);
-        tvFeedCommunityPostTextFullView.setTag(mViewMore);
         tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setEnabled(true);
         tvFeedCommunityPostUserReactionText.setEnabled(true);
@@ -256,7 +250,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 cardViewLinkRender.setVisibility(View.GONE);
             }
             multipleImageURLs();
-            descriptionContentForViewMore();
+            populatePostText();
         }
         onBookMarkClick();
         allTextViewStringOperations(mContext);
@@ -597,43 +591,40 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 userComments();
         }
     }
- private void descriptionContentForViewMore()
- {
-     mViewMoreDescription = dataItem.getShortDescription();
-     if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-         int index = 0;
-         int lengthOfDesc = mViewMoreDescription.length();
-         try {
-             if (lengthOfDesc < AppConstants.WORD_LENGTH) {
-                 if (mViewMoreDescription.contains(AppConstants.SLASH_N))
-                     index = AppUtils.findNthIndexOf(mViewMoreDescription, AppConstants.SLASH_N, 1);
-             }
-         } catch (Exception e) {
 
-         }
-         tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
-         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-         if (lengthOfDesc > AppConstants.WORD_LENGTH || index > 0 && index < 50) {
-             tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
-             tvFeedCommunityPostViewMore.setTag(mViewMore);
-             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
-             tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
+    private void populatePostText() {
+        if (!StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
+            return;
+        }
+        tvFeedCommunityPostText.post(new Runnable() {
+            @Override
+            public void run() {
+                tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
+                tvFeedCommunityPostText.setText(dataItem.getListDescription());
+                if (tvFeedCommunityPostText.getLineCount() > 2) {
+                    collapseFeedPostText();
+                } else {
+                    tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                    tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
 
-         } else {
-             tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
-             tvFeedCommunityPostViewMore.setTag(mLess);
-             tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-             tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-         }
+    private void collapseFeedPostText() {
+        tvFeedCommunityPostText.setMaxLines(2);
+        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+        tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
+        tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
+    }
 
-     } else {
-         tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
-         tvFeedCommunityPostViewMore.setTag(mLess);
-         tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
-         tvFeedCommunityPostText.setVisibility(View.GONE);
-         tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-     }
- }
+    private void expandFeedPostText() {
+        tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
+        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+        tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
+        tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
+    }
+
     private void userLike() {
 
         switch (dataItem.getReactionValue()) {
@@ -1057,64 +1048,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.tv_feed_community_post_view_more)
-    public void textViewMoreClick() {
-        mViewMoreDescription=dataItem.getListDescription();
-        if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-            int index = 0;
-            int lengthOfDesc = mViewMoreDescription.length();
-            try {
-                if (lengthOfDesc < AppConstants.WORD_LENGTH) {
-                    if (mViewMoreDescription.contains(AppConstants.SLASH_N))
-                        index = AppUtils.findNthIndexOf(mViewMoreDescription, AppConstants.SLASH_N, 1);
-                }
-            } catch (Exception e) {
-
-            }
-            if (lengthOfDesc > AppConstants.WORD_LENGTH || index > 0 && index < 50) {
-                viewMoreTextClick();
-            }
-        }
-    }
-
-    private void viewMoreTextClick() {
-        if (tvFeedCommunityPostViewMore.getTag().toString().equalsIgnoreCase(mViewMore)) {
-            tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
-            tvFeedCommunityPostViewMore.setTag(mLess);
-            tvFeedCommunityPostText.setTag(mLess);
-            tvFeedCommunityPostTextFullView.setTag(mLess);
-            tvFeedCommunityPostTextFullView.setVisibility(View.VISIBLE);
-            tvFeedCommunityPostText.setVisibility(View.GONE);
-            tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-            tvFeedCommunityPostTextFullView.scrollTo(0, 0);
+    public void onViewMoreClicked(){
+        if (tvFeedCommunityPostViewMore.getText().equals(mContext.getString(R.string.ID_LESS))) {
+            collapseFeedPostText();
         } else {
-            mViewMoreDescription=dataItem.getShortDescription();
-            tvFeedCommunityPostTextFullView.setVisibility(View.GONE);
-            tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-            tvFeedCommunityPostText.setTag(mViewMore);
-            tvFeedCommunityPostTextFullView.setTag(mViewMore);
-            int index = 0;
-            int lengthOfDesc = mViewMoreDescription.length();
-            try {
-                if (lengthOfDesc < AppConstants.WORD_LENGTH) {
-                    if (mViewMoreDescription.contains(AppConstants.SLASH_N))
-                        index = AppUtils.findNthIndexOf(mViewMoreDescription, AppConstants.SLASH_N, 1);
-                }
-            } catch (Exception e) {
-
-            }
-            if (lengthOfDesc > AppConstants.WORD_LENGTH || index > 0 && index < 50) {
-                tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
-                tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_VIEW_MORE));
-                tvFeedCommunityPostViewMore.setTag(mViewMore);
-                tvFeedCommunityPostText.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-                tvFeedCommunityPostTextFullView.scrollTo(0, 0);
-            } else {
-                tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
-                tvFeedCommunityPostViewMore.setTag(mLess);
-                tvFeedCommunityPostTextFullView.setText(StringEscapeUtils.unescapeHtml4(mViewMoreDescription));
-                tvFeedCommunityPostText.scrollTo(0, 0);
-            }
+            expandFeedPostText();
         }
     }
 

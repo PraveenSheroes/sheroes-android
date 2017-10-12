@@ -88,23 +88,8 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/dp_size_3"
             android:linksClickable="true"
-            android:maxLines="@integer/int_value_for_line_2"
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_14" />
-
-        <TextView
-            android:id="@+id/tv_feed_community_post_text_full_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:autoLink="web"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="@dimen/dp_size_3"
-            android:linksClickable="true"
-            android:textColor="@color/feed_article_label"
-            android:textSize="@dimen/sp_size_14"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_feed_community_post_view_more"
