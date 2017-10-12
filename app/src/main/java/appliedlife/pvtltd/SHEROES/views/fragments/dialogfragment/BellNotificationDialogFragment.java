@@ -93,7 +93,6 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
             return;
         }
         // set the animations to use on showing and hiding the dialog
-        getDialog().getWindow().setWindowAnimations(R.style.dialog_notification_animation_fade);
     }
 
     @Override

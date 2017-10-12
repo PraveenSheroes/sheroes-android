@@ -308,8 +308,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             bundle.putString(AppConstants.GCM_ID, mGcmId);
             signupFragment.setArguments(bundle);
             mFragmentOpen.setSignupFragment(true);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.fragment_welcome_sign_up, signupFragment, SignupFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_welcome_sign_up, signupFragment, SignupFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
         } else {
             mGetStarted.setEnabled(false);

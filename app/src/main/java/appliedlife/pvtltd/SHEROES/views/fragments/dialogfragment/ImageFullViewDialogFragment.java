@@ -69,7 +69,6 @@ public class ImageFullViewDialogFragment extends BaseDialogFragment implements V
             return;
         }
         // set the animations to use on showing and hiding the dialog
-        getDialog().getWindow().setWindowAnimations(R.style.dialog_imageview_animation_fade);
     }
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

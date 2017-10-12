@@ -142,8 +142,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     public void renderEmailVerifyFragmentView(){
         setContentView(R.layout.activity_login);
         EmailVerificationFragment emailVerificationFragment = new EmailVerificationFragment();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @Override

@@ -394,8 +394,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
             bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
             mCommunityOpenAboutFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
         }
     }
 
@@ -421,7 +420,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
 
@@ -559,8 +557,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             Bundle bundleInvite = new Bundle();
             bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
             myCommunityInviteMemberFragment.setArguments(bundleInvite);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityOwner.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityOwner.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
     }
 
@@ -608,8 +605,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.SHARE, mFeedDetail);
         shareCommunityFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                .replace(R.id.about_community_container, shareCommunityFragment).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, shareCommunityFragment).addToBackStack(null).commitAllowingStateLoss();
     }
 
 

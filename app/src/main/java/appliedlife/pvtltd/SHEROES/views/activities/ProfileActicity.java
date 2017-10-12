@@ -256,7 +256,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             updateProffesstionalWorkExpListItem();
         } else {
             super.onBackPressed();
-            overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
         }
     }
 
@@ -488,16 +487,14 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     ProfileTravelClientFragment profiletravelFragment = new ProfileTravelClientFragment();
                     Bundle bundleTravel = new Bundle();
                     profiletravelFragment.setArguments(bundleTravel);
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                            .replace(R.id.profile_container, profiletravelFragment, ProfileTravelClientFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profiletravelFragment, ProfileTravelClientFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                     break;
                 } else {
                     flprofile_container.setVisibility(View.VISIBLE);
                     ProfileCityWorkFragment profileCityWorkFragment = new ProfileCityWorkFragment();
                     Bundle bundleTravel = new Bundle();
                     profileCityWorkFragment.setArguments(bundleTravel);
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                            .replace(R.id.profile_container, profileCityWorkFragment, ProfileCityWorkFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileCityWorkFragment, ProfileCityWorkFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                     break;
                 }
             case R.id.tv_add_education:
@@ -509,8 +506,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     Bundle bundleTravel = new Bundle();
                     bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE, myEducation);
                     profileAddEducationFragment.setArguments(bundleTravel);
-                    getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                            .replace(R.id.profile_container, profileAddEducationFragment, ProfileAddEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileAddEducationFragment, ProfileAddEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                     break;
                 }
             case R.id.tv_add_work_exp:
@@ -521,8 +517,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Bundle bundleWorkExp = new Bundle();
                 bundleWorkExp.putParcelableArrayList(AppConstants.EXPERIENCE_PROFILE, (ArrayList<? extends Parcelable>) workExp.getExprienceEntity());
                 profileWorkExperienceFragment.setArguments(bundleWorkExp);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileWorkExperienceFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileWorkExperienceFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
                 break;
             case R.id.tv_edit_other_textline:
@@ -530,8 +525,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 ProfileOtherFragment profileOtherFragment = new ProfileOtherFragment();
                 Bundle bundleOther = new Bundle();
                 profileOtherFragment.setArguments(bundleOther);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileOtherFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileOtherFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
                 break;
 
@@ -542,8 +536,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Bundle bundleEditBasicDetails = new Bundle();
                 bundleEditBasicDetails.putParcelable(AppConstants.EDUCATION_PROFILE, editbasicDetail);
                 profileEditBasicDetailsFragment.setArguments(bundleEditBasicDetails);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileEditBasicDetailsFragment, ProfessionalEditBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileEditBasicDetailsFragment, ProfessionalEditBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
 
 
@@ -553,8 +546,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Bundle bundleAddAboutMeFragment = new Bundle();
                 bundleAddAboutMeFragment.putParcelable(AppConstants.MODEL_KEY, baseResponse);
                 profileAboutMeFragment.setArguments(bundleAddAboutMeFragment);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileAboutMeFragment, ProfileAboutMeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileAboutMeFragment, ProfileAboutMeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
                 break;
             }
@@ -565,8 +557,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Bundle bundlePersonalBasicDetailsFragment = new Bundle();
                 bundlePersonalBasicDetailsFragment.putParcelable(AppConstants.EDUCATION_PROFILE, basicDetail);
                 personalBasicDetailsFragment.setArguments(bundlePersonalBasicDetailsFragment);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, personalBasicDetailsFragment, PersonalBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, personalBasicDetailsFragment, PersonalBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             }
 
@@ -577,23 +568,20 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(AppConstants.MODEL_KEY, baseResponse);
                 profileGoodAtFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileGoodAtFragment, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileGoodAtFragment, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             }
             case R.id.tv_looking_for: {
                 mFragmentOpen.setLookingForHowCanOpen(true);
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment = new ProfilePersonelHowCanLookingForFragment();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profilePersonelHowCanLookingForFragment, ProfilePersonelHowCanLookingForFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profilePersonelHowCanLookingForFragment, ProfilePersonelHowCanLookingForFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             }
             case R.id.tv_add_interest_details: {
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileShareYourIntrestFragment profileShareYourIntrestFragment = new ProfileShareYourIntrestFragment();
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileShareYourIntrestFragment, ProfileShareYourIntrestFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileShareYourIntrestFragment, ProfileShareYourIntrestFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             }
             default:
@@ -735,8 +723,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         bundle1.putString("user_visiting_card_value", jsonSections1);
         ProfileEditVisitingCardFragment profileEditVisitingCardFragment = new ProfileEditVisitingCardFragment();
         profileEditVisitingCardFragment.setArguments(bundle1);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.profile_container, profileEditVisitingCardFragment, ProfileEditVisitingCardFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileEditVisitingCardFragment, ProfileEditVisitingCardFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @Override
@@ -746,15 +733,13 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 ProfileAddOtherFragment profileAddOtherFragment = new ProfileAddOtherFragment();
                 Bundle bundleAddOther = new Bundle();
                 profileAddOtherFragment.setArguments(bundleAddOther);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileAddOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileAddOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             case R.id.tv_edit_other_textline:
                 ProfileAddOtherFragment profileEditOtherFragment = new ProfileAddOtherFragment();
                 Bundle bundleEditOther = new Bundle();
                 profileEditOtherFragment.setArguments(bundleEditOther);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.top_to_bottom_exit)
-                        .replace(R.id.profile_container, profileEditOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileEditOtherFragment, ProfileAddOtherFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
             default:
         }

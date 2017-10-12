@@ -196,8 +196,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         OnBoardingTellUsAboutFragment onBoardingTellUsAboutFragment = new OnBoardingTellUsAboutFragment();
         Bundle bundleArticle = new Bundle();
         onBoardingTellUsAboutFragment.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in_dialog, 0, 0, R.anim.fade_out_dialog)
-                .replace(R.id.fl_onboarding_fragment, onBoardingTellUsAboutFragment, OnBoardingTellUsAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingTellUsAboutFragment, OnBoardingTellUsAboutFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
 

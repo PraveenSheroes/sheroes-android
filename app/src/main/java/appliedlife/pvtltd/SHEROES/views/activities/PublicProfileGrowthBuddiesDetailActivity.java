@@ -263,7 +263,6 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             deepLinkPressHandle();
         }
         finish();
-        overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
     }
     private void deepLinkPressHandle()
     {
@@ -550,7 +549,6 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     @Override

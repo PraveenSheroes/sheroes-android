@@ -48,7 +48,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
         if (getDialog() == null) {
             return;
         }
-        getDialog().getWindow().setWindowAnimations(R.style.dialog_animation_fade);
     }
 
     /**

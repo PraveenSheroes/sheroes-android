@@ -52,8 +52,7 @@ public class JobFilterActivity extends BaseActivity {
         setContentView(R.layout.job_filter_activity);
         ButterKnife.bind(this);
         JobFilterFragment frag = new JobFilterFragment();
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.job_filter_container, frag, JobFilterFragment.class.getName()).addToBackStack(JobFilterFragment.class.getName()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.job_filter_container, frag, JobFilterFragment.class.getName()).addToBackStack(JobFilterFragment.class.getName()).commitAllowingStateLoss();
 
     }
 

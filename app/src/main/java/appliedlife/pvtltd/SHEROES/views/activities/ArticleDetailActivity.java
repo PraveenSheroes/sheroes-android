@@ -285,8 +285,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
             bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                    .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
     }
 
@@ -366,8 +365,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
                 bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
                 commentReactionFragmentForArticle.setArguments(bundleArticle);
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.bottom_to_top_slide_anim, 0, 0, R.anim.bottom_to_top_slide_reverse_anim)
-                        .replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
             }
         }
 
@@ -504,7 +502,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             deepLinkPressHandle();
         }
         finish();
-        overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
     }
     private void deepLinkPressHandle()
     {
@@ -596,7 +593,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     @Override

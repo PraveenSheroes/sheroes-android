@@ -125,7 +125,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, feedDetail);
                 startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case AppConstants.FEED_COMMUNITY:
                 mFragmentOpen.setImageBlur(true);
@@ -135,7 +134,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.SEARCH_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             case AppConstants.FEED_COMMUNITY_POST:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
@@ -173,7 +171,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
                 intentJob.putExtra(AppConstants.JOB_DETAIL, feedDetail);
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
-                overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + searchTag);
@@ -233,7 +230,6 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
     @OnClick(R.id.tv_search_back)
     public void searchOnBackClick() {
         finish();
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
     @Override

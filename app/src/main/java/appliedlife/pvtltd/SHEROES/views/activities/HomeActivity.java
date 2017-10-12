@@ -354,7 +354,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void openJobFilterActivity() {
         Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     public void logOut() {
@@ -598,7 +597,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     public void referralUserAttribute(Context context, LoginResponse loginResponse) {
@@ -631,7 +629,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         Intent intent = new Intent(this, ProfileActicity.class);
         intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
     public void refreshHomeFragment(FeedDetail feedDetail) {
@@ -850,7 +847,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         bundle.putParcelable(AppConstants.ALL_SEARCH, mFragmentOpen);
         intent.putExtras(bundle);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
     @OnClick(R.id.li_article_spinner_icon)
@@ -868,8 +864,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
             mArticleCategorySpinnerFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                    .replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
             mFragmentOpen.setOpen(true);
 
         }
@@ -937,7 +932,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
         Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
 
@@ -950,8 +944,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         Bundle bundleArticle = new Bundle();
         bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT, (ArrayList) categoryIds);
         articlesFragment.setArguments(bundleArticle);
-        fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
+        fm.beginTransaction().replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
 
     }
     public void articleUi()
@@ -1002,8 +995,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         HelplineFragment helplineFragment = new HelplineFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
     }
     public void helplineUi()
@@ -1035,8 +1027,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         Bundle bundleBookMarks = new Bundle();
         bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, mFeedDetail);
         bookmarksFragment.setArguments(bundleBookMarks);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
     }
 
@@ -1049,8 +1040,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         Bundle jobBookMarks = new Bundle();
         // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
         jobFragment.setArguments(jobBookMarks);
-        fm.beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
+        fm.beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
 
     }
     public void jobUi()
@@ -1573,7 +1563,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     @Override

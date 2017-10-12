@@ -154,8 +154,6 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
             deepLinkBackPress();
         }
         finish();
-
-        overridePendingTransition(R.anim.fade_in_dialog, R.anim.fade_out_dialog);
     }
 
     @OnClick(R.id.tv_job_detail_share)

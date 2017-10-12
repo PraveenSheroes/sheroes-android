@@ -70,8 +70,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
         bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
 
         mCommunityFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.top_to_bottom_enter, 0, 0, R.anim.top_to_bottom_exit)
-                .replace(R.id.create_community_post_container, mCommunityFragment,CreateCommunityPostFragment.class.getName()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.create_community_post_container, mCommunityFragment,CreateCommunityPostFragment.class.getName()).commitAllowingStateLoss();
 
 
     }
