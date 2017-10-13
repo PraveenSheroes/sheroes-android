@@ -69,8 +69,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_job_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.tv_apply_job)
-    TextView mtv_apply_job;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private FeedDetail mFeedDetail;
@@ -124,8 +122,6 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
         return view;
     }
-
-    @OnClick(R.id.tv_apply_job)
     public void clickApplyButton() {
         JobApplyRequest jobApplyRequest = jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
         mJobpresenter.getJobApply(jobApplyRequest);
@@ -145,11 +141,11 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             jobDetailPojo.setFeedDetail(mFeedDetail);
             joblist.add(jobDetailPojo);
             if (mFeedDetail.isApplied()) {
-                mtv_apply_job.setText(getString(R.string.ID_APPLIED));
-                mtv_apply_job.setEnabled(false);
+                ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLIED));
+                ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(false);
             } else {
-                mtv_apply_job.setText(getString(R.string.ID_APPLY));
-                mtv_apply_job.setEnabled(true);
+                ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLY));
+                ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(true);
             }
             mAdapter.notifyDataSetChanged();
             mAdapter.setSheroesGenericListData(joblist);
@@ -177,8 +173,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public void getJobApplySuccess(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mtv_apply_job.setText(getString(R.string.ID_APPLIED));
-                mtv_apply_job.setEnabled(false);
+                ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLIED));
+                ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(false);
                 mFeedDetail.setApplied(true);
                 ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
                 Toast.makeText(getActivity(), getString(R.string.ID_APPLIED) + AppConstants.SPACE + getString(R.string.ID_SUCCESSFULLY), Toast.LENGTH_SHORT).show();

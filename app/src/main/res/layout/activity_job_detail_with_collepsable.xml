@@ -144,6 +144,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+    <TextView
+        android:id="@+id/tv_apply_job"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_48"
+        android:layout_marginTop="@dimen/dp_size_30"
+        android:layout_gravity="bottom"
+        android:background="@drawable/rect_btn"
+        android:gravity="center"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingTop="@dimen/dp_size_10"
+        android:text="@string/ID_APPLY"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_12" />
 
 </android.support.design.widget.CoordinatorLayout>
