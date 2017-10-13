@@ -167,7 +167,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
     public void onCameraSelection() {
 
         CropImage.activity(null,AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
+                .setRequestedSize(1000, 1000)
                 .start(this);
        // mCommunityFragment.selectImageFrmCamera();
     }
@@ -175,7 +175,7 @@ public class CreateCommunityPostActivity extends BaseActivity implements BaseHol
     @Override
     public void onGallerySelection() {
         CropImage.activity(null,AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
+                .setRequestedSize(1200, 1200)
                 .start(this);
        // mCommunityFragment.selectImageFrmGallery();
     }
