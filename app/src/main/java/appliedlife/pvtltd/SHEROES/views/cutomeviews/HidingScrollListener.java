@@ -120,7 +120,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         if ((mControlsVisible && dy > 0) || (!mControlsVisible && dy < 0)) {
             mScrolledDistance += dy;
         }
-        
+
         visibleItemCount = mRecyclerView.getChildCount();
         totalItemCount = mManager.getItemCount();
         int lastVisibleItem = mManager.findLastVisibleItemPosition();

@@ -97,6 +97,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
             if (null != intent.getData()) {
                 mData = intent.getData();
+                deepLink = mData.toString();
                 getDeeplinkUrlFromNotification(mData.toString());
             } else {
                 if (null != intent.getExtras()) {
