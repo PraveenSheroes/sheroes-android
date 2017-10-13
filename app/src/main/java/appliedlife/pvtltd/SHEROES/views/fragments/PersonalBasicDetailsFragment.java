@@ -304,7 +304,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         int toastDuration;
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
             toastDuration = Toast.LENGTH_SHORT;
-            mProfileBasicDetailsCallBack.onBackPressed(0);//TODO:Need to check with priyanka why need to pass value?
+            ((ProfileActicity)getActivity()).aboutMeBack();
         } else {
             toastDuration = Toast.LENGTH_LONG;
         }

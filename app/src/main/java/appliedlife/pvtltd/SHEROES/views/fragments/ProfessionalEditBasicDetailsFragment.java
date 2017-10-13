@@ -313,8 +313,8 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         int toastDuration = Toast.LENGTH_LONG;
         switch (boardingDataResponse.getStatus()) {
             case AppConstants.SUCCESS: {
-                mCallback.onBasicDetailsUpdate();//TODO:Need to check with priyanka why need to pass value?
                 toastDuration = Toast.LENGTH_SHORT;
+                ((ProfileActicity)getActivity()).aboutMeBack();
                 break;
             }
             case AppConstants.FAILED: {
