@@ -125,7 +125,7 @@ import butterknife.OnClick;
  * Created by Priyanka on 13-02-2017.
  */
 
-public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileAboutMeFragment.ProfileAboutMeFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
+public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragment.ProfileGoodAtListener, ProfileView, AppBarLayout.OnOffsetChangedListener, ProfileTravelClientFragment.ProfileTravelClientFragmentListener, ProfileCityWorkFragment.ProfileWorkLocationFragmentListener, ProfileOpportunityTypeFragment.ProfileOpportunityTypeListiner, ProfileShareYourIntrestFragment.MyProfileyYourInterestListener,
         ProfessionalEditBasicDetailsFragment.EditProfileCallable, ProfileOpportunityTypeFragment.OppertunitiesCallback, ProfileAddEditEducationFragment.ProfileEducationListener {
     private static final String SCREEN_LABEL = "Public Profile Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileActicity.class);
@@ -900,10 +900,13 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     }
 
-    @Override
+
     public void aboutMeBack() {
-        PersonalProfileFragment.getInstance().onDataRefresh();
-        onBackPressed();
+        getSupportFragmentManager().popBackStack();
+        Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        if (AppUtils.isFragmentUIActive(feature)) {
+            ((PersonalProfileFragment) feature).onDataRefresh();
+        }
     }
 
     @Override
@@ -924,7 +927,10 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
 
     @Override
     public void onGoodAtBack() {
-        ProffestionalProfileFragment.getInstance().onDataRefresh();
+        Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+        if (AppUtils.isFragmentUIActive(feature)) {
+            ((ProffestionalProfileFragment) feature).onDataRefresh();
+        }
         onBackPressed();
     }
 

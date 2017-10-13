@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
@@ -75,28 +76,12 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     public CustomCollapsingToolbarLayout mProfileAboutMe;
     @Inject
     Preference<LoginResponse> mUserPreference;
-    private ProfileAboutMeFragmentListener profileAboutMeFragmentListener;
+
 
 
     String mAbout_Me_Des;
 
     private MyProfileView mProfileView;
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof ProfileAboutMeFragmentListener) {
-
-                profileAboutMeFragmentListener = (ProfileAboutMeFragmentListener) getActivity();
-
-            }
-        } catch (Exception e) {
-
-
-        }
-    }
 
     @Nullable
     @Override
@@ -227,7 +212,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
 
     public void Onback_Click() {
         AppUtils.hideKeyboard(mEtWriteAboutMe, TAG);
-        profileAboutMeFragmentListener.aboutMeBack();
+        ((ProfileActicity)getActivity()).aboutMeBack();
 
     }
 
@@ -270,7 +255,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
             AppUtils.hideKeyboard(mEtWriteAboutMe, TAG);
             toastDuration = Toast.LENGTH_SHORT;
-            profileAboutMeFragmentListener.aboutMeBack();
+            ((ProfileActicity)getActivity()).aboutMeBack();
         } else {
             toastDuration = Toast.LENGTH_LONG;
         }
@@ -316,13 +301,6 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
         return SCREEN_LABEL;
     }
 
-
-    public interface ProfileAboutMeFragmentListener {
-
-        void onErrorOccurence();
-
-        void aboutMeBack();
-    }
 
 
 }

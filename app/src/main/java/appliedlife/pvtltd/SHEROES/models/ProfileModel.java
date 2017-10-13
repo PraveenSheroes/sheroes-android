@@ -231,8 +231,6 @@ public class ProfileModel {
 
                     @Override
                     public UserProfileResponse call(UserProfileResponse userProfileResponse) {
-                        LogUtils.info("Profile Response",gson.toJson(userProfileResponse));
-
                         return userProfileResponse;
 
                     }

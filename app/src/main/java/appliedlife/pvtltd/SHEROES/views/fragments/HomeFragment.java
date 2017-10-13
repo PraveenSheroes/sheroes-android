@@ -477,10 +477,6 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-    public void notificationUi() {
-        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-    }
-
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();

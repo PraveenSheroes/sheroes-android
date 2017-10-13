@@ -182,7 +182,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         toDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

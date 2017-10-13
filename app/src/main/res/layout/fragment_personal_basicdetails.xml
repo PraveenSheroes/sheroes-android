@@ -256,6 +256,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:focusable="false"
                     android:hint="@string/to_date"
+
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />

@@ -446,7 +446,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     homeOnClick();
                 }
             }
-
+            if(null!=bellNotificationDialogFragment) {
+                bellNotificationDialogFragment.dismiss();
+            }
         } else if (baseResponse instanceof MentorDetailItem) {
             mFragmentOpen.setChampionViaCommentReaction(AppConstants.ONE_CONSTANT);
             MentorDetailItem mentorDetailItem = (MentorDetailItem) baseResponse;
@@ -1109,10 +1111,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             bellNotificationDialogFragment = new BellNotificationDialogFragment();
             Bundle bundle = new Bundle();
             bellNotificationDialogFragment.setArguments(bundle);
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).notificationUi();
-            }
+            flNotificationReadCount.setVisibility(View.GONE);
         }
         if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
