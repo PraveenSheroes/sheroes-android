@@ -178,6 +178,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     mLoginActivityIntractionListner.onLoginAuthToken();
+                    AnalyticsManager.initializeMixpanel(getActivity());
                 } else {
                     LoginManager.getInstance().logOut();
                     mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));

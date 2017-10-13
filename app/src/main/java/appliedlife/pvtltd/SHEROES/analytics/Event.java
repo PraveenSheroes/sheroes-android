@@ -38,7 +38,7 @@ public enum Event {
 
     //region job related events
     JOBS_CREATED(AnalyticsEventType.JOB, "Created"),
-    JOBS_SEARCH(AnalyticsEventType.JOB, "Search"),
+    JOBS_SEARCH(AnalyticsEventType.JOB, "Search Performed"),
     JOBS_SEARCH_RESULT_CLICKED(AnalyticsEventType.JOB, "Search Result Click"),
     JOBS_APPLIED(AnalyticsEventType.JOB, "Applied"),
     JOBS_BOOKMARKED(AnalyticsEventType.JOB, "Bookmarked"),
@@ -68,11 +68,7 @@ public enum Event {
     COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
     //endregion
 
-
-
-
-
-//region Organization related event
+    //region Organization related event
     ORGANIZATION_UPVOTED(AnalyticsEventType.ORGANIZATION, "Upvoted"),    // region User related events
     USER_SIGNUP(AnalyticsEventType.USER, "Signed Up"),
     USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),

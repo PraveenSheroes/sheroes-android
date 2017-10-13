@@ -75,7 +75,7 @@ public class MixpanelHelper {
 
             SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
-                    .name(userSummary.getFirstName() + " " + userSummary.getLastName())
+                    .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
                     .dateOfBirth(userSummary.getUserBO().getDob())
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
