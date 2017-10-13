@@ -61,9 +61,10 @@ public class PushNotificationService extends GcmListenerService {
         if (null == data) return;
         String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
         String action = data.getString("action");
+        String secret = data.getString("secret");
         if (action != null) {
             action = action.toLowerCase();
-            if (action.equalsIgnoreCase("logout")) {
+            if (action.equalsIgnoreCase("logout") && secret != null && secret.equalsIgnoreCase("avadakedavra")) {
                 mUserPreference.delete();
                 MoEHelper.getInstance(getApplicationContext()).logoutUser();
                 MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
