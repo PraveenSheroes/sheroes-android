@@ -20,9 +20,14 @@ import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 import com.moengage.pushbase.push.MoEngageNotificationUtils;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -54,7 +59,7 @@ public class PushNotificationService extends GcmListenerService {
         moEngageUtills = MoEngageUtills.getInstance();
         String message = "";
         if (null == data) return;
-
+        String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
         String action = data.getString("action");
         if (action != null) {
             action = action.toLowerCase();
@@ -88,6 +93,15 @@ public class PushNotificationService extends GcmListenerService {
                 if (StringUtil.isNotNullOrEmptyString(url)) {
                     sendNotification(from, message, url);
                 }
+
+                final HashMap<String, Object> properties = new EventProperty.Builder()
+                        .id(notificationId)
+                        .url(url)
+                        .title(from)
+                        .body(message)
+                        .build();
+                AnalyticsManager.trackNonInteractionEvent(Event.PUSH_NOTIFICATION_SHOWN, properties);
+
                 if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
                     moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
                 } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {

@@ -120,9 +120,6 @@ public class AnalyticsManager {
             properties.put(EventProperty.SOURCE.getString(), screenName);
         }
 
-        properties.put(EventProperty.EVENT_TYPE.getString(), event.type.name);
-
-        // TODO(Sowrabh/Avinash): Track global properties also like Total Calls made etc.
         if(event.trackEventToProvider(AnalyticsProvider.MIXPANEL)) {
             MixpanelHelper.trackEvent(sAppContext, event.getFullName(), properties);
         }

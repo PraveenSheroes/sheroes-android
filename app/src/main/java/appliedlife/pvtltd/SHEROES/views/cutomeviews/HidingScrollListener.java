@@ -120,6 +120,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         if ((mControlsVisible && dy > 0) || (!mControlsVisible && dy < 0)) {
             mScrolledDistance += dy;
         }
+        
         visibleItemCount = mRecyclerView.getChildCount();
         totalItemCount = mManager.getItemCount();
         int lastVisibleItem = mManager.findLastVisibleItemPosition();
@@ -143,7 +144,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
                         FeedRequestPojo feedRequestArticlePojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
-                        feedRequestArticlePojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
                         mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
@@ -153,7 +153,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.FEATURE_FRAGMENT:
                         FeedRequestPojo feedRequestFeatureCommPojo=mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, pageNo);
-                        feedRequestFeatureCommPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
                         mHomePresenter.getFeedFromPresenter(feedRequestFeatureCommPojo);
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
@@ -166,7 +165,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.JOB_FRAGMENT:
                         FeedRequestPojo feedRequestJobPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, pageNo);
-                        feedRequestJobPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
                         mHomePresenter.getFeedFromPresenter(feedRequestJobPojo);
                         break;
                     case AppConstants.COMMUNITY_DETAIL:

@@ -464,7 +464,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 openProfileActivity();
                 break;
             case AppConstants.TWO_CONSTANT:
-                openArticleFragment(setCategoryIds());
+                openArticleFragment(setCategoryIds(),true);
                 break;
             case AppConstants.THREE_CONSTANT:
                 openJobFragment();
@@ -849,7 +849,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.li_article_spinner_icon)
     public void openSpinnerOnClick() {
-        if (!mFragmentOpen.isOpen()) {
             mFlHomeFooterList.setVisibility(View.GONE);
             if (!StringUtil.isNotEmptyCollection(mHomeSpinnerItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
                 setArticleCategoryFilterValues();
@@ -857,15 +856,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
                 mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
             }
-            mFragmentOpen.setArticleFragment(false);
             mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
             mArticleCategorySpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-            mFragmentOpen.setOpen(true);
-
-        }
     }
 
     @OnClick(R.id.tv_home)
@@ -933,12 +928,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
 
-    private void openArticleFragment(List<Long> categoryIds) {
+    private void openArticleFragment(List<Long> categoryIds,boolean fromDrawer) {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         ArticlesFragment articlesFragment = new ArticlesFragment();
         FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(ArticlesFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        if(fromDrawer) {
+            fm.popBackStackImmediate(ArticlesFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
         Bundle bundleArticle = new Bundle();
         bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT, (ArrayList) categoryIds);
         articlesFragment.setArguments(bundleArticle);
@@ -1444,7 +1441,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     mTvCategoryText.setText(AppConstants.EMPTY_STRING);
                     mTvCategoryChoose.setVisibility(View.VISIBLE);
                 }
-                openArticleFragment(categoryIds);
+                openArticleFragment(categoryIds,false);
             }
         } else {
             mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();

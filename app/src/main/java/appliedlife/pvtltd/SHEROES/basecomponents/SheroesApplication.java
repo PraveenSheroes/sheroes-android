@@ -8,6 +8,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -67,6 +68,7 @@ public class SheroesApplication extends MultiDexApplication  {
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);
         AnalyticsManager.initializeMixpanel(mContext);
+        Stetho.initializeWithDefaults(this);
     }
 
     public String getCurrentActivityName() {

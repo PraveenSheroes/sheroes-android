@@ -15,7 +15,6 @@ public enum EventProperty {
     AUTH_PROVIDER("AUTH_PROVIDER"),
     IS_NEW_USER("Is New User"),
     ID("ID"),
-    EVENT_TYPE("EventType"),
     LIST("List"),
     NAME("Name"),
     SOURCE("Source"),

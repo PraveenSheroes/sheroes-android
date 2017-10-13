@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -51,6 +52,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobApplyRequestBuilder;
 
 /**
  * Created by SHEROES-TECH on 20-02-2017.
@@ -90,6 +93,8 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
     RoundedImageView mIv_job_comp_logo;
     @Bind(R.id.li_header)
     public LinearLayout mLiHeader;
+    @Bind(R.id.tv_apply_job)
+    public TextView mtv_apply_job;
     //endregion
 
     ViewPagerAdapter mViewPagerAdapter;
@@ -155,7 +160,13 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
         }
         finish();
     }
-
+    @OnClick(R.id.tv_apply_job)
+    public void onClickApplyButton() {
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPagerJobDetail, 0);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((JobDetailFragment) fragment).clickApplyButton();
+        }
+           }
     @OnClick(R.id.tv_job_detail_share)
     public void onJobDetailShare() {
         Intent intent = new Intent(Intent.ACTION_SEND);

@@ -16,7 +16,7 @@ public enum SuperProperty {
     DATE_OF_BIRTH("Date Of Birth"),
     CREATED_DATE("Created Date"),
     MOBILE_NUMBER("Mobile Number"),
-    NAME("Name"),
+    USER_NAME("User Name"),
     EMAIL_ID("Email Id");
 
     private final String string;
@@ -55,8 +55,8 @@ public enum SuperProperty {
             return value != null;
         }
 
-        public Builder name(String value) {
-            put(NAME, value);
+        public Builder userName(String value) {
+            put(USER_NAME, value);
             return this;
         }
 
