@@ -10,6 +10,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -195,9 +196,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private long mUserId;
     private int mAdminId;
     private String mPhotoUrl;
+    private Handler mHandler;
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        mHandler = new Handler();
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
@@ -596,7 +599,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (!StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
             return;
         }
-        tvFeedCommunityPostText.post(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
