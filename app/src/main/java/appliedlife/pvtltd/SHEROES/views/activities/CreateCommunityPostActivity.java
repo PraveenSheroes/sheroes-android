@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,9 +12,6 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
-import appliedlife.pvtltd.SHEROES.imageops.CropImage;
-import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
-
 import java.io.File;
 import java.util.List;
 
@@ -26,7 +21,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-
+import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -34,13 +30,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
-import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ImageUploadFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeFragment;
 import butterknife.ButterKnife;
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 
 
 public class CreateCommunityPostActivity extends BaseActivity implements BaseHolderInterface, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ImageUploadFragment.ImageUploadCallable {

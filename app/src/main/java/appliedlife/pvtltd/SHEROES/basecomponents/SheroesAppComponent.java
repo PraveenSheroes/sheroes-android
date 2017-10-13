@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import javax.inject.Singleton;
 
-
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
@@ -20,7 +19,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MakeIndiaSafeMapActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
@@ -32,8 +30,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -92,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
@@ -100,9 +97,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearch
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityTypeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MakeIndiaSafeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingDailogHeySuccess;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
@@ -159,7 +156,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.JobDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobSearchHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.MakeIndiaSafeHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
@@ -569,17 +565,12 @@ public interface SheroesAppComponent {
 
     void inject(AppIntroCardHolder appIntroCardHolder);
 
-    void inject(MakeIndiaSafeFragment makeIndiaSafeFragment);
-
     void inject(PublicProfileGrowthBuddiesDialogFragment publicProfileGrowthBuddiesDialogFragment);
 
     void inject(GrowthBuddiesHolder growthBuddiesHolder);
 
     void inject(PublicProfileGrowthBuddiesDetailActivity publicProfileGrowthBuddiesDetailActivity);
 
-    void inject(MakeIndiaSafeMapActivity makeIndiaSafeMapActivity);
-
-    void inject(MakeIndiaSafeHolder makeIndiaSafeHolder);
     void inject(SpamPostListDialogFragment spamPostListDialogFragment);
 
     void inject(FeedProgressBarHolder feedProgressBarHolder);

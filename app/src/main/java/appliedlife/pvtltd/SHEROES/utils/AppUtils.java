@@ -123,8 +123,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.Device;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.MakeIndiaSafeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
@@ -1974,16 +1972,6 @@ public class AppUtils {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;
-    }
-    public  MakeIndiaSafeRequest makeIndiaSafeRequestBuilder(LatLongWithLocation latLongWithLocation) {
-        MakeIndiaSafeRequest makeIndiaSafeRequest=new MakeIndiaSafeRequest();
-        makeIndiaSafeRequest.setLongitude(latLongWithLocation.getLongitude());
-        makeIndiaSafeRequest.setLattitude(latLongWithLocation.getLatitude());
-        makeIndiaSafeRequest.setEntityId(latLongWithLocation.getEntityOrParticipantId());
-        makeIndiaSafeRequest.setDescription(latLongWithLocation.getDescription());
-        makeIndiaSafeRequest.setLocality(latLongWithLocation.getLocality());
-        makeIndiaSafeRequest.setCity(latLongWithLocation.getCityName());
-        return makeIndiaSafeRequest;
     }
     public static FeedRequestPojo jobCategoryRequestBuilder(String typeOfFeed, int pageNo,List<String> cities,Integer experienceFrom,Integer experienceTo,List<String> functionalAreas,List<String> opportunityTypes,List<String> skills) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);

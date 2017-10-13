@@ -155,22 +155,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         } else {
                             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HELP_LINE, AppConstants.EMPTY_STRING);
                         }
-                    } else if (urlOfSharedCard.contains(AppConstants.MAKE_INDIA_SAFE_URL) || urlOfSharedCard.contains(AppConstants.MAKE_INDIA_SAFE_URL_COM)) {
-                        try {
-                            Intent makeIndiaSafe = new Intent(this, MakeIndiaSafeMapActivity.class);
-                            makeIndiaSafe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            makeIndiaSafe.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
-                            startActivity(makeIndiaSafe);
-                            finish();
-                            if (mFromNotification > 0) {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_MAKE_INDIA_SAFE, AppConstants.EMPTY_STRING);
-
-                            } else {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_MAKE_INDIA_SAFE, AppConstants.EMPTY_STRING);
-                            }
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
-                        }
                     } else {
                         indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                         if (indexOfFourthBackSlace > 0) {
