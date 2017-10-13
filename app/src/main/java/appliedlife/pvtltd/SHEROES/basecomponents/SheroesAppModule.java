@@ -6,6 +6,7 @@ import android.content.Context;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -159,19 +160,22 @@ public class SheroesAppModule {
             Crashlytics.getInstance().core.logException(e);
             e.printStackTrace();
         }
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(AppConstants.READ_TIME_OUT, TimeUnit.SECONDS)
-               .connectTimeout(AppConstants.CONNECTION_TIME_OUT, TimeUnit.SECONDS)
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        okHttpClientBuilder.readTimeout(AppConstants.READ_TIME_OUT, TimeUnit.SECONDS)
+                .connectTimeout(AppConstants.CONNECTION_TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .cache(cache)
-                .build();
-        return okHttpClient;
+                .cache(cache);
+
+        if (BuildConfig.DEBUG) {
+            okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
+        }
+
+        return okHttpClientBuilder.build();
     }
 
     @Provides
     @Singleton
     Retrofit provideSheroesNetworkCall(OkHttpClient okHttpClient, Gson gson) {
-
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(okHttpClient)
@@ -186,8 +190,6 @@ public class SheroesAppModule {
     public SheroesAppServiceApi providesApiService(Retrofit retrofit) {
         return retrofit.create(SheroesAppServiceApi.class);
     }
-
-
 
 }
 
