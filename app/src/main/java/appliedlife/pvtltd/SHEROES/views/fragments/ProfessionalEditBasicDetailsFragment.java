@@ -314,7 +314,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
         switch (boardingDataResponse.getStatus()) {
             case AppConstants.SUCCESS: {
                 toastDuration = Toast.LENGTH_SHORT;
-                ((ProfileActicity)getActivity()).aboutMeBack();
+                ((ProfileActicity)getActivity()).proffestionalAtBack();
                 break;
             }
             case AppConstants.FAILED: {

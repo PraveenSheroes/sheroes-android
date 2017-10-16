@@ -925,6 +925,13 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         onBackPressed();
     }
 
+    public void proffestionalAtBack() {
+        getSupportFragmentManager().popBackStack();
+        Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+        if (AppUtils.isFragmentUIActive(feature)) {
+            ((ProffestionalProfileFragment) feature).onDataRefresh();
+        }
+    }
     @Override
     public void onGoodAtBack() {
         Fragment feature = viewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
