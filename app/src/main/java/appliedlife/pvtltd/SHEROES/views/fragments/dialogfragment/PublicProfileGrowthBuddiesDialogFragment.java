@@ -169,12 +169,29 @@ public class PublicProfileGrowthBuddiesDialogFragment extends BaseDialogFragment
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(mentorDetailItemList);
             List<FeedDetail> data=mPullRefreshList.getFeedResponses();
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.notifyItemRangeChanged(mentorDetailItemList.size()+1,data.size());
+            FeedDetail feedProgressBar=new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            int position=data.size()- mentorDetailItemList.size();
+            if(position>0) {
+                data.remove(position-1);
+            }
+            if(mentorDetailItemList.size()>9) {
+                data.add(feedProgressBar);
+            }
+            mAdapter.setSheroesGenericListData(data);
+            if (mPageNo == AppConstants.TWO_CONSTANT) {
+                mAdapter.notifyDataSetChanged();
+            }else
+            {
+                mAdapter.notifyItemRangeChanged(position+1, mentorDetailItemList.size());
+            }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
         } else {
             mLiNoResult.setVisibility(View.GONE);
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
+            mAdapter.notifyDataSetChanged();
         }
         mSwipeView.setRefreshing(false);
     }

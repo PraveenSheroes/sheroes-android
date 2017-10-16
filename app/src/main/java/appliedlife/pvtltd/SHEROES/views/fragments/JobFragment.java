@@ -174,8 +174,12 @@ public class JobFragment extends BaseFragment {
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-            mAdapter.notifyItemRangeChanged(feedDetailList.size()+1,data.size());
-
+            if (mPageNo == AppConstants.TWO_CONSTANT) {
+                mAdapter.notifyDataSetChanged();
+            }else
+            {
+                mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
+            }
             mSwipeView.setRefreshing(false);
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);

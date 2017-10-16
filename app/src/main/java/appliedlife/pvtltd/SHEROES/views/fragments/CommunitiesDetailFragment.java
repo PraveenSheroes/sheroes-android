@@ -414,7 +414,12 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     data.add(feedProgressBar);
                     mAdapter.setSheroesGenericListData(data);
                     mAdapter.setUserId(mUserId);
-                    mAdapter.notifyDataSetChanged();
+                    if (mPageNo == AppConstants.TWO_CONSTANT) {
+                        mAdapter.notifyDataSetChanged();
+                    }else
+                    {
+                        mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
+                    }
                 }
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {

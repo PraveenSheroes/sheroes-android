@@ -521,7 +521,7 @@ public class HomeFragment extends BaseFragment {
                 mAdapter.notifyDataSetChanged();
             }else
             {
-                mAdapter.notifyItemRangeChanged(feedDetailList.size() + 1, data.size());
+                mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);

@@ -165,7 +165,12 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
             }
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);
-            mAdapter.notifyItemRangeChanged(feedDetailList.size()+1,data.size());
+            if (mPageNo == AppConstants.TWO_CONSTANT) {
+                mAdapter.notifyDataSetChanged();
+            }else
+            {
+                mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
+            }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             mLiNoResult.setVisibility(View.VISIBLE);
         }else
