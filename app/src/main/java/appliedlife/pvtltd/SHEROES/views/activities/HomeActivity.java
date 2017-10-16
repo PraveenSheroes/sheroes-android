@@ -1363,6 +1363,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (null != communityEnum) {
                 switch (communityEnum) {
                     case FEATURE_COMMUNITY:
+                        if (mViewPagerAdapter == null) {
+                            return;
+                        }
                         Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(feature)) {
                             if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
