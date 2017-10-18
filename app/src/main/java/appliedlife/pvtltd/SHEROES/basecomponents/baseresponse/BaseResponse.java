@@ -10,7 +10,6 @@ import java.util.HashMap;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
-@org.parceler.Parcel(analyze = {BaseResponse.class})
 public class BaseResponse implements Parcelable {
        @SerializedName("fieldErrorMessageMap")
         @Expose

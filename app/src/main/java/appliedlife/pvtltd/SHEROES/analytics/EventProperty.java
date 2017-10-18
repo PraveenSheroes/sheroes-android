@@ -30,7 +30,8 @@ public enum EventProperty {
     LOCATION("Location"),
     COMMUNITY_ID("Community Id"),
     COMMUNITY_NAME("Community Name"),
-    KEYWORD("Keyword");
+    KEYWORD("Keyword"),
+    SHARED_TO("Share To");
 
     private final String string;
 
@@ -151,6 +152,11 @@ public enum EventProperty {
 
         public Builder positionInList(Integer value){
             put(POSITION_IN_LIST, value);
+            return this;
+        }
+
+        public Builder sharedTo(final String sharedTo){
+            put(SHARED_TO, sharedTo);
             return this;
         }
     }

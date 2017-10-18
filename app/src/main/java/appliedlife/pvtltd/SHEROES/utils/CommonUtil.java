@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -20,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -37,6 +39,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.pollexor.ThumborUrlBuilder;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -48,6 +53,8 @@ import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -58,7 +65,16 @@ import java.util.regex.Pattern;
 import javax.security.auth.x500.X500Principal;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.imageops.SheroesThumbor;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class CommonUtil {
 
@@ -531,13 +547,13 @@ public class CommonUtil {
         return true;
     }
 
-   /* public static void shareImageWhatsApp(final Context context, final String url, final String sourceScreen, final String postUrl, final boolean trackEvent) {
-        CompressImageUtil.createBitmap(CareApplication.getAppContext(), url, Globals.IMAGE_SLIDE_SIZE, Globals.IMAGE_SLIDE_SIZE)
+    public static void shareImageWhatsApp(final Context context, final String imageShareText, final String url, final String sourceScreen, final boolean trackEvent) {
+        CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<Bitmap>() {
+                .subscribe(new Subscriber<Bitmap>() {
                     @Override
-                    public void onComplete() {
+                    public void onCompleted() {
 
                     }
 
@@ -548,41 +564,15 @@ public class CommonUtil {
 
                     @Override
                     public void onNext(Bitmap bmp) {
-                        Config config = Config.getConfig();
-                        String imageShareText = "";
-                        if(!trackEvent){
-                            imageShareText = (config != null && config.albumShareText != null) ? config.albumShareText : context.getString(R.string.album_share_text);
-                        }else {
-                            imageShareText = (config != null && config.mImageShareText != null) ? config.mImageShareText : "";
-                        }
-                        imageShareText = imageShareText + System.getProperty("line.separator") + postUrl;
                         Event event = trackEvent ? Event.IMAGE_SHARED : null;
                         shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event);
                     }
                 });
 
-    }*/
+    }
 
-   /* public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName) {
-        File cachePath = new File(context.getCacheDir(), "images");
-        cachePath.mkdirs(); // don't forget to make the directory
-        FileOutputStream stream = null; // overwrites this image every time
-        String fileName = "IMG_" + new Date().getTime() + ".png";
-        String imagePath = cachePath + "/" + fileName;
-        try {
-            stream = new FileOutputStream(imagePath);
-        } catch (FileNotFoundException e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        try {
-            stream.close();
-        } catch (IOException e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-
-        File newFile = new File(cachePath, fileName);
-        Uri contentUri = FileProvider.getUriForFile(context, "com.addodoc.care.fileprovider", newFile);
+    public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName) {
+        Uri contentUri = CommonUtil.getContentUriFromBitmap(context, bmp);
         if (contentUri != null) {
             Intent sharingIntent = new Intent((Intent.ACTION_SEND));
             sharingIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
@@ -605,13 +595,10 @@ public class CommonUtil {
             if (eventName.equals(Event.IMAGE_SHARED)) {
                 properties.put(EventProperty.URL.getString(), url);
             }
-            if (eventName.equals(Event.USER_PROFILE_SHARED)) {
-                properties.put(EventProperty.ID.getString(), url);
-            }
             AnalyticsManager.trackEvent(eventName, properties);
 
         }
-    }*/
+    }
 
     public static Bitmap getViewBitmap(View view) {
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -719,6 +706,29 @@ public class CommonUtil {
 
     public static String getYoutubeURL(String videoId) {
         return "https://www.youtube.com/watch?v=" + videoId;
+    }
+
+    public static Uri getContentUriFromBitmap(Context context, Bitmap bmp) {
+        File cachePath = new File(context.getCacheDir(), "images");
+        cachePath.mkdirs(); // don't forget to make the directory
+        FileOutputStream stream = null; // overwrites this image every time
+        String fileName = "IMG_" + new Date().getTime() + ".png";
+        String imagePath = cachePath + "/" + fileName;
+        try {
+            stream = new FileOutputStream(imagePath);
+        } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+
+        File newFile = new File(cachePath, fileName);
+        Uri contentUri = FileProvider.getUriForFile(context, "appliedlife.pvtltd.SHEROES.provider", newFile);
+        return contentUri;
     }
 
     public static class Dimension {

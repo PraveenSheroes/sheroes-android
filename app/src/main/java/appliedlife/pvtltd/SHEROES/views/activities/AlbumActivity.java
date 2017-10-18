@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Album;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
 import appliedlife.pvtltd.SHEROES.presenters.AlbumPresenter;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -54,12 +53,12 @@ import butterknife.ButterKnife;
 public class AlbumActivity extends BaseActivity implements IAlbumView {
     private static final String TAG = "AlbumActivity";
     private static final String SCREEN_LABEL = "Album Activity";
-    private static final String NOTIFICATION_SCREEN = "Push Notification";
-    private static final String SAVE_TO_GALLERY = "Save To Gallery";
+    private static final String MAIN_ITEM_POSITION = "Main Item Position";
 
     private Album mAlbum;
     private String mMainImageUrl;
     private AlbumCarouselAdapter mAlbumCarouselAdapter;
+    private int mMainItemPosition;
     private String mAlbumId;
 
     @Inject
@@ -93,17 +92,15 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             if (mAlbum == null) {
                 return;
             }
+            if (getIntent().getExtras() != null) {
+                mMainItemPosition = getIntent().getExtras().getInt(MAIN_ITEM_POSITION, -1);
+            }
         } else {
             if (getIntent().getExtras() != null) {
                 mAlbumId = getIntent().getExtras().getString(FeedDetail.FEED_DETAIL_OBJ);
-                String notificationId = getIntent().getExtras().getString("notificationId");
-                /*if (!TextUtils.isEmpty(notificationId)) {
-                    setSource(NOTIFICATION_SCREEN);
-                }*/
             }
         }
         mAlbumPresenter.setView(this);
-        //mAlbumPresenter.attachView(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -163,6 +160,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         AlbumGalleryAdapter mAlbumGalleryAdapter = new AlbumGalleryAdapter(AlbumActivity.this, mAlbum.photos, callback);
         mViewPager.setAdapter(mAlbumGalleryAdapter);
         mViewPager.setOffscreenPageLimit(2);
+        if (mMainItemPosition > 0 && mMainItemPosition < mAlbum.photos.size()) {
+            mViewPager.setCurrentItem(mMainItemPosition);
+            mAlbumCarouselAdapter.setSelectedPosition(mMainItemPosition);
+        }
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -217,7 +218,8 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             }*/
             onBackPressed();
         } else if (id == R.id.share) {
-            ShareBottomSheetFragment.showDialog(AlbumActivity.this, mMainImageUrl, getPreviousScreenName(), mAlbum);
+            String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
+            ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName());
         }
         return true;
     }
@@ -254,10 +256,12 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             photo.url = url;
             album.photos.add(photo);
         }
+        album.deepLinkUrl = feedDetail.getDeepLinkUrl();
         Intent intent = new Intent(fromActivity, AlbumActivity.class);
         Parcelable parcelable = Parcels.wrap(album);
         intent.putExtra(album.ALBUM_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(MAIN_ITEM_POSITION, feedDetail.getItemPosition());
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
@@ -289,7 +293,11 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         }
         mAlbum = album;
         getSupportActionBar().setTitle(getString(R.string.album_title, 1, mAlbum.photos.size()));
-        mMainImageUrl = mAlbum.photos.get(0).url;
+    /*    if(mMainItemPosition < 0 || mMainItemPosition >= mAlbum.photos.size()){
+            mMainImageUrl = mAlbum.photos.get(0).url;
+        }else {
+            mMainImageUrl = mAlbum.photos.get(mMainItemPosition).url;
+        }*/
         initAlbumCarouselAdapter();
         initViewPager();
     }

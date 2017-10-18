@@ -376,4 +376,6 @@ public class AppConstants {
     public static final String orgUserType = "organisations_test_user";
     public static final String WEB_URL = "web_view_url";
     public static final String WEB_TITLE = "web_title";
+    public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";
+    public static final String PRIVATE_FOLDER_NAME = "Sheroes";
 }

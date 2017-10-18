@@ -98,7 +98,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearch
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityTypeDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
@@ -238,8 +237,6 @@ public interface SheroesAppComponent {
     void inject(MyCommunitiesFragment myCommunitiesFragment);
 
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
-
-    void inject(ImageFullViewDialogFragment imageFullViewDialogFragment);
 
     void inject(ArticleDetailFragment articleDetailFragment);
 

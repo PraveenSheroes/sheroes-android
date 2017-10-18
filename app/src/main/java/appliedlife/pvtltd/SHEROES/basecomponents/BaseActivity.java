@@ -67,7 +67,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
