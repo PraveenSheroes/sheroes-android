@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -82,6 +83,8 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
  * Title: Base activity for all activities.
  */
 public abstract class BaseActivity extends AppCompatActivity implements EventInterface, BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
+    public static final String SOURCE_SCREEN = "SOURCE_SCREEN";
+    public static final String SOURCE_PROPERTIES = "SOURCE_PROPERTIES";
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -869,7 +872,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        if (StringUtil.isNotEmptyCollection(feedDetail.getImageUrls())) {
+        /*if (StringUtil.isNotEmptyCollection(feedDetail.getImageUrls())) {
             ImageFullViewDialogFragment imageFullViewDialogFragment = (ImageFullViewDialogFragment) getFragmentManager().findFragmentByTag(ImageFullViewDialogFragment.class.getName());
             if (imageFullViewDialogFragment == null) {
                 imageFullViewDialogFragment = new ImageFullViewDialogFragment();
@@ -881,7 +884,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if (!imageFullViewDialogFragment.isVisible() && !imageFullViewDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
                 imageFullViewDialogFragment.show(getFragmentManager(), ImageFullViewDialogFragment.class.getName());
             }
-        }
+        }*/
+        AlbumActivity.navigateTo(this, feedDetail, "BASE", null);
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {

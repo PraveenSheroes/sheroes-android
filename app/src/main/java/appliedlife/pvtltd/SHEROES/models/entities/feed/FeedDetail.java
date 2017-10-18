@@ -13,9 +13,10 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
-
+@org.parceler.Parcel(analyze = {FeedDetail.class, BaseResponse.class})
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
-
+    public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
+    public static final String FEED_DETAIL_ID = "FEED_DETAIL_ID";
     @SerializedName("post_image_height_is")
     @Expose
     private List<Integer> imageHeight;

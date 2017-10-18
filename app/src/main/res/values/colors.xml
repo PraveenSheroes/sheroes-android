@@ -6,8 +6,15 @@
     <color name="unAcceptColor">#3023ae</color>
     <color name="colorAccent">#6e2f95</color>
     <color name="once_card">#6d3493</color>
+    <color name="light_grey">#4D4D4D</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
     <color name="challenge_count">#303F9F</color>
+    <color name="primary_text_disabled_light">#39000000</color>
+    <color name="primary_text_default_light">#de000000</color>
+    <color name="primary_text_default_dark">#FFFFFFFF</color>
+    <color name="primary_text_disabled_dark">#4DFFFFFF</color>
+    <color name="secondary_text_disabled_dark">#36FFFFFF</color>
+    <color name="secondary_text_default_dark">#B3FFFFFF</color>
     <color name="white">#ffffff</color>
     <color name="growth_followed">#5838ac</color>
     <color name="challenge">#53a0fe</color>
@@ -160,4 +167,6 @@
     <color name="faq_question_color">#39393a</color>
     <color name="faq_answer_color">#757575</color>
     <color name="faq_spinner_color">#783fdf</color>
+
+    <color name="transparent_dark">#80000000</color>
 </resources>

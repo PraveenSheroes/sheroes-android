@@ -173,6 +173,8 @@
     <dimen name="challenge_card">320dp</dimen>
     <dimen name="dp_size_minus_7">-7dp</dimen>
 
+    <dimen name="toolbar_title_size">20dp</dimen>
+
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->
 </resources>

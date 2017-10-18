@@ -751,5 +751,14 @@
 
     <string name="pick_image_intent_chooser_title">Select source</string>
 
+    <!-- Actions -->
+    <string name="action.whatsapp">WhatsApp</string>
+    <string name="action.facebook">Facebook</string>
+    <string name="action.copy_link">Copy Link</string>
+    <string name="action.save_to_gallery">Save to\nGallery</string>
+    <string name="action_share">share</string>
+
+    <string name="album_title">%1$d of %2$d"</string>
+    <string name="img_saved_info">Image saved</string>
 
 </resources>
