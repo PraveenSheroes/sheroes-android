@@ -1,3 +1,8 @@
+def versionMajor = 5
+def versionMinor = 3
+def versionPatch = 1
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 buildscript {
@@ -23,8 +28,8 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 62
-        versionName "5.3.1"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
     signingConfigs {
