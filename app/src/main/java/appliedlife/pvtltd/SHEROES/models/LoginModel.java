@@ -98,18 +98,6 @@ public class LoginModel {
                     .observeOn(AndroidSchedulers.mainThread());
 
     }
-    public Observable<GooglePlusResponse> getGoogleLoginFromModel(GooglePlusRequest loginRequest) {
-        return sheroesAppServiceApi.getUserGoogleLogin(loginRequest)
-                .map(new Func1<GooglePlusResponse, GooglePlusResponse>() {
-                    @Override
-                    public GooglePlusResponse call(GooglePlusResponse googlePlusResponse) {
-                        return googlePlusResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-    }
     public Observable<ExpireInResponse> getGoogleTokenExpireInFromModel(String expireInUrl) {
         return sheroesAppServiceApi.getGoogleTokenExpire(expireInUrl)
                 .map(new Func1<ExpireInResponse, ExpireInResponse>() {

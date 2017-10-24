@@ -72,16 +72,12 @@ public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
                 ivUserReactionEmoji.setImageResource(R.drawable.ic_heart_active);
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
-                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji3_whistel);
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
-                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji_xo_xo);
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
-                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji2_with_you);
                 break;
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
-                ivUserReactionEmoji.setImageResource(R.drawable.ic_emoji4_face_palm);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + item.getLikeValue());

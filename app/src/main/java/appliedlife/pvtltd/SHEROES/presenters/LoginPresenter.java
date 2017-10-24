@@ -131,36 +131,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         registerSubscription(subscription);
     }
 
-    public void getGoogleLoginFromPresenter(GooglePlusRequest loginRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getGoogleLoginFromModel(loginRequest).subscribe(new Subscriber<GooglePlusResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-            }
-
-            @Override
-            public void onNext(GooglePlusResponse googlePlusResponse) {
-                getMvpView().stopProgressBar();
-                if (null != googlePlusResponse) {
-                    ExpireInResponse expireInResponse=new ExpireInResponse();
-                    expireInResponse.setGooglePlusResponse(googlePlusResponse);
-                    getMvpView().getGoogleExpireInResponse(expireInResponse);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
 
     public void googleTokenExpireInFromPresenter(String tokenExpireUrl) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

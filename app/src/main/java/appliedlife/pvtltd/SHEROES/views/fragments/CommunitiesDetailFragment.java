@@ -36,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -46,7 +45,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -226,7 +224,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     public void communityPostClick() {
-        if (null!=mFeedDetail&&StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+        if (null!=mFeedDetail&& StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
             try {
                 FeedDetail feedDetail = (FeedDetail) mFeedDetail.clone();
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
@@ -247,7 +245,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+        if (null!=mFeedDetail&& StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
             FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
             feedRequestPojo.setIdForFeedDetail(null);
             Integer autherId = (int) mFeedDetail.getIdOfEntityOrParticipant();
@@ -543,7 +541,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mProgressBar.setVisibility(View.GONE);
         }
     }
-    public void approveSpamPost(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
+    public void approveSpamPost(FeedDetail feedDetail, boolean isActive, boolean isSpam, boolean isApproved) {
         mApprovePostFeedDetail=feedDetail;
         mIsSpam=isSpam;
         mHomePresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(feedDetail,isActive,isSpam,isApproved));
@@ -587,11 +585,14 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     @Override
     protected Map<String, Object> getExtraProperties() {
-        HashMap<String, Object> properties = new
-                EventProperty.Builder()
-                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
-                .build();
-        return properties;
+        if(null!=mFeedDetail) {
+            HashMap<String, Object> properties = new
+                    EventProperty.Builder()
+                    .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                    .build();
+            return properties;
+        }
+        return null;
     }
 }
 

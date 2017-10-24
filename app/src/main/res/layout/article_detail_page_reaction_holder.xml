@@ -175,22 +175,19 @@
             <TextView
                 android:id="@+id/tv_article_detail_reaction1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_emoji_xo_xo" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_article_detail_reaction2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_12"
-                android:drawableLeft="@drawable/ic_emoji2_with_you" />
+                android:layout_marginLeft="@dimen/dp_size_12" />
 
             <TextView
                 android:id="@+id/tv_article_detail_reaction3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_25"
-                android:drawableLeft="@drawable/ic_emoji3_whistel" />
+                android:layout_marginLeft="@dimen/dp_size_25" />
 
             <TextView
                 android:id="@+id/tv_article_detail_total_reactions"

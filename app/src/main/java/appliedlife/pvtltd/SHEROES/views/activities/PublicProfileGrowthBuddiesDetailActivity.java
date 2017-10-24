@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
@@ -55,8 +54,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ResizableCustomView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ViewMoreLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -227,7 +226,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             stringBuilder.append("\"").append(tvMentorDescription.getText().toString()).append("\"");
             mViewMoreDescription = stringBuilder.toString();
             tvMentorDescription.setText(mViewMoreDescription);
-            ResizableCustomView.doResizeTextView(tvMentorDescription, 2, AppConstants.VIEW_MORE, true);
+            ViewMoreLayout.doResizeTextView(tvMentorDescription, 4, getString(R.string.ID_VIEW_MORE_MENTOR), true, mFeedDetail.getDescription());
+
+
         }
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getCanHelpIns())) {
             StringBuilder stringBuilder = new StringBuilder();

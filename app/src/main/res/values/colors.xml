@@ -22,6 +22,7 @@
     <color name="challenge_post">#ff4531</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
+    <color name="theme">#ECECEC</color>
     <color name="public_profile_text">#eaccff</color>
     <color name="welcome_footer">#ccffffff</color>
     <color name="facebook_btn">#33ffffff</color>
@@ -42,6 +43,7 @@
     <color name="black_gradiant">#80000000</color>
     <color name="add_member_line">#e4e9ec</color>
     <color name="shadow">#3b99fc</color>
+
     <color name="profile_text">#999999</color>
     <color name="divide_approve_delete">#979797</color>
     <color name="approve_admin">#13c221</color>
@@ -55,12 +57,14 @@
     <color name="chat_incomming_text_color">#814edf</color>
 
     <!-- Text color of the search box hint text  -->
+
+    <color name="view_more">#2793e7</color>
     <color name="forgot_password">#838a9c</color>
     <color name="searchbox_hint_text_color">#1c2024</color>
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#f2403c</color>
-    <color name="posted_in">#8a8d8e</color>
+    <color name="posted_in">#90949c</color>
     <color name="search_tab_text">#3949ab</color>
     <color name="search_box">#273691</color>
     <color name="growth_buddies_name">#343434</color>
@@ -69,21 +73,25 @@
     <color name="ask_sheroes">#03d3f3</color>
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>
+    <color name="join_conversation">#F7F7F7</color>
     <color name="default_color_expanded">#F0F0F0</color>
     <color name="fully_transparent">#00000000</color>
     <color name="background">#f0f1f3</color>
-    <color name="feed_article_label">#323840</color>
+    <color name="feed_article_label">#3C3C3C</color>
     <color name="feed_article_comment">#777f8a</color>
     <color name="feed_job_card_new">#50e3c2</color>
+    <color name="feed_card_time">#90949c</color>
     <color name="feed_conversation">#878e98</color>
     <color name="requested_btn">#5d6d7d</color>
     <color name="suggested_text">#666666</color>
     <color name="suggested_card_text">#333333</color>
     <color name="tags_shap_selected_color">#EAECF6</color>
+    <color name="comment_text">#3c3c3c</color>
 
     <!--colors set through priyanka-->
 
     <!--text colors of setting_feedback page-->
+    <color name="recent_post_comment">#878787</color>
     <color name="text_color">#545b61</color>
     <color name="line_color">#a8c0c9d0</color>
     <color name="text_color_follow">#4a4a4a</color>

@@ -244,24 +244,19 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             } else {
                 mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REPLIES));
             }
-            if (mFeedDetail.getNoOfLikes() > 1) {
-                mTvReaction.setText(getString(R.string.ID_REACTIONS) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            } else if (mFeedDetail.getNoOfLikes() == 1) {
-                mTvReaction.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            }
+
+            String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, mFeedDetail.getNoOfLikes());
+            mTvReaction.setText(String.valueOf(pluralLikes+ getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET)));
+
         } else if (mFragmentOpen.isReactionList()) {
             HashMap<String, Object> properties = new EventProperty.Builder()
                     .id(Long.toString(mFeedDetail.getEntityOrParticipantId()))
                     .name(mFeedDetail.getNameOrTitle())
                     .build();
             AnalyticsManager.trackScreenView("Reactions Screen", properties);
-            if (mFeedDetail.getNoOfLikes() > 1) {
-                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTIONS) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            } else if (mFeedDetail.getNoOfLikes() == 1) {
-                mTvUserCommentHeaderText.setText(getString(R.string.ID_REACTION) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET));
-            } else {
-                mTvUserCommentHeaderText.setText(getString(R.string.ID_NO_REACTION));
-            }
+            String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, mFeedDetail.getNoOfLikes());
+            mTvUserCommentHeaderText.setText(String.valueOf(pluralLikes+ getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET)));
+
         }
         switch (mFragmentOpen.getOpenCommentReactionFragmentFor()) {
             case AppConstants.ONE_CONSTANT:

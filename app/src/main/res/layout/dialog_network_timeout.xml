@@ -22,8 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_below="@id/tv_no_connection"
-        android:src="@drawable/ic_emoji4_face_palm" />
+        android:layout_below="@id/tv_no_connection" />
 
 
     <TextView

@@ -32,6 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
+
 /**
  * Created by Praveen_Singh on 24-01-2017.
  */
@@ -106,6 +108,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             tvUserComment.setText(getCommentString);
+            linkifyURLs(tvUserComment);
             ivListCommentProfilePicVerified.setVisibility(View.GONE);
         } else {
             if (StringUtil.isNotNullOrEmptyString(dataItem.getComment())&&StringUtil.isNotNullOrEmptyString(dataItem.getParticipantName())) {
@@ -117,6 +120,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
                 getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 tvUserComment.setText(getCommentString);
+                linkifyURLs(tvUserComment);
                 if (!dataItem.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                     if (dataItem.isVerifiedMentor()) {
                         ivListCommentProfilePicVerified.setVisibility(View.VISIBLE);

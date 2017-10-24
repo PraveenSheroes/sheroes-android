@@ -7,7 +7,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/text_color_close</item>
-        <item name="colorAccent">@color/grey2</item>
+        <item name="colorAccent">@color/theme</item>
         </style>
 
     <style name="AlertDialogPositivCustom" parent="Theme.AppCompat.Light.Dialog.Alert">

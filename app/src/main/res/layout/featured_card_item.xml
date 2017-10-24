@@ -58,47 +58,33 @@
 
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_featured_community_text"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="@dimen/dp_size_3"
-            android:maxLines="@integer/int_value_for_line_2"
-            android:linksClickable="true"
-            android:textColor="@color/feed_article_label"
-            android:textSize="@dimen/sp_size_12" />
-        <TextView
-            android:id="@+id/tv_featured_community_text_full_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:visibility="gone"
-            android:linksClickable="true"
-            android:lineSpacingExtra="@dimen/dp_size_3"
-            android:textColor="@color/feed_article_label"
-            android:textSize="@dimen/sp_size_12" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_featured_view_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="@dimen/dp_size_22"
-            android:layout_marginTop="-23dp"
-            android:background="@color/white"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:gravity="right"
-            android:text="@string/ID_VIEW_MORE"
-            android:textColor="@color/feed_job_card_new"
-            android:textSize="@dimen/sp_size_14"
-            android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/tv_featured_community_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:lineSpacingExtra="@dimen/dp_size_3"
+                android:textColorLink="@color/view_more"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/sp_size_14" />
+            <TextView
+                android:id="@+id/tv_feature_communities_view_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ID_VIEW_MORE"
+                android:background="@color/white"
+                android:visibility="gone"
+                android:layout_marginBottom="@dimen/dp_size_2"
+                android:layout_gravity="bottom|right"
+                android:textColor="@color/view_more"/>
+        </FrameLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"

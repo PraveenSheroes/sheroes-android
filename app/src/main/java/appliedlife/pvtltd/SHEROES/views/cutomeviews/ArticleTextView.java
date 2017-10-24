@@ -21,7 +21,7 @@ public class ArticleTextView {
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#50e3c2'>";
+                final String LEFT_HTML_VEIW_TAG_FOR_COLOR = "<font color='#2793e7'>";
                 final String RIGHT_HTML_VIEW_TAG_FOR_COLOR = "</font>";
                 ViewTreeObserver obs = tv.getViewTreeObserver();
                 obs.removeGlobalOnLayoutListener(this);

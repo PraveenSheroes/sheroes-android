@@ -40,11 +40,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_10"
-                android:autoLink="web"
+                android:textColorLink="@color/view_more"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/detail_page_text"
                 android:lineSpacingExtra="@dimen/dp_size_4"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_12"
+                />
 
             <TextView
                 android:id="@+id/tv_list_user_comment_time"

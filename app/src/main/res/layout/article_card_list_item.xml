@@ -17,16 +17,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_11"
-            android:layout_marginBottom="@dimen/dp_size_11"
-            android:layout_marginRight="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginBottom="@dimen/dp_size_8"
+            android:layout_marginRight="@dimen/dp_size_16"
             android:gravity="center"
             android:weightSum="1">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_article_circle_icon"
-                android:layout_width="@dimen/comment_icon"
-                android:layout_height="@dimen/comment_icon" />
+                android:layout_width="@dimen/feed_profile_icon_size"
+                android:layout_height="@dimen/feed_profile_icon_size" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -40,16 +40,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textColor="@color/feed_article_label"
+                    android:textColor="@color/comment_text"
                     android:textSize="@dimen/sp_size_12" />
 
                 <TextView
                     android:id="@+id/tv_article_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_size_1"
+                    android:layout_marginTop="@dimen/dp_size_3"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:textColor="@color/button_color"
+                    android:textColor="@color/feed_card_time"
                     android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
 
@@ -83,7 +83,6 @@
                 android:id="@+id/tv_article_share"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_share_card"
                 android:paddingLeft="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_10" />
@@ -109,26 +108,26 @@
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
-                android:textColor="@color/dashboard_text"
+                android:textColor="@color/comment_text"
                 android:textSize="@dimen/sp_size_16" />
 
             <TextView
                 android:id="@+id/tv_article_description_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_5"
-                android:lines="@integer/int_value_for_line_2"
+                android:maxLines="@integer/int_value_for_line_4"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
-                android:textColor="@color/dashboard_fed_text"
-                android:textSize="@dimen/sp_size_12" />
+                android:textColor="@color/recent_post_comment"
+                android:textSize="@dimen/sp_size_14" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_0.5"
-                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:layout_marginLeft="@dimen/dp_size_13"
                 android:layout_marginRight="@dimen/dp_size_13"
                 android:background="@color/search_tab_unselected_text" />
@@ -138,8 +137,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/feed_article_label"
-                android:layout_marginTop="@dimen/dp_size_10"
+                android:textColor="@color/comment_text"
+                android:layout_marginTop="@dimen/dp_size_8"
+                android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginBottom="@dimen/dp_size_10"
                 android:textSize="@dimen/sp_size_12" />
