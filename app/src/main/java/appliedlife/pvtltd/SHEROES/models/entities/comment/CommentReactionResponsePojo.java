@@ -15,14 +15,14 @@ public class CommentReactionResponsePojo extends BaseResponse {
 
     @SerializedName("docs")
     @Expose
-    private List<CommentReactionDoc> commentReactionDocList = null;
+    private List<Comment> commentList = null;
 
-    public List<CommentReactionDoc> getCommentReactionDocList() {
-        return commentReactionDocList;
+    public List<Comment> getCommentList() {
+        return commentList;
     }
 
-    public void setCommentReactionDocList(List<CommentReactionDoc> commentReactionDocList) {
-        this.commentReactionDocList = commentReactionDocList;
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
 

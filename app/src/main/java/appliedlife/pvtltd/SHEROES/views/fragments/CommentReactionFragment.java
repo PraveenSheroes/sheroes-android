@@ -35,11 +35,10 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
@@ -58,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -127,8 +125,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     AppUtils mAppUtils;
     private FeedDetail mFeedDetail;
     boolean mIsAnonymous;
-    private List<CommentReactionDoc> mCommentReactionDocList;
-    private CommentReactionDoc mCommentReactionDoc;
+    private List<Comment> mCommentList;
+    private Comment mComment;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
     private int mPageNo = AppConstants.ONE_CONSTANT;
@@ -351,27 +349,27 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mEtUserCommentDescription.requestFocus();
         mLiNoResult.setVisibility(View.GONE);
         if (addEditOperation == AppConstants.ONE_CONSTANT) {
-            if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentReactionDocList())) {
-                mCommentReactionDocList = commentReactionResponsePojo.getCommentReactionDocList();
-                mCommentReactionDoc = null;
+            if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentList())) {
+                mCommentList = commentReactionResponsePojo.getCommentList();
+                mComment = null;
                 setLastComments();
                 setAdapterData();
                 addedComment = true;
             }
         } else {
-            if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentReactionDocList())) {
+            if (StringUtil.isNotEmptyCollection(commentReactionResponsePojo.getCommentList())) {
                 mPageNo = mFragmentListRefreshData.getPageNo();
                 mFragmentListRefreshData.setPageNo(++mPageNo);
-                mPullRefreshList.allListData(commentReactionResponsePojo.getCommentReactionDocList());
-                mCommentReactionDocList = mPullRefreshList.getFeedResponses();
+                mPullRefreshList.allListData(commentReactionResponsePojo.getCommentList());
+                mCommentList = mPullRefreshList.getFeedResponses();
                 if (mFeedDetail.isTrending()) {
                     menuItemDeleteOrEdit();
                     mFeedDetail.setTrending(false);
                 }
-                mAdapter.setSheroesGenericListData(mCommentReactionDocList);
+                mAdapter.setSheroesGenericListData(mCommentList);
                 mAdapter.notifyDataSetChanged();
                 if (!mPullRefreshList.isPullToRefresh()) {
-                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - commentReactionResponsePojo.getCommentReactionDocList().size(), 0);
+                    mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - commentReactionResponsePojo.getCommentList().size(), 0);
                 } else {
                     mLayoutManager.scrollToPositionWithOffset(0, 0);
                 }
@@ -391,34 +389,34 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         int editOrDelete = mFeedDetail.getExperienceFromI();
         switch (editOrDelete) {
             case AppConstants.ONE_CONSTANT:
-                List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+                List<Comment> lastCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastCommentList)) {
                     int commentId = lastCommentList.get(mFeedDetail.getNoOfOpenings()).getId();
-                    for (CommentReactionDoc commentReactionDoc : mCommentReactionDocList) {
-                        if (commentId == commentReactionDoc.getId()) {
+                    for (Comment comment : mCommentList) {
+                        if (commentId == comment.getId()) {
 
-                            mEtUserCommentDescription.setText(commentReactionDoc.getComment());
-                            mEtUserCommentDescription.setSelection(commentReactionDoc.getComment().length());
+                            mEtUserCommentDescription.setText(comment.getComment());
+                            mEtUserCommentDescription.setSelection(comment.getComment().length());
 
                             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
-                            mCommentReactionDocList.remove(commentReactionDoc);
-                            commentReactionDoc.setActive(true);
-                            commentReactionDoc.setEdit(true);
-                            mCommentReactionDoc = commentReactionDoc;
+                            mCommentList.remove(comment);
+                            comment.setActive(true);
+                            comment.setEdit(true);
+                            mComment = comment;
                             break;
                         }
                     }
                 }
                 break;
             case AppConstants.TWO_CONSTANT:
-                List<LastComment> lastDeleteCommentList = mFeedDetail.getLastComments();
+                List<Comment> lastDeleteCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastDeleteCommentList)) {
                     int commentId = lastDeleteCommentList.get(mFeedDetail.getNoOfOpenings()).getId();
-                    for (CommentReactionDoc commentReactionDoc : mCommentReactionDocList) {
-                        if (commentId == commentReactionDoc.getId()) {
-                            commentReactionDoc.setActive(false);
-                            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), mFeedDetail.isAnonymous(), commentReactionDoc.isActive(), commentReactionDoc.getId()), AppConstants.TWO_CONSTANT);
-                            mCommentReactionDocList.remove(commentReactionDoc);
+                    for (Comment comment : mCommentList) {
+                        if (commentId == comment.getId()) {
+                            comment.setActive(false);
+                            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), mFeedDetail.isAnonymous(), comment.isActive(), comment.getId()), AppConstants.TWO_CONSTANT);
+                            mCommentList.remove(comment);
                             break;
                         }
                     }
@@ -428,7 +426,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     private void setAdapterData() {
-        mAdapter.setSheroesGenericListData(mCommentReactionDocList);
+        mAdapter.setSheroesGenericListData(mCommentList);
         mLayoutManager.scrollToPosition(0);
         mAdapter.notifyDataSetChanged();
     }
@@ -462,7 +460,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                         tvPostComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_post_comment_active, 0, 0, 0);
                         tvPostComment.setVisibility(View.GONE);
                         mTotalComments++;
-                        if (!(mCommentReactionDoc != null && mCommentReactionDoc.isEdit())) {
+                        if (!(mComment != null && mComment.isEdit())) {
                             trackEvent(Event.REPLY_CREATED, properties);
                         }
                         entityData(mFeedDetail);
@@ -476,20 +474,20 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                             setAdapterData();
                             addedComment = true;
                         }*/
-                        if (mCommentReactionDoc != null && mCommentReactionDoc.isEdit()) {
+                        if (mComment != null && mComment.isEdit()) {
                             trackEvent(Event.REPLY_EDITED, properties);
                         }
 
                         break;
                     case AppConstants.TWO_CONSTANT:
                         mTotalComments--;
-                        if (null != mCommentReactionDoc) {
-                            mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
-                            mCommentReactionDoc = null;
+                        if (null != mComment) {
+                            mCommentList.remove(mComment.getItemPosition());
+                            mComment = null;
                         }
                         if (mFragmentOpen.isCommentList()) {
-                            if (mCommentReactionDocList.size() > 1) {
-                                mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentReactionDocList.size()) + getString(R.string.ID_CLOSE_BRACKET));
+                            if (mCommentList.size() > 1) {
+                                mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLIES) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mCommentList.size()) + getString(R.string.ID_CLOSE_BRACKET));
                             } else if (mTotalComments == 1) {
                                 mTvUserCommentHeaderText.setText(getString(R.string.ID_REPLY) + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mTotalComments) + getString(R.string.ID_CLOSE_BRACKET));
                             } else {
@@ -515,17 +513,17 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     private void setLastComments() {
-        List<LastComment> lastCommentList = new ArrayList<>();
-        if (StringUtil.isNotEmptyCollection(mCommentReactionDocList)) {
-            switch (mCommentReactionDocList.size()) {
+        List<Comment> lastCommentList = new ArrayList<>();
+        if (StringUtil.isNotEmptyCollection(mCommentList)) {
+            switch (mCommentList.size()) {
                 case AppConstants.ONE_CONSTANT:
-                    lastCommentList = getListItem(mCommentReactionDocList.size(), lastCommentList);
+                    lastCommentList = getListItem(mCommentList.size(), lastCommentList);
                     break;
                 case AppConstants.TWO_CONSTANT:
-                    lastCommentList = getListItem(mCommentReactionDocList.size(), lastCommentList);
+                    lastCommentList = getListItem(mCommentList.size(), lastCommentList);
                     break;
                 case AppConstants.THREE_CONSTANT:
-                    lastCommentList = getListItem(mCommentReactionDocList.size(), lastCommentList);
+                    lastCommentList = getListItem(mCommentList.size(), lastCommentList);
                     break;
                 default:
                     lastCommentList = getListItem(AppConstants.THREE_CONSTANT, lastCommentList);
@@ -548,16 +546,16 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         }
     }
 
-    private List<LastComment> getListItem(int size, List<LastComment> lastCommentList) {
+    private List<Comment> getListItem(int size, List<Comment> lastCommentList) {
         for (int i = size - 1; i >= 0; i--) {
-            LastComment lastComment = new LastComment();
-            lastComment.setId(mCommentReactionDocList.get(i).getId());
-            lastComment.setAnonymous(mCommentReactionDocList.get(i).isAnonymous());
-            lastComment.setComment(mCommentReactionDocList.get(i).getComment());
-            lastComment.setParticipantImageUrl(mCommentReactionDocList.get(i).getParticipantImageUrl());
-            lastComment.setParticipantName(mCommentReactionDocList.get(i).getParticipantName());
-            lastComment.setMyOwnParticipation(mCommentReactionDocList.get(i).isMyOwnParticipation());
-            lastComment.setCreatedOn(mCommentReactionDocList.get(i).getCreatedOn());
+            Comment lastComment = new Comment();
+            lastComment.setId(mCommentList.get(i).getId());
+            lastComment.setAnonymous(mCommentList.get(i).isAnonymous());
+            lastComment.setComment(mCommentList.get(i).getComment());
+            lastComment.setParticipantImageUrl(mCommentList.get(i).getParticipantImageUrl());
+            lastComment.setParticipantName(mCommentList.get(i).getParticipantName());
+            lastComment.setMyOwnParticipation(mCommentList.get(i).isMyOwnParticipation());
+            lastComment.setCreatedOn(mCommentList.get(i).getCreatedOn());
             lastCommentList.add(lastComment);
         }
         return lastCommentList;
@@ -625,9 +623,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     public void postComment() {
         mEtUserCommentDescription.setEnabled(false);
         tvPostComment.setEnabled(false);
-        if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
+        if (null != mComment && mComment.isEdit()) {
             mTotalComments--;
-            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mCommentReactionDoc.getEntityId(), mCommentReactionDoc.getComment(), mIsAnonymous, false, mCommentReactionDoc.getId()), AppConstants.ONE_CONSTANT);
+            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(mComment.getEntityId(), mComment.getComment(), mIsAnonymous, false, mComment.getId()), AppConstants.ONE_CONSTANT);
 
             if (typeOfPost == AppConstants.ONE_CONSTANT) {
                 ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_REPLIED, GoogleAnalyticsEventActions.EDITED_REPLIED_TO_ARTICLE, AppConstants.EMPTY_STRING);
@@ -648,14 +646,14 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     }
 
-    public void editCommentInList(CommentReactionDoc commentReactionDoc) {
-        mCommentReactionDoc = commentReactionDoc;
-        if (null != mCommentReactionDoc && mCommentReactionDoc.isEdit()) {
+    public void editCommentInList(Comment comment) {
+        mComment = comment;
+        if (null != mComment && mComment.isEdit()) {
             AppUtils.hideKeyboard(mEtUserCommentDescription, TAG);
             AppUtils.keyboardToggle(mEtUserCommentDescription, TAG);
             AppUtils.showKeyboard(mEtUserCommentDescription, TAG);
-            mCommentReactionDocList.remove(mCommentReactionDoc.getItemPosition());
-            mEtUserCommentDescription.setText(mCommentReactionDoc.getComment());
+            mCommentList.remove(mComment.getItemPosition());
+            mEtUserCommentDescription.setText(mComment.getComment());
             mEtUserCommentDescription.setSelection(mEtUserCommentDescription.getText().toString().length());
             mEtUserCommentDescription.setTextColor(ContextCompat.getColor(getActivity(), R.color.feed_article_label));
             //  mEtUserCommentDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -664,11 +662,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         setAdapterData();
     }
 
-    public void deleteCommentFromList(CommentReactionDoc commentReactionDoc) {
-        mCommentReactionDoc = commentReactionDoc;
-        mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(commentReactionDoc.getEntityId(), commentReactionDoc.getComment(), mIsAnonymous, commentReactionDoc.isActive(), commentReactionDoc.getId()), AppConstants.TWO_CONSTANT);
+    public void deleteCommentFromList(Comment comment) {
+        mComment = comment;
+        mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), mIsAnonymous, comment.isActive(), comment.getId()), AppConstants.TWO_CONSTANT);
         if (typeOfPost == AppConstants.ONE_CONSTANT) {
-            if (!commentReactionDoc.isActive()) {
+            if (!comment.isActive()) {
                 ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_REPLIED, GoogleAnalyticsEventActions.DELETED_REPLIED_TO_ARTICLE, AppConstants.EMPTY_STRING);
             }
         } else if (typeOfPost == AppConstants.TWO_CONSTANT) {

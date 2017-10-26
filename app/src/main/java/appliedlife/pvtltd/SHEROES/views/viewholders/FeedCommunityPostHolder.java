@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -662,8 +663,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
-        List<LastComment> lastCommentList = dataItem.getLastComments();
-        LastComment lastComment;
+        List<Comment> lastCommentList = dataItem.getLastComments();
+        Comment lastComment;
         if (StringUtil.isNotEmptyCollection(lastCommentList)) {
             mItemPosition = lastCommentList.size() - 1;
             lastComment = lastCommentList.get(mItemPosition);

@@ -761,4 +761,32 @@
     <string name="album_title">%1$d of %2$d"</string>
     <string name="img_saved_info">Image saved</string>
 
+    <string name="more_text_info">There are %1$s more comments."</string>
+    <string name="load_more">Load More</string>
+
+    <plurals name="numberOfComments">
+        <item quantity="zero">Comments</item>
+        <item quantity="one">Comment</item>
+        <item quantity="other">Comments</item>
+    </plurals>
+
+
+    <plurals name="numberOfLikes">
+        <item quantity="zero">Likes</item>
+        <item quantity="one">Like</item>
+        <item quantity="other">Likes</item>
+    </plurals>
+
+    <plurals name="numberOfViews">
+        <item quantity="zero">Views</item>
+        <item quantity="one">View</item>
+        <item quantity="other">Views</item>
+    </plurals>
+
+    <string name="action_like">like</string>
+    <string name="action_bookmark">bookmark</string>
+    <string name="delete">Delete</string>
+    <string name="comment_hint">Leave your thoughts here...</string>
+    <string name="comment_deleted">Your comment has been deleted</string>
+    <string name="image_kit_width_height">tr:h-%1$d,w-%1$d,fo-auto</string>
 </resources>

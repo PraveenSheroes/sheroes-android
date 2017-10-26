@@ -196,7 +196,12 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
+               /* Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
+                articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
+                articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(articleDetail);*/
+                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleActivity.class);
                 articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
                 articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);

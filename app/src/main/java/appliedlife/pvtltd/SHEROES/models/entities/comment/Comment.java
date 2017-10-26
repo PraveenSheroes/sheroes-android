@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by Praveen_Singh on 15-02-2017.
  */
 
-public class CommentReactionDoc extends BaseResponse implements Parcelable {
+public class Comment extends BaseResponse implements Parcelable {
     int byDefaultMenuOpen;
     boolean isEdit;
     int itemPosition;
@@ -199,7 +199,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.participationTypeId = participationTypeId;
     }
 
-    public CommentReactionDoc() {
+    public Comment() {
     }
 
     public boolean isMyOwnParticipation() {
@@ -290,7 +290,7 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
     }
 
-    protected CommentReactionDoc(Parcel in) {
+    protected Comment(Parcel in) {
         super(in);
         this.byDefaultMenuOpen = in.readInt();
         this.isEdit = in.readByte() != 0;
@@ -316,15 +316,15 @@ public class CommentReactionDoc extends BaseResponse implements Parcelable {
         this.isVerifiedMentor = in.readByte() != 0;
     }
 
-    public static final Creator<CommentReactionDoc> CREATOR = new Creator<CommentReactionDoc>() {
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
         @Override
-        public CommentReactionDoc createFromParcel(Parcel source) {
-            return new CommentReactionDoc(source);
+        public Comment createFromParcel(Parcel source) {
+            return new Comment(source);
         }
 
         @Override
-        public CommentReactionDoc[] newArray(int size) {
-            return new CommentReactionDoc[size];
+        public Comment[] newArray(int size) {
+            return new Comment[size];
         }
     };
 }

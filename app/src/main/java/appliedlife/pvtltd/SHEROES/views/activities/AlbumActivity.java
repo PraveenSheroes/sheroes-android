@@ -219,7 +219,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             onBackPressed();
         } else if (id == R.id.share) {
             String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
-            ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName());
+            ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true);
         }
         return true;
     }

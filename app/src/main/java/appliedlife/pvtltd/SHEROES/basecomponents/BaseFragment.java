@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
@@ -361,9 +362,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+                    List<Comment> lastCommentList = mFeedDetail.getLastComments();
                     if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-                        LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
+                        Comment lastComment = lastCommentList.get(lastCommentList.size() - 1);
                         lastCommentList.remove(lastComment);
                         mFeedDetail.setLastComments(lastCommentList);
                         AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail);

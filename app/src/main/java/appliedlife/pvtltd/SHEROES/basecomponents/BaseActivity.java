@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -126,6 +127,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }*/
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
+    }
+
+    public void setSource(String source) {
+        String mSourceScreen = source;
     }
 
     public boolean shouldTrackScreen() {
@@ -471,9 +476,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 userReactionDialogLongPress(view);
                 break;
             case R.id.li_feed_article_images:
-                Intent intent = new Intent(this, ArticleDetailActivity.class);
+                ArticleActivity.navigateTo(this, mFeedDetail, "da", null);
+                /*Intent intent = new Intent(this, ArticleDetailActivity.class);
                 intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case R.id.li_feed_job_card:
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
@@ -481,9 +487,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             case R.id.li_article_cover_image:
-                Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+                ArticleActivity.navigateTo(this, mFeedDetail, "da", null);
+                /*Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case R.id.li_community_images:
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
@@ -791,12 +798,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                if (null != commentReactionDoc) {
+                Comment comment = (Comment) baseResponse;
+                if (null != comment) {
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        commentReactionDoc.setActive(true);
-                        commentReactionDoc.setEdit(true);
-                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                        comment.setActive(true);
+                        comment.setEdit(true);
+                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(comment);
                     }
                 }
                 break;
@@ -826,11 +833,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                Comment comment = (Comment) baseResponse;
                 if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                    commentReactionDoc.setActive(false);
-                    commentReactionDoc.setEdit(false);
-                    ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(commentReactionDoc);
+                    comment.setActive(false);
+                    comment.setEdit(false);
+                    ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
                 }
                 break;
             case USER_REACTION_COMMENT_MENU:

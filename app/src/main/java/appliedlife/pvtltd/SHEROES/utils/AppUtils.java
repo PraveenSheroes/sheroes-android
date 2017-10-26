@@ -2144,6 +2144,20 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
+
+    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId, int pageNo, int pageSize) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        commentReactionRequestPojo.setPageNo(pageNo);
+        //Page size for comment list
+        commentReactionRequestPojo.setPageSize(pageSize);
+        commentReactionRequestPojo.setEntityId(entityId);
+        return commentReactionRequestPojo;
+    }
     public static MemberRequest getPandingMemberRequestBuilder(long entityId, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
 

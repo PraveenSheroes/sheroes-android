@@ -731,6 +731,15 @@ public class CommonUtil {
         return contentUri;
     }
 
+    public static void shareLinkToWhatsApp(Context context, String mShareText) {
+        Intent sharingIntent = new Intent((Intent.ACTION_SEND))
+                .setType("text/plain");
+        sharingIntent
+                .putExtra(Intent.EXTRA_TEXT, mShareText);
+        sharingIntent.setPackage("com.whatsapp");
+        context.startActivity(sharingIntent);
+    }
+
     public static class Dimension {
         public int width;
         public int height;

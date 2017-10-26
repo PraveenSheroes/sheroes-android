@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -36,7 +36,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 24-01-2017.
  */
 
-public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
+public class CommentHolder extends BaseViewHolder<Comment> {
     private final String TAG = LogUtils.makeLogTag(CommentHolder.class);
     @Inject
     DateUtil mDateUtil;
@@ -59,7 +59,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
 
     Context mContext;
     BaseHolderInterface viewInterface;
-    private CommentReactionDoc dataItem;
+    private Comment dataItem;
     private long mAdminId;
     public CommentHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -75,7 +75,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
-    public void bindData(CommentReactionDoc item, final Context context, int position) {
+    public void bindData(Comment item, final Context context, int position) {
         this.dataItem = item;
         this.mContext = context;
         if (StringUtil.isNotNullOrEmptyString(dataItem.getPostedDate())) {

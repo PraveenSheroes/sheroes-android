@@ -12,14 +12,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 public class CommentAddDelete extends BaseResponse {
     @SerializedName("participation_model")
     @Expose
-    private CommentReactionDoc commentReactionModel = null;
+    private Comment commentReactionModel = null;
 
 
-    public CommentReactionDoc getCommentReactionModel() {
+    public Comment getCommentReactionModel() {
         return commentReactionModel;
     }
 
-    public void setCommentReactionModel(CommentReactionDoc commentReactionModel) {
+    public void setCommentReactionModel(Comment commentReactionModel) {
         this.commentReactionModel = commentReactionModel;
     }
 }

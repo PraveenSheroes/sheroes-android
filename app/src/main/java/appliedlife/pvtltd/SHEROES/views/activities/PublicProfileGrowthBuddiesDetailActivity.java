@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -314,7 +313,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         int id = view.getId();
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
-        } else if (baseResponse instanceof CommentReactionDoc) {
+        } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -553,9 +552,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
 
     @Override
     public void championProfile(BaseResponse baseResponse, int championValue) {
-        if (baseResponse instanceof CommentReactionDoc) {
-            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-            championDetailActivity(commentReactionDoc.getParticipantId());
+        if (baseResponse instanceof Comment) {
+            Comment comment = (Comment) baseResponse;
+            championDetailActivity(comment.getParticipantId());
         }
     }
 

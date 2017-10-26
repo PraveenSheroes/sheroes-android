@@ -37,7 +37,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,7 +73,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
@@ -427,7 +426,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
             }
 
-        } else if (baseResponse instanceof CommentReactionDoc) {
+        } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -1519,9 +1518,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition());
-        } else if (baseResponse instanceof CommentReactionDoc) {
-            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-            championDetailActivity(commentReactionDoc.getParticipantId(), commentReactionDoc.getItemPosition());
+        } else if (baseResponse instanceof Comment) {
+            Comment comment = (Comment) baseResponse;
+            championDetailActivity(comment.getParticipantId(), comment.getItemPosition());
         }
     }
 

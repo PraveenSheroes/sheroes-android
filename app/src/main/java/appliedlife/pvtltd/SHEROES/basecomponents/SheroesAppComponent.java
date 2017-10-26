@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
@@ -578,5 +579,7 @@ public interface SheroesAppComponent {
     void inject (OrgReviewCardHolder orgReviewCardHolder);
 
     void inject(AlbumActivity albumActivity);
+
+    void inject(ArticleActivity articleActivity);
 
 }

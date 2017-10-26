@@ -12,7 +12,9 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
+
 public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
     public static final String FEED_DETAIL_ID = "FEED_DETAIL_ID";
@@ -484,7 +486,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     private int noOfComments;
     @SerializedName("solr_ignore_last_comments")
     @Expose
-    private List<LastComment> lastComments = null;
+    private List<Comment> lastComments = null;
     @SerializedName("solr_ignore_no_of_views")
     @Expose
     private int noOfViews;
@@ -582,6 +584,37 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @Expose
     private boolean isCommentAllowed;
 
+    @SerializedName("thumbnailImage_width_i")
+    @Expose
+    private int thumbImageWidth;
+
+    public int getThumbImageHeight() {
+        return thumbImageHeight;
+    }
+
+    public void setThumbImageHeight(int thumbImageHeight) {
+        this.thumbImageHeight = thumbImageHeight;
+    }
+
+    @SerializedName("thumbnailImage_height_i")
+    @Expose
+    private int thumbImageHeight;
+
+    @SerializedName("highresImage_width_i")
+    @Expose
+    private int highresImageWidth;
+
+    public int getHighresImageHeight() {
+        return highresImageHeight;
+    }
+
+    public void setHighresImageHeight(int highresImageHeight) {
+        this.highresImageHeight = highresImageHeight;
+    }
+
+    @SerializedName("highresImage_height_i")
+    @Expose
+    private int highresImageHeight;
 
     public int getItemPosition() {
         return itemPosition;
@@ -1567,11 +1600,11 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.noOfComments = noOfComments;
     }
 
-    public List<LastComment> getLastComments() {
+    public List<Comment> getLastComments() {
         return lastComments;
     }
 
-    public void setLastComments(List<LastComment> lastComments) {
+    public void setLastComments(List<Comment> lastComments) {
         this.lastComments = lastComments;
     }
 
@@ -2025,6 +2058,22 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.imageRatio = imageRatio;
     }
 
+    public int getHighresImageWidth() {
+        return highresImageWidth;
+    }
+
+    public void setHighresImageWidth(int highresImageWidth) {
+        this.highresImageWidth = highresImageWidth;
+    }
+
+    public int getThumbImageWidth() {
+        return thumbImageWidth;
+    }
+
+    public void setThumbImageWidth(int thumbImageWidth) {
+        this.thumbImageWidth = thumbImageWidth;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -2383,7 +2432,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.reactionValue = in.readInt();
         this.noOfLikes = in.readInt();
         this.noOfComments = in.readInt();
-        this.lastComments = in.createTypedArrayList(LastComment.CREATOR);
+        this.lastComments = in.createTypedArrayList(Comment.CREATOR);
         this.noOfViews = in.readInt();
         this.isApplied = in.readByte() != 0;
         this.isBookmarked = in.readByte() != 0;

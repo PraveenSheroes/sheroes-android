@@ -36,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -342,7 +343,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getLastComments())) {
-            List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+            List<Comment> lastCommentList = mFeedDetail.getLastComments();
             for (int index = 0; index < lastCommentList.size(); index++) {
                 switch (index) {
                     case AppConstants.NO_REACTION_CONSTANT:

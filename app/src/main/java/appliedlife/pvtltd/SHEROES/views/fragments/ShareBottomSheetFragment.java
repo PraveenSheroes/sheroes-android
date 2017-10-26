@@ -46,12 +46,15 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private static final String SHARE_DEEPLINK = "share deep link";
     private static final String SHARE_IMAGE = "share image";
     private static final String SHARE_TEXT = "share text";
+    private static final String IS_IMAGE_SHARE = "Is Image Share";
+
     private android.content.ClipboardManager myClipboard;
     private ClipData myClip;
 
     private String mShareImageUrl;
     private String mShareText;
     private String mShareDeepLinkUrl;
+    private boolean mIsImageShare;
     //endregion
 
     // region View variables
@@ -88,12 +91,13 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //endregion
 
     //region Public Static methods
-    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen) {
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage) {
         ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
         Bundle args = new Bundle();
         args.putString(SHARE_TEXT, shareText);
         args.putString(SHARE_DEEPLINK, shareDeepLinkUrl);
         args.putString(SHARE_IMAGE, shareImage);
+        args.putBoolean(IS_IMAGE_SHARE, isImage);
         shareBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
@@ -104,56 +108,75 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //region OnClicks
     @OnClick({R.id.layout_whatsapp, R.id.image_whatsapp, R.id.text_whatsapp})
     public void onWhatsAppClick() {
-        CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, "Album Screen", true);
+        if(mIsImageShare){
+            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, "Album Screen", true);
+        }else {
+            CommonUtil.shareLinkToWhatsApp(getContext(), mShareText);
+        }
     }
 
     @OnClick({R.id.layout_copy_link, R.id.image_copy_link, R.id.text_copy_link})
     public void onCopyLinkClick() {
-        if (mShareImageUrl != null) {
-            myClip = ClipData.newPlainText("copy_link", mShareImageUrl);
-            myClipboard.setPrimaryClip(myClip);
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(mShareImageUrl)
-                            .build();
-            AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, properties);
-            dismiss();
-            Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
+        if (mIsImageShare && !CommonUtil.isNotEmpty(mShareImageUrl)) {
+            return;
         }
+        if (!mIsImageShare && !CommonUtil.isNotEmpty(mShareDeepLinkUrl)) {
+            return;
+        }
+        myClip = ClipData.newPlainText("copy_link", mIsImageShare ? mShareImageUrl : mShareDeepLinkUrl);
+        myClipboard.setPrimaryClip(myClip);
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(mShareImageUrl)
+                        .build();
+        AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, properties);
+        dismiss();
+        Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick({R.id.layout_facebook, R.id.image_facebook, R.id.text_facebook})
     public void onFacebookClick() {
-        CompressImageUtil.createBitmap(SheroesApplication.mContext, mShareImageUrl, 816, 816)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Bitmap>() {
-                    @Override
-                    public void onCompleted() {
+        if(mIsImageShare){
+            CompressImageUtil.createBitmap(SheroesApplication.mContext, mShareImageUrl, 816, 816)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<Bitmap>() {
+                        @Override
+                        public void onCompleted() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
+                        @Override
+                        public void onError(Throwable e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onNext(Bitmap bmp) {
-                        SharePhoto photo = new SharePhoto.Builder()
-                                .setBitmap(bmp)
-                                .build();
-                        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
-                                .addPhoto(photo)
-                                .build();
-                        ShareDialog shareDialog = new ShareDialog(getActivity());
-                        shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
-                        EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
-                        final HashMap<String, Object> properties = builder.build();
-                        properties.put(EventProperty.URL.getString(), mShareImageUrl);
-                        AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);
-                    }
-                });
+                        @Override
+                        public void onNext(Bitmap bmp) {
+                            SharePhoto photo = new SharePhoto.Builder()
+                                    .setBitmap(bmp)
+                                    .build();
+                            SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                                    .addPhoto(photo)
+                                    .build();
+                            ShareDialog shareDialog = new ShareDialog(getActivity());
+                            shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
+                            EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
+                            final HashMap<String, Object> properties = builder.build();
+                            properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                            AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);
+                        }
+                    });
+        }else {
+            ShareLinkContent content = new ShareLinkContent.Builder()
+                   // .setContentTitle(imageTitle)
+                    .setContentUrl(Uri.parse(mShareDeepLinkUrl))
+                  //  .setContentDescription(imageDescription)
+                    //.setImageUrl(Uri.parse(url))
+                    .build();
+            ShareDialog shareDialog = new ShareDialog(getActivity());
+            shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+        }
     }
     //endregion
 }
