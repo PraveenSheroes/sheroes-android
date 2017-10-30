@@ -642,6 +642,19 @@ public class CommonUtil {
         return uri;
     }
 
+    public static String getImgKitUri(@NonNull String image, int width, int height) {
+        String heightWidth = "";
+        if(image.contains("img.sheroes")){
+            heightWidth = "?tr=w-" + Integer.toString(width) + ",h-" + Integer.toString(height);
+        }
+        if(image.contains("images.assettype")){
+            heightWidth = "?w=" + Integer.toString(width) + "&h=" + Integer.toString(height);
+        }
+        String uri = image + heightWidth;
+        return uri;
+    }
+
+
     public static String getThumborUriWithUpscale(String image, int width, int height) {
         String uri = image;
         try {

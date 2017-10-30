@@ -789,4 +789,17 @@
     <string name="comment_hint">Leave your thoughts here...</string>
     <string name="comment_deleted">Your comment has been deleted</string>
     <string name="image_kit_width_height">tr:h-%1$d,w-%1$d,fo-auto</string>
+    <string name="choose_community">Choose your community to post in</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="post_anonymous">Post as Anonymous</string>
+    <string name="hint.write_post">What\'s on your mind?</string>
+    <string name="action.post">Post</string>
+    <string name="title.create_post">Write a Post</string>
+    <string name="anonymous">Anonymous</string>
+    <string name="choose_community_option">Choose your community</string>
+    <string name="image_count">%1$d/%2$d</string>
+    <string name="error_blank">Please add something to post</string>
+    <string name="error_choose_community">Please choose the community to post in</string>
+    <string name="menu.post_as_community">Post as Community</string>
+    <string name="menu.post_as_user">Post as %1$s</string>
 </resources>

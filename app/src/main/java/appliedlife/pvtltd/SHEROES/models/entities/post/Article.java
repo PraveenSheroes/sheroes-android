@@ -26,14 +26,16 @@ public class Article extends Post {
     public int likesCount;
     public int totalViews;
     public boolean showComments = true;
-    public int featureImageHeight;
-    public int featureImageWidth;
     public boolean isThreadClosed;
     public String featureImage;
     public UserProfile author;
     public boolean isBookmarked;
     public boolean isLiked;
     public String deepLink;
+    public int thumbImageWidth;
+    public int thumbImageHeight;
+    public int featureImageWidth;
+    public int featureImageHeight;
     public ArrayList<Comment> comments = new ArrayList<>();
 
     public
@@ -49,7 +51,7 @@ public class Article extends Post {
     }
 
     public String getReadingTime() {
-        if (body == null) {
+        if (body == null && readingTime < MIN_READING_TIME) {
             return "";
         }
         String readingTimeSuffix = " mins read";

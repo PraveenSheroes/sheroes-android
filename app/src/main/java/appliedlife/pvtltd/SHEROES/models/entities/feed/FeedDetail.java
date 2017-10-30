@@ -598,11 +598,11 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     @SerializedName("thumbnailImage_height_i")
     @Expose
-    private int thumbImageHeight;
+    public int thumbImageHeight;
 
     @SerializedName("highresImage_width_i")
     @Expose
-    private int highresImageWidth;
+    public int highresImageWidth;
 
     public int getHighresImageHeight() {
         return highresImageHeight;
@@ -2261,6 +2261,10 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeLong(this.communityTypeId);
         dest.writeInt(this.rating);
         dest.writeByte(this.isCommentAllowed ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.highresImageHeight);
+        dest.writeInt(this.highresImageWidth);
+        dest.writeInt(this.thumbImageHeight);
+        dest.writeInt(this.thumbImageWidth);
     }
 
     protected FeedDetail(Parcel in) {
@@ -2465,6 +2469,10 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.communityTypeId = in.readLong();
         this.rating = in.readInt();
         this.isCommentAllowed = in.readByte() != 0;
+        this.highresImageHeight = in.readInt();
+        this.highresImageWidth = in.readInt();
+        this.thumbImageHeight = in.readInt();
+        this.thumbImageWidth = in.readInt();
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {

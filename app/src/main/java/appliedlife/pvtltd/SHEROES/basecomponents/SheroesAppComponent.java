@@ -6,6 +6,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
@@ -14,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -59,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingShareYourInterestFra
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfessionalEditBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProffestionalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileAboutMeFragment;
@@ -581,5 +584,11 @@ public interface SheroesAppComponent {
     void inject(AlbumActivity albumActivity);
 
     void inject(ArticleActivity articleActivity);
+
+    void inject(CommunityPostActivity communityPostActivity);
+
+    void inject(CreatePostPresenter createPostPresenter);
+
+    void inject(PostBottomSheetFragment postBottomSheetFragment);
 
 }

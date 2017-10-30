@@ -176,7 +176,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     author.setText(comment.getParticipantName());
                    // bio.setText(comment.getPa);
                     if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
-                        String authorImage = CommonUtil.getThumborUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                        String authorImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
                         Glide.with(mContext)
                                 .load(authorImage)
                                // .placeholder(comment.author.getPlaceholder())

@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -588,11 +589,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public void createCommunityPostClick(FeedDetail feedDetail) {
-        Intent intent = new Intent(this, CreateCommunityPostActivity.class);
+       /* Intent intent = new Intent(this, CreateCommunityPostActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
         intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);*/
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
         // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 

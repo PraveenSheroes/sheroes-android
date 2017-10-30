@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 /**
- * Created by Geet on 14-07-2016.
+ * Created by Ujjwal on 14-07-2016.
  */
 import android.graphics.Paint;
 import android.graphics.Typeface;

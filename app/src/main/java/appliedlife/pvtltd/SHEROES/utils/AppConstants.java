@@ -91,6 +91,7 @@ public class AppConstants {
     public static final String INTEREST_TYPE = "INTEREST";
     public static final String USER = "USER";
     public static final String COMMUNITY_OWNER = "COMMUNITY_OWNER";
+    public static final String ANONYMOUS = "ANONYMOUS";
 
     public static final String INTEREST_SUB_TYPE = "INTEREST_SERVICE";
     public static final String WORK_EXPERIENCE_SUB_TYPE = "TOTAL_EXP";

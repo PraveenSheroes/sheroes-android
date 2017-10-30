@@ -111,8 +111,8 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity"
             android:clearTaskOnLaunch="true"
@@ -131,8 +131,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity"
-            android:screenOrientation="portrait"
             android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
         <activity
@@ -161,15 +161,17 @@
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".views.activities.CommunityPostActivity"
+            android:screenOrientation="portrait"></activity>
 
-        </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"
             android:screenOrientation="portrait"
@@ -218,8 +220,10 @@
                 <data android:pathPattern="/.*" />
             </intent-filter>
         </activity>
-        <activity android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"
             android:exported="false">

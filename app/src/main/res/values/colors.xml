@@ -7,6 +7,7 @@
     <color name="colorAccent">#6e2f95</color>
     <color name="once_card">#6d3493</color>
     <color name="light_grey">#4D4D4D</color>
+    <color name="gray_light">#878787</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
     <color name="challenge_count">#303F9F</color>
     <color name="primary_text_disabled_light">#39000000</color>
@@ -112,6 +113,7 @@
     <color name="text_color_work_list">#828b93</color>
     <color name="background_color_project_number">#f5f5f5</color>
     <color name="feed_background">#f5f7fa</color>
+    <color name="anonymous_background">#ebebeb</color>
 
     <!--text colors of deactive_custom dialog page-->
 

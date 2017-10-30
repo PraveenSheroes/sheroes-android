@@ -175,6 +175,7 @@
 
     <dimen name="toolbar_title_size">20dp</dimen>
     <dimen name="article_image_height">260dp</dimen>
+    <dimen name="article_image_height_tmp">200dp</dimen>
     <dimen name="authorPicSize">44dp</dimen>
 
     <!--Text sizes for SHEROES-->

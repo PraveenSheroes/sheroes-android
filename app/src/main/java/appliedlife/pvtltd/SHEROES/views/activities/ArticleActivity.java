@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -37,6 +36,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -46,13 +46,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.crashlytics.android.Crashlytics;
-import com.facebook.stetho.common.LogUtil;
-import com.squareup.pollexor.ThumborUrlBuilder;
 
 import org.parceler.Parcels;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,14 +56,14 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.imageops.SheroesThumbor;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
@@ -75,7 +71,6 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.CustomTypefaceSpan;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -94,27 +89,34 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
 
 /**
- * Created by avinash on 28/01/16.
+ * Created by ujjwal on 28/10/17.
  */
 public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener {
 
     public static final String SCREEN_LABEL = "Article Activity";
-    private static final String TAG = "ArticleActivity";
     public static final String IMAGE_WIDTH = "IMAGE_WIDTH";
     public static final String IMAGE_HEIGHT = "IMAGE_HEIGHT";
     private static final String NOTIFICATION_SCREEN = "Push Notification";
     private static final String RELATIVE_PATH_ASSETS = "file:///android_asset/";
     private static final String TRANSITION = "TRANSITION";
+    private static final String FEED_POSITION = "Feed Position";
     int defaultUi;
     private WebViewClickListener webViewClickListener = null;
     public int mCommentCount = 0;
-    //region Presenter
+    public boolean mHasFocus = false;
+
+    //region member variabe
     private VideoEnabledWebChromeClient webChromeClient;
     private CommentListAdapter mCommentsAdapter;
     private int mImageWidth;
     private int mImageHeight;
     private int mArticleId;
-    private Handler mHandler;
+    private int mFeedPosition;
+    public Article mArticle;
+    private long mScrollPercentage = 0;
+    boolean isScrollingDown = false;
+    private boolean mIsTransition = false;
+    private FeedDetail mFeedDetail;
 
     @Inject
     ArticlePresenterImpl mArticlePresenter;
@@ -203,7 +205,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     RecyclerView mCommentList;
 
     @Bind(R.id.comment_body)
-    TextView mCommentBody;
+    EditText mCommentBody;
 
     @Bind(R.id.submit)
     Button mSubmitButton;
@@ -214,18 +216,16 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Bind(R.id.more_comments)
     TextView mMoreComments;
 
+    @Bind(R.id.like_count)
+    TextView mLikeCount;
+
     @Bind(R.id.border)
     View mBorder;
 
-    @BindDimen(R.dimen.article_image_height)
+    @BindDimen(R.dimen.article_image_height_tmp)
     int articleImageHeight;
 
     //endregion
-
-    public Article mArticle;
-    private long mScrollPercentage = 0;
-    boolean isScrollingDown = false;
-    private boolean mIsTransition = false;
 
     //region Activity methods
     @Override
@@ -235,12 +235,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         setContentView(R.layout.activity_article);
         ActivityCompat.postponeEnterTransition(ArticleActivity.this);
         ButterKnife.bind(this);
-        mHandler = new Handler();
-        setupWebView();
+        mArticlePresenter.attachView(this);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Parcelable parcelable = getIntent().getParcelableExtra(Article.ARTICLE_OBJ);
         mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
-      //  webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, "", "text/html", "UTF-8", null);
+        mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
         if (parcelable != null) {
             mArticle = Parcels.unwrap(parcelable);
             if (mArticle != null) {
@@ -252,7 +252,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         } else {
             if (getIntent().getExtras() != null) {
                 String notificationId = getIntent().getExtras().getString("notificationId");
-                mArticleId = getIntent().getExtras().getInt(AppConstants.ARTICLE_ID, -1);
+                Long i = (Long) getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
+                mArticleId = i.intValue();
                 if (!TextUtils.isEmpty(notificationId)) {
                     setSource(NOTIFICATION_SCREEN);
                 }
@@ -262,11 +263,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 finish();
             }
         }
-        if(mImageWidth!=0 && mImageHeight!=0){
-            int imageHeight = (int)(((float)mImageHeight/(float)mImageWidth) * CommonUtil.getWindowWidth(this));
-            image.getLayoutParams().height = imageHeight;
-        }
-        mArticlePresenter.attachView(this);
+
         mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
                 0xaa000000, 8, Gravity.TOP));
 
@@ -276,27 +273,26 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
         defaultUi = getWindow().getDecorView().getSystemUiVisibility();
         mArticleLayout.setOnScrollChangeListener(this);
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setAutoMeasureEnabled(true);
-        mCommentList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        ((SimpleItemAnimator) mCommentList.getItemAnimator()).setSupportsChangeAnimations(false);
-        mCommentList.setLayoutManager(mLinearLayoutManager);
-        mCommentList.setNestedScrollingEnabled(false);
-        mCommentList.setFocusable(false);
+
         initializeCommentsAdapter();
+
         if (mArticle != null) {
             loadArticleImage(mArticle);
         }
-        fetchArticle(mArticle == null ? mArticleId : (int)mArticle.id);
+        fetchArticle(mArticle == null ? mArticleId : (int) mArticle.id, mArticle!=null ? true : false);
+
         mCommentBody.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    mHasFocus = true;
+                    fab.hide();
                     mSubmitButton.setVisibility(View.VISIBLE);
                     mCancelButton.setVisibility(View.VISIBLE);
-                   // mArticleLayout.smoothScrollTo(0, mTitleComment.getBottom());
+                    mArticleLayout.smoothScrollTo(0, mAuthorDesView.getBottom());
 
                 } else {
+                    mHasFocus = false;
                     mSubmitButton.setVisibility(View.GONE);
                     mCancelButton.setVisibility(View.GONE);
                 }
@@ -377,14 +373,22 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 webViewText.goBack();
             } else {
                 destroyWebView();
-                if(mIsTransition){
-                    setResult(RESULT_OK, null);
-                    ActivityCompat.finishAfterTransition(ArticleActivity.this);
-                }else {
+                    setResult();
                     finish();
-                }
             }
         }
+    }
+
+    private void setResult() {
+        if (mFeedDetail == null) {
+            return;
+        }
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        mFeedDetail.setItemPosition(mFeedPosition);
+        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
     }
 
     @Override
@@ -398,9 +402,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mArticle != null) {
             builder.title(mArticle.title)
                     .id(Integer.toString(mArticle.remote_id));
-                  //  .topics(mArticle.topics)
-                   // .readingTime(mArticle.readingTime)
-                   // .readPercentage(mScrollPercentage);
 
         }
 
@@ -411,7 +412,14 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     //region Private Helper methods
     private void initializeCommentsAdapter() {
-        mCommentsAdapter = new CommentListAdapter(this, mArticlePresenter,new View.OnClickListener() {
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setAutoMeasureEnabled(true);
+        mCommentList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        ((SimpleItemAnimator) mCommentList.getItemAnimator()).setSupportsChangeAnimations(false);
+        mCommentList.setLayoutManager(mLinearLayoutManager);
+        mCommentList.setNestedScrollingEnabled(false);
+        mCommentList.setFocusable(false);
+        mCommentsAdapter = new CommentListAdapter(this, mArticlePresenter, new View.OnClickListener() {
             @Override
             public void onClick(View deleteItem) {
                 View recyclerViewItem = (View) deleteItem.getParent();
@@ -424,7 +432,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if(comment == null){
+                        if (comment == null) {
                             return true;
                         }
                         mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
@@ -437,8 +445,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentList.setAdapter(mCommentsAdapter);
     }
 
-    private void fetchArticle(int articleId) {
-        mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId));
+    private void fetchArticle(int articleId, boolean isImageLoaded) {
+        mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded);
     }
 
     private void updateTitleCommentCountView() {
@@ -466,7 +474,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region ButterKnife Bindings
     @OnClick(R.id.fab)
     void onFabClick() {
-       ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false);
+        ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false);
     }
 
     @OnClick(R.id.submit)
@@ -494,10 +502,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     public void startProgressBar() {
         mAuthorDesView.setVisibility(View.GONE);
-        webViewText.setVisibility(View.INVISIBLE);
+        webViewText.setVisibility(View.VISIBLE);
         mComments.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mArticleLayout.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+        mArticleLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -507,75 +515,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mAuthorDesView.setVisibility(View.VISIBLE);
         webViewText.setVisibility(View.VISIBLE);
         mComments.setVisibility(View.VISIBLE);
-    }
-
-    public void setupWebView(){
-        webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText){
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == 100) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                           // stopProgressBar();
-                        }
-                    });
-               //     webViewText.loadUrl("javascript:initials()");
-                 //   view.setVisibility(View.VISIBLE);
-                }
-            }
-        };
-        webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
-            @Override
-            public void toggledFullscreen(boolean fullscreen) {
-                // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
-                if (fullscreen) {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
-                    attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
-                    attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-                    getWindow().setAttributes(attrs);
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-                } else {
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
-                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
-                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-                    getWindow().setAttributes(attrs);
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                }
-            }
-        });
-
-        webViewText.getSettings().setJavaScriptEnabled(true);
-        webViewText.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        webViewText.setWebChromeClient(webChromeClient);
-        webViewText.setVerticalScrollBarEnabled(false);
-        webViewText.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                stopProgressBar();
-                view.setVisibility(View.VISIBLE);
-            }
-
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url != null) {
-                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        webViewText.setFocusable(false);
-        WebSettings webSettings = webViewText.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        if (webViewClickListener == null) {
-            webViewClickListener = new WebViewClickListener(this);
-            webViewText.addJavascriptInterface(webViewClickListener, "image");
-            webViewText.addJavascriptInterface(webViewClickListener, "video");
-        }
     }
 
     @Override
@@ -602,19 +541,86 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             mCommentList.setVisibility(View.GONE);
         }
 
-        if(!imageLoaded){
+        if (!imageLoaded) {
             loadArticleImage(article);
         }
 
+        loadUserViews(article);
+        if (!CommonUtil.isNotEmpty(article.body)) {
+            return;
+        }
+
+        webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText);
+        webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
+            @Override
+            public void toggledFullscreen(boolean fullscreen) {
+                // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
+                if (fullscreen) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
+                    attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                    attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                    getWindow().setAttributes(attrs);
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
+                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                    getWindow().setAttributes(attrs);
+                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                }
+            }
+        });
+
+        if (!CommonUtil.isNotEmpty(article.body)) {
+            return;
+        }
+        final String webViewStyle = getStyleFromConfig();
+        String htmlData = article.body == null ? "" : article.body;
+        htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
+        webViewText.getSettings().setJavaScriptEnabled(true);
+        webViewText.setWebChromeClient(webChromeClient);
+        webViewText.setVerticalScrollBarEnabled(false);
+        webViewText.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                stopProgressBar();
+                webViewText.loadUrl("javascript:initials()");
+                view.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+            }
+
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url != null) {
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        webViewText.setFocusable(false);
+        WebSettings webSettings = webViewText.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        if (webViewClickListener == null) {
+            webViewClickListener = new WebViewClickListener(this);
+            webViewText.addJavascriptInterface(webViewClickListener, "image");
+            webViewText.addJavascriptInterface(webViewClickListener, "video");
+        }
+        webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
+    }
+
+    private void loadUserViews(Article article) {
         if (article.author != null) {
             author.setText(article.author.name);
-            String pluralComments = getResources().getQuantityString(R.plurals.numberOfComments, article.commentsCount);
             String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
+            mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralLikes);
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
             mLikesViewsComments.setText(article.createdAt + " " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
-           // mLikesViewsComments.setText(Integer.toString(article.commentsCount) + " " + pluralComments + " " + "\u2022" + " " + Integer.toString(article.likesCount) + " " + pluralLikes + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
+                String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
@@ -628,7 +634,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             }
 
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
+                String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
@@ -640,35 +646,19 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
         }
         title.setText(article.title);
-        if (!CommonUtil.isNotEmpty(article.body)) {
-            return;
-        }
-        final String webViewStyle = getStyleFromConfig();
-        String htmlData = article.body == null ? "" : article.body;
-        htmlData = "<style>" + webViewStyle + " </style> <body> " + htmlData + " </body>";
-        webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
-        invalidateOptionsMenu();
     }
 
     private void loadArticleImage(Article article) {
         String imageUri = article.featureImage;
-        if (article.featureImage != null) {
-            try {
-                Uri image = Uri.parse(imageUri);
-                int size = image.getPathSegments().size();
-                image.getPathSegments().add(size - 2, "tr:h-400,w-400,fo-auto");
-                imageUri = SheroesThumbor.getInstance()
-                        .buildImage(URLEncoder.encode(article.featureImage, "UTF-8"))
-                        .resize(CommonUtil.getWindowWidth(this), 400)
-                        .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
-                        .toUrl();
-            } catch (UnsupportedEncodingException e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-            final String finalImageUri = imageUri;
-            final int imageHeight = (int)(((float)mImageHeight/(float)mImageWidth) * CommonUtil.getWindowWidth(this));
-           // image.getLayoutParams().height = imageHeight;
-            image.getLayoutParams().height = 400;
+        int imageNewHeight;
+        if (mImageWidth != 0 && mImageHeight != 0) {
+            imageNewHeight = (int) (((float) mImageHeight / (float) mImageWidth) * CommonUtil.getWindowWidth(this));
+        } else {
+            imageNewHeight = articleImageHeight;
+        }
+        image.getLayoutParams().height = imageNewHeight;
+        if (CommonUtil.isNotEmpty(article.featureImage)) {
+            String finalImageUri = CommonUtil.getImgKitUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
             Glide.with(ArticleActivity.this)
                     .load(finalImageUri)
                     .asBitmap()
@@ -688,16 +678,23 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         }
                     });
         }
+        loadUserViews(article);
     }
 
     @Override
     public void invalidateBookmark(Article article) {
+        if (mFeedDetail != null) {
+            mFeedDetail.setBookmarked(article.isBookmarked);
+        }
         mArticle = article;
         invalidateOptionsMenu();
     }
 
     @Override
     public void invalidateLike(Article article) {
+        if (mFeedDetail != null) {
+            mFeedDetail.setReactionValue(article.isLiked ? AppConstants.HEART_REACTION_CONSTANT : AppConstants.NO_REACTION_CONSTANT);
+        }
         mArticle = article;
         invalidateOptionsMenu();
     }
@@ -765,26 +762,24 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void showWebViewProgressBar() {
- /*       mAuthorDesView.setVisibility(View.GONE);
-        mWebViewProgressBar.setVisibility(View.VISIBLE);
-        webViewText.setVisibility(View.GONE);
-        mComments.setVisibility(View.GONE);*/
+    public void setFeedDetail(FeedDetail feedDetail) {
+        mFeedDetail = feedDetail;
     }
 
     @Override
-    public void hideWebViewProgressBar() {
-  /*      mAuthorDesView.setVisibility(View.VISIBLE);
-        mWebViewProgressBar.setVisibility(View.GONE);
-        webViewText.setVisibility(View.VISIBLE);
-        mComments.setVisibility(View.VISIBLE);*/
+    public void trackEvent(Event event) {
+        if (mFeedDetail == null) {
+            return;
+        } else {
+            AnalyticsManager.trackPostAction(event, mFeedDetail);
+        }
     }
 
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-    //endregio
+    //endregion
 
     //region OnScroll methods
     @Override
@@ -811,7 +806,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             int uiOptions = View.SYSTEM_UI_FLAG_LOW_PROFILE;
             getWindow().getDecorView().setSystemUiVisibility(uiOptions);
         } else {
-            fab.show();
+            if(!mHasFocus){
+                fab.show();
+            }
             getSupportActionBar().show();
             getWindow().getDecorView().setSystemUiVisibility(defaultUi);
         }
@@ -820,8 +817,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     // region Static methods
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties) {
-       // article.comments = null;
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ArticleActivity.class);
         Article article = new Article();
         article.title = feedDetail.getNameOrTitle();
@@ -835,13 +831,21 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         article.author.thumbUrl = feedDetail.getAuthorImageUrl();
         article.isBookmarked = feedDetail.isBookmarked();
         article.isLiked = feedDetail.getLastReactionValue() > 0;
+        article.thumbImageWidth = feedDetail.getThumbImageWidth();
+        article.thumbImageHeight = feedDetail.getThumbImageHeight();
+        article.featureImageHeight = feedDetail.getHighresImageHeight();
+        article.featureImageWidth = feedDetail.getHighresImageWidth();
+        article.createdAt = feedDetail.getPostedDate();
+        article.totalViews = feedDetail.getNoOfViews();
+        article.readingTime = feedDetail.getCharCount();
         Parcelable parcelable = Parcels.wrap(article);
         intent.putExtra(Article.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
-        ActivityCompat.startActivity(fromActivity, intent, null);
+        intent.putExtra(FEED_POSITION, feedDetail.getItemPosition());
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
     // endregion
@@ -849,12 +853,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region private methods
     private String getStyleFromConfig() {
         String styleFromConfig;
-       /* Config config = Config.getConfig();
-        if (config != null && config.webViewStyle != null) {
-            styleFromConfig = config.webViewStyle;
-        } else {*/
-            styleFromConfig = AppConstants.webstyle;
-      //  }
+        styleFromConfig = AppConstants.webstyle;
         return styleFromConfig;
     }
 
@@ -866,12 +865,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     private String getJavaScriptFromConfig() {
         String javaScriptFromConfig;
-       /* Config config = Config.getConfig();
-        if (config != null && config.webJavaScript != null) {
-            javaScriptFromConfig = config.webJavaScript;
-        } else {*/
-            javaScriptFromConfig = AppConstants.javascriptcode;
-     //   }
+        javaScriptFromConfig = AppConstants.javascriptcode;
         return javaScriptFromConfig;
     }
 
@@ -881,8 +875,17 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        switch (errorMsg) {
+            case AppConstants.CHECK_NETWORK_CONNECTION:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                break;
+            case AppConstants.HTTP_401_UNAUTHORIZED:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                break;
+            default:
+                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+        }
     }
 
     @Override

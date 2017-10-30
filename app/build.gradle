@@ -15,6 +15,9 @@ buildscript {
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     defaultConfig {
         applicationId "appliedlife.pvtltd.SHEROES"
         multiDexEnabled true

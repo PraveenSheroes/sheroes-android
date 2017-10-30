@@ -5,8 +5,10 @@ import android.support.annotation.StringRes;
 import java.util.ArrayList;
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 
@@ -31,7 +33,7 @@ public interface IArticleView extends BaseMvpView {
 
     void setAndNotify(int position, Comment comment);
 
-    void showWebViewProgressBar();
+    void setFeedDetail(FeedDetail feedDetail);
 
-    void hideWebViewProgressBar();
+    void trackEvent(Event postLiked);
 }

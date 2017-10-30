@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
@@ -476,7 +477,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 userReactionDialogLongPress(view);
                 break;
             case R.id.li_feed_article_images:
-                ArticleActivity.navigateTo(this, mFeedDetail, "da", null);
+                ArticleActivity.navigateTo(this, mFeedDetail, "da", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intent = new Intent(this, ArticleDetailActivity.class);
                 intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
@@ -487,7 +488,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             case R.id.li_article_cover_image:
-                ArticleActivity.navigateTo(this, mFeedDetail, "da", null);
+                ArticleActivity.navigateTo(this, mFeedDetail, "da", null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
@@ -817,13 +818,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
+                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                   /* Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
                     Bundle bundle = new Bundle();
                     mFeedDetail.setCallFromName(AppConstants.FEED_COMMUNITY_POST);
                     bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
                     intetFeature.putExtras(bundle);
                     startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
-                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_CONTENT, GoogleAnalyticsEventActions.EDITED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_CONTENT, GoogleAnalyticsEventActions.EDITED_COMMUNITY_POST, AppConstants.EMPTY_STRING);*/
                 }
                 break;
 

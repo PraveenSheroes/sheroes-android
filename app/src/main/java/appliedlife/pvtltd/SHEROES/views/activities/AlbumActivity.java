@@ -292,12 +292,13 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             return;
         }
         mAlbum = album;
-        getSupportActionBar().setTitle(getString(R.string.album_title, 1, mAlbum.photos.size()));
-    /*    if(mMainItemPosition < 0 || mMainItemPosition >= mAlbum.photos.size()){
-            mMainImageUrl = mAlbum.photos.get(0).url;
+        if(mAlbum.photos.size() < 2){
+            getSupportActionBar().setTitle("");
+            mImageListView.setVisibility(View.GONE);
         }else {
-            mMainImageUrl = mAlbum.photos.get(mMainItemPosition).url;
-        }*/
+            mImageListView.setVisibility(View.VISIBLE);
+            getSupportActionBar().setTitle(getString(R.string.album_title, 1, mAlbum.photos.size()));
+        }
         initAlbumCarouselAdapter();
         initViewPager();
     }

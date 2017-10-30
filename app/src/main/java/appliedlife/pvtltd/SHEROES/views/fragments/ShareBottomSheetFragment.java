@@ -37,7 +37,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by Geet on 13-06-2016.
+ * Created by Ujjwal on 27-10-2018.
  */
 public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
 
