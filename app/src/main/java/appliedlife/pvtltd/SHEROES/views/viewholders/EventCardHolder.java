@@ -111,9 +111,6 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
             imageSetOnEventBackground();
 
         }
-        if(dataItem != null &&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle()) ){
-            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.EVENT_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getNameOrTitle());
-        }
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageSetOnEventBackground() {

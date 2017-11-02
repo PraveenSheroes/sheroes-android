@@ -269,15 +269,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
         }
-
-        if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())){
-            if(dataItem.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
-                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.ORGANISATION_FEEDBACK_POST_IMPRESSION, dataItem.communityId + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
-
-            }else {
-                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getListDescription());
-            }
-        }
     }
     @OnClick(R.id.card_post_link_render)
     public void tvLinkClick() {

@@ -514,7 +514,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if(null!=mFeedDetail) {
                         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                             mUserId = userPreference.get().getUserSummary().getUserId();
-                            ((SheroesApplication) this.getApplication()).trackEvent(AppConstants.IMPRESSIONS, GoogleAnalyticsEventActions.OPENED_ORGANISATION_DETAIL_FEEDBACK, mFeedDetail.getCommunityId() + AppConstants.DASH + mUserId+AppConstants.DASH+mFeedDetail.getIdOfEntityOrParticipant());
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
@@ -532,7 +531,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if(null!=mFeedDetail) {
                     if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                         mUserId = userPreference.get().getUserSummary().getUserId();
-                        ((SheroesApplication) this.getApplication()).trackEvent(AppConstants.IMPRESSIONS, GoogleAnalyticsEventActions.OPENED_ORGANISATION_DETAIL_REVIEW, mFeedDetail.getCommunityId() + AppConstants.DASH + mUserId+AppConstants.DASH+mFeedDetail.getIdOfEntityOrParticipant());
                         openGenericCardInWebView(mFeedDetail);
                     }
                 }

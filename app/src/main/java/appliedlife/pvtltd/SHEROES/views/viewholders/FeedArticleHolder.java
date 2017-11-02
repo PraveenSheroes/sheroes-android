@@ -154,9 +154,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleUserMenu.setVisibility(View.GONE);
             }
-            if(dataItem != null&&StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())){
-                ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getNameOrTitle() );
-            }
 
     }
 

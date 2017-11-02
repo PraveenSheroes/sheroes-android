@@ -122,9 +122,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         tvNoOfUpVotes.setEnabled(true);
         imageOperations(context);
         allReviewTextViewAndImageOperations(context);
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.ORGANISATION_REVIEW_POST_IMPRESSION, dataItem.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
-
-
     }
 
 
