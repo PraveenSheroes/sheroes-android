@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -107,9 +108,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     getDeeplinkUrlFromNotification(deepLink);
                 }
             }
-
-            HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
-            trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
 
         } else {
             homeActivityCall();

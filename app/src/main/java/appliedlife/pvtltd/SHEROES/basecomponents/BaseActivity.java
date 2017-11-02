@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -114,12 +115,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         moEngageUtills = MoEngageUtills.getInstance();
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
-/*        if (getIntent() != null && getIntent().getExtras() != null) {
-            String notificationId = getIntent().getExtras().getString("notificationId");
-            logEventToAnalytics(notificationId);
-            mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
-            mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
-        }*/
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            if(getIntent().getExtras().getBoolean(PushNotificationService.FROM_PUSH_NOTIFICATION, false)){
+                String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
+                String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
+                HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
+                trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+            }
+        }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
@@ -214,22 +217,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 ft.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
             else ft.add(resId, fragment, fragment.getClass().getSimpleName());
             ft.commitAllowingStateLoss();
-        }
-    }
-
-    private void logEventToAnalytics(String notificationId) {
-        if (StringUtil.isNotNullOrEmptyString(notificationId)) {
-
-            HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).type("type"/*getNotificationType()*/).build();
-            trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
-
-         /*   if (currentUser != null) {
-                Answers.getInstance().logCustom(new CustomEvent("Push Notification")
-                        .putCustomAttribute("User", currentUser.remote_id)
-                        .putCustomAttribute("Action", "clicked")
-                        .putCustomAttribute("Notification Type", getNotificationType())
-                        .putCustomAttribute("Notification ID", notificationId));
-            }*/
         }
     }
 
