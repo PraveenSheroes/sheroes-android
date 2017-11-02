@@ -162,6 +162,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         mViewPager.setOffscreenPageLimit(2);
         if (mMainItemPosition > 0 && mMainItemPosition < mAlbum.photos.size()) {
             mViewPager.setCurrentItem(mMainItemPosition);
+            mMainImageUrl = mAlbum.photos.get(mMainItemPosition).url;
             mAlbumCarouselAdapter.setSelectedPosition(mMainItemPosition);
         }
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -291,6 +292,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         if (CommonUtil.isEmpty(album.photos)) {
             return;
         }
+        mMainImageUrl = mAlbum.photos.get(0).url;
         mAlbum = album;
         if(mAlbum.photos.size() < 2){
             getSupportActionBar().setTitle("");

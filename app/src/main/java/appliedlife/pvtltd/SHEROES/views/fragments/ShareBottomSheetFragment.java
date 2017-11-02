@@ -71,6 +71,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             mShareDeepLinkUrl = getArguments().getString(SHARE_DEEPLINK);
             mShareImageUrl = getArguments().getString(SHARE_IMAGE);
             mShareText = getArguments().getString(SHARE_TEXT);
+            mIsImageShare = getArguments().getBoolean(IS_IMAGE_SHARE, false);
         }
         return super.onCreateDialog(savedInstanceState);
     }

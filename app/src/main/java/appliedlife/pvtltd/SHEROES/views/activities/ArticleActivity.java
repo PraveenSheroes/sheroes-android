@@ -373,9 +373,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 webViewText.goBack();
             } else {
                 destroyWebView();
-                    setResult();
-                    finish();
+                setResult();
+                finish();
             }
+        } else {
+            finish();
         }
     }
 

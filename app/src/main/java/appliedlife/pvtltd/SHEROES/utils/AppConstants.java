@@ -33,6 +33,7 @@ public class AppConstants {
     public static final String COMMENT_DATE_TIME = "dd MMM, yyyy h:mm a";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
+    public static final String ALL_COMMUNITY_LIST = "all community list";
     public static final String MASTER_DATA = "master_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
