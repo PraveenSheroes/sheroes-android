@@ -214,10 +214,15 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:host="sheroes.com"></data>
                 <data android:scheme="https" />
-                <data android:pathPattern="/.*" />
+                <data android:pathPrefix="/jobs"/>
+                <data android:pathPrefix="/articles"/>
+                <data android:pathPrefix="/champions"/>
+                <data android:pathPrefix="/communities"/>
+                <data android:pathPrefix="/event"/>
+                <data android:pathPrefix="/helpline"/>
+                <data android:pathPrefix="/feed"/>
             </intent-filter>
         </activity>
         <activity

@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
@@ -352,11 +353,12 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
 
         } else {
+          //  AppUtils.openChromeTab(this, Uri.parse(urlSharedViaSocial));
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
-            Intent into = new Intent(Intent.ACTION_VIEW);
+            /*Intent into = new Intent(Intent.ACTION_VIEW);
             into.setData(Uri.parse(urlSharedViaSocial));
             into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(into);
+            startActivity(into);*/
             finish();
             if (mFromNotification > 0) {
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_WEB, AppConstants.EMPTY_STRING);
