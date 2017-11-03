@@ -40,20 +40,23 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
@@ -67,7 +70,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ImageFullViewDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
@@ -113,12 +115,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         moEngageUtills = MoEngageUtills.getInstance();
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
-/*        if (getIntent() != null && getIntent().getExtras() != null) {
-            String notificationId = getIntent().getExtras().getString("notificationId");
-            logEventToAnalytics(notificationId);
-            mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
-            mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
-        }*/
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            if(getIntent().getExtras().getBoolean(PushNotificationService.FROM_PUSH_NOTIFICATION, false)){
+                String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
+                String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
+                HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
+                trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+            }
+        }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
@@ -127,6 +131,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }*/
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
+    }
+
+    public void setSource(String source) {
+        String mSourceScreen = source;
     }
 
     public boolean shouldTrackScreen() {
@@ -209,22 +217,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 ft.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
             else ft.add(resId, fragment, fragment.getClass().getSimpleName());
             ft.commitAllowingStateLoss();
-        }
-    }
-
-    private void logEventToAnalytics(String notificationId) {
-        if (StringUtil.isNotNullOrEmptyString(notificationId)) {
-
-            HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).type("type"/*getNotificationType()*/).build();
-            trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
-
-         /*   if (currentUser != null) {
-                Answers.getInstance().logCustom(new CustomEvent("Push Notification")
-                        .putCustomAttribute("User", currentUser.remote_id)
-                        .putCustomAttribute("Action", "clicked")
-                        .putCustomAttribute("Notification Type", getNotificationType())
-                        .putCustomAttribute("Notification ID", notificationId));
-            }*/
         }
     }
 
@@ -466,9 +458,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_images:
-                Intent intent = new Intent(this, ArticleDetailActivity.class);
+                ArticleActivity.navigateTo(this, mFeedDetail, "da", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                /*Intent intent = new Intent(this, ArticleDetailActivity.class);
                 intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case R.id.li_feed_job_card:
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
@@ -476,9 +469,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             case R.id.li_article_cover_image:
-                Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
+                ArticleActivity.navigateTo(this, mFeedDetail, "da", null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                /*Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case R.id.li_community_images:
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
@@ -501,7 +495,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if(null!=mFeedDetail) {
                         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                             mUserId = userPreference.get().getUserSummary().getUserId();
-                            ((SheroesApplication) this.getApplication()).trackEvent(AppConstants.IMPRESSIONS, GoogleAnalyticsEventActions.OPENED_ORGANISATION_DETAIL_FEEDBACK, mFeedDetail.getCommunityId() + AppConstants.DASH + mUserId+AppConstants.DASH+mFeedDetail.getIdOfEntityOrParticipant());
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
@@ -519,7 +512,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if(null!=mFeedDetail) {
                     if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                         mUserId = userPreference.get().getUserSummary().getUserId();
-                        ((SheroesApplication) this.getApplication()).trackEvent(AppConstants.IMPRESSIONS, GoogleAnalyticsEventActions.OPENED_ORGANISATION_DETAIL_REVIEW, mFeedDetail.getCommunityId() + AppConstants.DASH + mUserId+AppConstants.DASH+mFeedDetail.getIdOfEntityOrParticipant());
                         openGenericCardInWebView(mFeedDetail);
                     }
                 }
@@ -762,12 +754,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-                if (null != commentReactionDoc) {
+                Comment comment = (Comment) baseResponse;
+                if (null != comment) {
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        commentReactionDoc.setActive(true);
-                        commentReactionDoc.setEdit(true);
-                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                        comment.setActive(true);
+                        comment.setEdit(true);
+                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(comment);
                     }
                 }
                 break;
@@ -781,13 +773,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
+                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                   /* Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
                     Bundle bundle = new Bundle();
                     mFeedDetail.setCallFromName(AppConstants.FEED_COMMUNITY_POST);
                     bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
                     intetFeature.putExtras(bundle);
                     startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
-                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_CONTENT, GoogleAnalyticsEventActions.EDITED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_CONTENT, GoogleAnalyticsEventActions.EDITED_COMMUNITY_POST, AppConstants.EMPTY_STRING);*/
                 }
                 break;
 
@@ -797,11 +790,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
-                CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                Comment comment = (Comment) baseResponse;
                 if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                    commentReactionDoc.setActive(false);
-                    commentReactionDoc.setEdit(false);
-                    ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(commentReactionDoc);
+                    comment.setActive(false);
+                    comment.setEdit(false);
+                    ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
                 }
                 break;
             case USER_REACTION_COMMENT_MENU:

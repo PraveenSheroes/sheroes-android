@@ -7,6 +7,7 @@
     <color name="colorAccent">#6e2f95</color>
     <color name="once_card">#6d3493</color>
     <color name="light_grey">#4D4D4D</color>
+    <color name="gray_light">#878787</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
     <color name="challenge_count">#303F9F</color>
     <color name="primary_text_disabled_light">#39000000</color>
@@ -55,6 +56,7 @@
     <color name="green">#28b51b</color>
     <color name="email">#dc4541</color>
     <color name="chat_incomming_text_color">#814edf</color>
+    <color name="link_color">#008cc9</color>
 
     <!-- Text color of the search box hint text  -->
 
@@ -119,6 +121,7 @@
     <color name="text_color_work_list">#828b93</color>
     <color name="background_color_project_number">#f5f5f5</color>
     <color name="feed_background">#f5f7fa</color>
+    <color name="anonymous_background">#ebebeb</color>
 
     <!--text colors of deactive_custom dialog page-->
 
@@ -167,6 +170,7 @@
     <color name="camera_bg_start_color">#092E35</color>
     <color name="camera_bg_end_color">#15636A</color>
     <color name="community_tag_color">#788189</color>
+    <color name="lighter_gray">#DDDDDD</color>
 
     <color name="visiting_card_backgroung">#bababa</color>
     <color name="signup_text_color">#512da8</color>
@@ -177,4 +181,13 @@
     <color name="faq_spinner_color">#783fdf</color>
 
     <color name="transparent_dark">#80000000</color>
+
+    <color name="text_grey">#A9A9A9</color>
+    <color name="grey_600">#757575</color>
+    <color name="accent">#1FBFA5</color>
+    <color name="divider">#B6B6B6</color>
+    <color name="grey_50">#FFFAFAFA</color>
+    <color name="transparent">#00000000</color>
+    <color name="unavailable_grey">#80A9A9A9</color>
+    <color name="lighter_grey">#E4E4E4</color>
 </resources>

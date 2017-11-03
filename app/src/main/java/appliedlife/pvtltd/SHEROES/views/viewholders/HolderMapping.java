@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -600,9 +600,9 @@ public enum HolderMapping {
                     returnView = SELECT_DIALOG.ordinal();
                 } else if (item instanceof DrawerItems) {
                     returnView = DRAWER_ITEMS.ordinal();
-                } else if (item instanceof CommentReactionDoc) {
-                    CommentReactionDoc commentReactionDoc = ((CommentReactionDoc) item);
-                    if (commentReactionDoc.getLikeValue() > AppConstants.NO_REACTION_CONSTANT) {
+                } else if (item instanceof Comment) {
+                    Comment comment = ((Comment) item);
+                    if (comment.getLikeValue() > AppConstants.NO_REACTION_CONSTANT) {
                         returnView = REACTION.ordinal();
                     } else {
                         returnView = COMMENT.ordinal();

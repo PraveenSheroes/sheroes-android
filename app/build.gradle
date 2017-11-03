@@ -1,3 +1,8 @@
+def versionMajor = 5
+def versionMinor = 3
+def versionPatch = 1
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 buildscript {
@@ -15,13 +20,16 @@ buildscript {
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     defaultConfig {
         applicationId "appliedlife.pvtltd.SHEROES"
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 62
-        versionName "5.3.1"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
     signingConfigs {
@@ -40,8 +48,8 @@ android {
     }
     buildTypes {
         debug {
-           buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-          // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+          // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+           buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug

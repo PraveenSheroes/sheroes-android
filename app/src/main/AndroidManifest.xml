@@ -44,17 +44,13 @@
         tools:replace="android:label">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="appliedlife.pvtltd.SHEROES.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider"
-            android:exported="true" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -92,6 +88,11 @@
             android:name="invitereferrals_bid_e"
             android:value="EFF2E267671D89492971FE6B5DAC0E44" />
 
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider994271980664614"
+            android:exported="true" />
+
         <activity
             android:name="com.moe.pushlibrary.activities.MoEActivity"
 
@@ -106,6 +107,12 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity"
             android:clearTaskOnLaunch="true"
@@ -124,8 +131,8 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity"
-            android:screenOrientation="portrait"
             android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
         <activity
@@ -154,15 +161,17 @@
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
 
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".views.activities.CommunityPostActivity"
+            android:screenOrientation="portrait"></activity>
 
-        </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"
             android:screenOrientation="portrait"
@@ -205,14 +214,21 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:host="sheroes.com"></data>
                 <data android:scheme="https" />
-                <data android:pathPattern="/.*" />
+                <data android:pathPrefix="/jobs"/>
+                <data android:pathPrefix="/articles"/>
+                <data android:pathPrefix="/champions"/>
+                <data android:pathPrefix="/communities"/>
+                <data android:pathPrefix="/event"/>
+                <data android:pathPrefix="/helpline"/>
+                <data android:pathPrefix="/feed"/>
             </intent-filter>
         </activity>
-        <activity android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"
             android:exported="false">

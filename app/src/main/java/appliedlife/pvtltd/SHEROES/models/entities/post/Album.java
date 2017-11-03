@@ -11,4 +11,5 @@ import java.util.ArrayList;
 public class Album extends Post {
     public static final String ALBUM_OBJ = "ALBUM_OBJ";
     public ArrayList<Photo> photos = new ArrayList<>();
+    public String deepLinkUrl;
 }

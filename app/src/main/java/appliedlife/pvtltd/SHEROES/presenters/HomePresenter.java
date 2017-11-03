@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -98,6 +99,10 @@ public class HomePresenter extends BasePresenter<HomeView> {
     Preference<LoginResponse> mUserPreference;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+
+    @Inject
+    Preference<AllCommunitiesResponse> mAllCommunities;
+
     MasterDataModel mMasterDataModel;
 
     @Inject
@@ -262,6 +267,37 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
                     getMvpView().getFeedListSuccess(feedResponsePojo);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getAllCommunityFromModel(myCommunityRequest).subscribe(new Subscriber<AllCommunitiesResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
+
+            }
+
+            @Override
+            public void onNext(AllCommunitiesResponse allCommunitiesResponse) {
+                getMvpView().stopProgressBar();
+                if (null != allCommunitiesResponse) {
+                    mAllCommunities.set(allCommunitiesResponse);
                 }
             }
         });

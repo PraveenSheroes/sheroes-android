@@ -100,7 +100,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         textRelatedOperation();
         onBookMarkClick();
-            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION,dataItem.getIdOfEntityOrParticipant()+ AppConstants.DASH +mUserId + AppConstants.DASH + dataItem.getNameOrTitle() );
     }
     private void onBookMarkClick() {
         if(dataItem.isBookmarked())

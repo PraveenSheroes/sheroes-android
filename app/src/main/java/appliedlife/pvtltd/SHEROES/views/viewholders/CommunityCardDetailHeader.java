@@ -113,10 +113,6 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
             tvJoin.setVisibility(View.GONE);
         }
 
-        if(dataItem != null && StringUtil.isNotNullOrEmptyString(dataItem.getId() )&&StringUtil.isNotNullOrEmptyString(dataItem.getListDescription()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-            ((SheroesApplication)((BaseActivity)mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getListDescription() );
-        }
-
     }
 
     @OnClick(R.id.card_community_detail)

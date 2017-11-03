@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
@@ -215,7 +215,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
             articleDetailHandled(view, baseResponse);
-        } else if (baseResponse instanceof CommentReactionDoc) {
+        } else if (baseResponse instanceof Comment) {
             clickMenuItem(view, baseResponse, true);
         }
     }
@@ -357,11 +357,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             @Override
             public void onClick(View v) {
                 if (isCommentReaction) {
-                    CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                    Comment comment = (Comment) baseResponse;
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        commentReactionDoc.setActive(true);
-                        commentReactionDoc.setEdit(true);
-                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(commentReactionDoc);
+                        comment.setActive(true);
+                        comment.setEdit(true);
+                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(comment);
                     }
                 } else {
                     if (null != mFeedDetail) {
@@ -379,11 +379,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             @Override
             public void onClick(View v) {
                 if (isCommentReaction) {
-                    CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
+                    Comment comment = (Comment) baseResponse;
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        commentReactionDoc.setActive(false);
-                        commentReactionDoc.setEdit(false);
-                        ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(commentReactionDoc);
+                        comment.setActive(false);
+                        comment.setEdit(false);
+                        ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
                     }
                 } else {
                     if (null != mFeedDetail) {
@@ -520,9 +520,9 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy());
-        } else if (baseResponse instanceof CommentReactionDoc) {
-            CommentReactionDoc commentReactionDoc = (CommentReactionDoc) baseResponse;
-            championDetailActivity(commentReactionDoc.getParticipantId());
+        } else if (baseResponse instanceof Comment) {
+            Comment comment = (Comment) baseResponse;
+            championDetailActivity(comment.getParticipantId());
         }
     }
 

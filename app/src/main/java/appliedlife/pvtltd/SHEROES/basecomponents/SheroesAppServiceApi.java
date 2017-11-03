@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
@@ -129,6 +130,9 @@ public interface SheroesAppServiceApi {
     Observable<FollowedResponse> isFollowedCheckFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
     @POST("participant/feed/my_communities")
     Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);
+
+    @POST("participant/feed/all_communities")
+    Observable<AllCommunitiesResponse> getAllCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);
 
     @POST("participant/feed/get_bookmarked")
     Observable<FeedResponsePojo> getBookMarkFromApi(@Body FeedRequestPojo feedRequestPojo);

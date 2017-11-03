@@ -36,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -156,10 +157,6 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             mFeedDetail.setLastReactionValue(mFeedDetail.getReactionValue());
             imageOperations(context);
             allTextViewStringOperations(context);
-        }
-
-        if(dataItem != null && null != dataItem.getFeedDetail() && StringUtil.isNotNullOrEmptyString(dataItem.getFeedDetail().getNameOrTitle()) && null != userPreference && userPreference.isSet() && null != userPreference.get() && userPreference.get().getUserSummary() !=null){
-            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS,AppConstants.ARTICLE_IMPRSSION, dataItem.getId() + AppConstants.DASH +userPreference.get().getUserSummary().getUserId() + AppConstants.DASH + dataItem.getFeedDetail().getNameOrTitle() );
         }
 
     }
@@ -338,7 +335,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
         if (StringUtil.isNotEmptyCollection(mFeedDetail.getLastComments())) {
-            List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+            List<Comment> lastCommentList = mFeedDetail.getLastComments();
             for (int index = 0; index < lastCommentList.size(); index++) {
                 switch (index) {
                     case AppConstants.NO_REACTION_CONSTANT:

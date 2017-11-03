@@ -52,6 +52,7 @@ public class PushNotificationService extends GcmListenerService {
     private PayloadBuilder payloadBuilder;
     private static String MOENGAGE_ALERT_MSG="gcm_alert";
     private static String MOENGAGE_TITLE="gcm_title";
+    public static String FROM_PUSH_NOTIFICATION = "From Push Notification";
     @Override
     public void onMessageReceived(String from, Bundle data) {
         mMoEHelper = MoEHelper.getInstance(this);
@@ -126,6 +127,7 @@ public class PushNotificationService extends GcmListenerService {
 
         notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
         notificationIntent.setData(url);
+        notificationIntent.putExtra(FROM_PUSH_NOTIFICATION, true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
         stackBuilder.addParentStack(ArticleDetailActivity.class);
         stackBuilder.addNextIntent(notificationIntent);

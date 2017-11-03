@@ -26,6 +26,7 @@ public class AppConstants {
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
+    public static final String ALL_COMMUNITY_LIST = "all community list";
     public static final String MASTER_DATA = "master_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
@@ -79,6 +80,7 @@ public class AppConstants {
     public static final String INTEREST_TYPE = "INTEREST";
     public static final String USER = "USER";
     public static final String COMMUNITY_OWNER = "COMMUNITY_OWNER";
+    public static final String ANONYMOUS = "ANONYMOUS";
 
     public static final String INTEREST_SUB_TYPE = "INTEREST_SERVICE";
     public static final String WORK_EXPERIENCE_SUB_TYPE = "TOTAL_EXP";
@@ -302,16 +304,15 @@ public class AppConstants {
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 79;
     public static final String GOOGLE_PLAY_URL_REFERRAL = "referrer";
     public static final String GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID = "app_user_contact_id";
-    public static final String IMPRESSIONS = "impressions";
-    public static final String COMMUNITY_POST_IMPRESSION = "community post impression";
-    public static final String ORGANISATION_REVIEW_POST_IMPRESSION = "organisation review post impression";
-    public static final String ORGANISATION_FEEDBACK_POST_IMPRESSION = "organisation feedback post impression";
-    public static final String ARTICLE_IMPRSSION = "article impression";
-    public static final String EVENT_IMPRESSION = "event impression";
     public static final String PUBLIC_PROFILE = "public profile";
     public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final String orgUserType = "organisations_test_user";
     public static final String WEB_URL = "web_view_url";
     public static final String WEB_TITLE = "web_title";
+    public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";
+    public static final String PRIVATE_FOLDER_NAME = "Sheroes";
+    //public static final String webstyle = "body { font-family: MyFont !important; background-color: #FFFFFF; font-size: 0.987em; font-weight: 120; color: #4D4D4D; line-height: 160%; } strong { font-family: MyFont !important; font-size: 0.987em; } span { font-family: MyFont !important; font-size: 0.987em !important; } img { display: inline; height: auto; max-width: 100%; } .youtube { position: relative; padding-bottom: 56.23%; height: 0; overflow: hidden; max-width: 100%; background: #000; margin: 5px; } .youtube iframe, .youtube object, .youtube embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; background: transparent; } .youtube img { bottom: 0; display: block; left: 0; margin: auto; max-width: 100%; width: 100%; position: absolute; right: 0; top: 0; border: none; height: auto; cursor: pointer; -webkit-transition: .4s all; -moz-transition: .4s all; transition: .4s all; } .youtube img:hover { -webkit-filter: brightness(75%); } .youtube .play { height: 72px; width: 72px; left: 50%; top: 50%; margin-left: -36px; margin-top: -36px; position: absolute; background: url(\"http://i.imgur.com/TxzC70f.png\") no-repeat; cursor: pointer; }";
+    public static final String webstyle = "@font-face {font-family: MyFont;src: url(\"fonts/RobotoSlab-Regular.ttf\")}body{font-family: MyFont !important;background-color:#FFFFFF ;font-size:0.987em ;font-weight:120;color: #4D4D4D ;line-height: 160%;}strong {font-family: MyFont !important;font-size:0.987em ;}span {font-family: MyFont !important;font-size: 0.987em !important;}img{display: inline;height: auto !important;max-width: 100% ;}";
+    public static final String javascriptcode = "<script type=\"text/javascript\" src=\"jquery.js\"></script> <script type=\"text/javascript\" src=\"jquerylazyload.js\"></script> <script type=\"text/javascript\" language=\"javascript\"> /*source: http://www.appelsiini.net/projects/lazyload*/ function initials() { loadVideo(); convertImages(); loadImages(); } function loadImages() { $(\"img.lazy\").lazyload({ effect: \"fadeIn\" }); $(\"img.lazy\").click(function() { image.openImageActivity($(this).attr(\"data-original\")); }); } function loadVideo() { var n, v = document.getElementsByClassName(\"youtube\"); var l = v.length; for (n = 0; n < l; n++) { var iframe = document.createElement(\"iframe\"); iframe.setAttribute(\"src\", \"https://www.youtube.com/embed/\" + v[n].dataset.id + \"?rel=0&fs=1\"); iframe.setAttribute(\"frameborder\", \"0\"); iframe.setAttribute(\"width\", \"100%\"); iframe.setAttribute(\"id\", \"player\"); iframe.setAttribute(\"height\", \"240\"); iframe.setAttribute(\"allowfullscreen\", \"1\"); while (v[n].firstChild) { v[n].removeChild(v[n].firstChild); } v[n].appendChild(iframe); } } function convertImages() { var n, v = document.getElementsByTagName(\"img\"); var l = v.length; for (n = 0; n < l; n++) { v[n].setAttribute(\"data-original\", v[n].src); v[n].setAttribute(\"src\", \"placeholder.png\"); v[n].setAttribute(\"class\", \"lazy\"); } } </script>";
     public static final String VIEW_MORE_TEXT = "View More";
 }

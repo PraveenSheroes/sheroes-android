@@ -5,7 +5,7 @@
     style="@style/TextAppearance.Toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
+    android:background="@color/colorPrimary"
     android:minHeight="?attr/actionBarSize"
     android:theme="@style/AppTheme.Toolbar"
     app:popupTheme="@style/AppTheme.PopupMenu">

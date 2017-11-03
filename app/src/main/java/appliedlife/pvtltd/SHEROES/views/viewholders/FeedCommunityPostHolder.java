@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -254,15 +255,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
             tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-        }
-
-        if (dataItem != null && StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
-            if (dataItem.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.ORGANISATION_FEEDBACK_POST_IMPRESSION, dataItem.communityId + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
-
-            } else {
-                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(AppConstants.IMPRESSIONS, AppConstants.COMMUNITY_POST_IMPRESSION, dataItem.getIdOfEntityOrParticipant() + AppConstants.DASH + userId + AppConstants.DASH + dataItem.getListDescription());
-            }
         }
     }
 
@@ -608,8 +600,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
-        List<LastComment> lastCommentList = dataItem.getLastComments();
-        LastComment lastComment;
+        List<Comment> lastCommentList = dataItem.getLastComments();
+        Comment lastComment;
         if (StringUtil.isNotEmptyCollection(lastCommentList)) {
             mItemPosition = lastCommentList.size() - 1;
             lastComment = lastCommentList.get(mItemPosition);

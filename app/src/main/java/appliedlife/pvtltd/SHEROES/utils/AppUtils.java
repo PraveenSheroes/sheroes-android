@@ -1962,6 +1962,20 @@ public class AppUtils {
         myCommunityRequest.setSubType(typeOfFeed);
         return myCommunityRequest;
     }
+
+    public static MyCommunityRequest myCommunityRequestBuilder(String typeOfFeed, int pageNo, int pageSize) {
+        AppUtils appUtils = AppUtils.getInstance();
+        MyCommunityRequest myCommunityRequest = new MyCommunityRequest();
+        myCommunityRequest.setAppVersion(appUtils.getAppVersionName());
+        myCommunityRequest.setSource(AppConstants.SOURCE_NAME);
+        myCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        myCommunityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        myCommunityRequest.setPageNo(pageNo);
+        myCommunityRequest.setPageSize(pageSize);
+        myCommunityRequest.setSubType(typeOfFeed);
+        return myCommunityRequest;
+    }
     public PublicProfileListRequest pubicProfileRequestBuilder( int pageNo) {
         PublicProfileListRequest publicProfileListRequest = new PublicProfileListRequest();
         publicProfileListRequest.setPageNo(pageNo);
@@ -2141,6 +2155,20 @@ public class AppUtils {
         commentReactionRequestPojo.setPageNo(pageNo);
         //Page size for comment list
         commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        commentReactionRequestPojo.setEntityId(entityId);
+        return commentReactionRequestPojo;
+    }
+
+    public static CommentReactionRequestPojo getCommentRequestBuilder(long entityId, int pageNo, int pageSize) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        commentReactionRequestPojo.setPageNo(pageNo);
+        //Page size for comment list
+        commentReactionRequestPojo.setPageSize(pageSize);
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }

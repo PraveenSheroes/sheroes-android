@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.models.entities.post;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -10,5 +11,12 @@ import java.util.ArrayList;
  */
 @Parcel(analyze = {CommunityPost.class, Post.class})
 public class CommunityPost extends Post {
-    public ArrayList<Photo> photos;
+    public static final String COMMUNITY_POST_OBJ = "COMMUNITY_POST_OBJ";
+    public ArrayList<Photo> photos = new ArrayList<>();
+    public boolean isAnonymous;
+    public Community community;
+    public boolean isEdit;
+    public boolean isMyPost;
+    public boolean isPostByCommunity;
+    public List<Community> myCommunitiesList = new ArrayList<>();
 }

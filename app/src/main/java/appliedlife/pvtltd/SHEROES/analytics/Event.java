@@ -83,7 +83,12 @@ public enum Event {
 
     // region Push Notification related events
     PUSH_NOTIFICATION_SHOWN(AnalyticsEventType.PUSH_NOTIFICATION, "Shown"),
-    PUSH_NOTIFICATION_CLICKED(AnalyticsEventType.PUSH_NOTIFICATION, "Clicked");
+    PUSH_NOTIFICATION_CLICKED(AnalyticsEventType.PUSH_NOTIFICATION, "Clicked"),
+    // endregion
+
+    //region Image related events
+    IMAGE_SHARED(AnalyticsEventType.IMAGE, "Shared"),
+    IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link");
     // endregion
 
     public final AnalyticsEventType type;

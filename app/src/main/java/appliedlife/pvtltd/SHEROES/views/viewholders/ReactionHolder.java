@@ -10,7 +10,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -22,7 +22,7 @@ import butterknife.OnClick;
 /**
  * Created by Praveen_Singh on 24-01-2017.
  */
-public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
+public class ReactionHolder extends BaseViewHolder<Comment> {
     private final String TAG = LogUtils.makeLogTag(ReactionHolder.class);
     @Bind(R.id.li_reaction)
     LinearLayout liReaction;
@@ -38,7 +38,7 @@ public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
     ImageView ivUserReactionEmoji;
 
     BaseHolderInterface viewInterface;
-    private CommentReactionDoc dataItem;
+    private Comment dataItem;
 
     public ReactionHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -48,7 +48,7 @@ public class ReactionHolder extends BaseViewHolder<CommentReactionDoc> {
     }
 
     @Override
-    public void bindData(CommentReactionDoc item, final Context context, int position) {
+    public void bindData(Comment item, final Context context, int position) {
         this.dataItem = item;
         if (StringUtil.isNotNullOrEmptyString(item.getParticipantName())) {
             tvUserName.setText(item.getParticipantName());

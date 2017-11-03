@@ -21,7 +21,8 @@ public enum AnalyticsEventType {
     NOTIFICATION_LIST("Notification List"),
     PUSH_NOTIFICATION("Push Notification"),
     USER("User"),
-    SEARCH("Search");
+    SEARCH("Search"),
+    IMAGE("Image");
     // endregion
 
     public final String name;
