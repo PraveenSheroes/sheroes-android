@@ -1,6 +1,12 @@
 package appliedlife.pvtltd.SHEROES.utils.stringutils;
 
 
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.widget.TextView;
 
@@ -12,11 +18,15 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.Charsets;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+
+import static appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication.mContext;
 
 public class StringUtil {
     private static final String TAG = LogUtils.makeLogTag(StringUtil.class);
@@ -78,6 +88,17 @@ public class StringUtil {
 
         Linkify.addLinks(textView, pattern, "", null, null);
     }
+    public static SpannableString hashTagColorInString(String stringToBeMatch) {
+        SpannableString hashText = new SpannableString(stringToBeMatch);
+        Matcher matcher = Pattern.compile("#([A-Za-z0-9_-]+)").matcher(hashText);
+        while (matcher.find())
+        {
+            //hashText.setSpan( new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.view_more)), matcher.start(), matcher.end(), 0);
+            hashText.setSpan(new StyleSpan(Typeface.BOLD),  matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+       return hashText;
+    }
+
 
     public static String numericToThousand(int countValue) {
        String thousand;
