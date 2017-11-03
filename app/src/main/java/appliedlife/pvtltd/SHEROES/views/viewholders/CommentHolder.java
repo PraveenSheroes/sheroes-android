@@ -32,6 +32,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagColorInString;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 /**
@@ -81,13 +82,6 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
         this.dataItem = item;
         this.mContext = context;
         if (StringUtil.isNotNullOrEmptyString(dataItem.getPostedDate())) {
-          /*  long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedOn(), AppConstants.DATE_FORMAT);
-            String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            if (StringUtil.isNotNullOrEmptyString(time)) {
-                tvListCommentTime.setText(time);
-            } else {
-                tvListCommentTime.setText(AppConstants.JUST_NOW);
-            }*/
             tvListCommentTime.setText(dataItem.getPostedDate());
         } else {
             tvListCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
@@ -107,7 +101,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
             int size = dataItem.getParticipantName().length() + 1;
             getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            tvUserComment.setText(getCommentString);
+            tvUserComment.setText(hashTagColorInString(getCommentString.toString()));
             linkifyURLs(tvUserComment);
             ivListCommentProfilePicVerified.setVisibility(View.GONE);
         } else {
@@ -119,7 +113,7 @@ public class CommentHolder extends BaseViewHolder<CommentReactionDoc> {
                 int size = dataItem.getParticipantName().length() + 1;
                 getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                tvUserComment.setText(getCommentString);
+                tvUserComment.setText(hashTagColorInString(getCommentString.toString()));
                 linkifyURLs(tvUserComment);
                 if (!dataItem.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                     if (dataItem.isVerifiedMentor()) {

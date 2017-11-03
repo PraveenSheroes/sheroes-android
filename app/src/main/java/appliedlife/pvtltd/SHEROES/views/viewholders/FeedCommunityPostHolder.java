@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -32,6 +33,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -55,6 +58,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagColorInString;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 /**
@@ -547,14 +551,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void populatePostText() {
         final String listDescription = dataItem.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
+            tvFeedCommunityPostText.setVisibility(View.GONE);
             return;
+        }else
+        {
+            tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         }
         mHandler.post(new Runnable() {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
-                tvFeedCommunityPostText.setText(listDescription);
+                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
                 linkifyURLs(tvFeedCommunityPostText);
+
                 if (tvFeedCommunityPostText.getLineCount() > 4) {
                     collapseFeedPostText();
                 } else {
@@ -618,14 +627,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
-                    tvFeedCommunityPostUserCommentPost.setText(lastComment.getComment());
+                    tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
-                    tvFeedCommunityPostUserCommentPost.setText(lastComment.getComment());
+                    tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (lastComment.isVerifiedMentor()) {
                             ivFeedCommunityPostUserIconVerified.setVisibility(View.VISIBLE);
@@ -702,7 +711,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         tvMoreImage.setVisibility(View.GONE);
         int count = typeOfHolder - 3;
         tvMoreImage.setText(String.valueOf("+" + count));
-
         switch (typeOfHolder) {
             case AppConstants.ONE_CONSTANT:
                 LinearLayout.LayoutParams liHolderLayout = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
@@ -711,7 +719,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             case AppConstants.TWO_CONSTANT:
                 LinearLayout.LayoutParams firstImageLayout = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayout.weight = 1;
-
                 LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
                 secondImageLayout.weight = 0;
                 break;

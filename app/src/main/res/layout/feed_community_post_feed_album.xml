@@ -32,7 +32,6 @@
             android:id="@+id/fl_third_image_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:layout_marginTop="@dimen/dp_size_2"
             android:layout_weight="1">
             <ImageView
