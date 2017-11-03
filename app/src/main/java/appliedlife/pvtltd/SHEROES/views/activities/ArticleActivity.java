@@ -481,7 +481,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @OnClick(R.id.submit)
     public void onSubmitClicked() {
-        String commentBody = mCommentBody.getText().toString();
+        String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
             mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false));
         }
@@ -628,13 +628,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
                         .into(authorPic);
 
-            } else {
-              /*  Glide.with(this)
-                        .load(R.drawable.vector_user_female)
-                        .override(authorPicSize, authorPicSize)
-                        .into(authorPic);*/
             }
-
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)

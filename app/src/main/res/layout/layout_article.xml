@@ -78,11 +78,17 @@
             android:layout_below="@id/author_view"
             android:visibility="gone"/>
 
+        <LinearLayout
+            android:id="@+id/webview_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_bar_web_view"
+            android:minHeight="400dp">
+
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/progress_bar_web_view"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="12dp"
@@ -91,12 +97,13 @@
             android:textColor="@color/light_grey"
             android:textIsSelectable="true"
             android:textSize="16sp" />
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/author_description_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text"
+            android:layout_below="@id/webview_container"
             android:gravity="center_vertical"
             android:paddingBottom="8dp"
             android:paddingLeft="8dp"
@@ -160,8 +167,7 @@
                 android:layout_below="@+id/divider"
                 android:layout_margin="15dp"
                 android:drawablePadding="@dimen/dp_size_4"
-                android:drawableLeft="@drawable/ic_like_18dp"
-                android:drawableTint="@color/red"
+                android:drawableLeft="@drawable/vector_like_red_18dp"
                 android:textColor="@color/light_grey"
                 android:textSize="14sp" />
 

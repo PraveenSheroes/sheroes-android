@@ -15,11 +15,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 public class Config {
 
     private static final String APP_SHARE_URL = "";
-    public static final String THUMBOR_URL = "https://t.babygogo.in";
-    public static final String THUMBOR_KEY = "8HPFWN8Ao3YpWwkXuRPlhhyoe8SXcCIt";
     public static final String COMMUNITY_POST_IMAGE_SHARE = "I found this useful infographic on Sheroes app. Download the app and view the complete post here";
-    public String thumborUrl;
-    public String thumborKey;
 
     public static Config getConfig() {
 //        SharedPreferences prefs = SheroesApplication.getAppContext().getSharedPreferences(Globals.SHARED_PREFS, Context.MODE_PRIVATE);

@@ -18,7 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 public class AllCommunitiesResponse extends BaseResponse implements Parcelable {
     @SerializedName("docs")
     @Expose
-    private List<FeedDetail> feedDetails = null;
+    public List<FeedDetail> feedDetails = null;
 
 
     protected AllCommunitiesResponse(Parcel in) {

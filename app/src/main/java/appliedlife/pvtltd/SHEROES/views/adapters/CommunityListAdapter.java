@@ -67,6 +67,11 @@ public class CommunityListAdapter extends RecyclerView.Adapter<CommunityListAdap
             }else {
                 holder.mCheck.setVisibility(View.GONE);
             }
+            if (community.isFirstOther) {
+                holder.otherCommunity.setVisibility(View.VISIBLE);
+            } else {
+                holder.otherCommunity.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -80,7 +85,11 @@ public class CommunityListAdapter extends RecyclerView.Adapter<CommunityListAdap
     static class CommunityListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
-        @BindDimen(R.dimen.dp_size_17)
+
+        @Bind(R.id.other_community)
+        TextView otherCommunity;
+
+        @BindDimen(R.dimen.dp_size_36)
         int authorPicSize;
 
         @Bind(R.id.community_container)

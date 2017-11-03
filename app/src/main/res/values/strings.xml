@@ -790,6 +790,7 @@
     <string name="comment_deleted">Your comment has been deleted</string>
     <string name="image_kit_width_height">tr:h-%1$d,w-%1$d,fo-auto</string>
     <string name="choose_community">Choose your community to post in</string>
+    <string name="other_community">Other Communities</string>
     <string name="add_photo">Add Photo</string>
     <string name="post_anonymous">Post as Anonymous</string>
     <string name="hint.write_post">What\'s on your mind?</string>

@@ -15,4 +15,5 @@ public class Community extends Post {
     public long id;
     public boolean isChecked;
     public boolean isOwner;
+    public boolean isFirstOther;
 }

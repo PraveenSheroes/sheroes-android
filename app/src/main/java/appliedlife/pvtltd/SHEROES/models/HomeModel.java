@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -204,6 +205,19 @@ public class HomeModel {
             public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
 
                 return feedResponsePojo;
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<AllCommunitiesResponse> getAllCommunityFromModel(MyCommunityRequest myCommunityRequest) {
+
+        return sheroesAppServiceApi.getAllCommunityFromApi(myCommunityRequest).map(new Func1<AllCommunitiesResponse, AllCommunitiesResponse>() {
+            @Override
+            public AllCommunitiesResponse call(AllCommunitiesResponse allCommunitiesResponse) {
+
+                return allCommunitiesResponse;
             }
         })
                 .subscribeOn(Schedulers.io())

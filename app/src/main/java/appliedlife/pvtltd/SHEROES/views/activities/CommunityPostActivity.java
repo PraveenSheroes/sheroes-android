@@ -397,25 +397,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     //endregion
 
-    //region onclick methods
-
-    @OnClick(R.id.add_image)
-    void onAddImageClick() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1200, 1200)
-                .start(this);
-    }
-
-    @OnClick(R.id.camera)
-    void onCameraClick() {
-        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1000, 1000)
-                .start(this);
-    }
-    //endregion
-
     //region private helper methods
-    public String getCreatorType() {
+    private String getCreatorType() {
         if (mPostAsCommunitySelected) {
             return AppConstants.COMMUNITY_OWNER;
         } else if (mIsAnonymous) {
@@ -425,7 +408,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    public List<String> getImageUrls() {
+    private List<String> getImageUrls() {
         List<String> imageList = new ArrayList<>();
         if (StringUtil.isNotEmptyCollection(mImageList)) {
             for (Photo photo : mImageList) {
@@ -467,7 +450,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
     }
 
-    public byte[] getBytesFromBitmap(Bitmap bitmap) {
+    private byte[] getBytesFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         return stream.toByteArray();
@@ -553,22 +536,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         return urlLength;
     }
 
-    public void setCommunityName() {
+    private void setCommunityName() {
         if (mCommunityPost != null && mCommunityPost.community != null)
             mCommunityName.setText(mCommunityPost.community.name);
-    }
-
-    public void setMainCommunity(Community community, MyCommunities myCommunities) {
-        if (mCommunityPost != null) {
-            mCommunityPost.community = new Community();
-            mCommunityPost.community.id = community.id;
-            mCommunityPost.community.name = community.name;
-            mCommunityPost.community.isOwner = community.isOwner;
-            mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
-            mMyCommunities = myCommunities;
-            setCommunityName();
-            invalidateUserDropDownView();
-        }
     }
 
     private void invalidateUserDropDownView() {
@@ -738,6 +708,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
+    //endregion
+
+    //region public methods
+    public void setMainCommunity(Community community, MyCommunities myCommunities) {
+        if (mCommunityPost != null) {
+            mCommunityPost.community = new Community();
+            mCommunityPost.community.id = community.id;
+            mCommunityPost.community.name = community.name;
+            mCommunityPost.community.isOwner = community.isOwner;
+            mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
+            mMyCommunities = myCommunities;
+            setCommunityName();
+            invalidateUserDropDownView();
+        }
+    }
+
     public void linkRenderResponse(LinkRenderResponse linkRenderResponse) {
         if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getStatus())) {
             switch (linkRenderResponse.getStatus()) {
@@ -783,6 +769,23 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             snackbar.show();
         }
     }
+    //endregion
+
+    //region onclick methods
+
+    @OnClick(R.id.add_image)
+    void onAddImageClick() {
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1200, 1200)
+                .start(this);
+    }
+
+    @OnClick(R.id.camera)
+    void onCameraClick() {
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1000, 1000)
+                .start(this);
+    }
 
     @OnClick(R.id.user_drop_down)
     public void onUserDropDownClicked(){
@@ -803,6 +806,5 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
         popup.show();
     }
-
     //endregion
 }

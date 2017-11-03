@@ -5,12 +5,15 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
+
+import com.f2prateek.rx.preferences.Preference;
 
 import org.parceler.Parcels;
 
@@ -25,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -57,6 +61,9 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     @Inject
     HomePresenter mHomePresenter;
 
+    @Inject
+    Preference<AllCommunitiesResponse> mAllCommunities;
+
     // region View variables
     @Bind(R.id.community_list)
     RecyclerView mRecyclerView;
@@ -86,7 +93,13 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         View containerView = View.inflate(getContext(), R.layout.dialog_community_list, null);
         dialog.setContentView(containerView);
         ButterKnife.bind(this, containerView);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setFocusable(false);
@@ -97,9 +110,31 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
             parcelable = getArguments().getParcelable(MyCommunities.MY_COMMUNITY_OBJ);
             mMyCommunities = Parcels.unwrap(parcelable);
             mCommunityList = mMyCommunities.myCommunities;
-            showCommunity();
         }else {
-            mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1, 100));
+            setMyCommunityList();
+        }
+        showCommunity();
+    }
+
+    private void setMyCommunityList() {
+        mMyCommunities = new MyCommunities();
+        boolean isFirstOtherSet = false;
+        if (mAllCommunities.isSet() && mAllCommunities.get() != null && !CommonUtil.isEmpty(mAllCommunities.get().feedDetails)) {
+            for (FeedDetail feedDetail : mAllCommunities.get().feedDetails) {
+                Community community = new Community();
+                community.id = feedDetail.getIdOfEntityOrParticipant();
+                community.name = feedDetail.getNameOrTitle();
+                community.thumbImageUrl = feedDetail.getThumbnailImageUrl();
+                community.isOwner = feedDetail.isOwner();
+                if (!feedDetail.isOwner() && !feedDetail.isMember() && !isFirstOtherSet) {
+                    community.isFirstOther = true;
+                    isFirstOtherSet = true;
+                }
+                mCommunityList.add(community);
+            }
+            mMyCommunities.myCommunities = new ArrayList<>(mCommunityList);
+        }else {
+            mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         }
     }
 

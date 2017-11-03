@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,14 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.crashlytics.android.Crashlytics;
-import com.squareup.pollexor.ThumborUrlBuilder;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.imageops.SheroesThumbor;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.TouchImageViewNew;
 import butterknife.Bind;
@@ -63,11 +56,13 @@ public class FileFragment extends Fragment {
         View fileFragmentLayout = inflater.inflate(R.layout.layout_pinchable_image, container, false);
         ButterKnife.bind(this, fileFragmentLayout);
 
+/*
         Canvas canvas = new Canvas();
         int height = canvas.getMaximumBitmapHeight() / 8;
         int width = canvas.getMaximumBitmapWidth() / 8;
+*/
 
-        try {
+/*        try {
             imageUrl = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(imageUrl, "UTF-8"))
                     .resize(width, height)
                     .fitIn(ThumborUrlBuilder.FitInStyle.NORMAL)
@@ -75,7 +70,7 @@ public class FileFragment extends Fragment {
                     .toUrl();
         } catch (UnsupportedEncodingException e) {
             Crashlytics.getInstance().core.logException(e);
-        }
+        }*/
 
         progressBar.setVisibility(View.VISIBLE);
         Glide.with(getActivity())
