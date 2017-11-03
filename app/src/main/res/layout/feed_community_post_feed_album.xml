@@ -50,7 +50,7 @@
                 android:textAlignment="center"
                 android:gravity="center"
                 android:visibility="gone"
-                android:textSize="@dimen/sp_size_14"
+                android:textSize="@dimen/sp_size_24"
                 android:textColor="@color/white"
                 android:background="@color/black"/>
         </FrameLayout>
