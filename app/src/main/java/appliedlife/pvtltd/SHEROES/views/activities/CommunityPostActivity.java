@@ -650,7 +650,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPostPhotoAdapter = new PostPhotoAdapter(this, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View recyclerViewItem = (View) view.getParent().getParent();
+                View recyclerViewItem = (View) view.getParent();
                 int position = mImageListView.getChildAdapterPosition(recyclerViewItem);
                 Photo photo = mImageList.get(position);
                 if (mIsEditPost && !photo.isNew) {

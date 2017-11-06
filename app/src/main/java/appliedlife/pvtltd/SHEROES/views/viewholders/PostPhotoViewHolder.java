@@ -35,7 +35,7 @@ public class PostPhotoViewHolder extends RecyclerView.ViewHolder {
 
     // region Butterknife Bindings
     @Bind(R.id.image)
-    RoundedImageView mImage;
+    ImageView mImage;
 
     @Bind(R.id.image_container)
     RelativeLayout mImageContainer;
