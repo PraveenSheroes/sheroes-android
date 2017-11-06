@@ -701,8 +701,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         final ImageView ivThird = (ImageView) child.findViewById(R.id.iv_third);
         final TextView tvMoreImage = (TextView) child.findViewById(R.id.tv_feed_community_more_image);
         tvMoreImage.setVisibility(View.GONE);
-        int count = typeOfHolder - 3;
-        tvMoreImage.setText(String.valueOf("+" + count));
         switch (typeOfHolder) {
             case AppConstants.ONE_CONSTANT:
                 LinearLayout.LayoutParams liHolderLayout = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
@@ -714,7 +712,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
                 secondImageLayout.weight = 0;
                 break;
+            case AppConstants.THREE_CONSTANT:
+                LinearLayout.LayoutParams liHolderLayoutDefault = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
+                liHolderLayoutDefault.weight = 1;
+                LinearLayout.LayoutParams firstImageLayoutDefault = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
+                firstImageLayoutDefault.weight = 2;
+                LinearLayout.LayoutParams secondImageLayoutDefault = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
+                secondImageLayoutDefault.weight = 1;
+                break;
             default:
+                int count = typeOfHolder - 3;
+                tvMoreImage.setText(String.valueOf("+" + count));
                 tvMoreImage.setVisibility(View.VISIBLE);
         }
 
