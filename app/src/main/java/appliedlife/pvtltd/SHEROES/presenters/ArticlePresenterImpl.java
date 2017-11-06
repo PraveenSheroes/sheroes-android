@@ -337,7 +337,11 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 if (bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().invalidateBookmark(article);
-                    getMvpView().trackEvent(Event.POST_BOOKMARKED);
+                    if(article.isBookmarked){
+                        getMvpView().trackEvent(Event.POST_BOOKMARKED);
+                    }else {
+                        getMvpView().trackEvent(Event.POST_UNBOOKMARKED);
+                    }
                 } else {
                     if (!isBookMarked) {
                         article.isBookmarked = false;
@@ -392,7 +396,11 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             public void onNext(LikeResponse likeResponse) {
                 if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().invalidateLike(article);
-                    getMvpView().trackEvent(Event.POST_LIKED);
+                    if (article.isLiked) {
+                        getMvpView().trackEvent(Event.POST_LIKED);
+                    } else {
+                        getMvpView().trackEvent(Event.POST_UNLIKED);
+                    }
                 } else {
                     if (!isLiked) {
                         article.isLiked = false;

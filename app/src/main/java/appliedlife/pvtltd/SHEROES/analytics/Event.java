@@ -19,8 +19,10 @@ public enum Event {
 
     //region post related events
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
+    POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
     POST_SHARED(AnalyticsEventType.POST, "Shared"),
     POST_BOOKMARKED(AnalyticsEventType.POST, "Bookmarked"),
+    POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
     POST_EDITED(AnalyticsEventType.POST, "Edited"),
     POST_DELETED(AnalyticsEventType.POST, "Deleted"),
     POST_REPORTED(AnalyticsEventType.POST, "Reported"),

@@ -89,7 +89,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequest
  */
 
 public class CommunityPostActivity extends BaseActivity implements ICommunityPostView {
-    public static final String SCREEN_LABEL = "Community Post Screen";
+    public static final String SCREEN_LABEL = "Create Communities Post Screen";
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
     public static final int MAX_IMAGE = 5;
 
@@ -345,7 +345,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public String getScreenName() {
-        return null;
+        return SCREEN_LABEL;
     }
 
     @Override
