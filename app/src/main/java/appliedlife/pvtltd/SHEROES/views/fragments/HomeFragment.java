@@ -514,6 +514,11 @@ public class HomeFragment extends BaseFragment {
             int position=data.size()- feedDetailList.size();
             if(position>0) {
                 data.remove(position-1);
+            }else
+            {
+                FeedDetail header=new FeedDetail();
+                header.setSubType(AppConstants.HEADER);
+                data.add(0,header);
             }
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);

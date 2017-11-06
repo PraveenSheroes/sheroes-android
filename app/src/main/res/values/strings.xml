@@ -805,4 +805,6 @@
     <string name="error_choose_community">Please choose the community to post in</string>
     <string name="menu.post_as_community">Post as Community</string>
     <string name="menu.post_as_user">Post as %1$s</string>
+
+    <string name="ID_HEADER_TEXT">what\'s on your mind?</string>
 </resources>

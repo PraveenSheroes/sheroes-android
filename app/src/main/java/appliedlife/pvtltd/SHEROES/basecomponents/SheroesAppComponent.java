@@ -149,6 +149,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GoodAtHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GrowthBuddiesHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
@@ -590,5 +591,6 @@ public interface SheroesAppComponent {
     void inject(CreatePostPresenter createPostPresenter);
 
     void inject(PostBottomSheetFragment postBottomSheetFragment);
+    void inject(HeaderViewHolder headerViewHolder);
 
 }

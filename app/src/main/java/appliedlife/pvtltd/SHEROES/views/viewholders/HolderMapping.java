@@ -428,6 +428,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new GrowthBuddiesHolder(view, viewInterface);
         }
+    },
+    HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new HeaderViewHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -508,6 +514,9 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.FEED_PROGRESS_BAR:
                                 returnView = FEED_PROGRESS_BAR_HOLDER.ordinal();
+                                break;
+                            case AppConstants.HEADER:
+                                returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
                             default:
                         }
