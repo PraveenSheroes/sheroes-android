@@ -618,7 +618,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (article.author != null) {
             author.setText(article.author.name);
             String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
-            mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralLikes);
+            mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
             mLikesViewsComments.setText(article.createdAt + " " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
