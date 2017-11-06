@@ -680,6 +680,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             mFeedDetail.setReactionValue(article.isLiked ? AppConstants.HEART_REACTION_CONSTANT : AppConstants.NO_REACTION_CONSTANT);
         }
         mArticle = article;
+        String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
+        mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
         invalidateOptionsMenu();
     }
 
