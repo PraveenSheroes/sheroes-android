@@ -99,6 +99,17 @@ public class StringUtil {
        return hashText;
     }
 
+    public static SpannableString hashTagColorInString(Spannable stringToBeMatch) {
+        SpannableString hashText = new SpannableString(stringToBeMatch);
+        Matcher matcher = Pattern.compile("#([A-Za-z0-9_-]+)").matcher(hashText);
+        while (matcher.find())
+        {
+            //hashText.setSpan( new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.view_more)), matcher.start(), matcher.end(), 0);
+            hashText.setSpan(new StyleSpan(Typeface.BOLD),  matcher.start(), matcher.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        }
+        return hashText;
+    }
+
 
     public static String numericToThousand(int countValue) {
        String thousand;

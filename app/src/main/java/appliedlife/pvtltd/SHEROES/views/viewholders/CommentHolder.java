@@ -101,7 +101,7 @@ public class CommentHolder extends BaseViewHolder<Comment> {
             int size = dataItem.getParticipantName().length() + 1;
             getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            tvUserComment.setText(hashTagColorInString(getCommentString.toString()));
+            tvUserComment.setText(hashTagColorInString(getCommentString));
             linkifyURLs(tvUserComment);
             ivListCommentProfilePicVerified.setVisibility(View.GONE);
         } else {
@@ -113,7 +113,7 @@ public class CommentHolder extends BaseViewHolder<Comment> {
                 int size = dataItem.getParticipantName().length() + 1;
                 getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                tvUserComment.setText(hashTagColorInString(getCommentString.toString()));
+                tvUserComment.setText(hashTagColorInString(getCommentString));
                 linkifyURLs(tvUserComment);
                 if (!dataItem.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                     if (dataItem.isVerifiedMentor()) {

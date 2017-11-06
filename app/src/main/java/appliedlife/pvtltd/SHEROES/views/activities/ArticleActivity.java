@@ -508,7 +508,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mAuthorDesView.setVisibility(View.GONE);
         webViewText.setVisibility(View.VISIBLE);
         mComments.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         mArticleLayout.setVisibility(View.VISIBLE);
     }
 
