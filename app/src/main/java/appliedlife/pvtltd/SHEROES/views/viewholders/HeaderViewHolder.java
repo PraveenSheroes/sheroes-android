@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,23 +20,29 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen on 06/11/17.
  */
 
 public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
+    BaseHolderInterface viewInterface;
     @Bind(R.id.iv_header_circle_icon)
     CircleImageView ivLoginUserPic;
+    @Bind(R.id.card_header_view)
+    CardView cardHeaderView;
     @Bind(R.id.tv_header_name)
     TextView tvHeaderName;
     @Inject
     Preference<LoginResponse> userPreference;
     private String mPhotoUrl;
     private String loggedInUser;
+    private FeedDetail dataItem;
     public HeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
@@ -50,11 +57,15 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
+        this.dataItem=item;
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
         tvHeaderName.setText(loggedInUser+AppConstants.SPACE+context.getString(R.string.ID_HEADER_TEXT));
     }
-
+    @OnClick(R.id.card_header_view)
+    public void cardHeaderClickForCreatePost() {
+        viewInterface.handleOnClick(dataItem, cardHeaderView);
+    }
     @Override
     public void viewRecycled() {
 

@@ -77,7 +77,7 @@
                 android:id="@+id/tv_feed_community_post_user_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_8"
+                android:padding="@dimen/dp_size_10"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:visibility="gone" />
 

@@ -183,7 +183,7 @@ public class HomeModel {
                     FeedDetail challengeFeedDetail = new FeedDetail();
                     challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
                     challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
-                    fragmentListRefreshData.setChallengePosition(feedDetails.size());
+                    fragmentListRefreshData.setChallengePosition(feedDetails.size()+1);
                     feedDetails.add(challengeFeedDetail);
                 }
                 if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {

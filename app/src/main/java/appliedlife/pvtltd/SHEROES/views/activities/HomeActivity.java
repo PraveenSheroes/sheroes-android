@@ -524,6 +524,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
+            case R.id.card_header_view:
+                createCommunityPostOnClick();
+                break;
             case R.id.tv_community_detail_invite:
                 inviteMyCommunityDialog();
                 break;
