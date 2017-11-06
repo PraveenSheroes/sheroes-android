@@ -449,19 +449,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 mFragmentOpen.setReactionList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
-            case R.id.li_feed_article_join_conversation:
+            case R.id.tv_feed_article_user_comment:
                 mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
-            case R.id.li_feed_community_post_join_conversation:
+            case R.id.tv_feed_community_post_user_comment:
                 mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
-                break;
-            case R.id.tv_feed_article_user_reaction:
-                userReactionDialogLongPress(view);
-                break;
-            case R.id.tv_feed_community_post_user_reaction:
-                userReactionDialogLongPress(view);
                 break;
             case R.id.li_feed_article_images:
                 ArticleActivity.navigateTo(this, mFeedDetail, "da", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
@@ -547,30 +541,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
 
-    private void userReactionDialogLongPress(View view) {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        popupView = layoutInflater.inflate(R.layout.emoji_reaction_layout, null);
-        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                popupWindow.dismiss();
-            }
-        });
-        TextView tvCommunityReaction = (TextView) popupView.findViewById(R.id.tv_reaction);
-        TextView tvCommunityReaction1 = (TextView) popupView.findViewById(R.id.tv_reaction1);
-        TextView tvCommunityReaction2 = (TextView) popupView.findViewById(R.id.tv_reaction2);
-        TextView tvCommunityReaction3 = (TextView) popupView.findViewById(R.id.tv_reaction3);
-        TextView tvCommunityReaction4 = (TextView) popupView.findViewById(R.id.tv_reaction4);
-        tvCommunityReaction.setOnClickListener(this);
-        tvCommunityReaction1.setOnClickListener(this);
-        tvCommunityReaction2.setOnClickListener(this);
-        tvCommunityReaction3.setOnClickListener(this);
-        tvCommunityReaction4.setOnClickListener(this);
-        popupWindow.showAsDropDown(view, 0, -200);
-        popupView.setOnTouchListener(this);
-    }
 
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
@@ -951,35 +921,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     public void onClick(View view) {
 
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_reaction:
-                userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction1:
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction2:
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction3:
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_THIRD_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction4:
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_review_upvote_reacted:
-                userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-
-        }
     }
 
     @Override

@@ -316,20 +316,16 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
                 tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_LOVE));
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
-                tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji3_whistel, 0, 0, 0);
-                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_WISHTLE));
+
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
-                tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji_xo_xo, 0, 0, 0);
-                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_XOXO));
+
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
-                tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji2_with_you, 0, 0, 0);
-                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_LIKE));
+
                 break;
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
-                tvArticleDetailUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_emoji4_face_palm, 0, 0, 0);
-                tvArticleDetailUserReactionText.setText(mContext.getString(R.string.ID_FACE_PALM));
+
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFeedDetail.getReactionValue());

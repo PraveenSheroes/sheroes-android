@@ -130,7 +130,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
                                 String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
                                 into.putExtra(AppConstants.CHALLENGE_ID, Long.parseLong(newChallengeId));
-                                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                            //    into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 startActivity(into);
                                 finish();
                             }
@@ -145,8 +146,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     } else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
                         Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
-                        helplineIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                     //   helplineIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);
+                        helplineIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                         startActivity(helplineIntent);
                         finish();
                         if (mFromNotification > 0) {
@@ -195,15 +197,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-               /* Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleDetailActivity.class);
-                articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
-                articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
-                articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(articleDetail);*/
                 Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleActivity.class);
                 articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
-                articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                articleDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(articleDetail);
                 finish();
                 if (mFromNotification > 0) {
@@ -225,7 +222,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 Intent jobDetail = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
                 jobDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 jobDetail.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
-                jobDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+              //  jobDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                jobDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(jobDetail);
                 finish();
                 if (mFromNotification > 0) {
@@ -274,8 +272,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                     into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
                 }
-                into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+              //  into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(into);
                 finish();
                 if (mFromNotification > 0) {
@@ -299,7 +298,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 dataIdString = dataIdString.replaceAll("\\D+", "");
                 Intent eventDetail = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
                 eventDetail.putExtra(AppConstants.EVENT_ID, Long.parseLong(dataIdString));
-                eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+              //  eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                eventDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(eventDetail);
                 finish();
                 if (mFromNotification > 0) {
@@ -321,7 +321,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, PublicProfileGrowthBuddiesDetailActivity.class);
                 articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
-                articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+               // articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                articleDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(articleDetail);
                 finish();
                 if (mFromNotification > 0) {
@@ -339,7 +340,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         //In case of profile
         else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) || AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
             Intent into = new Intent(this, ProfileActicity.class);
-            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+         //   into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             startActivity(into);
             finish();
             if (mFromNotification > 0) {
@@ -351,7 +353,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
 
         } else {
-          //  AppUtils.openChromeTab(this, Uri.parse(urlSharedViaSocial));
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
             /*Intent into = new Intent(Intent.ACTION_VIEW);
             into.setData(Uri.parse(urlSharedViaSocial));
@@ -388,7 +389,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
         }
         Intent into = new Intent(this, HomeActivity.class);
-        into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+       // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivity(into);
         finish();
     }

@@ -1,3 +1,8 @@
+def versionMajor = 5
+def versionMinor = 3
+def versionPatch = 1
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 buildscript {
@@ -23,16 +28,16 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 62
-        versionName "5.3.1"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
     }
 
     signingConfigs {
         debug {
-            keyAlias 'SHEROES'
-            keyPassword 'SHEROES2015'
-            storeFile file('../SHEROES.jks')
-            storePassword 'SHEROES2015'
+            keyAlias 'debug'
+            keyPassword 'android'
+            storeFile file('../debug')
+            storePassword 'android'
         }
         release {
             keyAlias 'SHEROES'
@@ -43,9 +48,8 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-           // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-            buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
+          // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+           buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
@@ -54,7 +58,6 @@ android {
         }
         release {
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-            buildConfigField "String", "GOOGLE_PLUS_URL", "\"https://sheroes.com/APIUsers/gplogin.json\""
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -66,10 +69,12 @@ android {
     lintOptions {
         abortOnError false
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 apply plugin: 'com.getkeepsafe.dexcount'
-
 dexcount {
     format = "tree"
     includeClasses = false

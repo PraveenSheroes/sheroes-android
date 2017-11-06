@@ -3,7 +3,7 @@
     <solid android:color="@color/white"/>
     <stroke
         android:width="@dimen/dp_size_0.5"
-        android:color="@color/search_tab_unselected_text"/>
+        android:color="@color/white"/>
 
     <corners
         android:bottomLeftRadius="@dimen/dp_size_5"

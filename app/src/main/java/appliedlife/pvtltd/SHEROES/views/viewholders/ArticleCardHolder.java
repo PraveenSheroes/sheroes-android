@@ -43,12 +43,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+
 public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     @Inject
     DateUtil mDateUtil;
-    private static final String LEFT_VIEW_MORE = "<font color='#323840'>";
-    private static final String RIGHT_VIEW_MORE = "</font>";
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     @Bind(R.id.li_article_cover_image)
@@ -115,17 +115,15 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textRelatedOperation()
     {
-        String dots = LEFT_VIEW_MORE + AppConstants.DOTS + RIGHT_VIEW_MORE;
         mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-           // Document documentString = Jsoup.parse(mViewMoreDescription);
             tvArticleDescriptionText.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 2, AppConstants.VIEW_MORE, true);
+            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4, AppConstants.VIEW_MORE_TEXT, true);
         }
         else
         {
@@ -145,7 +143,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvArticleTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            if (dataItem.getCharCount() > 0) {
+                stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_MIN_READ));
+            }
+            tvArticleTime.setText(stringBuilder);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
@@ -180,13 +183,13 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
             final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvFeedArticleTimeLabel = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_time_label);
+
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             final ProgressBar pbImage=(ProgressBar) backgroundImage.findViewById(R.id.pb_article_image);
             StringBuilder stringBuilder = new StringBuilder();
             if (dataItem.getNoOfViews() > 1) {
-                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
             } else if (dataItem.getNoOfViews() == 1) {
@@ -196,16 +199,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
             }
-            stringBuilder = new StringBuilder();
-            if (dataItem.getCharCount() > 0) {
-                stringBuilder.append(dataItem.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
-                tvFeedArticleTimeLabel.setText(stringBuilder.toString());
-                tvFeedArticleTimeLabel.setVisibility(View.VISIBLE);
-            } else {
-                tvFeedArticleTimeLabel.setVisibility(View.INVISIBLE);
-            }
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
+                    .placeholder(R.drawable.article_default)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {

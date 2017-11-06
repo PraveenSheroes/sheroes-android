@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.target.Target;
 
 import appliedlife.pvtltd.SHEROES.R;
 
+@SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView {
   int measuredHeight;
   int measuredWidth;

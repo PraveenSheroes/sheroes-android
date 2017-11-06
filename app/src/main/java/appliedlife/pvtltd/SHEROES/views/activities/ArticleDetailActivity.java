@@ -243,38 +243,10 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                 mFragmentOpen.setReactionList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
-            case R.id.tv_article_detail_user_reaction:
-                userReactionDialogLongPress(view);
-                break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
         }
-    }
-
-    private void userReactionDialogLongPress(View view) {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        popupView = layoutInflater.inflate(R.layout.emoji_reaction_layout, null);
-        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                popupWindow.dismiss();
-            }
-        });
-        TextView tvCommunityReaction = (TextView) popupView.findViewById(R.id.tv_reaction);
-        TextView tvCommunityReaction1 = (TextView) popupView.findViewById(R.id.tv_reaction1);
-        TextView tvCommunityReaction2 = (TextView) popupView.findViewById(R.id.tv_reaction2);
-        TextView tvCommunityReaction3 = (TextView) popupView.findViewById(R.id.tv_reaction3);
-        TextView tvCommunityReaction4 = (TextView) popupView.findViewById(R.id.tv_reaction4);
-        tvCommunityReaction.setOnClickListener(this);
-        tvCommunityReaction1.setOnClickListener(this);
-        tvCommunityReaction2.setOnClickListener(this);
-        tvCommunityReaction3.setOnClickListener(this);
-        tvCommunityReaction4.setOnClickListener(this);
-        popupWindow.showAsDropDown(view, 0, -250);
-        popupView.setOnTouchListener(this);
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
@@ -304,33 +276,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
      */
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.tv_reaction:
-                userCommentLikeRequest(mFeedDetail, AppConstants.HEART_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction1:
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FIRST_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction2:
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_SECOND_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction3:
 
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_THIRD_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            case R.id.tv_reaction4:
-
-                userCommentLikeRequest(mFeedDetail, AppConstants.EMOJI_FOURTH_REACTION_CONSTANT, mFeedDetail.getItemPosition());
-                popupWindow.dismiss();
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + "  " + TAG + " " + id);
-        }
     }
 
     /**

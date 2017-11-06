@@ -51,19 +51,6 @@
         android:paddingTop="@dimen/dp_size_10">
 
         <TextView
-            android:id="@+id/tv_reaction_type1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_emoji_xo_xo" />
-
-        <TextView
-            android:id="@+id/tv_reaction_type2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_12"
-            android:drawableLeft="@drawable/ic_emoji2_with_you" />
-
-        <TextView
             android:id="@+id/tv_total_replies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,20 +63,16 @@
             android:textColor="@color/feed_article_comment"
             android:textSize="@dimen/sp_size_11" />
 
-        <TextView
-            android:id="@+id/tv_reaction_type3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_25"
-            android:drawableLeft="@drawable/ic_emoji3_whistel" />
 
         <TextView
             android:id="@+id/tv_reaction_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="@dimen/dp_size_74"
+            android:layout_gravity="left"
+            android:drawableLeft="@drawable/ic_heart_active"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:drawablePadding="@dimen/dp_size_6"
             android:textColor="@color/feed_article_comment"
             android:textSize="@dimen/sp_size_11" />
     </FrameLayout>

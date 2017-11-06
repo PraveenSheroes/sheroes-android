@@ -305,10 +305,6 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/accept")
     Observable<ChallengeListResponse> challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
-
-    @POST(BuildConfig.GOOGLE_PLUS_URL)
-    Observable<GooglePlusResponse> getUserGoogleLogin(@Body GooglePlusRequest loginRequest);
-
     @GET
     Observable<ExpireInResponse> getGoogleTokenExpire(@Url String url);
 

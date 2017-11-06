@@ -15,7 +15,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/home_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_65"
+            android:layout_height="@dimen/dp_size_56"
             android:background="@color/text_color_close"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
