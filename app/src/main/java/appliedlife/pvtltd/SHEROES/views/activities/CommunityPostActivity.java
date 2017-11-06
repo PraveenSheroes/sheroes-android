@@ -364,6 +364,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
+    public void onBackPressed() {
+        onBackPress();
+    }
+
+    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         switch (errorMsg) {
             case AppConstants.CHECK_NETWORK_CONNECTION:
@@ -392,7 +397,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-        onBackPressed();
+        CommunityPostActivity.this.finish();
     }
 
     //endregion
