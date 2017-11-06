@@ -835,7 +835,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 break;
             }
             case R.id.iv_third: {
-                dataItem.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
+                dataItem.setItemPosition(AppConstants.TWO_CONSTANT);
                 viewInterface.dataOperationOnClick(dataItem);
                 break;
             }

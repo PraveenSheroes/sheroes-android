@@ -93,7 +93,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
                 return;
             }
             if (getIntent().getExtras() != null) {
-                mMainItemPosition = getIntent().getExtras().getInt(MAIN_ITEM_POSITION, -1);
+                mMainItemPosition = getIntent().getExtras().getInt(MAIN_ITEM_POSITION, 1);
             }
         } else {
             if (getIntent().getExtras() != null) {
@@ -299,7 +299,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             mImageListView.setVisibility(View.GONE);
         }else {
             mImageListView.setVisibility(View.VISIBLE);
-            getSupportActionBar().setTitle(getString(R.string.album_title, 1, mAlbum.photos.size()));
+            getSupportActionBar().setTitle(getString(R.string.album_title, mMainItemPosition + 1, mAlbum.photos.size()));
         }
         initAlbumCarouselAdapter();
         initViewPager();

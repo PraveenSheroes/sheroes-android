@@ -31,7 +31,10 @@ public enum EventProperty {
     COMMUNITY_ID("Community Id"),
     COMMUNITY_NAME("Community Name"),
     KEYWORD("Keyword"),
-    SHARED_TO("Share To");
+    SHARED_TO("Share To"),
+    ENTITY_ID("Entity Id"),
+    ACTIVITY_NAME("Activity Name"),
+    IS_MOENGAGE("Is Moengage");
 
     private final String string;
 
@@ -135,11 +138,20 @@ public enum EventProperty {
             return this;
         }
 
+        public Builder entityId(String value) {
+            put(ENTITY_ID, value);
+            return this;
+        }
+
         public Builder communityName(String value) {
             put(COMMUNITY_NAME, value);
             return this;
         }
 
+        public Builder isMonengage(boolean value) {
+            put(IS_MOENGAGE, value);
+            return this;
+        }
 
         public Builder keyword(String value) {
             put(KEYWORD, value);
@@ -157,6 +169,11 @@ public enum EventProperty {
 
         public Builder sharedTo(final String sharedTo){
             put(SHARED_TO, sharedTo);
+            return this;
+        }
+
+        public Builder activityName(final String name){
+            put(ACTIVITY_NAME, name);
             return this;
         }
     }

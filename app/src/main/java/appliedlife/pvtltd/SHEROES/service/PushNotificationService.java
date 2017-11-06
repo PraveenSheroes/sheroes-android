@@ -55,6 +55,7 @@ public class PushNotificationService extends GcmListenerService {
     public static String FROM_PUSH_NOTIFICATION = "From Push Notification";
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        SheroesApplication.getAppComponent(this).inject(this);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -66,11 +67,14 @@ public class PushNotificationService extends GcmListenerService {
         if (action != null) {
             action = action.toLowerCase();
             if (action.equalsIgnoreCase("logout") && secret != null && secret.equalsIgnoreCase("avadakedavra")) {
-                mUserPreference.delete();
+                if (mUserPreference != null) {
+                    mUserPreference.delete();
+                }
                 MoEHelper.getInstance(getApplicationContext()).logoutUser();
                 MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
                 ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+                return;
             }
 
             if(action.equalsIgnoreCase("nothing")){
@@ -78,39 +82,56 @@ public class PushNotificationService extends GcmListenerService {
             }
         }
 
+        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
+            message = data.getString(AppConstants.MESSAGE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
+            from = data.getString("title");
+        }
+        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
+            url = data.getString(AppConstants.DEEP_LINK_URL);
+        }
+
         if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
             //If the message is not sent from MoEngage it will be rejected
+            final HashMap<String, Object> properties = new EventProperty.Builder()
+                    .id(MoEngageNotificationUtils.getCampaignIdIfAny(data))
+                    .url(MoEngageNotificationUtils.getDeeplinkURIStringIfAny(data))
+                    .isMonengage(true)
+                    .activityName(MoEngageNotificationUtils.getRedirectActivityNameIfAny(data))
+                    .title(MoEngageNotificationUtils.getNotificationTitleIfAny(data))
+                    .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
+                    .build();
+            AnalyticsManager.trackNonInteractionEvent(Event.PUSH_NOTIFICATION_SHOWN, properties);
+            data.putBoolean(FROM_PUSH_NOTIFICATION, true);
+            data.putString(AppConstants.NOTIFICATION_ID, MoEngageNotificationUtils.getCampaignIdIfAny(data));
             PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
         }else {
-            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
-                message = data.getString(AppConstants.MESSAGE);
-            }
-            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
-                from = data.getString("title");
-            }
-            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
-                url = data.getString(AppConstants.DEEP_LINK_URL);
-            }
             if (StringUtil.isNotNullOrEmptyString(url)) {
                 if (StringUtil.isNotNullOrEmptyString(url)) {
                     sendNotification(from, message, url);
                 }
 
+                String entityId = "";
+                if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
+                    entityId = data.getString(this.getString(R.string.ID_ARTICLE));
+                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
+                } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
+                    entityId = data.getString(this.getString(R.string.ID_COMMUNITIY));
+                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
+                } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
+                    entityId = data.getString(this.getString(R.string.ID_JOB));
+                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
+                }
                 final HashMap<String, Object> properties = new EventProperty.Builder()
                         .id(notificationId)
                         .url(url)
+                        .entityId(entityId)
                         .title(from)
+                        .isMonengage(false)
                         .body(message)
                         .build();
                 AnalyticsManager.trackNonInteractionEvent(Event.PUSH_NOTIFICATION_SHOWN, properties);
-
-                if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
-                } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
-                } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
-                }
             }
         }
     }

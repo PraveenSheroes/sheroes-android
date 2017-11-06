@@ -298,6 +298,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 }
             }
         });
+
+        applyPalette();
     }
 
     @Override
@@ -464,11 +466,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         return true;
     }
 
-    private void applyPalette(Palette palette) {
-        mCollapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(mPrimaryColor));
-        mCollapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(mPrimaryDarkColor));
+    private void applyPalette() {
+        mCollapsingToolbarLayout.setContentScrimColor(mPrimaryColor);
+        mCollapsingToolbarLayout.setStatusBarScrimColor(mPrimaryDarkColor);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(CommonUtil.colorBurn(palette.getMutedColor(mPrimaryDarkColor)));
+            getWindow().setStatusBarColor(CommonUtil.colorBurn(mPrimaryDarkColor));
         }
     }
     //endregion
@@ -658,21 +660,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             Glide.with(ArticleActivity.this)
                     .load(finalImageUri)
                     .asBitmap()
-                    .into(new BitmapImageViewTarget(image) {
-                        @Override
-                        public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                            super.onResourceReady(bitmap, anim);
-                            Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
-                                @Override
-                                public void onGenerated(Palette palette) {
-                                    // Here's your generated palette
-                                    applyPalette(palette);
-                                    mAppBarLayout.setExpanded(true);
-                                    ActivityCompat.startPostponedEnterTransition(ArticleActivity.this);
-                                }
-                            });
-                        }
-                    });
+                    .into(image);
         }
         loadUserViews(article);
     }
