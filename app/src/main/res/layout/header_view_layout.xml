@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_8"
             android:fontFamily="@string/ID_ROBOTO_LIGHT"
+            android:inputType="textCapSentences"
             android:gravity="center"
             android:layout_gravity="center"
             android:textColor="@color/posted_in"

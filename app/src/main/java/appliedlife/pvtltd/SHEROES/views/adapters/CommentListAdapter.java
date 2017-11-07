@@ -168,7 +168,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 body.setText(commentBody);
                 body.setTextIsSelectable(true);
                 body.setLinkTextColor(ContextCompat.getColor(mContext, R.color.link_color));
-                //TextViewUtil.linkifyURLs(body);
+                StringUtil.linkifyURLs(body);
 
                 if (comment.getPostedDate() != null) {
                     relativeTime.setText(comment.getPostedDate());

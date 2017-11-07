@@ -109,6 +109,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>

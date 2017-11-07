@@ -152,7 +152,8 @@
                 <ImageView
                     android:id="@+id/user_pic"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_marginRight="10dp"/>
 
                 <ImageView
                     android:id="@+id/user_drop_down"
@@ -167,23 +168,24 @@
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_24"
                     android:layout_toRightOf="@id/user_pic"
+                    android:inputType="textPersonName|textCapWords"
                     android:text="@string/anonymous"
-                    android:textSize="@dimen/dp_size_16" />
+                    android:textColor="#3c3c3c"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/community_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/user_name"
-                    android:layout_marginLeft="@dimen/dp_size_24"
                     android:layout_toRightOf="@id/user_pic"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="@string/choose_community_option"
                     android:drawableRight="@drawable/vector_down_arrow_red_14dp"
-                    android:drawablePadding="@dimen/dp_size_4"
                     android:textColor="@color/red"
-                    android:textSize="@dimen/dp_size_16" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 

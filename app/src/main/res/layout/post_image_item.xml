@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="87dp"
-    android:layout_height="87dp">
+    android:layout_width="82dp"
+    android:layout_height="82dp">
 
     <RelativeLayout
         android:id="@+id/image_container"
@@ -10,8 +10,8 @@
         android:layout_height="72dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_image_select">
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_image_select_colorless">
 
         <ImageView
             android:id="@+id/image"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/image_close"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"

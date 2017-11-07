@@ -14,6 +14,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DividerItemDecoration;
@@ -370,7 +372,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public void onBackPressed() {
-        if (webChromeClient != null && !webChromeClient.onBackPressed()) {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        }
+        if (webChromeClient != null && !webChromeClient.onBackPressed()){
             if (webViewText.canGoBack()) {
                 webViewText.goBack();
             } else {

@@ -397,7 +397,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-        CommunityPostActivity.this.finish();
+        onBackPressed();
     }
 
     //endregion
