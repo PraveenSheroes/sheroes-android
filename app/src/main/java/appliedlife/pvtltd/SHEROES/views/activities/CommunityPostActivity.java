@@ -397,7 +397,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-        onBackPressed();
+        CommunityPostActivity.this.finish();
     }
 
     //endregion
@@ -681,14 +681,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if(mPostAsCommunitySelected){
             mCommunityName.setVisibility(View.GONE);
             if(mCommunityPost.community !=null){
-                mUserName.setText(mCommunityPost.community.name);
+                mUserName.setText(CommonUtil.capitalizeString(mCommunityPost.community.name));
             }
         }else {
             mCommunityName.setVisibility(View.VISIBLE);
             if(mIsAnonymous){
                 mUserName.setText("Anonymous");
             }else {
-                mUserName.setText(mUserSummary.getFirstName() + " " + mUserSummary.getLastName());
+                mUserName.setText(CommonUtil.capitalizeString(mUserSummary.getFirstName() + " " + mUserSummary.getLastName()));
             }
         }
         setUserImage();

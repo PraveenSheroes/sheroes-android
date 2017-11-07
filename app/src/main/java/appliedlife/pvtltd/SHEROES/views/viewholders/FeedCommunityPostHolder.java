@@ -731,7 +731,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
             Glide.with(context)
                     .load(firstImage).asBitmap()
-                    .placeholder(R.drawable.article_default)
                     .into(ivFirst);
         }
 
@@ -740,7 +739,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
             Glide.with(context)
                     .load(secondImage).asBitmap()
-                    .placeholder(R.drawable.article_default)
+                    .placeholder(R.color.photo_placeholder)
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
