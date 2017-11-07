@@ -72,6 +72,10 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     public void cardHeaderClickForCreatePost() {
         viewInterface.handleOnClick(dataItem, cardHeaderView);
     }
+    @OnClick(R.id.tv_header_name)
+    public void textClickForCreatePost() {
+        viewInterface.handleOnClick(dataItem, cardHeaderView);
+    }
     @Override
     public void viewRecycled() {
 
