@@ -98,6 +98,7 @@ public class LoginModel {
                     .observeOn(AndroidSchedulers.mainThread());
 
     }
+
     public Observable<ExpireInResponse> getGoogleTokenExpireInFromModel(String expireInUrl) {
         return sheroesAppServiceApi.getGoogleTokenExpire(expireInUrl)
                 .map(new Func1<ExpireInResponse, ExpireInResponse>() {

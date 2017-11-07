@@ -50,6 +50,7 @@
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_FIRST_NAME_HINT"
+                    android:inputType="textPersonName|textCapWords"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />
@@ -70,6 +71,7 @@
                     android:focusableInTouchMode="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_LAST_NAME_HINT"
+                    android:inputType="textPersonName|textCapWords"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/text_color_setting_preference_basicdetails"
                     android:textSize="@dimen/sp_size_13" />

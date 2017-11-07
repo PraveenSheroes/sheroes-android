@@ -23,7 +23,6 @@
         android:layout_height="@dimen/dp_size_50"
         android:layout_gravity="bottom"
         android:visibility="gone"
-        android:alpha=".5"
         android:background="@drawable/view_holder_gradiant"
         android:gravity="bottom">
 

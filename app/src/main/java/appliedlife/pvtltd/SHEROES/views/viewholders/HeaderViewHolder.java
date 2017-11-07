@@ -60,7 +60,13 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         this.dataItem=item;
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
-        tvHeaderName.setText(loggedInUser+AppConstants.SPACE+context.getString(R.string.ID_HEADER_TEXT));
+        if(StringUtil.isNotNullOrEmptyString(loggedInUser)) {
+            String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
+            tvHeaderName.setText(name + AppConstants.SPACE + context.getString(R.string.ID_HEADER_TEXT));
+        }else
+        {
+            tvHeaderName.setText(context.getString(R.string.ID_HEADER_TEXT));
+        }
     }
     @OnClick(R.id.card_header_view)
     public void cardHeaderClickForCreatePost() {

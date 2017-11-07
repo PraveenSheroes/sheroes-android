@@ -130,6 +130,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedCommunityPostText;
     @Bind(R.id.tv_feed_community_post_user_menu)
     TextView tvFeedCommunityPostUserMenu;
+    @Bind(R.id.tv_spam_post_menu)
+    TextView tvSpamPostyMenu;
     @Bind(R.id.tv_feed_community_post_reaction1)
     TextView tvFeedCommunityPostReaction1;
     @Bind(R.id.tv_feed_community_post_total_reactions)
@@ -405,6 +407,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
             if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+                tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 String feedTitle = dataItem.getAuthorName();
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {

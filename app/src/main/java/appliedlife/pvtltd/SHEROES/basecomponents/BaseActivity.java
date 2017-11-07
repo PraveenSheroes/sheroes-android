@@ -426,6 +426,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
+            case R.id.tv_spam_post_menu:
+                clickMenuItem(view, baseResponse, FEED_CARD_MENU);
+                break;
             case R.id.tv_feed_article_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
@@ -689,6 +692,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
               /*  //if owner
                 tvDelete.setVisibility(View.VISIBLE);
                 //if commenter*/
+                tvEdit.setVisibility(View.VISIBLE);
+                tvDelete.setVisibility(View.VISIBLE);
+                break;
+            case R.id.tv_spam_post_menu:
                 tvEdit.setVisibility(View.VISIBLE);
                 tvDelete.setVisibility(View.VISIBLE);
                 break;

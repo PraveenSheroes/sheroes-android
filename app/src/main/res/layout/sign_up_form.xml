@@ -51,7 +51,7 @@
                 android:backgroundTint="@color/visiting_card_backgroung"
                 android:digits="@string/ID_NAME_CHECK"
                 android:hint="@string/ID_FIRST_NAME_HINT_SIGNUP"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:maxLines="@integer/int_value_for_line_1"
                 android:textSize="@dimen/sp_size_14" />
 
@@ -70,7 +70,7 @@
                 android:backgroundTint="@color/visiting_card_backgroung"
                 android:digits="@string/ID_NAME_CHECK"
                 android:hint="@string/ID_LAST_NAME_HINT_SIGNUP"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:maxLines="@integer/int_value_for_line_1"
                 android:textSize="@dimen/sp_size_14" />
 

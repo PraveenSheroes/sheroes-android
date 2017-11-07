@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_10"
             android:layout_marginTop="@dimen/dp_size_16"
             android:gravity="top"
             android:weightSum="1">
@@ -70,8 +70,11 @@
                 android:id="@+id/tv_feed_community_post_user_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:drawableRight="@drawable/ic_bookmark_in_active"
-                android:padding="@dimen/dp_size_10" />
+                android:paddingRight="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingBottom="@dimen/dp_size_10"/>
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_menu"
@@ -285,7 +288,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_8"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_6"
             android:layout_marginTop="@dimen/dp_size_6"
             android:clickable="false"
             android:orientation="horizontal"
@@ -334,7 +337,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_6"
             android:layout_marginTop="@dimen/dp_size_16"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -421,7 +424,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:drawableRight="@drawable/ic_menu_dashboard"
-                android:padding="@dimen/dp_size_10" />
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_10"
+                android:paddingTop="@dimen/dp_size_5"
+                android:paddingBottom="@dimen/dp_size_20"/>
         </LinearLayout>
 
         <RelativeLayout
@@ -503,8 +509,6 @@
         android:id="@+id/fl_spam_post_ui"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dp_size_16"
-        android:layout_marginLeft="@dimen/dp_size_16"
         android:visibility="gone">
 
         <LinearLayout
@@ -540,6 +544,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:padding="@dimen/dp_size_10"
             android:background="@color/spam_post"
             android:gravity="center"
             android:orientation="horizontal"
@@ -553,7 +558,7 @@
                 android:layout_weight=".5"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
-                android:padding="@dimen/dp_size_14"
+                android:padding="@dimen/dp_size_10"
                 android:text="@string/ID_DELETE"
                 android:textAllCaps="true"
                 android:textColor="@color/email"
@@ -573,7 +578,7 @@
                 android:layout_weight=".5"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
-                android:padding="@dimen/dp_size_14"
+                android:padding="@dimen/dp_size_10"
                 android:text="@string/ID_APPROVE"
                 android:textAllCaps="true"
                 android:textColor="@color/approve_admin"

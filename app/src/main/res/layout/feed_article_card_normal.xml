@@ -12,7 +12,6 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
         android:gravity="top"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -51,14 +50,20 @@
             android:id="@+id/tv_feed_article_user_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_10"
+            android:paddingRight="@dimen/dp_size_25"
+            android:paddingLeft="@dimen/dp_size_10"
+            android:layout_gravity="top"
+            android:paddingBottom="@dimen/dp_size_20"
             android:drawableRight="@drawable/ic_bookmark_in_active" />
 
         <TextView
             android:id="@+id/tv_feed_article_user_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_size_10"
+            android:paddingLeft="@dimen/dp_size_10"
+            android:paddingBottom="@dimen/dp_size_20"
+            android:paddingRight="@dimen/dp_size_25"
+            android:layout_gravity="top"
             android:drawableRight="@drawable/ic_menu_dashboard"
             android:visibility="gone" />
     </LinearLayout>
@@ -165,11 +170,10 @@
 
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_8"
-        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_6"
         android:layout_marginTop="@dimen/dp_size_6"
         android:clickable="false"
         android:orientation="horizontal"
@@ -216,7 +220,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_6"
         android:layout_marginTop="@dimen/dp_size_18"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -301,7 +305,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:drawableRight="@drawable/ic_menu_dashboard"
-            android:padding="@dimen/dp_size_10" />
+            android:paddingLeft="@dimen/dp_size_10"
+            android:paddingRight="@dimen/dp_size_10"
+            android:paddingTop="@dimen/dp_size_5"
+            android:paddingBottom="@dimen/dp_size_20" />
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/rl_feed_article_join_conversation"
