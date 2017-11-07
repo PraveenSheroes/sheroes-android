@@ -336,6 +336,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_app_user_contact_referral")
     Observable<UserFromReferralResponse> updateUserReferral(@Body UserFromReferralRequest userFromReferralRequest);
+
     @POST("/entity/master/app_intro_screen")
     Observable<AppIntroScreenResponse> appIntroScreen(@Body AppIntroScreenRequest appIntroScreenRequest);
 }
