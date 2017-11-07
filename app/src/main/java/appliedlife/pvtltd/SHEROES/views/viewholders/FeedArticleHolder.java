@@ -391,7 +391,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             }
             Glide.with(mContext)
                     .load(backgrndImageUrl).asBitmap()
-                    .placeholder(R.drawable.article_default)
+                    .placeholder(R.color.photo_placeholder)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {

@@ -552,7 +552,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
     @Override
     public Drawable getDrawable(String source) {
         LevelListDrawable d = new LevelListDrawable();
-        Drawable empty = mContext.getResources().getDrawable(R.drawable.article_default);
+        Drawable empty = mContext.getResources().getDrawable(R.color.photo_placeholder);
         d.addLevel(0, 0, empty);
         d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
