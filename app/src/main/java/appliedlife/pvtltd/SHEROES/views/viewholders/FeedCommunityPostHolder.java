@@ -131,7 +131,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_feed_community_post_user_menu)
     TextView tvFeedCommunityPostUserMenu;
     @Bind(R.id.tv_spam_post_menu)
-    TextView tvSpamPostyMenu;
+    TextView tvSpamPostMenu;
     @Bind(R.id.tv_feed_community_post_reaction1)
     TextView tvFeedCommunityPostReaction1;
     @Bind(R.id.tv_feed_community_post_total_reactions)
@@ -804,7 +804,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_spam_post_menu)
     public void spamMenuClick() {
-        viewInterface.handleOnClick(dataItem, tvFeedCommunityPostUserMenu);
+        viewInterface.handleOnClick(dataItem, tvSpamPostMenu);
     }
 
 
