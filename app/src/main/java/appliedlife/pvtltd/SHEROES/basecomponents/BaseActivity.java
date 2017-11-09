@@ -50,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -60,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
@@ -349,6 +351,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void startActivity(Intent intent) {
         boolean handled = false;
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_VIEW)) {
+            if(CommonUtil.isSheoresAppLink(Uri.parse(intent.getDataString()))){
+                intent.setClass(this, SheroesDeepLinkingActivity.class);
+                super.startActivity(intent);
+                return;
+            }
             if (AppUtils.matchesWebsiteURLPattern(intent.getDataString())) {
                 Uri url = Uri.parse(intent.getDataString());
                 AppUtils.openChromeTab(this, url);

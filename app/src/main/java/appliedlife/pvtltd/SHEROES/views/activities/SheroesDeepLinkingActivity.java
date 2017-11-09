@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 
 /**
  * Created by Ajit Kumar on 11-04-2017.
@@ -35,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class SheroesDeepLinkingActivity extends BaseActivity {
     private static final String SCREEN_LABEL = "DeepLink Screen";
+    public static final String OPEN_FRAGMENT = "Open Fragment";
     private Uri mData;
     private int indexOfFourthBackSlace;
     private MoEHelper mMoEHelper;
@@ -110,7 +112,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
 
         } else {
-            homeActivityCall();
+            homeActivityCall("");
         }
     }
 
@@ -142,7 +144,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             }
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
-                            homeActivityCall();
+                            homeActivityCall("");
                         }
                     } else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
                         Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
@@ -156,7 +158,15 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         } else {
                             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HELP_LINE, AppConstants.EMPTY_STRING);
                         }
-                    } else {
+                    }
+                    else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/")){
+                        homeActivityCall(ArticlesFragment.SCREEN_LABEL);
+                    }
+
+                    else if (urlOfSharedCard.equals(AppConstants.COMMUNITY_URL) || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL_COM) || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL + "/") || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL_COM + "/")){
+                        homeActivityCall("Community List");
+                    }
+                        else {
                         indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                         if (indexOfFourthBackSlace > 0) {
                             baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
@@ -171,11 +181,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    homeActivityCall();
+                    homeActivityCall("");
                 }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                homeActivityCall();
+                homeActivityCall("");
             }
             fullLength = urlOfSharedCard.length();
 
@@ -211,7 +221,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                homeActivityCall();
+                homeActivityCall("");
             }
         } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) || AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
             try {
@@ -234,7 +244,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                homeActivityCall();
+                homeActivityCall("");
             }
 
         }
@@ -285,7 +295,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                homeActivityCall();
+                homeActivityCall("");
 
             }
 
@@ -310,7 +320,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                homeActivityCall();
+                homeActivityCall("");
             }
         } else if (AppConstants.CHAMPION_URL.equalsIgnoreCase(baseUrl) || AppConstants.CHAMPION_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.CHAMPION_URL.length() < fullLength) {
             try {
@@ -334,7 +344,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                homeActivityCall();
+                homeActivityCall("");
             }
         }
         //In case of profile
@@ -380,7 +390,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         return counter;
     }
 
-    private void homeActivityCall() {
+    private void homeActivityCall(String fragmentName) {
         if (mFromNotification > 0) {
             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_HOME, AppConstants.EMPTY_STRING);
 
@@ -391,6 +401,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         Intent into = new Intent(this, HomeActivity.class);
        // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        into.putExtra(OPEN_FRAGMENT, fragmentName);
         startActivity(into);
         finish();
     }
