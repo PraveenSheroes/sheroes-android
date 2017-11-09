@@ -6,6 +6,8 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.ContestListPresenterImpl;
+import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
@@ -17,6 +19,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -595,5 +599,11 @@ public interface SheroesAppComponent {
     void inject(HeaderViewHolder headerViewHolder);
 
     void inject(PushNotificationService pushNotificationService);
+
+    void inject(ContestActivity contestActivity);
+
+    void inject(ContestPresenterImpl contestPresenter);
+
+    void inject(ContestListActivity contestListActivity);
 
 }

@@ -96,6 +96,20 @@ public class CommonUtil {
         return String.valueOf(chars);
     }
 
+    public static ContestStatus getContestStatus(Date startAt, Date endAt){
+        Date currentDate = new Date();
+        if(currentDate.before(startAt)){
+            return ContestStatus.UPCOMING;
+        }
+        else if(currentDate.after(startAt) && currentDate.before(endAt)){
+            return ContestStatus.ONGOING;
+        }else if(currentDate.after(startAt) && currentDate.after(endAt)){
+            return ContestStatus.COMPLETED;
+        }else {
+            return ContestStatus.UPCOMING;
+        }
+    }
+
     public static String ellipsize(String input, int maxLength) {
         String ellip = "...";
         if (input == null || input.length() <= maxLength

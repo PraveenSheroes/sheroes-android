@@ -772,6 +772,12 @@
         <item quantity="other">Comments</item>
     </plurals>
 
+    <plurals name="numberOfResponses">
+        <item quantity="zero">Responses</item>
+        <item quantity="one">Response</item>
+        <item quantity="other">Responses</item>
+    </plurals>
+
 
     <plurals name="numberOfLikes">
         <item quantity="zero">Likes</item>
@@ -807,4 +813,19 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
     <string name="ID_HEADER_TEXT">what\'s on your mind?</string>
+
+    <string name="contest.status.ongoing">Ongoing</string>
+    <string name="contest.status.upcoming">Upcoming</string>
+    <string name="contest.status.completed">Completed</string>
+
+    <string name="endsOn">ends on</string>
+    <string name="starts_at">starts at</string>
+    <string name="joined_by">joined by</string>
+    <string name="completed">completed</string>
+
+    <string name="join_contest">join contest</string>
+    <string name="submit_response">Write response</string>
+    <string name="view_response">View response</string>
+    <string name="joined">Joined</string>
+    <string name="title.contest_list">Contests</string>
 </resources>

@@ -14,6 +14,8 @@
      public static DateUtil getInstance(){
        return   new DateUtil();
      }
+     private static final String CONTEST_TIME = "d MMM, h aaa";
+     public static final Locale LOCALE = Locale.US;
      /**
       * Format a timestamp to standard format.
       *
@@ -24,6 +26,18 @@
      public static String getDateFromMillisecondsWithFormat(Long time, String format) {
          SimpleDateFormat sdf = new SimpleDateFormat(format);
          return sdf.format(time);
+     }
+
+     public static String contestDate(Date date) {
+         if (!validateDate(date)) {
+             return "";
+         }
+         SimpleDateFormat dateFormat = new SimpleDateFormat(CONTEST_TIME, LOCALE);
+         return dateFormat.format(date);
+     }
+
+     private static boolean validateDate(Date date) {
+         return date != null;
      }
      /**
       * @return absolute rounded off difference in days
