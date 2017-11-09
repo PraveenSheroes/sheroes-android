@@ -2481,7 +2481,6 @@ public class AppUtils {
             customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
                     Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
         }
-        customTabsIntent.intent.setPackage("com.android.chrome");
         customTabsIntent.launchUrl(activity, url);
     }
 
