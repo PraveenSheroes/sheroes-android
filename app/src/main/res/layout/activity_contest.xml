@@ -13,7 +13,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
             android:theme="@style/AppTheme.Toolbar"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -35,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:tabIndicatorColor="@color/accent"
-            app:tabSelectedTextColor="@color/accent"
+            app:tabIndicatorColor="@color/red"
+            app:tabSelectedTextColor="@color/red"
             app:tabTextColor="@color/text_grey" />
 
     </android.support.design.widget.AppBarLayout>
@@ -59,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
-            android:background="@color/accent"
+            android:background="@color/red"
             android:clickable="true">
 
             <Button

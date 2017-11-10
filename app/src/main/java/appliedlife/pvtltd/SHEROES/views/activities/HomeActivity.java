@@ -516,6 +516,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             case 14:
                 growthBuddiesInPublicProfile();
                 break;
+            case 15 :
+                ContestListActivity.navigateTo(this, SCREEN_LABEL, null);
+                break;
             default:
 
         }

@@ -27,6 +27,7 @@ public class Contest extends Post {
     public static final String CONTEST_OBJ = "CONTEST_OBJ";
     public static final String CONTEST_ID = "CONTEST_ID";
     public String shortUrl;
+    public String tag = "#Workplace Challenge";
     public int likesCount;
     public boolean isLiked;
     public boolean hasStarted;
@@ -35,7 +36,8 @@ public class Contest extends Post {
     public Date startAt;
     public int totalViews;
     public Date endAt;
-    public boolean isWinner;
+    public boolean hasWinner;
+    public boolean isWinnerAnnounced;
     public Date winnerAnnouncementDate;
     public List<FeedDetail> submissions;
     public String thumbImage;

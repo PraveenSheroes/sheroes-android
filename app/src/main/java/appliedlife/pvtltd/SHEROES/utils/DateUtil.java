@@ -16,6 +16,7 @@
      }
      private static final String CONTEST_TIME = "d MMM, h aaa";
      public static final Locale LOCALE = Locale.US;
+     public static final String PRETTY_DATE_WITHOUT_TIME = "d MMM yyyy";
      /**
       * Format a timestamp to standard format.
       *
@@ -111,5 +112,13 @@
              e.printStackTrace();
          }
          return null;
+     }
+
+     public static String toPrettyDateWithoutTime(Date date) {
+         if (!validateDate(date)) {
+             return "";
+         }
+         SimpleDateFormat dateFormat = new SimpleDateFormat(PRETTY_DATE_WITHOUT_TIME, LOCALE);
+         return dateFormat.format(date);
      }
  }

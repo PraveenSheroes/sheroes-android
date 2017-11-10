@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.addodoc.care.widget.EmptyRecyclerView
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView
         android:id="@+id/winner_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -54,10 +54,12 @@ public class ContestFlatViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(Contest contest) {
         mTitle.setText(contest.title);
-        String contestImage = CommonUtil.getImgKitUri(contest.thumbImage, mContestImageSize, mContestImageSize);
-        Glide.with(mContext)
-                .load(contestImage)
-                .into(mImage);
+        if(CommonUtil.isNotEmpty(contest.thumbImage)){
+            String contestImage = CommonUtil.getImgKitUri(contest.thumbImage, mContestImageSize, mContestImageSize);
+            Glide.with(mContext)
+                    .load(contestImage)
+                    .into(mImage);
+        }
         ContestStatus contestStatus = CommonUtil.getContestStatus(contest.startAt, contest.endAt);
         if(contestStatus==ContestStatus.ONGOING){
             mContestParticipants.setText(Integer.toString(contest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, contest.submissionCount));

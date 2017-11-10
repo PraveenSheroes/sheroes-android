@@ -242,6 +242,38 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
+    public void getChallengeResponse(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+                if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+                    getMvpView().showHomeFeedList(feedDetailList);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
     public void getMyCommunityFromPresenter(final MyCommunityRequest myCommunityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);

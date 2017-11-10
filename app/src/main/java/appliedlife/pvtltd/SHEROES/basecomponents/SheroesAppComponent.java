@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
@@ -133,6 +134,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggested
 import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
@@ -605,5 +607,10 @@ public interface SheroesAppComponent {
     void inject(ContestPresenterImpl contestPresenter);
 
     void inject(ContestListActivity contestListActivity);
+
+    void inject(ContestWinnerFragment contestWinnerFragment);
+
+    void inject(ChallengeFeedHolder challengeFeedHolder);
+
 
 }

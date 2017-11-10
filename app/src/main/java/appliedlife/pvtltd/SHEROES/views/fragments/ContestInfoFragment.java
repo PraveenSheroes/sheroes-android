@@ -19,15 +19,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.crashlytics.android.Crashlytics;
-import com.squareup.pollexor.ThumborUrlBuilder;
-
 import org.parceler.Parcels;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Locale;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -54,6 +47,9 @@ public class ContestInfoFragment extends BaseFragment {
     @Bind(R.id.root)
     RelativeLayout rootLayout;
 
+    @Bind(R.id.contest_tag)
+    TextView mContestTag;
+
     @Bind(R.id.title)
     TextView mTitle;
 
@@ -66,17 +62,17 @@ public class ContestInfoFragment extends BaseFragment {
     @Bind(R.id.video_layout)
     RelativeLayout videoLayout;
 
-    @Bind(R.id.days_count)
-    TextView mDaysCount;
+    /*@Bind(R.id.days_count)
+    TextView mDaysCount;*/
 
-    @Bind(R.id.days_text)
-    TextView mDaysText;
+    /*@Bind(R.id.days_text)
+    TextView mDaysText;*/
 
-    @Bind(R.id.participants_count)
+    /*@Bind(R.id.participants_count)
     TextView mParticipantsCount;
 
     @Bind(R.id.participants_text)
-    TextView mParticipantsText;
+    TextView mParticipantsText;*/
     //endregion
 
     private Contest mContest;
@@ -152,7 +148,7 @@ public class ContestInfoFragment extends BaseFragment {
     //region private methods
     private void showDaysParticipantsInfo() {
         ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.startAt, mContest.endAt);
-        mDaysText.setText(mContest.getDaysText());
+       /* mDaysText.setText(mContest.getDaysText());
         mDaysCount.setText(mContest.getDaysCount());
         mParticipantsText.setText(mContest.getParticipantsText(getContext()));
         mParticipantsCount.setText(mContest.getParticipantsCount());
@@ -171,12 +167,13 @@ public class ContestInfoFragment extends BaseFragment {
             mDaysText.setText(R.string.completed);
             mParticipantsCount.setText(String.format(Locale.getDefault(), "%d", mContest.submissionCount));
             mParticipantsText.setText(this.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
-        }
+        }*/
     }
 
     @SuppressLint("AddJavascriptInterface")
     private void showContestInfo() {
         mTitle.setText(mContest.title);
+        mContestTag.setText(mContest.tag);
         VideoEnabledWebChromeClient webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText);
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
             @Override

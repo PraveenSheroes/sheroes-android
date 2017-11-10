@@ -434,6 +434,12 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HeaderViewHolder(view, viewInterface);
         }
+    },
+    FEED_CHALLENGE(R.layout.challenge_feed_item) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new ChallengeFeedHolder(view, viewInterface);
+        }
     };
     public Object object;
     public int layout;
@@ -504,7 +510,7 @@ public enum HolderMapping {
                                 returnView = INVITE_MEMBER_MODULE.ordinal();
                                 break;
                             case AppConstants.CHALLENGE_SUB_TYPE:
-                                returnView = CHALLENGE_HORIZONTAL_VIEW.ordinal();
+                                returnView = FEED_CHALLENGE.ordinal();
                                 break;
                             case AppConstants.APP_INTRO_SUB_TYPE:
                                 returnView = APP_INTRO_VIEW.ordinal();
@@ -687,7 +693,7 @@ public enum HolderMapping {
                 } else if (item instanceof ExprienceEntity) {
                     returnView = WORK_EXPERIENCE_DETAIl_CARD.ordinal();
                 } else if (item instanceof ChallengeDataItem) {
-                    returnView = CHALLENGE_LIST_ITEM_HOLDER.ordinal();
+                    returnView = FEED_CHALLENGE.ordinal();
                 } else if (item instanceof HelplineChatDoc) {
                     if (((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
                         HelplineChatDoc helplineChatDoc = (HelplineChatDoc) item;

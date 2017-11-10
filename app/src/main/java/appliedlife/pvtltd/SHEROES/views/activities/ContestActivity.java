@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -38,7 +37,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
-import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
@@ -55,6 +53,7 @@ import butterknife.OnClick;
 
 public class ContestActivity extends BaseActivity implements IContestView {
     private static final String SCREEN_LABEL = "Contest Activity";
+    public static final String IS_CHALLENGE = "Is Challenge";
     private static int flagActivity = 0;
     private int FRAGMENT_RESPONSES = 0;
     private int FRAGMENT_INFO = 1;
@@ -147,7 +146,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         super.onResume();
 
         int currentPage = mViewPager.getCurrentItem();
-        if (currentPage == FRAGMENT_WINNER && mContest.isWinner) {
+        if (currentPage == FRAGMENT_WINNER && mContest.isWinnerAnnounced) {
       /*      if (CareServiceHelper.getUser().contestAddress == null) {
                 mBottomBar.setText(R.string.send_address);
             } else {
@@ -188,11 +187,16 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         mHomeFragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(IS_CHALLENGE, true);
+        mHomeFragment.setArguments(bundle);
         ContestInfoFragment mContestInfoFragment = (ContestInfoFragment) ContestInfoFragment.instance();
         ContestWinnerFragment mContestWinnerFragment = new ContestWinnerFragment();
         adapter.addFragment(mHomeFragment, "Responses");
         adapter.addFragment(mContestInfoFragment, "Info");
-        adapter.addFragment(mContestWinnerFragment, "Winner");
+        if (mContest.hasWinner) {
+            adapter.addFragment(mContestWinnerFragment, "Winner");
+        }
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(2);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -267,7 +271,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 mBottomBar.setText(R.string.submit_response);
             }
         } else if (position == FRAGMENT_WINNER) {
-            if (mContest.isWinner) {
+            if (mContest.isWinnerAnnounced) {
                /* if (CareServiceHelper.getUser().contestAddress == null) {
                     mBottomBar.setText(R.string.send_address);
                 } else {

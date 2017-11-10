@@ -62,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -70,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -145,6 +147,7 @@ public class HomeFragment extends BaseFragment {
     private long startedTime;
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     private long mUserId;
+    private boolean isChallenge;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +162,7 @@ public class HomeFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
         if (bundle != null) {
+            isChallenge = bundle.getBoolean(ContestActivity.IS_CHALLENGE, false);
             mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
@@ -170,26 +174,39 @@ public class HomeFragment extends BaseFragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setInitialPrefetchItemCount(1);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        if(getActivity() instanceof HomeActivity){
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        }
+
+        if(getActivity() instanceof ContestActivity){
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (ContestActivity) getActivity());
+        }
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                mListLoad = false;
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+                if(!isChallenge){
+                    mListLoad = false;
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onShow() {
-                mListLoad = false;
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                if(!isChallenge){
+                    mListLoad = false;
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void dismissReactions() {
-                if (null != (((HomeActivity) getActivity()).popupWindow)) {
-                    ((HomeActivity) getActivity()).popupWindow.dismiss();
+                if(!isChallenge){
+                    if (null != (((HomeActivity) getActivity()).popupWindow)) {
+                        ((HomeActivity) getActivity()).popupWindow.dismiss();
+                    }
                 }
             }
 
@@ -206,10 +223,16 @@ public class HomeFragment extends BaseFragment {
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
-                    FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
-                    feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-                    mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
-                    mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+                    if(isChallenge){
+                        FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
+                        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+                        mHomePresenter.getChallengeResponse(feedRequestPojo);
+                    }else {
+                        FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+                        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+                        mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+                    }
                 }
             }
             if (null != mUserPreference.get().getUserSummary()) {
@@ -220,7 +243,9 @@ public class HomeFragment extends BaseFragment {
         } else {
             mHomePresenter.getAuthTokenRefreshPresenter();
         }
-        ((HomeActivity)getActivity()).homeButtonUi();
+        if(getActivity() instanceof HomeActivity){
+            ((HomeActivity)getActivity()).homeButtonUi();
+        }
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         try {
             getGcmId();
@@ -309,9 +334,13 @@ public class HomeFragment extends BaseFragment {
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
-        mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
-        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        if(isChallenge){
+            mHomePresenter.getChallengeResponse(feedRequestPojo);
+        }else {
+            mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+            mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+            mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        }
     }
 
     @Override
