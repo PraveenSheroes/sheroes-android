@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -595,8 +596,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);*/
         CommunityPost communityPost = new CommunityPost();
-        communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
+        communityPost.community = new Community();
+        communityPost.community.id = feedDetail.getCommunityId();
+        communityPost.community.name = feedDetail.getNameOrTitle();
+        communityPost.community.isOwner = feedDetail.isCommunityOwner();
+        communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
+       // CommunityPostActivity.navigateTo(this, feedDetail, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
         // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 

@@ -978,7 +978,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);*/
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
       //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
     }
 
