@@ -36,8 +36,8 @@ public class Contest extends Post {
     public Date startAt;
     public int totalViews;
     public Date endAt;
-    public boolean hasWinner;
-    public boolean isWinnerAnnounced;
+    public boolean hasWinner = true;
+    public boolean isWinnerAnnounced = true;
     public Date winnerAnnouncementDate;
     public List<FeedDetail> submissions;
     public String thumbImage;

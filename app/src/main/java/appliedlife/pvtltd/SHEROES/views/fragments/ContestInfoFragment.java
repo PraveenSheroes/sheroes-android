@@ -61,18 +61,6 @@ public class ContestInfoFragment extends BaseFragment {
 
     @Bind(R.id.video_layout)
     RelativeLayout videoLayout;
-
-    /*@Bind(R.id.days_count)
-    TextView mDaysCount;*/
-
-    /*@Bind(R.id.days_text)
-    TextView mDaysText;*/
-
-    /*@Bind(R.id.participants_count)
-    TextView mParticipantsCount;
-
-    @Bind(R.id.participants_text)
-    TextView mParticipantsText;*/
     //endregion
 
     private Contest mContest;
@@ -139,35 +127,10 @@ public class ContestInfoFragment extends BaseFragment {
         return SCREEN_LABEL;
     }
 
-    /*@Override
-    protected IPresenter getPresenter() {
-        return null;
-    }*/
-    //endregion
-
     //region private methods
     private void showDaysParticipantsInfo() {
         ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.startAt, mContest.endAt);
-       /* mDaysText.setText(mContest.getDaysText());
-        mDaysCount.setText(mContest.getDaysCount());
-        mParticipantsText.setText(mContest.getParticipantsText(getContext()));
-        mParticipantsCount.setText(mContest.getParticipantsCount());
-        if (contestStatus == ContestStatus.ONGOING) {
-            mDaysCount.setText(DateUtil.contestDate(mContest.endAt));
-            mDaysText.setText(R.string.endsOn);
-            mParticipantsCount.setText(String.format(Locale.getDefault(), "%d", mContest.submissionCount));
-            mParticipantsText.setText(this.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
-        } else if (contestStatus == ContestStatus.UPCOMING) {
-            mDaysCount.setText(DateUtil.contestDate(mContest.startAt));
-            mDaysText.setText(R.string.starts_at);
-            mParticipantsCount.setText(String.format(Locale.getDefault(), "%d", mContest.likesCount));
-            mParticipantsText.setText(R.string.joined_by);
-        } else if (contestStatus == ContestStatus.COMPLETED) {
-            mDaysCount.setText(DateUtil.contestDate(mContest.endAt));
-            mDaysText.setText(R.string.completed);
-            mParticipantsCount.setText(String.format(Locale.getDefault(), "%d", mContest.submissionCount));
-            mParticipantsText.setText(this.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
-        }*/
+
     }
 
     @SuppressLint("AddJavascriptInterface")
@@ -243,25 +206,7 @@ public class ContestInfoFragment extends BaseFragment {
     }
 
     private void showImage() {
-       /* imageView.setVisibility(View.VISIBLE);
-        String imageUri = mContest.featureImage;
-        if (mContest.featureImage != null) {
-            try {
-                imageUri = BabygogoThumbor.getInstance()
-                        .buildImage(URLEncoder.encode(mContest.featureImage, "UTF-8"))
-                        .resize(CommonUtil.getWindowWidth(getActivity()), 0)
-                        .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
-                        .toUrl();
-            } catch (UnsupportedEncodingException e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-            final String finalImageUri = imageUri;
 
-            Glide.with(getActivity())
-                    .load(finalImageUri)
-                    .asBitmap()
-                    .into(imageView);
-        }*/
     }
 
     //endregion
