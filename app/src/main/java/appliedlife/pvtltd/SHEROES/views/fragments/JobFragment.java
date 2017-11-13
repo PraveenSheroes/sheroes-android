@@ -94,7 +94,7 @@ public class JobFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
-
+        ((HomeActivity)getActivity()).jobButtonUI();
         mLayoutManager = new LinearLayoutManager(getContext());
 
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -125,7 +125,7 @@ public class JobFragment extends BaseFragment {
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, false, mHomePresenter, mAppUtils, mProgressBar);
         jobFilterIds(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
         ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-        ((HomeActivity)getActivity()).jobUi();
+        ((HomeActivity)getActivity()).jobButtonUI();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageJobListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_LISTING));

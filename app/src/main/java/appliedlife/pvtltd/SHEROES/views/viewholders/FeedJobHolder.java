@@ -151,7 +151,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
             for (String skill : jobSkills) {
                 mergeJobSkills += skill + AppConstants.COMMA;
             }
-            tvFeedJobName.setText(mergeJobSkills);
+            tvFeedJobName.setText(mergeJobSkills.substring(0, mergeJobSkills.length() - 1));
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorCityName())) {
             StringBuilder stringBuilder=new StringBuilder();

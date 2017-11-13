@@ -47,7 +47,7 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
                 tvDrawerItem.setText(context.getString(R.string.ID_ARTICLE));
                 break;
             case 3:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_job), null, null, null);
+                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_job_selected), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_JOBS));
                 break;
             case 4:

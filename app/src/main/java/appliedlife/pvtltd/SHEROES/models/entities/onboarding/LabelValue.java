@@ -7,31 +7,25 @@ package appliedlife.pvtltd.SHEROES.models.entities.onboarding;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
  * @author amleshsinha
  *
  */
-public class LabelValue extends BaseResponse implements Parcelable {
-	
-
+public class LabelValue extends BaseResponse  {
+	@SerializedName("value")
 	long value;
+	@SerializedName("label")
 	String label;
+	@SerializedName("desc")
+	String desc;
+	@SerializedName("imgUrl")
+	String imgUrl;
+
 	private boolean isSelected;
-	public LabelValue(String id, long value, String label) {
-		super();
-		this.value = value;
-		this.label = label;
-	}
-
-	/**
-	 * 
-	 */
-	public LabelValue() {
-		// TODO Auto-generated constructor stub
-	}
-
 
 	public long getValue() {
 		return value;
@@ -47,6 +41,22 @@ public class LabelValue extends BaseResponse implements Parcelable {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	public boolean isSelected() {
@@ -67,13 +77,20 @@ public class LabelValue extends BaseResponse implements Parcelable {
 		super.writeToParcel(dest, flags);
 		dest.writeLong(this.value);
 		dest.writeString(this.label);
+		dest.writeString(this.desc);
+		dest.writeString(this.imgUrl);
 		dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+	}
+
+	public LabelValue() {
 	}
 
 	protected LabelValue(Parcel in) {
 		super(in);
 		this.value = in.readLong();
 		this.label = in.readString();
+		this.desc = in.readString();
+		this.imgUrl = in.readString();
 		this.isSelected = in.readByte() != 0;
 	}
 

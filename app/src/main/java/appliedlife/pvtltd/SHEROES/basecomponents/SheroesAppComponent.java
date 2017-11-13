@@ -56,9 +56,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingHowCanSheroesHelpYouFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingJobAtFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingShareYourInterestFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingLookingForFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
@@ -106,7 +104,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaD
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingDailogHeySuccess;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
@@ -162,6 +159,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.JobDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobLocationSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.JobSearchHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.LookingForJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MemberHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
@@ -277,8 +275,6 @@ public interface SheroesAppComponent {
     void inject(FeedJobHolder feedJobHolder);
 
     void inject(FeedArticleHolder feedArticleHolder);
-
-    void inject(OnBoardingDailogHeySuccess onBoardingDailogHeySuccess);
 
     void inject(CommentHolder commentHolder);
 
@@ -396,11 +392,7 @@ public interface SheroesAppComponent {
 
     void inject(OnBoardingTellUsAboutFragment onBoardingTellUsAboutFragment);
 
-    void inject(OnBoardingHowCanSheroesHelpYouFragment onBoardingHowCanSheroesHelpYouFragment);
-
-    void inject(OnBoardingShareYourInterestFragment onBoardingShareYourInterestFragment);
-
-    void inject(OnBoardingJobAtFragment onBoardingJobAtFragment);
+    void inject(OnBoardingLookingForFragment onBoardingLookingForFragment);
 
     void inject(OnBoardingSearchDialogFragment onBoardingSearchDialogFragment);
 
@@ -595,5 +587,6 @@ public interface SheroesAppComponent {
     void inject(HeaderViewHolder headerViewHolder);
 
     void inject(PushNotificationService pushNotificationService);
+    void inject(LookingForJobHolder lookingForJobHolder);
 
 }

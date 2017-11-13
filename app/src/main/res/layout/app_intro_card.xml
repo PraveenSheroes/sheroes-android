@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/article_card"
+    android:id="@+id/app_intro_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_10"
@@ -9,16 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
+            android:id="@+id/iv_app_intro_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_size_10"
             android:adjustViewBounds="true"
             android:background="@drawable/once_open_card" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_size_10"
             android:orientation="vertical">
 
             <TextView
@@ -43,12 +42,6 @@
                 android:maxLines="@integer/int_value_for_line_3"
                 android:textColor="@color/text_color_follow"
                 android:textSize="@dimen/sp_size_12" />
-            <ImageView
-                android:id="@+id/iv_app_intro_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_10"
-                android:adjustViewBounds="true" />
         </LinearLayout>
     </FrameLayout>
 </android.support.v7.widget.CardView>

@@ -21,10 +21,10 @@ public class CustomeDataList {
         secondDrawerItem.setId(2);
         secondDrawerItem.setName("Article");
         secondDrawerItem.setIconName("ic_article");
-        DrawerItems thirdDrawerItem = new DrawerItems();
-        thirdDrawerItem.setId(3);
-        thirdDrawerItem.setName("Jobs");
-        thirdDrawerItem.setIconName("ic_job");
+       // DrawerItems thirdDrawerItem = new DrawerItems();
+      //  thirdDrawerItem.setId(3);
+      //  thirdDrawerItem.setName("Jobs");
+      //  thirdDrawerItem.setIconName("ic_job");
         DrawerItems fourthDrawerItem = new DrawerItems();
         fourthDrawerItem.setId(4);
         fourthDrawerItem.setName("Bookmarks");
@@ -79,7 +79,7 @@ public class CustomeDataList {
             drawerItemsList.add(firstDrawerItem);
             drawerItemsList.add(fourteenItem);
             drawerItemsList.add(secondDrawerItem);
-            drawerItemsList.add(thirdDrawerItem);
+         //   drawerItemsList.add(thirdDrawerItem);
             //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
             drawerItemsList.add(twelveDraerItem);

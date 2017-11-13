@@ -166,10 +166,10 @@
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".views.activities.CommunityPostActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"

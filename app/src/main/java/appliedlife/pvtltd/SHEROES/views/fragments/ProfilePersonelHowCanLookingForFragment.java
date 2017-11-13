@@ -107,13 +107,10 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
             @Override
             public void onHide() {
-                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onShow() {
-                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
-
             }
 
             @Override
@@ -166,7 +163,7 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
         return null;
     }
 
-    @OnClick(R.id.tv_looking_back)
+   /* @OnClick(R.id.tv_looking_back)
     public void onBackPressClick() {
         ((ProfileActicity) getActivity()).onBackPressed();
     }
@@ -182,7 +179,7 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
             ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_LOOKING_FOR, AppConstants.EMPTY_STRING);
         }
 
-    }
+    }*/
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {

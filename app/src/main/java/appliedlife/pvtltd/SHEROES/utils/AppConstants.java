@@ -200,6 +200,8 @@ public class AppConstants {
     public static final String MASTER_DATA_ARTICLE_KEY = "ARTICLE_CATEGORY";//article category drop down
     public static final String MASTER_DATA_INTEREST_KEY = "INTEREST"; //interest
     public static final String MASTER_DATA_OPPORTUNITY_KEY = "OPPORTUNITY";// looking_for
+    public static final String MASTER_DATA_LOOKING_FOR_KEY = "OPPORTUNITY_FOR_ONBOARDING";// looking_for
+
     public static final String MASTER_DATA_JOB_TAG_KEY = "JOB_TAG";// currently
     public static final String MASTER_DATA_SKILL_KEY = "SKILL"; // job at
     public static final String MASTER_DATA_COMMUNITY_TYPE_KEY = "COMMUNITY_TYPE";

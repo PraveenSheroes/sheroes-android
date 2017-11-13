@@ -22,7 +22,10 @@ public enum AnalyticsEventType {
     PUSH_NOTIFICATION("Push Notification"),
     USER("User"),
     SEARCH("Search"),
-    IMAGE("Image");
+    IMAGE("Image"),
+    LOOKING_FOR("Looking For"),
+    PROMO_CARD("Promo Card");
+
     // endregion
 
     public final String name;

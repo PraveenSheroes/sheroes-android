@@ -34,6 +34,7 @@ public enum EventProperty {
     SHARED_TO("Share To"),
     ENTITY_ID("Entity Id"),
     ACTIVITY_NAME("Activity Name"),
+    LOOKING_FOR_NAME("Looking For Name"),
     IS_MOENGAGE("Is Moengage");
 
     private final String string;
@@ -174,6 +175,11 @@ public enum EventProperty {
 
         public Builder activityName(final String name){
             put(ACTIVITY_NAME, name);
+            return this;
+        }
+
+        public Builder lookingForName(final String lookingForName){
+            put(LOOKING_FOR_NAME, lookingForName);
             return this;
         }
     }

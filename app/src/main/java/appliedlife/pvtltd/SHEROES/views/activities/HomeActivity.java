@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -157,6 +158,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTvSearchBox;
     @Bind(R.id.tv_setting)
     TextView mTvSetting;
+    @Bind(R.id.tv_job_home)
+    TextView mTvJob;
     @Bind(R.id.tv_home)
     TextView mTvHome;
     @Bind(R.id.tv_communities)
@@ -182,7 +185,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Bind(R.id.fl_notification)
     FrameLayout mFlNotification;
     @Bind(R.id.fab_filter)
-    FloatingActionButton mJobFragment;
+    public FloatingActionButton mFloatActionBtn;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
     @Bind(R.id.title_text)
@@ -282,6 +285,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mEventId = getIntent().getExtras().getLong(AppConstants.EVENT_ID);
             }
         }
+        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
         if (mEventId > 0) {
@@ -351,8 +355,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.fab_filter)
     public void openJobFilterActivity() {
-        Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
+        String fabString=(String)mFloatActionBtn.getTag();
+        if(fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE))
+        {
+            createCommunityPostOnClick();
+
+        }else
+        {
+            Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
+        }
+
     }
 
     public void logOut() {
@@ -470,7 +483,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 openArticleFragment(setCategoryIds(),true);
                 break;
             case AppConstants.THREE_CONSTANT:
-                openJobFragment();
+                //Job
                 break;
             case AppConstants.FOURTH_CONSTANT:
                 openBookMarkFragment();
@@ -809,10 +822,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTabLayout.setVisibility(View.GONE);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
+
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+
+
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
     }
@@ -886,14 +906,61 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
+        mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
+        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
 
+    }
+    public void jobButtonUI() {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.setTag(AppConstants.FEED_JOB);
+        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+        mFloatActionBtn.setImageResource(R.drawable.ic_fab_icon);
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
+
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+        mFragmentOpen.setJobFragment(true);
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_selected), null, null);
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+    }
+    @OnClick(R.id.tv_job_home)
+    public void jobOnClick() {
+        mTabLayout.setVisibility(View.GONE);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.ID_FEED));
+        JobFragment jobFragment = new JobFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle bundle = new Bundle();
+        jobFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.tv_communities)
@@ -918,10 +985,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvHome.setText(getString(R.string.ID_FEED));
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
     }
@@ -955,7 +1026,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void articleUi()
     {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
@@ -1007,7 +1078,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
     }
@@ -1025,8 +1096,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         setAllValues(mFragmentOpen);
         BookmarksFragment bookmarksFragment = new BookmarksFragment();
         Bundle bundleBookMarks = new Bundle();
@@ -1036,31 +1107,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mliArticleSpinnerIcon.setVisibility(View.GONE);
     }
 
-    public void openJobFragment() {
-        changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
-        JobFragment jobFragment = new JobFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle jobBookMarks = new Bundle();
-        // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
-        jobFragment.setArguments(jobBookMarks);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
-
-    }
-    public void jobUi()
-    {
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.VISIBLE);
-        mTvSearchBox.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
-    }
 
     @Override
     public void onBackPressed() {
 
-        if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()) {
+        if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()||mFragmentOpen.isJobFragment()) {
             if (mFragmentOpen.isCommentList()) {
                 mFragmentOpen.setCommentList(false);
                 getSupportFragmentManager().popBackStackImmediate();
@@ -1086,7 +1137,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     return;
                 }
                 doubleBackToExitPressedOnce = true;
-                Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                homeOnClick();
+              //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
