@@ -245,7 +245,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                         .postType(AnalyticsEventType.ARTICLE.toString())
                                         .body(commentResponsePojo.getCommentReactionModel().getComment())
                                         .build();
-                        AnalyticsManager.trackEvent(Event.REPLY_EDITED, properties);
+                        AnalyticsManager.trackEvent(Event.REPLY_CREATED, properties);
                     }
                 }
             }
