@@ -174,6 +174,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private int mFeedPosition;
     private String mOldText;
     private boolean mPostAsCommunitySelected;
+    private boolean mIsProgressBarVisible;
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
@@ -266,6 +267,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 finish();
                 return true;
             }
+            if (mIsProgressBarVisible) {
+                return true;
+            }
             if (!mIsEditPost) {
                 mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse));
             } else {
@@ -355,11 +359,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void startProgressBar() {
+        mIsProgressBarVisible = true;
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgressBar() {
+        mIsProgressBarVisible = false;
         mProgressBar.setVisibility(View.GONE);
     }
 
