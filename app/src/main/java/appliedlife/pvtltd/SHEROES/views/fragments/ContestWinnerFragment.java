@@ -72,7 +72,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text, getDateString(mContest.winnerAnnouncementDate)), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext));
-        if (CommonUtil.getContestStatus(mContest.startAt, mContest.endAt) == ContestStatus.COMPLETED) {
+        if (CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt()) == ContestStatus.COMPLETED) {
             if (!mContest.hasMyPost) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,

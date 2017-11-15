@@ -159,9 +159,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
                         break;
                     case AppConstants.HOME_FRAGMENT:
-                        FeedRequestPojo feedRequestPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, pageNo);
-                        feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
-                        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                        if (mFragmentListRefreshData.isChallenge()) {
+                            FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getSourceEntity(), pageNo);
+                            feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                            mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
+                        } else {
+                            FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, pageNo);
+                            feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
+                            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                        }
                         break;
                     case AppConstants.JOB_FRAGMENT:
                         FeedRequestPojo feedRequestJobPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, pageNo);

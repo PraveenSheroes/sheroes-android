@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -43,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAtSkill;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
@@ -725,6 +727,11 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
 
     @Override
     public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
     }
 

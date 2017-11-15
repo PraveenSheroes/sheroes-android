@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -42,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -480,6 +482,11 @@ public class CommunitySearchTagsDialogFragment extends BaseDialogFragment implem
 
     @Override
     public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
     }
 

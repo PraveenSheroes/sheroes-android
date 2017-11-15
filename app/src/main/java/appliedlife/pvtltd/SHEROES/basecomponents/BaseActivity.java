@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
@@ -57,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
@@ -502,13 +505,18 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
                     }
                 }else {
-                    Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
-                    Bundle bundleFromPost = new Bundle();
-                    bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                    bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-                    bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                    intentFromCommunityPost.putExtras(bundleFromPost);
-                    startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                    if (mFeedDetail.communityId == 0) {
+                        ContestActivity.navigateTo(this, Long.toString(mFeedDetail.getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
+
+                    }else {
+                        Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                        Bundle bundleFromPost = new Bundle();
+                        bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                        bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                        bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                        intentFromCommunityPost.putExtras(bundleFromPost);
+                        startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                    }
                 }
                 break;
             case R.id.tv_feed_review_card_title:
@@ -916,6 +924,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     @Override
     public void championProfile(BaseResponse baseResponse,int championValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
     }
 

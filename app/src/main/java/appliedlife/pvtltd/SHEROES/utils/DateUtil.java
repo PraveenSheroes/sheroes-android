@@ -1,5 +1,7 @@
  package appliedlife.pvtltd.SHEROES.utils;
 
+ import android.text.format.DateUtils;
+
  import java.text.ParseException;
  import java.text.SimpleDateFormat;
  import java.util.Date;
@@ -14,6 +16,7 @@
      public static DateUtil getInstance(){
        return   new DateUtil();
      }
+     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z";
      private static final String CONTEST_TIME = "d MMM, h aaa";
      public static final Locale LOCALE = Locale.US;
      public static final String PRETTY_DATE_WITHOUT_TIME = "d MMM yyyy";
@@ -61,6 +64,10 @@
          }
 
          return time;
+     }
+
+     public static CharSequence getRelativeTimeSpanString(Date date) {
+         return DateUtils.getRelativeTimeSpanString(date.getTime(), new Date().getTime(), DateUtils.SECOND_IN_MILLIS);
      }
      /**
       * @return absolute rounded off difference in days
@@ -120,5 +127,27 @@
          }
          SimpleDateFormat dateFormat = new SimpleDateFormat(PRETTY_DATE_WITHOUT_TIME, LOCALE);
          return dateFormat.format(date);
+     }
+
+     public static Date parseDateFormat(String dateStr, String dateformat) {
+
+         Date date = null;
+         try {
+             date = parseDateFormatHelper(dateStr, dateformat);
+         } catch (ParseException e) {
+//            Crashlytics.logException(e);
+         }
+
+         return date;
+     }
+
+     public static Date parseDateFormatHelper(String dateStr, String dateformat) throws ParseException {
+         if (dateStr == null)
+             return null;
+
+         Date date = null;
+         SimpleDateFormat dateFormat = new SimpleDateFormat(dateformat, LOCALE);
+
+         return dateFormat.parse(dateStr);
      }
  }

@@ -96,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
@@ -2027,6 +2028,7 @@ public class AppUtils {
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
         feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        feedRequestPojo.setScreenName("Feed");
         //TODO:: change rquest data
         feedRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         feedRequestPojo.setPageNo(pageNo);
@@ -2034,6 +2036,37 @@ public class AppUtils {
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
+
+    public static FeedRequestPojo makeFeedChallengeListRequest(String typeOfFeed, int pageNo) {
+        AppUtils appUtils = AppUtils.getInstance();
+        FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
+        feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        feedRequestPojo.setScreenName("Feed");
+        feedRequestPojo.setOnlyActive(true);
+        feedRequestPojo.setAcceptedOrActive(true);
+        //TODO:: change rquest data
+        feedRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        feedRequestPojo.setPageNo(pageNo);
+        feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        feedRequestPojo.setSubType(typeOfFeed);
+        return feedRequestPojo;
+    }
+
+    public static FeedRequestPojo makeChallengeResponseRequest(String typeOfFeed, int challengeId, int pageNo) {
+        AppUtils appUtils = AppUtils.getInstance();
+        FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
+        feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        feedRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        feedRequestPojo.setSourceEntityId(challengeId);
+        //TODO:: change rquest data
+        feedRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        feedRequestPojo.setPageNo(pageNo);
+        feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        feedRequestPojo.setSubType(typeOfFeed);
+        return feedRequestPojo;
+    }
+
     public static DeleteCommunityPostRequest deleteCommunityPostRequest(long idOfEntityParticipant) {
         AppUtils appUtils = AppUtils.getInstance();
         DeleteCommunityPostRequest deleteCommunityPostRequest = new DeleteCommunityPostRequest();
@@ -2221,6 +2254,69 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         return communityPostCreateRequest;
+    }
+
+    public static CommunityPostCreateRequest createCommunityPostRequestForChallengeBuilder(String createType, int challengeId, String sourceType,  String description, List<String> imag, LinkRenderResponse linkRenderResponse) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityPostCreateRequest.setSourceEntityId(challengeId);
+        communityPostCreateRequest.setmSourceType(sourceType);
+        communityPostCreateRequest.setCommunityId(0L);
+        communityPostCreateRequest.setCreatorType(createType);
+        communityPostCreateRequest.setDescription(description);
+        communityPostCreateRequest.setImages(imag);
+        if (null!=linkRenderResponse) {
+            communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
+            communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
+            communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
+            communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
+            communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
+        }else
+        {
+            communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgVideoLinkB(false);
+            communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
+        }
+        return communityPostCreateRequest;
+    }
+
+    public static ChallengePostCreateRequest createChallengePostRequestBuilder(String createType, int challengeId, String sourceType, String description, List<String> imag, LinkRenderResponse linkRenderResponse) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ChallengePostCreateRequest challengePostCreateRequest=new ChallengePostCreateRequest();
+        challengePostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        challengePostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        challengePostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        challengePostCreateRequest.setSourceEntityId(challengeId);
+        challengePostCreateRequest.setmChallengeId(challengeId);
+        challengePostCreateRequest.setmSourceType(sourceType);
+        challengePostCreateRequest.setCommunityId(0L);
+        challengePostCreateRequest.setAccepted(true);
+        challengePostCreateRequest.setUpdated(true);
+        challengePostCreateRequest.setActive(true);
+        challengePostCreateRequest.setmCompletionPercent(100);
+        challengePostCreateRequest.setCreatorType(createType);
+        challengePostCreateRequest.setDescription(description);
+        challengePostCreateRequest.setImages(imag);
+        if (null!=linkRenderResponse) {
+            challengePostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
+            challengePostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
+            challengePostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
+            challengePostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
+            challengePostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
+        }else
+        {
+            challengePostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
+            challengePostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
+            challengePostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
+            challengePostCreateRequest.setOgVideoLinkB(false);
+            challengePostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
+        }
+        return challengePostCreateRequest;
     }
     public LinkRequest linkRequestBuilder(String linkData) {
         AppUtils appUtils = AppUtils.getInstance();

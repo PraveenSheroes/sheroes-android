@@ -14,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
+import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
@@ -611,6 +612,8 @@ public interface SheroesAppComponent {
     void inject(ContestWinnerFragment contestWinnerFragment);
 
     void inject(ChallengeFeedHolder challengeFeedHolder);
+
+    void inject(AddressActivity addressActivity);
 
 
 }

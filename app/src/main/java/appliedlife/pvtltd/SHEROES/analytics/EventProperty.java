@@ -29,6 +29,7 @@ public enum EventProperty {
     COMPANY_ID("Company Id"),
     LOCATION("Location"),
     COMMUNITY_ID("Community Id"),
+    CHALLENGE_ID("Challenge Id"),
     COMMUNITY_NAME("Community Name"),
     KEYWORD("Keyword"),
     SHARED_TO("Share To"),
@@ -135,6 +136,11 @@ public enum EventProperty {
 
         public Builder communityId(String value) {
             put(COMMUNITY_ID, value);
+            return this;
+        }
+
+        public Builder challengeId(String value) {
+            put(CHALLENGE_ID, value);
             return this;
         }
 

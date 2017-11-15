@@ -57,6 +57,7 @@ import rx.Observable;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.functions.Func3;
 import rx.schedulers.Schedulers;
 
@@ -165,12 +166,12 @@ public class HomeModel {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
 
         Observable<FeedResponsePojo> feedResponsePojoObservable = getFeedFromModel(feedRequestPojo);
-        Observable<ChallengeListResponse> challengeListResponseObservable = getChallengeListFromModel(challengeRequest);
+      //  Observable<ChallengeListResponse> challengeListResponseObservable = getChallengeListFromModel(challengeRequest);
         Observable<AppIntroScreenResponse> appIntroScreenResponseObservable = getAppIntroFromModel(appIntroScreenRequest);
 
-        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, challengeListResponseObservable, appIntroScreenResponseObservable, new Func3<FeedResponsePojo, ChallengeListResponse, AppIntroScreenResponse, List<FeedDetail>>() {
+        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, appIntroScreenResponseObservable, new Func2<FeedResponsePojo, AppIntroScreenResponse, List<FeedDetail>>() {
             @Override
-            public List<FeedDetail> call(FeedResponsePojo feedResponsePojo, ChallengeListResponse challengeListResponse, AppIntroScreenResponse appIntroScreenResponse) {
+            public List<FeedDetail> call(FeedResponsePojo feedResponsePojo, AppIntroScreenResponse appIntroScreenResponse) {
                 ArrayList<FeedDetail> feedDetails = new ArrayList<>();
                 if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
                     FeedDetail appIntroFeedCard = new FeedDetail();
@@ -179,13 +180,13 @@ public class HomeModel {
                     appIntroFeedCard.setAppIntroDataItems(appIntroData);
                     feedDetails.add(appIntroFeedCard);
                 }
-                if (StringUtil.isNotEmptyCollection(challengeListResponse.getReponseList())) {
+              /*  if (StringUtil.isNotEmptyCollection(challengeListResponse.getReponseList())) {
                     FeedDetail challengeFeedDetail = new FeedDetail();
                     challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
                     challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
                     fragmentListRefreshData.setChallengePosition(feedDetails.size()+1);
                     feedDetails.add(challengeFeedDetail);
-                }
+                }*/
                 if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                     List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
                     fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostingDate());

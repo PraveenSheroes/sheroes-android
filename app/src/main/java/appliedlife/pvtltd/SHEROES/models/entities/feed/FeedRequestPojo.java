@@ -26,6 +26,15 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     @SerializedName("id_of_entity_or_participant")
     @Expose
     private Long idForFeedDetail=null;
+
+    @SerializedName("only_active")
+    @Expose
+    private boolean onlyActive;
+
+    @SerializedName("is_accepted_or_active")
+    @Expose
+    private boolean isAcceptedOrActive;
+
     @SerializedName("author_id")
     @Expose
     private Integer autherId;
@@ -70,6 +79,18 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     @Expose
     private List<String> skills = null;
 
+    @SerializedName("source_entity_id")
+    @Expose
+    private Integer sourceEntityId;
+
+
+    public Integer getSourceEntityId() {
+        return sourceEntityId;
+    }
+
+    public void setSourceEntityId(Integer sourceEntityId) {
+        this.sourceEntityId = sourceEntityId;
+    }
 
     public Long getIdForFeedDetail() {
         return idForFeedDetail;
@@ -101,6 +122,22 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
 
     public void setArticleCategories(List<String> articleCategories) {
         this.articleCategories = articleCategories;
+    }
+
+    public boolean isOnlyActive() {
+        return onlyActive;
+    }
+
+    public void setOnlyActive(boolean onlyActive) {
+        this.onlyActive = onlyActive;
+    }
+
+    public boolean isAcceptedOrActive() {
+        return isAcceptedOrActive;
+    }
+
+    public void setAcceptedOrActive(boolean acceptedOrActive) {
+        isAcceptedOrActive = acceptedOrActive;
     }
 
     public List<Long> getCategoryIds() {
@@ -204,6 +241,8 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         dest.writeString(this.postingDate);
         dest.writeByte(this.isSpamPost ? (byte) 1 : (byte) 0);
         dest.writeValue(this.idForFeedDetail);
+        dest.writeByte(this.onlyActive ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isAcceptedOrActive ? (byte) 1 : (byte) 0);
         dest.writeValue(this.autherId);
         dest.writeString(this.subType);
         dest.writeString(this.question);
@@ -216,12 +255,15 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         dest.writeStringList(this.functionalAreas);
         dest.writeStringList(this.opportunityTypes);
         dest.writeStringList(this.skills);
+        dest.writeValue(this.sourceEntityId);
     }
 
     protected FeedRequestPojo(Parcel in) {
         this.postingDate = in.readString();
         this.isSpamPost = in.readByte() != 0;
         this.idForFeedDetail = (Long) in.readValue(Long.class.getClassLoader());
+        this.onlyActive = in.readByte() != 0;
+        this.isAcceptedOrActive = in.readByte() != 0;
         this.autherId = (Integer) in.readValue(Integer.class.getClassLoader());
         this.subType = in.readString();
         this.question = in.readString();
@@ -235,6 +277,7 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
         this.functionalAreas = in.createStringArrayList();
         this.opportunityTypes = in.createStringArrayList();
         this.skills = in.createStringArrayList();
+        this.sourceEntityId = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
     public static final Creator<FeedRequestPojo> CREATOR = new Creator<FeedRequestPojo>() {

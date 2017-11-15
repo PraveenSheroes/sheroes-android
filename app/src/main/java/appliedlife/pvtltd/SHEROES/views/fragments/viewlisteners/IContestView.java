@@ -9,6 +9,5 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
  */
 
 public interface IContestView extends BaseMvpView {
-    void populateContest(Contest contest);
-
+    void showContestFromId(Contest mContest);
 }

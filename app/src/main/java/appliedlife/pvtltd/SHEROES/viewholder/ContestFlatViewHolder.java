@@ -5,6 +5,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -40,8 +41,8 @@ public class ContestFlatViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.contest_participants)
     TextView mContestParticipants;
 
-    @BindDimen(R.dimen.contest_image_size)
-    int mContestImageSize;
+    @BindDimen(R.dimen.dp_size_32)
+    public int mImageMargin;
 
     // endregion
 
@@ -54,18 +55,23 @@ public class ContestFlatViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData(Contest contest) {
         mTitle.setText(contest.title);
-        if(CommonUtil.isNotEmpty(contest.thumbImage)){
-            String contestImage = CommonUtil.getImgKitUri(contest.thumbImage, mContestImageSize, mContestImageSize);
+        int featureImageHeight = ((CommonUtil.getWindowWidth(mContext)) - mImageMargin)/2;
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
+        mImage.setLayoutParams(params);
+        if (CommonUtil.isNotEmpty(contest.thumbImage)) {
+            String contestImage = CommonUtil.getImgKitUri(contest.thumbImage, CommonUtil.getWindowWidth(mContext) - mImageMargin, featureImageHeight);
             Glide.with(mContext)
                     .load(contestImage)
                     .into(mImage);
+        } else {
+            mImage.setImageResource(R.drawable.challenge_placeholder);
         }
-        ContestStatus contestStatus = CommonUtil.getContestStatus(contest.startAt, contest.endAt);
+        ContestStatus contestStatus = CommonUtil.getContestStatus(contest.getStartAt(), contest.getEndAt());
         if(contestStatus==ContestStatus.ONGOING){
             mContestParticipants.setText(Integer.toString(contest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, contest.submissionCount));
             mContestStatus.setText(R.string.contest_status_ongoing);
-            /*mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_ongoing_white_16dp, 0, 0, 0);
-            mContestStatus.setBackgroundResource(R.drawable.background_ongoing_contest);*/
+            mContestStatus.setTextColor(mContext.getResources().getColor(R.color.email));
+            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_live_dot, 0, 0, 0);
             mContestStatus.setVisibility(View.VISIBLE);
         }
         if(contestStatus==ContestStatus.UPCOMING){
@@ -79,9 +85,8 @@ public class ContestFlatViewHolder extends RecyclerView.ViewHolder {
             mContestParticipants.setText(Integer.toString(contest.submissionCount));
             mContestParticipants.setText(Integer.toString(contest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, contest.submissionCount));
             mContestStatus.setText(mContext.getString(R.string.contest_status_completed));
-            /*mContestStatus.setTextColor(mContext.getResources().getColor(R.color.grey_700));
-            mContestStatus.setBackgroundResource(R.drawable.background_completed_contest);
-            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_tick_grey, 0, 0, 0);*/
+            mContestStatus.setTextColor(mContext.getResources().getColor(R.color.light_green));
+            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
             mContestStatus.setVisibility(View.VISIBLE);
         }
     }

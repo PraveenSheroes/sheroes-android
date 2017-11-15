@@ -1,10 +1,22 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import org.w3c.dom.Text;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -12,9 +24,18 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Ujjwal on 10/10/17.
@@ -22,11 +43,20 @@ import butterknife.ButterKnife;
 
 public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
+    @Bind(R.id.card_challenge)
+    CardView mCardChallenge;
+
+    @Bind(R.id.author_image)
+    ImageView mAuthorImage;
+
+    @Bind(R.id.author_name)
+    TextView mAuthorName;
+
+    @Bind(R.id.share)
+    ImageView mShare;
+
     @Bind(R.id.feature_image)
     ImageView mFeatureImage;
-
-    @Bind(R.id.scrim_view)
-    View mScrimView;
 
     @Bind(R.id.contest_tag)
     TextView mContestTag;
@@ -46,9 +76,10 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.response_view_count)
     TextView mResponseViewCount;
 
-
     BaseHolderInterface viewInterface;
-    private FeedDetail feedDetail;
+    private Contest mContest;
+    private FeedDetail mFeedDetail;
+    private Context mContext;
 
 
     public ChallengeFeedHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -59,33 +90,85 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     }
     @Override
     public void bindData(FeedDetail feedDetail, Context context, int position) {
-        this.feedDetail = feedDetail;
+      mContext = context;
+      mFeedDetail = feedDetail;
+        mContest = new Contest();
+        mContest.title = feedDetail.getChallengeTitle();
+        mContest.remote_id = (int) feedDetail.getIdOfEntityOrParticipant();
+        mContest.body = feedDetail.getListDescription();
+        mContest.createdDateString = feedDetail.getChallengeStartDate();
+        mContest.endDateString = feedDetail.getChallengeEndDate();
+        mContest.hasWinner = feedDetail.isChallengeHasWinner();
+        mContest.isWinner = feedDetail.isChallengeIsWinner();
+        mContest.authorName = feedDetail.getAuthorName();
+        mContest.authorType = feedDetail.getChallengeAuthorTypeS();
+        mContest.authorImageUrl = feedDetail.getAuthorImageUrl();
+        mContest.submissionCount = feedDetail.getChallengeAcceptedCount();
+        mContest.hasMyPost = feedDetail.isChallengeAccepted();
+        mContest.tag = feedDetail.getChallengeAcceptPostTextS();
+        mContest.thumbImage = feedDetail.getThumbnailImageUrl();
+        mContest.shortUrl = feedDetail.getDeepLinkUrl();
+        mTitle.setText(mContest.title);
+        int featureImageHeight = (CommonUtil.getWindowWidth(mContext) / 2);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
+        mFeatureImage.setLayoutParams(params);
 
-      /*  tvCanHelpAdd.setOnClickListener(this);
-        tvCanHelpNumber.setText(dataItem.getType());
-        List<CanHelpIn> canHelpIns=this.dataItem.getCanHelpIn();
+        ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt());
+        if(contestStatus==ContestStatus.ONGOING){
+            mContestEndText.setText("Ends" + " " + DateUtil.getRelativeTimeSpanString(mContest.getEndAt()));
+            mContestStatus.setText(R.string.contest_status_ongoing);
+            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_live_dot, 0, 0, 0);
+            mContestStatus.setVisibility(View.VISIBLE);
+        }
+        if(contestStatus==ContestStatus.UPCOMING){
+            mContestStatus.setText(context.getString(R.string.contest_status_upcoming));
+            mContestStatus.setVisibility(View.VISIBLE);
+        }
+        if(contestStatus==ContestStatus.COMPLETED){
+            mContestStatus.setText(context.getString(R.string.contest_status_completed));
+            mContestStatus.setTextColor(context.getResources().getColor(R.color.light_green));
+            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
+            mContestStatus.setVisibility(View.VISIBLE);
+        }
+        if (mContest.hasMyPost) {
+            mJoinChallengeText.setText("completed");
+            mJoinChallengeText.setTextColor(context.getResources().getColor(R.color.light_green));
+            mJoinChallengeText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
+        } else {
+            mJoinChallengeText.setText("Join the Challenge");
+            mJoinChallengeText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            mJoinChallengeText.setTextColor(context.getResources().getColor(R.color.email));
+        }
+        mResponseViewCount.setText(Integer.toString(mContest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
+        if (CommonUtil.isNotEmpty(mContest.tag)) {
+            String tag = "#" + mContest.tag;
+            String tagText = tag + " " + "Challenge";
+            final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.email));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mContestTag.setText(spannableStringBuilder);
+        } else {
+            mContestTag.setText("Challenge");
+        }
 
-
-        if(null !=dataItem.getCanHelpIn() && dataItem.getCanHelpIn().size() >0) {
-            if (StringUtil.isNotNullOrEmptyString(canHelpIns.get(0).getName())) {
-                mTv_interesting_text1.setVisibility(View.VISIBLE);
-                mTv_interesting_text1.setText(canHelpIns.get(0).getName());
-
+        if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
+            String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(mContext), featureImageHeight);
+            if (CommonUtil.isNotEmpty(imageKitUrl)) {
+                Glide.with(mContext)
+                        .load(imageKitUrl)
+                        .into(mFeatureImage);
             }
-            if(StringUtil.isNotNullOrEmptyString(canHelpIns.get(1).getName()) && dataItem.getCanHelpIn().size() >0)
-            {
-                mTv_interesting_text2.setVisibility(View.VISIBLE);
-                mTv_interesting_text2.setText(canHelpIns.get(1).getName());
+        }else {
+            mFeatureImage.setImageResource(R.drawable.challenge_placeholder);
+        }
 
-            }
-        }*/
-      mTitle.setText("Showcase your workspace. Share your workspace photo that motivate you to work daily.");
-      mContestEndText.setText("Ends in: 4 Days");
-      mContestStatus.setText("LIVE");
-      mJoinChallengeText.setText("Join the Challenge");
-      mResponseViewCount.setText("198 responses  ·  235 views");
-        mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
-                0xaa000000, 8, Gravity.TOP));
+        if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
+            Glide.with(mContext)
+                    .load(mContest.authorImageUrl)
+                    .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
+                    .into(mAuthorImage);
+        }
+        mAuthorName.setText(mContest.authorName);
     }
 
     @Override
@@ -94,17 +177,18 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     }
 
 
+    @OnClick(R.id.card_challenge)
+    public void onChallengeClicked(){
+        viewInterface.contestOnClick(mContest, mCardChallenge);
+    }
+
+    @OnClick(R.id.share)
+    public void onShareClick(){
+        viewInterface.handleOnClick(mFeedDetail, mShare);
+    }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-/*
-            case R.id.tv_add_can_help:
-
-                viewInterface.handleOnClick(this.dataItem,tvCanHelpAdd);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + view.getId());*/
-        }
 
     }
 }

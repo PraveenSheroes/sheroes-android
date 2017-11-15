@@ -249,15 +249,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
         allTextViewStringOperations(mContext);
         likeCommentOps();
+
         if (dataItem.getAuthorId() == userId || dataItem.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
             tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-            if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+          /*  if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                 tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
+            } else {*/
+            tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+            tvFeedCommunityPostUserBookmark.setVisibility(View.GONE);
+            if (dataItem.communityId == 0) {
+                tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+                tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
             } else {
                 tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-                tvFeedCommunityPostUserBookmark.setVisibility(View.GONE);
+                tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
             }
+           // }
         } else {
             tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
             tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
@@ -314,7 +322,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-        if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+       /* if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
             liFeedCommunityUserPostImages.removeAllViews();
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
@@ -336,7 +344,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 ivChallenge.setBackgroundResource(R.drawable.challenge_post);
             }
             liFeedCommunityUserPostImages.addView(child);
-        } else {
+        } else {*/
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
             if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
                 liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
@@ -386,7 +394,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 liFeedCommunityUserPostImages.removeAllViewsInLayout();
                 liFeedCommunityUserPostImages.setVisibility(View.GONE);
             }
-        }
+        //}
     }
 
     @Override
@@ -406,7 +414,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-            if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+          /*  if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 String feedTitle = dataItem.getAuthorName();
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
@@ -415,9 +423,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
                 }
-            } else {
+            } else {*/
                 String feedTitle = dataItem.getAuthorName();
-                String feedCommunityName = dataItem.getPostCommunityName();
+                String feedCommunityName = dataItem.communityId == 0 ? dataItem.getChallengeAcceptPostTextS() + " " + "challenge" :dataItem.getPostCommunityName();
                 if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (dataItem.isAuthorMentor()) {
@@ -469,7 +477,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     }
 
                 }
-            }
+           // }
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);

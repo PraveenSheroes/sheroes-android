@@ -56,5 +56,10 @@ public class ContestsListAdapter extends RecyclerView.Adapter<ContestFlatViewHol
         mContestList = contests;
         notifyDataSetChanged();
     }
+
+    public void setItem(Contest contest, int position) {
+        mContestList.set(position, contest);
+        notifyItemChanged(position);
+    }
     //endregion
 }

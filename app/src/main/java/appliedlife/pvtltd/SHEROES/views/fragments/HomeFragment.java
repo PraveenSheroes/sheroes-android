@@ -1,12 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -31,6 +31,8 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,12 +48,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -64,17 +63,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.presenters.CreateCommunityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -114,7 +113,7 @@ public class HomeFragment extends BaseFragment {
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
-    RecyclerView mRecyclerView;
+    EmptyRecyclerView mRecyclerView;
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
@@ -135,6 +134,8 @@ public class HomeFragment extends BaseFragment {
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
+    @Bind(R.id.empty_view)
+    View emptyView;
     private String mGcmId;
     private FeedDetail  onceWelcomeDataItem, appIntroFeedCard;
     private ChallengeDataItem mChallengeDataItem;
@@ -148,6 +149,7 @@ public class HomeFragment extends BaseFragment {
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     private long mUserId;
     private boolean isChallenge;
+    public Contest mContest;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,14 +168,21 @@ public class HomeFragment extends BaseFragment {
             mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
+        if(isChallenge){
+            Parcelable parcelable = getArguments().getParcelable(ContestActivity.CHALLENGE_OBJ);
+            mContest = Parcels.unwrap(parcelable);
+        }
         startedTime = System.currentTimeMillis();
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT, isChallenge);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setInitialPrefetchItemCount(1);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        if(isChallenge){
+            mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_challenge_response_text, R.drawable.vector_no_challenge_response, R.string.empty_challenge_response_subtext);
+        }
         if(getActivity() instanceof HomeActivity){
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
         }
@@ -224,9 +233,12 @@ public class HomeFragment extends BaseFragment {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
                     if(isChallenge){
-                        FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
+                        mFragmentListRefreshData.setChallenge(true);
+                        mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
+                        mFragmentListRefreshData.setSubType(AppConstants.FEED_COMMUNITY_POST);
+                        FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-                        mHomePresenter.getChallengeResponse(feedRequestPojo);
+                        mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
@@ -332,12 +344,14 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
-        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         if(isChallenge){
-            mHomePresenter.getChallengeResponse(feedRequestPojo);
+            FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
+            feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+            mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
         }else {
-            mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+            FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+            feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+            mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder("feed"), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
             mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
             mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         }
@@ -541,13 +555,14 @@ public class HomeFragment extends BaseFragment {
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
             data=mPullRefreshList.getFeedResponses();
             int position=data.size()- feedDetailList.size();
-            if(position>0) {
-                data.remove(position-1);
-            }else
-            {
-                FeedDetail header=new FeedDetail();
-                header.setSubType(AppConstants.HEADER);
-                data.add(0,header);
+            if (position > 0) {
+                data.remove(position - 1);
+            }else {
+                if (!isChallenge) {
+                    FeedDetail header = new FeedDetail();
+                    header.setSubType(AppConstants.HEADER);
+                    data.add(0, header);
+                }
             }
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);
@@ -714,5 +729,22 @@ public class HomeFragment extends BaseFragment {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    public void scrollToMySubmission(){
+        if (CommonUtil.isEmpty(mfeedDetailList)) {
+            return;
+        }
+        int position = -1;
+        for(int pos=0; pos < mfeedDetailList.size(); pos++){
+            FeedDetail feedDetail = mfeedDetailList.get(pos);
+            if(feedDetail.getAuthorId() == mUserPreference.get().getUserSummary().getUserId()){
+                position = pos;
+                break;
+            }
+        }
+        if(position >= 0 && position!=RecyclerView.NO_POSITION){
+            mRecyclerView.smoothScrollToPosition(position + 1);
+        }
     }
 }

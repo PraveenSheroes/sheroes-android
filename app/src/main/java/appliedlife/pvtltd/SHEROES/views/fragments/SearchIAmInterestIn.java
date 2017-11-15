@@ -3,6 +3,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -38,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
@@ -394,6 +396,11 @@ public class SearchIAmInterestIn extends BaseFragment implements BaseHolderInter
 
     @Override
     public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
     }
 

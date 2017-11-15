@@ -509,7 +509,7 @@ public enum HolderMapping {
                             case AppConstants.USER_SUB_TYPE:
                                 returnView = INVITE_MEMBER_MODULE.ordinal();
                                 break;
-                            case AppConstants.CHALLENGE_SUB_TYPE:
+                            case AppConstants.CHALLENGE_SUB_TYPE_NEW:
                                 returnView = FEED_CHALLENGE.ordinal();
                                 break;
                             case AppConstants.APP_INTRO_SUB_TYPE:

@@ -19,4 +19,8 @@ public class CommunityPost extends Post {
     public boolean isMyPost;
     public boolean isPostByCommunity;
     public List<Community> myCommunitiesList = new ArrayList<>();
+    public int challengeId;
+    public String challengeType;
+    public boolean isChallengeType;
+    public String challengeHashTag;
 }

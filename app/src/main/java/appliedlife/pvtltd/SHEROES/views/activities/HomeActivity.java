@@ -28,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -83,7 +84,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -100,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -400,7 +405,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
-        } else if (baseResponse instanceof DrawerItems) {
+        }
+        else if (baseResponse instanceof DrawerItems) {
             drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof ChallengeDataItem) {
             int id = view.getId();
@@ -455,6 +461,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             MentorDetailItem mentorDetailItem = (MentorDetailItem) baseResponse;
             mentorItemClick(view, mentorDetailItem);
         }
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge){
+        ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null,0,0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
     }
 
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
@@ -542,6 +553,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             case R.id.li_event_card_main_layout:
                 eventDetailDialog(0);
+                break;
+            case R.id.share:
+                String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(((FeedDetail) baseResponse).getUserPostSourceEntityId()))
+                                .build();
+                trackEvent(Event.CHALLENGE_SHARED, properties);
+                ShareBottomSheetFragment.showDialog(this, shareText,((FeedDetail) baseResponse).getThumbnailImageUrl(),  ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true);
                 break;
             case R.id.tv_event_detail_interested_btn:
                 if (null != eventDetailDialogFragment) {
@@ -1190,6 +1210,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
                     communityDetailActivityResponse(intent);
                     break;
+
+                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                        if (resultCode == Activity.RESULT_OK) {
+                            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                            if (AppUtils.isFragmentUIActive(fragment)) {
+                                ((HomeFragment) fragment).onRefreshClick();
+                            }
+                        }
+                        break;
                 case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
                     jobDetailActivityResponse(intent);
                     break;

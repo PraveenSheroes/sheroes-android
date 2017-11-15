@@ -3,11 +3,19 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +27,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import org.parceler.Parcels;
 
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -40,7 +51,7 @@ import butterknife.ButterKnife;
  */
 
 public class ContestInfoFragment extends BaseFragment {
-    private static final String SCREEN_LABEL = "Contest Info Fragment";
+    private static final String SCREEN_LABEL = "Challenge Info Fragment";
     private static final String RELATIVE_PATH_ASSETS = "file:///android_asset/";
 
     //region view variable
@@ -61,6 +72,15 @@ public class ContestInfoFragment extends BaseFragment {
 
     @Bind(R.id.video_layout)
     RelativeLayout videoLayout;
+
+    @Bind(R.id.author_pic)
+    ImageView mAuthorPic;
+
+    @Bind(R.id.author)
+    TextView mAuthorName;
+
+    @Bind(R.id.response_views_counts)
+    TextView mResponseCount;
     //endregion
 
     private Contest mContest;
@@ -107,10 +127,24 @@ public class ContestInfoFragment extends BaseFragment {
             } else {
                 imageView.setVisibility(View.GONE);
             }
-
+            showAuthorDetails();
             showDaysParticipantsInfo();
             showContestInfo();
         }
+    }
+
+    private void showAuthorDetails() {
+        if (mContest == null) {
+            return;
+        }
+        if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
+            Glide.with(this)
+                    .load(mContest.authorImageUrl)
+                    .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(getActivity()))
+                    .into(mAuthorPic);
+        }
+        mAuthorName.setText(mContest.authorName);
+        mResponseCount.setText(Integer.toString(mContest.submissionCount) + " " + getActivity().getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
     }
 
     @Override
@@ -129,14 +163,23 @@ public class ContestInfoFragment extends BaseFragment {
 
     //region private methods
     private void showDaysParticipantsInfo() {
-        ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.startAt, mContest.endAt);
+        ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt());
 
     }
 
     @SuppressLint("AddJavascriptInterface")
     private void showContestInfo() {
         mTitle.setText(mContest.title);
-        mContestTag.setText(mContest.tag);
+        if (CommonUtil.isNotEmpty(mContest.tag)) {
+            String tag = "#" + mContest.tag;
+            String tagText = tag + " " + "Challenge";
+            final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.email));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mContestTag.setText(spannableStringBuilder);
+        } else {
+            mContestTag.setText("Challenge");
+        }
         VideoEnabledWebChromeClient webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText);
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
             @Override
@@ -206,7 +249,24 @@ public class ContestInfoFragment extends BaseFragment {
     }
 
     private void showImage() {
+        int featureImageHeight = (CommonUtil.getWindowWidth(getActivity()) / 2);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
+        imageView.setLayoutParams(params);
+        if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
+            String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(getActivity()), featureImageHeight);
+            if (CommonUtil.isNotEmpty(imageKitUrl)) {
+                Glide.with(getActivity())
+                        .load(imageKitUrl)
+                        .into(imageView);
+            }
+        }else {
+            imageView.setImageResource(R.drawable.challenge_placeholder);
+        }
+    }
 
+    public void setContest(Contest contest){
+        mContest = contest;
+        showContest(contest);
     }
 
     //endregion

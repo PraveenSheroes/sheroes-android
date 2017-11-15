@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -144,7 +145,30 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             Crashlytics.getInstance().core.logException(e);
                             homeActivityCall();
                         }
-                    } else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
+                    }
+
+                    else if (urlOfSharedCard.contains(AppConstants.CHALLENGE_NEW_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_NEW_URL_COM)) {
+                        try {
+                            Intent into = new Intent(SheroesDeepLinkingActivity.this, ContestActivity.class);
+                            String challengeIdEncoded = Uri.parse(urlOfSharedCard).getLastPathSegment();
+                            byte[] challengeBytes = Base64.decode(challengeIdEncoded, Base64.DEFAULT);
+                            String challengeId = new String(challengeBytes, AppConstants.UTF_8);
+                            if(CommonUtil.isNotEmpty(challengeId)){
+                                into.putExtra(Contest.CONTEST_ID, challengeId);
+                                startActivity(into);
+                                finish();
+                            }
+                            if (mFromNotification > 0) {
+                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
+                            } else {
+                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
+                            }
+                        } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
+                            homeActivityCall();
+                        }
+                    }
+                    else if (urlOfSharedCard.contains(AppConstants.HELPLINE_URL) || urlOfSharedCard.contains(AppConstants.HELPLINE_URL_COM)) {
                         Intent helplineIntent = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
                      //   helplineIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);

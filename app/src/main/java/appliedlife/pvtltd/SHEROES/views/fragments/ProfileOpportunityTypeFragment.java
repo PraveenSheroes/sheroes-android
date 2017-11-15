@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobRespo
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -269,6 +271,11 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
 
     @Override
     public void championProfile(BaseResponse baseResponse, int championValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
     }
 

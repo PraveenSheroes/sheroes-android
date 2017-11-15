@@ -555,6 +555,18 @@ public class CommonUtil {
         return uri;
     }
 
+    public static String getImgKitUri(@NonNull String image, int width) {
+        String heightWidth = "";
+        if(image.contains("img.sheroes")){
+            heightWidth = "?tr=w-" + Integer.toString(width);
+        }
+        if(image.contains("images.assettype")){
+            heightWidth = "?w=" + Integer.toString(width);
+        }
+        String uri = image + heightWidth;
+        return uri;
+    }
+
     public static String getYoutubeURL(String videoId) {
         return "https://www.youtube.com/watch?v=" + videoId;
     }

@@ -19,6 +19,10 @@ public class FragmentListRefreshData {
     private String callForNameUser;
     private String postedDate;
     private int challengePosition=-1;
+    private String subType;
+    private int sourceEntity;
+
+    private boolean isChallenge;
     public FragmentListRefreshData() {
 
     }
@@ -27,6 +31,14 @@ public class FragmentListRefreshData {
         this.callFromFragment = callFromFragment;
         this.idFeedDetail = idFeedDetail;
     }
+
+    public FragmentListRefreshData(int pageNo, String callFromFragment, long idFeedDetail, boolean isChallenge) {
+        this.pageNo = pageNo;
+        this.callFromFragment = callFromFragment;
+        this.idFeedDetail = idFeedDetail;
+        this.isChallenge = isChallenge;
+    }
+
     public FragmentListRefreshData(int pageNo, String callFromFragment, long idFeedDetail,String searchString) {
         this.pageNo = pageNo;
         this.callFromFragment = callFromFragment;
@@ -119,6 +131,13 @@ public class FragmentListRefreshData {
     public void setCallForNameUser(String callForNameUser) {
         this.callForNameUser = callForNameUser;
     }
+    public boolean isChallenge() {
+        return isChallenge;
+    }
+
+    public void setChallenge(boolean challenge) {
+        isChallenge = challenge;
+    }
 
     public String getPostedDate() {
         return postedDate;
@@ -134,5 +153,21 @@ public class FragmentListRefreshData {
 
     public void setChallengePosition(int challengePosition) {
         this.challengePosition = challengePosition;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
+    public void setSubType(String subType) {
+        this.subType = subType;
+    }
+
+    public int getSourceEntity() {
+        return sourceEntity;
+    }
+
+    public void setSourceEntity(int sourceEntity) {
+        this.sourceEntity = sourceEntity;
     }
 }

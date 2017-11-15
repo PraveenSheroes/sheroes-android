@@ -43,6 +43,10 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @Expose
     private boolean videoLink;
 
+    @SerializedName("source_type")
+    @Expose
+    private String mSourceType;
+
     @SerializedName("id")
     @Expose
     private Long id=null;
@@ -68,6 +72,13 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @Expose
     private boolean isSpam;
 
+    public String getmSourceType() {
+        return mSourceType;
+    }
+
+    public void setmSourceType(String mSourceType) {
+        this.mSourceType = mSourceType;
+    }
 
     public Long getId() {
         return id;
@@ -218,6 +229,7 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         dest.writeString(this.ogTitleS);
         dest.writeValue(this.sourceEntityId);
         dest.writeByte(this.videoLink ? (byte) 1 : (byte) 0);
+        dest.writeString(this.mSourceType);
         dest.writeValue(this.id);
         dest.writeValue(this.communityId);
         dest.writeString(this.creatorType);
@@ -237,6 +249,7 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         this.ogTitleS = in.readString();
         this.sourceEntityId = (Integer) in.readValue(Integer.class.getClassLoader());
         this.videoLink = in.readByte() != 0;
+        this.mSourceType = in.readString();
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.communityId = (Long) in.readValue(Long.class.getClassLoader());
         this.creatorType = in.readString();

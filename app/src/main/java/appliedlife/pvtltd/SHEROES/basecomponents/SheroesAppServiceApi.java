@@ -6,6 +6,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponseNew;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -13,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
@@ -303,6 +305,9 @@ public interface SheroesAppServiceApi {
     @POST("participation/challenge/get/challenges")
     Observable<ChallengeListResponse> challengeList(@Body ChallengeRequest challengeRequest);
 
+    @POST("participation/challenge/get/challenges")
+    Observable<ChallengeListResponseNew> getChallengeList(@Body ChallengeRequest challengeRequest);
+
     @POST("participation/challenge/accept")
     Observable<ChallengeListResponse> challengeAccept(@Body ChallengeAcceptRequest challengeAcceptRequest);
     @GET
@@ -339,4 +344,8 @@ public interface SheroesAppServiceApi {
 
     @POST("/entity/master/app_intro_screen")
     Observable<AppIntroScreenResponse> appIntroScreen(@Body AppIntroScreenRequest appIntroScreenRequest);
+
+    @POST("participation/challenge/v2/response")
+    Observable<CreateCommunityResponse> createChallengePost(@Body ChallengePostCreateRequest challengePostCreateRequest);
+
 }
