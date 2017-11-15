@@ -9,9 +9,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommentReactionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -21,6 +24,8 @@ import rx.Subscriber;
 import rx.Subscription;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 
 /**
  * Created by Praveen_Singh on 24-01-2017.
@@ -125,6 +130,82 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
                 if(null!=commentResponsePojo) {
                     getMvpView().commentSuccess(commentResponsePojo, editDeleteId);
                 }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getUnLikesFromPresenter(final LikeRequestPojo likeRequestPojo, final Comment comment) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            comment.isLiked = true;
+            comment.likeCount++;
+            getMvpView().invalidateCommentLikeUnlike(comment);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mCommentReactionModel.getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                comment.isLiked = true;
+                comment.likeCount++;
+                getMvpView().invalidateCommentLikeUnlike(comment);
+            }
+
+            @Override
+            public void onNext(LikeResponse likeResponse) {
+                getMvpView().stopProgressBar();
+                if(likeResponse.getStatus() == AppConstants.FAILED){
+                    comment.isLiked = true;
+                    comment.likeCount++;
+                }
+                getMvpView().invalidateCommentLikeUnlike(comment);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            comment.isLiked = false;
+            comment.likeCount--;
+            getMvpView().invalidateCommentLikeUnlike(comment);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mCommentReactionModel.getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                comment.isLiked = false;
+                comment.likeCount--;
+                getMvpView().invalidateCommentLikeUnlike(comment);
+            }
+
+            @Override
+            public void onNext(LikeResponse likeResponse) {
+                getMvpView().stopProgressBar();
+                if(likeResponse.getStatus() == AppConstants.FAILED){
+                    comment.isLiked = false;
+                    comment.likeCount--;
+                }
+                getMvpView().invalidateCommentLikeUnlike(comment);
             }
         });
         registerSubscription(subscription);

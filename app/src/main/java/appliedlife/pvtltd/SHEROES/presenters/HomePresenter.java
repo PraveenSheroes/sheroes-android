@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
@@ -503,6 +504,85 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
         registerSubscription(subscription);
     }
+
+    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            comment.isLiked = false;
+            comment.likeCount--;
+            getMvpView().invalidateLikeUnlike(comment);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                comment.isLiked = false;
+                comment.likeCount--;
+                getMvpView().invalidateLikeUnlike(comment);
+
+            }
+
+            @Override
+            public void onNext(LikeResponse likeResponse) {
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                    comment.isLiked = false;
+                    comment.likeCount--;
+                }
+                getMvpView().stopProgressBar();
+                getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            comment.isLiked = true;
+            comment.likeCount++;
+            getMvpView().invalidateLikeUnlike(comment);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                comment.isLiked = true;
+                comment.likeCount++;
+                getMvpView().invalidateLikeUnlike(comment);
+            }
+
+            @Override
+            public void onNext(LikeResponse likeResponse) {
+                getMvpView().stopProgressBar();
+                if(likeResponse.getStatus() == AppConstants.FAILED){
+                    comment.isLiked = true;
+                    comment.likeCount++;
+                }
+                getMvpView().invalidateLikeUnlike(comment);
+               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

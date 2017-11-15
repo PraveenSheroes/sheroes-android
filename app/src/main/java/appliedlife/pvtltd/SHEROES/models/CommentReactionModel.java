@@ -8,6 +8,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -71,6 +73,32 @@ public class CommentReactionModel {
                     @Override
                     public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(likeRequestPojo));
+        return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+                .map(new Func1<LikeResponse, LikeResponse>() {
+                    @Override
+                    public LikeResponse call(LikeResponse likeResponse) {
+                        return likeResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(likeRequestPojo));
+        return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+                .map(new Func1<LikeResponse, LikeResponse>() {
+                    @Override
+                    public LikeResponse call(LikeResponse likeResponse) {
+                        return likeResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

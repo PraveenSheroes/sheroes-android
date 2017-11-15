@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -254,6 +255,11 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
+    }
+
+    @Override
+    public void invalidateLikeUnlike(Comment comment) {
+
     }
     //endregion
 }

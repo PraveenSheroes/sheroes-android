@@ -2131,6 +2131,20 @@ public class AppUtils {
         return likeRequestPojo;
     }
 
+    public  LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue, long commentId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
+        likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        likeRequestPojo.commentId = commentId;
+        //TODO:: change rquest data
+        likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        likeRequestPojo.setEntityId(entityId);
+        likeRequestPojo.setReactionValue(reactionValue);
+        return likeRequestPojo;
+    }
+
+
     /**
      * Request for feed api
      */
@@ -2139,6 +2153,18 @@ public class AppUtils {
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
         likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        likeRequestPojo.setEntityId(entityId);
+        return likeRequestPojo;
+    }
+
+    public  LikeRequestPojo unLikeRequestBuilder(long entityId, long commentId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
+        likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        likeRequestPojo.commentId = commentId;
         //TODO:: change rquest data
         likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         likeRequestPojo.setEntityId(entityId);

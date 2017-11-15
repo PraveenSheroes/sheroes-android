@@ -913,7 +913,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
                 ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
-        } else {
+        } else if(mFragmentOpen.isCommentList()){
+            Fragment fragmentCommentList = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentCommentList)) {
+                ((CommentReactionFragment) fragmentCommentList).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }
+        }
+            else {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
@@ -974,5 +980,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public void invalidateLikeUnlike(Comment comment) {
+
     }
 }

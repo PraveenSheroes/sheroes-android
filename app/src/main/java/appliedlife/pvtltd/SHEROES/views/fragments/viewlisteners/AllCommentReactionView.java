@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 
@@ -11,4 +12,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRespons
 public interface AllCommentReactionView extends BaseMvpView {
     void getAllCommentsAndReactions(CommentReactionResponsePojo commentReactionResponsePojo,int addEditOperation);
     void commentSuccess(CommentAddDelete commentAddDelete, int operationId);
+
+    void invalidateCommentLikeUnlike(Comment comment);
 }
