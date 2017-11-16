@@ -58,6 +58,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ViewMoreLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -335,20 +336,22 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     }
 
     @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-        if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
-                ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        }
-    }
-
-    @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
         mMyCommunityPostFeedDetail = feedDetail;
         onBackPressed();
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        if(mFragmentOpen.isCommentList()){
+            CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
+            commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        }else {
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+            if(fragment instanceof CommunitiesDetailFragment)
+                ((CommunitiesDetailFragment)fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        }
     }
 
     @Override

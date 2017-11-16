@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -107,6 +108,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private FeedDetail mApprovePostFeedDetail;
     private boolean mIsSpam;
     private long mUserId;
+    private Comment mComment;
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
@@ -508,14 +510,35 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        if (baseResponse instanceof Comment) {
+            mComment = (Comment) baseResponse;
+            Comment comment = (Comment) baseResponse;
+            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                if (mComment.getId() != -1) {
+                    mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mComment.getEntityId(), mComment.getCommentsId()), comment);
+                }
+            } else {
+                if (mComment.getId() != -1) {
+                    mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mComment.getEntityId(), reactionValue, mComment.getCommentsId()), comment);
+                }
+            }
+        }
+        if(baseResponse instanceof FeedDetail){
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(feedDetail.getEntityOrParticipantId()));
+            } else {
+                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(feedDetail.getEntityOrParticipantId(), reactionValue));
+            }
+        }
+    }
+
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }
 
-
-    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        super.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-    }
 
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);

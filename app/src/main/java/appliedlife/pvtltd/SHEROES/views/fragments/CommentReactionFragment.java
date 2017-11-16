@@ -510,6 +510,9 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     @Override
     public void invalidateCommentLikeUnlike(Comment comment) {
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
+        mFeedDetail.setLastComments(comments);
         int position = comment.getItemPosition();
         mCommentList.set(position, comment);
         mAdapter.notifyItemChanged(position);
