@@ -64,7 +64,6 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
         View view = inflater.inflate(R.layout.profile_image_dialog_fragment, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, view);
-
         setUserProfileData(false, null);
         return view;
     }

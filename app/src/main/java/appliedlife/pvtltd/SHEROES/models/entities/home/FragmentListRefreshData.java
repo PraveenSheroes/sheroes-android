@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.models.entities.home;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+
 /**
  * Created by Praveen_Singh on 17-02-2017.
  */
@@ -19,6 +21,7 @@ public class FragmentListRefreshData {
     private String callForNameUser;
     private String postedDate;
     private int challengePosition=-1;
+    private FeedRequestPojo feedRequestPojo;
     public FragmentListRefreshData() {
 
     }
@@ -134,5 +137,13 @@ public class FragmentListRefreshData {
 
     public void setChallengePosition(int challengePosition) {
         this.challengePosition = challengePosition;
+    }
+
+    public FeedRequestPojo getFeedRequestPojo() {
+        return feedRequestPojo;
+    }
+
+    public void setFeedRequestPojo(FeedRequestPojo feedRequestPojo) {
+        this.feedRequestPojo = feedRequestPojo;
     }
 }

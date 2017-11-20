@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_size_250"
+    android:layout_height="@dimen/dp_size_180"
     android:orientation="vertical">
 
     <ImageView
@@ -37,7 +37,7 @@
                 android:layout_width="@dimen/drawer_profile_icon_size"
                 android:layout_height="@dimen/drawer_profile_icon_size"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_70"
+                android:layout_marginTop="@dimen/dp_size_20"
                 app:riv_border_width="@dimen/dp_size_6"
                 app:riv_corner_radius="@dimen/dp_size_12"
                 app:riv_oval="true" />
@@ -47,7 +47,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_25"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textAllCaps="true"
                 android:textColor="@color/white"

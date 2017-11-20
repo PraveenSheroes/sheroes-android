@@ -723,6 +723,7 @@
     <string name="ID_JOB_LISTING">job listing</string>
     <string name="ID_JOB_SEARCH_RESULT">job search results</string>
     <string name="ID_JOB_FILTERS">jobs filters</string>
+    <string name="ID_JOB_FILTER_SCREEN">jobs filter screen</string>
     <string name="ID_JOB_FILTERS_SELECT_LOCATION">jobs filters- select locations</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>

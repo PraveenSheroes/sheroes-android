@@ -36,7 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -89,7 +89,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
             mAdapter = new GenericRecyclerViewAdapter(getActivity(), (ProfileActicity) getActivity());
             tvSaveJobLocation.setVisibility(View.GONE);
         } else {
-            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
+            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
         }
         mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
         mOnBoardingPresenter.getOnBoardingSearchToPresenter(onBoardingSearchRequestBuilder(AppConstants.CITY_NAME_DEFAULT, mMasterDataSkill));
@@ -116,7 +116,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
 
     @OnClick(R.id.tv_save_job_location)
     public void onSaveJobLocation() {
-        ((JobFilterActivity) getActivity()).saveJobLocation();
+        ((HomeActivity) getActivity()).saveJobLocation();
     }
 
     @OnClick(R.id.iv_search_back)

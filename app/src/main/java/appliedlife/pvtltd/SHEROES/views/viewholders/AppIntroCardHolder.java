@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
@@ -52,7 +55,6 @@ public class AppIntroCardHolder extends BaseViewHolder<FeedDetail> {
     TextView tvAppIntroDescription;
     @Bind(R.id.iv_app_intro_image)
     ImageView ivAppIntroImage;
-
 
 
     public AppIntroCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -82,14 +84,8 @@ public class AppIntroCardHolder extends BaseViewHolder<FeedDetail> {
         }
         Glide.with(mContext)
                 .load(appIntroData.getCategory()).asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .skipMemoryCache(true)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
-                        ivAppIntroImage.setImageBitmap(profileImage);
-                    }
-                });
+                .placeholder(R.drawable.once_open_card)
+                .into(ivAppIntroImage);
 
     }
 
@@ -111,21 +107,20 @@ public class AppIntroCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void onClick(View view) {
     }
-private void openDeepLInkOrWebUrl()
-{
-    if(null!=dataItem.getAppIntroDataItems()&&StringUtil.isNotNullOrEmptyString(dataItem.getAppIntroDataItems().getImageLinkUrl()))
-    {
-        Uri url = Uri.parse(dataItem.getAppIntroDataItems().getImageLinkUrl());
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(url);
-        mContext.startActivity(intent);
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(String.valueOf(dataItem.getAppIntroDataItems().getValue()))
-                        .url(dataItem.getAppIntroDataItems().getImageLinkUrl())
-                        .build();
-        AnalyticsManager.trackEvent(Event.PROMO_CARD, properties);
+
+    private void openDeepLInkOrWebUrl() {
+        if (null != dataItem.getAppIntroDataItems() && StringUtil.isNotNullOrEmptyString(dataItem.getAppIntroDataItems().getImageLinkUrl())) {
+            Uri url = Uri.parse(dataItem.getAppIntroDataItems().getImageLinkUrl());
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(url);
+            mContext.startActivity(intent);
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(String.valueOf(dataItem.getAppIntroDataItems().getValue()))
+                            .url(dataItem.getAppIntroDataItems().getImageLinkUrl())
+                            .build();
+            AnalyticsManager.trackEvent(Event.PROMO_CARD, properties);
+        }
     }
-}
 }
 

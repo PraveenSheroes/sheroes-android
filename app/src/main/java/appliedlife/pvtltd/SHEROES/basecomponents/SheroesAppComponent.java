@@ -22,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
@@ -44,16 +43,13 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFilterFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFunctionalAreaFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobLocationFilter;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingLookingForFragment;
@@ -368,15 +364,12 @@ public interface SheroesAppComponent {
 
     void inject(InviteSearchHolder inviteSearchHolder);
 
-    void inject(JobFilterActivity jobFilterActivity);
 
-    void inject(JobFilterFragment jobFilterFragment);
+    void inject(JobFilterDialogFragment jobFilterDialogFragment);
 
-    void inject(JobLocationFilter jobLocationFilter);
 
     void inject(JobLocationHolder jobLocationHolder);
 
-    void inject(JobFunctionalAreaFragment jobLocationHolder);
 
     void inject(ProfessionalWorkExperienceActivity professional_workExperience_activity);
 
@@ -520,8 +513,6 @@ public interface SheroesAppComponent {
     void inject(ProfilePersonelHowCanLookingForFragment profilePersonelHowCanLookingForFragment);
 
     void inject(HelplineFragment helplineFragment);
-
-    void inject(GenericWebViewFragment genericWebViewFragment);
 
     void inject(HelplineQuestionCardHolder helplineQuestionCardHolder);
 

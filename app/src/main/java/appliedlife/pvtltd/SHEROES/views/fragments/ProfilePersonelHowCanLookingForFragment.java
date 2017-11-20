@@ -163,7 +163,7 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
         return null;
     }
 
-   /* @OnClick(R.id.tv_looking_back)
+    @OnClick(R.id.tv_looking_back)
     public void onBackPressClick() {
         ((ProfileActicity) getActivity()).onBackPressed();
     }
@@ -179,7 +179,7 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
             ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_LOOKING_FOR, AppConstants.EMPTY_STRING);
         }
 
-    }*/
+    }
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
