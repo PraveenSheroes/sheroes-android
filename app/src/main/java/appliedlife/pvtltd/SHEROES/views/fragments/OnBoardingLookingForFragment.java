@@ -2,8 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,13 +27,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLableValues;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLabelValues;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -55,7 +52,7 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_how_can_progress_bar)
     ProgressBar mProgressBar;
-    private LookingForLableValues lookingForLableValues;
+    private LookingForLabelValues lookingForLabelValues;
     private GenericRecyclerViewAdapter mAdapter;
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
     @Inject
@@ -103,20 +100,20 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
         return view;
     }
 
-    private List<LookingForLableValues> setFilterValues() {
+    private List<LookingForLabelValues> setFilterValues() {
         if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_LOOKING_FOR_KEY)) {
             {
                 HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_LOOKING_FOR_KEY);
-                List<LookingForLableValues> listBoardingList = new ArrayList<>();
+                List<LookingForLabelValues> listBoardingList = new ArrayList<>();
                 if(StringUtil.isNotEmptyCollection(hashMap.get(AppConstants.MASTER_DATA_LOOKING_FOR_KEY))) {
                     for(LabelValue labelValue:hashMap.get(AppConstants.MASTER_DATA_LOOKING_FOR_KEY))
                     {
-                        LookingForLableValues lookingForLableValues=new LookingForLableValues();
-                        lookingForLableValues.setValue(labelValue.getValue());
-                        lookingForLableValues.setLabel(labelValue.getLabel());
-                        lookingForLableValues.setDesc(labelValue.getDesc());
-                        lookingForLableValues.setImgUrl(labelValue.getImgUrl());
-                        listBoardingList.add(lookingForLableValues);
+                        LookingForLabelValues lookingForLabelValues =new LookingForLabelValues();
+                        lookingForLabelValues.setValue(labelValue.getValue());
+                        lookingForLabelValues.setLabel(labelValue.getLabel());
+                        lookingForLabelValues.setDesc(labelValue.getDesc());
+                        lookingForLabelValues.setImgUrl(labelValue.getImgUrl());
+                        listBoardingList.add(lookingForLabelValues);
                     }
                 }
                // Set<String> lookingForCategorySet = hashMap.keySet();
@@ -133,8 +130,8 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
         return null;
     }
 
-    public void onLookingForRequestClick(LookingForLableValues lookingForLableValues) {
-       this.lookingForLableValues=lookingForLableValues;
+    public void onLookingForRequestClick(LookingForLabelValues lookingForLabelValues) {
+       this.lookingForLabelValues = lookingForLabelValues;
        mAdapter.notifyDataSetChanged();
     }
 
@@ -158,7 +155,7 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
         if (null != boardingDataResponse) {
             switch (boardingDataResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    ((OnBoardingActivity) getActivity()).onLookingForHowCanSheroesNextClick(lookingForLableValues);
+                    ((OnBoardingActivity) getActivity()).onLookingForHowCanSheroesNextClick(lookingForLabelValues);
                     break;
                 case AppConstants.FAILED:
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), FeedParticipationEnum.ERROR_ON_ONBOARDING);
@@ -175,9 +172,9 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
 
     @OnClick(R.id.ripple_finish)
     public void rippleFinishClick() {
-        if(lookingForLableValues!=null) {
+        if(lookingForLabelValues !=null) {
             Set<Long> opportunityIds = new HashSet<>();
-            opportunityIds.add(lookingForLableValues.getValue());
+            opportunityIds.add(lookingForLabelValues.getValue());
             mOnBoardingPresenter.getLookingForHowCanToPresenter(mAppUtils.boardingLookingHowCanFormDataRequestBuilder(opportunityIds));
         }else
         {

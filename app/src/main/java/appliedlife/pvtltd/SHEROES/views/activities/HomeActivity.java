@@ -999,7 +999,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.VISIBLE);
         mFloatActionBtn.setTag(AppConstants.FEED_JOB);
-        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
         mFloatActionBtn.setImageResource(R.drawable.ic_fab_icon);
         mTvSearchBox.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);

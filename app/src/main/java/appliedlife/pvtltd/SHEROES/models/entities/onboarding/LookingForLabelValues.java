@@ -10,7 +10,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by Praveen on 16/11/17.
  */
 
-public class LookingForLableValues extends BaseResponse {
+public class LookingForLabelValues extends BaseResponse {
     @SerializedName("value")
     long value;
     @SerializedName("label")
@@ -62,7 +62,7 @@ public class LookingForLableValues extends BaseResponse {
         this.position = position;
     }
 
-    public LookingForLableValues() {
+    public LookingForLabelValues() {
     }
 
     public boolean isSelected() {
@@ -89,7 +89,7 @@ public class LookingForLableValues extends BaseResponse {
         dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
     }
 
-    protected LookingForLableValues(Parcel in) {
+    protected LookingForLabelValues(Parcel in) {
         super(in);
         this.value = in.readLong();
         this.label = in.readString();
@@ -99,15 +99,15 @@ public class LookingForLableValues extends BaseResponse {
         this.isSelected = in.readByte() != 0;
     }
 
-    public static final Creator<LookingForLableValues> CREATOR = new Creator<LookingForLableValues>() {
+    public static final Creator<LookingForLabelValues> CREATOR = new Creator<LookingForLabelValues>() {
         @Override
-        public LookingForLableValues createFromParcel(Parcel source) {
-            return new LookingForLableValues(source);
+        public LookingForLabelValues createFromParcel(Parcel source) {
+            return new LookingForLabelValues(source);
         }
 
         @Override
-        public LookingForLableValues[] newArray(int size) {
-            return new LookingForLableValues[size];
+        public LookingForLabelValues[] newArray(int size) {
+            return new LookingForLabelValues[size];
         }
     };
 }

@@ -2,20 +2,15 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.net.Uri;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-
-import java.io.InputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLableValues;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLabelValues;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -28,7 +23,7 @@ import butterknife.OnClick;
  * Created by Praveen on 16/11/17.
  */
 
-public class LookingForJobHolder extends BaseViewHolder<LookingForLableValues> {
+public class LookingForJobHolder extends BaseViewHolder<LookingForLabelValues> {
     private final String TAG = LogUtils.makeLogTag(LookingForJobHolder.class);
     BaseHolderInterface viewInterface;
     @Bind(R.id.tv_job_tag)
@@ -39,7 +34,7 @@ public class LookingForJobHolder extends BaseViewHolder<LookingForLableValues> {
     CircleImageView ivJobLookigCircleIcon;
     @Bind(R.id.rl_job_option)
     RelativeLayout mRlJobOption;
-    private LookingForLableValues dataItem;
+    private LookingForLabelValues dataItem;
     private Context mContext;
 
 
@@ -51,8 +46,8 @@ public class LookingForJobHolder extends BaseViewHolder<LookingForLableValues> {
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
-    public void bindData(LookingForLableValues lookingForLableValues, Context context, int position) {
-        dataItem = lookingForLableValues;
+    public void bindData(LookingForLabelValues lookingForLabelValues, Context context, int position) {
+        dataItem = lookingForLabelValues;
         dataItem.setPosition(position);
         mContext = context;
         if(dataItem.isSelected())

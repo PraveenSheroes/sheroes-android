@@ -1,20 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -22,12 +15,10 @@ import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -39,11 +30,9 @@ import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLableValues;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLabelValues;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -51,7 +40,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingLookingForFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
@@ -137,9 +125,9 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof LookingForLableValues) {
-            LookingForLableValues lookingForLableValues = (LookingForLableValues) baseResponse;
-            setTagsForFragment(lookingForLableValues, view);
+        if (baseResponse instanceof LookingForLabelValues) {
+            LookingForLabelValues lookingForLabelValues = (LookingForLabelValues) baseResponse;
+            setTagsForFragment(lookingForLabelValues, view);
         } else if (baseResponse instanceof LabelValue) {
             LabelValue labelValue = (LabelValue) baseResponse;
             if (null != mCurrentStatusDialog) {
@@ -161,10 +149,10 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         }
 
     }
-    private void setTagsForFragment(LookingForLableValues lookingForLableValues, View view) {
+    private void setTagsForFragment(LookingForLabelValues lookingForLabelValues, View view) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingLookingForFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
-            ((OnBoardingLookingForFragment) fragment).onLookingForRequestClick(lookingForLableValues);
+            ((OnBoardingLookingForFragment) fragment).onLookingForRequestClick(lookingForLabelValues);
         }
     }
 
@@ -229,7 +217,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         }
         }
 
-    public void onLookingForHowCanSheroesNextClick(LookingForLableValues lookingForLableValues) {
+    public void onLookingForHowCanSheroesNextClick(LookingForLabelValues lookingForLabelValues) {
         long currentTime=System.currentTimeMillis();
         long timeSpent=currentTime-launchTime;
         long totalTime=currentTime-startedTime;
@@ -239,15 +227,15 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mMoEHelper.trackEvent(MoEngageEvent.EVENT_COMPLETED_ON_BOARDING.value, payloadBuilder.build());
         HashMap hashMap=new HashMap<String,Object>();
         StringBuilder stringBuilder=new StringBuilder();
-        stringBuilder.append(lookingForLableValues.getLabel());
+        stringBuilder.append(lookingForLabelValues.getLabel());
         hashMap.put(MoEngageConstants.LOOKING_FOR,stringBuilder);
         moEngageUtills.entityMoEngageLookingFor(this, mMoEHelper, payloadBuilder,hashMap);
 
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .positionInList(lookingForLableValues.getPosition())
-                        .id(String.valueOf(lookingForLableValues.getValue()))
-                        .lookingForName(lookingForLableValues.getLabel())
+                        .positionInList(lookingForLabelValues.getPosition())
+                        .id(String.valueOf(lookingForLabelValues.getValue()))
+                        .lookingForName(lookingForLabelValues.getLabel())
                         .build();
         AnalyticsManager.trackEvent(Event.LOOKING_FOR, properties);
 

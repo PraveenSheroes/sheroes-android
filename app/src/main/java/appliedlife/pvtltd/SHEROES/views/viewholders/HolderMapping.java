@@ -33,7 +33,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLableValues;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLabelValues;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
@@ -669,7 +669,7 @@ public enum HolderMapping {
                     returnView = MEMBER_MODULE.ordinal();
                 } else if (item instanceof OnBoardingData) {
                     returnView = ON_BOARDING_HOLDER.ordinal();
-                }else if (item instanceof LookingForLableValues) {
+                }else if (item instanceof LookingForLabelValues) {
                     returnView = ON_LOOKING_FOR_HOLDER.ordinal();
                 } else if (item instanceof PopularTag) {
                     returnView = POPULAR_TAG_HOLDER.ordinal();
