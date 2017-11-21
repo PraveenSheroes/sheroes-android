@@ -9,10 +9,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/dp_size_16"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="28dp"
         android:gravity="top">
 
         <FrameLayout
@@ -101,32 +105,39 @@
                 android:layout_marginTop="@dimen/dp_size_8"/>
 
             <TextView
+                android:id="@+id/tv_review_company_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_90"
-                android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:layout_marginTop="@dimen/dp_size_10"
-                android:textSize="@dimen/sp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:layout_toEndOf="@+id/iv_company_icon"
+                android:layout_toLeftOf="@+id/review_post_img_heart"
+                android:layout_toRightOf="@+id/iv_company_icon"
+                android:layout_toStartOf="@+id/review_post_img_heart"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:textColor="@color/comment_text"
-                android:id="@+id/tv_review_company_title" />
+                android:textSize="@dimen/sp_size_16" />
+
             <TextView
                 android:id="@+id/review_post_img_heart"
                 android:layout_width="@dimen/dp_size_28"
+                android:layout_height="@dimen/dp_size_20"
+                android:layout_alignTop="@+id/tv_review_company_title"
+                android:layout_toLeftOf="@+id/tv_review_company_rating"
+                android:layout_toStartOf="@+id/tv_review_company_rating"
                 android:drawableLeft="@drawable/ic_star_rating"
-                android:gravity="center"
-                android:layout_centerVertical="true"
-                android:layout_height="@dimen/dp_size_20"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dp_size_40"/>
+                android:gravity="top" />
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_size_20"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/dp_size_8"
-                android:layout_alignParentRight="true"
                 android:id="@+id/tv_review_company_rating"
-                android:textSize="@dimen/sp_size_14"
-                android:layout_marginRight="@dimen/dp_size_30"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/review_post_img_heart"
+                android:layout_alignBottom="@+id/review_post_img_heart"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:textSize="@dimen/sp_size_14" />
 
         </RelativeLayout>
 

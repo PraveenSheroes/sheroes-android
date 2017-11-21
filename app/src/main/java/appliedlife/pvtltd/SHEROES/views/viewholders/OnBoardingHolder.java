@@ -35,8 +35,6 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
     TextView tvTagHeader;
     private OnBoardingData dataItem;
     private Context mContext;
-    int mCurrentIndex = 0;
-    int first, second, third, fourth;
 
     public OnBoardingHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -70,93 +68,6 @@ public class OnBoardingHolder extends BaseViewHolder<OnBoardingData> {
             }
         }
     }
-    /*public void renderOnBoardingView() {
-        int mSeatHeight = 100;//(int) mContext.getResources().getDimension(R.dimen.dp_size_48);
-        int mSeatWidth = (int) mContext.getResources().getDimension(R.dimen.dp_size_48);
-        if (StringUtil.isNotEmptyCollection(dataItem.getBoardingDataList()) && StringUtil.isNotNullOrEmptyString(dataItem.getCategory())) {
-            tvTagHeader.setText(dataItem.getCategory());
-            int row = 0;
-            for (int index = 0; index <= row; index++) {
-                first = second = third = fourth = 0;
-                LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                LinearLayout liRow = (LinearLayout) layoutInflater.inflate(R.layout.tags_onboarding_ui_layout, null);
-                int column = 3;
-                row = cloumnViewTwo(liRow, row, column, dataItem.getBoardingDataList());
-                liTags.addView(liRow);
-            }
-        }
-    }*/
-
-    /*private int cloumnViewTwo(LinearLayout liRow, int passedRow, int column, List<LabelValue> stringList) {
-
-        if (mCurrentIndex < stringList.size()) {
-            int lengthString = stringList.get(mCurrentIndex).getLabel().length();
-            if (first == 1 && second == 1) {
-                passedRow += 1;
-                return passedRow;
-            } else if (second == 2 || third == 2) {
-                passedRow += 1;
-                return passedRow;
-            } else if (second == 1 && third == 1) {
-                passedRow += 1;
-                return passedRow;
-            } else if (fourth == 1 && second == 1) {
-                passedRow += 1;
-                return passedRow;
-            } else if (fourth >= 1 && lengthString > 30) {
-                passedRow += 1;
-                return passedRow;
-            }
-            if (lengthString > 30) {
-                if (column < 3) {
-                    passedRow += 1;
-                    return passedRow;
-                } else {
-                    first++;
-                    inflateTagData(liRow, stringList);
-                    passedRow += 1;
-                    mCurrentIndex++;
-                }
-
-            } else if (lengthString <= 30 && lengthString > 15) {
-
-                if (column < 2) {
-                    passedRow += 1;
-                    return passedRow;
-                } else {
-                    second++;
-                    inflateTagData(liRow, stringList);
-                    mCurrentIndex++;
-                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
-                }
-
-            } else if (lengthString >= 10 && lengthString <= 15) {
-
-                if (column < 1) {
-                    passedRow += 1;
-                    return passedRow;
-                } else {
-                    third++;
-                    inflateTagData(liRow, stringList);
-                    mCurrentIndex++;
-                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
-                }
-
-            } else if (lengthString >= 5 && lengthString < 10) {
-                if (column < 1) {
-                    passedRow += 1;
-                    return passedRow;
-                } else {
-                    fourth++;
-                    inflateTagData(liRow, stringList);
-                    mCurrentIndex++;
-                    passedRow = cloumnViewTwo(liRow, passedRow, column - 1, stringList);
-                }
-            }
-
-        }
-        return passedRow;
-    }*/
 
     private void inflateTagData(HorizontalFlowLayout liRow, final LabelValue stringList) {
         LayoutInflater columnInflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

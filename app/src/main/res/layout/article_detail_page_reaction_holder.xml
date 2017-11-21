@@ -106,7 +106,7 @@
             android:layout_marginTop="@dimen/dp_size_10"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
-            android:textColor="@color/teg_text_color"
+            android:textColor="@color/feed_card_time"
             android:textSize="@dimen/sp_size_12" />
         <View
             android:layout_width="match_parent"
@@ -342,7 +342,7 @@
             android:gravity="center"
             android:padding="@dimen/dp_size_8"
             android:text="@string/ID_VIEW_MORE_COMMENT"
-            android:textColor="@color/teg_text_color"
+            android:textColor="@color/feed_card_time"
             android:textSize="@dimen/dp_size_12" />
 
         <LinearLayout

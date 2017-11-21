@@ -107,13 +107,10 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mRecyclerView, manager, new FragmentListRefreshData()) {
             @Override
             public void onHide() {
-                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onShow() {
-                ((OnBoardingActivity) getActivity()).mLiStripForAddItem.setVisibility(View.VISIBLE);
-
             }
 
             @Override

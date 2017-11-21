@@ -1,5 +1,6 @@
-package appliedlife.pvtltd.SHEROES.views.fragments;
+package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +21,8 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -33,7 +35,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.RangeSeekBar;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,9 +48,9 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.jobCategoryRequestBuilde
  * Created by Ajit Kumar on 10-02-2017.
  */
 
-public class JobFilterFragment extends BaseFragment {
+public class JobFilterDialogFragment extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Job Filters Screen";
-    private final String TAG = LogUtils.makeLogTag(JobFilterFragment.class);
+    private final String TAG = LogUtils.makeLogTag(JobFilterDialogFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_filter_list)
@@ -73,11 +75,9 @@ public class JobFilterFragment extends BaseFragment {
     private List<String> skill = new ArrayList<>();
     private Integer experienceFrom;
     private Integer experienceTo;
-  //  @Bind(R.id.tv_functional_area_data)
-   // TextView tvFunctionAreaData;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.job_filter_fragment, container, false);
         ButterKnife.bind(this, view);
         RangeSeekBar<Integer> seekBar = (RangeSeekBar<Integer>) view.findViewById(R.id.rangeSeekbar);
@@ -96,13 +96,25 @@ public class JobFilterFragment extends BaseFragment {
         seekBar.setNotifyWhileDragging(true);
 
         opportunityRecyclerDataList();
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_FILTER_SCREEN));
         return view;
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+        // set the animations to use on showing and hiding the dialog
+    }
+
     private void opportunityRecyclerDataList()
     {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (JobFilterActivity) getActivity());
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity)getActivity());
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
@@ -113,23 +125,6 @@ public class JobFilterFragment extends BaseFragment {
         ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         if (StringUtil.isNotEmptyCollection(setJobOpportunityValues())) {
             mAdapter.setSheroesGenericListData(setJobOpportunityValues());
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-    private void functionalRecyclerDataList()
-    {
-        tvFunctionAreaRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (JobFilterActivity) getActivity());
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        tvFunctionAreaRecycler.setLayoutManager(manager);
-        tvFunctionAreaRecycler.setAdapter(mAdapter);
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
-            mMasterDataResult = mUserPreferenceMasterData.get().getData();
-        } else {
-            mHomePresenter.getMasterDataToPresenter();
-        }
-        if (StringUtil.isNotEmptyCollection(functionalAreaValues())) {
-            mAdapter.setSheroesGenericListData(functionalAreaValues());
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -146,27 +141,16 @@ public class JobFilterFragment extends BaseFragment {
             tvLocationData.setText(loc);
         }
     }
-    public void setFunctionAreaDataItem(List<String> functionAreaDataItem) {
-        if (StringUtil.isNotEmptyCollection(functionAreaDataItem)) {
-            //tvFunctionAreaData.setVisibility(View.VISIBLE);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String fuctinalArea : functionAreaDataItem) {
-                stringBuilder.append(fuctinalArea).append(AppConstants.COMMA);
-            }
-            String funcArea = stringBuilder.toString().substring(0, stringBuilder.toString().length() - 1);
-          //  tvFunctionAreaData.setText(funcArea);
-        }
-    }
     @OnClick(R.id.tv_save_job_filter)
     public void applyFilterOnClick() {
-        FeedRequestPojo feedRequestPojo = jobCategoryRequestBuilder(AppConstants.FEED_JOB, AppConstants.ONE_CONSTANT, cities, experienceFrom, experienceTo,  ((JobFilterActivity) getActivity()).mFunctionArea, ((JobFilterActivity) getActivity()).mListOfOpportunity, skill);
-        ((JobFilterActivity) getActivity()).applyFilterData(feedRequestPojo);
+        FeedRequestPojo feedRequestPojo = jobCategoryRequestBuilder(AppConstants.FEED_JOB, AppConstants.ONE_CONSTANT, cities, experienceFrom, experienceTo, null, ((HomeActivity) getActivity()).mListOfOpportunity, skill);
+        ((HomeActivity) getActivity()).jobFilterActivityResponse(feedRequestPojo);
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_JOBS, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_close_community)
     public void backBtnClick() {
-        ((JobFilterActivity) getActivity()).onBackPressed();
+      dismiss();
     }
 
     @OnClick(R.id.tv_opportunity_type_lable)
@@ -177,19 +161,12 @@ public class JobFilterFragment extends BaseFragment {
     @OnClick(R.id.tv_loaction_label)
     public void locationJob() {
         tvLocationData.setVisibility(View.VISIBLE);
-        ((JobFilterActivity) getActivity()).searchLocationData(AppConstants.LOCATION_CITY_GET_ALL_DATA_KEY, LOCATION);
+        ((HomeActivity) getActivity()).searchLocationData(AppConstants.LOCATION_CITY_GET_ALL_DATA_KEY, LOCATION);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_FILTERS_SELECT_LOCATION));
     }
-
-    @OnClick(R.id.tv_functional_area_lable)
-    public void functionalArea() {
-      //  ((JobFilterActivity) getActivity()).functionAreaData();
-      //  functionalRecyclerDataList();
-      //  tvFunctionAreaRecycler.setVisibility(View.VISIBLE);
-    }
-    @OnClick(R.id.tv_functional_area_data)
-    public void onFuncAreaDataClick() {
-       // ((JobFilterActivity) getActivity()).functionAreaData();
+    @OnClick(R.id.tv_location_data)
+    public void locationJobData() {
+        locationJob();
     }
     @OnClick(R.id.tv_filter_exp_label)
     public void filterExperience() {
@@ -217,28 +194,17 @@ public class JobFilterFragment extends BaseFragment {
         return null;
     }
 
-    private List<OnBoardingData> functionalAreaValues() {
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
-            mMasterDataResult = mUserPreferenceMasterData.get().getData();
-        }
-        if (null != mMasterDataResult && null != mMasterDataResult.get(AppConstants.MASTER_DATA_FUNCTIONAL_AREA_KEY)) {
-            HashMap<String, ArrayList<LabelValue>> hashMap = mMasterDataResult.get(AppConstants.MASTER_DATA_FUNCTIONAL_AREA_KEY);
-            List<OnBoardingData> listBoardingList = new ArrayList<>();
-            Set<String> lookingForCategorySet = hashMap.keySet();
-            for (String lookingForCategory : lookingForCategorySet) {
-                OnBoardingData boardingData = new OnBoardingData();
-                boardingData.setFragmentName(AppConstants.MASTER_DATA_FUNCTIONAL_AREA_KEY);
-                boardingData.setCategory(lookingForCategory);
-                boardingData.setBoardingDataList(hashMap.get(lookingForCategory));
-                listBoardingList.add(boardingData);
-            }
-            return listBoardingList;
-        }
-        return null;
-    }
-
-    @Override
+   /* @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }*/
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                backBtnClick();
+            }
+        };
     }
 }

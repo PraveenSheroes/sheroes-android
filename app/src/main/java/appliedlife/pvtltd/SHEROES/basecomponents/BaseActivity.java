@@ -54,10 +54,8 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
@@ -68,7 +66,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.GenericWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
@@ -102,7 +99,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-    private GenericWebViewFragment genericWebViewFragment;
     private long mUserId;
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
@@ -524,22 +520,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    private DialogFragment openGenericCardInWebView(FeedDetail feedDetail){
+    private void openGenericCardInWebView(FeedDetail feedDetail){
        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl())) {
-           genericWebViewFragment = (GenericWebViewFragment) getFragmentManager().findFragmentByTag(GenericWebViewFragment.class.getName());
-           if (genericWebViewFragment == null) {
-               genericWebViewFragment = new GenericWebViewFragment();
-               Bundle bundle = new Bundle();
-               bundle.putString(AppConstants.WEB_URL, feedDetail.getDeepLinkUrl());
-               bundle.putString(AppConstants.WEB_TITLE, feedDetail.getPostCommunityName());
-               genericWebViewFragment.setArguments(bundle);
-           }
-           if (!genericWebViewFragment.isVisible() && !genericWebViewFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-               genericWebViewFragment.show(getFragmentManager(), GenericWebViewFragment.class.getName());
-           }
-           return genericWebViewFragment;
-       }else {
-           return null;
+           Uri url = Uri.parse(feedDetail.getDeepLinkUrl());
+           Intent intent = new Intent(Intent.ACTION_VIEW);
+           intent.setData(url);
+           startActivity(intent);
        }
     }
 

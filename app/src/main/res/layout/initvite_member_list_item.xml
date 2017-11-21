@@ -25,7 +25,7 @@
         android:id="@+id/tv_member_city"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/teg_text_color"
+        android:textColor="@color/feed_card_time"
         android:layout_below="@+id/tv_member_name"
         android:layout_marginLeft="@dimen/dp_size_15"
         android:layout_toRightOf="@+id/iv_circle_profile_pic"

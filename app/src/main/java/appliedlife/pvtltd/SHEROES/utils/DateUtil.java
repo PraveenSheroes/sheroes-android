@@ -5,6 +5,9 @@
  import java.util.Date;
  import java.util.Locale;
 
+ import appliedlife.pvtltd.SHEROES.R;
+ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+
  /**
   * Created by Praveen_Singh on 19-02-2017.
   */
@@ -84,6 +87,9 @@
              } else {
                  sb.append(AppConstants.MINUT+ AppConstants.S);
              }
+         }else
+         {
+             sb.append(SheroesApplication.mContext.getString(R.string.ID_JUST_NOW));
          }
          return sb.toString();
      }

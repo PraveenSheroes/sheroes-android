@@ -112,10 +112,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:background="@color/blue"
-        android:visibility="gone"
-        app:backgroundTint="@color/blue"
-        android:src="@drawable/ic_fab_icon"
+        app:backgroundTint="@color/email"
+        android:src="@drawable/ic_pencil"
         android:layout_marginBottom="@dimen/dp_size_65"
         android:layout_marginRight="@dimen/dp_size_20"/>
     <include

@@ -99,7 +99,7 @@ public class RippleView extends RelativeLayout
             return;
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
-        rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.shadow));
+        rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.colorAccent));
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_rv_zoom, false);
         isCentered = typedArray.getBoolean(R.styleable.RippleView_rv_centered, true);
@@ -162,6 +162,7 @@ public class RippleView extends RelativeLayout
                 timer = 0;
                 durationEmpty = -1;
                 timerEmpty = 0;
+                canvas.save();
                 canvas.restore();
                 invalidate();
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);

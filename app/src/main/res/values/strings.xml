@@ -723,6 +723,7 @@
     <string name="ID_JOB_LISTING">job listing</string>
     <string name="ID_JOB_SEARCH_RESULT">job search results</string>
     <string name="ID_JOB_FILTERS">jobs filters</string>
+    <string name="ID_JOB_FILTER_SCREEN">jobs filter screen</string>
     <string name="ID_JOB_FILTERS_SELECT_LOCATION">jobs filters- select locations</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
@@ -807,4 +808,9 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
     <string name="ID_HEADER_TEXT">what\'s on your mind?</string>
+    <string name="ID_WHAT_LOOKING_FOR">What are you looking for?</string>
+
+    <string name="ID_FINISH">Finish</string>
+    <string name="ID_SELECT_LOOKING_FOR">Please tell us what are you looking for</string>
+
 </resources>

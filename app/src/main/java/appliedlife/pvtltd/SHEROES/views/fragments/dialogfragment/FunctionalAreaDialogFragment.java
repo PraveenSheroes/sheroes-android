@@ -30,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.JobFilterActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import butterknife.Bind;
@@ -68,7 +68,7 @@ public class FunctionalAreaDialogFragment extends BaseDialogFragment {
             mAdapter = new GenericRecyclerViewAdapter(getActivity(), (ProfileActicity) getActivity());
             tvDoneFunArea.setVisibility(View.GONE);
         } else {
-            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (JobFilterActivity) getActivity());
+           // mAdapter = new GenericRecyclerViewAdapter(getActivity(), (Ho) getActivity());
         }
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
@@ -102,7 +102,7 @@ public class FunctionalAreaDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.tv_done_fun_area)
     public void onSaveJobLocation() {
-        ((JobFilterActivity) getActivity()).onDoneFunctionArea();
+
     }
 
     @OnClick(R.id.iv_fun_area_back)

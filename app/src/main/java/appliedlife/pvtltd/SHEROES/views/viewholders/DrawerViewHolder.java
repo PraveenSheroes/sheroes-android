@@ -3,6 +3,9 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -25,6 +28,10 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
     private DrawerItems dataItem;
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
+    @Bind(R.id.tv_drawer_image)
+    TextView tvDrawerImage;
+    @Bind(R.id.ll_drawer_item)
+    LinearLayout llDrawerItem;
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -35,67 +42,67 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
     @Override
     public void bindData(DrawerItems item, Context context, int position) {
         this.dataItem = item;
-        tvDrawerItem.setOnClickListener(this);
+        llDrawerItem.setOnClickListener(this);
         int drawerItemId = item.getId();
         switch (drawerItemId) {
             case 1:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_profile), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_profile), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_PROFILE));
                 break;
             case 2:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_article), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_article), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_ARTICLE));
                 break;
             case 3:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_job), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_job_selected), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_JOBS));
                 break;
             case 4:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_bookmark), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_bookmark), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_BOOKMARK));
                 break;
             case 5:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_setting), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_setting), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_SETTING));
                 break;
             case 6:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_ask_sheroes), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_ask_sheroes), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
                 break;
             case 7:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_helpline), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_helpline), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
                 break;
             case 8:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_icc_members), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_icc_members), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_ICC_MEMBERS));
                 break;
             case 9:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_faq), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_faq), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_FAQS));
                 break;
             case 10:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_feed), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_feed), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_FEED));
                 break;
             case AppConstants.ELEVENTH_CONSTANT:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_logout), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_logout), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_LOGOUT));
                 tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
                 tvDrawerItem.setTextSize(16.0f);
                 break;
             case 12:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_invite_friend), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_invite_friend), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_INVITE_WOMEN_FRIEND));
                 tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
                 break;
             case 13:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_invite_friend), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_invite_friend), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_INVITE_REFERRAL_FRIEND));
                 tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
                 break;
             case 14:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_champions), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_champions), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_GROWTH_BUDDIES));
                 break;
             default:
@@ -111,10 +118,9 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
 
     @Override
     public void onClick(View view) {
-
         int id = view.getId();
         switch (id) {
-            case R.id.tv_drawer_item:
+            case R.id.ll_drawer_item:
                 viewInterface.handleOnClick(dataItem, view);
                 break;
             default:

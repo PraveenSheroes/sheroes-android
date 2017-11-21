@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -20,7 +21,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -71,9 +71,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
@@ -83,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
@@ -99,7 +102,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
@@ -113,6 +116,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 import butterknife.Bind;
@@ -151,12 +155,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TabLayout mTabLayout;
     @Bind(R.id.fl_home_footer_list)
     public FrameLayout mFlHomeFooterList;
-    @Bind(R.id.iv_footer_button_icon)
-    ImageView mIvFooterButtonIcon;
     @Bind(R.id.tv_search_box)
     TextView mTvSearchBox;
     @Bind(R.id.tv_setting)
     TextView mTvSetting;
+    @Bind(R.id.tv_job_home)
+    TextView mTvJob;
     @Bind(R.id.tv_home)
     TextView mTvHome;
     @Bind(R.id.tv_communities)
@@ -182,13 +186,14 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Bind(R.id.fl_notification)
     FrameLayout mFlNotification;
     @Bind(R.id.fab_filter)
-    FloatingActionButton mJobFragment;
+    public FloatingActionButton mFloatActionBtn;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
     @Bind(R.id.title_text)
     TextView mTitleText;
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
+    private JobFilterDialogFragment jobFilterDailogFragment;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
@@ -215,6 +220,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private boolean isInviteReferral;
     private PublicProfileGrowthBuddiesDialogFragment mPublicProfileGrowthBuddiesDialogFragment;
     private BellNotificationDialogFragment bellNotificationDialogFragment;
+    private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
+    private List<String> mJobLocationList = new ArrayList<>();
+    public List<String> mListOfOpportunity = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -282,6 +290,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mEventId = getIntent().getExtras().getLong(AppConstants.EVENT_ID);
             }
         }
+        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         initHomeViewPagerAndTabs();
         assignNavigationRecyclerListView();
         if (mEventId > 0) {
@@ -351,8 +360,58 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.fab_filter)
     public void openJobFilterActivity() {
-        Intent intent = new Intent(getApplicationContext(), JobFilterActivity.class);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_JOB_FILTER);
+        String fabString=(String)mFloatActionBtn.getTag();
+        if(fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE))
+        {
+            createCommunityPostOnClick();
+
+        }else
+        {
+            jobFilterDialog();
+        }
+
+    }
+    private void jobFilterDialog()
+    {
+       jobFilterDailogFragment = (JobFilterDialogFragment) getFragmentManager().findFragmentByTag(JobFilterDialogFragment.class.getName());
+        if (jobFilterDailogFragment == null) {
+            jobFilterDailogFragment = new JobFilterDialogFragment();
+            Bundle bundle = new Bundle();
+            jobFilterDailogFragment.setArguments(bundle);
+        }
+        if (!jobFilterDailogFragment.isVisible() && !jobFilterDailogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            jobFilterDailogFragment.show(getFragmentManager(), JobFilterDialogFragment.class.getName());
+        }
+    }
+    public void jobFilterActivityResponse(FeedRequestPojo feedRequestPojo) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((JobFragment) fragment).jobFilterIds(feedRequestPojo);
+            if(null!=jobFilterDailogFragment)
+            {
+                jobFilterDailogFragment.dismiss();
+            }
+        }
+    }
+    public void searchLocationData(String masterDataSkill, OnBoardingEnum onBoardingEnum) {
+        jobLocationSearchDialogFragment = (JobLocationSearchDialogFragment) getFragmentManager().findFragmentByTag(JobLocationSearchDialogFragment.class.getName());
+        if (jobLocationSearchDialogFragment == null) {
+            jobLocationSearchDialogFragment = new JobLocationSearchDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(AppConstants.MASTER_SKILL, masterDataSkill);
+            jobLocationSearchDialogFragment.setArguments(bundle);
+        }
+        if (!jobLocationSearchDialogFragment.isVisible() && !jobLocationSearchDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            jobLocationSearchDialogFragment.show(getFragmentManager(), JobLocationSearchDialogFragment.class.getName());
+        }
+    }
+    public void saveJobLocation() {
+        if (null != jobLocationSearchDialogFragment) {
+            jobLocationSearchDialogFragment.dismiss();
+        }
+        if (null != jobFilterDailogFragment) {
+            jobFilterDailogFragment.locationData(mJobLocationList);
+        }
     }
 
     public void logOut() {
@@ -454,6 +513,32 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mFragmentOpen.setChampionViaCommentReaction(AppConstants.ONE_CONSTANT);
             MentorDetailItem mentorDetailItem = (MentorDetailItem) baseResponse;
             mentorItemClick(view, mentorDetailItem);
+        }else if (baseResponse instanceof GetAllDataDocument) {
+            GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
+            if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
+                if (!getAllDataDocument.isChecked()) {
+                    mJobLocationList.add(getAllDataDocument.getTitle());
+                } else {
+                    if (StringUtil.isNotEmptyCollection(mJobLocationList)) {
+                        mJobLocationList.remove(getAllDataDocument.getTitle());
+                    }
+                }
+            }
+        }else  if (baseResponse instanceof OnBoardingData) {
+            OnBoardingData onBoardingData = (OnBoardingData) baseResponse;
+            if (null != onBoardingData && StringUtil.isNotNullOrEmptyString(onBoardingData.getFragmentName())) {
+                LabelValue labelValue = (LabelValue) view.getTag();
+                if (onBoardingData.getFragmentName().equalsIgnoreCase(AppConstants.JOB_DATA_OPPORTUNITY_KEY)) {
+                    if (labelValue.isSelected()) {
+                        if (StringUtil.isNotEmptyCollection(mListOfOpportunity)) {
+                            mListOfOpportunity.remove(labelValue.getLabel());
+                        }
+                    } else {
+                        mListOfOpportunity.add(labelValue.getLabel());
+                    }
+                }
+            }
+
         }
     }
 
@@ -470,7 +555,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 openArticleFragment(setCategoryIds(),true);
                 break;
             case AppConstants.THREE_CONSTANT:
-                openJobFragment();
+                //Job
                 break;
             case AppConstants.FOURTH_CONSTANT:
                 openBookMarkFragment();
@@ -809,10 +894,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTabLayout.setVisibility(View.GONE);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
+
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+
+
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
     }
@@ -886,14 +978,63 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
+        mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
+        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
 
+    }
+    public void  jobButtonUI() {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.setTag(AppConstants.FEED_JOB);
+        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+        mFloatActionBtn.setImageResource(R.drawable.ic_fab_icon);
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
+
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+        mFragmentOpen.setJobFragment(true);
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_selected), null, null);
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+    }
+    @OnClick(R.id.tv_job_home)
+    public void jobOnClick() {
+        mTabLayout.setVisibility(View.GONE);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.ID_FEED));
+        JobFragment jobFragment = new JobFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle bundle = new Bundle();
+        jobFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).commitAllowingStateLoss();
+        mJobLocationList.clear();
+        mListOfOpportunity.clear();
     }
 
     @OnClick(R.id.tv_communities)
@@ -918,23 +1059,22 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvHome.setText(getString(R.string.ID_FEED));
+        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
+        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvJob.setText(getString(R.string.ID_JOBS));
+
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.iv_footer_button_icon)
     public void createCommunityPostOnClick() {
-        // Snackbar.make(mCLMainLayout, "Comming soon", Snackbar.LENGTH_SHORT).show();
-        /*Intent intent = new Intent(getApplicationContext(), CreateCommunityPostActivity.class);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);*/
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
         CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
-      //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
     }
 
 
@@ -950,12 +1090,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT, (ArrayList) categoryIds);
         articlesFragment.setArguments(bundleArticle);
         fm.beginTransaction().replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
-
     }
     public void articleUi()
     {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
@@ -1007,7 +1146,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
     }
@@ -1025,8 +1164,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.teg_text_color));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         setAllValues(mFragmentOpen);
         BookmarksFragment bookmarksFragment = new BookmarksFragment();
         Bundle bundleBookMarks = new Bundle();
@@ -1036,31 +1175,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mliArticleSpinnerIcon.setVisibility(View.GONE);
     }
 
-    public void openJobFragment() {
-        changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
-        JobFragment jobFragment = new JobFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle jobBookMarks = new Bundle();
-        // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
-        jobFragment.setArguments(jobBookMarks);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
-
-    }
-    public void jobUi()
-    {
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mJobFragment.setVisibility(View.VISIBLE);
-        mTvSearchBox.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
-    }
 
     @Override
     public void onBackPressed() {
 
-        if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()) {
+        if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()||mFragmentOpen.isJobFragment()) {
             if (mFragmentOpen.isCommentList()) {
                 mFragmentOpen.setCommentList(false);
                 getSupportFragmentManager().popBackStackImmediate();
@@ -1086,7 +1205,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     return;
                 }
                 doubleBackToExitPressedOnce = true;
-                Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                homeOnClick();
+              //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -1193,9 +1313,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
                     createCommunityActivityResponse(intent);
                     break;
-                case AppConstants.REQUEST_CODE_FOR_JOB_FILTER:
-                    jobFilterActivityResponse(intent);
-                    break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     editCommunityPostResponse(intent);
                     break;
@@ -1296,13 +1413,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
-    private void jobFilterActivityResponse(Intent intent) {
-        FeedRequestPojo feedRequestPojo = (FeedRequestPojo) intent.getExtras().get(AppConstants.JOB_FILTER);
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((JobFragment) fragment).jobFilterIds(feedRequestPojo);
-        }
-    }
+
 
     private void createCommunityActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {

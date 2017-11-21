@@ -474,6 +474,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+        }else
+        {
+            tvFeedCommunityPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
 
@@ -658,6 +661,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
                 tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            }else
+            {
+                tvFeedCommunityPostUserCommentPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
             }
             if (lastComment.isMyOwnParticipation()) {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);

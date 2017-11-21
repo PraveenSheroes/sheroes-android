@@ -90,7 +90,10 @@ public enum Event {
 
     //region Image related events
     IMAGE_SHARED(AnalyticsEventType.IMAGE, "Shared"),
-    IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link");
+    IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link"),
+    LOOKING_FOR(AnalyticsEventType.LOOKING_FOR, "Clicked"),
+    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked");
+
     // endregion
 
     public final AnalyticsEventType type;
