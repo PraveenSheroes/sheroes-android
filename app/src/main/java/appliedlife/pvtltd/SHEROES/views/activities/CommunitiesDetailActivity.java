@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -62,9 +63,11 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
+import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
@@ -134,6 +137,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private SpamPostListDialogFragment spamPostDialogFragment;
     private int mFromNotification;
     private FeedDetail feedDetailForHomeFeed;
+    private CommunitiesDetailFragment mCommunitiesDetailFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -178,6 +182,16 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
     }
 
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        if(mFragmentOpen.isCommentList()){
+            CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
+            commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        }else {
+            mCommunitiesDetailFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        }
+    }
+
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
@@ -195,12 +209,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 communityOpenAboutFragment(mFeedDetail);
             } else {
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_COMMUNITIES));
+                mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId);
+                mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
             }
         } else {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_COMMUNITIES));
+            mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId);
+            mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
             mViewPager.setAdapter(mViewPagerAdapter);
         }
     }
@@ -420,17 +436,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-        if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
-                ((CommunitiesDetailFragment) mFragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        }
-    }
-
     public void updateOpenAboutFragment(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
         if (null != mInviteCommunityMemberDialogFragment) {
@@ -595,8 +600,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);*/
         CommunityPost communityPost = new CommunityPost();
-        communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
+        communityPost.community = new Community();
+        communityPost.community.id = feedDetail.getCommunityId();
+        communityPost.community.name = feedDetail.getNameOrTitle();
+        communityPost.community.isOwner = feedDetail.isCommunityOwner();
+        communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
+       // CommunityPostActivity.navigateTo(this, feedDetail, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
         // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 

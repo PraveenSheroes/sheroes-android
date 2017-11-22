@@ -58,7 +58,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                getMvpView().stopProgressBar();
                 getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
                 AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail());
             }

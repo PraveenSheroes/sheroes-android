@@ -50,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -96,6 +97,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     //Communitypost handling
     @Bind(R.id.li_feed_community_post_user_comments)
     LinearLayout liFeedCommunityPostUserComments;
+
+    @Bind(R.id.comment_like)
+    TextView mCommentLike;
+
+    @Bind(R.id.comment_like_count)
+    TextView mCommentLikeCount;
+
     @Bind(R.id.li_feed_community_user_post_images)
     LinearLayout liFeedCommunityUserPostImages;
     @Bind(R.id.iv_feed_community_post_circle_icon)
@@ -621,12 +629,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             mItemPosition = lastCommentList.size() - 1;
             lastComment = lastCommentList.get(mItemPosition);
             ivFeedCommunityPostUserPic.setCircularImage(true);
+            invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
+                    invalidateCommentLike(lastComment);
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
@@ -675,6 +685,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
         }
 
+    }
+
+    private void invalidateCommentLike(Comment lastComment) {
+        if(lastComment.likeCount > 0){
+            mCommentLikeCount.setVisibility(View.VISIBLE);
+            mCommentLikeCount.setText(Integer.toString(lastComment.likeCount));
+        }else {
+            mCommentLikeCount.setVisibility(View.GONE);
+        }
+        if (lastComment.isLiked) {
+            mCommentLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        } else {
+            mCommentLike.setTextColor(mContext.getResources().getColor(R.color.posted_in));
+        }
     }
 
     private void imageOperations(Context context) {
@@ -1095,6 +1119,60 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_delete_spam_post)
     public void onDeleteSpamPostClick() {
         viewInterface.handleOnClick(dataItem, tvDeleteSpamPost);
+    }
+
+    @OnClick(R.id.comment_like)
+    public void onCommentLikeClicked(){
+        List<Comment> lastCommentList = dataItem.getLastComments();
+        Comment lastComment;
+        if (StringUtil.isNotEmptyCollection(lastCommentList)) {
+            mItemPosition = lastCommentList.size() - 1;
+            lastComment = lastCommentList.get(mItemPosition);
+            lastComment.setItemPosition(dataItem.getItemPosition());
+            if (lastComment.isLiked) {
+                lastComment.isLiked = false;
+                lastComment.likeCount--;
+            } else {
+                lastComment.isLiked = true;
+                lastComment.likeCount++;
+            }
+            invalidateCommentLike(lastComment);
+            if (!lastComment.isLiked) {
+                viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+            } else {
+                viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            }
+
+        }
+    }
+
+    private void commentLike() {
+        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+            if (dataItem.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_FEEDBACK_POST, AppConstants.EMPTY_STRING);
+            } else {
+                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+            }
+        } else {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            if (dataItem.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_FEEDBACK_POST, AppConstants.EMPTY_STRING);
+
+            } else {
+                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+            }
+        }
+        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            dataItem.setNoOfLikes(dataItem.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+        } else {
+            dataItem.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            dataItem.setNoOfLikes(dataItem.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+        }
+        likeCommentOps();
     }
 
 

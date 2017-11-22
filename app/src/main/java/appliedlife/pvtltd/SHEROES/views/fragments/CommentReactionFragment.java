@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
@@ -244,7 +245,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             }
 
             String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, mFeedDetail.getNoOfLikes());
-            mTvReaction.setText(String.valueOf(pluralLikes+ getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET)));
+            mTvReaction.setText(String.valueOf(pluralLikes + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET)));
 
         } else if (mFragmentOpen.isReactionList()) {
             HashMap<String, Object> properties = new EventProperty.Builder()
@@ -253,7 +254,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                     .build();
             AnalyticsManager.trackScreenView("Reactions Screen", properties);
             String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, mFeedDetail.getNoOfLikes());
-            mTvUserCommentHeaderText.setText(String.valueOf(pluralLikes+ getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET)));
+            mTvUserCommentHeaderText.setText(String.valueOf(pluralLikes + getString(R.string.ID_OPEN_BRACKET) + String.valueOf(mFeedDetail.getNoOfLikes()) + getString(R.string.ID_CLOSE_BRACKET)));
 
         }
         switch (mFragmentOpen.getOpenCommentReactionFragmentFor()) {
@@ -507,6 +508,16 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
 
     }
 
+    @Override
+    public void invalidateCommentLikeUnlike(Comment comment) {
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
+        mFeedDetail.setLastComments(comments);
+        int position = comment.getItemPosition();
+        mCommentList.set(position, comment);
+        mAdapter.notifyItemChanged(position);
+    }
+
     private void setLastComments() {
         List<Comment> lastCommentList = new ArrayList<>();
         if (StringUtil.isNotEmptyCollection(mCommentList)) {
@@ -711,6 +722,23 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             return new EventProperty.Builder().id(Long.toString(mFeedDetail.getEntityOrParticipantId())).build();
         } else {
             return super.getExtraProperties();
+        }
+    }
+
+    @Override
+    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+        if (baseResponse instanceof Comment) {
+            mComment = (Comment) baseResponse;
+            Comment comment = (Comment) baseResponse;
+            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                if (mComment.getId() != -1) {
+                    mCommentReactionPresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mComment.getEntityId(), mComment.getCommentsId()), comment);
+                }
+            } else {
+                if (mComment.getId() != -1) {
+                    mCommentReactionPresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mComment.getEntityId(), reactionValue, mComment.getCommentsId()), comment);
+                }
+            }
         }
     }
 }

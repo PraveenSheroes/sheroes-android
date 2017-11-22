@@ -91,6 +91,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequest
 public class CommunityPostActivity extends BaseActivity implements ICommunityPostView {
     public static final String SCREEN_LABEL = "Create Communities Post Screen";
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
+    public static final String IS_FROM_COMMUNITY = "Is from community";
     public static final int MAX_IMAGE = 5;
 
     //region View variables
@@ -168,10 +169,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private LinkRenderResponse mLinkRenderResponse = null;
     private CommunityPost mCommunityPost;
     private boolean mIsEditPost;
+    private boolean mIsFromCommunity;
     private MyCommunities mMyCommunities;
     private int mFeedPosition;
     private String mOldText;
     private boolean mPostAsCommunitySelected;
+    private boolean mIsProgressBarVisible;
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
@@ -189,6 +192,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
+            mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
         }
         Parcelable parcelable = getIntent().getParcelableExtra(CommunityPost.COMMUNITY_POST_OBJ);
         if (parcelable != null) {
@@ -211,7 +215,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             invalidateUserDropDownView();
         } else {
             mText.requestFocus();
-            PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+            if (!mIsFromCommunity) {
+                PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+            }
         }
 
         Parcelable parcelableMyCommunities = getIntent().getParcelableExtra(MyCommunities.MY_COMMUNITY_OBJ);
@@ -259,6 +265,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
             if (mCommunityPost == null) {
                 finish();
+                return true;
+            }
+            if (mIsProgressBarVisible) {
                 return true;
             }
             if (!mIsEditPost) {
@@ -350,11 +359,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void startProgressBar() {
+        mIsProgressBarVisible = true;
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgressBar() {
+        mIsProgressBarVisible = false;
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -448,7 +459,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mCommunityName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!mIsEditPost) {
+                if (!mIsEditPost && !mIsFromCommunity) {
                     PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, mMyCommunities);
                 }
             }
@@ -597,10 +608,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     }
 
-    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode) {
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
         Parcelable parcelable = Parcels.wrap(communityPost);
         intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+        intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
 
     }

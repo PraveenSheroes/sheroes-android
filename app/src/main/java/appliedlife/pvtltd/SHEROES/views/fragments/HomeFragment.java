@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -338,6 +339,16 @@ public class HomeFragment extends BaseFragment {
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void invalidateLikeUnlike(Comment comment) {
+        List<Comment> commentList = new ArrayList<>();
+        commentList.add(comment);
+        List<FeedDetail> feedDetailList = mPullRefreshList.getFeedResponses();
+        FeedDetail feedDetail = feedDetailList.get(comment.getItemPosition());
+        feedDetail.setLastComments(commentList);
+        mAdapter.notifyItemChanged(comment.getItemPosition(), feedDetail);
     }
 
     private void approveSpamPostResponse(BaseResponse baseResponse) {

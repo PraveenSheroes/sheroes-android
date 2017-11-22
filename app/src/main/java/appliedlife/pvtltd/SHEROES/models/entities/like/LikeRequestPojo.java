@@ -17,6 +17,10 @@ public class LikeRequestPojo extends BaseRequest {
     @Expose
     private Integer reactionValue;
 
+    @SerializedName("parent_participation_id")
+    @Expose
+    public Long commentId;
+
     public Integer getReactionValue() {
         return reactionValue;
     }

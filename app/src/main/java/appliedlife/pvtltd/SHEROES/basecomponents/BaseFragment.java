@@ -116,6 +116,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     private SwipeRefreshLayout mSwipeView;
     private LinearLayout mLiNoResult;
     private FeedDetail mFeedDetail;
+    private Comment mComment;
     private RecyclerView mRecyclerView;
     private int mPosition;
     private int mPressedEmoji;
@@ -498,19 +499,36 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        mListLoad = false;
-        mFeedDetail = (FeedDetail) baseResponse;
-        this.mPosition = position;
-        this.mPressedEmoji = reactionValue;
-        if (null != mFeedDetail && mFeedDetail.isLongPress()) {
-            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-        } else {
-            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
-            } else {
+        if (baseResponse instanceof FeedDetail) {
+            mListLoad = false;
+            mFeedDetail = (FeedDetail) baseResponse;
+            this.mPosition = position;
+            this.mPressedEmoji = reactionValue;
+            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
                 mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+            } else {
+                if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                    mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+                } else {
+                    mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+                }
             }
         }
+
+        if (baseResponse instanceof Comment) {
+            Comment comment = (Comment) baseResponse;
+            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(comment.getEntityId(), comment.getCommentsId()), comment);
+            } else {
+                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(comment.getEntityId(), reactionValue, comment.getCommentsId()), comment);
+            }
+        }
+
+    }
+
+    @Override
+    public void invalidateLikeUnlike(Comment comment) {
+
     }
 
 

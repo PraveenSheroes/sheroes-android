@@ -93,6 +93,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
@@ -242,6 +243,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
+
+        if (getIntent() != null) {
+            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
+                    openArticleFragment(setCategoryIds(), false);
+                }
+            }
+            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
+                    communityOnClick();
+                }
+            }
+        }
     }
 
     @Override
@@ -254,6 +268,37 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             isInviteReferral = false;
         } else {
             setProfileImage();
+        }
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null) {
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    openArticleFragment(setCategoryIds(), false);
+                }
+            }
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                if(mFragmentOpen.isCommentList()){
+                    getSupportFragmentManager().popBackStack();
+                }
+                handleHelpLineFragmentFromDeepLinkAndLoading();
+            }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    communityOnClick();
+                }
+            }
         }
     }
 
@@ -1074,7 +1119,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void createCommunityPostOnClick() {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+      //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
     }
 
 

@@ -57,6 +57,35 @@
                 android:layout_gravity="top"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_10" />
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/comment_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="@color/posted_in"
+                android:text="Like"/>
+
+            <TextView
+                android:id="@+id/comment_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:text="-1"
+                android:textColor="#90949c" />
+            </LinearLayout>
         </LinearLayout>
 
         <TextView

@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
+import java.util.List;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -22,8 +26,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -60,6 +66,12 @@ public class CommentHolder extends BaseViewHolder<Comment> {
     @Bind(R.id.tv_list_user_comment_time)
     TextView tvListCommentTime;
 
+    @Bind(R.id.comment_like_count)
+    TextView mCommentLikeCount;
+
+    @Bind(R.id.comment_like)
+    TextView mCommentLike;
+
     Context mContext;
     BaseHolderInterface viewInterface;
     private Comment dataItem;
@@ -80,6 +92,7 @@ public class CommentHolder extends BaseViewHolder<Comment> {
     @Override
     public void bindData(Comment item, final Context context, int position) {
         this.dataItem = item;
+        this.dataItem.setItemPosition(position);
         this.mContext = context;
         if (StringUtil.isNotNullOrEmptyString(dataItem.getPostedDate())) {
             tvListCommentTime.setText(dataItem.getPostedDate());
@@ -93,6 +106,7 @@ public class CommentHolder extends BaseViewHolder<Comment> {
             tvUserCommentListMenu.setVisibility(View.GONE);
         }
         ivListCommentProfilePic.setCircularImage(true);
+        invalidateLikeView(item);
         if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(dataItem.getParticipantName())) {
             ivListCommentProfilePic.setImageResource(R.drawable.ic_anonomous);
             StringBuilder stringBuilder = new StringBuilder();
@@ -128,6 +142,20 @@ public class CommentHolder extends BaseViewHolder<Comment> {
         }
     }
 
+    private void invalidateLikeView(Comment item) {
+        if(item.likeCount > 0){
+            mCommentLikeCount.setVisibility(View.VISIBLE);
+            mCommentLikeCount.setText(Integer.toString(item.likeCount));
+        }else {
+            mCommentLikeCount.setVisibility(View.GONE);
+        }
+        if (item.isLiked) {
+            mCommentLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        } else {
+            mCommentLike.setTextColor(mContext.getResources().getColor(R.color.posted_in));
+        }
+    }
+
     @Override
     public void viewRecycled() {
 
@@ -143,6 +171,23 @@ public class CommentHolder extends BaseViewHolder<Comment> {
         if (dataItem.isVerifiedMentor()) {
             viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
+    }
+
+    @OnClick(R.id.comment_like)
+    public void onCommentLikeClicked(){
+        if (dataItem.isLiked) {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+        } else {
+            viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+        }
+        if (dataItem.isLiked) {
+            dataItem.isLiked = false;
+            dataItem.likeCount--;
+        } else {
+            dataItem.isLiked = true;
+            dataItem.likeCount++;
+        }
+        invalidateLikeView(dataItem);
     }
 
 

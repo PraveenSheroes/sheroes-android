@@ -78,6 +78,14 @@ public class Comment extends BaseResponse implements Parcelable {
     @Expose
     private boolean isVerifiedMentor;
 
+    @SerializedName("solr_ignore_number_of_likes_on_comment")
+    @Expose
+    public int likeCount;
+
+    @SerializedName("solr_ignore_is_my_own_like_on_comment")
+    @Expose
+    public boolean isLiked;
+
 
     public boolean isEdit() {
         return isEdit;
@@ -288,6 +296,8 @@ public class Comment extends BaseResponse implements Parcelable {
         dest.writeValue(this.entityAuthorUserId);
         dest.writeByte(this.participantActive ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.likeCount);
+        dest.writeByte(this.isLiked ? (byte) 1 : (byte) 0);
     }
 
     protected Comment(Parcel in) {
@@ -314,6 +324,8 @@ public class Comment extends BaseResponse implements Parcelable {
         this.entityAuthorUserId = (Long) in.readValue(Long.class.getClassLoader());
         this.participantActive = in.readByte() != 0;
         this.isVerifiedMentor = in.readByte() != 0;
+        this.likeCount = in.readInt();
+        this.isLiked = in.readByte() != 0;
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {

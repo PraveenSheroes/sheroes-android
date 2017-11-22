@@ -486,7 +486,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region ButterKnife Bindings
     @OnClick(R.id.fab)
     void onFabClick() {
-        ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false);
+        if (mArticle != null) {
+            ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false);
+        }
     }
 
     @OnClick(R.id.submit)

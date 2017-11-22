@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -193,6 +194,11 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
 
     @Override
     public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
+
+    }
+
+    @Override
+    public void invalidateLikeUnlike(Comment comment) {
 
     }
 }

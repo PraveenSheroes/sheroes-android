@@ -588,6 +588,10 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @Expose
     private int thumbImageWidth;
 
+    @SerializedName("parent_participation_id")
+    @Expose
+    public long commentId = -1;
+
     public int getThumbImageHeight() {
         return thumbImageHeight;
     }
@@ -2074,6 +2078,14 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.thumbImageWidth = thumbImageWidth;
     }
 
+    public long getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(long commentId) {
+        this.commentId = commentId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -2261,10 +2273,11 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeLong(this.communityTypeId);
         dest.writeInt(this.rating);
         dest.writeByte(this.isCommentAllowed ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.highresImageHeight);
-        dest.writeInt(this.highresImageWidth);
-        dest.writeInt(this.thumbImageHeight);
         dest.writeInt(this.thumbImageWidth);
+        dest.writeLong(this.commentId);
+        dest.writeInt(this.thumbImageHeight);
+        dest.writeInt(this.highresImageWidth);
+        dest.writeInt(this.highresImageHeight);
     }
 
     protected FeedDetail(Parcel in) {
@@ -2469,10 +2482,11 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.communityTypeId = in.readLong();
         this.rating = in.readInt();
         this.isCommentAllowed = in.readByte() != 0;
-        this.highresImageHeight = in.readInt();
-        this.highresImageWidth = in.readInt();
-        this.thumbImageHeight = in.readInt();
         this.thumbImageWidth = in.readInt();
+        this.commentId = in.readLong();
+        this.thumbImageHeight = in.readInt();
+        this.highresImageWidth = in.readInt();
+        this.highresImageHeight = in.readInt();
     }
 
     public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {

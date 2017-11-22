@@ -48,7 +48,7 @@ import butterknife.ButterKnife;
 
 
 public class ArticlesFragment extends BaseFragment {
-    private static final String SCREEN_LABEL = "Article Listing Screen";
+    public static final String SCREEN_LABEL = "Article Listing Screen";
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
     @Inject
     HomePresenter mHomePresenter;
