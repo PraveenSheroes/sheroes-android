@@ -297,6 +297,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                             into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
                             into.putExtra(AppConstants.COMMUNITY_POST_ID, Long.parseLong(dataIdString));
+                            into.putExtra(AppConstants.FROM_DEEPLINK, true);
                         }
                     }
                 } else {

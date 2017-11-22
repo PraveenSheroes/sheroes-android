@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -59,6 +60,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 /**
  * Created by ujjwal on 11/20/17.
@@ -320,7 +322,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
                                 .id(Integer.toString(mContest.remote_id))
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED, properties);
-                ShareBottomSheetFragment.showDialog(this, shareText, mContest.thumbImage, mContest.shortUrl, SOURCE_SCREEN, true);
+                ShareBottomSheetFragment.showDialog(this, shareText, mContest.thumbImage, mContest.shortUrl, SOURCE_SCREEN, true, mContest.shortUrl);
                 break;
         }
         return true;
@@ -433,6 +435,11 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
         }
+        if(baseResponse instanceof Comment){
+            setAllValues(mFragmentOpen);
+             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
+            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+        }
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -493,11 +500,22 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
                 mHomeFragment.commentListRefresh(mFeedDetail, COMMENT_REACTION);
             }
         }
+        if (mFragmentOpen.isReactionList()) {
+            mFragmentOpen.setReactionList(false);
+            mFragmentOpen.setCommentList(true);
+            getSupportFragmentManager().popBackStackImmediate();
+        }
     }
 
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-
+        mFragmentOpen = isFragmentOpen;
+        mFeedDetail = feedDetail;
+        if (mFragmentOpen.isReactionList()) {
+            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
+            setAllValues(mFragmentOpen);
+            clickCommentReactionFragment(feedDetail);
+        }
     }
 
     //endregion

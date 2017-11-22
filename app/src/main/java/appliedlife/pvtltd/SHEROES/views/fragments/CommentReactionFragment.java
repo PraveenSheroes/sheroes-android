@@ -564,6 +564,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             lastComment.setComment(mCommentList.get(i).getComment());
             lastComment.setParticipantImageUrl(mCommentList.get(i).getParticipantImageUrl());
             lastComment.setParticipantName(mCommentList.get(i).getParticipantName());
+            lastComment.setEntityId(mCommentList.get(i).getEntityId());
+            lastComment.setCommentsId(mCommentList.get(i).getCommentsId());
             lastComment.setMyOwnParticipation(mCommentList.get(i).isMyOwnParticipation());
             lastComment.setCreatedOn(mCommentList.get(i).getCreatedOn());
             lastCommentList.add(lastComment);

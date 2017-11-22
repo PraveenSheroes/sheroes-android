@@ -46,6 +46,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private static final String SHARE_DEEPLINK = "share deep link";
     private static final String SHARE_IMAGE = "share image";
     private static final String SHARE_TEXT = "share text";
+    private static final String SHARE_COPYLINK = "copy link";
     private static final String IS_IMAGE_SHARE = "Is Image Share";
 
     private android.content.ClipboardManager myClipboard;
@@ -54,7 +55,9 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private String mShareImageUrl;
     private String mShareText;
     private String mShareDeepLinkUrl;
+    private String mShareCopyLink;
     private boolean mIsImageShare;
+
     //endregion
 
     // region View variables
@@ -71,6 +74,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             mShareDeepLinkUrl = getArguments().getString(SHARE_DEEPLINK);
             mShareImageUrl = getArguments().getString(SHARE_IMAGE);
             mShareText = getArguments().getString(SHARE_TEXT);
+            mShareCopyLink = getArguments().getString(SHARE_COPYLINK);
             mIsImageShare = getArguments().getBoolean(IS_IMAGE_SHARE, false);
         }
         return super.onCreateDialog(savedInstanceState);
@@ -92,12 +96,13 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //endregion
 
     //region Public Static methods
-    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage) {
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink) {
         ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
         Bundle args = new Bundle();
         args.putString(SHARE_TEXT, shareText);
         args.putString(SHARE_DEEPLINK, shareDeepLinkUrl);
         args.putString(SHARE_IMAGE, shareImage);
+        args.putString(SHARE_COPYLINK, shareCopyLink);
         args.putBoolean(IS_IMAGE_SHARE, isImage);
         shareBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -118,13 +123,10 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
 
     @OnClick({R.id.layout_copy_link, R.id.image_copy_link, R.id.text_copy_link})
     public void onCopyLinkClick() {
-        if (mIsImageShare && !CommonUtil.isNotEmpty(mShareImageUrl)) {
+        if (!CommonUtil.isNotEmpty(mShareCopyLink)) {
             return;
         }
-        if (!mIsImageShare && !CommonUtil.isNotEmpty(mShareDeepLinkUrl)) {
-            return;
-        }
-        myClip = ClipData.newPlainText("copy_link", mIsImageShare ? mShareImageUrl : mShareDeepLinkUrl);
+        myClip = ClipData.newPlainText("copy_link", mShareCopyLink);
         myClipboard.setPrimaryClip(myClip);
         HashMap<String, Object> properties =
                 new EventProperty.Builder()

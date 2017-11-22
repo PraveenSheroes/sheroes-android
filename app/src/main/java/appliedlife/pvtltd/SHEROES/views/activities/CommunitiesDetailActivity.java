@@ -138,6 +138,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private int mFromNotification;
     private FeedDetail feedDetailForHomeFeed;
     private CommunitiesDetailFragment mCommunitiesDetailFragment;
+    private boolean isFromDeepLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,13 +158,21 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
             mCommunityId = getIntent().getExtras().getLong(AppConstants.COMMUNITY_ID);
             mCommunityPostId = getIntent().getExtras().getLong(AppConstants.COMMUNITY_POST_ID);
-            if (mCommunityId > 0) {
-                mFeedDetail = new FeedDetail();
-                mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
-            } else {
-                mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
-                communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
-                isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
+            isFromDeepLink = getIntent().getExtras().getBoolean(AppConstants.FROM_DEEPLINK, false);
+            if(isFromDeepLink){
+                if (mCommunityId >= 0) {
+                    mFeedDetail = new FeedDetail();
+                    mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+                }
+            }else {
+                if (mCommunityId > 0) {
+                    mFeedDetail = new FeedDetail();
+                    mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+                } else {
+                    mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
+                    communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
+                    isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
+                }
             }
 
         }
@@ -601,7 +610,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);*/
         CommunityPost communityPost = new CommunityPost();
         communityPost.community = new Community();
-        communityPost.community.id = feedDetail.getCommunityId();
+        communityPost.community.id = feedDetail.getIdOfEntityOrParticipant();
         communityPost.community.name = feedDetail.getNameOrTitle();
         communityPost.community.isOwner = feedDetail.isCommunityOwner();
         communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();

@@ -85,11 +85,11 @@ public class CustomeDataList {
             drawerItemsList.add(firstDrawerItem);
             drawerItemsList.add(fourteenItem);
             drawerItemsList.add(secondDrawerItem);
+            drawerItemsList.add(fifteenDrawerItem);
          //   drawerItemsList.add(thirdDrawerItem);
             //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
             drawerItemsList.add(twelveDraerItem);
-            drawerItemsList.add(fifteenDrawerItem);
             // drawerItemsList.add(thirteenItem);
         }
         drawerItemsList.add(elevenDrawerItem);

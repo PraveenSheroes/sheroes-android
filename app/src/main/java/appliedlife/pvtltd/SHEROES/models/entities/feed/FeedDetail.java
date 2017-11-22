@@ -671,7 +671,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     @SerializedName("solr_ignore_winner_rank_i")
     @Expose
-    private Integer challengeWinnerRank;
+    private int challengeWinnerRank;
 
     @SerializedName("challenge_has_winner")
     @Expose
@@ -799,6 +799,10 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     public boolean isCommunityPost() {
         return isCommunityPost;
+    }
+
+    public void setChallengeWinnerRank(int challengeWinnerRank) {
+        this.challengeWinnerRank = challengeWinnerRank;
     }
 
     public void setCommunityPost(boolean communityPost) {
@@ -2600,18 +2604,15 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeString(this.challengeWinnerAddress);
         dest.writeString(this.challengePrizeDescription);
         dest.writeString(this.challengePrizeIconLinkUrl);
-        dest.writeValue(this.challengeWinnerRank);
+        dest.writeInt(this.challengeWinnerRank);
         dest.writeByte(this.challengeHasWinner ? (byte) 1 : (byte) 0);
         dest.writeString(this.challengeWinnerAnnouncementDate);
         dest.writeByte(this.isFutureChallenge ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.commentId);
         dest.writeInt(this.thumbImageHeight);
         dest.writeInt(this.highresImageWidth);
         dest.writeLong(this.authorParticipantIdl);
         dest.writeLong(this.userPostSourceEntityId);
-        dest.writeInt(this.highresImageHeight);
-        dest.writeLong(this.commentId);
-        dest.writeInt(this.thumbImageHeight);
-        dest.writeInt(this.highresImageWidth);
         dest.writeInt(this.highresImageHeight);
     }
 
@@ -2818,10 +2819,6 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.rating = in.readInt();
         this.isCommentAllowed = in.readByte() != 0;
         this.thumbImageWidth = in.readInt();
-        this.commentId = in.readLong();
-        this.thumbImageHeight = in.readInt();
-        this.highresImageWidth = in.readInt();
-        this.highresImageHeight = in.readInt();
         this.isChallengeAccepted = in.readByte() != 0;
         this.challengeAcceptedCount = in.readInt();
         this.challengeLastModifiedDate = in.readString();
@@ -2842,10 +2839,11 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.challengeWinnerAddress = in.readString();
         this.challengePrizeDescription = in.readString();
         this.challengePrizeIconLinkUrl = in.readString();
-        this.challengeWinnerRank = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.challengeWinnerRank = in.readInt();
         this.challengeHasWinner = in.readByte() != 0;
         this.challengeWinnerAnnouncementDate = in.readString();
         this.isFutureChallenge = in.readByte() != 0;
+        this.commentId = in.readLong();
         this.thumbImageHeight = in.readInt();
         this.highresImageWidth = in.readInt();
         this.authorParticipantIdl = in.readLong();

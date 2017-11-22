@@ -279,6 +279,7 @@ public class AppConstants {
     public static final String CHAMPION_ID = "champion_id";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
+    public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
     public static final String MODEL_KEY = "key";
     public static final String BASIC_EXP_YEAR = "Year(s)";

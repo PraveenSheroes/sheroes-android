@@ -106,7 +106,7 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
                 tvDrawerItem.setText(context.getString(R.string.ID_GROWTH_BUDDIES));
                 break;
             case 15:
-                tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_challenge_icon), null, null, null);
+                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_mychallenge), null, null, null);
                 tvDrawerItem.setText(context.getString(R.string.ID_CHALLENGED));
                 break;
             default:

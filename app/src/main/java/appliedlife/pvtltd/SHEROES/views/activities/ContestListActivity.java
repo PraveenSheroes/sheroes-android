@@ -88,7 +88,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mContestListView.setLayoutManager(mLayoutManager);
 
-        mContestListView.setEmptyViewWithImage(emptyView, R.string.empty_challenge_response_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
+        mContestListView.setEmptyViewWithImage(emptyView, R.string.empty_challenge_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
 
         initAdapter();
 
