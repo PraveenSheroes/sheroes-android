@@ -256,6 +256,7 @@ public class HomeFragment extends BaseFragment {
             if (null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
                 AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
+                AppsFlyerLib.getInstance().startTracking(SheroesApplication.mContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
                 ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(mUserId));
             }
         } else {

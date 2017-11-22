@@ -6,6 +6,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 
+import com.appsflyer.AppsFlyerLib;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,6 +125,10 @@ public class AnalyticsManager {
         if(event.trackEventToProvider(AnalyticsProvider.MIXPANEL)) {
             MixpanelHelper.trackEvent(sAppContext, event.getFullName(), properties);
         }
+        if(event.trackEventToProvider(AnalyticsProvider.APPSFLYER)){
+            AppsFlyerLib.getInstance().trackEvent(sAppContext, event.getFullName(), properties);
+        }
+
     }
 
     public static void trackPostAction(Event event, FeedDetail feedDetail) {

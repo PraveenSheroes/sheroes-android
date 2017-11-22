@@ -71,7 +71,6 @@
                     android:layout_marginLeft="@dimen/dp_size_90"
                     android:paddingLeft="@dimen/dp_size_16"
                     android:textColor="@color/text_color_work_list"
-                    android:layout_toRightOf="@+id/cb_create_community_open_check"
                     android:button="@drawable/customecheckbox"
                     android:checked="false"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"

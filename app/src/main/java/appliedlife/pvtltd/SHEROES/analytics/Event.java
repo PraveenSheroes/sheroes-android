@@ -109,7 +109,7 @@ public enum Event {
     }
 
     public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-        if (analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS || analyticsProvider == AnalyticsProvider.MIXPANEL) {
+        if (analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS || analyticsProvider == AnalyticsProvider.MIXPANEL || analyticsProvider == AnalyticsProvider.APPSFLYER) {
             return true;
         }
         return false;
