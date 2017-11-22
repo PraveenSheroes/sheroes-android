@@ -12,4 +12,6 @@ public interface ICommunityPostView extends BaseMvpView {
     void onPostSend(FeedDetail feedDetail);
 
     void linkRenderResponse(LinkRenderResponse linkRenderResponse);
+
+    void finishActivity();
 }

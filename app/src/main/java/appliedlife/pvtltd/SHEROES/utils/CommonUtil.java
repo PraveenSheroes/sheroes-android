@@ -96,6 +96,20 @@ public class CommonUtil {
         return String.valueOf(chars);
     }
 
+    public static ContestStatus getContestStatus(Date startAt, Date endAt){
+        Date currentDate = new Date();
+        if(currentDate.before(startAt)){
+            return ContestStatus.UPCOMING;
+        }
+        else if(currentDate.after(startAt) && currentDate.before(endAt)){
+            return ContestStatus.ONGOING;
+        }else if(currentDate.after(startAt) && currentDate.after(endAt)){
+            return ContestStatus.COMPLETED;
+        }else {
+            return ContestStatus.UPCOMING;
+        }
+    }
+
     public static String ellipsize(String input, int maxLength) {
         String ellip = "...";
         if (input == null || input.length() <= maxLength
@@ -545,6 +559,18 @@ public class CommonUtil {
         }
         if(image.contains("images.assettype")){
             heightWidth = "?w=" + Integer.toString(width) + "&h=" + Integer.toString(height);
+        }
+        String uri = image + heightWidth;
+        return uri;
+    }
+
+    public static String getImgKitUri(@NonNull String image, int width) {
+        String heightWidth = "";
+        if(image.contains("img.sheroes")){
+            heightWidth = "?tr=w-" + Integer.toString(width);
+        }
+        if(image.contains("images.assettype")){
+            heightWidth = "?w=" + Integer.toString(width);
         }
         String uri = image + heightWidth;
         return uri;

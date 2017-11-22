@@ -8,7 +8,7 @@
         android:id="@+id/swipe_view_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.v7.widget.RecyclerView
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView
             android:id="@+id/rv_home_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,4 +68,6 @@
             android:textColor="@color/requested_btn"
             android:textSize="@dimen/sp_size_14" />
     </LinearLayout>
+
+    <include layout="@layout/empty_list_view" />
 </FrameLayout>

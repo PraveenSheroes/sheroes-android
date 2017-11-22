@@ -620,6 +620,7 @@
     <string name="ID_JOIN_SHEROES_NETWORK">Join The SHEROES Network</string>
     <string name="ID_MENTOR_FOR">CAN HELP IN</string>
     <string name="ID_GROWTH_BUDDIES">Champions</string>
+    <string name="ID_CHALLENGED">My Challenges</string>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
     <string name="ID_SPONSORS">Sponsors</string>
@@ -773,6 +774,12 @@
         <item quantity="other">Comments</item>
     </plurals>
 
+    <plurals name="numberOfResponses">
+        <item quantity="zero">Responses</item>
+        <item quantity="one">Response</item>
+        <item quantity="other">Responses</item>
+    </plurals>
+
 
     <plurals name="numberOfLikes">
         <item quantity="zero">Likes</item>
@@ -813,4 +820,42 @@
     <string name="ID_FINISH">Finish</string>
     <string name="ID_SELECT_LOOKING_FOR">Please tell us what are you looking for</string>
 
+
+    <string name="contest.status.ongoing">Live</string>
+    <string name="contest.status.upcoming">Upcoming</string>
+    <string name="contest.status.completed">Completed</string>
+
+    <string name="endsOn">ends on</string>
+    <string name="starts_at">starts at</string>
+    <string name="joined_by">joined by</string>
+    <string name="completed">completed</string>
+
+    <string name="join_contest">join contest</string>
+    <string name="submit_response">Submit a response</string>
+    <string name="empty_winner_text">Winner will be announced %1$s</string>
+    <string name="empty_winner_subtext">Till then keep checking this place</string>
+    <string name="empty_challenge_response_text">No Responses yet!</string>
+    <string name="empty_challenge_response_subtext">Be the first one to submit a response</string>
+    <string name="view_response">View response</string>
+    <string name="joined">Joined</string>
+    <string name="title.contest_list">My Challenges</string>
+    <string name="soon">soon</string>
+
+    <string name="hint.full_name">Full Name</string>
+    <string name="hint.mobile_number">Mobile Number</string>
+    <string name="hint.full_address">Full Address</string>
+    <string name="hint.pin_code">Pin Code</string>
+    <string name="email">Email</string>
+
+    <string name="error.invalid_mobile">Please enter a valid 10 digit mobile number</string>
+    <string name="error.name_blank">Please enter a name!</string>
+    <string name="error.email_blank">Please enter an email!</string>
+    <string name="error.address_blank">Please enter an address!</string>
+    <string name="error.invalid_pin_code">Please enter valid pin code!</string>
+
+    <string name="title.send_address">Send Address</string>
+    <string name="action_send">Send</string>
+    <string name="snackbar.submission_submited">Your submission has been submitted successfully</string>
+    <string name="empty_challenge_text">No Challenges yet!</string>
+    <string name="empty_challenge_sub_text">Come back after sometime</string>
 </resources>

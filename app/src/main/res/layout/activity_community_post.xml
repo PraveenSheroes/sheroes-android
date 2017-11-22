@@ -185,7 +185,8 @@
                     android:text="@string/choose_community_option"
                     android:drawableRight="@drawable/vector_down_arrow_red_14dp"
                     android:textColor="@color/red"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
 
             </RelativeLayout>
 

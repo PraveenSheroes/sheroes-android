@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,6 +114,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+    @Bind(R.id.anonymous)
+    RelativeLayout mAnonymousView;
+
     @Bind(R.id.anonymous_select)
     SwitchCompat mAnonymousSelect;
 
@@ -175,6 +179,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String mOldText;
     private boolean mPostAsCommunitySelected;
     private boolean mIsProgressBarVisible;
+    private boolean mIsChallengePost;
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
@@ -198,6 +203,20 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (parcelable != null) {
             mCommunityPost = Parcels.unwrap(parcelable);
             mIsEditPost = mCommunityPost.isEdit;
+            mIsChallengePost = mCommunityPost.isChallengeType;
+        }
+        if (mIsChallengePost) {
+            mAnonymousSelect.setVisibility(View.GONE);
+            mAnonymousView.setVisibility(View.GONE);
+            if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
+                mText.setText(" " + "#" + mCommunityPost.challengeHashTag);
+                mText.requestFocus();
+                mText.setSelection(0);
+            }
+                RelativeLayout.LayoutParams layoutParams =
+                        (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                mUserName.setLayoutParams(layoutParams);
         }
         if (mIsEditPost) {
             mPostAsCommunitySelected = mCommunityPost.isPostByCommunity;
@@ -215,7 +234,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             invalidateUserDropDownView();
         } else {
             mText.requestFocus();
-            if (!mIsFromCommunity) {
+            if (!mIsFromCommunity && !mIsChallengePost) {
                 PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
             }
         }
@@ -270,7 +289,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (mIsProgressBarVisible) {
                 return true;
             }
-            if (!mIsEditPost) {
+
+            if(mIsChallengePost){
+                mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(),mCommunityPost.challengeId, mCommunityPost.challengeType, mText.getText().toString(), getImageUrls(), mLinkRenderResponse));
+            }else if (!mIsEditPost) {
                 mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse));
             } else {
                 mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
@@ -286,7 +308,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             return false;
         }
 
-        if(mCommunityPost.community == null){
+        if(mCommunityPost.community == null && !mCommunityPost.isChallengeType){
             showMessage(R.string.error_choose_community);
             return false;
         }
@@ -360,6 +382,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void startProgressBar() {
         mIsProgressBarVisible = true;
+        CommonUtil.hideKeyboard(this);
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
@@ -553,6 +576,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setCommunityName() {
+        if(mIsChallengePost){
+            mCommunityName.setVisibility(View.GONE);
+        }
         if (mCommunityPost != null && mCommunityPost.community != null)
             mCommunityName.setText(mCommunityPost.community.name);
     }
@@ -695,8 +721,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if(mCommunityPost.community !=null){
                 mUserName.setText(CommonUtil.capitalizeString(mCommunityPost.community.name));
             }
-        }else {
-            mCommunityName.setVisibility(View.VISIBLE);
+        } else {
+            if (mIsChallengePost) {
+                mCommunityName.setVisibility(View.GONE);
+            } else {
+                mCommunityName.setVisibility(View.VISIBLE);
+            }
             if(mIsAnonymous){
                 mUserName.setText("Anonymous");
             }else {
@@ -778,6 +808,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             //mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
         }
+    }
+
+    @Override
+    public void finishActivity() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        CommunityPostActivity.this.finish();
     }
 
     public void showMessage(int stringRes) {

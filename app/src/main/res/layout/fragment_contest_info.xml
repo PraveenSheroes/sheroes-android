@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:background="@color/photo_placeholder"/>
+        
+        <TextView
+            android:id="@+id/contest_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="#90949c"
+            android:layout_below="@id/image"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contest_tag"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:textColor="#3c3c3c"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/author_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp">
+
+            <ImageView
+                android:id="@+id/author_pic"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@id/author_pic"
+                android:gravity="center_vertical"
+                android:textColor="#3c3c3c"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/response_views_counts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/author"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/author_pic"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:textColor="#90949c"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/author_view"
+            android:layout_marginTop="12dp"
+            android:background="@color/white"
+            android:lineSpacingMultiplier="1.4"
+            android:textColor="@color/light_grey"
+            android:textIsSelectable="true"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/video_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

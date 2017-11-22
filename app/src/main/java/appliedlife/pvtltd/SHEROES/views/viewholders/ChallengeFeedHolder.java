@@ -1,0 +1,195 @@
+package appliedlife.pvtltd.SHEROES.views.viewholders;
+
+import android.app.Activity;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import org.w3c.dom.Text;
+
+import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
+import butterknife.Bind;
+import butterknife.BindDimen;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+/**
+ * Created by Ujjwal on 10/10/17.
+ */
+
+public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
+
+    @Bind(R.id.card_challenge)
+    CardView mCardChallenge;
+
+    @Bind(R.id.author_image)
+    ImageView mAuthorImage;
+
+    @Bind(R.id.author_name)
+    TextView mAuthorName;
+
+    @Bind(R.id.share)
+    ImageView mShare;
+
+    @Bind(R.id.feature_image)
+    ImageView mFeatureImage;
+
+    @Bind(R.id.contest_tag)
+    TextView mContestTag;
+
+    @Bind(R.id.title)
+    TextView mTitle;
+
+    @Bind(R.id.contest_end_text)
+    TextView mContestEndText;
+
+    @Bind(R.id.contest_status)
+    TextView mContestStatus;
+
+    @Bind(R.id.join_challenge_text)
+    TextView mJoinChallengeText;
+
+    @Bind(R.id.response_view_count)
+    TextView mResponseViewCount;
+
+    BaseHolderInterface viewInterface;
+    private Contest mContest;
+    private FeedDetail mFeedDetail;
+    private Context mContext;
+
+
+    public ChallengeFeedHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+        super(itemView);
+        ButterKnife.bind(this,itemView);
+        this.viewInterface = baseHolderInterface;
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+    }
+    @Override
+    public void bindData(FeedDetail feedDetail, Context context, int position) {
+      mContext = context;
+      mFeedDetail = feedDetail;
+        mContest = new Contest();
+        mContest.title = feedDetail.getChallengeTitle();
+        mContest.remote_id = (int) feedDetail.getIdOfEntityOrParticipant();
+        mContest.body = feedDetail.getListDescription();
+        mContest.createdDateString = feedDetail.getChallengeStartDate();
+        mContest.endDateString = feedDetail.getChallengeEndDate();
+        mContest.hasWinner = feedDetail.isChallengeHasWinner();
+        mContest.isWinner = feedDetail.isChallengeIsWinner();
+        mContest.authorName = feedDetail.getAuthorName();
+        mContest.authorType = feedDetail.getChallengeAuthorTypeS();
+        mContest.authorImageUrl = feedDetail.getAuthorImageUrl();
+        mContest.submissionCount = feedDetail.getChallengeAcceptedCount();
+        mContest.hasMyPost = feedDetail.isChallengeAccepted();
+        mContest.tag = feedDetail.getChallengeAcceptPostTextS();
+        mContest.thumbImage = feedDetail.getThumbnailImageUrl();
+        mContest.shortUrl = feedDetail.getDeepLinkUrl();
+        mTitle.setText(mContest.title);
+        int featureImageHeight = (CommonUtil.getWindowWidth(mContext) / 2);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
+        mFeatureImage.setLayoutParams(params);
+
+        ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt());
+        if(contestStatus==ContestStatus.ONGOING){
+            mContestEndText.setText("Ends" + " " + DateUtil.getRelativeTimeSpanString(mContest.getEndAt()));
+            mContestStatus.setText(R.string.contest_status_ongoing);
+            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_live_dot, 0, 0, 0);
+            mContestStatus.setVisibility(View.VISIBLE);
+        }
+        if(contestStatus==ContestStatus.UPCOMING){
+            mContestStatus.setText(context.getString(R.string.contest_status_upcoming));
+            mContestStatus.setVisibility(View.VISIBLE);
+        }
+        if(contestStatus==ContestStatus.COMPLETED){
+            mContestStatus.setText(context.getString(R.string.contest_status_completed));
+            mContestStatus.setTextColor(context.getResources().getColor(R.color.light_green));
+            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
+            mContestStatus.setVisibility(View.VISIBLE);
+        }
+        if (mContest.hasMyPost) {
+            mJoinChallengeText.setText("completed");
+            mJoinChallengeText.setTextColor(context.getResources().getColor(R.color.light_green));
+            mJoinChallengeText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
+        } else {
+            mJoinChallengeText.setText("Join the Challenge");
+            mJoinChallengeText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            mJoinChallengeText.setTextColor(context.getResources().getColor(R.color.email));
+        }
+        mResponseViewCount.setText(Integer.toString(mContest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
+        if (CommonUtil.isNotEmpty(mContest.tag)) {
+            String tag = "#" + mContest.tag;
+            String tagText = tag + " " + "Challenge";
+            final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
+            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.email));
+            spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mContestTag.setText(spannableStringBuilder);
+        } else {
+            mContestTag.setText("Challenge");
+        }
+
+        if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
+            String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(mContext), featureImageHeight);
+            if (CommonUtil.isNotEmpty(imageKitUrl)) {
+                Glide.with(mContext)
+                        .load(imageKitUrl)
+                        .into(mFeatureImage);
+            }
+        }else {
+            mFeatureImage.setImageResource(R.drawable.challenge_placeholder);
+        }
+
+        if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
+            Glide.with(mContext)
+                    .load(mContest.authorImageUrl)
+                    .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
+                    .into(mAuthorImage);
+        }
+        mAuthorName.setText(mContest.authorName);
+    }
+
+    @Override
+    public void viewRecycled() {
+
+    }
+
+
+    @OnClick(R.id.card_challenge)
+    public void onChallengeClicked(){
+        viewInterface.contestOnClick(mContest, mCardChallenge);
+    }
+
+    @OnClick(R.id.share)
+    public void onShareClick(){
+        viewInterface.handleOnClick(mFeedDetail, mShare);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+}
+

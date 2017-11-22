@@ -60,6 +60,7 @@ public class AppConstants {
     public static final String SEARCH_SUB_TYPE = "S";
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
+    public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String TAG_SUB_TYPE = "tags";
     public static final String SKILL_SUB_TYPE = "skill";
     public static final String OWNER_SUB_TYPE = "O";
@@ -100,6 +101,7 @@ public class AppConstants {
     public static final String MASTER_SKILL = "master_data_skill";
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
+    public static final int REQUEST_CODE_FOR_CHALLENGE_DETAIL = 1901;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
@@ -174,6 +176,7 @@ public class AppConstants {
     public static final int TWO_CONSTANT = 2;
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
+    public static final int FIFTH_CONSTANT = 5;
     public static final int SEVENTH_CONSTANT = 7;
     public static final int EIGHTH_CONSTANT = 8;
     public static final int NINTH_CONSTANT = 9;
@@ -267,6 +270,8 @@ public class AppConstants {
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
+    public static final String CHALLENGE_NEW_URL = "https://sheroes.in/sheroes_challenge";
+    public static final String CHALLENGE_NEW_URL_COM = "https://sheroes.com/sheroes_challenge";
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";

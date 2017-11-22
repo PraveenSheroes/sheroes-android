@@ -178,6 +178,7 @@
     <dimen name="article_image_height_tmp">200dp</dimen>
     <dimen name="authorPicSize">44dp</dimen>
     <dimen name="looking_for_circle">70dp</dimen>
+    <dimen name="contest_image_size">80dp</dimen>
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->

@@ -1,6 +1,6 @@
 def versionMajor = 5
-def versionMinor = 4
-def versionPatch = 2
+def versionMinor = 5
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -45,7 +45,7 @@ android {
     }
     buildTypes {
         debug {
-           buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
            //buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

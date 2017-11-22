@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
@@ -99,6 +100,20 @@ public class CommunityModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<CreateCommunityResponse> createChallengePost(ChallengePostCreateRequest challengePostCreateRequest){
+        LogUtils.info(TAG,"***************Post****"+new Gson().toJson(challengePostCreateRequest));
+        return sheroesAppServiceApi.createChallengePost(challengePostCreateRequest)
+                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
+                    @Override
+                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
+                        return communityTagsListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<CreateCommunityResponse> editPostCommunity(CommunityPostCreateRequest communityPostCreateRequest){
         LogUtils.info(TAG,"***************edit community Post****"+new Gson().toJson(communityPostCreateRequest));
         return sheroesAppServiceApi.editCommunityPost(communityPostCreateRequest)

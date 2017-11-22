@@ -21,6 +21,7 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @SerializedName("post_image_height_is")
     @Expose
     private List<Integer> imageHeight;
+
     @SerializedName("post_image_width_is")
     @Expose
     private List<Integer> imageWidth;
@@ -588,6 +589,119 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @Expose
     private int thumbImageWidth;
 
+    @SerializedName("solr_ignore_is_challenge_accepted")
+    @Expose
+    private boolean isChallengeAccepted;
+    @SerializedName("solr_ignore_no_of_challenge_accepted")
+    @Expose
+    private int challengeAcceptedCount;
+
+    @SerializedName("challenge_last_modified_on_dt")
+    @Expose
+    private String challengeLastModifiedDate;
+
+    @SerializedName("challenge_start_date_dt")
+    @Expose
+    private String challengeStartDate;
+
+    @SerializedName("challenge_end_date_dt")
+    @Expose
+    private String challengeEndDate;
+
+    @SerializedName("challenge_title_s")
+    @Expose
+    private String challengeTitle;
+
+    @SerializedName("challenge_is_anonymous_b")
+    @Expose
+    private boolean challengeIsAnonymous;
+
+    @SerializedName("challenge_accept_post_text_s")
+    @Expose
+    private String challengeAcceptPostTextS;
+
+    @SerializedName("challenge_update_post_text_s")
+    @Expose
+    private String challengeUpdatePostTextS;
+
+    @SerializedName("challenge_hours_i")
+    @Expose
+    private int challengeHourI;
+
+    @SerializedName("challenge_minute_i")
+    @Expose
+    private int challengeMinuteI;
+
+    @SerializedName("challenge_author_type_s")
+    @Expose
+    private String challengeAuthorTypeS;
+
+
+    @SerializedName("solr_ignore_not_interested")
+    @Expose
+    private boolean challngeIsNotIntrested;
+
+    @SerializedName("solr_ignore_is_winner")
+    @Expose
+    private boolean challengeIsWinner;
+
+    @SerializedName("solr_ignore_is_challenge_completed")
+    @Expose
+    private boolean challengeIsCompleted;
+
+    @SerializedName("challenge_is_public_b")
+    @Expose
+    private boolean challengeIsPublic;
+
+    @SerializedName("challenge_author_email_id_s")
+    @Expose
+    private boolean challengeAuthorEmailId;
+
+    @SerializedName("solr_ignore_winner_address_s")
+    @Expose
+    private String challengeWinnerAddress;
+
+    @SerializedName("solr_ignore_prize_discription_s")
+    @Expose
+    private String challengePrizeDescription;
+
+    @SerializedName("solr_ignore_prize_icon_link_url_s")
+    @Expose
+    private String challengePrizeIconLinkUrl;
+
+    @SerializedName("solr_ignore_winner_rank_i")
+    @Expose
+    private Integer challengeWinnerRank;
+
+    @SerializedName("challenge_has_winner")
+    @Expose
+    private boolean challengeHasWinner;
+
+    @SerializedName("challenge_winner_announcement_dt")
+    @Expose
+    private String challengeWinnerAnnouncementDate;
+
+    @SerializedName("solr_ignore_is_future_challenge")
+    @Expose
+    private boolean isFutureChallenge;
+
+    public int getChallengeAcceptedCount() {
+        return challengeAcceptedCount;
+    }
+
+    public void setChallengeAcceptedCount(int challengeAcceptedCount) {
+        this.challengeAcceptedCount = challengeAcceptedCount;
+    }
+
+
+    public boolean isChallengeAccepted() {
+        return isChallengeAccepted;
+    }
+
+    public void setChallengeAccepted(boolean challengeAccepted) {
+        isChallengeAccepted = challengeAccepted;
+    }
+
     @SerializedName("parent_participation_id")
     @Expose
     public long commentId = -1;
@@ -607,6 +721,13 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     @SerializedName("highresImage_width_i")
     @Expose
     public int highresImageWidth;
+
+    @SerializedName("author_participant_id_l")
+    @Expose
+    public long authorParticipantIdl;
+    @SerializedName("user_post_source_entity_id_l")
+    @Expose
+    public long userPostSourceEntityId;
 
     public int getHighresImageHeight() {
         return highresImageHeight;
@@ -766,6 +887,14 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     public boolean isSearchFirmB() {
         return isSearchFirmB;
+    }
+
+    public long getUserPostSourceEntityId() {
+        return userPostSourceEntityId;
+    }
+
+    public void setUserPostSourceEntityId(long userPostSourceEntityId) {
+        this.userPostSourceEntityId = userPostSourceEntityId;
     }
 
     public void setSearchFirmB(boolean searchFirmB) {
@@ -2066,6 +2195,183 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         return highresImageWidth;
     }
 
+    public String getChallengeLastModifiedDate() {
+        return challengeLastModifiedDate;
+    }
+
+    public void setChallengeLastModifiedDate(String challengeLastModifiedDate) {
+        this.challengeLastModifiedDate = challengeLastModifiedDate;
+    }
+
+    public String getChallengeStartDate() {
+        return challengeStartDate;
+    }
+
+    public void setChallengeStartDate(String challengeStartDate) {
+        this.challengeStartDate = challengeStartDate;
+    }
+
+    public String getChallengeEndDate() {
+        return challengeEndDate;
+    }
+
+    public void setChallengeEndDate(String challengeEndDate) {
+        this.challengeEndDate = challengeEndDate;
+    }
+
+    public String getChallengeTitle() {
+        return challengeTitle;
+    }
+
+    public void setChallengeTitle(String challengeTitle) {
+        this.challengeTitle = challengeTitle;
+    }
+
+    public boolean isChallengeIsAnonymous() {
+        return challengeIsAnonymous;
+    }
+
+    public void setChallengeIsAnonymous(boolean challengeIsAnonymous) {
+        this.challengeIsAnonymous = challengeIsAnonymous;
+    }
+
+    public String getChallengeAcceptPostTextS() {
+        return challengeAcceptPostTextS;
+    }
+
+    public void setChallengeAcceptPostTextS(String challengeAcceptPostTextS) {
+        this.challengeAcceptPostTextS = challengeAcceptPostTextS;
+    }
+
+    public String getChallengeUpdatePostTextS() {
+        return challengeUpdatePostTextS;
+    }
+
+    public void setChallengeUpdatePostTextS(String challengeUpdatePostTextS) {
+        this.challengeUpdatePostTextS = challengeUpdatePostTextS;
+    }
+
+    public int getChallengeHourI() {
+        return challengeHourI;
+    }
+
+    public void setChallengeHourI(int challengeHourI) {
+        this.challengeHourI = challengeHourI;
+    }
+
+    public int getChallengeMinuteI() {
+        return challengeMinuteI;
+    }
+
+    public void setChallengeMinuteI(int challengeMinuteI) {
+        this.challengeMinuteI = challengeMinuteI;
+    }
+
+    public String getChallengeAuthorTypeS() {
+        return challengeAuthorTypeS;
+    }
+
+    public void setChallengeAuthorTypeS(String challengeAuthorTypeS) {
+        this.challengeAuthorTypeS = challengeAuthorTypeS;
+    }
+
+    public boolean isChallngeIsNotIntrested() {
+        return challngeIsNotIntrested;
+    }
+
+    public void setChallngeIsNotIntrested(boolean challngeIsNotIntrested) {
+        this.challngeIsNotIntrested = challngeIsNotIntrested;
+    }
+
+    public boolean isChallengeIsWinner() {
+        return challengeIsWinner;
+    }
+
+    public void setChallengeIsWinner(boolean challengeIsWinner) {
+        this.challengeIsWinner = challengeIsWinner;
+    }
+
+    public boolean isChallengeIsCompleted() {
+        return challengeIsCompleted;
+    }
+
+    public void setChallengeIsCompleted(boolean challengeIsCompleted) {
+        this.challengeIsCompleted = challengeIsCompleted;
+    }
+
+    public boolean isChallengeIsPublic() {
+        return challengeIsPublic;
+    }
+
+    public void setChallengeIsPublic(boolean challengeIsPublic) {
+        this.challengeIsPublic = challengeIsPublic;
+    }
+
+    public boolean isChallengeAuthorEmailId() {
+        return challengeAuthorEmailId;
+    }
+
+    public void setChallengeAuthorEmailId(boolean challengeAuthorEmailId) {
+        this.challengeAuthorEmailId = challengeAuthorEmailId;
+    }
+
+    public String getChallengeWinnerAddress() {
+        return challengeWinnerAddress;
+    }
+
+    public void setChallengeWinnerAddress(String challengeWinnerAddress) {
+        this.challengeWinnerAddress = challengeWinnerAddress;
+    }
+
+    public String getChallengePrizeDescription() {
+        return challengePrizeDescription;
+    }
+
+    public void setChallengePrizeDescription(String challengePrizeDescription) {
+        this.challengePrizeDescription = challengePrizeDescription;
+    }
+
+    public String getChallengePrizeIconLinkUrl() {
+        return challengePrizeIconLinkUrl;
+    }
+
+    public void setChallengePrizeIconLinkUrl(String challengePrizeIconLinkUrl) {
+        this.challengePrizeIconLinkUrl = challengePrizeIconLinkUrl;
+    }
+
+    public Integer getChallengeWinnerRank() {
+        return challengeWinnerRank;
+    }
+
+    public void setChallengeWinnerRank(Integer challengeWinnerRank) {
+        this.challengeWinnerRank = challengeWinnerRank;
+    }
+
+    public boolean isChallengeHasWinner() {
+        return challengeHasWinner;
+    }
+
+    public void setChallengeHasWinner(boolean challengeHasWinner) {
+        this.challengeHasWinner = challengeHasWinner;
+    }
+
+    public String getChallengeWinnerAnnouncementDate() {
+        return challengeWinnerAnnouncementDate;
+    }
+
+    public void setChallengeWinnerAnnouncementDate(String challengeWinnerAnnouncementDate) {
+        this.challengeWinnerAnnouncementDate = challengeWinnerAnnouncementDate;
+    }
+
+    public boolean isFutureChallenge() {
+        return isFutureChallenge;
+    }
+
+    public void setFutureChallenge(boolean futureChallenge) {
+        isFutureChallenge = futureChallenge;
+    }
+
+
     public void setHighresImageWidth(int highresImageWidth) {
         this.highresImageWidth = highresImageWidth;
     }
@@ -2274,6 +2580,35 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         dest.writeInt(this.rating);
         dest.writeByte(this.isCommentAllowed ? (byte) 1 : (byte) 0);
         dest.writeInt(this.thumbImageWidth);
+        dest.writeByte(this.isChallengeAccepted ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.challengeAcceptedCount);
+        dest.writeString(this.challengeLastModifiedDate);
+        dest.writeString(this.challengeStartDate);
+        dest.writeString(this.challengeEndDate);
+        dest.writeString(this.challengeTitle);
+        dest.writeByte(this.challengeIsAnonymous ? (byte) 1 : (byte) 0);
+        dest.writeString(this.challengeAcceptPostTextS);
+        dest.writeString(this.challengeUpdatePostTextS);
+        dest.writeInt(this.challengeHourI);
+        dest.writeInt(this.challengeMinuteI);
+        dest.writeString(this.challengeAuthorTypeS);
+        dest.writeByte(this.challngeIsNotIntrested ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.challengeIsWinner ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.challengeIsCompleted ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.challengeIsPublic ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.challengeAuthorEmailId ? (byte) 1 : (byte) 0);
+        dest.writeString(this.challengeWinnerAddress);
+        dest.writeString(this.challengePrizeDescription);
+        dest.writeString(this.challengePrizeIconLinkUrl);
+        dest.writeValue(this.challengeWinnerRank);
+        dest.writeByte(this.challengeHasWinner ? (byte) 1 : (byte) 0);
+        dest.writeString(this.challengeWinnerAnnouncementDate);
+        dest.writeByte(this.isFutureChallenge ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.thumbImageHeight);
+        dest.writeInt(this.highresImageWidth);
+        dest.writeLong(this.authorParticipantIdl);
+        dest.writeLong(this.userPostSourceEntityId);
+        dest.writeInt(this.highresImageHeight);
         dest.writeLong(this.commentId);
         dest.writeInt(this.thumbImageHeight);
         dest.writeInt(this.highresImageWidth);
@@ -2486,6 +2821,35 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.commentId = in.readLong();
         this.thumbImageHeight = in.readInt();
         this.highresImageWidth = in.readInt();
+        this.highresImageHeight = in.readInt();
+        this.isChallengeAccepted = in.readByte() != 0;
+        this.challengeAcceptedCount = in.readInt();
+        this.challengeLastModifiedDate = in.readString();
+        this.challengeStartDate = in.readString();
+        this.challengeEndDate = in.readString();
+        this.challengeTitle = in.readString();
+        this.challengeIsAnonymous = in.readByte() != 0;
+        this.challengeAcceptPostTextS = in.readString();
+        this.challengeUpdatePostTextS = in.readString();
+        this.challengeHourI = in.readInt();
+        this.challengeMinuteI = in.readInt();
+        this.challengeAuthorTypeS = in.readString();
+        this.challngeIsNotIntrested = in.readByte() != 0;
+        this.challengeIsWinner = in.readByte() != 0;
+        this.challengeIsCompleted = in.readByte() != 0;
+        this.challengeIsPublic = in.readByte() != 0;
+        this.challengeAuthorEmailId = in.readByte() != 0;
+        this.challengeWinnerAddress = in.readString();
+        this.challengePrizeDescription = in.readString();
+        this.challengePrizeIconLinkUrl = in.readString();
+        this.challengeWinnerRank = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.challengeHasWinner = in.readByte() != 0;
+        this.challengeWinnerAnnouncementDate = in.readString();
+        this.isFutureChallenge = in.readByte() != 0;
+        this.thumbImageHeight = in.readInt();
+        this.highresImageWidth = in.readInt();
+        this.authorParticipantIdl = in.readLong();
+        this.userPostSourceEntityId = in.readLong();
         this.highresImageHeight = in.readInt();
     }
 

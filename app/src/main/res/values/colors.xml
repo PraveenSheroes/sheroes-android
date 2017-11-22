@@ -56,6 +56,7 @@
     <color name="searchbox_text_color">#9b9b9b</color>
     <color name="selected_on_boarding">#eaecf6</color>
     <color name="green">#28b51b</color>
+    <color name="light_green">#6bba28</color>
     <color name="email">#dc4541</color>
     <color name="chat_incomming_text_color">#814edf</color>
     <color name="link_color">#008cc9</color>

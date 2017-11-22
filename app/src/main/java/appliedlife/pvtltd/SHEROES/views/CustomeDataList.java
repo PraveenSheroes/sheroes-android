@@ -70,6 +70,12 @@ public class CustomeDataList {
         DrawerItems fourteenItem = new DrawerItems();
         fourteenItem.setId(14);
 
+        DrawerItems fifteenDrawerItem = new DrawerItems();
+        fifteenDrawerItem.setName("Contest");
+        fifteenDrawerItem.setIconName("ic_setting");
+        fifteenDrawerItem.setId(15);
+
+
         if (isSheUser) {
             drawerItemsList.add(seventhDrawerItem);
             drawerItemsList.add(eighthDrawerItem);
@@ -83,6 +89,7 @@ public class CustomeDataList {
             //  drawerItemsList.add(fourthDrawerItem);
             drawerItemsList.add(sixthDrawerItem);
             drawerItemsList.add(twelveDraerItem);
+            drawerItemsList.add(fifteenDrawerItem);
             // drawerItemsList.add(thirteenItem);
         }
         drawerItemsList.add(elevenDrawerItem);

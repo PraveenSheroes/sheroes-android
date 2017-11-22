@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.HashMap;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 
 public class BaseResponse implements Parcelable {
        @SerializedName("fieldErrorMessageMap")
@@ -93,15 +94,4 @@ public class BaseResponse implements Parcelable {
         this.screenName = in.readString();
     }
 
-    public static final Creator<BaseResponse> CREATOR = new Creator<BaseResponse>() {
-        @Override
-        public BaseResponse createFromParcel(Parcel source) {
-            return new BaseResponse(source);
-        }
-
-        @Override
-        public BaseResponse[] newArray(int size) {
-            return new BaseResponse[size];
-        }
-    };
 }

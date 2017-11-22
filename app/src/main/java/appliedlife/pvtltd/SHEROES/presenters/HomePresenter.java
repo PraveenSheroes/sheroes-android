@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import android.util.Pair;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
@@ -30,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
@@ -53,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRe
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -60,10 +58,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.APP_INTRO;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_ACCEPT;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
@@ -238,6 +234,39 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 if (StringUtil.isNotEmptyCollection(feedDetailList)) {
                     getMvpView().showHomeFeedList(feedDetailList);
                 }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+                if (!CommonUtil.isEmpty(feedDetailList)) {
+                    mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+                }
+                getMvpView().showHomeFeedList(feedDetailList);
             }
         });
         registerSubscription(subscription);

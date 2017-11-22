@@ -128,9 +128,26 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.AddressActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ContestActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
 
@@ -218,6 +235,7 @@
                 <data android:pathPrefix="/event"/>
                 <data android:pathPrefix="/helpline"/>
                 <data android:pathPrefix="/feed"/>
+                <data android:pathPrefix="/sheroes_challenge"/>
             </intent-filter>
         </activity>
         <activity
