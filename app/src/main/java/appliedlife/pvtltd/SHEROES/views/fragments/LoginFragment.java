@@ -13,10 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.login.LoginManager;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
 
 import java.util.HashMap;
 
@@ -37,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.social.CustomSocialDialog;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -50,6 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 /**
@@ -74,8 +78,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mEmailView;
     @Bind(R.id.password)
     EditText mPasswordView;
-    @Bind(R.id.pb_login_progress_bar)
-    ProgressBar mProgressBar;
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
     private ProgressDialog mProgressDialog;
@@ -113,14 +115,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
-        if (null != getArguments()) {
-            mGcmId = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
-        }
         mLoginPresenter.attachView(this);
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
-        setProgressBar(mProgressBar);
-        //  mLoginPresenter.getMasterDataToPresenter();
         return view;
     }
 
@@ -132,6 +129,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         mEmailSign.setEnabled(true);
+        checkDialogDismiss();
         if (null != loginResponse) {
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
                 switch (loginResponse.getStatus()) {
@@ -159,16 +157,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
-                  /*  if (loginResponse.getUserSummary().isFbVerificationRequired()) {
-                        mUserPreference.set(loginResponse);
-                        setProgressBar(mProgressBar);
-                        mLoginActivityIntractionListner.onErrorOccurence(AppConstants.FACEBOOK_VERIFICATION);
-                    } else {
-                        loginResponse.setTokenTime(System.currentTimeMillis());
-                        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                        mUserPreference.set(loginResponse);
-                        mLoginActivityIntractionListner.onLoginAuthToken();
-                    }*/
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
@@ -258,6 +246,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         } else {
             mEmailSign.setEnabled(false);
+            showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                 LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                 loginRequest.setUsername(email);
@@ -269,18 +258,27 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                     return;
                 } else {
-                    mProgressDialog = new ProgressDialog(getActivity());
-                    mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                    mProgressDialog.setCancelable(false);
-                    mProgressDialog.show();
                     getGcmId();
                 }
             }
         }
     }
 
+    /**
+     * Show dialog
+     *
+     * @param id id of dialog
+     */
+    private void showDialog(int id) {
+        mProgressDialog = createCustomDialog(id);
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
+        }
+    }
+
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        checkDialogDismiss();
         mEmailSign.setEnabled(true);
         super.showError(errorMsg, feedParticipationEnum);
     }
@@ -295,9 +293,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    if (null != mProgressDialog) {
-                        mProgressDialog.dismiss();
-                    }
+                    PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                     loginRequest.setUsername(email);
                     loginRequest.setPassword(password);
@@ -313,6 +309,45 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 mGcmId = ex;
             }
         });
+    }
+
+    /**
+     * Creates and returns dialog
+     *
+     * @param id id of dialog
+     * @return dialog
+     */
+    private ProgressDialog createCustomDialog(int id) {
+        ProgressDialog mProgressDialog = null;
+        try {
+            switch (id) {
+                case CustomSocialDialog.LOGGING_IN_DIALOG: {
+                    mProgressDialog = new ProgressDialog(getActivity());
+                    mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
+                    break;
+                }
+                default:
+                    break;
+            }
+            return mProgressDialog;
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+            LogUtils.error(TAG, e);
+            return null;
+        }
+    }
+
+    private void checkDialogDismiss() {
+        try {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+        } catch (IllegalArgumentException e) {
+            Crashlytics.getInstance().core.logException(e);
+            LogUtils.error(this.getClass().getName(), e.toString(), e);
+        }
     }
 
     @OnClick(R.id.iv_login_back)

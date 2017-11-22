@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
@@ -120,8 +121,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     Button mSignUp;
     @Bind(R.id.click_to_join_fb_signup)
     LoginButton mFbSignUp;
-    @Bind(R.id.pb_login_progress_bar)
-    ProgressBar mProgressBar;
     @Bind(R.id.btn_login_google)
     Button btnLoginGoogle;
     @Bind(R.id.li_login_via_fb_google)
@@ -147,16 +146,22 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
     private String socialLoginLastName;
     private GooglePlusHelper mGooglePlusHelper;
     private GoogleSignInOptions gso;
-    private Dialog dialog;
+    private ProgressDialog mProgressDialog;
     //google api client
     public static GoogleApiClient mGoogleApiClient;
     private String mToken = null;
     private String loginViaSocial = MoEngageConstants.GOOGLE;
-    private  long currentTime;
+    private long currentTime;
     @Bind(R.id.cb_female)
     CheckBox mCbFemale;
     @Bind(R.id.cb_sign_up_female)
     CheckBox mCbSignUpFemale;
+    private int gcmForGoogleAndFacebook;
+    public static final int GOOGLE_CALL = 101;
+    public static final int FACEBOOK_CALL = 201;
+    public static final int NORMAL_CALL = 301;
+    private AccessToken accessToken = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,30 +176,18 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         faceBookInitialization();
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         ButterKnife.bind(this, view);
-        if (null != getArguments()) {
-            mGcmId = getArguments().getString(AppConstants.GCM_ID);
-        }
         mLoginPresenter.attachView(this);
         liLoginViaFbGoogle.setVisibility(View.VISIBLE);
         rlSignUpForm.setVisibility(View.GONE);
-        currentTime=System.currentTimeMillis();
-        // initGoogleLogin();
+        currentTime = System.currentTimeMillis();
         googlePlusLogin();
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
-        setProgressBar(mProgressBar);
         mFbSignUp.setFragment(this);
-        // setGooglePlusButtonText(btnLoginGoogle, getString(R.string.IDS_GOOGLE_BUTTON));
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         fbSignIn();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_SIGN_UP_FORM));
         return view;
-    }
-
-    private void initGoogleLogin() {
-        mGooglePlusHelper = GooglePlusHelper.getInstance();
-        mGooglePlusHelper.initializeGoogleAPIClient(getContext());
-
     }
 
     private void googlePlusLogin() {
@@ -236,9 +229,9 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
      * @param id id of dialog
      */
     private void showDialog(int id) {
-        dialog = createCustomDialog(id);
-        if (dialog != null) {
-            dialog.show();
+        mProgressDialog = createCustomDialog(id);
+        if (mProgressDialog != null) {
+            mProgressDialog.show();
         }
     }
 
@@ -248,20 +241,22 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
      * @param id id of dialog
      * @return dialog
      */
-    private Dialog createCustomDialog(int id) {
-        Dialog dialog = null;
+    private ProgressDialog createCustomDialog(int id) {
+        ProgressDialog mProgressDialog = null;
         try {
             CustomSocialDialog dialogCreater = null;
             switch (id) {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
-                    dialogCreater = new CustomSocialDialog(getContext(), id);
-                    dialog = dialogCreater.createCustomDialog();
+                    mProgressDialog = new ProgressDialog(getActivity());
+                    mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.show();
                     break;
                 }
                 default:
                     break;
             }
-            return dialog;
+            return mProgressDialog;
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
             LogUtils.error(TAG, e);
@@ -271,9 +266,16 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     @OnClick(R.id.btn_login_google)
     public void googleLoginClick() {
-        if(mCbFemale.isChecked()) {
-            launchGooglePlusLogin();
-        }else {
+        gcmForGoogleAndFacebook = GOOGLE_CALL;
+        if (mCbFemale.isChecked()) {
+            showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
+            if (!NetworkUtil.isConnected(getContext())) {
+                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                return;
+            } else {
+                getGcmId();
+            }
+        } else {
             ((WelcomeActivity) getActivity()).showFaceBookError(getString(R.string.ID_WOMEN_ERROR));
         }
 
@@ -281,9 +283,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     public void launchGooglePlusLogin() {
         if (AppUtils.getInstance().isNetworkAvailable()) {
-          /*  if (mGooglePlusHelper != null) {
-                mGooglePlusHelper.signIn(this);
-            }*/
             signIn();
         } else {
             Toast.makeText(getActivity(), getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION), Toast.LENGTH_SHORT).show();
@@ -359,8 +358,10 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
             mPasswordView.setError(getString(R.string.ID_PASSWORD_STRENTH));
             focusView.requestFocus();
         } else {
+            gcmForGoogleAndFacebook = NORMAL_CALL;
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                if(mCbSignUpFemale.isChecked()) {
+                if (mCbSignUpFemale.isChecked()) {
+                    showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
                     SignupRequest signupRequest = AppUtils.signupRequestBuilder();
                     signupRequest.setEmailId(email);
                     signupRequest.setFirstName(firstName);
@@ -370,7 +371,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                     signupRequest.setGcmorapnsid(mGcmId);
                     mSignUpVia = AppConstants.ONE_CONSTANT;
                     mLoginPresenter.getAuthTokenSignupInPresenter(signupRequest);
-                }else {
+                } else {
                     ((WelcomeActivity) getActivity()).showFaceBookError(getString(R.string.ID_WOMEN_ERROR));
                 }
             } else {
@@ -378,7 +379,13 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                     return;
                 } else {
-                    getGcmId();
+                    if (mCbSignUpFemale.isChecked()) {
+                        showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
+                        getGcmId();
+                    } else {
+                        ((WelcomeActivity) getActivity()).showFaceBookError(getString(R.string.ID_WOMEN_ERROR));
+                    }
+
                 }
             }
         }
@@ -398,6 +405,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                     PushManager.getInstance().refreshToken(getActivity(), mGcmId);
                     mSignUp.setEnabled(true);
                     mFbSignUp.setEnabled(true);
+                    checkSignUpCall(gcmForGoogleAndFacebook);
                 } else {
                     mSignUp.setEnabled(false);
                     mFbSignUp.setEnabled(false);
@@ -415,6 +423,41 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                 mGcmId = ex;
             }
         });
+    }
+
+
+    private void checkSignUpCall(int checkCall) {
+        switch (checkCall) {
+            case FACEBOOK_CALL:
+                if (null != accessToken) {
+                    LoginRequest loginRequest = loginRequestBuilder();
+                    loginRequest.setAccessToken(accessToken.getToken());
+                    AppUtils appUtils = AppUtils.getInstance();
+                    loginRequest.setAppVersion(appUtils.getAppVersionName());
+                    //TODO:: NEED to Change
+                    loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                    loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                    loginRequest.setGcmorapnsid(mGcmId);
+                    loginViaSocial = MoEngageConstants.FACEBOOK;
+                    mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+                }
+                break;
+            case GOOGLE_CALL:
+                    launchGooglePlusLogin();
+                break;
+            case NORMAL_CALL:
+                    SignupRequest signupRequest = AppUtils.signupRequestBuilder();
+                    signupRequest.setEmailId(email);
+                    signupRequest.setFirstName(firstName);
+                    signupRequest.setLastName(lastName);
+                    signupRequest.setMobile(mobileNo);
+                    signupRequest.setPassword(password);
+                    signupRequest.setGcmorapnsid(mGcmId);
+                    mSignUpVia = AppConstants.ONE_CONSTANT;
+                    mLoginPresenter.getAuthTokenSignupInPresenter(signupRequest);
+                break;
+            default:
+        }
     }
 
     private void faceBookInitialization() {
@@ -460,30 +503,25 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                             final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(true).authProvider("Email").build();
                             trackEvent(Event.APP_LOGIN, properties);
                             AnalyticsManager.initializeMixpanel(getActivity());
-                        }else
-                        {
+                        } else {
                             if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
                                 long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
 
-                                final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime<createdDate).authProvider(loginViaSocial==MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
+                                final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial == MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
                                 trackEvent(Event.APP_LOGIN, properties);
-                                if (createdDate<currentTime) {
+                                if (createdDate < currentTime) {
                                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
-                                    if(loginViaSocial==MoEngageConstants.FACEBOOK)
-                                    {
+                                    if (loginViaSocial == MoEngageConstants.FACEBOOK) {
                                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                                    }else
-                                    {
+                                    } else {
                                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
                                     }
 
                                 } else {
                                     moEngageUtills.entityMoEngageSignUp(getActivity(), mMoEHelper, payloadBuilder, loginViaSocial);
-                                    if(loginViaSocial==MoEngageConstants.FACEBOOK)
-                                    {
+                                    if (loginViaSocial == MoEngageConstants.FACEBOOK) {
                                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                                    }else
-                                    {
+                                    } else {
                                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
                                     }
                                 }
@@ -524,26 +562,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     @Override
     public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
-       /* if (null != expireInResponse.getGooglePlusResponse()) {
-            if (expireInResponse.getGooglePlusResponse().getStatus() && StringUtil.isNotNullOrEmptyString(expireInResponse.getGooglePlusResponse().getMessage()) && AppConstants.SUCCESS.equalsIgnoreCase(expireInResponse.getGooglePlusResponse().getMessage()) && StringUtil.isNotNullOrEmptyString(expireInResponse.getGooglePlusResponse().getGooglePlusLogInAuthToken())) {
-                LoginResponse loginResponse = new LoginResponse();
-                loginResponse.setToken(expireInResponse.getGooglePlusResponse().getGooglePlusLogInAuthToken());
-                mUserPreference.set(loginResponse);
-                loginViaSocial = MoEngageConstants.GOOGLE;
-                mLoginPresenter.getGooglePlusUserResponse();
-            }
-        } else {
-            if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
-                User user = new User();
-                user.setExpiresIn(String.valueOf(expireInResponse.getExpiresIn()));
-                String created = String.valueOf(System.currentTimeMillis());
-                user.setCreated(created);
-                user.setGpAccessToken(mToken);
-                GooglePlusRequest googlePlusRequest = mAppUtils.googlePlusRequestBuilder(user);
-                mLoginPresenter.getGoogleLoginFromPresenter(googlePlusRequest);
-            }
-        }*/
-
         if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
             LoginRequest loginRequest = loginRequestBuilder();
             loginRequest.setAccessToken(mToken);
@@ -560,26 +578,6 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     }
 
-   /* @OnClick(R.id.click_to_join_fb_signup)
-    public void fbOnClick() {
-        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-            if(mCbFemale.isChecked()) {
-               // fbSignIn();
-            }else {
-                ((WelcomeActivity) getActivity()).showFaceBookError(getString(R.string.ID_WOMEN_ERROR));
-            }
-        } else {
-            mFbSignUp.setEnabled(false);
-            mSignUp.setEnabled(false);
-            if (!NetworkUtil.isConnected(getContext())) {
-                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-                return;
-            } else {
-                getGcmId();
-            }
-        }
-    }
-*/
     private void fbSignIn() {
         LoginManager.getInstance().logOut();
         mFbSignUp.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
@@ -607,7 +605,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
         @Override
         public void onSuccess(final LoginResult loginResult) {
-            final AccessToken accessToken = loginResult.getAccessToken();
+            accessToken = loginResult.getAccessToken();
             // Facebook Email address
             GraphRequest request = GraphRequest.newMeRequest(
                     accessToken,
@@ -615,17 +613,9 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
                             if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                                mProgressBar.setVisibility(View.VISIBLE);
-                                LoginRequest loginRequest = loginRequestBuilder();
-                                loginRequest.setAccessToken(accessToken.getToken());
-                                AppUtils appUtils = AppUtils.getInstance();
-                                loginRequest.setAppVersion(appUtils.getAppVersionName());
-                                //TODO:: NEED to Change
-                                loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-                                loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                                loginRequest.setGcmorapnsid(mGcmId);
-                                loginViaSocial = MoEngageConstants.FACEBOOK;
-                                mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+                                gcmForGoogleAndFacebook = FACEBOOK_CALL;
+                                showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
+                                getGcmId();
                             }
                         }
                     });
@@ -654,24 +644,12 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     @OnClick(R.id.tv_signup_already_user)
     public void signInExistingUser() {
-        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
-            loginIntent.putExtras(bundle);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(loginIntent);
-            getActivity().finish();
-        } else {
-            if (!NetworkUtil.isConnected(getContext())) {
-                showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-                return;
-            } else {
-                mSignUp.setEnabled(false);
-                mFbSignUp.setEnabled(false);
-                getGcmId();
-            }
-        }
+        Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+        Bundle bundle = new Bundle();
+        loginIntent.putExtras(bundle);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(loginIntent);
+        getActivity().finish();
     }
 
     @Override
@@ -694,8 +672,8 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     public void dismissDialog() {
         try {
-            if (dialog != null && dialog.isShowing()) {
-                dialog.dismiss();
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
             }
         } catch (IllegalArgumentException e) {
             Crashlytics.getInstance().core.logException(e);
@@ -820,40 +798,42 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        dismissDialog();
         mSignUp.setEnabled(true);
         mFbSignUp.setEnabled(true);
         mUserPreference.delete();
         super.showError(errorMsg, feedParticipationEnum);
     }
+
     @OnClick(R.id.cb_female)
     public void OnCheckFemaleByClick() {
-        if(mCbFemale.isChecked())
-        {
+        if (mCbFemale.isChecked()) {
             mCbFemale.setChecked(true);
-        }else {
+        } else {
             mCbFemale.setChecked(false);
         }
     }
+
     @OnClick(R.id.cb_sign_up_female)
     public void OnCheckFemaleSignUpClick() {
-        if(mCbSignUpFemale.isChecked())
-        {
+        if (mCbSignUpFemale.isChecked()) {
             mCbSignUpFemale.setChecked(true);
-        }else {
+        } else {
             mCbSignUpFemale.setChecked(false);
         }
     }
 
     @OnClick(R.id.tv_continue_sign_up)
     public void OnSignUpClick() {
-        WelcomeActivity.isSignUpOpen=AppConstants.ONE_CONSTANT;
-       liLoginViaFbGoogle.setVisibility(View.GONE);
+        WelcomeActivity.isSignUpOpen = AppConstants.ONE_CONSTANT;
+        liLoginViaFbGoogle.setVisibility(View.GONE);
         rlSignUpForm.setVisibility(View.VISIBLE);
     }
+
     @OnClick(R.id.tv_sign_up_back)
     public void OnSignUpBackClick() {
         AppUtils.hideKeyboard(mobile, TAG);
-        WelcomeActivity.isSignUpOpen=AppConstants.NO_REACTION_CONSTANT;
+        WelcomeActivity.isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
         liLoginViaFbGoogle.setVisibility(View.VISIBLE);
         rlSignUpForm.setVisibility(View.GONE);
     }
