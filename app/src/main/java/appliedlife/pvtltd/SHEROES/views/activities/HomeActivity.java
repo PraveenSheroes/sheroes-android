@@ -692,7 +692,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                                 .id(Long.toString(((FeedDetail) baseResponse).getUserPostSourceEntityId()))
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED, properties);
-                ShareBottomSheetFragment.showDialog(this, shareText,((FeedDetail) baseResponse).getThumbnailImageUrl(),  ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true,  ((FeedDetail) baseResponse).getDeepLinkUrl());
+                ShareBottomSheetFragment.showDialog(this, shareText,((FeedDetail) baseResponse).getThumbnailImageUrl(),  ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true,  ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
                 break;
             case R.id.tv_event_detail_interested_btn:
                 if (null != eventDetailDialogFragment) {

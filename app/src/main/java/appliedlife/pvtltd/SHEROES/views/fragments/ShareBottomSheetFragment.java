@@ -48,6 +48,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private static final String SHARE_TEXT = "share text";
     private static final String SHARE_COPYLINK = "copy link";
     private static final String IS_IMAGE_SHARE = "Is Image Share";
+    private static final String IS_CHALLENGE = "Is Challenge";
 
     private android.content.ClipboardManager myClipboard;
     private ClipData myClip;
@@ -57,6 +58,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private String mShareDeepLinkUrl;
     private String mShareCopyLink;
     private boolean mIsImageShare;
+    private boolean mIsChallenge;
 
     //endregion
 
@@ -76,6 +78,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             mShareText = getArguments().getString(SHARE_TEXT);
             mShareCopyLink = getArguments().getString(SHARE_COPYLINK);
             mIsImageShare = getArguments().getBoolean(IS_IMAGE_SHARE, false);
+            mIsChallenge = getArguments().getBoolean(IS_CHALLENGE, false);
         }
         return super.onCreateDialog(savedInstanceState);
     }
@@ -96,7 +99,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //endregion
 
     //region Public Static methods
-    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink) {
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink, boolean isChallenge) {
         ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
         Bundle args = new Bundle();
         args.putString(SHARE_TEXT, shareText);
@@ -104,6 +107,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         args.putString(SHARE_IMAGE, shareImage);
         args.putString(SHARE_COPYLINK, shareCopyLink);
         args.putBoolean(IS_IMAGE_SHARE, isImage);
+        args.putBoolean(IS_CHALLENGE, isChallenge);
         shareBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
@@ -139,7 +143,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
 
     @OnClick({R.id.layout_facebook, R.id.image_facebook, R.id.text_facebook})
     public void onFacebookClick() {
-        if(mIsImageShare){
+        if(mIsImageShare && !mIsChallenge){
             CompressImageUtil.createBitmap(SheroesApplication.mContext, mShareImageUrl, 816, 816)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

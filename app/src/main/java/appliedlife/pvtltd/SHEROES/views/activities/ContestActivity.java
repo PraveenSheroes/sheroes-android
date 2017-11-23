@@ -322,7 +322,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
                                 .id(Integer.toString(mContest.remote_id))
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED, properties);
-                ShareBottomSheetFragment.showDialog(this, shareText, mContest.thumbImage, mContest.shortUrl, SOURCE_SCREEN, true, mContest.shortUrl);
+                ShareBottomSheetFragment.showDialog(this, shareText, mContest.thumbImage, mContest.shortUrl, SOURCE_SCREEN, true, mContest.shortUrl, true);
                 break;
         }
         return true;

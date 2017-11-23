@@ -487,7 +487,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @OnClick(R.id.fab)
     void onFabClick() {
         if (mArticle != null) {
-            ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false, mArticle.deepLink);
+            ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false, mArticle.deepLink, false);
         }
     }
 
