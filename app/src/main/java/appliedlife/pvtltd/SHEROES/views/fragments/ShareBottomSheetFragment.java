@@ -3,6 +3,8 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 
 import java.util.HashMap;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -27,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import butterknife.Bind;
@@ -175,14 +179,25 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                         }
                     });
         }else {
-            ShareLinkContent content = new ShareLinkContent.Builder()
-                   // .setContentTitle(imageTitle)
-                    .setContentUrl(Uri.parse(mShareDeepLinkUrl))
-                  //  .setContentDescription(imageDescription)
-                    //.setImageUrl(Uri.parse(url))
-                    .build();
-            ShareDialog shareDialog = new ShareDialog(getActivity());
-            shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType(AppConstants.SHARE_MENU_TYPE);
+            intent.putExtra(Intent.EXTRA_TEXT, mShareDeepLinkUrl);
+            // See if official Facebook app is found
+            boolean facebookAppFound = false;
+            List<ResolveInfo> matches = getActivity().getPackageManager().queryIntentActivities(intent, 0);
+            for (ResolveInfo info : matches) {
+                if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.FACEBOOK_SHARE)) {
+                    intent.setPackage(info.activityInfo.packageName);
+                    facebookAppFound = true;
+                    break;
+                }
+            }
+            // As fallback, launch sharer.php in a browser
+            if (!facebookAppFound) {
+                String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + mShareDeepLinkUrl;
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+            }
+            startActivity(intent);
         }
     }
     //endregion
