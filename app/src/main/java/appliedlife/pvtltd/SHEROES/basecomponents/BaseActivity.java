@@ -60,7 +60,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
@@ -783,13 +782,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
                     CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
-                   /* Intent intetFeature = new Intent(this, CreateCommunityPostActivity.class);
-                    Bundle bundle = new Bundle();
-                    mFeedDetail.setCallFromName(AppConstants.FEED_COMMUNITY_POST);
-                    bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, mFeedDetail);
-                    intetFeature.putExtras(bundle);
-                    startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
-                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EDITED_CONTENT, GoogleAnalyticsEventActions.EDITED_COMMUNITY_POST, AppConstants.EMPTY_STRING);*/
                 }
                 break;
 

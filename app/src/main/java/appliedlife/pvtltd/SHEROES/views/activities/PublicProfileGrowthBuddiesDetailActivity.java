@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
@@ -606,13 +607,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     }
 
     public void createCommunityPostClick(FeedDetail feedDetail) {
-        Intent intent = new Intent(this, CreateCommunityPostActivity.class);
-        Bundle bundle = new Bundle();
-        feedDetail.setNameOrTitle(AppConstants.EMPTY_STRING);
-        bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
-        // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false);
     }
     @OnClick(R.id.fab_champion_community_post)
     public void communityPostClick() {

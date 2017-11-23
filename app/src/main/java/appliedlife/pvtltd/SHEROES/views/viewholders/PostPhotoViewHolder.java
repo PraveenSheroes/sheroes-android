@@ -24,8 +24,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment.getRoundedCroppedBitmap;
-
 /**
  * Created by ujjwal on 21/03/17.
  */

@@ -603,11 +603,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public void createCommunityPostClick(FeedDetail feedDetail) {
-       /* Intent intent = new Intent(this, CreateCommunityPostActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, feedDetail);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);*/
         CommunityPost communityPost = new CommunityPost();
         communityPost.community = new Community();
         communityPost.community.id = feedDetail.getIdOfEntityOrParticipant();
@@ -615,8 +610,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         communityPost.community.isOwner = feedDetail.isCommunityOwner();
         communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
         CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
-       // CommunityPostActivity.navigateTo(this, feedDetail, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST);
-        // overridePendingTransition(R.anim.bottom_to_top_slide_anim, R.anim.bottom_to_top_slide_reverse_anim);
     }
 
     @OnClick(R.id.tv_communities_detail_share)

@@ -146,7 +146,6 @@
     <string name="ID_ASK_SHEROES">Ask SHEROES</string>
     <string name="ID_HELPLINE">Helpline</string>
     <string name="ID_POST">Post as:</string>
-    <string name="ID_POST_AS">Post as </string>
     <string name="ID_POSTED">posted</string>
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_MEMBER">Member</string>
@@ -161,7 +160,6 @@
     <string name="ID_SHARE_WITH_COMMUNITY">Type here to share what you are thinking...</string>
     <string name="ID_EDIT">Edit</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
-    <string name="ID_EDIT_POST">EDIT POST</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_APPROVE">Approve</string>
 
@@ -503,7 +501,6 @@
 
     <string name="ID_COMMUNITY_TYPE">COMMUNITY TYPE</string>
     <string name="ID_DESCRIPTION"> DESCRIPTION</string>
-    <string name="ID_CREATEPOST">CREATE A POST</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
     <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
     <string name="ID_CONTINUE_WITH_GOOGLE">Continue with Google</string>
@@ -513,7 +510,6 @@
     <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
 
     <string name="COMMUNITY_TYPE">COMMUNITY TYPE</string>
-    <string name="ID_ADDMORE">Add More</string>
     <string name="ID_EMAIL">Or, Sign Up Using Email</string>
 
     <string name="ID_ORGANISATION">Organization</string>

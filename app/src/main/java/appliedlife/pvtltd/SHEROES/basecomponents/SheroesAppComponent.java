@@ -22,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateCommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
@@ -45,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CreateCommunityPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
@@ -321,10 +319,6 @@ public interface SheroesAppComponent {
 
     void inject(ProfileIAmInterestingInHolder profileIAmInterestingInHolder);
 
-    void inject(CreateCommunityPostActivity createCommunityPostActivity);
-
-    void inject(CreateCommunityPostFragment createCommunityPostFragment);
-
     void inject(SelectCommunityDialogFragment selectCommunityFragment);
 
     void inject(ShareCommunityFragment shareCommunityFragment);
@@ -598,6 +592,5 @@ public interface SheroesAppComponent {
     void inject(ChallengeFeedHolder challengeFeedHolder);
 
     void inject(AddressActivity addressActivity);
-
 
 }
