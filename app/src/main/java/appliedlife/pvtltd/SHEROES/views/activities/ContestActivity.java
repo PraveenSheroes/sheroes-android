@@ -477,6 +477,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
+        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
         bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
