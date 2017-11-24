@@ -527,6 +527,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         }
         if(baseResponse instanceof FeedDetail){
             FeedDetail feedDetail = (FeedDetail) baseResponse;
+            setFeedDetail(feedDetail);
             if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
                 mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(feedDetail.getEntityOrParticipantId()));
             } else {
