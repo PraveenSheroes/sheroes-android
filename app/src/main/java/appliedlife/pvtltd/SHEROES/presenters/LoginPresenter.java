@@ -79,7 +79,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
-        getMvpView().startProgressBar();
+       // getMvpView().startProgressBar();
         Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp).subscribe(new Subscriber<LoginResponse>() {
             @Override
             public void onCompleted() {
@@ -89,13 +89,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
+               // getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(LoginResponse loginResponse) {
-                getMvpView().stopProgressBar();
+               // getMvpView().stopProgressBar();
                 getMvpView().getLogInResponse(loginResponse);
             }
         });

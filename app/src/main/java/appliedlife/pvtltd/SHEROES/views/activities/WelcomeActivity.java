@@ -102,10 +102,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     TextView mTvGrowthWomen;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.tv_other_login_option)
-    TextView mOtherLoginOption;
-    @Bind(R.id.btn_get_started)
-    Button mGetStarted;
     @Bind(R.id.scroll_view_welcome)
     ScrollView mScrollView;
     private PayloadBuilder payloadBuilder;
@@ -114,13 +110,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private int NUM_PAGES = 4;
     private static final String LEFT = "<b><font color='#ffffff'>";
     private static final String RIGHT = "</font></b>";
-    private String mGcmId;
+    //private String mGcmId;
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private FragmentOpen mFragmentOpen;
     @Inject
     AppUtils appUtils;
-    private ProgressDialog mProgressDialog;
     public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
 
     private Handler mHandler;
@@ -171,12 +166,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 return;
             } else {
             mLoginPresenter.getMasterDataToPresenter();
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-            mGetStarted.setEnabled(false);
-            mOtherLoginOption.setEnabled(false);
             mScrollView.post(new Runnable() {
                 public void run() {
                     mScrollView.fullScroll(mScrollView.FOCUS_DOWN);
@@ -184,51 +173,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             });
             mScrollView.scrollTo(0, mScrollView.getBottom() + 1);
 
-                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getGcmId())) {
-                    mGcmId = userPreference.get().getGcmId();
-                    mOtherLoginOption.setEnabled(true);
-                } else {
-                    getGcmId();
-                }
             }
             ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
 
-    }
-
-    private void getGcmId() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mGcmId = registrationId;
-                if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    LogUtils.info(TAG, "******* ******success Registarion" + registrationId);
-                    PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
-                    mGetStarted.setEnabled(true);
-                    mOtherLoginOption.setEnabled(true);
-                    if (null != mProgressDialog && mProgressDialog.isShowing()) {
-                        mProgressDialog.dismiss();
-                    }
-                } else {
-                    mGetStarted.setEnabled(false);
-                    mOtherLoginOption.setEnabled(false);
-                    if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                        showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                        return;
-                    } else {
-                        getGcmId();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(String ex) {
-                getGcmId();
-            }
-        });
     }
 
     private void openHomeScreen() {
@@ -301,54 +249,22 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @OnClick(R.id.btn_get_started)
     public void getStartedOnClick() {
-        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
             SignupFragment signupFragment = new SignupFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.GCM_ID, mGcmId);
             signupFragment.setArguments(bundle);
             mFragmentOpen.setSignupFragment(true);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_welcome_sign_up, signupFragment, SignupFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
-        } else {
-            mGetStarted.setEnabled(false);
-            mOtherLoginOption.setEnabled(false);
-            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                return;
-            } else {
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.show();
-                getGcmId();
-            }
-}
            }
 
     @OnClick(R.id.tv_other_login_option)
     public void otherLoginOption() {
-        if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
             openLoginActivity();
-        } else {
-            mGetStarted.setEnabled(false);
-            mOtherLoginOption.setEnabled(false);
-            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                return;
-            } else {
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                mProgressDialog.setCancelable(false);
-                mProgressDialog.show();
-                getGcmId();
-            }
-        }
     }
 
     private void openLoginActivity() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
+       // bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
         loginIntent.putExtras(bundle);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
