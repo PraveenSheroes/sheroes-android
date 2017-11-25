@@ -176,6 +176,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             }
 
         }
+        if (mCommunityId == 0) {
+            ivFabPostCommunity.setVisibility(View.GONE);
+        }
         setPagerAndLayouts();
         try {
             if (null != mFeedDetail) {
