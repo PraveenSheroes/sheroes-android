@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {UserPostSolrObj.class,BaseEntityOrParticipantModel.class})
-public class UserPostSolrObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {UserPostSolrObj.class,FeedDetail.class})
+public class UserPostSolrObj extends FeedDetail {
     @SerializedName(value = "search_id_post_image")
     private List<Long> imagesIds;
 

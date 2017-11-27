@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +45,14 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -332,7 +340,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         if (fragment == null) {
             fragment = new CommunityOptionJoinDialog();
             Bundle b = new Bundle();
-            b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, feedDetail);
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, parcelable);
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -375,12 +384,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
-                if (mFeedDetail.isClosedCommunity()) {
+                if (((CommunityFeedSolrObj)mFeedDetail).getClosed()) {
                     mFeedDetail.setFromHome(true);
                     showCommunityJoinReason(mFeedDetail);
                     ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                 } else {
-                    if(mFeedDetail.isRequestPending())
+                    if(((CommunityFeedSolrObj)mFeedDetail).isRequestPending())
                     {
                         ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                     }else
@@ -474,7 +483,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case R.id.li_feed_job_card:
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
-                intentJob.putExtra(AppConstants.JOB_DETAIL, mFeedDetail);
+                Parcelable parcelable = Parcels.wrap(mFeedDetail);
+                intentJob.putExtra(AppConstants.JOB_DETAIL, parcelable);
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             case R.id.li_article_cover_image:
@@ -486,7 +496,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.li_community_images:
                 Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                Parcelable parcelables = Parcels.wrap(mFeedDetail);
+                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
                 bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentMyCommunity.putExtras(bundle);
                 startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -494,13 +505,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.li_featured_community_images:
                 Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFeature = new Bundle();
-                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                Parcelable parcelabless = Parcels.wrap(mFeedDetail);
+                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelabless);
                 bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 break;
             case R.id.tv_feed_community_post_card_title:
-                if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
+                if(((CommunityFeedSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
                     if(null!=mFeedDetail) {
                         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                             mUserId = userPreference.get().getUserSummary().getUserId();
@@ -508,14 +520,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
                     }
                 }else {
-                    if (mFeedDetail.communityId == 0) {
-                        ContestActivity.navigateTo(this, Long.toString(mFeedDetail.getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
+                    if (((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == 0) {
+                        ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj)mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
 
                     }else {
                         Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                         Bundle bundleFromPost = new Bundle();
                         bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                        bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+                        Parcelable parcelablesss = Parcels.wrap(mFeedDetail);
+                        bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                         bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                         intentFromCommunityPost.putExtras(bundleFromPost);
                         startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -590,7 +603,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     new EventProperty.Builder()
                             .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                             .title(mFeedDetail.getNameOrTitle())
-                            .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                            .companyId(Long.toString(((JobFeedSolrObj)mFeedDetail).getCompanyMasterId()))
                             .location(mFeedDetail.getAuthorCityName())
                             .build();
             trackEvent(Event.JOBS_SHARED, properties);
@@ -710,7 +723,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                     if (mFeedDetail.getAuthorId() == userId|| mFragmentOpen.isOwner()||adminId==AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
-                        if(mFeedDetail.isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
+                        if(((UserPostSolrObj)mFeedDetail).getCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
                         {
                             if(mFeedDetail.getAuthorId() == userId)
                             {
@@ -775,7 +788,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (null != mFeedDetail) {
                     mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
+                    ((JobFeedSolrObj)mFeedDetail).setExperiecneFrom(AppConstants.ONE_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -803,7 +816,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     mFragmentOpen.setCommentList(true);
                     mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
+                    ((JobFeedSolrObj)mFeedDetail).setExperiecneFrom(AppConstants.TWO_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -878,7 +891,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
                 Bundle bundleArticle = new Bundle();
                 bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-                bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+                Parcelable parcelable = Parcels.wrap(feedDetail);
+                bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
                 commentReactionFragmentForArticle.setArguments(bundleArticle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
@@ -887,7 +901,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
             bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }

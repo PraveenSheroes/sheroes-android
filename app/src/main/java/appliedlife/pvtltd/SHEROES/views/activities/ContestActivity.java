@@ -39,8 +39,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -460,7 +462,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
             case R.id.tv_feed_community_post_user_comment:
                 mFragmentOpen = new FragmentOpen();
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
-                mFragmentOpen.setOwner(mFeedDetail.isCommunityOwner());
+                mFragmentOpen.setOwner(((UserPostSolrObj)mFeedDetail).getCommunityOwner());
                 setAllValues(mFragmentOpen);
                 super.feedCardsHandled(view, baseResponse);
                 break;
@@ -481,7 +483,8 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
         bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-        bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
         commentReactionFragmentForArticle.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().replace(R.id.comment_from_contest, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }

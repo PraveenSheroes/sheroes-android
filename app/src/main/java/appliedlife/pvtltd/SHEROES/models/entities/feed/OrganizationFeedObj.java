@@ -9,8 +9,8 @@ import java.util.Date;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {OrganizationFeedObj.class,BaseEntityOrParticipantModel.class})
-public class OrganizationFeedObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {OrganizationFeedObj.class,FeedDetail.class})
+public class OrganizationFeedObj extends FeedDetail {
     @SerializedName("founder_s")
     private String founder;
 

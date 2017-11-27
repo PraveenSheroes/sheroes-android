@@ -7,8 +7,8 @@ import org.parceler.Parcel;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {CommunityFeedSolrObj.class,BaseEntityOrParticipantModel.class})
-public class CommunityFeedSolrObj extends BaseEntityOrParticipantModel{
+@Parcel(analyze = {CommunityFeedSolrObj.class,FeedDetail.class})
+public class CommunityFeedSolrObj extends FeedDetail {
     @SerializedName("community_type_s")
     public String communityType;
 

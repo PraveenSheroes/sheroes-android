@@ -1,12 +1,8 @@
 package appliedlife.pvtltd.SHEROES.models;
 
 
-import android.util.Pair;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +21,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.NewFeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
@@ -54,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -162,6 +157,19 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<NewFeedResponsePojo> getNewFeedFromModel(FeedRequestPojo feedRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
+        return sheroesAppServiceApi.getNewFeedFromApi(feedRequestPojo)
+                .map(new Func1<NewFeedResponsePojo, NewFeedResponsePojo>() {
+                    @Override
+                    public NewFeedResponsePojo call(NewFeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<List<FeedDetail>> getHomeFeedFromModel(final FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest, final FragmentListRefreshData fragmentListRefreshData) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
 
@@ -190,6 +198,44 @@ public class HomeModel {
                 if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                     List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
                     fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostingDate());
+                    feedDetails.addAll(feedDetailsFromServer);
+                }
+
+                return  feedDetails;
+            }
+        });
+        return combined;
+    }
+
+
+    public Observable<List<FeedDetail>> getNewHomeFeedFromModel(final FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest, final FragmentListRefreshData fragmentListRefreshData) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
+
+        Observable<NewFeedResponsePojo> feedResponsePojoObservable = getNewFeedFromModel(feedRequestPojo);
+        //  Observable<ChallengeListResponse> challengeListResponseObservable = getChallengeListFromModel(challengeRequest);
+        Observable<AppIntroScreenResponse> appIntroScreenResponseObservable = getAppIntroFromModel(appIntroScreenRequest);
+
+        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, appIntroScreenResponseObservable, new Func2<NewFeedResponsePojo, AppIntroScreenResponse, List<FeedDetail>>() {
+            @Override
+            public List<FeedDetail> call(NewFeedResponsePojo feedResponsePojo, AppIntroScreenResponse appIntroScreenResponse) {
+                ArrayList<FeedDetail> feedDetails = new ArrayList<>();
+                /*if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
+                    FeedDetail appIntroFeedCard = new FeedDetail();
+                    appIntroFeedCard.setSubType(AppConstants.APP_INTRO_SUB_TYPE);
+                    AppIntroData appIntroData = appIntroScreenResponse.getData().get(0);
+                    appIntroFeedCard.setAppIntroDataItems(appIntroData);
+                    feedDetails.add(appIntroFeedCard);
+                }*/
+              /*  if (StringUtil.isNotEmptyCollection(challengeListResponse.getReponseList())) {
+                    FeedDetail challengeFeedDetail = new FeedDetail();
+                    challengeFeedDetail.setSubType(AppConstants.CHALLENGE_SUB_TYPE);
+                    challengeFeedDetail.setChallengeDataItems(challengeListResponse.getReponseList());
+                    fragmentListRefreshData.setChallengePosition(feedDetails.size()+1);
+                    feedDetails.add(challengeFeedDetail);
+                }*/
+                if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
+                    List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
+                    fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostingDate().toString());
                     feedDetails.addAll(feedDetailsFromServer);
                 }
 

@@ -54,9 +54,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -338,17 +340,17 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void joinInviteResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (mFeedDetail.isClosedCommunity()) {
-                    mFeedDetail.setRequestPending(true);
+                if (((CommunityFeedSolrObj)mFeedDetail).getClosed()) {
+                    ((CommunityFeedSolrObj)mFeedDetail).setRequestPending(true);
 
                 } else {
-                    mFeedDetail.setMember(true);
+                    ((CommunityFeedSolrObj)mFeedDetail).setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                 PayloadBuilder payloadBuilder = new PayloadBuilder();
                 MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
+                moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), ((CommunityFeedSolrObj)mFeedDetail).isClosed(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
                 break;
@@ -365,9 +367,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    List<Comment> lastCommentList = mFeedDetail.getLastComments();
+                    List<LastComment> lastCommentList = mFeedDetail.getLastComments();
                     if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-                        Comment lastComment = lastCommentList.get(lastCommentList.size() - 1);
+                        LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
                         lastCommentList.remove(lastComment);
                         mFeedDetail.setLastComments(lastCommentList);
                         AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail);
@@ -442,11 +444,11 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     if (mFeedDetail.isLongPress()) {
-                        if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
-                            mFeedDetail.setReactionValue(mPressedEmoji);
+                        if (mFeedDetail.getReactedValue() == AppConstants.NO_REACTION_CONSTANT) {
+                            mFeedDetail.setReactedValue(mPressedEmoji);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         } else {
-                            mFeedDetail.setReactionValue(mPressedEmoji);
+                            mFeedDetail.setReactedValue(mPressedEmoji);
                         }
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
@@ -454,22 +456,23 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
-                    if(mFeedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
+                    if(mFeedDetail instanceof OrganizationFeedObj){
                         AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail);
-                    }else {
+                    }
+                    else {
                         AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail);
                     }
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isLongPress()) {
-                        if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-                            mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                        if (mFeedDetail.getReactedValue() != AppConstants.NO_REACTION_CONSTANT) {
+                            mFeedDetail.setReactedValue(AppConstants.NO_REACTION_CONSTANT);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                         } else {
-                            mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                            mFeedDetail.setReactedValue(AppConstants.HEART_REACTION_CONSTANT);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         }
-                        mFeedDetail.setReactionValue(mFeedDetail.getLastReactionValue());
+                        mFeedDetail.setReactedValue(mFeedDetail.getLastReactionValue());
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);

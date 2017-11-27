@@ -7,8 +7,8 @@ import org.parceler.Parcel;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {ArticleSolrObj.class,BaseEntityOrParticipantModel.class})
-public class ArticleSolrObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {ArticleSolrObj.class,FeedDetail.class})
+public class ArticleSolrObj extends FeedDetail {
     @SerializedName(value = "slug_s")
     private String slug;
 

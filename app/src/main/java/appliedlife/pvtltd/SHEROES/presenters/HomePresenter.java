@@ -239,6 +239,37 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
+    public void getNewHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, challengeRequest, appIntroScreenRequest,fragmentListRefreshData).subscribe(new Subscriber<List<FeedDetail>>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(List<FeedDetail> feedDetailList) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+                    getMvpView().showHomeFeedList(feedDetailList);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
     public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);

@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {EventSolrObj.class,BaseEntityOrParticipantModel.class})
-public class EventSolrObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {EventSolrObj.class,FeedDetail.class})
+public class EventSolrObj extends FeedDetail {
     @SerializedName(value = "start_date_dt")
     private Date startDate;
 

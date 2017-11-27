@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -126,8 +127,8 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 community.id = feedDetail.getIdOfEntityOrParticipant();
                 community.name = feedDetail.getNameOrTitle();
                 community.thumbImageUrl = feedDetail.getThumbnailImageUrl();
-                community.isOwner = feedDetail.isOwner();
-                if (!feedDetail.isOwner() && !feedDetail.isMember() && !isFirstOtherSet) {
+                community.isOwner = ((CommunityFeedSolrObj)feedDetail).isOwner();
+                if (!((CommunityFeedSolrObj)feedDetail).isOwner() && !((CommunityFeedSolrObj)feedDetail).isMember() && !isFirstOtherSet) {
                     community.isFirstOther = true;
                     isFirstOtherSet = true;
                 }
@@ -182,7 +183,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 community.id = feedDetail.getIdOfEntityOrParticipant();
                 community.name = feedDetail.getNameOrTitle();
                 community.thumbImageUrl = feedDetail.getThumbnailImageUrl();
-                community.isOwner = feedDetail.isOwner();
+                community.isOwner = ((CommunityFeedSolrObj)feedDetail).isOwner();
                 mCommunityList.add(community);
             }
             mMyCommunities.myCommunities = new ArrayList<>(mCommunityList);

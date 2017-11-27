@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {JobFeedSolrObj.class,BaseEntityOrParticipantModel.class})
-public class JobFeedSolrObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {JobFeedSolrObj.class,FeedDetail.class})
+public class JobFeedSolrObj extends FeedDetail {
     @SerializedName(value="company_profile_id_l")
     private Long companyProfileId;
 

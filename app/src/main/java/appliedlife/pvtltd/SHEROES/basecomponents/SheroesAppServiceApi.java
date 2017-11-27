@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -39,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.NewFeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
@@ -68,8 +66,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;

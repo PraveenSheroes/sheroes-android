@@ -8,8 +8,6 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,11 +37,10 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.BaseEntityOrParticipantModel;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.BaseEntityOrParticipantModel;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -66,9 +63,6 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -138,8 +132,8 @@ public class SheroesAppModule {
 
     private static Gson initGSONSerializers() {
 
-        final RuntimeTypeAdapterFactory<BaseEntityOrParticipantModel> typeFactory = RuntimeTypeAdapterFactory
-                .of(BaseEntityOrParticipantModel.class, "sub_type")
+        final RuntimeTypeAdapterFactory<FeedDetail> typeFactory = RuntimeTypeAdapterFactory
+                .of(FeedDetail.class, "sub_type")
                 .registerSubtype(UserSolrObj.class, "U")
                 .registerSubtype(JobFeedSolrObj.class, "J")
                 .registerSubtype(CommunityFeedSolrObj.class, "C")

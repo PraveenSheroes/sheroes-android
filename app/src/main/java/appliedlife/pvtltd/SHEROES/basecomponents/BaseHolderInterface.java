@@ -16,8 +16,8 @@ public interface BaseHolderInterface<T extends BaseResponse> {
     void dataOperationOnClick(BaseResponse baseResponse);
     void setListData(T data,boolean flag);
     List<T> getListData();
-    void userCommentLikeRequest(BaseResponse baseResponse,int reactionValue,int position);
-    void championProfile(BaseResponse baseResponse,int championValue);
+    void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position);
+    void championProfile(BaseResponse baseResponse, int championValue);
 
     void contestOnClick(Contest mContest, CardView mCardChallenge);
 }

@@ -9,8 +9,8 @@ import java.util.Date;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {ChallengeSolrObj.class,BaseEntityOrParticipantModel.class})
-public class ChallengeSolrObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {ChallengeSolrObj.class,FeedDetail.class})
+public class ChallengeSolrObj extends FeedDetail {
     @SerializedName("challenge_is_public_b")
     private Boolean challengeIsPublic;
 

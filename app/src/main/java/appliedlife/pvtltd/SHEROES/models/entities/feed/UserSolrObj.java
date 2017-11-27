@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {UserSolrObj.class,BaseEntityOrParticipantModel.class})
-public class UserSolrObj extends BaseEntityOrParticipantModel {
+@Parcel(analyze = {UserSolrObj.class,FeedDetail.class})
+public class UserSolrObj extends FeedDetail {
     @SerializedName(value="total_exp_i")
     private Integer totalExperience;
 
