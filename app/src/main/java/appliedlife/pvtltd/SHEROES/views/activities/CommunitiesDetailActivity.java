@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +33,8 @@ import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Member;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -177,16 +181,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
         }
         setPagerAndLayouts();
-        try {
             if (null != mFeedDetail) {
-                feedDetailForHomeFeed = (FeedDetail) mFeedDetail.clone();
+                feedDetailForHomeFeed = (FeedDetail) mFeedDetail;
             }
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
         long timeSpent = System.currentTimeMillis() - startedTime;
         if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-            moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
+            // TODO : ujjwal
+            // /moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
         }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
     }
@@ -207,12 +208,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         setSupportActionBar(mToolbarCommunitiesDetail);
         if (null != mFeedDetail && null != communityEnum) {
             idOFEntityParticipant = mFeedDetail.getIdOfEntityOrParticipant();
-            communityId = mFeedDetail.getCommunityId();
+            // TODO : ujjwal
+            // /communityId = (CommunityFeedSolrObj)mFeedDetail.getCommunityId();
             if (isFromFeedPost) {
                 mFeedDetail.setIdOfEntityOrParticipant(communityId);
-                mFeedDetail.setCommunityId(idOFEntityParticipant);
+                // TODO : ujjwal
+                //mFeedDetail.setCommunityId(idOFEntityParticipant);
             }
-            if (mFeedDetail.isClosedCommunity() && !mFeedDetail.isOwner()) {
+            // TODO : ujjwal
+            /*if (mFeedDetail.isClosedCommunity() && !((CommunityFeedSolrObj)mFeedDetail).isOwner()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
                 communityOpenAboutFragment(mFeedDetail);
@@ -221,7 +225,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId);
                 mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
-            }
+            }*/
         } else {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
             mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId);
@@ -232,7 +236,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     public void initializeUiContent(FeedDetail feedDetail) {
         mFeedDetail = feedDetail;
-        mCommunityDetailActivity.setVisibility(View.VISIBLE);
+        // TODO : ujjwal
+       /* mCommunityDetailActivity.setVisibility(View.VISIBLE);
         mTvMemebr.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
         if (feedDetail.getNoOfMembers() > 1) {
             mTvMemebr.setVisibility(View.VISIBLE);
@@ -242,11 +247,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBER));
         } else {
             mTvMemebr.setVisibility(View.INVISIBLE);
-        }
+        }*/
         mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
         mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
         mTvCommunityDetailTitle.setText(feedDetail.getNameOrTitle());
-        mTvCommunityDetailSubTitle.setText(feedDetail.getCommunityType());
+        // TODO : ujjwal
+        //mTvCommunityDetailSubTitle.setText(feedDetail.getCommunityType());
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getImageUrl())) {
             Glide.with(this)
                     .load(feedDetail.getImageUrl()).asBitmap()
@@ -334,11 +340,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             if (isOwner) {
                 isMemberRemoveDialog = isOwner;
                 OwnerList ownerList = (OwnerList) baseResponse;
-                bundleCommunity.putParcelable(AppConstants.OWNER_SUB_TYPE, ownerList);
+                Parcelable parcelable = Parcels.wrap(ownerList);
+                bundleCommunity.putParcelable(AppConstants.OWNER_SUB_TYPE, parcelable);
             } else {
                 isMemberRemoveDialog = isOwner;
                 Member member = (Member) baseResponse;
-                bundleCommunity.putParcelable(AppConstants.MEMBER, member);
+                Parcelable parcelable = Parcels.wrap(member);
+                bundleCommunity.putParcelable(AppConstants.MEMBER, parcelable);
                 bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
             }
             bundleCommunity.putBoolean(AppConstants.COMMUNITY_POST_FRAGMENT, isOwner);
@@ -358,7 +366,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-        mFragmentOpen.setOwner(mFeedDetail.isOwner());
+        mFragmentOpen.setOwner(((CommunityFeedSolrObj)mFeedDetail).isOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
@@ -380,7 +388,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
                 break;
             case R.id.tv_approve_spam_post:
-                feedDetailForHomeFeed.setViewed(true);
+                // TODO : ujjwal
+                // feedDetailForHomeFeed.setViewed(true);
                 if (null != spamPostDialogFragment) {
                     spamPostDialogFragment.approveSpamPost(feedDetail, true, false, true);
                 } else {
@@ -392,7 +401,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 break;
 
             case R.id.tv_delete_spam_post:
-                feedDetailForHomeFeed.setViewed(true);
+                // TODO : ujjwal
+                //feedDetailForHomeFeed.setViewed(true);
                 if (null != spamPostDialogFragment) {
                     spamPostDialogFragment.approveSpamPost(feedDetail, true, true, false);
                 } else {
@@ -414,7 +424,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (null != feedDetail) {
             mCommunityOpenAboutFragment = new CommunityOpenAboutFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
             bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
             mCommunityOpenAboutFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().add(R.id.about_community_container, mCommunityOpenAboutFragment, CommunityOpenAboutFragment.class.getName()).addToBackStack(CommunityOpenAboutFragment.class.getName()).commitAllowingStateLoss();
@@ -439,7 +450,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         mFeedDetail.setIdOfEntityOrParticipant(userId);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         mFeedDetail.setItemPosition(position);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -496,7 +508,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (mAllMembersDialogFragment == null) {
             mAllMembersDialogFragment = new AllMembersDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
             mAllMembersDialogFragment.setArguments(bundle);
         }
         if (!mAllMembersDialogFragment.isVisible() && !mAllMembersDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -507,7 +520,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     public void inviteJoinEventClick(String pressedEventName, FeedDetail feedDetail) {
         if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
-            if (feedDetail.isClosedCommunity()) {
+            // TODO : ujjwal
+           /* if (feedDetail.isClosedCommunity()) {
                 feedDetail.setScreenName(AppConstants.COMMUNITY_DETAIL);
                 showCommunityJoinReason(feedDetail);
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
@@ -521,7 +535,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 } else {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
                 }
-            }
+            }*/
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
             inviteCommunityMemberDialog();
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(feedDetail.getEntityOrParticipantId())).name(feedDetail.getNameOrTitle()).build();
@@ -567,7 +581,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (null != mFeedDetail) {
             InviteCommunityOwner myCommunityInviteMemberFragment = new InviteCommunityOwner();
             Bundle bundleInvite = new Bundle();
-            bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
             myCommunityInviteMemberFragment.setArguments(bundleInvite);
             getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityOwner.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
@@ -593,7 +608,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (communityRequestedDialogFragment == null) {
             communityRequestedDialogFragment = new CommunityRequestedDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
             communityRequestedDialogFragment.setArguments(bundle);
         }
         if (!communityRequestedDialogFragment.isVisible() && !communityRequestedDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -607,8 +623,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         communityPost.community = new Community();
         communityPost.community.id = feedDetail.getIdOfEntityOrParticipant();
         communityPost.community.name = feedDetail.getNameOrTitle();
-        communityPost.community.isOwner = feedDetail.isCommunityOwner();
-        communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
+        // TODO : ujjwal
+        // communityPost.community.isOwner = feedDetail.isCommunityOwner();
+        // TODO : ujjwal
+        // communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
         CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
     }
 
@@ -616,7 +634,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void shareClick() {
         ShareCommunityFragment shareCommunityFragment = new ShareCommunityFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.SHARE, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.SHARE, parcelable);
         shareCommunityFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, shareCommunityFragment).addToBackStack(null).commitAllowingStateLoss();
     }
@@ -626,7 +645,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
             if (!isMemberRemoveDialog) {
-                mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() - 1);
+                // TODO : ujjwal
+                //  mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() - 1);
             }
             ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mFeedDetail);
         }
@@ -726,11 +746,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         if (isFromFeedPost) {
-            feedDetailForHomeFeed.setCommunityId(communityId);
+            // TODO : ujjwal
+            //feedDetailForHomeFeed.setCommunityId(communityId);
             feedDetailForHomeFeed.setIdOfEntityOrParticipant(idOFEntityParticipant);
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, feedDetailForHomeFeed);
+            Parcelable parcelable = Parcels.wrap(feedDetailForHomeFeed);
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
         } else {
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
         }
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
         intent.putExtras(bundle);
@@ -830,7 +853,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (spamPostDialogFragment == null) {
             spamPostDialogFragment = new SpamPostListDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.SPAM_POST, feedRequestPojo);
+            Parcelable parcelable = Parcels.wrap(feedRequestPojo);
+            bundle.putParcelable(AppConstants.SPAM_POST, parcelable);
             spamPostDialogFragment.setArguments(bundle);
         }
         if (!spamPostDialogFragment.isVisible() && !spamPostDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {

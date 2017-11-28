@@ -225,13 +225,15 @@ public class MyCommunityInviteMemberDialogFragment extends BaseDialogFragment im
                 case AppConstants.SUCCESS:
                     Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
                     if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
-                        int count = mFeedDetail.getNoOfMembers();
+                        // TODO: ujjwal
+                        /*int count = mFeedDetail.getNoOfMembers();
                         count += mUserIdForAddMember.size();
-                        mFeedDetail.setNoOfMembers(count);
+                        mFeedDetail.setNoOfMembers(count);*/
                         ((HomeActivity) getActivity()).updateMyCommunitiesFragment(mFeedDetail);
                     }
                     if(null!=mFeedDetail) {
-                        moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember(), mFeedDetail.getNoOfMembers());
+                        // TODO: ujjwal
+                        //moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember(), mFeedDetail.getNoOfMembers());
                     }
                     break;
                 case AppConstants.FAILED:

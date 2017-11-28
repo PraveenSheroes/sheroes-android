@@ -104,11 +104,12 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     article.author.thumbUrl = feedDetail.getAuthorImageUrl();
                     article.isBookmarked = feedDetail.isBookmarked();
                     article.isLiked = feedDetail.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
-                    article.thumbImageWidth = feedDetail.getThumbImageWidth();
+                    // TODO: ujjwal
+                    /*article.thumbImageWidth = feedDetail.getThumbImageWidth();
                     article.thumbImageHeight = feedDetail.getThumbImageHeight();
                     article.featureImageHeight = feedDetail.getHighresImageHeight();
                     article.featureImageWidth = feedDetail.getHighresImageWidth();
-                    article.readingTime = feedDetail.getCharCount();
+                    article.readingTime = feedDetail.getCharCount();*/
                     if (!CommonUtil.isEmpty(feedDetail.getLastComments())) {
                         article.comments = new ArrayList<>(feedDetail.getLastComments());
                     }

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.widget.ProgressBar;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +77,8 @@ public class ArticleDetailFragment extends BaseFragment {
     public static ArticleDetailFragment createInstance(FeedDetail feedDetail) {
         ArticleDetailFragment articleDetailFragment = new ArticleDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, feedDetail);
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        bundle.putParcelable(AppConstants.ARTICLE_DETAIL, parcelable);
         articleDetailFragment.setArguments(bundle);
         return articleDetailFragment;
     }
@@ -88,7 +92,7 @@ public class ArticleDetailFragment extends BaseFragment {
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
-            mFeedDetail = getArguments().getParcelable(AppConstants.ARTICLE_DETAIL);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.ARTICLE_DETAIL));
         }
         if(null!=mFeedDetail) {
             mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.EMPTY_STRING, mFeedDetail.getIdOfEntityOrParticipant());
@@ -164,7 +168,7 @@ public class ArticleDetailFragment extends BaseFragment {
 
     protected void likeSuccess(BaseResponse baseResponse) {
 
-        if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
+      /*  if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
             if (mFeedDetail.isLongPress()) {
                 if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
                     mFeedDetail.setReactionValue(mPressedEmoji);
@@ -195,7 +199,7 @@ public class ArticleDetailFragment extends BaseFragment {
                 mAdapter.notifyDataSetChanged();
             }
             showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
-        }
+        }*/
     }
 
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {

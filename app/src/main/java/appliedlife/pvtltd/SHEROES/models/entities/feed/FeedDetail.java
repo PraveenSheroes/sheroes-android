@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
 /**
@@ -15,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
  */
 @Parcel(analyze = {FeedDetail.class, BaseResponse.class})
 public class FeedDetail extends BaseResponse {
+    public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
+    public static final String FEED_DETAIL_ID = "FEED_DETAIL_ID";
     @SerializedName(value = "id")
     private String id;
 
@@ -37,7 +41,7 @@ public class FeedDetail extends BaseResponse {
     private String type;
 
     @SerializedName(value = "sub_type")
-    protected String subType;
+    public String subType;
 
     @SerializedName(value = "name")
     private String nameOrTitle;
@@ -67,11 +71,11 @@ public class FeedDetail extends BaseResponse {
     private boolean isActive;
 
     @SerializedName(value = "p_crdt")
-    private Date createdDate;
+    private String createdDate;
 
 
     @SerializedName(value = "posting_date_dt")
-    private Date postingDate;
+    private String postingDate;
 
     @SerializedName(value = "posting_date_only_dt")
     private Date postingDateOnly;
@@ -128,7 +132,7 @@ public class FeedDetail extends BaseResponse {
     private int noOfComments = 0;
 
     @SerializedName(value = "solr_ignore_last_comments")
-    private List<LastComment> lastComments;
+    private List<Comment> lastComments;
 
     @SerializedName(value = "solr_ignore_reacted_value")
     private int reactedValue;
@@ -159,6 +163,7 @@ public class FeedDetail extends BaseResponse {
     private boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
     private int lastReactionValue;
+    private List<ChallengeDataItem> challengeDataItems = null;
 
     public String getId() {
         return id;
@@ -296,19 +301,19 @@ public class FeedDetail extends BaseResponse {
         isActive = active;
     }
 
-    public Date getCreatedDate() {
+    public String getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getPostingDate() {
+    public String getPostedDate() {
         return postingDate;
     }
 
-    public void setPostingDate(Date postingDate) {
+    public void setPostedDate(String postingDate) {
         this.postingDate = postingDate;
     }
 
@@ -456,19 +461,19 @@ public class FeedDetail extends BaseResponse {
         this.noOfComments = noOfComments;
     }
 
-    public List<LastComment> getLastComments() {
+    public List<Comment> getLastComments() {
         return lastComments;
     }
 
-    public void setLastComments(List<LastComment> lastComments) {
+    public void setLastComments(List<Comment> lastComments) {
         this.lastComments = lastComments;
     }
 
-    public int getReactedValue() {
+    public int getReactionValue() {
         return reactedValue;
     }
 
-    public void setReactedValue(int reactedValue) {
+    public void setReactionValue(int reactedValue) {
         this.reactedValue = reactedValue;
     }
 
@@ -574,5 +579,17 @@ public class FeedDetail extends BaseResponse {
 
     public void setLastReactionValue(int lastReactionValue) {
         this.lastReactionValue = lastReactionValue;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    public List<ChallengeDataItem> getChallengeDataItems() {
+        return challengeDataItems;
+    }
+
+    public void setChallengeDataItems(List<ChallengeDataItem> challengeDataItems) {
+        this.challengeDataItems = challengeDataItems;
     }
 }

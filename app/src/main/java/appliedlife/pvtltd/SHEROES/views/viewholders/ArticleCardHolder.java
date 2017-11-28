@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -72,7 +73,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_article_tag)
     TextView tvArticleTag;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private ArticleSolrObj dataItem;
     Context mContext;
     String mViewMoreDescription;
     @Inject
@@ -91,7 +92,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        this.dataItem = (ArticleSolrObj)item;
         dataItem.setItemPosition(position);
         mContext = context;
         tvArticleBookmark.setEnabled(true);
@@ -153,7 +154,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
+        // TODO: ujjwal
+       /* if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
             List<String> tags = dataItem.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
             for (String tag : tags) {
@@ -166,7 +168,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
-        }
+        }*/
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {

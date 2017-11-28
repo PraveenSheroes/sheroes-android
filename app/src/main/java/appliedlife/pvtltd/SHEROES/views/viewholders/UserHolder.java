@@ -56,9 +56,10 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvowOer_title.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
+        // TODO: ujjwal
+     /*   if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
             tv_owner_city.setText(dataItem.getCityName());
-        }
+        }*/
         String images = dataItem.getImageUrl();
 
         ivFeedUserCircleIcon.setCircularImage(true);

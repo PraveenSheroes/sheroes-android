@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.models.entities.community;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,8 +10,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 /**
  * Created by SHEROES-TECH on 19-03-2017.
  */
-
-public class GetAllDataDocument  extends BaseResponse implements Parcelable {
+@org.parceler.Parcel(analyze = {GetAllDataDocument.class,BaseResponse.class})
+public class GetAllDataDocument  extends BaseResponse{
     @SerializedName("id")
     @Expose
     private String id;
@@ -92,43 +91,4 @@ public class GetAllDataDocument  extends BaseResponse implements Parcelable {
         isChecked = checked;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeString(this.id);
-        dest.writeString(this.title);
-        dest.writeString(this.category);
-        dest.writeString(this.logo);
-        dest.writeString(this.communityType);
-        dest.writeByte(this.isCommunityClosed ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isChecked ? (byte) 1 : (byte) 0);
-    }
-
-    protected GetAllDataDocument(Parcel in) {
-        super(in);
-        this.id = in.readString();
-        this.title = in.readString();
-        this.category = in.readString();
-        this.logo = in.readString();
-        this.communityType = in.readString();
-        this.isCommunityClosed = in.readByte() != 0;
-        this.isChecked = in.readByte() != 0;
-    }
-
-    public static final Creator<GetAllDataDocument> CREATOR = new Creator<GetAllDataDocument>() {
-        @Override
-        public GetAllDataDocument createFromParcel(Parcel source) {
-            return new GetAllDataDocument(source);
-        }
-
-        @Override
-        public GetAllDataDocument[] newArray(int size) {
-            return new GetAllDataDocument[size];
-        }
-    };
 }

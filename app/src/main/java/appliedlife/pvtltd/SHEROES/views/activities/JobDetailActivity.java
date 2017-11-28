@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -181,7 +185,8 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
                 new EventProperty.Builder()
                         .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                         .title(mFeedDetail.getNameOrTitle())
-                        .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                        // TODO: ujjwal
+                        //.companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
                         .location(mFeedDetail.getAuthorCityName())
                         .build();
         trackEvent(Event.JOBS_SHARED, properties);
@@ -211,11 +216,12 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
         mTvJobDetailSubTitle.setText(mFeedDetail.getAuthorName());
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             StringBuilder stringBuilder = new StringBuilder();
-            if (!mFeedDetail.isApplied() && !mFeedDetail.isViewed()) {
+            // TODO: ujjwal
+          /*  if (!mFeedDetail.isApplied() && !mFeedDetail.isViewed()) {
                 stringBuilder.append(mFeedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(getString(R.string.ID_NEW)).append(RIGHT_NEW);
             } else {
                 stringBuilder.append(mFeedDetail.getNameOrTitle());
-            }
+            }*/
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 mTvJobDetailTitle.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
                 mTv_job_title.setText(Html.fromHtml(stringBuilder.toString(), 0));
@@ -333,22 +339,24 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
     private void deepLinkBackPress() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.JOB_FRAGMENT, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.JOB_FRAGMENT, parcelable);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
     }
 
     private void moEngageData(FeedDetail feedDetail) {
         StringBuilder mergeJobTypes = new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(feedDetail.getSearchTextJobEmpTypes())) {
-            List<String> jobTypes = feedDetail.getSearchTextJobEmpTypes();
+        // TODO: ujjwal
+        if (StringUtil.isNotEmptyCollection(((JobFeedSolrObj)feedDetail).getEmploymentTypeNames())) {
+            List<String> jobTypes = ((JobFeedSolrObj)feedDetail).getEmploymentTypeNames();
             for (String jobType : jobTypes) {
                 mergeJobTypes.append(jobType).append(AppConstants.PIPE);
             }
         }
         StringBuilder mergeJobSkills = new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
-            List<String> jobSkills = mFeedDetail.getSearchTextJobSkills();
+        if (StringUtil.isNotEmptyCollection(((JobFeedSolrObj)feedDetail).getSkills())) {
+            List<String> jobSkills = ((JobFeedSolrObj)feedDetail).getSkills();
 
             for (String skill : jobSkills) {
                 mergeJobSkills.append(skill);

@@ -115,11 +115,12 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             StringBuilder stringBuilder=new StringBuilder();
-            if (!dataItem.isApplied() && !dataItem.isViewed()) {
+            // TODO: ujjwal
+            /* if (!dataItem.isApplied() && !dataItem.isViewed()) {
                 stringBuilder.append(dataItem.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(mContext.getString(R.string.ID_NEW)).append(RIGHT_NEW);
             } else {
                 stringBuilder.append(dataItem.getNameOrTitle());
-            }
+            }*/
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedJobCardTitle.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
             } else {
@@ -129,30 +130,34 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvFeedJobGroupName.setText(dataItem.getAuthorName());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDate())) {
+        // TODO: ujjwal
+     /*   if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDate())) {
             tvFeedJobDateTime.setVisibility(View.VISIBLE);
             tvFeedJobDateTime.setText(dataItem.getStartDate());
-        }
+        }*/
         else
         {
             tvFeedJobDateTime.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {
+        // TODO: ujjwal
+      /*  if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {
             List<String> jobTypes = dataItem.getSearchTextJobEmpTypes();
             String mergeJobTypes = AppConstants.EMPTY_STRING;
             for (String jobType : jobTypes) {
                 mergeJobTypes += jobType + AppConstants.PIPE;
             }
             tvFeedJobType.setText(mergeJobTypes.substring(0, mergeJobTypes.length() - 1));
-        }
-        if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobSkills())) {
+        }*/
+
+        // TODO: ujjwal
+     /*   if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobSkills())) {
             List<String> jobSkills = dataItem.getSearchTextJobSkills();
             String mergeJobSkills = AppConstants.EMPTY_STRING;
             for (String skill : jobSkills) {
                 mergeJobSkills += skill + AppConstants.COMMA;
             }
             tvFeedJobName.setText(mergeJobSkills.substring(0, mergeJobSkills.length() - 1));
-        }
+        }*/
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorCityName())) {
             StringBuilder stringBuilder=new StringBuilder();
             stringBuilder.append(dataItem.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
@@ -161,11 +166,12 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         {
             tvFeedJobLocation.setText(mContext.getString(R.string.ID_REMOTE));
         }
-        if (dataItem.isApplied()) {
+        // TODO: ujjwal
+     /*   if (dataItem.isApplied()) {
             tvFeedJobApplied.setVisibility(View.VISIBLE);
         } else {
             tvFeedJobApplied.setVisibility(View.INVISIBLE);
-        }
+        }*/
 
     }
 

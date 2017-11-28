@@ -1,18 +1,17 @@
 package appliedlife.pvtltd.SHEROES.models.entities.community;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
  * Created by Ajit Kumar on 03-02-2017.
  */
-
-public class MembersList extends BaseResponse implements Parcelable{
+@Parcel(analyze = {MembersList.class,BaseResponse.class})
+public class MembersList extends BaseResponse{
     @SerializedName("approved_date")
     @Expose
     private String approvedDate;
@@ -98,36 +97,6 @@ public class MembersList extends BaseResponse implements Parcelable{
     @SerializedName("position")
     @Expose
     private int position;
-
-
-    public MembersList(Parcel in) {
-        approvedDate = in.readString();
-        comLogoUrl = in.readString();
-        comName = in.readString();
-        comType = in.readString();
-        communityUserCityName = in.readString();
-        communityUserEmailid = in.readString();
-        communityUserFirstName = in.readString();
-        communityUserLastName = in.readString();
-        communityUserMobile = in.readString();
-        communityUserPhotoUrlPath = in.readString();
-        id = in.readString();
-        typeS = in.readString();
-    }
-
-    public static final Creator<Member> CREATOR = new Creator<Member>() {
-        @Override
-        public Member createFromParcel(Parcel in) {
-            return new Member(in);
-        }
-
-        @Override
-        public Member[] newArray(int size) {
-            return new Member[size];
-        }
-    };
-
-
 
     public String getApprovedDate() {
         return approvedDate;
@@ -353,26 +322,5 @@ public class MembersList extends BaseResponse implements Parcelable{
         this.isOwner = isOwner;
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(approvedDate);
-        dest.writeString(comLogoUrl);
-        dest.writeString(comName);
-        dest.writeString(comType);
-        dest.writeString(communityUserCityName);
-        dest.writeString(communityUserEmailid);
-        dest.writeString(communityUserFirstName);
-        dest.writeString(communityUserLastName);
-        dest.writeString(communityUserMobile);
-        dest.writeString(communityUserPhotoUrlPath);
-        dest.writeString(id);
-        dest.writeString(typeS);
-    }
 
 }

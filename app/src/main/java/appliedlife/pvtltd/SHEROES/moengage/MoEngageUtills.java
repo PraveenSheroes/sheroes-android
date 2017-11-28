@@ -115,12 +115,13 @@ public class MoEngageUtills {
 
     private String getCardTag(FeedDetail feedDetail) {
         StringBuilder mergeTags = new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(feedDetail.getTags())) {
+        // TODO: ujjwal
+       /* if (StringUtil.isNotEmptyCollection(feedDetail.getTags())) {
             List<String> tags = feedDetail.getTags();
             for (String tag : tags) {
                 mergeTags.append(tag).append(AppConstants.COMMA);
             }
-        }
+        }*/
         return mergeTags.toString();
     }
 
@@ -138,7 +139,8 @@ public class MoEngageUtills {
                 case AppConstants.FEED_JOB:
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(feedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(feedDetail.getAuthorName()).append(feedDetail.getAuthorCityName());
-                    entityMoEngageBookmark(mMoEHelper, payloadBuilder, MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, feedDetail.getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                    // TODO: ujjwal
+                    //entityMoEngageBookmark(mMoEHelper, payloadBuilder, MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, feedDetail.getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                     break;
             }
         }
@@ -243,7 +245,8 @@ public class MoEngageUtills {
                 case AppConstants.FEED_JOB:
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(feedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(feedDetail.getAuthorName()).append(feedDetail.getAuthorCityName());
-                    entityMoEngageShareCard(mMoEHelper, payloadBuilder, shareType,MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, feedDetail.getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                    // TODO: ujjwal
+                    //entityMoEngageShareCard(mMoEHelper, payloadBuilder, shareType,MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, feedDetail.getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                     break;
             }
         }

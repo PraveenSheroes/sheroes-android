@@ -152,11 +152,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (!dataItem.isTrending()) {
             imageOperations(context);
         }
-            if (dataItem.getAuthorId() == mUserId || dataItem.isOwner()) {
+        // TODO: ujjwal
+            /*if (dataItem.getAuthorId() == mUserId || dataItem.isOwner()) {
                 tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedArticleUserMenu.setVisibility(View.GONE);
-            }
+            }*/
 
     }
 
@@ -189,9 +190,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
-            if (dataItem.getCharCount() > 0) {
+            // TODO: ujjwal
+            /*   if (dataItem.getCharCount() > 0) {
                 stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
-            }
+            }*/
             tvFeedArticleTitleLabel.setText(stringBuilder);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {

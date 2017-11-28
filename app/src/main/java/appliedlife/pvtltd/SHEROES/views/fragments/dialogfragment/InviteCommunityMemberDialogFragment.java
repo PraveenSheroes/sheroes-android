@@ -224,8 +224,9 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
     private void joinSuccess(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
+                // TODO: ujjwal
                 Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
+               /* if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
                     int count = mFeedDetail.getNoOfMembers();
                     count += mUserIdForAddMember.size();
                     mFeedDetail.setNoOfMembers(count);
@@ -233,7 +234,7 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
                     if(null!=mFeedDetail) {
                         moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember(), mFeedDetail.getNoOfMembers());
                     }
-                }
+                }*/
 
                 break;
             case AppConstants.FAILED:

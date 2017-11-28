@@ -39,7 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityReque
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.NewFeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
@@ -119,7 +119,7 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
     @POST("participant/feed/")
-    Observable<NewFeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
+    Observable<FeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
     @POST("participant/user/get_mentor_list")
     Observable<PublicProfileListResponse> getPublicProfileListFromApi(@Body PublicProfileListRequest publicProfileListRequest);

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PANDING_MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         if (null != getArguments()) {
-            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
         }
         requestedPresenter.attachView(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -147,7 +149,8 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         switch (memberListResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 pandingListData.remove(position);
-                mFeedDetail.setNoOfPendingRequest(pandingListData.size());
+                // TODO: ujjwal
+                //mFeedDetail.setNoOfPendingRequest(pandingListData.size());
                 mAdapter.setSheroesGenericListData(pandingListData);
                 mAdapter.notifyDataSetChanged();
                 ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
@@ -165,7 +168,8 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         switch (memberListResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 pandingListData.remove(position);
-                mFeedDetail.setNoOfPendingRequest(pandingListData.size());
+                // TODO: ujjwal
+                //mFeedDetail.setNoOfPendingRequest(pandingListData.size());
                 mAdapter.setSheroesGenericListData(pandingListData);
                 mAdapter.notifyDataSetChanged();
                 ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);

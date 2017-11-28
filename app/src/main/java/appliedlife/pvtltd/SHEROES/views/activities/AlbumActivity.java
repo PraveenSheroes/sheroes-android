@@ -248,15 +248,16 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
     //region public helper methods
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties) {
-        if (feedDetail == null || CommonUtil.isEmpty(feedDetail.getImageUrls())) {
+        // TODO: ujjwal
+        /* if (feedDetail == null || CommonUtil.isEmpty(feedDetail.getImageUrls())) {
             return;
-        }
+        }*/
         Album album = new Album();
-        for (String url : feedDetail.getImageUrls()) {
+      /*  for (String url : feedDetail.getImageUrls()) {
             Photo photo = new Photo();
             photo.url = url;
             album.photos.add(photo);
-        }
+        }*/
         album.deepLinkUrl = feedDetail.getDeepLinkUrl();
         Intent intent = new Intent(fromActivity, AlbumActivity.class);
         Parcelable parcelable = Parcels.wrap(album);

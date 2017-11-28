@@ -87,7 +87,8 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mEventId = bundle.getLong(AppConstants.EVENT_ID);
                 if (mEventId > 0) {
                     mFeedDetail = new FeedDetail();
-                    mFeedDetail.setDispThirdPartyUniqueId(String.valueOf(mEventId));
+                    // TODO: ujjwal
+                   // mFeedDetail.setDispThirdPartyUniqueId(String.valueOf(mEventId));
                 }
             }
             if (null != mFeedDetail) {
@@ -97,7 +98,8 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDispThirdPartyUniqueId())) {
+                // TODO: ujjwal
+          /*      if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDispThirdPartyUniqueId())) {
                     Long uniqueId = Long.parseLong(mFeedDetail.getDispThirdPartyUniqueId());
                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_EVENT, 1, uniqueId));
                     try {
@@ -105,7 +107,7 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
             }
         }
         return view;

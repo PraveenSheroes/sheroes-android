@@ -262,7 +262,8 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
     public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
         switch (createCommunityOwnerResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() + 1);
+                // TODO: ujjwal
+                // mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() + 1);
                 feedUserObject.setTrending(true);
                 mAdapter.notifyItemChanged(feedUserObject.getItemPosition(), feedUserObject);
                 if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {

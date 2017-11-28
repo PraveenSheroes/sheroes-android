@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +29,8 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+
+import org.parceler.Parcels;
 
 import java.util.HashMap;
 import java.util.List;
@@ -160,13 +163,13 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         } else {
             mTvArticleDetailTotalViews.setVisibility(View.INVISIBLE);
         }
-        if (mFeedDetail.getCharCount() > 0) {
+     /*   if (mFeedDetail.getCharCount() > 0) {
             mTvArticleTime.setVisibility(View.VISIBLE);
             mTvArticleTime.setText(mFeedDetail.getCharCount() + AppConstants.SPACE + getString(R.string.ID_MIN_READ));
 
         } else {
             mTvArticleTime.setVisibility(View.INVISIBLE);
-        }
+        }*/
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             mCollapsingToolbarLayout.setTitle(mFeedDetail.getNameOrTitle());
         }
@@ -254,8 +257,10 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
-            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-            bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            Parcelable parcelableFragment = Parcels.wrap(mFragmentOpen);
+            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelableFragment);
+            bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
@@ -308,8 +313,10 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             if (mFragmentOpen.isReactionList()) {
                 CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
                 Bundle bundleArticle = new Bundle();
-                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-                bundleArticle.putParcelable(AppConstants.COMMENTS, feedDetail);
+                Parcelable parcelable = Parcels.wrap(feedDetail);
+                Parcelable parcelableFragment = Parcels.wrap(mFragmentOpen);
+                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelableFragment);
+                bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
                 commentReactionFragmentForArticle.setArguments(bundleArticle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
             }
@@ -368,7 +375,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                         mFragmentOpen.setOpen(true);
                         mFragmentOpen.setCommentList(true);
                         mFeedDetail.setTrending(true);
-                        mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
+                      //  mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
                 }
@@ -390,7 +397,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
                         mFragmentOpen.setOpen(true);
                         mFragmentOpen.setCommentList(true);
                         mFeedDetail.setTrending(true);
-                        mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
+                      //  mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
                         openCommentReactionFragment(mFeedDetail);
                     }
                 }
@@ -454,12 +461,13 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         mFeedDetail.setItemPosition(feedDetailPosition);
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.HOME_FRAGMENT, parcelable);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
     }
     private void moEngageData(FeedDetail feedDetail) {
-        StringBuilder mergeTags =new StringBuilder();
+       /* StringBuilder mergeTags =new StringBuilder();
         if (StringUtil.isNotEmptyCollection(feedDetail.getTags())) {
             List<String> tags = feedDetail.getTags();
             for (String tag : tags) {
@@ -467,7 +475,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             }
         }
         long timeSpent=System.currentTimeMillis()-startedTime;
-        moEngageUtills.entityMoEngageArticleDetail(this, mMoEHelper, payloadBuilder,timeSpent,feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getArticleCategoryNameS(), mergeTags.toString(),feedDetail.getAuthorName(),feedDetail.getCharCount());
+        moEngageUtills.entityMoEngageArticleDetail(this, mMoEHelper, payloadBuilder,timeSpent,feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getArticleCategoryNameS(), mergeTags.toString(),feedDetail.getAuthorName(),feedDetail.getCharCount());*/
     }
 
     @OnClick(R.id.tv_article_detail_share)
@@ -534,9 +542,11 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         MentorDetailItem mentorDetailItem=new MentorDetailItem();
         mentorDetailItem.setEntityOrParticipantId(userId);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
 
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        Parcelable parcelableMentor = Parcels.wrap(mentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }

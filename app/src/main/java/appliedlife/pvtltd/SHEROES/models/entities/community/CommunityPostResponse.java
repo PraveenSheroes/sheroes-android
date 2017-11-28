@@ -3,12 +3,14 @@ package appliedlife.pvtltd.SHEROES.models.entities.community;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
  * Created by Ajit Kumar on 22-03-2017.
  */
-
+@Parcel(analyze = {CommunityPostResponse.class,BaseResponse.class})
 public class CommunityPostResponse extends BaseResponse {
         @SerializedName("id")
         @Expose

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences.Preference;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -215,9 +218,10 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             mTvMentorName.setText(mFeedDetail.getNameOrTitle());
             // tvChampionTitle.setText(mFeedDetail.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCityName())) {
+        // TODO: ujjwal
+        /*if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCityName())) {
             tvMentorCityName.setText(mFeedDetail.getCityName());
-        }
+        }*/
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvMentorDescription.setText(Html.fromHtml(mFeedDetail.getDescription(), 0)); // for 24 api and more
@@ -232,13 +236,14 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
 
 
         }
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getCanHelpIns())) {
+        // TODO: ujjwal
+      /*  if (StringUtil.isNotEmptyCollection(mFeedDetail.getCanHelpIns())) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String str : mFeedDetail.getCanHelpIns()) {
                 stringBuilder.append(str).append(AppConstants.COMMA).append(AppConstants.SPACE);
                 tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().trim().length() - 1));
             }
-        }
+        }*/
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
@@ -271,8 +276,10 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mMentorDetailItem);
-        bundle.putParcelable(AppConstants.FEED_SCREEN, mFeedDetail);
+        Parcelable parcelableMentorDetail = Parcels.wrap(mMentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.FEED_SCREEN, parcelable);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
     }
@@ -331,7 +338,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
-        mFragmentOpen.setOwner(feedDetail.isCommunityOwner());
+        // TODO: ujjwal
+        //mFragmentOpen.setOwner(feedDetail.isCommunityOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
     }
@@ -550,7 +558,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         mFeedDetail = new FeedDetail();
         mFeedDetail.setIdOfEntityOrParticipant(userId);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

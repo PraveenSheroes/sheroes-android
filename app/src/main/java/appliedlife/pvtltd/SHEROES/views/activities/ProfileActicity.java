@@ -38,6 +38,8 @@ import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView.*;
 
@@ -454,7 +456,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             mFragmentOpen.setProfileWorkExpEditFragment(true);
             profileWorkExperienceSelfEmploymentDialogFragment = new ProfileWorkExperienceSelfEmploymentDialogFragment();
             Bundle bundleBookMarks = new Bundle();
-            bundleBookMarks.putParcelable(AppConstants.WORK_EXPERIENCE_TYPE, exprienceEntity);
+            Parcelable parcelable = Parcels.wrap(exprienceEntity);
+            bundleBookMarks.putParcelable(AppConstants.WORK_EXPERIENCE_TYPE, parcelable);
             profileWorkExperienceSelfEmploymentDialogFragment.setArguments(bundleBookMarks);
         }
         if (!profileWorkExperienceSelfEmploymentDialogFragment.isVisible() && !profileWorkExperienceSelfEmploymentDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -470,7 +473,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
             profileAddEditEducationFragment = new ProfileAddEditEducationFragment();
             profileAddEditEducationFragment.setListener(this);
             Bundle bundleBookMarks = new Bundle();
-            bundleBookMarks.putParcelable(AppConstants.EDUCATION_PROFILE, exprienceEntity);
+            Parcelable parcelable = Parcels.wrap(exprienceEntity);
+            bundleBookMarks.putParcelable(AppConstants.EDUCATION_PROFILE, parcelable);
             profileAddEditEducationFragment.setArguments(bundleBookMarks);
         }
         if (!profileAddEditEducationFragment.isVisible() && !profileAddEditEducationFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -504,7 +508,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                     mFragmentOpen.setProfesstionalEducationFragment(true);
                     ProfileAddEducationFragment profileAddEducationFragment = new ProfileAddEducationFragment();
                     Bundle bundleTravel = new Bundle();
-                    bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE, myEducation);
+                    Parcelable parcelable = Parcels.wrap(myEducation);
+                    bundleTravel.putParcelable(AppConstants.EDUCATION_PROFILE, parcelable);
                     profileAddEducationFragment.setArguments(bundleTravel);
                     getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileAddEducationFragment, ProfileAddEducationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                     break;
@@ -515,7 +520,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileWorkExperienceFragment profileWorkExperienceFragment = new ProfileWorkExperienceFragment();
                 Bundle bundleWorkExp = new Bundle();
-                bundleWorkExp.putParcelableArrayList(AppConstants.EXPERIENCE_PROFILE, (ArrayList<? extends Parcelable>) workExp.getExprienceEntity());
+                Parcelable parcelable = Parcels.wrap(workExp.getExprienceEntity());
+                bundleWorkExp.putParcelableArrayList(AppConstants.EXPERIENCE_PROFILE, (ArrayList<? extends Parcelable>)parcelable);
                 profileWorkExperienceFragment.setArguments(bundleWorkExp);
                 getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileWorkExperienceFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
@@ -534,7 +540,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfessionalEditBasicDetailsFragment profileEditBasicDetailsFragment = new ProfessionalEditBasicDetailsFragment();
                 Bundle bundleEditBasicDetails = new Bundle();
-                bundleEditBasicDetails.putParcelable(AppConstants.EDUCATION_PROFILE, editbasicDetail);
+                Parcelable parcelableEditBasicDetail = Parcels.wrap(editbasicDetail);
+                bundleEditBasicDetails.putParcelable(AppConstants.EDUCATION_PROFILE, parcelableEditBasicDetail);
                 profileEditBasicDetailsFragment.setArguments(bundleEditBasicDetails);
                 getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileEditBasicDetailsFragment, ProfessionalEditBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
@@ -544,7 +551,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileAboutMeFragment profileAboutMeFragment = new ProfileAboutMeFragment();
                 Bundle bundleAddAboutMeFragment = new Bundle();
-                bundleAddAboutMeFragment.putParcelable(AppConstants.MODEL_KEY, baseResponse);
+                Parcelable parcelableBaseResponse = Parcels.wrap(baseResponse);
+                bundleAddAboutMeFragment.putParcelable(AppConstants.MODEL_KEY, parcelableBaseResponse);
                 profileAboutMeFragment.setArguments(bundleAddAboutMeFragment);
                 getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileAboutMeFragment, ProfileAboutMeFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
@@ -555,7 +563,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 flprofile_container.setVisibility(View.VISIBLE);
                 PersonalBasicDetailsFragment personalBasicDetailsFragment = new PersonalBasicDetailsFragment();
                 Bundle bundlePersonalBasicDetailsFragment = new Bundle();
-                bundlePersonalBasicDetailsFragment.putParcelable(AppConstants.EDUCATION_PROFILE, basicDetail);
+                Parcelable parcelableBasicDetail = Parcels.wrap(basicDetail);
+                bundlePersonalBasicDetailsFragment.putParcelable(AppConstants.EDUCATION_PROFILE, parcelableBasicDetail);
                 personalBasicDetailsFragment.setArguments(bundlePersonalBasicDetailsFragment);
                 getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, personalBasicDetailsFragment, PersonalBasicDetailsFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;
@@ -566,7 +575,8 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 flprofile_container.setVisibility(View.VISIBLE);
                 ProfileGoodAtFragment profileGoodAtFragment = new ProfileGoodAtFragment();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(AppConstants.MODEL_KEY, baseResponse);
+                Parcelable parcelableBaseResponse = Parcels.wrap(baseResponse);
+                bundle.putParcelable(AppConstants.MODEL_KEY, parcelableBaseResponse);
                 profileGoodAtFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileGoodAtFragment, ProfileGoodAtFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
                 break;

@@ -1,13 +1,12 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import org.parceler.Parcel;
 
 /**
  * Created by priyanka on 07/04/17.
  */
-
-public class ClientSideLocation implements Parcelable {
+@Parcel(analyze = {ClientSideLocation.class})
+public class ClientSideLocation {
 
 
     private String description;
@@ -21,33 +20,4 @@ public class ClientSideLocation implements Parcelable {
 
         this.description = description;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.description);
-    }
-
-    public ClientSideLocation() {
-    }
-
-    protected ClientSideLocation(Parcel in) {
-        this.description = in.readString();
-    }
-
-    public static final Parcelable.Creator<ClientSideLocation> CREATOR = new Parcelable.Creator<ClientSideLocation>() {
-        @Override
-        public ClientSideLocation createFromParcel(Parcel source) {
-            return new ClientSideLocation(source);
-        }
-
-        @Override
-        public ClientSideLocation[] newArray(int size) {
-            return new ClientSideLocation[size];
-        }
-    };
 }

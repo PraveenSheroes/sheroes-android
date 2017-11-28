@@ -890,7 +890,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if (mFragment instanceof CommunitiesDetailFragment) {
                 CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
                 Bundle bundleArticle = new Bundle();
-                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+                Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
+                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelable1);
                 Parcelable parcelable = Parcels.wrap(feedDetail);
                 bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
                 commentReactionFragmentForArticle.setArguments(bundleArticle);
@@ -900,7 +901,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         } else {
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
-            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
+            Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
+            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelable1);
             Parcelable parcelable = Parcels.wrap(feedDetail);
             bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);

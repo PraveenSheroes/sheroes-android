@@ -15,13 +15,13 @@ public class ChallengeSolrObj extends FeedDetail {
     private Boolean challengeIsPublic;
 
     @SerializedName("challenge_last_modified_on_dt")
-    private Date challengeLastModifiedOn;
+    private String challengeLastModifiedOn;
 
     @SerializedName("challenge_start_date_dt")
-    private Date challengeStartDate;
+    private String challengeStartDate;
 
     @SerializedName("challenge_end_date_dt")
-    private Date challengeEndDate;
+    private String challengeEndDate;
 
     @SerializedName("challenge_title_s")
     private String challengeTitle;
@@ -76,7 +76,7 @@ public class ChallengeSolrObj extends FeedDetail {
     private Boolean challengeHasWinner;
 
     @SerializedName("challenge_winner_announcement_dt")
-    private Date challengeAnnouncementDate;
+    private String challengeAnnouncementDate;
 
 
     @SerializedName("solr_ignore_is_future_challenge")
@@ -88,5 +88,183 @@ public class ChallengeSolrObj extends FeedDetail {
 
     public void setChallengeIsPublic(Boolean challengeIsPublic) {
         this.challengeIsPublic = challengeIsPublic;
+    }
+
+    public String getChallengeLastModifiedOn() {
+        return challengeLastModifiedOn;
+    }
+
+    public void setChallengeLastModifiedOn(String challengeLastModifiedOn) {
+        this.challengeLastModifiedOn = challengeLastModifiedOn;
+    }
+
+    public String getChallengeStartDate() {
+        return challengeStartDate;
+    }
+
+    public void setChallengeStartDate(String challengeStartDate) {
+        this.challengeStartDate = challengeStartDate;
+    }
+
+    public String getChallengeEndDate() {
+        return challengeEndDate;
+    }
+
+    public void setChallengeEndDate(String challengeEndDate) {
+        this.challengeEndDate = challengeEndDate;
+    }
+
+    public String getChallengeTitle() {
+        return challengeTitle;
+    }
+
+    public void setChallengeTitle(String challengeTitle) {
+        this.challengeTitle = challengeTitle;
+    }
+
+    public Boolean getChallengeIsAnonymous() {
+        return challengeIsAnonymous;
+    }
+
+    public void setChallengeIsAnonymous(Boolean challengeIsAnonymous) {
+        this.challengeIsAnonymous = challengeIsAnonymous;
+    }
+
+    public String getChallengeAcceptPostText() {
+        return challengeAcceptPostText;
+    }
+
+    public void setChallengeAcceptPostText(String challengeAcceptPostText) {
+        this.challengeAcceptPostText = challengeAcceptPostText;
+    }
+
+    public String getChallengeUpdatePostText() {
+        return challengeUpdatePostText;
+    }
+
+    public void setChallengeUpdatePostText(String challengeUpdatePostText) {
+        this.challengeUpdatePostText = challengeUpdatePostText;
+    }
+
+    public Integer getChallengeHours() {
+        return challengeHours;
+    }
+
+    public void setChallengeHours(Integer challengeHours) {
+        this.challengeHours = challengeHours;
+    }
+
+    public Integer getChallengeMinute() {
+        return challengeMinute;
+    }
+
+    public void setChallengeMinute(Integer challengeMinute) {
+        this.challengeMinute = challengeMinute;
+    }
+
+    @Override
+    public Long getAuthorParticipantId() {
+        return authorParticipantId;
+    }
+
+    @Override
+    public void setAuthorParticipantId(Long authorParticipantId) {
+        this.authorParticipantId = authorParticipantId;
+    }
+
+    public String getChallengeAuthorTypeS() {
+        return challengeAuthorType;
+    }
+
+    public void setChallengeAuthorTypeS(String challengeAuthorType) {
+        this.challengeAuthorType = challengeAuthorType;
+    }
+
+    public boolean isChallengeIsWinner() {
+        return isWinner;
+    }
+
+    public void setWinner(boolean winner) {
+        isWinner = winner;
+    }
+
+    public boolean isChallengeCompleted() {
+        return isChallengeCompleted;
+    }
+
+    public void setChallengeCompleted(boolean challengeCompleted) {
+        isChallengeCompleted = challengeCompleted;
+    }
+
+    public boolean isNotInterested() {
+        return notInterested;
+    }
+
+    public void setNotInterested(boolean notInterested) {
+        this.notInterested = notInterested;
+    }
+
+    public String getChallengeAuthorEmailId() {
+        return challengeAuthorEmailId;
+    }
+
+    public void setChallengeAuthorEmailId(String challengeAuthorEmailId) {
+        this.challengeAuthorEmailId = challengeAuthorEmailId;
+    }
+
+    public String getWinnerAddress() {
+        return winnerAddress;
+    }
+
+    public void setWinnerAddress(String winnerAddress) {
+        this.winnerAddress = winnerAddress;
+    }
+
+    public String getPrizeDiscription() {
+        return prizeDiscription;
+    }
+
+    public void setPrizeDiscription(String prizeDiscription) {
+        this.prizeDiscription = prizeDiscription;
+    }
+
+    public String getPrizeIcon() {
+        return prizeIcon;
+    }
+
+    public void setPrizeIcon(String prizeIcon) {
+        this.prizeIcon = prizeIcon;
+    }
+
+    public Integer getWinnerRank() {
+        return winnerRank;
+    }
+
+    public void setWinnerRank(Integer winnerRank) {
+        this.winnerRank = winnerRank;
+    }
+
+    public Boolean isChallengeHasWinner() {
+        return challengeHasWinner;
+    }
+
+    public void setChallengeHasWinner(Boolean challengeHasWinner) {
+        this.challengeHasWinner = challengeHasWinner;
+    }
+
+    public String getChallengeAnnouncementDate() {
+        return challengeAnnouncementDate;
+    }
+
+    public void setChallengeAnnouncementDate(String challengeAnnouncementDate) {
+        this.challengeAnnouncementDate = challengeAnnouncementDate;
+    }
+
+    public boolean isFutureChallenge() {
+        return isFutureChallenge;
+    }
+
+    public void setFutureChallenge(boolean futureChallenge) {
+        isFutureChallenge = futureChallenge;
     }
 }

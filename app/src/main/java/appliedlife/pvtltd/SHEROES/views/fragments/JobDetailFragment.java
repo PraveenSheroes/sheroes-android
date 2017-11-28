@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +87,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public static JobDetailFragment createInstance(FeedDetail feedDetail) {
         JobDetailFragment jobDetailFragment = new JobDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.JOB_DETAIL, feedDetail);
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        bundle.putParcelable(AppConstants.JOB_DETAIL, parcelable);
         jobDetailFragment.setArguments(bundle);
         return jobDetailFragment;
     }
@@ -93,7 +97,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (null != getArguments()) {
-            mFeedDetail = getArguments().getParcelable(AppConstants.JOB_DETAIL);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.JOB_DETAIL));
         }
 
     }
@@ -140,13 +144,14 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
             jobDetailPojo.setFeedDetail(mFeedDetail);
             joblist.add(jobDetailPojo);
-            if (mFeedDetail.isApplied()) {
+            // TODO: ujjwal
+            /*if (mFeedDetail.isApplied()) {
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(false);
             } else {
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLY));
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(true);
-            }
+            }*/
             mAdapter.notifyDataSetChanged();
             mAdapter.setSheroesGenericListData(joblist);
             mAdapter.notifyDataSetChanged();
@@ -159,10 +164,11 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         super.onDestroyView();
         mHomePresenter.detachView();
         mJobpresenter.detachView();
-        if(mFeedDetail.isApplied()) {
+        // TODO: ujjwal
+        /*if(mFeedDetail.isApplied()) {
             long timeSpent = System.currentTimeMillis() - startedTime;
             moEngageUtills.entityMoEngageViewAppliedJob(getActivity(), mMoEHelper, payloadBuilder, timeSpent);
-        }
+        }*/
     }
 
     public void bookMarkForDetailCard(FeedDetail feedDetail) {
@@ -175,14 +181,16 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             case AppConstants.SUCCESS:
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(false);
-                mFeedDetail.setApplied(true);
+                // TODO: ujjwal
+                //mFeedDetail.setApplied(true);
                 ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
                 Toast.makeText(getActivity(), getString(R.string.ID_APPLIED) + AppConstants.SPACE + getString(R.string.ID_SUCCESSFULLY), Toast.LENGTH_SHORT).show();
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
                         .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                         .title(mFeedDetail.getNameOrTitle())
-                        .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                                // TODO: ujjwal
+                                //.companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
                         .location(mFeedDetail.getAuthorCityName())
                         .build();
                 trackEvent(Event.JOBS_APPLIED, properties);
@@ -198,7 +206,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     }
 
     private void moEngageData(FeedDetail feedDetail) {
-        StringBuilder mergeJobTypes=new StringBuilder();
+        // TODO: ujjwal
+        /*StringBuilder mergeJobTypes=new StringBuilder();
         if (StringUtil.isNotEmptyCollection(feedDetail.getSearchTextJobEmpTypes())) {
             List<String> jobTypes = feedDetail.getSearchTextJobEmpTypes();
             for (String jobType : jobTypes) {
@@ -215,7 +224,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             }
         }
 
-        moEngageUtills.entityMoEngageAppliedJob(getActivity(), mMoEHelper, payloadBuilder, feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getAuthorName(), feedDetail.getAuthorCityName(),mergeJobTypes.toString(),mergeJobTypes.toString(),AppConstants.EMPTY_STRING,AppConstants.EMPTY_STRING,mergeJobSkills.toString());
+        moEngageUtills.entityMoEngageAppliedJob(getActivity(), mMoEHelper, payloadBuilder, feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getAuthorName(), feedDetail.getAuthorCityName(),mergeJobTypes.toString(),mergeJobTypes.toString(),AppConstants.EMPTY_STRING,AppConstants.EMPTY_STRING,mergeJobSkills.toString());*/
 
     }
 
@@ -239,7 +248,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
                                 new EventProperty.Builder()
                                         .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                                         .title(mFeedDetail.getNameOrTitle())
-                                        .companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
+                                        // TODO: ujjwal
+                                        //.companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
                                         .location(mFeedDetail.getAuthorCityName())
                                         .build();
                         trackEvent(Event.JOBS_BOOKMARKED, properties);

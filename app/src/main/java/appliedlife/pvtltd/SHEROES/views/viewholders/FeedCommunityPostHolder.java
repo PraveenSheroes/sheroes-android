@@ -66,7 +66,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
 /**
  * Created by Praveen_Singh on 22-01-2017.
  */
-
+// TODO: ujjwal
 public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private static final String LEFT_POSTED = "<font color='#8a8d8e'>";
     private static final String RIGHT_POSTED = "</font>";
@@ -220,7 +220,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+      /*  this.dataItem = item;
         mContext = context;
         dataItem.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
@@ -232,10 +232,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             flSpamPostUi.setVisibility(View.GONE);
             liApproveDelete.setVisibility(View.GONE);
             tvReviewDescription.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
-    private void normalCommunityPostUi(long userId, int adminId) {
+    @Override
+    public void viewRecycled() {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
+
+  /*  private void normalCommunityPostUi(long userId, int adminId) {
         liCommunityPostMainLayout.setVisibility(View.VISIBLE);
         tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setTag(true);
@@ -260,10 +270,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
         if (dataItem.getAuthorId() == userId || dataItem.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
             tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-          /*  if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+          *//*  if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                 tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
-            } else {*/
+            } else {*//*
             tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             tvFeedCommunityPostUserBookmark.setVisibility(View.GONE);
             if (dataItem.communityId == 0) {
@@ -330,7 +340,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-       /* if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+       *//* if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
             liFeedCommunityUserPostImages.removeAllViews();
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
@@ -352,7 +362,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 ivChallenge.setBackgroundResource(R.drawable.challenge_post);
             }
             liFeedCommunityUserPostImages.addView(child);
-        } else {*/
+        } else {*//*
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
             if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
                 liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
@@ -422,7 +432,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-          /*  if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+          *//*  if (dataItem.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 String feedTitle = dataItem.getAuthorName();
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
@@ -431,7 +441,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
                 }
-            } else {*/
+            } else {*//*
                 String feedTitle = dataItem.getAuthorName();
                 String feedCommunityName = dataItem.communityId == 0 ? dataItem.getChallengeAcceptPostTextS() + " " + "Challenge" :dataItem.getPostCommunityName();
                 if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
@@ -1181,7 +1191,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
         likeCommentOps();
-    }
-
+    }*/
 
 }

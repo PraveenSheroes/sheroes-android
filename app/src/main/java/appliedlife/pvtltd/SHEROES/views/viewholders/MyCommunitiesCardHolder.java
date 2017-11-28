@@ -86,11 +86,12 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
-        if (dataItem.isClosedCommunity()) {
+        // TODO: ujjwal
+     /*   if (dataItem.isClosedCommunity()) {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
         } else {
             tvCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        }
+        }*/
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName()) && dataItem.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
             tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
@@ -99,7 +100,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             tvCommunityInvite.setVisibility(View.VISIBLE);
             dataItem.setCallFromName(AppConstants.FEATURE_FRAGMENT);
         } else {
-            if (dataItem.isMember() && !dataItem.isOwner()) {
+            // TODO: ujjwal
+        /*    if (dataItem.isMember() && !dataItem.isOwner()) {
                 tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvCommunityInvite.setText(mContext.getString(R.string.ID_VIEW));
                 tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
@@ -107,13 +109,14 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
                 tvCommunityInvite.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvCommunityInvite.setText(mContext.getString(R.string.ID_INVITE));
                 tvCommunityInvite.setBackgroundResource(R.drawable.rectangle_community_invite);
-            }
+            }*/
         }
         //TODO:: change for UI
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvCommunityCardTitle.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
+        // TODO: ujjwal
+      /*  if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvCommunityTime.setText(dataItem.getCommunityType());
         }
 
@@ -130,7 +133,7 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvCommunityTag.setText(Html.fromHtml(tagHeader+AppConstants.SPACE + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
-        }
+        }*/
     }
     private void populatePostText() {
 
@@ -190,7 +193,8 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_community_time_label);
             time.setVisibility(View.INVISIBLE);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            // TODO: ujjwal
+            //tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .into(new SimpleTarget<Bitmap>() {

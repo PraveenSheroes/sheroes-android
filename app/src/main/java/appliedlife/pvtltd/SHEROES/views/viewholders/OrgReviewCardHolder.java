@@ -42,7 +42,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
 /**
  * Created by deepakpoptani on 18/09/17.
  */
-
+// TODO: ujjwal
 public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(EventCardHolder.class);
     BaseHolderInterface viewInterface;
@@ -97,14 +97,14 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+     /*   this.dataItem = item;
         mContext = context;
         dataItem.setItemPosition(position);
-        organisationReviewPostUI(context);
+        organisationReviewPostUI(context);*/
     }
 
 
-    private void organisationReviewPostUI(Context context) {
+  /*  private void organisationReviewPostUI(Context context) {
         upvoteReacted.setEnabled(true);
         tvNoOfUpVotes.setEnabled(true);
         imageOperations(context);
@@ -331,7 +331,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             expandFeedPostText();
         }
-    }
+    }*/
     @Override
     public void onClick(View view) {
     }

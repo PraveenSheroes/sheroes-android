@@ -13,7 +13,7 @@ import java.util.List;
 @Parcel(analyze = {EventSolrObj.class,FeedDetail.class})
 public class EventSolrObj extends FeedDetail {
     @SerializedName(value = "start_date_dt")
-    private Date startDate;
+    private String startDate;
 
     @SerializedName(value = "end_date_dt")
     private Date endDate;
@@ -87,11 +87,11 @@ public class EventSolrObj extends FeedDetail {
     @SerializedName(value = "s_disp_event_venue")
     private String venue;
 
-    public Date getStartDate() {
+    public String getStartDateForEvent() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDateForEvent(String startDate) {
         this.startDate = startDate;
     }
 
@@ -103,35 +103,35 @@ public class EventSolrObj extends FeedDetail {
         this.endDate = endDate;
     }
 
-    public String getStartHour() {
+    public String getDisplayTextStartHour() {
         return startHour;
     }
 
-    public void setStartHour(String startHour) {
+    public void setDisplayTextStartHour(String startHour) {
         this.startHour = startHour;
     }
 
-    public String getStartMinute() {
+    public String getDisplayTextStartMinute() {
         return startMinute;
     }
 
-    public void setStartMinute(String startMinute) {
+    public void setDisplayTextStartMinute(String startMinute) {
         this.startMinute = startMinute;
     }
 
-    public String getEndHour() {
+    public String getDisplayTextEndHour() {
         return endHour;
     }
 
-    public void setEndHour(String endHour) {
+    public void setDisplayTextEndHour(String endHour) {
         this.endHour = endHour;
     }
 
-    public String getEndMinute() {
+    public String getDisplayTextEndMinute() {
         return endMinute;
     }
 
-    public void setEndMinute(String endMinute) {
+    public void setDisplayTextEndMinute(String endMinute) {
         this.endMinute = endMinute;
     }
 
@@ -279,11 +279,11 @@ public class EventSolrObj extends FeedDetail {
         this.serviceName = serviceName;
     }
 
-    public String getVenue() {
+    public String getEventVenu() {
         return venue;
     }
 
-    public void setVenue(String venue) {
+    public void setEventVenue(String venue) {
         this.venue = venue;
     }
 }

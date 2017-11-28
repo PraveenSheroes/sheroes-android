@@ -482,7 +482,8 @@ public enum HolderMapping {
                                 returnView = FEED_JOB.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
-                                if(feedDetail.isSpamPost())
+                                // TODO: ujjwal
+                                /*if(feedDetail.isSpamPost())
                                 {
                                     if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
                                     {
@@ -511,7 +512,7 @@ public enum HolderMapping {
                                     {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
                                     }
-                                }
+                                }*/
                                 break;
                             case AppConstants.USER_SUB_TYPE:
                                 returnView = INVITE_MEMBER_MODULE.ordinal();
@@ -566,18 +567,20 @@ public enum HolderMapping {
                                 returnView = ARTICLE_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY:
-                                boolean isFeatured = feedDetail.isFeatured();
+                                // TODO: ujjwal
+                                /*boolean isFeatured = feedDetail.isFeatured();
                                 if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
                                 } else {
                                     returnView = MY_COMMUNITIES_CARD.ordinal();
-                                }
+                                }*/
                                 break;
                             case AppConstants.FEED_JOB:
                                 returnView = FEED_JOB.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
-                                if(feedDetail.isSpamPost())
+                                // TODO: ujjwal
+                               /* if(feedDetail.isSpamPost())
                                 {
                                     if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
                                     {
@@ -604,7 +607,7 @@ public enum HolderMapping {
                                     {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
                                     }
-                                }
+                                }*/
                                 break;
                             case AppConstants.MY_COMMUNITIES_HEADER:
                                 returnView = COMMUNITY_DETAIL_HEADER.ordinal();

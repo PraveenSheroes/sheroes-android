@@ -55,19 +55,21 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
                 case AppConstants.FEED_COMMUNITY:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
                     mTvHeaderText.setText(item.getNameOrTitle());
-                    mTvLabelText.setText(item.getCommunityType());
-                    if(dataItem.isClosedCommunity()) {
+                    // TODO: ujjwal
+                    //mTvLabelText.setText(item.getCommunityType());
+                    /*if(dataItem.isClosedCommunity()) {
                         mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
                     }else
                     {
                         mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0,0, 0);
-                    }
+                    }*/
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY);
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
                     mTvHeaderText.setText(item.getNameOrTitle());
-                    mTvLabelText.setText(item.getCommunityType());
+                    // TODO: ujjwal
+                    //mTvLabelText.setText(item.getCommunityType());
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY_POST);
                     break;
                 case AppConstants.FEED_JOB:

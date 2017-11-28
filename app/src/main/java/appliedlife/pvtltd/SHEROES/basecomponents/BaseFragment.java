@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -27,7 +26,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.google.gson.Gson;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -42,7 +40,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
@@ -57,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
@@ -71,11 +67,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -350,7 +344,8 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                 PayloadBuilder payloadBuilder = new PayloadBuilder();
                 MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), ((CommunityFeedSolrObj)mFeedDetail).isClosed(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
+                // TODO: ujjwal
+                //moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), ((CommunityFeedSolrObj)mFeedDetail).isClosed(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
                 break;
@@ -367,9 +362,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    List<LastComment> lastCommentList = mFeedDetail.getLastComments();
+                    List<Comment> lastCommentList = mFeedDetail.getLastComments();
                     if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-                        LastComment lastComment = lastCommentList.get(lastCommentList.size() - 1);
+                        Comment lastComment = lastCommentList.get(lastCommentList.size() - 1);
                         lastCommentList.remove(lastComment);
                         mFeedDetail.setLastComments(lastCommentList);
                         AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail);
@@ -444,11 +439,11 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     if (mFeedDetail.isLongPress()) {
-                        if (mFeedDetail.getReactedValue() == AppConstants.NO_REACTION_CONSTANT) {
-                            mFeedDetail.setReactedValue(mPressedEmoji);
+                        if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
+                            mFeedDetail.setReactionValue(mPressedEmoji);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         } else {
-                            mFeedDetail.setReactedValue(mPressedEmoji);
+                            mFeedDetail.setReactionValue(mPressedEmoji);
                         }
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
@@ -465,14 +460,14 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isLongPress()) {
-                        if (mFeedDetail.getReactedValue() != AppConstants.NO_REACTION_CONSTANT) {
-                            mFeedDetail.setReactedValue(AppConstants.NO_REACTION_CONSTANT);
+                        if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                            mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                         } else {
-                            mFeedDetail.setReactedValue(AppConstants.HEART_REACTION_CONSTANT);
+                            mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                             mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                         }
-                        mFeedDetail.setReactedValue(mFeedDetail.getLastReactionValue());
+                        mFeedDetail.setReactionValue(mFeedDetail.getLastReactionValue());
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
                     showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);

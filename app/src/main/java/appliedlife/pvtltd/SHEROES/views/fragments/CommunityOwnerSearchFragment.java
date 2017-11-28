@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -74,7 +76,7 @@ public class CommunityOwnerSearchFragment extends BaseFragment implements HomeVi
         ButterKnife.bind(this, view);
         if(null!=getArguments())
         {
-            mFeedDetail =getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
         }
         mHomePresenter.attachView(this);
         mAppUtils = AppUtils.getInstance();

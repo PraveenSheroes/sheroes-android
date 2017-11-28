@@ -44,7 +44,8 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail feedDetail, Context context, int position) {
-        this.dataItem = feedDetail;
+        // TODO: ujjwal
+        /*this.dataItem = feedDetail;
         mContext = context;
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) ;
         {
@@ -70,7 +71,7 @@ public class InviteMemberHolder extends BaseViewHolder<FeedDetail> {
             tvAddInvite.setTextColor(ContextCompat.getColor(mContext, R.color.blue));
         }
         ivCircleProfilePic.setCircularImage(true);
-        ivCircleProfilePic.bindImage(images);
+        ivCircleProfilePic.bindImage(images);*/
     }
 
     @Override

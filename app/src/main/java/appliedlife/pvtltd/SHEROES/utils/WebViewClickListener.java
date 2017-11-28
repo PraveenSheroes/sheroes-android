@@ -28,7 +28,8 @@ public class WebViewClickListener {
         FeedDetail feedDetail = new FeedDetail();
         List<String> imageUrls = new ArrayList<>();
         imageUrls.add(imageSource);
-        feedDetail.setImageUrls(imageUrls);
+        // TODO: ujjwal
+        //feedDetail.setImageUrls(imageUrls);
         AlbumActivity.navigateTo((ArticleActivity) mContext, feedDetail, ArticleActivity.SCREEN_LABEL, null);
     }
 }

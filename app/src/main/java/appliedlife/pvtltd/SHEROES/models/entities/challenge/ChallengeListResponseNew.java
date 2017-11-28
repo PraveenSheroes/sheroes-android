@@ -51,9 +51,4 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
         this.totalPeopleCompletedDelhi = totalPeopleCompletedDelhi;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
 }

@@ -4,15 +4,15 @@ package appliedlife.pvtltd.SHEROES.models.entities.community;
  * Created by Praveen_Singh on 12-03-2017.
  */
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import org.parceler.Parcel;
 
-public class Member extends BaseResponse implements Parcelable {
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+@Parcel(analyze = {Member.class,BaseResponse.class})
+public class Member extends BaseResponse{
 
     @SerializedName("approved_date")
     @Expose
@@ -326,86 +326,4 @@ public class Member extends BaseResponse implements Parcelable {
         this.ownerCount = ownerCount;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.approvedDate);
-        dest.writeValue(this.cityMasterId);
-        dest.writeValue(this.comId);
-        dest.writeString(this.comLogoUrl);
-        dest.writeString(this.comName);
-        dest.writeString(this.comType);
-        dest.writeByte(this.commIsActive ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.commIsClosed ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.commIsDeleted ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.commIsFeatured ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.communityId);
-        dest.writeValue(this.communityMemberId);
-        dest.writeValue(this.communityUserCityId);
-        dest.writeString(this.communityUserCityName);
-        dest.writeString(this.communityUserEmailid);
-        dest.writeString(this.communityUserFirstName);
-        dest.writeValue(this.communityUserId);
-        dest.writeString(this.communityUserLastName);
-        dest.writeString(this.communityUserMobile);
-        dest.writeValue(this.communityUserParticipantId);
-        dest.writeString(this.communityUserPhotoUrlPath);
-        dest.writeString(this.id);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isApproved ? (byte) 1 : (byte) 0);
-        dest.writeString(this.typeS);
-        dest.writeValue(this.usersId);
-        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.ownerCount);
-    }
-
-    public Member() {
-    }
-
-    protected Member(Parcel in) {
-        this.approvedDate = in.readString();
-        this.cityMasterId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.comId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.comLogoUrl = in.readString();
-        this.comName = in.readString();
-        this.comType = in.readString();
-        this.commIsActive = in.readByte() != 0;
-        this.commIsClosed = in.readByte() != 0;
-        this.commIsDeleted = in.readByte() != 0;
-        this.commIsFeatured = in.readByte() != 0;
-        this.communityId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.communityMemberId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.communityUserCityId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.communityUserCityName = in.readString();
-        this.communityUserEmailid = in.readString();
-        this.communityUserFirstName = in.readString();
-        this.communityUserId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.communityUserLastName = in.readString();
-        this.communityUserMobile = in.readString();
-        this.communityUserParticipantId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.communityUserPhotoUrlPath = in.readString();
-        this.id = in.readString();
-        this.isActive = in.readByte() != 0;
-        this.isApproved = in.readByte() != 0;
-        this.typeS = in.readString();
-        this.usersId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.isOwner = in.readByte() != 0;
-        this.ownerCount = (Integer) in.readValue(Integer.class.getClassLoader());
-    }
-
-    public static final Creator<Member> CREATOR = new Creator<Member>() {
-        @Override
-        public Member createFromParcel(Parcel source) {
-            return new Member(source);
-        }
-
-        @Override
-        public Member[] newArray(int size) {
-            return new Member[size];
-        }
-    };
 }

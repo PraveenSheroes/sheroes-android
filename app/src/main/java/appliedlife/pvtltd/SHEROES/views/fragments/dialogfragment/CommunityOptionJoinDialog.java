@@ -12,6 +12,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +66,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         mHomePresenter.attachView(this);
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
-        mFeedDetail = getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK);
+        mFeedDetail = Parcels.unwrap(getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK));
         setCancelable(true);
         return view;
     }
@@ -124,14 +126,16 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mFeedDetail.setRequestPending(true);
-                mFeedDetail.setOwner(false);
+                // TODO: ujjwal
+                /*mFeedDetail.setRequestPending(true);
+                mFeedDetail.setOwner(false);*/
                 if (mFeedDetail.isFromHome()) {
                     ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mFeedDetail);
                 } else {
                     ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mFeedDetail);
                 }
-                entityMoEngageJoinedCommunity(mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mFeedDetail.getItemPosition());
+                // TODO: ujjwal
+                //entityMoEngageJoinedCommunity(mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mFeedDetail.getItemPosition());
                 dismiss();
                 break;
             case AppConstants.FAILED:

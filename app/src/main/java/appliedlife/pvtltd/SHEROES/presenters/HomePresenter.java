@@ -295,7 +295,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().stopProgressBar();
                 List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
                 if (!CommonUtil.isEmpty(feedDetailList)) {
-                    mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+                    mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
                 }
                 getMvpView().showHomeFeedList(feedDetailList);
             }

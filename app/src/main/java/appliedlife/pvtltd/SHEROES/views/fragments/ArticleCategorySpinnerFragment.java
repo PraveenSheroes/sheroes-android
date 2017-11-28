@@ -67,7 +67,8 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mHomeSpinnerItemList = bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
+            // TODO: ujjwal
+            //mHomeSpinnerItemList = bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
         }
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);

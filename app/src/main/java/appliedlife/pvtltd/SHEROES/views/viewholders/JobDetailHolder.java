@@ -72,7 +72,8 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void jobTextViewOperation() {
-        String description =mFeedDetail.getListDescription();
+        // TODO: ujjwal
+      /*  String description =mFeedDetail.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(description)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 mTvJobDes.setText(Html.fromHtml(description, 0)); // for 24 api and more
@@ -156,7 +157,7 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             mTvJobOpening.setText(mFeedDetail.getNoOfOpenings() + AppConstants.SPACE + mContext.getString(R.string.ID_JOB_OPENING));
         } else {
             mTvJobOpening.setVisibility(View.GONE);
-        }
+        }*/
 
 
     }

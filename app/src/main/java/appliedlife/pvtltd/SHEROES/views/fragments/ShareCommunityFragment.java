@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -82,7 +84,7 @@ public class ShareCommunityFragment extends BaseFragment {
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
-            mFeedDetail = getArguments().getParcelable(AppConstants.SHARE);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.SHARE));
         }
         mCreateCommunityPresenter.attachView(this);
         setProgressBar(mProgressBar);

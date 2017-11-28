@@ -239,7 +239,8 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof ApproveSpamPostResponse) {
                     if(null!=mApprovePostFeedDetail) {
-                        mApprovePostFeedDetail.setSpamPost(mIsSpam);
+                        // TODO: ujjwal
+                        //mApprovePostFeedDetail.setSpamPost(mIsSpam);
                         mAdapter.removeDataOnPosition(mApprovePostFeedDetail, mApprovePostFeedDetail.getItemPosition());
                         mLayoutManager.scrollToPosition(mApprovePostFeedDetail.getItemPosition());
                         mAdapter.notifyDataSetChanged();

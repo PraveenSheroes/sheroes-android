@@ -58,4 +58,108 @@ public class ArticleSolrObj extends FeedDetail {
     public void setSlug(String slug) {
         this.slug = slug;
     }
+
+    public String getPublishedIn() {
+        return publishedIn;
+    }
+
+    public void setPublishedIn(String publishedIn) {
+        this.publishedIn = publishedIn;
+    }
+
+    public String getMetaDescription() {
+        return metaDescription;
+    }
+
+    public void setMetaDescription(String metaDescription) {
+        this.metaDescription = metaDescription;
+    }
+
+    public String getMetaTitle() {
+        return metaTitle;
+    }
+
+    public void setMetaTitle(String metaTitle) {
+        this.metaTitle = metaTitle;
+    }
+
+    public Integer getArticleStatus() {
+        return articleStatus;
+    }
+
+    public void setArticleStatus(Integer articleStatus) {
+        this.articleStatus = articleStatus;
+    }
+
+    public String getThirdPartyId() {
+        return thirdPartyId;
+    }
+
+    public void setThirdPartyId(String thirdPartyId) {
+        this.thirdPartyId = thirdPartyId;
+    }
+
+    public String getThirdPartyUniqueId() {
+        return thirdPartyUniqueId;
+    }
+
+    public void setThirdPartyUniqueId(String thirdPartyUniqueId) {
+        this.thirdPartyUniqueId = thirdPartyUniqueId;
+    }
+
+    public String getArticleCategory() {
+        return articleCategory;
+    }
+
+    public void setArticleCategory(String articleCategory) {
+        this.articleCategory = articleCategory;
+    }
+
+    public Long getArticleCategoryId() {
+        return articleCategoryId;
+    }
+
+    public void setArticleCategoryId(Long articleCategoryId) {
+        this.articleCategoryId = articleCategoryId;
+    }
+
+    public int getCharCount() {
+        return charCount;
+    }
+
+    public void setCharCount(int charCount) {
+        this.charCount = charCount;
+    }
+
+    public int getThumbnailImageWidth() {
+        return thumbnailImageWidth;
+    }
+
+    public void setThumbnailImageWidth(int thumbnailImageWidth) {
+        this.thumbnailImageWidth = thumbnailImageWidth;
+    }
+
+    public int getThumbnailImageHeight() {
+        return thumbnailImageHeight;
+    }
+
+    public void setThumbnailImageHeight(int thumbnailImageHeight) {
+        this.thumbnailImageHeight = thumbnailImageHeight;
+    }
+
+    public int getHighresImageWidth() {
+        return highresImageWidth;
+    }
+
+    public void setHighresImageWidth(int highresImageWidth) {
+        this.highresImageWidth = highresImageWidth;
+    }
+
+    public int getHighresImageHeight() {
+        return highresImageHeight;
+    }
+
+    public void setHighresImageHeight(int highresImageHeight) {
+        this.highresImageHeight = highresImageHeight;
+    }
 }

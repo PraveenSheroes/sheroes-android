@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +19,8 @@ import android.widget.TextView;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,7 +116,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(AppConstants.COMMUNITY_POST_ID, communityPostId);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
         communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
@@ -129,7 +133,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
             mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
-            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         if (null != mFeedDetail) {
@@ -227,13 +231,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     public void communityPostClick() {
         if (null!=mFeedDetail&& StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-            try {
-                FeedDetail feedDetail = (FeedDetail) mFeedDetail.clone();
+                FeedDetail feedDetail = (FeedDetail) mFeedDetail;
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
                 ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
         } else {
             FeedDetail feedDetail = mFeedDetail;
             feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
@@ -271,7 +271,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
             switch (communityEnum) {
                 case SEARCH_COMMUNITY:
                     mScreenName = AppConstants.ALL_SEARCH;
-                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
+                    // TODO: ujjwal
+                /*    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -279,7 +280,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     } else {
                         mTvJoinView.setVisibility(View.GONE);
                         mTvJoinView.setTag(false);
-                    }
+                    }*/
                     break;
                 case FEATURE_COMMUNITY:
                     if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
@@ -287,7 +288,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                     }
                     mScreenName = AppConstants.FEATURE_FRAGMENT;
-                    if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
+                    // TODO: ujjwal
+                 /*   if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                         mTvJoinView.setText(getString(R.string.ID_JOIN));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -295,7 +297,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     } else {
                         mTvJoinView.setVisibility(View.GONE);
                         mTvJoinView.setTag(false);
-                    }
+                    }*/
                     break;
                 case MY_COMMUNITY:
                     if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
@@ -311,7 +313,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
             }
         } else {
-            if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
+            // TODO: ujjwal
+      /*      if (!feedDetail.isMember() && !feedDetail.isOwner() && !feedDetail.isRequestPending() && feedDetail.isFeatured()) {
                 mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
                 mTvJoinView.setText(getString(R.string.ID_JOIN));
                 mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -319,7 +322,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             } else {
                 mTvJoinView.setVisibility(View.GONE);
                 mTvJoinView.setTag(false);
-            }
+            }*/
         }
         swipeToRefreshList();
     }
@@ -485,7 +488,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
         if (baseResponse instanceof CommunityResponse) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    if (mFeedDetail.isClosedCommunity()) {
+                    // TODO: ujjwal
+                /*    if (mFeedDetail.isClosedCommunity()) {
                         mFeedDetail.setRequestPending(true);
                         mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                         mTvJoinView.setText(getContext().getString(R.string.ID_REQUESTED));
@@ -496,10 +500,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         mTvJoinView.setText(getContext().getString(R.string.ID_JOINED));
                         mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                         updateUiAccordingToFeedDetail(mFeedDetail);
-                    }
+                    }*/
                     HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                     AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
-                    moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
+                    // TODO: ujjwal
+                    //moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                     break;
                 case AppConstants.FAILED:
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -589,7 +594,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         {
                             commentListRefresh(mApprovePostFeedDetail, DELETE_COMMUNITY_POST);
                         }else {
-                            mApprovePostFeedDetail.setSpamPost(false);
+                            // TODO: ujjwal
+                            //mApprovePostFeedDetail.setSpamPost(false);
                             commentListRefresh(mApprovePostFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
                     }

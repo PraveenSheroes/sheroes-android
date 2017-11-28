@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import org.parceler.Parcels;
 
 import java.util.HashMap;
 
@@ -123,14 +126,16 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
             case AppConstants.FEED_ARTICLE:
                 mFragmentOpen.setImageBlur(true);
                 Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
-                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, feedDetail);
+                Parcelable parcelable = Parcels.wrap(feedDetail);
+                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, parcelable);
                 startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 break;
             case AppConstants.FEED_COMMUNITY:
                 mFragmentOpen.setImageBlur(true);
                 Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFeature = new Bundle();
-                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, feedDetail);
+                Parcelable parcelableFeed = Parcels.wrap(feedDetail);
+                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelableFeed);
                 bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.SEARCH_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -169,7 +174,8 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 }
                 mFragmentOpen.setImageBlur(true);
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
-                intentJob.putExtra(AppConstants.JOB_DETAIL, feedDetail);
+                Parcelable parcelableFeedDetail = Parcels.wrap(feedDetail);
+                intentJob.putExtra(AppConstants.JOB_DETAIL, parcelableFeedDetail);
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             default:

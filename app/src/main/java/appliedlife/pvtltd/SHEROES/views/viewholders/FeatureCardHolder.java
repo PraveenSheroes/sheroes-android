@@ -89,7 +89,8 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
-        if (dataItem.isClosedCommunity()) {
+        // TODO: ujjwal
+     /*   if (dataItem.isClosedCommunity()) {
             tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
         } else {
             tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
@@ -131,7 +132,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
-        }
+        }*/
 
     }
 
@@ -151,7 +152,8 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             time.setVisibility(View.INVISIBLE);
             final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_community_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            // TODO: ujjwal
+            //tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .into(new SimpleTarget<Bitmap>() {

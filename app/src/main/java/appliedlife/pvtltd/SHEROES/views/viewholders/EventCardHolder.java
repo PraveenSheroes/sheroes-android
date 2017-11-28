@@ -138,7 +138,8 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
             ivFeedEventIcon.setCircularImage(true);
             ivFeedEventIcon.bindImage(authorImageUrl);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDateForEvent())) {
+        // TODO: ujjwal
+      /*  if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDateForEvent())) {
             long time = mDateUtil.getTimeInMillis(dataItem.getStartDateForEvent(), AppConstants.DATE_FORMAT);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
@@ -157,12 +158,13 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
 
             }
 
-        }
+        }*/
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
             tvEventTitle.setText(dataItem.getListDescription());
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+        // TODO: ujjwal
+   /*     if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.challenge_image, null);
             ImageView ivEventImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
@@ -172,7 +174,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
                     .load(dataItem.getImageUrls().get(0))
                     .into(ivEventImage);
             liFeedEventImages.addView(child);
-        }
+        }*/
     }
     private void setInterested() {
         if (dataItem.getNoOfLikes() > 0) {

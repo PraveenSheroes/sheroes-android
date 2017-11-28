@@ -54,6 +54,8 @@ import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -79,6 +81,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -689,7 +692,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
-                                .id(Long.toString(((FeedDetail) baseResponse).getUserPostSourceEntityId()))
+                                .id(Long.toString(((UserPostSolrObj)((FeedDetail) baseResponse)).getUserPostSourceEntityId()))
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED, properties);
                 ShareBottomSheetFragment.showDialog(this, shareText,((FeedDetail) baseResponse).getThumbnailImageUrl(),  ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true,  ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
@@ -718,7 +721,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             default:
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
-                mFragmentOpen.setOwner(mFeedDetail.isCommunityOwner());
+                // TODO: ujjwal
+                //mFragmentOpen.setOwner(mFeedDetail.isCommunityOwner());
                 setAllValues(mFragmentOpen);
                 setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
                 super.feedCardsHandled(view, baseResponse);
@@ -751,8 +755,10 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFeedDetail.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
         //   mFeedDetail.setIdOfEntityOrParticipant(157);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        Parcelable parcelableMentor = Parcels.wrap(mentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -842,7 +848,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (updateProgressDialogFragment == null) {
             updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, challengeDataItem);
+            Parcelable parcelable = Parcels.wrap(challengeDataItem);
+            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, parcelable);
             updateProgressDialogFragment.setArguments(bundle);
         }
         if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -862,7 +869,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (mChallengeSuccessDialogFragment == null) {
             mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.SUCCESS, challengeDataItem);
+            Parcelable parcelable = Parcels.wrap(challengeDataItem);
+            bundle.putParcelable(AppConstants.SUCCESS, parcelable);
             mChallengeSuccessDialogFragment.setArguments(bundle);
         }
         if (!mChallengeSuccessDialogFragment.isVisible() && !mChallengeSuccessDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -876,7 +884,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             eventDetailDialogFragment = new EventDetailDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putLong(AppConstants.EVENT_ID, eventID);
-            bundle.putParcelable(AppConstants.EVENT_DETAIL, mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
             eventDetailDialogFragment.setArguments(bundle);
         }
         if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -991,7 +1000,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.HOME_FRAGMENT, parcelable);
         bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
@@ -1009,7 +1019,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void searchButtonClick() {
         Intent intent = new Intent(this, HomeSearchActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ALL_SEARCH, mFragmentOpen);
+        Parcelable parcelable = Parcels.wrap(mFragmentOpen);
+        bundle.putParcelable(AppConstants.ALL_SEARCH, parcelable);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -1025,7 +1036,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
             mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
+            Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
+            bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) parcelable);
             mArticleCategorySpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
@@ -1239,7 +1251,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         setAllValues(mFragmentOpen);
         BookmarksFragment bookmarksFragment = new BookmarksFragment();
         Bundle bundleBookMarks = new Bundle();
-        bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, parcelable);
         bookmarksFragment.setArguments(bundleBookMarks);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -1566,11 +1579,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         }
                         Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(feature)) {
-                            if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
+                            // TODO: ujjwal
+                            /*if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
                                 communityOnClick();
                             } else {
                                 ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                            }
+                            }*/
                         }
                         break;
                     case MY_COMMUNITY:
@@ -1583,14 +1597,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                                     ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                 }
                             } else {
-                                if (mFeedDetail.isViewed()) {
+                                // TODO: ujjwal
+                             /*   if (mFeedDetail.isViewed()) {
                                     homeOnClick();
                                 } else {
                                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                                     if (AppUtils.isFragmentUIActive(fragment)) {
                                         ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                     }
-                                }
+                                }*/
                             }
                         }
                         break;
@@ -1730,7 +1745,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFeedDetail.setIdOfEntityOrParticipant(userId);
         mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         mFeedDetail.setItemPosition(position);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
 
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);

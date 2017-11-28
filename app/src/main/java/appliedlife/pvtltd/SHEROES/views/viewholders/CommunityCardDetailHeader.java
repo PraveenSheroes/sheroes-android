@@ -74,9 +74,10 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvCommunityName.setText(dataItem.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
+        // TODO: ujjwal
+        /*if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
             tvCommunityRelated.setText(dataItem.getCommunityType());
-        }
+        }*/
       /*  if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName())) {
             switch (dataItem.getScreenName()) {
                 case AppConstants.ALL_SEARCH:
@@ -104,14 +105,15 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + dataItem.getScreenName());
             }
         }*/
-        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()&&dataItem.isFeatured()) {
+        // TODO: ujjwal
+        /*if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()&&dataItem.isFeatured()) {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvJoin.setText(mContext.getString(R.string.ID_JOIN));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
             tvJoin.setVisibility(View.VISIBLE);
         } else {
             tvJoin.setVisibility(View.GONE);
-        }
+        }*/
 
     }
 

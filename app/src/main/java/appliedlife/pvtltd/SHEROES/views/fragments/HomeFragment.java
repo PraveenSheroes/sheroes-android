@@ -171,7 +171,7 @@ public class HomeFragment extends BaseFragment {
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         if(isChallenge){
-            Parcelable parcelable = getArguments().getParcelable(ContestActivity.CHALLENGE_OBJ);
+            Parcelable parcelable = Parcels.unwrap(getArguments().getParcelable(ContestActivity.CHALLENGE_OBJ));
             mContest = Parcels.unwrap(parcelable);
         }
         startedTime = System.currentTimeMillis();
@@ -248,7 +248,7 @@ public class HomeFragment extends BaseFragment {
                     }else {
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-                        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+                        mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
                         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
                     }
                 }
@@ -358,7 +358,7 @@ public class HomeFragment extends BaseFragment {
         }else {
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-            mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder("feed"), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+            mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder("feed"), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
             mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
             mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         }
@@ -407,7 +407,8 @@ public class HomeFragment extends BaseFragment {
                         if (mIsSpam) {
                             commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
                         } else {
-                            feedDetail.setSpamPost(false);
+                            // TODO: ujjwal
+                            //feedDetail.setSpamPost(false);
                             commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
                     } catch (CloneNotSupportedException e) {
@@ -476,7 +477,8 @@ public class HomeFragment extends BaseFragment {
                                     }
                                     challengeDataItemList.remove(mChallengeDataItem.getItemPosition());
                                     challengeDataItemList.add(mChallengeDataItem.getItemPosition(), mChallengeDataItem);
-                                    challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
+                                    // TODO: ujjwal
+                                    //challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
                                     challengeFeedDetail.setChallengeDataItems(challengeDataItemList);
                                     break;
                                 }
