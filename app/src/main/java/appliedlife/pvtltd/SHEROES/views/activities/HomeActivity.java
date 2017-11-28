@@ -599,6 +599,26 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null,0,0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
     }
 
+    public void openJobFragment() {
+        changeFragmentWithCommunities();
+        setAllValues(mFragmentOpen);
+        JobFragment jobFragment = new JobFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle jobBookMarks = new Bundle();
+        // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
+        jobFragment.setArguments(jobBookMarks);
+        fm.beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
+
+    }
+    public void jobUi()
+    {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
+    }
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
         int drawerItem = ((DrawerItems) baseResponse).getId();
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -613,6 +633,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             case AppConstants.THREE_CONSTANT:
                 //Job
+                openJobFragment();
+
                 break;
             case AppConstants.FOURTH_CONSTANT:
                 openBookMarkFragment();

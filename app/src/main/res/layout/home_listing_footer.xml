@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight=".33"
+            android:layout_weight=".5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_FEED"
@@ -39,15 +39,21 @@
             android:drawablePadding="@dimen/dp_size_5"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_JOBS"
+            android:visibility="gone"
             android:drawableTop="@drawable/ic_job_unselected"
             android:textColor="@color/feed_card_time"
             android:textSize="@dimen/sp_size_12" />
+        <View
+            android:layout_width="@dimen/dp_size_0.5"
+            android:layout_height="match_parent"
+            android:background="@color/feed_card_time"
+            />
         <TextView
             android:id="@+id/tv_communities"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight=".33"
+            android:layout_weight=".5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/dp_size_6"
             android:drawablePadding="@dimen/dp_size_4"

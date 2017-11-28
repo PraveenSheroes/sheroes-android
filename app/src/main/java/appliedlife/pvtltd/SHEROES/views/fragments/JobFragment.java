@@ -48,6 +48,7 @@ import butterknife.ButterKnife;
 public class JobFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Job Listing Screen";
     private final String TAG = LogUtils.makeLogTag(JobFragment.class);
+
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_job_list)
@@ -125,7 +126,8 @@ public class JobFragment extends BaseFragment {
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, false, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo()));
         ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-        ((HomeActivity)getActivity()).jobButtonUI();
+        //((HomeActivity)getActivity()).jobButtonUI();
+        ((HomeActivity)getActivity()).jobUi();
         long timeSpent=System.currentTimeMillis()-startedTime;
         moEngageUtills.entityMoEngageJobListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_JOB_LISTING));
