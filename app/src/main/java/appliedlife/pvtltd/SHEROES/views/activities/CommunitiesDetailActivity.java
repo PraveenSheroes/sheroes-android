@@ -198,7 +198,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         if(mFragmentOpen.isCommentList()){
             CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-            commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            if(commentReactionFragment!=null){
+                commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }
         }else {
             mCommunitiesDetailFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
         }
@@ -664,7 +666,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         } else if (mFragmentOpen.isReactionList()) {
             getSupportFragmentManager().popBackStack();
             mFragmentOpen.setReactionList(false);
-            mFragmentOpen.setCommentList(true);
         } else if (mFragmentOpen.isOpenAboutFragment()) {
             if (isCommunityDetailFragment) {
                 onBackClick();

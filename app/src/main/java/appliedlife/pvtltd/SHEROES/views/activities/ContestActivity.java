@@ -504,7 +504,6 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         }
         if (mFragmentOpen.isReactionList()) {
             mFragmentOpen.setReactionList(false);
-            mFragmentOpen.setCommentList(true);
             getSupportFragmentManager().popBackStackImmediate();
         }
     }

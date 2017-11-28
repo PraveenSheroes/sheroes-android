@@ -1288,7 +1288,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             } else if (mFragmentOpen.isReactionList()) {
                 mFragmentOpen.setReactionList(false);
-                mFragmentOpen.setCommentList(true);
                 getSupportFragmentManager().popBackStackImmediate();
             }else {
                 if (doubleBackToExitPressedOnce) {

@@ -347,7 +347,14 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         if(mFragmentOpen.isCommentList()){
             CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-            commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            if(commentReactionFragment != null){
+                commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }else {
+                mFragmentOpen.setCommentList(false);
+                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                if(fragment!=null && fragment instanceof CommunitiesDetailFragment)
+                    ((CommunitiesDetailFragment)fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+            }
         }else {
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
             if(fragment instanceof CommunitiesDetailFragment)
@@ -378,7 +385,6 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         } else if (mFragmentOpen.isReactionList()) {
             getSupportFragmentManager().popBackStack();
             mFragmentOpen.setReactionList(false);
-            mFragmentOpen.setCommentList(true);
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
