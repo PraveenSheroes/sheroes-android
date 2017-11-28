@@ -433,7 +433,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
             } else {*/
                 String feedTitle = dataItem.getAuthorName();
-                String feedCommunityName = dataItem.communityId == 0 ? dataItem.getChallengeAcceptPostTextS() + " " + "Challenge" :dataItem.getPostCommunityName();
+                String acceptPostText = dataItem.getChallengeAcceptPostTextS()==null ? "" :dataItem.getChallengeAcceptPostTextS();
+                String feedCommunityName = dataItem.communityId == 0 ? acceptPostText + " " + "Challenge" :dataItem.getPostCommunityName();
                 if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (dataItem.isAuthorMentor()) {

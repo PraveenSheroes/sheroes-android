@@ -127,15 +127,17 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         setAllValues(mFragmentOpen);
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
-            mContest = (Contest)Parcels.unwrap(parcelable);
+            mContest = (Contest) Parcels.unwrap(parcelable);
             populateContest(mContest);
         } else {
             if (getIntent().getExtras() != null) {
                 mContestId = getIntent().getExtras().getString(Contest.CONTEST_ID);
             }
             if (CommonUtil.isNotEmpty(mContestId)) {
-                FeedRequestPojo feedRequestPojo =  mAppUtils.feedDetailRequestBuilder(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1, Long.valueOf(mContestId));
+                FeedRequestPojo feedRequestPojo = mAppUtils.feedDetailRequestBuilder(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1, Long.valueOf(mContestId));
                 mContestPresenter.fetchContest(feedRequestPojo);
+            } else {
+                finish();
             }
         }
 
