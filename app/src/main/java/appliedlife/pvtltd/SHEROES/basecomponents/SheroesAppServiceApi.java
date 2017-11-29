@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -71,6 +70,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusReq
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
@@ -348,4 +349,6 @@ public interface SheroesAppServiceApi {
     @POST("participation/challenge/v2/response")
     Observable<CreateCommunityResponse> createChallengePost(@Body ChallengePostCreateRequest challengePostCreateRequest);
 
+    @POST("http://34.234.43.47/participant/appmenu/")
+    Observable<NavigationItems> getNavigationDrawerItems(@Body NavigationDrawerRequest navItems);
 }

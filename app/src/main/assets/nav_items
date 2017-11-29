@@ -1,0 +1,104 @@
+ {
+    "status": "SUCCESS",
+    "fieldErrorMessageMap": {},
+    "numFound": 12,
+    "screen_name": null,
+    "menu_items": [
+      {
+        "menu_id": 1,
+        "display_order": 1,
+        "menu_name": "Profile",
+        "menu_desc": "user profile navigation link menu item",
+        "menu_url": "/users/edit_profile",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 5,
+        "display_order": 5,
+        "menu_name": "Champions",
+        "menu_desc": "Meet the champions",
+        "menu_url": "/champions",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 6,
+        "display_order": 6,
+        "menu_name": "Articles",
+        "menu_desc": "Display Articles",
+        "menu_url": "/articles",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 7,
+        "display_order": 7,
+        "menu_name": "Jobs",
+        "menu_desc": "View Jobs",
+        "menu_url": "/jobs",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 8,
+        "display_order": 8,
+        "menu_name": "Ask Sheroes",
+        "menu_desc": "Ask Sheroes",
+        "menu_url": "/mentors",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 9,
+        "display_order": 9,
+        "menu_name": "Organizations",
+        "menu_desc": "View Organizations",
+        "menu_url": "/organizations",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 10,
+        "display_order": 10,
+        "menu_name": "Courses/Workshops",
+        "menu_desc": "user profile navigation link menu item",
+        "menu_url": "/career-resources-for-women",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 11,
+        "display_order": 11,
+        "menu_name": "Events",
+        "menu_desc": "View Events",
+        "menu_url": "/event",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 12,
+        "display_order": 12,
+        "menu_name": "Invite & Win",
+        "menu_desc": "Invite your friends and win",
+        "menu_url": "/#",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 13,
+        "display_order": 13,
+        "menu_name": "Invite Women Friends",
+        "menu_desc": "Invite your women friends",
+        "menu_url": "/#",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 14,
+        "display_order": 14,
+        "menu_name": "Settings",
+        "menu_desc": "Go to App Settings",
+        "menu_url": "/#",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      },
+      {
+        "menu_id": 15,
+        "display_order": 15,
+        "menu_name": "TEST",
+        "menu_desc": "TEST",
+        "menu_url": "/#",
+        "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/menu_profile.png"
+      }
+    ]
+  }

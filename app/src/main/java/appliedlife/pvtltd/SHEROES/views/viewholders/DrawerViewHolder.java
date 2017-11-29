@@ -1,20 +1,24 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -22,10 +26,10 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 05-01-2017.
  */
 
-public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
+public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     private final String TAG = LogUtils.makeLogTag(DrawerViewHolder.class);
     BaseHolderInterface viewInterface;
-    private DrawerItems dataItem;
+    private NavMenuItem dataItem;
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
     @Bind(R.id.tv_drawer_image)
@@ -40,10 +44,32 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
     }
 
     @Override
-    public void bindData(DrawerItems item, Context context, int position) {
+    public void bindData(NavMenuItem item, final Context context, int position) {
         this.dataItem = item;
         llDrawerItem.setOnClickListener(this);
-        int drawerItemId = item.getId();
+
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getMenuItemIconUrl())) {
+           /* Glide.with(context)
+                    .load(dataItem.getMenuItemIconUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                    .skipMemoryCache(true)
+                    .into(tvDrawerItem);*/
+
+            Glide.with(context)
+                    .load(dataItem.getMenuItemIconUrl())
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>(100,100) {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                            tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(context.getResources(),resource), null, null);
+                        }
+                    });
+        }
+
+        tvDrawerItem.setText(dataItem.getMenuName());
+
+
+        /*int drawerItemId = item.getId();
         switch (drawerItemId) {
             case 1:
                 tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_profile), null, null, null);
@@ -111,8 +137,7 @@ public class DrawerViewHolder extends BaseViewHolder<DrawerItems> {
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG +  AppConstants.SPACE + drawerItemId);
-        }
-
+        }*/
     }
 
     @Override

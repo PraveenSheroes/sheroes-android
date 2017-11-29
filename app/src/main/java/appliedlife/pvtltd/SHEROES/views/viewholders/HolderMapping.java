@@ -23,7 +23,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSponsorData;
@@ -31,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLabelValues;
@@ -620,7 +620,7 @@ public enum HolderMapping {
                     }
                 } else if (item instanceof CommunityPostResponse) {
                     returnView = SELECT_DIALOG.ordinal();
-                } else if (item instanceof DrawerItems) {
+                } else if (item instanceof NavMenuItem) {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof Comment) {
                     Comment comment = ((Comment) item);

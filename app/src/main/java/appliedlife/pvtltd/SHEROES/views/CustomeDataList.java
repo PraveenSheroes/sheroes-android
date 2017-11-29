@@ -3,15 +3,13 @@ package appliedlife.pvtltd.SHEROES.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
-
 /**
  * Created by Praveen_Singh on 30-01-2017.
  */
 
 public class CustomeDataList {
     //TODO:: Remove static content
-    public static List<DrawerItems> makeDrawerItemList(boolean isSheUser) {
+    /*public static List<DrawerItems> makeDrawerItemList(boolean isSheUser) {
         List<DrawerItems> drawerItemsList = new ArrayList<>();
         DrawerItems firstDrawerItem = new DrawerItems();
         firstDrawerItem.setId(1);
@@ -95,6 +93,6 @@ public class CustomeDataList {
         drawerItemsList.add(elevenDrawerItem);
 
         return drawerItemsList;
-    }
+    }*/
 
 }

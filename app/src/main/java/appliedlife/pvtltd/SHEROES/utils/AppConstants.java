@@ -140,6 +140,7 @@ public class AppConstants {
     public static final String PANDING_MEMBER = "PandingMember";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
+    public static final String WEB_URL_FRAGMENT = "web_url";
 
     public static final String EMAIL = "email";
 
@@ -154,6 +155,7 @@ public class AppConstants {
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
     public static final String YOUR_INTEREST = "your_interest";
+
 
     public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";

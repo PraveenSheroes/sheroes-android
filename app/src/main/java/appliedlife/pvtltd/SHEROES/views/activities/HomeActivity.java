@@ -80,14 +80,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -107,8 +106,8 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.WebPageFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -343,7 +342,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         initHomeViewPagerAndTabs();
-        assignNavigationRecyclerListView();
+        //assignNavigationRecyclerListView();
         if (mEventId > 0) {
             eventDetailDialog(mEventId);
         }
@@ -407,6 +406,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 //  mDrawer.openDrawer(Gravity.LEFT);
             }
         };
+    }
+
+    public  void openWebUrlFragment(String url) { //To open the webpages in app
+        changeFragmentWithCommunities();
+        setAllValues(mFragmentOpen); //add the changes related this
+        WebPageFragment webPageFragment = new WebPageFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(WebPageFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle webLinks = new Bundle();
+        webLinks.putString(AppConstants.WEB_URL_FRAGMENT, url);
+        webPageFragment.setArguments(webLinks);
+
+        fm.beginTransaction().replace(R.id.fl_article_card_view, webPageFragment, WebPageFragment.class.getName()).addToBackStack(WebPageFragment.class.getName()).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.fab_filter)
@@ -510,8 +522,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
-        }
-        else if (baseResponse instanceof DrawerItems) {
+        } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof ChallengeDataItem) {
             int id = view.getId();
@@ -620,72 +631,79 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
     }
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
-        int drawerItem = ((DrawerItems) baseResponse).getId();
+        NavMenuItem navMenuItem = (NavMenuItem) baseResponse;
+        int drawerItem = navMenuItem.getMenuId();
+
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         }
-        switch (drawerItem) {
-            case AppConstants.ONE_CONSTANT:
-                openProfileActivity();
-                break;
-            case AppConstants.TWO_CONSTANT:
-                openArticleFragment(setCategoryIds(),true);
-                break;
-            case AppConstants.THREE_CONSTANT:
-                //Job
-                openJobFragment();
 
-                break;
-            case AppConstants.FOURTH_CONSTANT:
-                openBookMarkFragment();
-                break;
-            case 6:
-                handleHelpLineFragmentFromDeepLinkAndLoading();
-                break;
-            case AppConstants.SEVENTH_CONSTANT:
+        if (navMenuItem.isNative()) {
+            switch (drawerItem) {
+                case AppConstants.ONE_CONSTANT:
+                    openProfileActivity();
+                    break;
+                case AppConstants.TWO_CONSTANT:
+                    openArticleFragment(setCategoryIds(), true);
+                    break;
+                case AppConstants.THREE_CONSTANT:
+                    //Job
+                    openJobFragment();
+
+                    break;
+                case AppConstants.FOURTH_CONSTANT:
+                    openBookMarkFragment();
+                    break;
+                case 6:
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
+                    break;
+                case AppConstants.SEVENTH_CONSTANT:
                     openHelplineFragment();
                     mTitleText.setText(getString(R.string.ID_APP_NAME));
                     mTitleText.setVisibility(View.VISIBLE);
                     mICSheroes.setVisibility(View.GONE);
-                break;
-            case AppConstants.EIGHTH_CONSTANT:
+                    break;
+                case AppConstants.EIGHTH_CONSTANT:
                     mFragmentOpen.setICCMemberListFragment(true);
                     renderICCMemberListView();
-                break;
-            case AppConstants.NINTH_CONSTANT:
+                    break;
+                case AppConstants.NINTH_CONSTANT:
                     mFragmentOpen.setFAQSFragment(true);
                     renderFAQSView();
-                break;
-            case AppConstants.TENTH_CONSTANT:
+                    break;
+                case AppConstants.TENTH_CONSTANT:
                     renderFeedFragment();
-                break;
-            case AppConstants.ELEVENTH_CONSTANT:
-                logOut();
-                break;
-            case 12:
-                inviteMyCommunityDialog();
-                break;
-            case 13:
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage(getString(R.string.ID_INVITE_REFERRAL_FRIEND));
-                mProgressDialog.setCancelable(true);
-                mProgressDialog.show();
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
-                    LoginResponse loginResponse = mUserPreference.get();
-                    if (null != loginResponse)
-                        referralUserAttribute(this, loginResponse);
-                }
-                isInviteReferral = true;
-                break;
-            case 14:
-                growthBuddiesInPublicProfile();
-                break;
-            case 15 :
-                ContestListActivity.navigateTo(this, SCREEN_LABEL, null);
-                break;
-            default:
-
+                    break;
+                case AppConstants.ELEVENTH_CONSTANT:
+                    logOut();
+                    break;
+                case 12:
+                    inviteMyCommunityDialog();
+                    break;
+                case 13:
+                    mProgressDialog = new ProgressDialog(this);
+                    mProgressDialog.setMessage(getString(R.string.ID_INVITE_REFERRAL_FRIEND));
+                    mProgressDialog.setCancelable(true);
+                    mProgressDialog.show();
+                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
+                        LoginResponse loginResponse = mUserPreference.get();
+                        if (null != loginResponse)
+                            referralUserAttribute(this, loginResponse);
+                    }
+                    isInviteReferral = true;
+                    break;
+                case 14:
+                    growthBuddiesInPublicProfile();
+                    break;
+                case 15:
+                    ContestListActivity.navigateTo(this, SCREEN_LABEL, null);
+                    break;
+                default:
+            }
+            } else {
+            openWebUrlFragment(navMenuItem.getMenuUrl());
         }
+
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -925,24 +943,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void onDrawerClosed() {
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
-    }
-
-    private void assignNavigationRecyclerListView() {
+    public void notifyNavigationDrawerItems(List<NavMenuItem> menuItems) {
         mAdapter = new GenericRecyclerViewAdapter(this, this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(manager);
-        boolean isSheUser = false;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
-            isSheUser = true;
-        } else {
-            isSheUser = false;
-        }
-        mAdapter.setSheroesGenericListData(CustomeDataList.makeDrawerItemList(isSheUser));
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setSheroesGenericListData(menuItems);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
     }
 
     private void renderFAQSView() {

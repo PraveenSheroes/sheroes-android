@@ -34,6 +34,8 @@ import com.moengage.push.PushManager;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,6 +65,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -77,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -104,7 +110,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
  * Title: Home fragment within Home activity perform all the UI operation .
  * Fragment will have all UI components and operate with activity .
  */
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements HomeView.NavigationView{
     private static final String SCREEN_LABEL = "Feed Screen";
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
 
@@ -231,9 +237,14 @@ public class HomeFragment extends BaseFragment {
         if (null == mUserPreference) {
             ((HomeActivity) getActivity()).logOut();
         } else if (null != mUserPreference.get()) {
+
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
                 ((HomeActivity) getActivity()).logOut();
             } else {
+                //For navigation drawer items
+                NavigationDrawerRequest navigationDrawerRequest = AppUtils.navigationOptionsRequestBuilder();
+                mHomePresenter.getNavigationDrawerOptions(navigationDrawerRequest);
+
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
@@ -545,6 +556,28 @@ public class HomeFragment extends BaseFragment {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         showHomeFeedList(feedDetailList);
     }
+
+    @Override
+    public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
+        ((HomeActivity) getContext()).notifyNavigationDrawerItems(navigationItems);
+    }
+
+    @Override
+    public void getNavigationDrawerItemsFailed() { //Read from asset file and display nav items
+        String stringContent = AppUtils.getStringContent("nav_items");
+        NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
+        if(eventResponseList.getStatus().equals(AppConstants.SUCCESS)) {
+            List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
+            Collections.sort(navMenuItems, new Comparator<NavMenuItem>(){ //Sort based on display order
+                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
+                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
+                }
+            });
+            ((HomeActivity) getContext()).notifyNavigationDrawerItems(navMenuItems);
+        }
+
+    }
+
 
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
