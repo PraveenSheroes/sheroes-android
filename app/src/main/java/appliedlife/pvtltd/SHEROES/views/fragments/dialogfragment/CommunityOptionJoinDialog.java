@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -51,7 +52,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     private final String TAG = LogUtils.makeLogTag(CommunityOptionJoinDialog.class);
     @Inject
     Preference<LoginResponse> userPreference;
-    private FeedDetail mFeedDetail;
+    private CommunityFeedSolrObj mCommunityFeedObj;
     @Inject
     HomePresenter mHomePresenter;
     @Inject
@@ -66,7 +67,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         mHomePresenter.attachView(this);
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
-        mFeedDetail = Parcels.unwrap(getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK));
+        mCommunityFeedObj = Parcels.unwrap(getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK));
         setCancelable(true);
         return view;
     }
@@ -108,7 +109,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add((long) userPreference.get().getUserSummary().getUserId());
-            mHomePresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, mFeedDetail.getIdOfEntityOrParticipant(), reasonToJoin));
+            mHomePresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), reasonToJoin));
         }
     }
 
@@ -126,23 +127,21 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                // TODO: ujjwal
-                /*mFeedDetail.setRequestPending(true);
-                mFeedDetail.setOwner(false);*/
-                if (mFeedDetail.isFromHome()) {
-                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mFeedDetail);
+                mCommunityFeedObj.setRequestPending(true);
+                mCommunityFeedObj.setOwner(false);
+                if (mCommunityFeedObj.isFromHome()) {
+                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mCommunityFeedObj);
                 } else {
-                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mFeedDetail);
+                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mCommunityFeedObj);
                 }
-                // TODO: ujjwal
-                //entityMoEngageJoinedCommunity(mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mFeedDetail.getItemPosition());
+                entityMoEngageJoinedCommunity(mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mCommunityFeedObj.getItemPosition());
                 dismiss();
                 break;
             case AppConstants.FAILED:
-                if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getScreenName()) && mFeedDetail.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
-                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mFeedDetail);
+                if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getScreenName()) && mCommunityFeedObj.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mCommunityFeedObj);
                 } else {
-                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mFeedDetail);
+                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mCommunityFeedObj);
                 }
                 dismiss();
                 break;

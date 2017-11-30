@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -959,5 +960,25 @@ public class UserBO {
 
 	public void setProficiencyLevel(String proficiencyLevel) {
 		this.proficiencyLevel = proficiencyLevel;
+	}
+
+	public List<String> getSkillsLabel(){
+		List<String> skillsLabels = new ArrayList<>();
+		if (getSkills() != null && !getSkills().isEmpty()) {
+			for (LabelValue labelValue : getSkills()) {
+				skillsLabels.add(labelValue.getLabel());
+			}
+		}
+		return skillsLabels;
+	}
+
+	public List<String> getInterestLabel(){
+		List<String> interestLabel = new ArrayList<>();
+		if (getInterests() != null && !getInterests().isEmpty()) {
+			for (LabelValue labelValue : getInterests()) {
+				interestLabel.add(labelValue.getLabel());
+			}
+		}
+		return interestLabel;
 	}
 }

@@ -154,8 +154,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
         }
-        // TODO: ujjwal
-       /* if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
+        if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
             List<String> tags = dataItem.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
             for (String tag : tags) {
@@ -168,7 +167,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
-        }*/
+        }
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {

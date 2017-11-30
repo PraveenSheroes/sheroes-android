@@ -182,8 +182,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
         setInterested();
         goingOnEvent();
         setEventDate();
-        // TODO: ujjwal
-      /*  if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getSpeakerId())) {
+        if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getSpeakerId())) {
             mCardViewSpeaker.setVisibility(View.VISIBLE);
             List<EventSpeakerData> speakerList = new ArrayList<>();
             int size = mFeedDetail.getSpeakerId().size();
@@ -202,9 +201,8 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
             setSpeakerListItem(speakerList);
         } else {
             mCardViewSpeaker.setVisibility(View.GONE);
-        }*/
-        // TODO: ujjwal
-       /* if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getSpeakerId())) {
+        }
+        if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mFeedDetail.getSpeakerId())) {
             mCardViewSponsor.setVisibility(View.VISIBLE);
             List<EventSponsorData> sponsorList = new ArrayList<>();
             int size = mFeedDetail.getSpeakerId().size();
@@ -223,7 +221,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
             setSponsersListItem(sponsorList);
         } else {
             mCardViewSponsor.setVisibility(View.GONE);
-        }*/
+        }
     }
 
     private void setEventDate() {

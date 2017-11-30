@@ -8,6 +8,8 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,8 +37,10 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -134,6 +138,7 @@ public class SheroesAppModule {
 
         final RuntimeTypeAdapterFactory<FeedDetail> typeFactory = RuntimeTypeAdapterFactory
                 .of(FeedDetail.class, "sub_type")
+                .registerSubtype(ArticleSolrObj.class, "A")
                 .registerSubtype(UserSolrObj.class, "U")
                 .registerSubtype(JobFeedSolrObj.class, "J")
                 .registerSubtype(CommunityFeedSolrObj.class, "C")
@@ -146,17 +151,6 @@ public class SheroesAppModule {
                 .setDateFormat(DATE_FORMATS[0])
                 .registerTypeAdapter(Date.class, new DateDeserializer())
                 .registerTypeAdapterFactory(typeFactory)
-              /*  .setExclusionStrategies(new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f) {
-                        return f.getDeclaringClass().equals(BaseModel.class);
-                    }
-
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                        return false;
-                    }
-                })*/
                 .create();
     }
 

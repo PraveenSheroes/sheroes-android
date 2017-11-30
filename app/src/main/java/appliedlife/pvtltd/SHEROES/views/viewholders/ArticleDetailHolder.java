@@ -193,8 +193,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             tvArticleDetailHeader.setText(mFeedDetail.getNameOrTitle());
         }
-        // TODO: ujjwal
-        /*if (StringUtil.isNotEmptyCollection(mFeedDetail.getTags())) {
+        if (StringUtil.isNotEmptyCollection(mFeedDetail.getTags())) {
             List<String> tags = mFeedDetail.getTags();
             //String mergeTags = AppConstants.EMPTY_STRING;
             StringBuilder mergeTags = new StringBuilder();
@@ -216,7 +215,7 @@ public class ArticleDetailHolder extends BaseViewHolder<ArticleDetailPojo> imple
             } else {
                 tvArticleDetailTag.setText(Html.fromHtml(tagHeader.toString()));// or for older api
             }
-        }*/
+        }
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
             tvArticleDetailIconName.setText(mFeedDetail.getAuthorName());
         }

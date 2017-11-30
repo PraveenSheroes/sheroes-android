@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ public class UserPostSolrObj extends FeedDetail {
     private List<String> imageUrls;
 
     @SerializedName("community_i")
-    private Long communityId;
+    public Long communityId;
 
     @SerializedName("is_commumity_post_b")
     private boolean isCommunityPost;
@@ -43,23 +42,23 @@ public class UserPostSolrObj extends FeedDetail {
     private boolean isClosedCommunity;
 
     @SerializedName(value = "s_disp_third_party_unique_id")
-    private String sourceEntityId;
+    private String dispThirdPartyUniqueId;
 
     @SerializedName(value = "start_date_dt")
-    private Date entityStartDate;
+    private String entityStartDate;
 
     @SerializedName(value = "rating_i")
     private Integer rating;
 
     @SerializedName(value = "is_comment_allowed_b")
-    private Boolean isCommentAllowed;
+    private boolean isCommentAllowed;
 
     @SerializedName(value = "solr_ignore_community_type_id")
-    private Long communityTypeId;
+    private long communityTypeId;
 
 
     @SerializedName(value="solr_ignore_is_community_owner")
-    private Boolean isCommunityOwner;
+    private boolean isCommunityOwner;
 
     @SerializedName(value = "post_image_width_is")
     private List<Integer> imageWidth;
@@ -79,6 +78,9 @@ public class UserPostSolrObj extends FeedDetail {
 
     @SerializedName("challenge_accept_post_text_s")
     private String challengeAcceptPostText;
+
+    //this field are added by own
+    private Integer noOfOpenings;
 
     public List<Long> getImagesIds() {
         return imagesIds;
@@ -136,11 +138,11 @@ public class UserPostSolrObj extends FeedDetail {
         this.postCommunityClosed = postCommunityClosed;
     }
 
-    public String getPostCommunityLogo() {
+    public String getSolrIgnorePostCommunityLogo() {
         return postCommunityLogo;
     }
 
-    public void setPostCommunityLogo(String postCommunityLogo) {
+    public void getSolrIgnorePostCommunityLogo(String postCommunityLogo) {
         this.postCommunityLogo = postCommunityLogo;
     }
 
@@ -160,19 +162,19 @@ public class UserPostSolrObj extends FeedDetail {
         isClosedCommunity = closedCommunity;
     }
 
-    public String getSourceEntityId() {
-        return sourceEntityId;
+    public String getDispThirdPartyUniqueId() {
+        return dispThirdPartyUniqueId;
     }
 
-    public void setSourceEntityId(String sourceEntityId) {
-        this.sourceEntityId = sourceEntityId;
+    public void setDispThirdPartyUniqueId(String dispThirdPartyUniqueId) {
+        this.dispThirdPartyUniqueId = dispThirdPartyUniqueId;
     }
 
-    public Date getEntityStartDate() {
+    public String getStartDateForEvent() {
         return entityStartDate;
     }
 
-    public void setEntityStartDate(Date entityStartDate) {
+    public void setEntityStartDate(String entityStartDate) {
         this.entityStartDate = entityStartDate;
     }
 
@@ -184,27 +186,27 @@ public class UserPostSolrObj extends FeedDetail {
         this.rating = rating;
     }
 
-    public Boolean getCommentAllowed() {
+    public boolean isCommentAllowed() {
         return isCommentAllowed;
     }
 
-    public void setCommentAllowed(Boolean commentAllowed) {
+    public void setCommentAllowed(boolean commentAllowed) {
         isCommentAllowed = commentAllowed;
     }
 
-    public Long getCommunityTypeId() {
+    public long getCommunityTypeId() {
         return communityTypeId;
     }
 
-    public void setCommunityTypeId(Long communityTypeId) {
+    public void setCommunityTypeId(long communityTypeId) {
         this.communityTypeId = communityTypeId;
     }
 
-    public Boolean getCommunityOwner() {
+    public boolean isCommunityOwner() {
         return isCommunityOwner;
     }
 
-    public void setCommunityOwner(Boolean communityOwner) {
+    public void setCommunityOwner(boolean communityOwner) {
         isCommunityOwner = communityOwner;
     }
 
@@ -256,11 +258,35 @@ public class UserPostSolrObj extends FeedDetail {
         this.userPostSourceEntityId = userPostSourceEntityId;
     }
 
-    public String getChallengeAcceptPostText() {
+    public String getChallengeAcceptPostTextS() {
         return challengeAcceptPostText;
     }
 
     public void setChallengeAcceptPostText(String challengeAcceptPostText) {
         this.challengeAcceptPostText = challengeAcceptPostText;
+    }
+
+    public Integer getNoOfOpenings() {
+        return noOfOpenings;
+    }
+
+    public void setNoOfOpenings(Integer noOfOpenings) {
+        this.noOfOpenings = noOfOpenings;
+    }
+
+    public String getPostCommunityLogo() {
+        return postCommunityLogo;
+    }
+
+    public void setPostCommunityLogo(String postCommunityLogo) {
+        this.postCommunityLogo = postCommunityLogo;
+    }
+
+    public Boolean getCommunityOwner() {
+        return isCommunityOwner;
+    }
+
+    public String getChallengeAcceptPostText() {
+        return challengeAcceptPostText;
     }
 }

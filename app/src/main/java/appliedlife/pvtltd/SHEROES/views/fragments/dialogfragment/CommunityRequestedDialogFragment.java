@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
@@ -54,7 +55,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
     @Bind(R.id.pb_community_requested_progress_bar)
     ProgressBar mProgressBar;
     private GenericRecyclerViewAdapter mAdapter;
-    FeedDetail mFeedDetail;
+    CommunityFeedSolrObj mCommunityFeedObj;
     int position;
     private FragmentListRefreshData mFragmentListRefreshData;
     private int mPageNo = AppConstants.ONE_CONSTANT;
@@ -68,7 +69,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         ButterKnife.bind(this, view);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PANDING_MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         if (null != getArguments()) {
-            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
+            mCommunityFeedObj = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
         }
         requestedPresenter.attachView(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -90,8 +91,8 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
 
             }
         });
-        mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
-        requestedPresenter.getAllPendingRequest(getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
+        mFragmentListRefreshData.setEnitityOrParticpantid(mCommunityFeedObj.getIdOfEntityOrParticipant());
+        requestedPresenter.getAllPendingRequest(getPandingMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
 
         return view;
     }
@@ -109,7 +110,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
 
     @OnClick(R.id.fmCommunityMembersClose)
     public void communityClosePress() {
-        ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
+        ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mCommunityFeedObj);
         dismiss();
     }
 
@@ -149,11 +150,10 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         switch (memberListResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 pandingListData.remove(position);
-                // TODO: ujjwal
-                //mFeedDetail.setNoOfPendingRequest(pandingListData.size());
+                mCommunityFeedObj.setNoOfPendingRequest(pandingListData.size());
                 mAdapter.setSheroesGenericListData(pandingListData);
                 mAdapter.notifyDataSetChanged();
-                ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
+                ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mCommunityFeedObj);
                 break;
             case AppConstants.FAILED:
                 ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -168,11 +168,10 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         switch (memberListResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 pandingListData.remove(position);
-                // TODO: ujjwal
-                //mFeedDetail.setNoOfPendingRequest(pandingListData.size());
+                mCommunityFeedObj.setNoOfPendingRequest(pandingListData.size());
                 mAdapter.setSheroesGenericListData(pandingListData);
                 mAdapter.notifyDataSetChanged();
-                ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
+                ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mCommunityFeedObj);
                 break;
             case AppConstants.FAILED:
                 ((CommunitiesDetailActivity)getActivity()).onShowErrorDialog(memberListResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -189,7 +188,7 @@ public class CommunityRequestedDialogFragment extends BaseDialogFragment impleme
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth){
             @Override
             public void onBackPressed() {
-                ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
+                ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mCommunityFeedObj);
             }
         };
     }

@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -30,7 +31,7 @@ import butterknife.ButterKnife;
 public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
     BaseHolderInterface viewInterface;
     private JobDetailPojo dataItem;
-    private FeedDetail mFeedDetail;
+    private JobFeedSolrObj jobFeedObj;
     private Context mContext;
     @Bind(R.id.tv_job_des)
     TextView mTvJobDes;
@@ -64,16 +65,15 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
     public void bindData(JobDetailPojo obj, Context context, int position) {
         dataItem = obj;
         mContext = context;
-        mFeedDetail = dataItem.getFeedDetail();
-        if (null != mFeedDetail) {
+        jobFeedObj = (JobFeedSolrObj) dataItem.getFeedDetail();
+        if (null != jobFeedObj) {
             jobTextViewOperation();
         }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void jobTextViewOperation() {
-        // TODO: ujjwal
-      /*  String description =mFeedDetail.getListDescription();
+        String description =jobFeedObj.getListDescription();
         if (StringUtil.isNotNullOrEmptyString(description)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 mTvJobDes.setText(Html.fromHtml(description, 0)); // for 24 api and more
@@ -81,8 +81,8 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
                 mTvJobDes.setText(Html.fromHtml(description));// or for older api
             }
         }
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobEmpTypes())) {
-            List<String> jobTypes = mFeedDetail.getSearchTextJobEmpTypes();
+        if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobEmpTypes())) {
+            List<String> jobTypes = jobFeedObj.getSearchTextJobEmpTypes();
             String mergeJobTypes = AppConstants.EMPTY_STRING;
             for (String jobType : jobTypes) {
                 mergeJobTypes += jobType + AppConstants.PIPE;
@@ -92,8 +92,8 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             mTvJobOpt.setVisibility(View.GONE);
         }
 
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
-            List<String> jobSkills = mFeedDetail.getSearchTextJobSkills();
+        if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobSkills())) {
+            List<String> jobSkills = jobFeedObj.getSearchTextJobSkills();
             StringBuilder mergeJobSkills = new StringBuilder();
             for (String skill : jobSkills) {
                 mergeJobSkills.append(skill);
@@ -103,36 +103,36 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
         } else {
             mTvJobSkill.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getStartDate())) {
-         //   long startDate = mDateUtil.getTimeInMillis(mFeedDetail.getStartDate(), AppConstants.DATE_FORMAT);
-            mTvJobStartDate.setText(mFeedDetail.getStartDate());
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getStartDate())) {
+         //   long startDate = mDateUtil.getTimeInMillis(jobFeedObj.getStartDate(), AppConstants.DATE_FORMAT);
+            mTvJobStartDate.setText(jobFeedObj.getStartDate());
         } else {
             mTvJobStartDate.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getEndDate())) {
-         //   long endDate = mDateUtil.getTimeInMillis(mFeedDetail.getEndDate(), AppConstants.DATE_FORMAT);
-            mTvJobEndDate.setText(mFeedDetail.getEndDate());
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getEndDate())) {
+         //   long endDate = mDateUtil.getTimeInMillis(jobFeedObj.getEndDate(), AppConstants.DATE_FORMAT);
+            mTvJobEndDate.setText(jobFeedObj.getEndDate());
         } else {
             mTvJobEndDate.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorCityName())) {
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getAuthorCityName())) {
             StringBuilder stringBuilder=new StringBuilder();
-            stringBuilder.append(mFeedDetail.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
+            stringBuilder.append(jobFeedObj.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
             mTvJobLocation.setText(stringBuilder.toString());
         } else {
             mTvJobLocation.setText(mContext.getString(R.string.ID_REMOTE));
         }
-        if (mFeedDetail.getCompensationFrom() > 0 && mFeedDetail.getCompensationTo() > 0) {
+        if (jobFeedObj.getCompensationFrom() > 0 && jobFeedObj.getCompensationTo() > 0) {
             StringBuilder jobPackage = new StringBuilder();
-            if(StringUtil.isNotNullOrEmptyString(mFeedDetail.getCompensationCurrency())) {
-                jobPackage.append(mFeedDetail.getCompensationCurrency()).append(mFeedDetail.getCompensationFrom()).append(AppConstants.DASH).append(mFeedDetail.getCompensationTo());
+            if(StringUtil.isNotNullOrEmptyString(jobFeedObj.getCompensationCurrency())) {
+                jobPackage.append(jobFeedObj.getCompensationCurrency()).append(jobFeedObj.getCompensationFrom()).append(AppConstants.DASH).append(jobFeedObj.getCompensationTo());
             }
             else
             {
-                jobPackage.append(mFeedDetail.getCompensationFrom()).append(AppConstants.DASH).append(mFeedDetail.getCompensationTo());
+                jobPackage.append(jobFeedObj.getCompensationFrom()).append(AppConstants.DASH).append(jobFeedObj.getCompensationTo());
             }
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCompensationDetails())) {
-                jobPackage.append(AppConstants.SPACE).append(mFeedDetail.getCompensationDetails());
+            if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getCompensationDetails())) {
+                jobPackage.append(AppConstants.SPACE).append(jobFeedObj.getCompensationDetails());
             } else {
                 jobPackage.append(AppConstants.SPACE).append(AppConstants.PER_ANUM);
             }
@@ -141,9 +141,10 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
         else {
             mTvJobPackage.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getEducationDegreeNames())) {
+        // TODO : ujjwal
+       /* if (StringUtil.isNotEmptyCollection(jobFeedObj.getEducationDegreeNames())) {
             StringBuilder education = new StringBuilder();
-            for (String degreeName : mFeedDetail.getEducationDegreeNames()) {
+            for (String degreeName : jobFeedObj.getEducationDegreeNames()) {
                 education.append(degreeName);
                 education.append(AppConstants.COMMA);
             }
@@ -152,14 +153,12 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             }
         } else {
             mTvJobEducation.setVisibility(View.GONE);
-        }
-        if (mFeedDetail.getNoOfOpenings() > 0) {
-            mTvJobOpening.setText(mFeedDetail.getNoOfOpenings() + AppConstants.SPACE + mContext.getString(R.string.ID_JOB_OPENING));
+        }*/
+        if (jobFeedObj.getNoOfOpenings() > 0) {
+            mTvJobOpening.setText(jobFeedObj.getNoOfOpenings() + AppConstants.SPACE + mContext.getString(R.string.ID_JOB_OPENING));
         } else {
             mTvJobOpening.setVisibility(View.GONE);
-        }*/
-
-
+        }
     }
 
     @Override

@@ -79,6 +79,8 @@ import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -690,9 +692,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             case R.id.share:
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
+                String sourceId = "";
+                if(baseResponse instanceof UserPostSolrObj){
+                    sourceId = Long.toString(((UserPostSolrObj)baseResponse).getUserPostSourceEntityId());
+                }else if(baseResponse instanceof ChallengeSolrObj){
+                    sourceId = Long.toString(((ChallengeSolrObj)baseResponse).getIdOfEntityOrParticipant());
+                }
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
-                                .id(Long.toString(((UserPostSolrObj)((FeedDetail) baseResponse)).getUserPostSourceEntityId()))
+                                .id(sourceId)
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED, properties);
                 ShareBottomSheetFragment.showDialog(this, shareText,((FeedDetail) baseResponse).getThumbnailImageUrl(),  ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true,  ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
@@ -721,8 +729,9 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             default:
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
-                // TODO: ujjwal
-                //mFragmentOpen.setOwner(mFeedDetail.isCommunityOwner());
+                if (mFeedDetail instanceof UserPostSolrObj) {
+                    mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
+                }
                 setAllValues(mFragmentOpen);
                 setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
                 super.feedCardsHandled(view, baseResponse);
@@ -751,10 +760,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void openMentorProfileDetail(MentorDetailItem mentorDetailItem) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        mFeedDetail = new FeedDetail();
-        mFeedDetail.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
         //   mFeedDetail.setIdOfEntityOrParticipant(157);
-        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        mFeedDetail = communityFeedSolrObj;
         Parcelable parcelable = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         Parcelable parcelableMentor = Parcels.wrap(mentorDetailItem);
@@ -1037,7 +1047,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
-            bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) parcelable);
+            bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
             mArticleCategorySpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
@@ -1445,7 +1455,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void checkPublicProfileMentorFollow(Intent intent) {
         if (null != mPublicProfileGrowthBuddiesDialogFragment) {
             if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                MentorDetailItem mentorDetailItem = (MentorDetailItem) intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE);
+                MentorDetailItem mentorDetailItem = (MentorDetailItem)Parcels.unwrap(intent.getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
                 mPublicProfileGrowthBuddiesDialogFragment.notifyList(mentorDetailItem);
                 if (mFragmentOpen.getChampionViaCommentReaction() != AppConstants.ONE_CONSTANT) {
                     mFragmentOpen.setChampionViaCommentReaction(AppConstants.NO_REACTION_CONSTANT);
@@ -1489,7 +1499,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void editCommunityPostResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
             if (null != mFeedDetail) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -1509,7 +1519,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void createCommunityActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
             if (AppUtils.isFragmentUIActive(community)) {
                 if (null != mFeedDetail) {
@@ -1523,7 +1534,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void articleDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
+            mFeedDetail =(FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
             if (mFragmentOpen.isArticleFragment()) {
                 Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentArticle)) {
@@ -1552,7 +1564,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void jobDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
             if (mFragmentOpen.isJobFragment()) {
                 Fragment fragmentJob = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentJob)) {
@@ -1568,8 +1581,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras() && null != (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+        if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
+            CommunityFeedSolrObj communityFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
             CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
             if (null != communityEnum) {
                 switch (communityEnum) {
@@ -1579,33 +1592,31 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         }
                         Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(feature)) {
-                            // TODO: ujjwal
-                            /*if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
+                            if (communityFeedSolrObj.isFeatured() && communityFeedSolrObj.isMember()) {
                                 communityOnClick();
                             } else {
-                                ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                            }*/
+                                ((FeaturedFragment) feature).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                            }
                         }
                         break;
                     case MY_COMMUNITY:
-                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                        if (StringUtil.isNotNullOrEmptyString(communityFeedSolrObj.getCallFromName()) && communityFeedSolrObj.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
                             communityOnClick();
                         } else {
                             if (null != mViewPagerAdapter) {
                                 Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
                                 if (AppUtils.isFragmentUIActive(community)) {
-                                    ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                    ((MyCommunitiesFragment) community).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                 }
                             } else {
-                                // TODO: ujjwal
-                             /*   if (mFeedDetail.isViewed()) {
+                                if (communityFeedSolrObj.isViewed()) {
                                     homeOnClick();
                                 } else {
                                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                                     if (AppUtils.isFragmentUIActive(fragment)) {
-                                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                        ((HomeFragment) fragment).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                     }
-                                }*/
+                                }
                             }
                         }
                         break;
@@ -1741,10 +1752,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void championDetailActivity(Long userId, int position) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        mFeedDetail = new FeedDetail();
-        mFeedDetail.setIdOfEntityOrParticipant(userId);
-        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        mFeedDetail.setItemPosition(position);
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        mFeedDetail = communityFeedSolrObj;
         Parcelable parcelable = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
 

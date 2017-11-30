@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -67,7 +68,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_feed_job_user_share)
     TextView tvFeedJobUserShare;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private JobFeedSolrObj jobFeedObj;
     @Inject
     DateUtil mDateUtil;
     Context mContext;
@@ -81,18 +82,18 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        this.jobFeedObj = (JobFeedSolrObj) item;
         this.mContext = context;
-        dataItem.setItemPosition(position);
+        jobFeedObj.setItemPosition(position);
         tvFeedJobUserBookmark.setEnabled(true);
-        if (!dataItem.isTrending()) {
+        if (!jobFeedObj.isTrending()) {
             imageOperations(context);
         }
         allTextViewStringOperations(context);
         onBookMarkClick();
     }
     private void onBookMarkClick() {
-        if (dataItem.isBookmarked()) {
+        if (jobFeedObj.isBookmarked()) {
             tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
         } else {
             tvFeedJobUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
@@ -101,7 +102,7 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
+        String feedCircleIconUrl = jobFeedObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             Glide.with(context)
                     .load(feedCircleIconUrl)
@@ -113,83 +114,78 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getNameOrTitle())) {
             StringBuilder stringBuilder=new StringBuilder();
-            // TODO: ujjwal
-            /* if (!dataItem.isApplied() && !dataItem.isViewed()) {
-                stringBuilder.append(dataItem.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(mContext.getString(R.string.ID_NEW)).append(RIGHT_NEW);
+             if (!jobFeedObj.isApplied() && !jobFeedObj.isViewed()) {
+                stringBuilder.append(jobFeedObj.getNameOrTitle()).append(AppConstants.SPACE).append(LEFT_NEW).append(mContext.getString(R.string.ID_NEW)).append(RIGHT_NEW);
             } else {
-                stringBuilder.append(dataItem.getNameOrTitle());
-            }*/
+                stringBuilder.append(jobFeedObj.getNameOrTitle());
+            }
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedJobCardTitle.setText(Html.fromHtml(stringBuilder.toString(), 0)); // for 24 api and more
             } else {
                 tvFeedJobCardTitle.setText(Html.fromHtml(stringBuilder.toString()));// or for older api
             }
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-            tvFeedJobGroupName.setText(dataItem.getAuthorName());
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getAuthorName())) {
+            tvFeedJobGroupName.setText(jobFeedObj.getAuthorName());
         }
-        // TODO: ujjwal
-     /*   if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDate())) {
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getStartDate())) {
             tvFeedJobDateTime.setVisibility(View.VISIBLE);
-            tvFeedJobDateTime.setText(dataItem.getStartDate());
-        }*/
+            tvFeedJobDateTime.setText(jobFeedObj.getStartDate());
+        }
         else
         {
             tvFeedJobDateTime.setVisibility(View.GONE);
         }
-        // TODO: ujjwal
-      /*  if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobEmpTypes())) {
-            List<String> jobTypes = dataItem.getSearchTextJobEmpTypes();
+        if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobEmpTypes())) {
+            List<String> jobTypes = jobFeedObj.getSearchTextJobEmpTypes();
             String mergeJobTypes = AppConstants.EMPTY_STRING;
             for (String jobType : jobTypes) {
                 mergeJobTypes += jobType + AppConstants.PIPE;
             }
             tvFeedJobType.setText(mergeJobTypes.substring(0, mergeJobTypes.length() - 1));
-        }*/
+        }
 
-        // TODO: ujjwal
-     /*   if (StringUtil.isNotEmptyCollection(dataItem.getSearchTextJobSkills())) {
-            List<String> jobSkills = dataItem.getSearchTextJobSkills();
+        if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobSkills())) {
+            List<String> jobSkills = jobFeedObj.getSearchTextJobSkills();
             String mergeJobSkills = AppConstants.EMPTY_STRING;
             for (String skill : jobSkills) {
                 mergeJobSkills += skill + AppConstants.COMMA;
             }
             tvFeedJobName.setText(mergeJobSkills.substring(0, mergeJobSkills.length() - 1));
-        }*/
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorCityName())) {
+        }
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getAuthorCityName())) {
             StringBuilder stringBuilder=new StringBuilder();
-            stringBuilder.append(dataItem.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
+            stringBuilder.append(jobFeedObj.getAuthorCityName()).append(AppConstants.COMMA).append(AppConstants.COUNTRY_NAME);
             tvFeedJobLocation.setText(stringBuilder.toString());
         }else
         {
             tvFeedJobLocation.setText(mContext.getString(R.string.ID_REMOTE));
         }
-        // TODO: ujjwal
-     /*   if (dataItem.isApplied()) {
+        if (jobFeedObj.isApplied()) {
             tvFeedJobApplied.setVisibility(View.VISIBLE);
         } else {
             tvFeedJobApplied.setVisibility(View.INVISIBLE);
-        }*/
+        }
 
     }
 
     @OnClick(R.id.tv_feed_job_user_bookmark)
     public void isBookMarkClick() {
-        dataItem.setTrending(true);
+        jobFeedObj.setTrending(true);
         tvFeedJobUserBookmark.setEnabled(false);
-        if (dataItem.isBookmarked()) {
-            viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
+        if (jobFeedObj.isBookmarked()) {
+            viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserBookmark);
             ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.handleOnClick(dataItem, tvFeedJobUserBookmark);
+            viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserBookmark);
             ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARK_ON_JOB, AppConstants.EMPTY_STRING);
         }
-        if (!dataItem.isBookmarked()) {
-            dataItem.setBookmarked(true);
+        if (!jobFeedObj.isBookmarked()) {
+            jobFeedObj.setBookmarked(true);
         } else {
-            dataItem.setBookmarked(false);
+            jobFeedObj.setBookmarked(false);
         }
         onBookMarkClick();
 
@@ -197,18 +193,18 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_job_user_menu)
     public void userMenuClick() {
-        dataItem.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(dataItem, tvFeedJobUserMenu);
+        jobFeedObj.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserMenu);
     }
 
     @OnClick(R.id.li_feed_job_card)
     public void feedJobClick() {
-        dataItem.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(dataItem, liFeedJobCard);
+        jobFeedObj.setItemPosition(getAdapterPosition());
+        viewInterface.handleOnClick(jobFeedObj, liFeedJobCard);
     }
     @OnClick(R.id.tv_feed_job_user_share)
     public void tvFeedJobShare() {
-        viewInterface.handleOnClick(dataItem, tvFeedJobUserShare);
+        viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserShare);
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackScreenView(mContext.getString(R.string.ID_REFER_SHARE_JOB));
     }

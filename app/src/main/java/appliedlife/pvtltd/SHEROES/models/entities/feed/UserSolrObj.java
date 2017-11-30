@@ -91,7 +91,7 @@ public class UserSolrObj extends FeedDetail {
     private Long currently_id;
 
     @SerializedName(value="profile_id_l")
-    private Long profileId;
+    private long profileId;
 
     @SerializedName(value="currently_s")
     private String currently;
@@ -131,9 +131,6 @@ public class UserSolrObj extends FeedDetail {
 
     @SerializedName(value="mars_user_preferred_time_s")
     private String marsUserPreferredTime;
-
-    @SerializedName(value="user_sub_type_s")
-    private String userSubType;
 
     public Integer getTotalExperience() {
         return totalExperience;
@@ -344,12 +341,12 @@ public class UserSolrObj extends FeedDetail {
     }
 
     @Override
-    public Long getProfileId() {
+    public long getProfileId() {
         return profileId;
     }
 
     @Override
-    public void setProfileId(Long profileId) {
+    public void setProfileId(long profileId) {
         this.profileId = profileId;
     }
 
@@ -455,13 +452,5 @@ public class UserSolrObj extends FeedDetail {
 
     public void setMarsUserPreferredTime(String marsUserPreferredTime) {
         this.marsUserPreferredTime = marsUserPreferredTime;
-    }
-
-    public String getUserSubType() {
-        return userSubType;
-    }
-
-    public void setUserSubType(String userSubType) {
-        this.userSubType = userSubType;
     }
 }

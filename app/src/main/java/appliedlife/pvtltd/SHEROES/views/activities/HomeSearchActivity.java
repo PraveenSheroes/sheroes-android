@@ -243,7 +243,8 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (requestCode == AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL && null != intent) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.TWO_CONSTANT);
             if (AppUtils.isFragmentUIActive(fragment)) {
                 if (fragment instanceof SearchArticleFragment) {
@@ -257,7 +258,8 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 }
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL && null != intent) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
+           // mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);
             if (AppUtils.isFragmentUIActive(fragment)) {
                 if (fragment instanceof SearchCommunitiesFragment) {
@@ -276,7 +278,8 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 }
             }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_JOB_DETAIL && null != intent) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.FOURTH_CONSTANT);
             if (AppUtils.isFragmentUIActive(fragment)) {
                 if (fragment instanceof SearchJobFragment) {

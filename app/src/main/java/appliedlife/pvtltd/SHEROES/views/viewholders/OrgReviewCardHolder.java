@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -42,7 +43,6 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
 /**
  * Created by deepakpoptani on 18/09/17.
  */
-// TODO: ujjwal
 public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(EventCardHolder.class);
     BaseHolderInterface viewInterface;
@@ -80,7 +80,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     private Handler mHandler;
     @Inject
     Preference<LoginResponse> userPreference;
-    private FeedDetail dataItem;
+    private UserPostSolrObj userPostObj;
     private Context mContext;
     private long mUserId;
 
@@ -97,14 +97,14 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-     /*   this.dataItem = item;
+        userPostObj = (UserPostSolrObj) item;
         mContext = context;
-        dataItem.setItemPosition(position);
-        organisationReviewPostUI(context);*/
+        userPostObj.setItemPosition(position);
+        organisationReviewPostUI(context);
     }
 
 
-  /*  private void organisationReviewPostUI(Context context) {
+    private void organisationReviewPostUI(Context context) {
         upvoteReacted.setEnabled(true);
         tvNoOfUpVotes.setEnabled(true);
         imageOperations(context);
@@ -113,7 +113,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
 
     private void imageOperations(Context context) {
-        String authorImageUrl = dataItem.getAuthorImageUrl();
+        String authorImageUrl = userPostObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivReviewPostAuthor.setCircularImage(true);
             ivReviewPostAuthor.bindImage(authorImageUrl);
@@ -123,14 +123,14 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allReviewTextViewAndImageOperations(Context context) {
 
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
+        if (StringUtil.isNotNullOrEmptyString(userPostObj.getAuthorName())) {
             StringBuilder postText = new StringBuilder();
             tvReviewPostText.setVisibility(View.VISIBLE);
-            String feedAuthorTitle = dataItem.getAuthorName();
-            String communityName = dataItem.getPostCommunityName();
+            String feedAuthorTitle = userPostObj.getAuthorName();
+            String communityName = userPostObj.getPostCommunityName();
             if (StringUtil.isNotNullOrEmptyString(feedAuthorTitle) && StringUtil.isNotNullOrEmptyString(communityName)) {
                 if (!feedAuthorTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                    if (dataItem.isAuthorMentor()) {
+                    if (userPostObj.isAuthorMentor()) {
                         ivReviewPostMentorVerified.setVisibility(View.VISIBLE);
                     } else {
                         ivReviewPostMentorVerified.setVisibility(View.GONE);
@@ -148,26 +148,26 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
                 tvCompanyTitle.setText(communityName);
             }
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+        if (StringUtil.isNotNullOrEmptyString(userPostObj.getCreatedDate())) {
+            long createdDate = mDateUtil.getTimeInMillis(userPostObj.getCreatedDate(), AppConstants.DATE_FORMAT);
             tvReviewPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
 
-        if (!dataItem.isTrending()) {
-            if (StringUtil.isNotNullOrEmptyString(dataItem.getSolrIgnorePostCommunityLogo())) {
+        if (!userPostObj.isTrending()) {
+            if (StringUtil.isNotNullOrEmptyString(userPostObj.getSolrIgnorePostCommunityLogo())) {
                 Glide.with(context)
-                        .load(dataItem.getSolrIgnorePostCommunityLogo())
+                        .load(userPostObj.getSolrIgnorePostCommunityLogo())
                         .into(ivCompanyThumbnail);
             }
-            if (!dataItem.isCommentAllowed()) {
-                tvComapnyRating.setText(String.valueOf(dataItem.getRating()));
+            if (!userPostObj.isCommentAllowed()) {
+                tvComapnyRating.setText(String.valueOf(userPostObj.getRating()));
             }
         }
         populatePostText();
         setUpvoteButtonAndText();
     }
     private void populatePostText() {
-        final String listDescription = dataItem.getListDescription();
+        final String listDescription = userPostObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             return;
         }
@@ -207,15 +207,15 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     }
     private void setUpvoteButtonAndText() {
         String upvoteText = "";
-        int likes = dataItem.getNoOfLikes();
+        int likes = userPostObj.getNoOfLikes();
         if (likes == 0) {
             upvoteText = mContext.getString(R.string.ID_REVIEW_POST_NO_UPVOTE);
         } else if (likes == 1) {
-            upvoteText = String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + mContext.getString(R.string.ID_REVIEW_POST_NO_UPVOTE);
+            upvoteText = String.valueOf(userPostObj.getNoOfLikes()) + AppConstants.SPACE + mContext.getString(R.string.ID_REVIEW_POST_NO_UPVOTE);
         } else {
-            upvoteText = String.valueOf(dataItem.getNoOfLikes()) + AppConstants.SPACE + mContext.getString(R.string.ID_REVIEW_POST_NON_ZERO_UPVOTES);
+            upvoteText = String.valueOf(userPostObj.getNoOfLikes()) + AppConstants.SPACE + mContext.getString(R.string.ID_REVIEW_POST_NON_ZERO_UPVOTES);
         }
-        switch (dataItem.getReactionValue()) {
+        switch (userPostObj.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 upvoteReacted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_upvote_inactive, 0, 0, 0);
                 tvNoOfUpVotes.setText(upvoteText);
@@ -228,30 +228,30 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_review_post_user_share_ic)
     public void reviewShareClick() {
-        viewInterface.handleOnClick(dataItem, reviewPostShareIc);
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_REVIEW_POST, dataItem.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
+        viewInterface.handleOnClick(userPostObj, reviewPostShareIc);
+        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_REVIEW_POST, userPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
     }
 
 
     @OnClick(R.id.tv_review_upvote_reacted)
     public void onReviewUpvoteClick() {
         upvoteReacted.setEnabled(false);
-        dataItem.setLongPress(false);
-        dataItem.setTrending(true);
-        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST, dataItem.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
+        userPostObj.setLongPress(false);
+        userPostObj.setTrending(true);
+        if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            viewInterface.userCommentLikeRequest(userPostObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
         } else {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_REVIEW_POST, dataItem.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + dataItem.getIdOfEntityOrParticipant());
+            viewInterface.userCommentLikeRequest(userPostObj, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
 
         }
-        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-            dataItem.setNoOfLikes(dataItem.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+        if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            userPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            userPostObj.setNoOfLikes(userPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
         } else {
-            dataItem.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-            dataItem.setNoOfLikes(dataItem.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            userPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            userPostObj.setNoOfLikes(userPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
         }
         setUpvoteButtonAndText();
     }
@@ -265,8 +265,8 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (dataItem.isAuthorMentor()) {
-                    viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                if (userPostObj.isAuthorMentor()) {
+                    viewInterface.championProfile(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
 
@@ -291,7 +291,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                viewInterface.handleOnClick(dataItem, tvReviewPostTitle);
+                viewInterface.handleOnClick(userPostObj, tvReviewPostTitle);
 
             }
 
@@ -303,7 +303,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
             if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                if (dataItem.isAuthorMentor()) {
+                if (userPostObj.isAuthorMentor()) {
                     SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), 0, feedTitle.length(), 0);
                 } else {
                     SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
@@ -331,7 +331,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             expandFeedPostText();
         }
-    }*/
+    }
     @Override
     public void onClick(View view) {
     }

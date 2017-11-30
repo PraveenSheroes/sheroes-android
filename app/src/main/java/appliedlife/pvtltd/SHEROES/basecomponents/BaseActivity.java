@@ -45,14 +45,12 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -384,7 +382,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
-                if (((CommunityFeedSolrObj)mFeedDetail).getClosed()) {
+                if (((CommunityFeedSolrObj)mFeedDetail).isClosedCommunity()) {
                     mFeedDetail.setFromHome(true);
                     showCommunityJoinReason(mFeedDetail);
                     ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
@@ -723,7 +721,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                     if (mFeedDetail.getAuthorId() == userId|| mFragmentOpen.isOwner()||adminId==AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
-                        if(((UserPostSolrObj)mFeedDetail).getCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
+                        if(((UserPostSolrObj)mFeedDetail).isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
                         {
                             if(mFeedDetail.getAuthorId() == userId)
                             {

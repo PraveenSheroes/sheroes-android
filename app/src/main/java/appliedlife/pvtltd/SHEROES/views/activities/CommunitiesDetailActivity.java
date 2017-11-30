@@ -108,7 +108,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     TextView mTvCommunityTime;
     @Bind(R.id.community_detail_activity)
     CoordinatorLayout mCommunityDetailActivity;
-    private FeedDetail mFeedDetail;
+    private CommunityFeedSolrObj mCommunityFeedObj;
     private FeedDetail mMyCommunityPostFeedDetail;
     private FragmentOpen mFragmentOpen;
     ViewPagerAdapter mViewPagerAdapter;
@@ -140,7 +140,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private boolean isFromFeedPost;
     private SpamPostListDialogFragment spamPostDialogFragment;
     private int mFromNotification;
-    private FeedDetail feedDetailForHomeFeed;
+    private CommunityFeedSolrObj communityFeedObjForHomeFeed;
     private CommunitiesDetailFragment mCommunitiesDetailFragment;
     private boolean isFromDeepLink;
 
@@ -165,15 +165,15 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             isFromDeepLink = getIntent().getExtras().getBoolean(AppConstants.FROM_DEEPLINK, false);
             if(isFromDeepLink){
                 if (mCommunityId >= 0) {
-                    mFeedDetail = new FeedDetail();
-                    mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+                    mCommunityFeedObj = new CommunityFeedSolrObj();
+                    mCommunityFeedObj.setIdOfEntityOrParticipant(mCommunityId);
                 }
             }else {
                 if (mCommunityId > 0) {
-                    mFeedDetail = new FeedDetail();
-                    mFeedDetail.setIdOfEntityOrParticipant(mCommunityId);
+                    mCommunityFeedObj = new CommunityFeedSolrObj();
+                    mCommunityFeedObj.setIdOfEntityOrParticipant(mCommunityId);
                 } else {
-                    mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
+                    mCommunityFeedObj = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL));
                     communityEnum = (CommunityEnum) getIntent().getSerializableExtra(AppConstants.MY_COMMUNITIES_FRAGMENT);
                     isFromFeedPost = getIntent().getBooleanExtra(AppConstants.COMMUNITY_POST_ID, false);
                 }
@@ -181,13 +181,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
         }
         setPagerAndLayouts();
-            if (null != mFeedDetail) {
-                feedDetailForHomeFeed = (FeedDetail) mFeedDetail;
+            if (null != mCommunityFeedObj) {
+                communityFeedObjForHomeFeed = mCommunityFeedObj;
             }
         long timeSpent = System.currentTimeMillis() - startedTime;
-        if (null != mFeedDetail && StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
+        if (null != mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getNameOrTitle())) {
             // TODO : ujjwal
-            // /moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
+            // /moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
         }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
     }
@@ -206,56 +206,54 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbarCommunitiesDetail);
-        if (null != mFeedDetail && null != communityEnum) {
-            idOFEntityParticipant = mFeedDetail.getIdOfEntityOrParticipant();
+        if (null != mCommunityFeedObj && null != communityEnum) {
+            idOFEntityParticipant = mCommunityFeedObj.getIdOfEntityOrParticipant();
             // TODO : ujjwal
-            // /communityId = (CommunityFeedSolrObj)mFeedDetail.getCommunityId();
+            // /communityId = (CommunityFeedSolrObj)mCommunityFeedObj.getCommunityId();
             if (isFromFeedPost) {
-                mFeedDetail.setIdOfEntityOrParticipant(communityId);
+                mCommunityFeedObj.setIdOfEntityOrParticipant(communityId);
                 // TODO : ujjwal
-                //mFeedDetail.setCommunityId(idOFEntityParticipant);
+                //mCommunityFeedObj.setCommunityId(idOFEntityParticipant);
             }
-            // TODO : ujjwal
-            /*if (mFeedDetail.isClosedCommunity() && !((CommunityFeedSolrObj)mFeedDetail).isOwner()) {
+            if (mCommunityFeedObj.isClosedCommunity() && !(mCommunityFeedObj).isOwner()) {
                 isCommunityDetailFragment = true;
                 mCommunityDetailActivity.setVisibility(View.GONE);
-                communityOpenAboutFragment(mFeedDetail);
+                communityOpenAboutFragment(mCommunityFeedObj);
             } else {
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId);
+                mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mCommunityFeedObj, communityEnum, mCommunityPostId);
                 mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
-            }*/
+            }
         } else {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId);
+            mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mCommunityFeedObj, communityEnum, mCommunityPostId);
             mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
             mViewPager.setAdapter(mViewPagerAdapter);
         }
     }
 
     public void initializeUiContent(FeedDetail feedDetail) {
-        mFeedDetail = feedDetail;
-        // TODO : ujjwal
-       /* mCommunityDetailActivity.setVisibility(View.VISIBLE);
-        mTvMemebr.setText(feedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-        if (feedDetail.getNoOfMembers() > 1) {
+        CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
+        mCommunityFeedObj = communityFeedSolrObj;
+        mCommunityDetailActivity.setVisibility(View.VISIBLE);
+        mTvMemebr.setText(communityFeedSolrObj.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+        if (communityFeedSolrObj.getNoOfMembers() > 1) {
             mTvMemebr.setVisibility(View.VISIBLE);
-            mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
-        } else if (feedDetail.getNoOfViews() == 1) {
+            mTvMemebr.setText(mCommunityFeedObj.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBERS));
+        } else if (communityFeedSolrObj.getNoOfViews() == 1) {
             mTvMemebr.setVisibility(View.VISIBLE);
-            mTvMemebr.setText(mFeedDetail.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBER));
+            mTvMemebr.setText(mCommunityFeedObj.getNoOfMembers() + AppConstants.SPACE + getString(R.string.ID_MEMBER));
         } else {
             mTvMemebr.setVisibility(View.INVISIBLE);
-        }*/
+        }
         mCollapsingToolbarLayout.setTitle(AppConstants.SPACE);
         mCollapsingToolbarLayout.setSubtitle(AppConstants.SPACE);
-        mTvCommunityDetailTitle.setText(feedDetail.getNameOrTitle());
-        // TODO : ujjwal
-        //mTvCommunityDetailSubTitle.setText(feedDetail.getCommunityType());
-        if (StringUtil.isNotNullOrEmptyString(feedDetail.getImageUrl())) {
+        mTvCommunityDetailTitle.setText(communityFeedSolrObj.getNameOrTitle());
+        mTvCommunityDetailSubTitle.setText(communityFeedSolrObj.getCommunityType());
+        if (StringUtil.isNotNullOrEmptyString(communityFeedSolrObj.getImageUrl())) {
             Glide.with(this)
-                    .load(feedDetail.getImageUrl()).asBitmap()
+                    .load(communityFeedSolrObj.getImageUrl()).asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
                     .into(new SimpleTarget<Bitmap>() {
@@ -347,7 +345,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 Member member = (Member) baseResponse;
                 Parcelable parcelable = Parcels.wrap(member);
                 bundleCommunity.putParcelable(AppConstants.MEMBER, parcelable);
-                bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
+                bundleCommunity.putLong(AppConstants.COMMUNITY_DETAIL, mCommunityFeedObj.getIdOfEntityOrParticipant());
             }
             bundleCommunity.putBoolean(AppConstants.COMMUNITY_POST_FRAGMENT, isOwner);
             ownerRemoveDialog.setArguments(bundleCommunity);
@@ -366,7 +364,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-        mFragmentOpen.setOwner(((CommunityFeedSolrObj)mFeedDetail).isOwner());
+        mFragmentOpen.setOwner(((CommunityFeedSolrObj)mCommunityFeedObj).isOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
         switch (id) {
@@ -388,8 +386,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
                 break;
             case R.id.tv_approve_spam_post:
-                // TODO : ujjwal
-                // feedDetailForHomeFeed.setViewed(true);
+                 communityFeedObjForHomeFeed.setViewed(true);
                 if (null != spamPostDialogFragment) {
                     spamPostDialogFragment.approveSpamPost(feedDetail, true, false, true);
                 } else {
@@ -401,8 +398,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 break;
 
             case R.id.tv_delete_spam_post:
-                // TODO : ujjwal
-                //feedDetailForHomeFeed.setViewed(true);
+                communityFeedObjForHomeFeed.setViewed(true);
                 if (null != spamPostDialogFragment) {
                     spamPostDialogFragment.approveSpamPost(feedDetail, true, true, false);
                 } else {
@@ -446,11 +442,11 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private void championDetailActivity(Long userId, int position) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        mFeedDetail = new FeedDetail();
-        mFeedDetail.setIdOfEntityOrParticipant(userId);
-        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        mFeedDetail.setItemPosition(position);
-        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        mCommunityFeedObj = new CommunityFeedSolrObj();
+        mCommunityFeedObj.setIdOfEntityOrParticipant(userId);
+        mCommunityFeedObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        mCommunityFeedObj.setItemPosition(position);
+        Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
@@ -458,7 +454,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public void updateOpenAboutFragment(FeedDetail feedDetail) {
-        mFeedDetail = feedDetail;
+        CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
+            mCommunityFeedObj = communityFeedSolrObj;
         if (null != mInviteCommunityMemberDialogFragment) {
             mInviteCommunityMemberDialogFragment.dismiss();
         }
@@ -470,7 +467,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         }
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragment)) {
-            ((CommunityOpenAboutFragment) fragment).refreshOpeAboutCommunityContent(feedDetail);
+            ((CommunityOpenAboutFragment) fragment).refreshOpeAboutCommunityContent(mCommunityFeedObj);
         }
     }
 
@@ -508,7 +505,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (mAllMembersDialogFragment == null) {
             mAllMembersDialogFragment = new AllMembersDialogFragment();
             Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
             mAllMembersDialogFragment.setArguments(bundle);
         }
@@ -528,9 +525,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             } else {
                 Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
-                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mFeedDetail, pressedEventName);
+                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mCommunityFeedObj, pressedEventName);
                 }
-                if (mFeedDetail.isRequestPending()) {
+                if (mCommunityFeedObj.isRequestPending()) {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                 } else {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
@@ -566,7 +563,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (mInviteCommunityMemberDialogFragment == null) {
             mInviteCommunityMemberDialogFragment = new InviteCommunityMemberDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mFeedDetail);
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mCommunityFeedObj);
             mInviteCommunityMemberDialogFragment.setArguments(bundle);
         }
         if (!mInviteCommunityMemberDialogFragment.isVisible() && !mInviteCommunityMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -578,10 +575,10 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void addOwnerOnClick() {
         mFragmentOpen.setOpenAboutFragment(false);
         mFragmentOpen.setInviteCommunityOwner(true);
-        if (null != mFeedDetail) {
+        if (null != mCommunityFeedObj) {
             InviteCommunityOwner myCommunityInviteMemberFragment = new InviteCommunityOwner();
             Bundle bundleInvite = new Bundle();
-            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
             bundleInvite.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
             myCommunityInviteMemberFragment.setArguments(bundleInvite);
             getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, myCommunityInviteMemberFragment, InviteCommunityOwner.class.getName()).addToBackStack(null).commitAllowingStateLoss();
@@ -608,7 +605,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (communityRequestedDialogFragment == null) {
             communityRequestedDialogFragment = new CommunityRequestedDialogFragment();
             Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
             bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
             communityRequestedDialogFragment.setArguments(bundle);
         }
@@ -624,7 +621,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         communityPost.community.id = feedDetail.getIdOfEntityOrParticipant();
         communityPost.community.name = feedDetail.getNameOrTitle();
         // TODO : ujjwal
-        // communityPost.community.isOwner = feedDetail.isCommunityOwner();
+        // communityPost.community.isOwner = communityFeedSolrObj.isCommunityOwner();
         // TODO : ujjwal
         // communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
         CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
@@ -634,7 +631,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void shareClick() {
         ShareCommunityFragment shareCommunityFragment = new ShareCommunityFragment();
         Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
         bundle.putParcelable(AppConstants.SHARE, parcelable);
         shareCommunityFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, shareCommunityFragment).addToBackStack(null).commitAllowingStateLoss();
@@ -646,9 +643,9 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
             if (!isMemberRemoveDialog) {
                 // TODO : ujjwal
-                //  mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() - 1);
+                //  mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
             }
-            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mFeedDetail);
+            ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mCommunityFeedObj);
         }
     }
 
@@ -690,7 +687,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                 Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     if (fragment instanceof CommunitiesDetailFragment) {
-                        ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mFeedDetail);
+                        ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mCommunityFeedObj);
                     }
                 }
                 mCommunityDetailActivity.setVisibility(View.VISIBLE);
@@ -718,7 +715,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     public void updateFeedDetailWithCommunityStatus(FeedDetail feedDetail) {
-        mFeedDetail = feedDetail;
+        CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
+        mCommunityFeedObj = communityFeedSolrObj;
 
     }
 
@@ -747,12 +745,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         Bundle bundle = new Bundle();
         if (isFromFeedPost) {
             // TODO : ujjwal
-            //feedDetailForHomeFeed.setCommunityId(communityId);
-            feedDetailForHomeFeed.setIdOfEntityOrParticipant(idOFEntityParticipant);
-            Parcelable parcelable = Parcels.wrap(feedDetailForHomeFeed);
+            //communityFeedObjForHomeFeed.setCommunityId(communityId);
+            communityFeedObjForHomeFeed.setIdOfEntityOrParticipant(idOFEntityParticipant);
+            Parcelable parcelable = Parcels.wrap(communityFeedObjForHomeFeed);
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
         } else {
-            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
             bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, parcelable);
         }
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
@@ -788,24 +786,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
-                    FeedDetail feedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
-                    updateOpenAboutFragment(feedDetail);
+                    CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+                    updateOpenAboutFragment(communityFeedSolrObj);
                     break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
-                    FeedDetail feedCommunityPost = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+                   // FeedDetail feedCommunityPost = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mFeedDetail);
+                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mCommunityFeedObj);
                         }
                     }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    FeedDetail feedCommunityPostEdit = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+                    FeedDetail feedCommunityPostEdit = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
                     Fragment fragmentCommunity = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragmentCommunity)) {
                         if (fragmentCommunity instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(mFeedDetail);
+                            ((CommunitiesDetailFragment) fragmentCommunity).updateUiAccordingToFeedDetail(mCommunityFeedObj);
                         }
                     }
                     break;
@@ -883,12 +881,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     @Override
     protected Map<String, Object> getExtraPropertiesToTrack() {
-        if (mFeedDetail == null) {
+        if (mCommunityFeedObj == null) {
             return null;
         }
         HashMap<String, Object> properties = new
                 EventProperty.Builder()
-                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .id(Long.toString(mCommunityFeedObj.getIdOfEntityOrParticipant()))
                 .build();
         return properties;
     }

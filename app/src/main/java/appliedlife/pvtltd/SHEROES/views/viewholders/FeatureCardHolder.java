@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -60,7 +61,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_featured_community_tag_lable)
     TextView tvFeaturedCommunityTagLable;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private CommunityFeedSolrObj CommunityFeedObj;
     private Context mContext;
     private Handler mHandler;
 
@@ -74,12 +75,12 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        this.CommunityFeedObj = (CommunityFeedSolrObj)item;
         this.mContext = context;
-        dataItem.setItemPosition(position);
+        CommunityFeedObj.setItemPosition(position);
         textViewOperation(context);
         populatePostText();
-        if (!dataItem.isTrending()) {
+        if (!CommunityFeedObj.isTrending()) {
             liFeaturedCoverImage.removeAllViews();
             liFeaturedCoverImage.removeAllViewsInLayout();
             imageOperations(context);
@@ -89,38 +90,37 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
-        // TODO: ujjwal
-     /*   if (dataItem.isClosedCommunity()) {
+        if (CommunityFeedObj.isClosedCommunity()) {
             tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
         } else {
             tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
+        if (!CommunityFeedObj.isMember() && !CommunityFeedObj.isOwner() && !CommunityFeedObj.isRequestPending()) {
             tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-        } else if (dataItem.isRequestPending()) {
+        } else if (CommunityFeedObj.isRequestPending()) {
             tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_REQUESTED));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_requested);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
-        } else if (dataItem.isOwner() || dataItem.isMember()) {
+        } else if (CommunityFeedObj.isOwner() || CommunityFeedObj.isMember()) {
             tvFeaturedCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvFeaturedCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvFeaturedCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
             tvFeaturedCommunityJoin.setVisibility(View.VISIBLE);
         }
         //TODO:: change for UI
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvFeaturedCommunityCardTitle.setText(dataItem.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(CommunityFeedObj.getNameOrTitle())) {
+            tvFeaturedCommunityCardTitle.setText(CommunityFeedObj.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
-            tvFeaturedCommunityTime.setText(dataItem.getCommunityType());
+        if (StringUtil.isNotNullOrEmptyString(CommunityFeedObj.getCommunityType())) {
+            tvFeaturedCommunityTime.setText(CommunityFeedObj.getCommunityType());
         }
-        if (StringUtil.isNotEmptyCollection(dataItem.getTags()))
+        if (StringUtil.isNotEmptyCollection(CommunityFeedObj.getTags()))
         {
-            List<String> tags = dataItem.getTags();
+            List<String> tags = CommunityFeedObj.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
             for (String tag : tags) {
                 mergeTags += tag + AppConstants.COMMA + AppConstants.SPACE;
@@ -132,18 +132,18 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeaturedCommunityTagLable.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + AppConstants.COLON + AppConstants.SPACE + mergeTags));// or for older api
             }
-        }*/
+        }
 
     }
 
     private void imageOperations(Context context) {
-        String authorImageUrl = dataItem.getThumbnailImageUrl();
+        String authorImageUrl = CommunityFeedObj.getThumbnailImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
 
             ivFeaturedCommunityCircleIcon.setCircularImage(true);
             ivFeaturedCommunityCircleIcon.bindImage(authorImageUrl);
         }
-        String imageUrl = dataItem.getImageUrl();
+        String imageUrl = CommunityFeedObj.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.communities_single_image, null);
@@ -152,8 +152,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
             time.setVisibility(View.INVISIBLE);
             final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_community_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            // TODO: ujjwal
-            //tvTotalMember.setText(dataItem.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
+            tvTotalMember.setText(CommunityFeedObj.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .load(imageUrl).asBitmap()
                     .into(new SimpleTarget<Bitmap>() {
@@ -171,7 +170,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     }
     private void populatePostText() {
 
-        final String listDescription = dataItem.getListDescription();
+        final String listDescription = CommunityFeedObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             return;
         }
@@ -211,20 +210,20 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     }
     @OnClick(R.id.tv_featured_community_join)
     public void joinClick() {
-        dataItem.setTrending(true);
+        CommunityFeedObj.setTrending(true);
         if (tvFeaturedCommunityJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOIN))) {
-            viewInterface.handleOnClick(dataItem, tvFeaturedCommunityJoin);
+            viewInterface.handleOnClick(CommunityFeedObj, tvFeaturedCommunityJoin);
         }
     }
 
     @OnClick(R.id.li_featured_community_images)
     public void detailImageClick() {
-        viewInterface.handleOnClick(dataItem, liFeaturedCoverImage);
+        viewInterface.handleOnClick(CommunityFeedObj, liFeaturedCoverImage);
     }
 
     @OnClick(R.id.card_feature_communities)
     public void featureClick() {
-        viewInterface.handleOnClick(dataItem, liFeaturedCoverImage);
+        viewInterface.handleOnClick(CommunityFeedObj, liFeaturedCoverImage);
     }
 
     @Override

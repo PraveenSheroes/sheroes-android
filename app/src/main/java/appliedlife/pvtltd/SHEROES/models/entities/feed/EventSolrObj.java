@@ -37,7 +37,7 @@ public class EventSolrObj extends FeedDetail {
     private List<String> speakerDesignation;
 
     @SerializedName(value = "display_text_speaker_desc")
-    private List<String> speakerDesc;
+    private List<String> speakerDescription;
 
     @SerializedName(value = "display_text_speaker_image_url")
     private List<String> speakerImageUrl;
@@ -46,7 +46,7 @@ public class EventSolrObj extends FeedDetail {
     private List<Long> sponserId;
 
     @SerializedName(value = "display_text_sponser_name")
-    private List<String> sponserName;
+    private List<String> sponsorName;
 
     @SerializedName(value = "display_text_sponser_url")
     private List<String> sponserUrl;
@@ -86,6 +86,9 @@ public class EventSolrObj extends FeedDetail {
 
     @SerializedName(value = "s_disp_event_venue")
     private String venue;
+
+    @SerializedName("display_id_speaker_id")
+    private List<Integer> speakerId;
 
     public String getStartDateForEvent() {
         return startDate;
@@ -151,12 +154,12 @@ public class EventSolrObj extends FeedDetail {
         this.speakerDesignation = speakerDesignation;
     }
 
-    public List<String> getSpeakerDesc() {
-        return speakerDesc;
+    public List<String> getSpeakerDescription() {
+        return speakerDescription;
     }
 
-    public void setSpeakerDesc(List<String> speakerDesc) {
-        this.speakerDesc = speakerDesc;
+    public void setSpeakerDescription(List<String> speakerDescription) {
+        this.speakerDescription = speakerDescription;
     }
 
     public List<String> getSpeakerImageUrl() {
@@ -175,12 +178,12 @@ public class EventSolrObj extends FeedDetail {
         this.sponserId = sponserId;
     }
 
-    public List<String> getSponserName() {
-        return sponserName;
+    public List<String> getSponsorName() {
+        return sponsorName;
     }
 
-    public void setSponserName(List<String> sponserName) {
-        this.sponserName = sponserName;
+    public void setSponsorName(List<String> sponsorName) {
+        this.sponsorName = sponsorName;
     }
 
     public List<String> getSponserUrl() {
@@ -285,5 +288,61 @@ public class EventSolrObj extends FeedDetail {
 
     public void setEventVenue(String venue) {
         this.venue = venue;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getStartHour() {
+        return startHour;
+    }
+
+    public void setStartHour(String startHour) {
+        this.startHour = startHour;
+    }
+
+    public String getStartMinute() {
+        return startMinute;
+    }
+
+    public void setStartMinute(String startMinute) {
+        this.startMinute = startMinute;
+    }
+
+    public String getEndHour() {
+        return endHour;
+    }
+
+    public void setEndHour(String endHour) {
+        this.endHour = endHour;
+    }
+
+    public String getEndMinute() {
+        return endMinute;
+    }
+
+    public void setEndMinute(String endMinute) {
+        this.endMinute = endMinute;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public List<Integer> getSpeakerId() {
+        return speakerId;
+    }
+
+    public void setSpeakerId(List<Integer> speakerId) {
+        this.speakerId = speakerId;
     }
 }

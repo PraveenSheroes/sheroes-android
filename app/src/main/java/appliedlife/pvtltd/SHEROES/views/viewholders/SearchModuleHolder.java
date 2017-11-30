@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -55,21 +56,19 @@ public class SearchModuleHolder extends BaseViewHolder<FeedDetail> {
                 case AppConstants.FEED_COMMUNITY:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
                     mTvHeaderText.setText(item.getNameOrTitle());
-                    // TODO: ujjwal
-                    //mTvLabelText.setText(item.getCommunityType());
-                    /*if(dataItem.isClosedCommunity()) {
+                    mTvLabelText.setText(((CommunityFeedSolrObj)item).getCommunityType());
+                    if(((CommunityFeedSolrObj)dataItem).isClosedCommunity()) {
                         mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
                     }else
                     {
                         mTvLabelText.setCompoundDrawablesWithIntrinsicBounds(0, 0,0, 0);
-                    }*/
+                    }
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY);
                     break;
                 case AppConstants.FEED_COMMUNITY_POST:
                     mTvHeaderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_group_icon, 0, 0, 0);
                     mTvHeaderText.setText(item.getNameOrTitle());
-                    // TODO: ujjwal
-                    //mTvLabelText.setText(item.getCommunityType());
+                    mTvLabelText.setText(((CommunityFeedSolrObj)item).getCommunityType());
                     rlSearchModuleList.setTag(AppConstants.FEED_COMMUNITY_POST);
                     break;
                 case AppConstants.FEED_JOB:

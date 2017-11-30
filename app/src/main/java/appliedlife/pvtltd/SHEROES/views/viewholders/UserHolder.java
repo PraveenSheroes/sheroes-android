@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -32,7 +33,7 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_owner_add)
     TextView mTvownerclose;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private UserSolrObj userObj;
     Context mContext;
 
     public UserHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -45,26 +46,25 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        this.userObj = (UserSolrObj) item;
         this.mContext = context;
         mTvownerclose.setOnClickListener(this);
-        dataItem.setItemPosition(position);
+        userObj.setItemPosition(position);
         allTextViewStringOperations(context);
     }
 
     private void allTextViewStringOperations(Context context) {
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvowOer_title.setText(dataItem.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(userObj.getNameOrTitle())) {
+            tvowOer_title.setText(userObj.getNameOrTitle());
         }
-        // TODO: ujjwal
-     /*   if (StringUtil.isNotNullOrEmptyString(dataItem.getCityName())) {
-            tv_owner_city.setText(dataItem.getCityName());
-        }*/
-        String images = dataItem.getImageUrl();
+        if (StringUtil.isNotNullOrEmptyString(userObj.getCityName())) {
+            tv_owner_city.setText(userObj.getCityName());
+        }
+        String images = userObj.getImageUrl();
 
         ivFeedUserCircleIcon.setCircularImage(true);
         ivFeedUserCircleIcon.bindImage(images);
-        if(dataItem.isTrending())
+        if(userObj.isTrending())
         {
             mTvownerclose.setBackgroundResource(R.drawable.unselected_add_btn_shap);
             mTvownerclose.setTextColor(Color.WHITE);
@@ -90,7 +90,7 @@ public class UserHolder extends BaseViewHolder<FeedDetail> {
         int id = view.getId();
         switch (id) {
             case R.id.tv_owner_add:
-                viewInterface.handleOnClick(dataItem,view);
+                viewInterface.handleOnClick(userObj,view);
                 break;
             default:
                 LogUtils.error("", AppConstants.CASE_NOT_HANDLED + " " + "" + " " + id);

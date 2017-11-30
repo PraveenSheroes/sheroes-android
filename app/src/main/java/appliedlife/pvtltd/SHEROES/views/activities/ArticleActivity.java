@@ -826,8 +826,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         article.author.thumbUrl = articleSolrObj.getAuthorImageUrl();
         article.isBookmarked = articleSolrObj.isBookmarked();
         article.isLiked = articleSolrObj.getLastReactionValue() > 0;
-        article.thumbImageWidth = articleSolrObj.getThumbnailImageWidth();
-        article.thumbImageHeight = articleSolrObj.getThumbnailImageHeight();
+        article.thumbImageWidth = articleSolrObj.getThumbImageWidth();
+        article.thumbImageHeight = articleSolrObj.getThumbImageHeight();
         article.featureImageHeight = articleSolrObj.getHighresImageHeight();
         article.featureImageWidth = articleSolrObj.getHighresImageWidth();
         article.createdAt = articleSolrObj.getPostedDate();

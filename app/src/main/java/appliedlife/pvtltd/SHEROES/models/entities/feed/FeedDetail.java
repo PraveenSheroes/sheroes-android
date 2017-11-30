@@ -16,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
  * Created by ujjwal on 26/11/17.
  */
 @Parcel(analyze = {FeedDetail.class, BaseResponse.class})
-public class FeedDetail extends BaseResponse {
+public class FeedDetail extends BaseResponse implements Cloneable{
     public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
     public static final String FEED_DETAIL_ID = "FEED_DETAIL_ID";
     @SerializedName(value = "id")
@@ -29,10 +29,10 @@ public class FeedDetail extends BaseResponse {
     private Integer entityOrParticipantTypeId;
 
     @SerializedName(value = "display_id_profile_id")
-    private Long profileId;
+    private long profileId;
 
     @SerializedName(value = "created_by_l")
-    private Long createdBy;
+    private long createdBy;
 
     @SerializedName(value = "id_of_entity_or_participant")
     private long idOfEntityOrParticipant;
@@ -87,10 +87,10 @@ public class FeedDetail extends BaseResponse {
     private Date lastModifiedDate;
 
     @SerializedName(value = "author_participant_id")
-    private Long authorParticipantId;
+    private long authorParticipantId;
 
     @SerializedName(value = "author_id")
-    private Long authorId;
+    private long authorId;
 
     @SerializedName(value = "is_author_confidential")
     private boolean isAuthorConfidential;
@@ -114,7 +114,7 @@ public class FeedDetail extends BaseResponse {
     private boolean isAuthorImagePublic;
 
     @SerializedName(value = "author_city_id")
-    private Long authorCityId;
+    private String authorCityId;
 
     @SerializedName(value = "author_city_name")
     private String authorCityName;
@@ -155,6 +155,57 @@ public class FeedDetail extends BaseResponse {
     @SerializedName("solr_ignore_deep_link_url")
     private String deepLinkUrl;
 
+    @SerializedName(value = "solr_ignore_is_applied")
+    private boolean isApplied;
+
+    @SerializedName(value = "solr_ignore_is_viewed")
+    private boolean isViewed;
+
+    @SerializedName(value = "solr_ignore_no_of_applies")
+    private int noOfApplied;
+
+    @SerializedName(value = "tag_ids")
+    private List<Long> tag_ids;
+
+    @SerializedName(value = "tag_names")
+    private List<String> tags;
+
+    @SerializedName(value = "solr_ignore_participant_deep_link_url")
+    private String participantDeepLinkingUrl;
+
+    @SerializedName(value = "solr_ignore_entity_deep_link_url")
+    private String entityDeepLinkingUrl;
+
+    @SerializedName(value = "og_image_url_s")
+    private String ogImageUrlS;
+
+    @SerializedName(value = "og_title_s")
+    private String ogTitleS;
+
+    @SerializedName(value = "og_description_s")
+    private String ogDescriptionS;
+
+    @SerializedName(value = "og_requested_url_s")
+    private String ogRequestedUrlS;
+
+    @SerializedName(value = "is_og_video_link_b")
+    private boolean isOgVideoLinkB;
+
+    @SerializedName("solr_ignore_is_author_mentor")
+    private boolean isAuthorMentor;
+
+    @SerializedName(value = "solr_ignore_mentor_deep_link_url")
+    private String mentorDeepLinkUrl;
+
+    @SerializedName(value = "blog_link_s")
+    private String blogLinkUrl;
+
+    @SerializedName("user_sub_type_s")
+    private String userSubType;
+
+    @SerializedName("is_spam_post_b")
+    private boolean isSpamPost;
+
     //These fields are not from API response
     private int itemPosition;
     private boolean isLongPress;
@@ -189,19 +240,19 @@ public class FeedDetail extends BaseResponse {
         this.entityOrParticipantTypeId = entityOrParticipantTypeId;
     }
 
-    public Long getProfileId() {
+    public long getProfileId() {
         return profileId;
     }
 
-    public void setProfileId(Long profileId) {
+    public void setProfileId(long profileId) {
         this.profileId = profileId;
     }
 
-    public Long getCreatedBy() {
+    public long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Long createdBy) {
+    public void setCreatedBy(long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -341,19 +392,19 @@ public class FeedDetail extends BaseResponse {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public Long getAuthorParticipantId() {
+    public long getAuthorParticipantId() {
         return authorParticipantId;
     }
 
-    public void setAuthorParticipantId(Long authorParticipantId) {
+    public void setAuthorParticipantId(long authorParticipantId) {
         this.authorParticipantId = authorParticipantId;
     }
 
-    public Long getAuthorId() {
+    public long getAuthorId() {
         return authorId;
     }
 
-    public void setAuthorId(Long authorId) {
+    public void setAuthorId(long authorId) {
         this.authorId = authorId;
     }
 
@@ -413,11 +464,11 @@ public class FeedDetail extends BaseResponse {
         isAuthorImagePublic = authorImagePublic;
     }
 
-    public Long getAuthorCityId() {
+    public String getAuthorCityId() {
         return authorCityId;
     }
 
-    public void setAuthorCityId(Long authorCityId) {
+    public void setAuthorCityId(String authorCityId) {
         this.authorCityId = authorCityId;
     }
 
@@ -591,5 +642,157 @@ public class FeedDetail extends BaseResponse {
 
     public void setChallengeDataItems(List<ChallengeDataItem> challengeDataItems) {
         this.challengeDataItems = challengeDataItems;
+    }
+
+    public String getPostingDate() {
+        return postingDate;
+    }
+
+    public void setPostingDate(String postingDate) {
+        this.postingDate = postingDate;
+    }
+
+    public int getReactedValue() {
+        return reactedValue;
+    }
+
+    public void setReactedValue(int reactedValue) {
+        this.reactedValue = reactedValue;
+    }
+
+    public boolean isApplied() {
+        return isApplied;
+    }
+
+    public void setApplied(boolean applied) {
+        isApplied = applied;
+    }
+
+    public boolean isViewed() {
+        return isViewed;
+    }
+
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
+    }
+
+    public int getNoOfApplied() {
+        return noOfApplied;
+    }
+
+    public void setNoOfApplied(int noOfApplied) {
+        this.noOfApplied = noOfApplied;
+    }
+
+    public List<Long> getTag_ids() {
+        return tag_ids;
+    }
+
+    public void setTag_ids(List<Long> tag_ids) {
+        this.tag_ids = tag_ids;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public String getParticipantDeepLinkingUrl() {
+        return participantDeepLinkingUrl;
+    }
+
+    public void setParticipantDeepLinkingUrl(String participantDeepLinkingUrl) {
+        this.participantDeepLinkingUrl = participantDeepLinkingUrl;
+    }
+
+    public String getEntityDeepLinkingUrl() {
+        return entityDeepLinkingUrl;
+    }
+
+    public void setEntityDeepLinkingUrl(String entityDeepLinkingUrl) {
+        this.entityDeepLinkingUrl = entityDeepLinkingUrl;
+    }
+
+    public String getOgImageUrlS() {
+        return ogImageUrlS;
+    }
+
+    public void setOgImageUrlS(String ogImageUrlS) {
+        this.ogImageUrlS = ogImageUrlS;
+    }
+
+    public String getOgTitleS() {
+        return ogTitleS;
+    }
+
+    public void setOgTitleS(String ogTitleS) {
+        this.ogTitleS = ogTitleS;
+    }
+
+    public String getOgDescriptionS() {
+        return ogDescriptionS;
+    }
+
+    public void setOgDescriptionS(String ogDescriptionS) {
+        this.ogDescriptionS = ogDescriptionS;
+    }
+
+    public String getOgRequestedUrlS() {
+        return ogRequestedUrlS;
+    }
+
+    public void setOgRequestedUrlS(String ogRequestedUrlS) {
+        this.ogRequestedUrlS = ogRequestedUrlS;
+    }
+
+    public boolean isOgVideoLinkB() {
+        return isOgVideoLinkB;
+    }
+
+    public void setOgVideoLinkB(boolean ogVideoLinkB) {
+        isOgVideoLinkB = ogVideoLinkB;
+    }
+
+    public boolean isAuthorMentor() {
+        return isAuthorMentor;
+    }
+
+    public void setAuthorMentor(boolean authorMentor) {
+        isAuthorMentor = authorMentor;
+    }
+
+    public String getMentorDeepLinkUrl() {
+        return mentorDeepLinkUrl;
+    }
+
+    public void setMentorDeepLinkUrl(String mentorDeepLinkUrl) {
+        this.mentorDeepLinkUrl = mentorDeepLinkUrl;
+    }
+
+    public String getBlogLinkUrl() {
+        return blogLinkUrl;
+    }
+
+    public void setBlogLinkUrl(String blogLinkUrl) {
+        this.blogLinkUrl = blogLinkUrl;
+    }
+
+    public String getUserSubType() {
+        return userSubType;
+    }
+
+    public void setUserSubType(String userSubType) {
+        this.userSubType = userSubType;
+    }
+
+    public boolean isSpamPost() {
+        return isSpamPost;
+    }
+
+    public void setSpamPost(boolean spamPost) {
+        isSpamPost = spamPost;
     }
 }

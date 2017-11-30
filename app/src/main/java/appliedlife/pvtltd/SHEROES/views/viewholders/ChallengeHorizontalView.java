@@ -49,8 +49,7 @@ public class ChallengeHorizontalView extends BaseViewHolder<FeedDetail> {
         if (null != dataItem && StringUtil.isNotEmptyCollection(dataItem.getChallengeDataItems())) {
             List<ChallengeDataItem> challengeDataItems = dataItem.getChallengeDataItems();
             int challengePosition = 0;
-            // TODO: ujjwal
-       /*     if (dataItem.getCommunityId() != AppConstants.NO_REACTION_CONSTANT) {
+    /*        if (dataItem.getCommunityId() != AppConstants.NO_REACTION_CONSTANT) {
                 for (ChallengeDataItem challengeDataItem : challengeDataItems) {
                     if (dataItem.getCommunityId() == challengeDataItem.getChallengeId()) {
                         break;

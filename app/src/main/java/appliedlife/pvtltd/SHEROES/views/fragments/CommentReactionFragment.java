@@ -45,7 +45,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -418,8 +418,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
                     for (Comment comment : mCommentList) {
                         if (commentId == comment.getId()) {
                             comment.setActive(false);
-                            // TODO: ujjwal
-                            //mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), mFeedDetail.isAnonymous(), comment.isActive(), comment.getId()), AppConstants.TWO_CONSTANT);
+                            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), ((UserPostSolrObj)mFeedDetail).isAnonymous(), comment.isActive(), comment.getId()), AppConstants.TWO_CONSTANT);
                             mCommentList.remove(comment);
                             break;
                         }

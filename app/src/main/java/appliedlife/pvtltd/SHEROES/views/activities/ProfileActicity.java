@@ -521,7 +521,7 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
                 ProfileWorkExperienceFragment profileWorkExperienceFragment = new ProfileWorkExperienceFragment();
                 Bundle bundleWorkExp = new Bundle();
                 Parcelable parcelable = Parcels.wrap(workExp.getExprienceEntity());
-                bundleWorkExp.putParcelableArrayList(AppConstants.EXPERIENCE_PROFILE, (ArrayList<? extends Parcelable>)parcelable);
+                bundleWorkExp.putParcelable(AppConstants.EXPERIENCE_PROFILE, parcelable);
                 profileWorkExperienceFragment.setArguments(bundleWorkExp);
                 getSupportFragmentManager().beginTransaction().replace(R.id.profile_container, profileWorkExperienceFragment, ProfileWorkExperienceFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 

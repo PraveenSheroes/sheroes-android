@@ -8,7 +8,7 @@ import org.parceler.Parcel;
  * Created by ujjwal on 26/11/17.
  */
 @Parcel(analyze = {CommunityFeedSolrObj.class,FeedDetail.class})
-public class CommunityFeedSolrObj extends FeedDetail {
+public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
     @SerializedName("community_type_s")
     public String communityType;
 
@@ -16,7 +16,7 @@ public class CommunityFeedSolrObj extends FeedDetail {
     public Long communityTypeId;
 
     @SerializedName("is_closed_b")
-    public Boolean isClosed;
+    public boolean isClosedCommunity;
 
     @SerializedName(value = "solr_ignore_no_of_members")
     private int noOfMembers = 0;
@@ -49,12 +49,12 @@ public class CommunityFeedSolrObj extends FeedDetail {
         this.communityTypeId = communityTypeId;
     }
 
-    public Boolean getClosed() {
-        return isClosed;
+    public boolean isClosedCommunity() {
+        return isClosedCommunity;
     }
 
-    public void setClosed(Boolean closed) {
-        isClosed = closed;
+    public void setClosedCommunity(boolean closedCommunity) {
+        isClosedCommunity = closedCommunity;
     }
 
     public int getNoOfMembers() {
@@ -95,5 +95,9 @@ public class CommunityFeedSolrObj extends FeedDetail {
 
     public void setRequestPending(boolean requestPending) {
         isRequestPending = requestPending;
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

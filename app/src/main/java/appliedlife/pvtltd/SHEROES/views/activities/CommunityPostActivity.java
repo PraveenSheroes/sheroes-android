@@ -61,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -603,33 +604,33 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
         if (feedDetail != null) {
             CommunityPost communityPost = new CommunityPost();
-            communityPost.remote_id = (int) feedDetail.getIdOfEntityOrParticipant();
+            communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
             communityPost.community = new Community();
-            communityPost.community.id = ((CommunityFeedSolrObj)feedDetail).getCommunityTypeId();
-            communityPost.body = ((CommunityFeedSolrObj)feedDetail).getListDescription();
-            communityPost.community.name = ((CommunityFeedSolrObj)feedDetail).getNameOrTitle();
-            communityPost.community.isOwner = ((CommunityFeedSolrObj)feedDetail).isOwner();
-            communityPost.isMyPost = ((CommunityFeedSolrObj)feedDetail).isOwner();
+            communityPost.community.id = userPostObj.getCommunityTypeId();
+            communityPost.body = userPostObj.getListDescription();
+            communityPost.community.name = userPostObj.getNameOrTitle();
+            communityPost.community.isOwner = userPostObj.isCommunityOwner();
+            communityPost.isMyPost =userPostObj.isCommunityOwner();
 
-            // TODO: ujjwal
-            /*communityPost.community.thumbImageUrl = ((CommunityFeedSolrObj)feedDetail).getSolrIgnorePostCommunityLogo();
-            communityPost.isAnonymous = feedDetail.isAnonymous();
+            communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
+            communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
-            communityPost.isPostByCommunity = feedDetail.isCommunityPost();
-            if (!CommonUtil.isEmpty(feedDetail.getImageUrls()) && !CommonUtil.isEmpty(feedDetail.getImagesIds())) {
-                for (String imageUrl : feedDetail.getImageUrls()) {
+            communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+            if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
+                for (String imageUrl : userPostObj.getImageUrls()) {
                     Photo photo = new Photo();
                     photo.url = imageUrl;
                     communityPost.photos.add(photo);
                 }
                 int i = 0;
-                for (Long imageId : feedDetail.getImagesIds()) {
+                for (Long imageId : userPostObj.getImagesIds()) {
                     communityPost.photos.get(i).remote_id = imageId.intValue();
                     i++;
                 }
-            }*/
+            }
             Parcelable parcelable = Parcels.wrap(communityPost);
             intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
             intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());

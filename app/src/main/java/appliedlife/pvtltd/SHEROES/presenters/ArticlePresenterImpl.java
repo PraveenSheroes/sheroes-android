@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -86,30 +87,33 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 //getMvpView().stopProgressBar();
                 // LogUtils.info(TAG, "********response***********");
                 FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
+                ArticleSolrObj articleObj = new ArticleSolrObj();
+                if(feedDetail instanceof ArticleSolrObj){
+                    articleObj = (ArticleSolrObj) feedDetail;
+                }
                 getMvpView().setFeedDetail(feedDetail);
                 if (null != feedResponsePojo) {
                     Article article = new Article();
-                    article.createdAt = feedDetail.getPostedDate();
-                    article.title = feedDetail.getNameOrTitle();
-                    article.body = feedDetail.getListDescription();
-                    article.remote_id = (int) feedDetail.getEntityOrParticipantId();
-                    article.featureImage = feedDetail.getImageUrl();
-                    article.commentsCount = feedDetail.getNoOfComments();
-                    article.totalViews = feedDetail.getNoOfViews();
-                    article.likesCount = feedDetail.getNoOfLikes();
-                    article.deepLink = feedDetail.getDeepLinkUrl();
+                    article.createdAt = articleObj.getPostedDate();
+                    article.title = articleObj.getNameOrTitle();
+                    article.body = articleObj.getListDescription();
+                    article.remote_id = (int) articleObj.getEntityOrParticipantId();
+                    article.featureImage = articleObj.getImageUrl();
+                    article.commentsCount = articleObj.getNoOfComments();
+                    article.totalViews = articleObj.getNoOfViews();
+                    article.likesCount = articleObj.getNoOfLikes();
+                    article.deepLink = articleObj.getDeepLinkUrl();
                     article.author = new UserProfile();
-                    article.author.name = feedDetail.getAuthorName();
-                    article.author.shortDescription = feedDetail.getAuthorShortDescription();
-                    article.author.thumbUrl = feedDetail.getAuthorImageUrl();
-                    article.isBookmarked = feedDetail.isBookmarked();
-                    article.isLiked = feedDetail.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
-                    // TODO: ujjwal
-                    /*article.thumbImageWidth = feedDetail.getThumbImageWidth();
-                    article.thumbImageHeight = feedDetail.getThumbImageHeight();
-                    article.featureImageHeight = feedDetail.getHighresImageHeight();
-                    article.featureImageWidth = feedDetail.getHighresImageWidth();
-                    article.readingTime = feedDetail.getCharCount();*/
+                    article.author.name = articleObj.getAuthorName();
+                    article.author.shortDescription = articleObj.getAuthorShortDescription();
+                    article.author.thumbUrl = articleObj.getAuthorImageUrl();
+                    article.isBookmarked = articleObj.isBookmarked();
+                    article.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
+                    article.thumbImageWidth = articleObj.getThumbImageWidth();
+                    article.thumbImageHeight = articleObj.getThumbImageHeight();
+                    article.featureImageHeight = articleObj.getHighresImageHeight();
+                    article.featureImageWidth = articleObj.getHighresImageWidth();
+                    article.readingTime = articleObj.getCharCount();
                     if (!CommonUtil.isEmpty(feedDetail.getLastComments())) {
                         article.comments = new ArrayList<>(feedDetail.getLastComments());
                     }

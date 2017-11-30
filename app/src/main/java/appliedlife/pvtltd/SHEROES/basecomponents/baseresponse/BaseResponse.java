@@ -10,19 +10,14 @@ import java.util.HashMap;
 @Parcel(analyze = {BaseResponse.class})
 public class BaseResponse {
     @SerializedName("fieldErrorMessageMap")
-    @Expose
     private HashMap<String, String> fieldErrorMessageMap;
     @SerializedName("numFound")
-    @Expose
     private int numFound;
     @SerializedName("start")
-    @Expose
     private int start;
     @SerializedName("status")
-    @Expose
     private String status;
     @SerializedName("screen_name")
-    @Expose
     private String screenName;
 
     public HashMap<String, String> getFieldErrorMessageMap() {

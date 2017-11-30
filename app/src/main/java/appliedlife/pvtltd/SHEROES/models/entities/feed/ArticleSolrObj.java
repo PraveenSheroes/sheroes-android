@@ -40,10 +40,10 @@ public class ArticleSolrObj extends FeedDetail {
     private int charCount;
 
     @SerializedName(value="thumbnailImage_width_i")
-    private int thumbnailImageWidth;
+    private int thumbImageWidth;
 
     @SerializedName(value="thumbnailImage_height_i")
-    private int thumbnailImageHeight;
+    private int thumbImageHeight;
 
     @SerializedName(value="highresImage_width_i")
     private int highresImageWidth;
@@ -131,20 +131,20 @@ public class ArticleSolrObj extends FeedDetail {
         this.charCount = charCount;
     }
 
-    public int getThumbnailImageWidth() {
-        return thumbnailImageWidth;
+    public int getThumbImageWidth() {
+        return thumbImageWidth;
     }
 
-    public void setThumbnailImageWidth(int thumbnailImageWidth) {
-        this.thumbnailImageWidth = thumbnailImageWidth;
+    public void setThumbImageWidth(int thumbImageWidth) {
+        this.thumbImageWidth = thumbImageWidth;
     }
 
-    public int getThumbnailImageHeight() {
-        return thumbnailImageHeight;
+    public int getThumbImageHeight() {
+        return thumbImageHeight;
     }
 
-    public void setThumbnailImageHeight(int thumbnailImageHeight) {
-        this.thumbnailImageHeight = thumbnailImageHeight;
+    public void setThumbImageHeight(int thumbImageHeight) {
+        this.thumbImageHeight = thumbImageHeight;
     }
 
     public int getHighresImageWidth() {

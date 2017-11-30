@@ -39,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -462,7 +461,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
             case R.id.tv_feed_community_post_user_comment:
                 mFragmentOpen = new FragmentOpen();
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
-                mFragmentOpen.setOwner(((UserPostSolrObj)mFeedDetail).getCommunityOwner());
+                mFragmentOpen.setOwner(((UserPostSolrObj)mFeedDetail).isCommunityOwner());
                 setAllValues(mFragmentOpen);
                 super.feedCardsHandled(view, baseResponse);
                 break;

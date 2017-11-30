@@ -49,10 +49,10 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -167,11 +167,11 @@ public class HomeFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             isChallenge = bundle.getBoolean(ContestActivity.IS_CHALLENGE, false);
-            mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_FRAGMENT));
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         if(isChallenge){
-            Parcelable parcelable = Parcels.unwrap(getArguments().getParcelable(ContestActivity.CHALLENGE_OBJ));
+            Parcelable parcelable = getArguments().getParcelable(ContestActivity.CHALLENGE_OBJ);
             mContest = Parcels.unwrap(parcelable);
         }
         startedTime = System.currentTimeMillis();
@@ -407,8 +407,7 @@ public class HomeFragment extends BaseFragment {
                         if (mIsSpam) {
                             commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
                         } else {
-                            // TODO: ujjwal
-                            //feedDetail.setSpamPost(false);
+                            ((UserPostSolrObj)feedDetail).setSpamPost(false);
                             commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
                     } catch (CloneNotSupportedException e) {
@@ -477,7 +476,6 @@ public class HomeFragment extends BaseFragment {
                                     }
                                     challengeDataItemList.remove(mChallengeDataItem.getItemPosition());
                                     challengeDataItemList.add(mChallengeDataItem.getItemPosition(), mChallengeDataItem);
-                                    // TODO: ujjwal
                                     //challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
                                     challengeFeedDetail.setChallengeDataItems(challengeDataItemList);
                                     break;

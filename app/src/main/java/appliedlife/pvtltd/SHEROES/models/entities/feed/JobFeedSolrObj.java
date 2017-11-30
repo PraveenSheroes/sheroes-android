@@ -13,19 +13,19 @@ import java.util.List;
 @Parcel(analyze = {JobFeedSolrObj.class,FeedDetail.class})
 public class JobFeedSolrObj extends FeedDetail {
     @SerializedName(value="company_profile_id_l")
-    private Long companyProfileId;
+    private int companyProfileId;
 
     @SerializedName(value="top_company_tag_link_id_l")
-    private Long topCompanyTagLinkId;
+    private String topCompanyTagLinkId;
 
     @SerializedName(value="sector_id_l")
-    private Long sectorId;
+    private int sectorId;
 
     @SerializedName(value="sector_name_s")
     private String sectorName;
 
     @SerializedName(value="job_city_id_l")
-    private Long cityId;
+    private String cityId;
 
     @SerializedName(value="job_city_name_s")
     private String cityName;
@@ -43,10 +43,10 @@ public class JobFeedSolrObj extends FeedDetail {
     private String proxiedCompanyLogo;
 
     @SerializedName(value="experience_from_i")
-    private Integer experiecneFrom;
+    private int experiecneFrom;
 
     @SerializedName(value="experience_to_i")
-    private Integer experienceTo;
+    private int experienceTo;
 
     @SerializedName(value = "search_id_job_opp_types")
     private List<Long> opportunityTypeIds;
@@ -58,22 +58,22 @@ public class JobFeedSolrObj extends FeedDetail {
     private List<Long> employmentTypeIds;
 
     @SerializedName(value = "search_text_job_emp_types")
-    private List<String> employmentTypeNames;
+    private List<String> searchTextJobEmpTypes;
 
     @SerializedName(value = "search_id_job_skills")
     private List<Long> skillIds;
 
     @SerializedName(value = "search_text_job_skills")
-    private List<String> skills;
+    private List<String> searchTextJobSkills;
 
     @SerializedName(value = "job_Type_s")
     private String jobType;
 
     @SerializedName(value = "end_date_dt")
-    private Date endDate;
+    private String endDate;
 
     @SerializedName(value = "start_date_dt")
-    private Date startDate;
+    private String startDate;
 
     @SerializedName(value = "is_assisted_b")
     private boolean isAssisted;
@@ -85,13 +85,13 @@ public class JobFeedSolrObj extends FeedDetail {
     private boolean isCtcRequired;
 
     @SerializedName(value = "compensation_from_l")
-    private Long compensationFrom;
+    private long compensationFrom;
 
     @SerializedName(value = "compensation_to_l")
-    private Long compensationTo;
+    private long compensationTo;
 
     @SerializedName(value = "no_of_openings_i")
-    private Integer noOfOpenings;
+    private int noOfOpenings;
 
     @SerializedName(value = "compensation_details_s")
     private String compensationDetails;
@@ -120,27 +120,27 @@ public class JobFeedSolrObj extends FeedDetail {
     @SerializedName(value="solr_ignore_job_level")
     private String jobLevel;
 
-    public Long getCompanyProfileId() {
+    public int getCompanyProfileId() {
         return companyProfileId;
     }
 
-    public void setCompanyProfileId(Long companyProfileId) {
+    public void setCompanyProfileId(int companyProfileId) {
         this.companyProfileId = companyProfileId;
     }
 
-    public Long getTopCompanyTagLinkId() {
+    public String getTopCompanyTagLinkId() {
         return topCompanyTagLinkId;
     }
 
-    public void setTopCompanyTagLinkId(Long topCompanyTagLinkId) {
+    public void setTopCompanyTagLinkId(String topCompanyTagLinkId) {
         this.topCompanyTagLinkId = topCompanyTagLinkId;
     }
 
-    public Long getSectorId() {
+    public int getSectorId() {
         return sectorId;
     }
 
-    public void setSectorId(Long sectorId) {
+    public void setSectorId(int sectorId) {
         this.sectorId = sectorId;
     }
 
@@ -152,11 +152,11 @@ public class JobFeedSolrObj extends FeedDetail {
         this.sectorName = sectorName;
     }
 
-    public Long getCityId() {
+    public String getCityId() {
         return cityId;
     }
 
-    public void setCityId(Long cityId) {
+    public void setCityId(String cityId) {
         this.cityId = cityId;
     }
 
@@ -200,19 +200,19 @@ public class JobFeedSolrObj extends FeedDetail {
         this.proxiedCompanyLogo = proxiedCompanyLogo;
     }
 
-    public Integer getExperiecneFrom() {
+    public int getExperiecneFrom() {
         return experiecneFrom;
     }
 
-    public void setExperiecneFrom(Integer experiecneFrom) {
+    public void setExperiecneFrom(int experiecneFrom) {
         this.experiecneFrom = experiecneFrom;
     }
 
-    public Integer getExperienceTo() {
+    public int getExperienceTo() {
         return experienceTo;
     }
 
-    public void setExperienceTo(Integer experienceTo) {
+    public void setExperienceTo(int experienceTo) {
         this.experienceTo = experienceTo;
     }
 
@@ -240,12 +240,12 @@ public class JobFeedSolrObj extends FeedDetail {
         this.employmentTypeIds = employmentTypeIds;
     }
 
-    public List<String> getEmploymentTypeNames() {
-        return employmentTypeNames;
+    public List<String> getSearchTextJobEmpTypes() {
+        return searchTextJobEmpTypes;
     }
 
-    public void setEmploymentTypeNames(List<String> employmentTypeNames) {
-        this.employmentTypeNames = employmentTypeNames;
+    public void setSearchTextJobEmpTypes(List<String> searchTextJobEmpTypes) {
+        this.searchTextJobEmpTypes = searchTextJobEmpTypes;
     }
 
     public List<Long> getSkillIds() {
@@ -256,12 +256,12 @@ public class JobFeedSolrObj extends FeedDetail {
         this.skillIds = skillIds;
     }
 
-    public List<String> getSkills() {
-        return skills;
+    public List<String> getSearchTextJobSkills() {
+        return searchTextJobSkills;
     }
 
-    public void setSkills(List<String> skills) {
-        this.skills = skills;
+    public void setSearchTextJobSkills(List<String> searchTextJobSkills) {
+        this.searchTextJobSkills = searchTextJobSkills;
     }
 
     public String getJobType() {
@@ -272,19 +272,19 @@ public class JobFeedSolrObj extends FeedDetail {
         this.jobType = jobType;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
@@ -312,27 +312,27 @@ public class JobFeedSolrObj extends FeedDetail {
         isCtcRequired = ctcRequired;
     }
 
-    public Long getCompensationFrom() {
+    public long getCompensationFrom() {
         return compensationFrom;
     }
 
-    public void setCompensationFrom(Long compensationFrom) {
+    public void setCompensationFrom(long compensationFrom) {
         this.compensationFrom = compensationFrom;
     }
 
-    public Long getCompensationTo() {
+    public long getCompensationTo() {
         return compensationTo;
     }
 
-    public void setCompensationTo(Long compensationTo) {
+    public void setCompensationTo(long compensationTo) {
         this.compensationTo = compensationTo;
     }
 
-    public Integer getNoOfOpenings() {
+    public int getNoOfOpenings() {
         return noOfOpenings;
     }
 
-    public void setNoOfOpenings(Integer noOfOpenings) {
+    public void setNoOfOpenings(int noOfOpenings) {
         this.noOfOpenings = noOfOpenings;
     }
 

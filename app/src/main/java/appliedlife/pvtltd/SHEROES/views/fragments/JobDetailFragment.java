@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
@@ -74,7 +75,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     ProgressBar mProgressBar;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private FeedDetail mFeedDetail;
+    private JobFeedSolrObj jobFeedObj;
     private FragmentListRefreshData mFragmentListRefreshData;
     private AppUtils mAppUtils;
     private JobDetailPojo jobDetailPojo;
@@ -97,7 +98,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (null != getArguments()) {
-            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.JOB_DETAIL));
+            jobFeedObj = Parcels.unwrap(getArguments().getParcelable(AppConstants.JOB_DETAIL));
         }
 
     }
@@ -112,8 +113,8 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime=System.currentTimeMillis();
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, mFeedDetail.getIdOfEntityOrParticipant());
-        mItemPosition = mFeedDetail.getItemPosition();
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.JOB_DETAIL, jobFeedObj.getIdOfEntityOrParticipant());
+        mItemPosition = jobFeedObj.getItemPosition();
         mHomePresenter.attachView(this);
         mJobpresenter.attachView(this);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -121,13 +122,13 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (JobDetailActivity) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, mFeedDetail, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
+        super.setAllInitializationForFeeds(mFragmentListRefreshData, mAdapter, mLayoutManager, jobFeedObj, mRecyclerView, 0, 0, false, mHomePresenter, mAppUtils, mProgressBar);
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getIdFeedDetail()));
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_VIEW_JOBS_DETAIL));
         return view;
     }
     public void clickApplyButton() {
-        JobApplyRequest jobApplyRequest = jobApplyRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
+        JobApplyRequest jobApplyRequest = jobApplyRequestBuilder(jobFeedObj.getIdOfEntityOrParticipant(), AppConstants.JOB_DETAIL);
         mJobpresenter.getJobApply(jobApplyRequest);
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_JOB_APPLICATION, GoogleAnalyticsEventActions.APPLIED_JOB, AppConstants.EMPTY_STRING);
     }
@@ -139,19 +140,18 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             joblist = new ArrayList<>();
             jobDetailPojo = new JobDetailPojo();
             jobDetailPojo.setId(AppConstants.ONE_CONSTANT);
-            mFeedDetail = feedDetailList.get(0);
-            mFeedDetail.setItemPosition(mItemPosition);
-            ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
-            jobDetailPojo.setFeedDetail(mFeedDetail);
+            jobFeedObj = (JobFeedSolrObj) feedDetailList.get(0);
+            jobFeedObj.setItemPosition(mItemPosition);
+            ((JobDetailActivity) getActivity()).setBackGroundImage(jobFeedObj);
+            jobDetailPojo.setFeedDetail(jobFeedObj);
             joblist.add(jobDetailPojo);
-            // TODO: ujjwal
-            /*if (mFeedDetail.isApplied()) {
+            if (jobFeedObj.isApplied()) {
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(false);
             } else {
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLY));
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(true);
-            }*/
+            }
             mAdapter.notifyDataSetChanged();
             mAdapter.setSheroesGenericListData(joblist);
             mAdapter.notifyDataSetChanged();
@@ -164,11 +164,10 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
         super.onDestroyView();
         mHomePresenter.detachView();
         mJobpresenter.detachView();
-        // TODO: ujjwal
-        /*if(mFeedDetail.isApplied()) {
+        if(jobFeedObj.isApplied()) {
             long timeSpent = System.currentTimeMillis() - startedTime;
             moEngageUtills.entityMoEngageViewAppliedJob(getActivity(), mMoEHelper, payloadBuilder, timeSpent);
-        }*/
+        }
     }
 
     public void bookMarkForDetailCard(FeedDetail feedDetail) {
@@ -181,20 +180,18 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             case AppConstants.SUCCESS:
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setText(getString(R.string.ID_APPLIED));
                 ((JobDetailActivity)getActivity()).mtv_apply_job.setEnabled(false);
-                // TODO: ujjwal
-                //mFeedDetail.setApplied(true);
-                ((JobDetailActivity) getActivity()).setBackGroundImage(mFeedDetail);
+                jobFeedObj.setApplied(true);
+                ((JobDetailActivity) getActivity()).setBackGroundImage(jobFeedObj);
                 Toast.makeText(getActivity(), getString(R.string.ID_APPLIED) + AppConstants.SPACE + getString(R.string.ID_SUCCESSFULLY), Toast.LENGTH_SHORT).show();
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
-                        .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
-                        .title(mFeedDetail.getNameOrTitle())
-                                // TODO: ujjwal
-                                //.companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
-                        .location(mFeedDetail.getAuthorCityName())
+                        .id(Long.toString(jobFeedObj.getIdOfEntityOrParticipant()))
+                        .title(jobFeedObj.getNameOrTitle())
+                                .companyId(Long.toString(jobFeedObj.getCompanyMasterId()))
+                        .location(jobFeedObj.getAuthorCityName())
                         .build();
                 trackEvent(Event.JOBS_APPLIED, properties);
-                moEngageData(mFeedDetail);
+                moEngageData(jobFeedObj);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -205,18 +202,18 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
 
     }
 
-    private void moEngageData(FeedDetail feedDetail) {
-        // TODO: ujjwal
-        /*StringBuilder mergeJobTypes=new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(feedDetail.getSearchTextJobEmpTypes())) {
-            List<String> jobTypes = feedDetail.getSearchTextJobEmpTypes();
+    private void moEngageData(JobFeedSolrObj jobFeedObj) {
+
+        StringBuilder mergeJobTypes=new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobEmpTypes())) {
+            List<String> jobTypes = jobFeedObj.getSearchTextJobEmpTypes();
             for (String jobType : jobTypes) {
                 mergeJobTypes.append(jobType).append(AppConstants.PIPE);
             }
         }
         StringBuilder mergeJobSkills = new StringBuilder();
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getSearchTextJobSkills())) {
-            List<String> jobSkills = mFeedDetail.getSearchTextJobSkills();
+        if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobSkills())) {
+            List<String> jobSkills = jobFeedObj.getSearchTextJobSkills();
 
             for (String skill : jobSkills) {
                 mergeJobSkills.append(skill);
@@ -224,7 +221,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
             }
         }
 
-        moEngageUtills.entityMoEngageAppliedJob(getActivity(), mMoEHelper, payloadBuilder, feedDetail.getNameOrTitle(), feedDetail.getIdOfEntityOrParticipant(), feedDetail.getAuthorName(), feedDetail.getAuthorCityName(),mergeJobTypes.toString(),mergeJobTypes.toString(),AppConstants.EMPTY_STRING,AppConstants.EMPTY_STRING,mergeJobSkills.toString());*/
+        moEngageUtills.entityMoEngageAppliedJob(getActivity(), mMoEHelper, payloadBuilder, jobFeedObj.getNameOrTitle(), jobFeedObj.getIdOfEntityOrParticipant(), jobFeedObj.getAuthorName(), jobFeedObj.getAuthorCityName(),mergeJobTypes.toString(),mergeJobTypes.toString(),AppConstants.EMPTY_STRING,AppConstants.EMPTY_STRING,mergeJobSkills.toString());
 
     }
 
@@ -240,34 +237,33 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     }
 
     protected void jobDetailBookMarkSuccess(BaseResponse baseResponse) {
-        if (null != mFeedDetail) {
+        if (null != jobFeedObj) {
             if (baseResponse instanceof BookmarkResponsePojo) {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
                         HashMap<String, Object> properties =
                                 new EventProperty.Builder()
-                                        .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
-                                        .title(mFeedDetail.getNameOrTitle())
-                                        // TODO: ujjwal
-                                        //.companyId(Long.toString(mFeedDetail.getCompanyMasterId()))
-                                        .location(mFeedDetail.getAuthorCityName())
+                                        .id(Long.toString(jobFeedObj.getIdOfEntityOrParticipant()))
+                                        .title(jobFeedObj.getNameOrTitle())
+                                        .companyId(Long.toString(jobFeedObj.getCompanyMasterId()))
+                                        .location(jobFeedObj.getAuthorCityName())
                                         .build();
                         trackEvent(Event.JOBS_BOOKMARKED, properties);
                         ((JobDetailActivity) getActivity()).mTvJobDetailBookmark.setEnabled(true);
-                        moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
+                        moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, jobFeedObj);
                         break;
                     case AppConstants.FAILED:
-                        if (!mFeedDetail.isBookmarked()) {
-                            mFeedDetail.setBookmarked(true);
-                            jobDetailPojo.setFeedDetail(mFeedDetail);
+                        if (!jobFeedObj.isBookmarked()) {
+                            jobFeedObj.setBookmarked(true);
+                            jobDetailPojo.setFeedDetail(jobFeedObj);
                         } else {
-                            mFeedDetail.setBookmarked(false);
-                            jobDetailPojo.setFeedDetail(mFeedDetail);
+                            jobFeedObj.setBookmarked(false);
+                            jobDetailPojo.setFeedDetail(jobFeedObj);
                         }
                         joblist.clear();
                         joblist.add(jobDetailPojo);
                         mAdapter.notifyDataSetChanged();
-                        ((JobDetailActivity) getActivity()).onJobBookmarkClick(mFeedDetail);
+                        ((JobDetailActivity) getActivity()).onJobBookmarkClick(jobFeedObj);
                         showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                         break;
                     default:
@@ -282,7 +278,7 @@ public class JobDetailFragment extends BaseFragment implements HomeView, JobView
     protected Map<String, Object> getExtraProperties() {
         HashMap<String, Object> properties = new
                 EventProperty.Builder()
-                .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                .id(Long.toString(jobFeedObj.getIdOfEntityOrParticipant()))
                 .build();
         return properties;
     }

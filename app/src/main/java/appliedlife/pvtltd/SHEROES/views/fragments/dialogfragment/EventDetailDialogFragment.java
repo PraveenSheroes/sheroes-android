@@ -19,6 +19,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -58,7 +61,7 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     AppUtils mAppUtils;
     @Bind(R.id.pb_event_detail_progress_bar)
     ProgressBar mProgressBar;
-    FeedDetail mFeedDetail;
+    UserPostSolrObj mUserPostObj;
     @Inject
     HomePresenter mHomePresenter;
     private GenericRecyclerViewAdapter mAdapter;
@@ -82,32 +85,30 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             Bundle bundle = getArguments();
-            mFeedDetail = bundle.getParcelable(AppConstants.EVENT_DETAIL);
+            mUserPostObj = Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_DETAIL));
             if (null != bundle.get(AppConstants.EVENT_ID)) {
                 mEventId = bundle.getLong(AppConstants.EVENT_ID);
                 if (mEventId > 0) {
-                    mFeedDetail = new FeedDetail();
-                    // TODO: ujjwal
-                   // mFeedDetail.setDispThirdPartyUniqueId(String.valueOf(mEventId));
+                    mUserPostObj = new UserPostSolrObj();
+                    mUserPostObj.setDispThirdPartyUniqueId(String.valueOf(mEventId));
                 }
             }
-            if (null != mFeedDetail) {
+            if (null != mUserPostObj) {
                 mHomePresenter.attachView(this);
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
-                // TODO: ujjwal
-          /*      if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDispThirdPartyUniqueId())) {
-                    Long uniqueId = Long.parseLong(mFeedDetail.getDispThirdPartyUniqueId());
+                if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getDispThirdPartyUniqueId())) {
+                    Long uniqueId = Long.parseLong(mUserPostObj.getDispThirdPartyUniqueId());
                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_EVENT, 1, uniqueId));
                     try {
-                        feedDetailCard = (FeedDetail) mFeedDetail.clone();
+                        feedDetailCard = (FeedDetail) mUserPostObj.clone();
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
-                }*/
+                }
             }
         }
         return view;
@@ -141,8 +142,8 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
             eventDetailPojo = new EventDetailPojo();
             eventDetailPojo.setId(AppConstants.ONE_CONSTANT);
             FeedDetail feedDetail = feedDetailList.get(0);
-            mFeedDetail = feedDetail;
-            feedDetail.setItemPosition(mFeedDetail.getItemPosition());
+            mUserPostObj = (UserPostSolrObj)feedDetail;
+            feedDetail.setItemPosition(mUserPostObj.getItemPosition());
             setImageBackground(feedDetail);
             eventDetailPojo.setFeedDetail(feedDetail);
             eventList.add(eventDetailPojo);
@@ -152,17 +153,17 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     }
 
     public void eventInterestedListData(FeedDetail feedDetail) {
-        mFeedDetail.setReactionValue(feedDetail.getReactionValue());
-        if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+        mUserPostObj.setReactionValue(feedDetail.getReactionValue());
+        if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mUserPostObj.getEntityOrParticipantId()));
         } else {
-            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
+            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mUserPostObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
         }
     }
 
     public void eventGoingListData(FeedDetail feedDetail) {
-        mFeedDetail.setBookmarked(feedDetail.isBookmarked());
-        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(mFeedDetail.getEntityOrParticipantId()), mFeedDetail.isBookmarked());
+        mUserPostObj.setBookmarked(feedDetail.isBookmarked());
+        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(mUserPostObj.getEntityOrParticipantId()), mUserPostObj.isBookmarked());
     }
 
 
@@ -181,24 +182,24 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     }
 
     protected void going(BaseResponse baseResponse) {
-        if (null != mFeedDetail) {
+        if (null != mUserPostObj) {
             if (baseResponse instanceof BookmarkResponsePojo) {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
                         isOperationPerformed = true;
-                        feedDetailCard.setBookmarked(mFeedDetail.isBookmarked());
-                        eventDetailPojo.setFeedDetail(mFeedDetail);
+                        feedDetailCard.setBookmarked(mUserPostObj.isBookmarked());
+                        eventDetailPojo.setFeedDetail(mUserPostObj);
                         eventList.clear();
                         eventList.add(eventDetailPojo);
                         mAdapter.notifyDataSetChanged();
                         break;
                     case AppConstants.FAILED:
-                        if (!mFeedDetail.isBookmarked()) {
-                            mFeedDetail.setBookmarked(true);
-                            eventDetailPojo.setFeedDetail(mFeedDetail);
+                        if (!mUserPostObj.isBookmarked()) {
+                            mUserPostObj.setBookmarked(true);
+                            eventDetailPojo.setFeedDetail(mUserPostObj);
                         } else {
-                            mFeedDetail.setBookmarked(false);
-                            eventDetailPojo.setFeedDetail(mFeedDetail);
+                            mUserPostObj.setBookmarked(false);
+                            eventDetailPojo.setFeedDetail(mUserPostObj);
                         }
                         eventList.clear();
                         eventList.add(eventDetailPojo);
@@ -213,23 +214,23 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     }
 
     protected void interested(BaseResponse baseResponse) {
-        if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mFeedDetail) {
+        if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mUserPostObj) {
             isOperationPerformed = true;
-            feedDetailCard.setReactionValue(mFeedDetail.getReactionValue());
-            eventDetailPojo.setFeedDetail(mFeedDetail);
+            feedDetailCard.setReactionValue(mUserPostObj.getReactionValue());
+            eventDetailPojo.setFeedDetail(mUserPostObj);
             eventList.clear();
             eventList.add(eventDetailPojo);
             mAdapter.notifyDataSetChanged();
 
         } else {
-            if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-                mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
             } else {
-                mFeedDetail.setReactionValue(AppConstants.EVENT_CONSTANT);
-                mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mUserPostObj.setReactionValue(AppConstants.EVENT_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
             }
-            eventDetailPojo.setFeedDetail(mFeedDetail);
+            eventDetailPojo.setFeedDetail(mUserPostObj);
             eventList.clear();
             eventList.add(eventDetailPojo);
             mAdapter.notifyDataSetChanged();

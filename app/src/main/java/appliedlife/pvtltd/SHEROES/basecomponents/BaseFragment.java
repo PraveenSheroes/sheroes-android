@@ -334,7 +334,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void joinInviteResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (((CommunityFeedSolrObj)mFeedDetail).getClosed()) {
+                if (((CommunityFeedSolrObj)mFeedDetail).isClosedCommunity()) {
                     ((CommunityFeedSolrObj)mFeedDetail).setRequestPending(true);
 
                 } else {
@@ -344,7 +344,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                 PayloadBuilder payloadBuilder = new PayloadBuilder();
                 MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                // TODO: ujjwal
                 //moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), ((CommunityFeedSolrObj)mFeedDetail).isClosed(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);

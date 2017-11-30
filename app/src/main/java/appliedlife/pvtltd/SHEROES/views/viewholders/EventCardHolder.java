@@ -25,7 +25,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -77,7 +79,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
 
     @Inject
     Preference<LoginResponse> userPreference;
-    private FeedDetail dataItem;
+    private UserPostSolrObj userPostSolrObj;
     private Context mContext;
     private long mUserId;
     private int mAdminId;
@@ -96,9 +98,9 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        this.userPostSolrObj = (UserPostSolrObj) item;
         mContext = context;
-        dataItem.setItemPosition(position);
+        userPostSolrObj.setItemPosition(position);
         eventPostUI(mUserId);
     }
     private void eventPostUI(long userId)
@@ -107,7 +109,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         tvEventInterestedBtn.setEnabled(true);
         setInterested();
         goingOnEvent();
-        if (!dataItem.isTrending()) {
+        if (!userPostSolrObj.isTrending()) {
             imageSetOnEventBackground();
 
         }
@@ -116,7 +118,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
     private void imageSetOnEventBackground() {
         liFeedEventImages.removeAllViews();
         liFeedEventImages.removeAllViewsInLayout();
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
+        if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
             String feedTitle = mContext.getString(R.string.ID_APP_NAME);
             String feedCommunityName = mContext.getString(R.string.ID_EVENT);
@@ -128,19 +130,18 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedEventCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
             }
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+        if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getCreatedDate())) {
+            long createdDate = mDateUtil.getTimeInMillis(userPostSolrObj.getCreatedDate(), AppConstants.DATE_FORMAT);
             tvFeedEventTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         }
 
-        String authorImageUrl = dataItem.getAuthorImageUrl();
+        String authorImageUrl = userPostSolrObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedEventIcon.setCircularImage(true);
             ivFeedEventIcon.bindImage(authorImageUrl);
         }
-        // TODO: ujjwal
-      /*  if (StringUtil.isNotNullOrEmptyString(dataItem.getStartDateForEvent())) {
-            long time = mDateUtil.getTimeInMillis(dataItem.getStartDateForEvent(), AppConstants.DATE_FORMAT);
+        if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getStartDateForEvent())) {
+            long time = mDateUtil.getTimeInMillis(userPostSolrObj.getStartDateForEvent(), AppConstants.DATE_FORMAT);
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
             String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
@@ -158,32 +159,31 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
 
             }
 
-        }*/
-
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getListDescription())) {
-            tvEventTitle.setText(dataItem.getListDescription());
         }
-        // TODO: ujjwal
-   /*     if (StringUtil.isNotEmptyCollection(dataItem.getImageUrls())) {
+
+        if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getListDescription())) {
+            tvEventTitle.setText(userPostSolrObj.getListDescription());
+        }
+        if (StringUtil.isNotEmptyCollection(userPostSolrObj.getImageUrls())) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.challenge_image, null);
             ImageView ivEventImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
             LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
             liImageText.setVisibility(View.GONE);
             Glide.with(mContext)
-                    .load(dataItem.getImageUrls().get(0))
+                    .load(userPostSolrObj.getImageUrls().get(0))
                     .into(ivEventImage);
             liFeedEventImages.addView(child);
-        }*/
+        }
     }
     private void setInterested() {
-        if (dataItem.getNoOfLikes() > 0) {
-            tvEventInterestedPeople.setText(dataItem.getNoOfLikes() + AppConstants.SPACE + mContext.getString(R.string.ID_PEOPLE_INTERESTED));
+        if (userPostSolrObj.getNoOfLikes() > 0) {
+            tvEventInterestedPeople.setText(userPostSolrObj.getNoOfLikes() + AppConstants.SPACE + mContext.getString(R.string.ID_PEOPLE_INTERESTED));
             tvEventInterestedPeople.setVisibility(View.VISIBLE);
         } else {
             tvEventInterestedPeople.setVisibility(View.GONE);
         }
-        switch (dataItem.getReactionValue()) {
+        switch (userPostSolrObj.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvEventInterestedBtn.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                 tvEventInterestedBtn.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -193,12 +193,12 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
                 tvEventInterestedBtn.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + dataItem.getReactionValue());
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + userPostSolrObj.getReactionValue());
         }
     }
 
     private void goingOnEvent() {
-        if (dataItem.isBookmarked()) {
+        if (userPostSolrObj.isBookmarked()) {
             tvEventGoingBtn.setEnabled(false);
             tvEventGoingBtn.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvEventGoingBtn.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
@@ -210,21 +210,21 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
     }
     private void interestedPress() {
         tvEventInterestedBtn.setEnabled(false);
-        dataItem.setTrending(true);
-        dataItem.setLongPress(false);
-        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+        userPostSolrObj.setTrending(true);
+        userPostSolrObj.setLongPress(false);
+        if (userPostSolrObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            viewInterface.userCommentLikeRequest(userPostSolrObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
         } else {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.EVENT_CONSTANT, getAdapterPosition());
+            viewInterface.userCommentLikeRequest(userPostSolrObj, AppConstants.EVENT_CONSTANT, getAdapterPosition());
         }
-        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-            dataItem.setNoOfLikes(dataItem.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+        if (userPostSolrObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
             tvEventInterestedBtn.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvEventInterestedBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rectangle_feed_commnity_join, 0, 0, 0);
         } else {
-            dataItem.setReactionValue(AppConstants.EVENT_CONSTANT);
-            dataItem.setNoOfLikes(dataItem.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            userPostSolrObj.setReactionValue(AppConstants.EVENT_CONSTANT);
+            userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
             tvEventInterestedBtn.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvEventInterestedBtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.rectangle_feed_community_joined_active, 0, 0, 0);
         }
@@ -232,12 +232,12 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
     }
     @OnClick(R.id.li_feed_event_images)
     public void eventImageClick() {
-        viewInterface.handleOnClick(dataItem, liEventCardMainLayout);
-        //  viewInterface.dataOperationOnClick(dataItem);
+        viewInterface.handleOnClick(userPostSolrObj, liEventCardMainLayout);
+        //  viewInterface.dataOperationOnClick(userPostSolrObj);
     }
     @OnClick(R.id.li_event_card_main_layout)
     public void onEventClick() {
-        viewInterface.handleOnClick(dataItem, liEventCardMainLayout);
+        viewInterface.handleOnClick(userPostSolrObj, liEventCardMainLayout);
     }
 
     @OnClick(R.id.tv_event_interested_btn)
@@ -247,20 +247,20 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_event_going_btn)
     public void onEventGoingClick() {
-        dataItem.setTrending(true);
+        userPostSolrObj.setTrending(true);
         tvEventGoingBtn.setEnabled(false);
-        if (!dataItem.isBookmarked()) {
-            viewInterface.handleOnClick(dataItem, tvEventGoingBtn);
+        if (!userPostSolrObj.isBookmarked()) {
+            viewInterface.handleOnClick(userPostSolrObj, tvEventGoingBtn);
         }
-        if (!dataItem.isBookmarked()) {
-            dataItem.setBookmarked(true);
+        if (!userPostSolrObj.isBookmarked()) {
+            userPostSolrObj.setBookmarked(true);
         }
         goingOnEvent();
     }
 
     @OnClick(R.id.tv_event_share_btn)
     public void onEventShareClick() {
-        viewInterface.handleOnClick(dataItem, tvEventShareBtn);
+        viewInterface.handleOnClick(userPostSolrObj, tvEventShareBtn);
     }
     @Override
     public void viewRecycled() {

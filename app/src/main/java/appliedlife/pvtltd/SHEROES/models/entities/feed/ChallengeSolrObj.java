@@ -12,7 +12,7 @@ import java.util.Date;
 @Parcel(analyze = {ChallengeSolrObj.class,FeedDetail.class})
 public class ChallengeSolrObj extends FeedDetail {
     @SerializedName("challenge_is_public_b")
-    private Boolean challengeIsPublic;
+    private boolean challengeIsPublic;
 
     @SerializedName("challenge_last_modified_on_dt")
     private String challengeLastModifiedOn;
@@ -27,7 +27,7 @@ public class ChallengeSolrObj extends FeedDetail {
     private String challengeTitle;
 
     @SerializedName("challenge_is_anonymous_b")
-    private Boolean challengeIsAnonymous;
+    private boolean challengeIsAnonymous;
 
     @SerializedName("challenge_accept_post_text_s")
     private String challengeAcceptPostText;
@@ -42,7 +42,7 @@ public class ChallengeSolrObj extends FeedDetail {
     private Integer challengeMinute;
 
     @SerializedName("author_participant_id_l")
-    private Long authorParticipantId;
+    private long authorParticipantId;
 
     @SerializedName("challenge_author_type_s")
     private String challengeAuthorType;
@@ -73,7 +73,7 @@ public class ChallengeSolrObj extends FeedDetail {
     private Integer winnerRank;
 
     @SerializedName("challenge_has_winner")
-    private Boolean challengeHasWinner;
+    private boolean challengeHasWinner;
 
     @SerializedName("challenge_winner_announcement_dt")
     private String challengeAnnouncementDate;
@@ -82,11 +82,11 @@ public class ChallengeSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_is_future_challenge")
     private boolean isFutureChallenge;
 
-    public Boolean getChallengeIsPublic() {
+    public boolean getChallengeIsPublic() {
         return challengeIsPublic;
     }
 
-    public void setChallengeIsPublic(Boolean challengeIsPublic) {
+    public void setChallengeIsPublic(boolean challengeIsPublic) {
         this.challengeIsPublic = challengeIsPublic;
     }
 
@@ -122,11 +122,11 @@ public class ChallengeSolrObj extends FeedDetail {
         this.challengeTitle = challengeTitle;
     }
 
-    public Boolean getChallengeIsAnonymous() {
+    public boolean  getChallengeIsAnonymous() {
         return challengeIsAnonymous;
     }
 
-    public void setChallengeIsAnonymous(Boolean challengeIsAnonymous) {
+    public void setChallengeIsAnonymous(boolean  challengeIsAnonymous) {
         this.challengeIsAnonymous = challengeIsAnonymous;
     }
 
@@ -163,12 +163,12 @@ public class ChallengeSolrObj extends FeedDetail {
     }
 
     @Override
-    public Long getAuthorParticipantId() {
+    public long getAuthorParticipantId() {
         return authorParticipantId;
     }
 
     @Override
-    public void setAuthorParticipantId(Long authorParticipantId) {
+    public void setAuthorParticipantId(long authorParticipantId) {
         this.authorParticipantId = authorParticipantId;
     }
 
@@ -180,27 +180,27 @@ public class ChallengeSolrObj extends FeedDetail {
         this.challengeAuthorType = challengeAuthorType;
     }
 
-    public boolean isChallengeIsWinner() {
+    public boolean  isChallengeIsWinner() {
         return isWinner;
     }
 
-    public void setWinner(boolean winner) {
+    public void setWinner(boolean  winner) {
         isWinner = winner;
     }
 
-    public boolean isChallengeCompleted() {
+    public boolean  isChallengeCompleted() {
         return isChallengeCompleted;
     }
 
-    public void setChallengeCompleted(boolean challengeCompleted) {
+    public void setChallengeCompleted(boolean  challengeCompleted) {
         isChallengeCompleted = challengeCompleted;
     }
 
-    public boolean isNotInterested() {
+    public boolean  isNotInterested() {
         return notInterested;
     }
 
-    public void setNotInterested(boolean notInterested) {
+    public void setNotInterested(boolean  notInterested) {
         this.notInterested = notInterested;
     }
 
@@ -244,11 +244,11 @@ public class ChallengeSolrObj extends FeedDetail {
         this.winnerRank = winnerRank;
     }
 
-    public Boolean isChallengeHasWinner() {
+    public boolean  isChallengeHasWinner() {
         return challengeHasWinner;
     }
 
-    public void setChallengeHasWinner(Boolean challengeHasWinner) {
+    public void setChallengeHasWinner(boolean  challengeHasWinner) {
         this.challengeHasWinner = challengeHasWinner;
     }
 
@@ -260,11 +260,11 @@ public class ChallengeSolrObj extends FeedDetail {
         this.challengeAnnouncementDate = challengeAnnouncementDate;
     }
 
-    public boolean isFutureChallenge() {
+    public boolean  isFutureChallenge() {
         return isFutureChallenge;
     }
 
-    public void setFutureChallenge(boolean futureChallenge) {
+    public void setFutureChallenge(boolean  futureChallenge) {
         isFutureChallenge = futureChallenge;
     }
 }
