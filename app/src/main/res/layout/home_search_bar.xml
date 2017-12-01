@@ -16,13 +16,16 @@
         android:visibility="visible" />
 
     <TextView
+        android:layout_toEndOf="@+id/tv_drawer_navigation"
+        android:layout_toRightOf="@+id/tv_drawer_navigation"
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp_size_8"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_size_17"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        />
 
     <ImageView
         android:id="@+id/ic_sheroes"

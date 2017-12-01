@@ -28,6 +28,7 @@ public class AppConstants {
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String ALL_COMMUNITY_LIST = "all community list";
     public static final String MASTER_DATA = "master_data";
+    public static final String NAVIGATION_DRAWER_ITEMS_DATA = "nav_items_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
@@ -271,10 +272,17 @@ public class AppConstants {
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";
+    public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
     public static final String CHALLENGE_NEW_URL = "https://sheroes.in/sheroes-challenge";
     public static final String CHALLENGE_NEW_URL_COM = "https://sheroes.com/sheroes-challenge";
+    public static final String MY_CHALLENGE_NEW_URL = "https://sheroes.in/my-challenges";
+    public static final String MY_CHALLENGE_NEW_URL_COM = "https://sheroes.com/my-challenges";
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
+    public static final String FAQ_URL = "https://sheroes.com/faq";
+    public static final String FAQ_URL_COM = "https://sheroes.com/faq";
+    public static final String ICC_MEMEBERS_URL = "https://sheroes.in/icc-members";
+    public static final String ICC_MEMEBERS_URL_COM = "https://sheroes.com/icc-members";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
     public static final String ARTICLE_ID = "article_id";

@@ -1397,7 +1397,7 @@ public class AppUtils {
     /**
      * Request for Navigation drawer items
      */
-    public static NavigationDrawerRequest navigationOptionsRequestBuilder() {
+    public  NavigationDrawerRequest navigationOptionsRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
         NavigationDrawerRequest navigationDrawerRequest =  new NavigationDrawerRequest();
         navigationDrawerRequest.setDisplayDefault(false);

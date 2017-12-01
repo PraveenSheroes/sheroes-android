@@ -43,8 +43,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
@@ -492,20 +490,6 @@ public class HomeModel {
                     @Override
                     public UserPhoneContactsListResponse call(UserPhoneContactsListResponse userPhoneContactsListResponse) {
                         return userPhoneContactsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-    }
-
-    //To get the list of navigation drawer options
-    public Observable<NavigationItems> getNavigationDrawerItemsResponseInModel(NavigationDrawerRequest navigationDrawerRequest) {
-        return sheroesAppServiceApi.getNavigationDrawerItems(navigationDrawerRequest)
-                .map(new Func1<NavigationItems, NavigationItems>() {
-                    @Override
-                    public NavigationItems call(NavigationItems navigationItems) {
-                        return navigationItems;
                     }
                 })
                 .subscribeOn(Schedulers.io())

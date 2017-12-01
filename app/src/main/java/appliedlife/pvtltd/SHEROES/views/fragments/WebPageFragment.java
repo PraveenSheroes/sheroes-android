@@ -68,19 +68,14 @@ public class WebPageFragment extends BaseFragment {
 
         if (null != getArguments()) {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL_FRAGMENT);
-            if (mWebUrl != null) {
-                if(mWebUrl.startsWith(AppConstants.BACK_SLASH)) {
-                    mWebUrl = mWebUrl.substring(1);
-                }
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
-                    if (StringUtil.isNotNullOrEmptyString(token)) {
-                        String localUrl = BuildConfig.BASE_URL + mWebUrl + "?auth=" + token + "&addHeader=false&addFooter=false";
-                        LogUtils.info(TAG, "#######  toke value*****" + localUrl);
+                    if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
+                        String localUrl = mWebUrl+ "?auth=" + token + "&addHeader=false&addFooter=false";
+                        LogUtils.info(TAG, "#######WebPage Url*****" + localUrl);
                         webPagesView.loadUrl(localUrl);
                     }
                 }
-            }
         }
 
         webPagesView.setWebViewClient(new WebViewClient() {
@@ -114,6 +109,11 @@ public class WebPageFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        pbWebView.setVisibility(View.GONE);
+    }
 
     @Override
     public String getScreenName() {

@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityReque
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
@@ -161,6 +162,13 @@ public class SheroesAppModule {
     public Preference<InstallUpdateForMoEngage> provideInstallUpdatePref(RxSharedPreferences rxSharedPreferences, Gson gson) {
         return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new GsonPreferenceAdapter<>(gson, InstallUpdateForMoEngage.class));
     }
+
+    @Singleton
+    @Provides
+    public Preference<NavigationItems> provideNavDrawerItemsPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.NAVIGATION_DRAWER_ITEMS_DATA, new GsonPreferenceAdapter<>(gson, NavigationItems.class));
+    }
+
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(Interceptor interceptor) {

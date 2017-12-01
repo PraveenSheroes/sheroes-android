@@ -110,7 +110,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
  * Title: Home fragment within Home activity perform all the UI operation .
  * Fragment will have all UI components and operate with activity .
  */
-public class HomeFragment extends BaseFragment implements HomeView.NavigationView{
+public class HomeFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Feed Screen";
     private final String TAG = LogUtils.makeLogTag(HomeFragment.class);
 
@@ -241,10 +241,6 @@ public class HomeFragment extends BaseFragment implements HomeView.NavigationVie
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
                 ((HomeActivity) getActivity()).logOut();
             } else {
-                //For navigation drawer items
-                NavigationDrawerRequest navigationDrawerRequest = AppUtils.navigationOptionsRequestBuilder();
-                mHomePresenter.getNavigationDrawerOptions(navigationDrawerRequest);
-
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
@@ -556,28 +552,6 @@ public class HomeFragment extends BaseFragment implements HomeView.NavigationVie
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         showHomeFeedList(feedDetailList);
     }
-
-    @Override
-    public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
-        ((HomeActivity) getContext()).notifyNavigationDrawerItems(navigationItems);
-    }
-
-    @Override
-    public void getNavigationDrawerItemsFailed() { //Read from asset file and display nav items
-        String stringContent = AppUtils.getStringContent("nav_items");
-        NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
-        if(eventResponseList.getStatus().equals(AppConstants.SUCCESS)) {
-            List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
-            Collections.sort(navMenuItems, new Comparator<NavMenuItem>(){ //Sort based on display order
-                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
-                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
-                }
-            });
-            ((HomeActivity) getContext()).notifyNavigationDrawerItems(navMenuItems);
-        }
-
-    }
-
 
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {

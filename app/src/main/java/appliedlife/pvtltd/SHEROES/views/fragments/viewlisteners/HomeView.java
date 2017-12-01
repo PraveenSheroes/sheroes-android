@@ -24,10 +24,4 @@ public interface HomeView extends BaseMvpView {
     void getNotificationReadCountSuccess(BaseResponse baseResponse,FeedParticipationEnum feedParticipationEnum);
 
     void invalidateLikeUnlike(Comment comment);
-
-    interface NavigationView {
-        void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems);
-        void getNavigationDrawerItemsFailed();
-    }
-
 }

@@ -3,11 +3,15 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
@@ -15,10 +19,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -33,9 +39,10 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
     @Bind(R.id.tv_drawer_image)
-    TextView tvDrawerImage;
+    ImageView tvDrawerImage;
     @Bind(R.id.ll_drawer_item)
     LinearLayout llDrawerItem;
+
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -48,97 +55,21 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         this.dataItem = item;
         llDrawerItem.setOnClickListener(this);
 
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getMenuItemIconUrl())) {
-           /* Glide.with(context)
-                    .load(dataItem.getMenuItemIconUrl())
+        tvDrawerItem.setText(dataItem.getMenuName());
+        setImageBackground(context, dataItem.getMenuItemIconUrl());
+
+    }
+
+    private void setImageBackground(Context context, String url) {
+        if (StringUtil.isNotNullOrEmptyString(url)) {
+            Glide.with(context)
+                    .load(url)
                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                     .skipMemoryCache(true)
-                    .into(tvDrawerItem);*/
-
-            Glide.with(context)
-                    .load(dataItem.getMenuItemIconUrl())
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>(100,100) {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                            tvDrawerItem.setCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(context.getResources(),resource), null, null);
-                        }
-                    });
+                    .into(tvDrawerImage);
         }
-
-        tvDrawerItem.setText(dataItem.getMenuName());
-
-
-        /*int drawerItemId = item.getId();
-        switch (drawerItemId) {
-            case 1:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_profile), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_PROFILE));
-                break;
-            case 2:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_article), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_ARTICLE));
-                break;
-            case 3:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_job_navigation), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_JOBS));
-                break;
-            case 4:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_bookmark), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_BOOKMARK));
-                break;
-            case 5:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_setting), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_SETTING));
-                break;
-            case 6:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_ask_sheroes), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
-                break;
-            case 7:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_helpline), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_ASK_SHEROES));
-                break;
-            case 8:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_icc_members), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_ICC_MEMBERS));
-                break;
-            case 9:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_faq), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_FAQS));
-                break;
-            case 10:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_feed), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_FEED));
-                break;
-            case AppConstants.ELEVENTH_CONSTANT:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_logout), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_LOGOUT));
-                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
-                tvDrawerItem.setTextSize(16.0f);
-                break;
-            case 12:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context, R.drawable.ic_invite_friend), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_INVITE_WOMEN_FRIEND));
-                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
-                break;
-            case 13:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_invite_friend), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_INVITE_REFERRAL_FRIEND));
-                tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.ask_sheroes));
-                break;
-            case 14:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_champions), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_GROWTH_BUDDIES));
-                break;
-            case 15:
-                tvDrawerImage.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(context,R.drawable.ic_mychallenge), null, null, null);
-                tvDrawerItem.setText(context.getString(R.string.ID_CHALLENGED));
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE+ TAG +  AppConstants.SPACE + drawerItemId);
-        }*/
     }
+
 
     @Override
     public void viewRecycled() {

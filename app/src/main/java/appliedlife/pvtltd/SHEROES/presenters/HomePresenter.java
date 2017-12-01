@@ -43,9 +43,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
@@ -59,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -890,52 +886,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().stopProgressBar();
                 if (null != userPhoneContactsListResponse) {
                     getMvpView().getNotificationReadCountSuccess(userPhoneContactsListResponse,USER_CONTACTS_ACCESS_SUCCESS);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
-
-    public void getNavigationDrawerOptions(NavigationDrawerRequest navigationDrawerRequest) { //Request to get navigation drawer options
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_NAV_DRAWER);
-            return;
-        };
-
-        Subscription subscription = mHomeModel.getNavigationDrawerItemsResponseInModel(navigationDrawerRequest).subscribe(new Subscriber<NavigationItems>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                //getMvpView().showError(e.getMessage(), ERROR_NAV_DRAWER);
-                if(getMvpView()!=null && getMvpView() instanceof HomeFragment) {
-                    ((HomeFragment) getMvpView()).getNavigationDrawerItemsFailed();
-                }
-
-            }
-
-            @Override
-            public void onNext(NavigationItems navigationItems) {
-                getMvpView().stopProgressBar();
-                if (null != navigationItems) {
-                    if(getMvpView()!=null && getMvpView() instanceof HomeFragment) {
-
-                        if (navigationItems.getStatus().equals(AppConstants.SUCCESS)) {
-                            List<NavMenuItem> navMenuItems = navigationItems.getMenuItems();
-                            Collections.sort(navMenuItems, new Comparator<NavMenuItem>(){ //Sort based on display order
-                                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
-                                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
-                                }
-                            });
-
-                            ((HomeFragment) getMvpView()).getNavigationDrawerItemsSuccess(navMenuItems);
-                        }
-
-                    }
                 }
             }
         });

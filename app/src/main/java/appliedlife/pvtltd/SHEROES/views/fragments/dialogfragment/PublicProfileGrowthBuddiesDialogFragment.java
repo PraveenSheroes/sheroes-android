@@ -51,7 +51,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class PublicProfileGrowthBuddiesDialogFragment extends BaseDialogFragment implements HomeView {
-    private static final String SCREEN_LABEL = "Champions Screen";
+    public static final String SCREEN_LABEL = "Champions Screen";
     private final String TAG = LogUtils.makeLogTag(PublicProfileGrowthBuddiesDialogFragment.class);
     @Inject
     AppUtils mAppUtils;

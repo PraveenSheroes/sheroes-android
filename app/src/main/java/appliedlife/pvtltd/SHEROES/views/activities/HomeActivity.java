@@ -72,6 +72,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
@@ -84,6 +85,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
@@ -93,19 +96,20 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.presenters.ActivityDataPresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.NavigationActivityConnectView;
 import appliedlife.pvtltd.SHEROES.views.fragments.WebPageFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
@@ -134,11 +138,15 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements NavigationActivityConnectView,CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SCREEN_LABEL = "Home Screen";
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    Preference<NavigationItems> mDrawerItems;
+
     @Bind(R.id.iv_drawer_profile_circle_icon)
     RoundedImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -216,6 +224,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     @Inject
+    ActivityDataPresenter activityDataPresenter;
+    @Inject
     AppUtils mAppUtils;
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     private long mChallengeId;
@@ -233,12 +243,16 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        activityDataPresenter.attachView(this);
+        //For navigation drawer items
+        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         long timeSpentFeed = System.currentTimeMillis();
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
         renderHomeFragmentView();
+
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime()) {
             openHelplineFragment();
             mTitleText.setText(getString(R.string.ID_APP_NAME));
@@ -253,12 +267,19 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
                     openArticleFragment(setCategoryIds(), false);
-                }
-            }
-            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
+                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
                     communityOnClick();
+                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)){
+                    openJobFragment();
+                }else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
+                    growthBuddiesInPublicProfile();
+                }else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)){
+                    renderFAQSView();
+                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMEBERS_URL)){
+                    renderICCMemberListView();
                 }
+
+
             }
         }
     }
@@ -281,6 +302,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent != null) {
+
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
                     if(mFragmentOpen.isCommentList()){
@@ -304,6 +326,42 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                     communityOnClick();
                 }
             }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    growthBuddiesInPublicProfile();
+                }
+            }
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    openJobFragment();
+                }
+            }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    renderFAQSView();
+                }
+            }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMEBERS_URL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    renderICCMemberListView();
+                }
+            }
+
         }
     }
 
@@ -630,78 +688,36 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mICSheroes.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
     }
+
+
+    private void openNativeViews(String url) {
+        if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+    }
+
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
         NavMenuItem navMenuItem = (NavMenuItem) baseResponse;
-        int drawerItem = navMenuItem.getMenuId();
 
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         }
 
-        if (navMenuItem.isNative()) {
-            switch (drawerItem) {
-                case AppConstants.ONE_CONSTANT:
-                    openProfileActivity();
-                    break;
-                case AppConstants.TWO_CONSTANT:
-                    openArticleFragment(setCategoryIds(), true);
-                    break;
-                case AppConstants.THREE_CONSTANT:
-                    //Job
-                    openJobFragment();
+        String url = navMenuItem.getMenuUrl();
 
-                    break;
-                case AppConstants.FOURTH_CONSTANT:
-                    openBookMarkFragment();
-                    break;
-                case 6:
-                    handleHelpLineFragmentFromDeepLinkAndLoading();
-                    break;
-                case AppConstants.SEVENTH_CONSTANT:
-                    openHelplineFragment();
-                    mTitleText.setText(getString(R.string.ID_APP_NAME));
-                    mTitleText.setVisibility(View.VISIBLE);
-                    mICSheroes.setVisibility(View.GONE);
-                    break;
-                case AppConstants.EIGHTH_CONSTANT:
-                    mFragmentOpen.setICCMemberListFragment(true);
-                    renderICCMemberListView();
-                    break;
-                case AppConstants.NINTH_CONSTANT:
-                    mFragmentOpen.setFAQSFragment(true);
-                    renderFAQSView();
-                    break;
-                case AppConstants.TENTH_CONSTANT:
-                    renderFeedFragment();
-                    break;
-                case AppConstants.ELEVENTH_CONSTANT:
-                    logOut();
-                    break;
-                case 12:
-                    inviteMyCommunityDialog();
-                    break;
-                case 13:
-                    mProgressDialog = new ProgressDialog(this);
-                    mProgressDialog.setMessage(getString(R.string.ID_INVITE_REFERRAL_FRIEND));
-                    mProgressDialog.setCancelable(true);
-                    mProgressDialog.show();
-                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
-                        LoginResponse loginResponse = mUserPreference.get();
-                        if (null != loginResponse)
-                            referralUserAttribute(this, loginResponse);
-                    }
-                    isInviteReferral = true;
-                    break;
-                case 14:
-                    growthBuddiesInPublicProfile();
-                    break;
-                case 15:
-                    ContestListActivity.navigateTo(this, SCREEN_LABEL, null);
-                    break;
-                default:
-            }
+        if (url.contains(getString(R.string.logoutUrl))) {
+            logOut();
+        } else if (url.contains("#") || url.equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
+            inviteMyCommunityDialog();
+        } else {
+            if (navMenuItem.isNative()) {
+                openNativeViews(url);
             } else {
-            openWebUrlFragment(navMenuItem.getMenuUrl());
+                openWebUrlFragment(url);
+            }
         }
 
     }
@@ -959,36 +975,29 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     private void renderFAQSView() {
 
-        FAQSFragment faqsFragment = new FAQSFragment();
-        mToolbar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        flFeedFullView.setVisibility(View.GONE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFlHomeFooterList.setVisibility(View.GONE);
-        mTitleText.setText(getString(R.string.ID_FAQS));
+        changeFragmentWithCommunities();
+        setAllValues(mFragmentOpen);
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
+        FAQSFragment faqsFragment = new FAQSFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
     }
 
 
     private void renderICCMemberListView() {
 
+        changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
-        ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
-        mToolbar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        flFeedFullView.setVisibility(View.GONE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFlHomeFooterList.setVisibility(View.GONE);
-        mTitleText.setText(getString(R.string.ID_ICC_MEMBERS));
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
+        ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
     }
 
     public void changeFragmentWithCommunities() {
@@ -1240,6 +1249,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void openHelplineFragment() {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
+        mTitleText.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
         HelplineFragment helplineFragment = new HelplineFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -1252,7 +1263,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFlHomeFooterList.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
+            mICSheroes.setVisibility(View.GONE);
+        } else{
+            mICSheroes.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void openBookMarkFragment() {
@@ -1773,5 +1789,48 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
+        if(StringUtil.isNotEmptyCollection(navigationItems)) {
+            notifyNavigationDrawerItems(navigationItems);
+        }
+    }
+
+    @Override
+    public void getNavigationDrawerItemsFailed() {
+        if (null != mDrawerItems.get()) {
+            List<NavMenuItem> navigationItems = mDrawerItems.get().getMenuItems();
+            if (StringUtil.isNotEmptyCollection(navigationItems)) {
+                notifyNavigationDrawerItems(navigationItems);
+            }
+        }
+    }
+
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
 }
