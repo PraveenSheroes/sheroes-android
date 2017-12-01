@@ -255,10 +255,20 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
                     openArticleFragment(setCategoryIds(), false);
                 }
+
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(JobFragment.SCREEN_LABEL)){
+                    openJobFragment();
+                }
             }
             if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
                     communityOnClick();
+                }
+            }
+
+            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
+                    growthBuddiesInPublicProfile();
                 }
             }
         }
@@ -303,6 +313,24 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                         getSupportFragmentManager().popBackStack();
                     }
                     communityOnClick();
+                }
+            }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(JobFragment.SCREEN_LABEL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    openJobFragment();
+                }
+            }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    growthBuddiesInPublicProfile();
                 }
             }
         }

@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
  */
 
 public class JobFragment extends BaseFragment {
-    private static final String SCREEN_LABEL = "Job Listing Screen";
+    public static final String SCREEN_LABEL = "Job Listing Screen";
     private final String TAG = LogUtils.makeLogTag(JobFragment.class);
 
     @Inject

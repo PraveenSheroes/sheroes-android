@@ -223,6 +223,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="sheroes.com"></data>
+                <data android:host="sheroes.in"></data>
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs"/>
                 <data android:pathPrefix="/articles"/>

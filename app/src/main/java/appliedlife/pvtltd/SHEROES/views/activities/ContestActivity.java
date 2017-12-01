@@ -558,6 +558,13 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (mContest == null) {
             return;
         }
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Integer.toString(mContest.remote_id))
+                        .title(mContest.title)
+                        .build();
+        trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
+
         int currentPage = mViewPager.getCurrentItem();
         if (currentPage == FRAGMENT_WINNER && mContest.isWinner) {
            // AddressActivity.navigateTo(this, getScreenName(), CareServiceHelper.getUser().contestAddress, null);
