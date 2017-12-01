@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -98,6 +99,10 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
 
     @Bind(R.id.title_toolbar)
     TextView toolbarTitle;
+
+
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     @Bind(R.id.bottom_bar)
     FrameLayout mBottomBarView;
@@ -337,6 +342,9 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
             mBottomBarView.setVisibility(View.GONE);
             mBottomView.setVisibility(View.GONE);
         } else {
+            mBottomBar.setVisibility(View.VISIBLE);
+            mBottomBarView.setVisibility(View.VISIBLE);
+            mBottomView.setVisibility(View.VISIBLE);
             if (position == FRAGMENT_RESPONSES) {
                 if (mContest.hasMyPost) {
                     mBottomBar.setText(R.string.view_response);
@@ -391,11 +399,6 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (contest == null) {
             return;
         }
-        if (contest.hasMyPost || contest.getContestStatus() == ContestStatus.COMPLETED) {
-            mBottomBar.setVisibility(View.GONE);
-            mBottomBarView.setVisibility(View.GONE);
-            mBottomBarView.setVisibility(View.GONE);
-        }
         invalidateBottomBar(FRAGMENT_RESPONSES);
     }
 
@@ -409,12 +412,17 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
 
     @Override
     public void startProgressBar() {
-
+        mBottomBarView.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgressBar() {
-
+        mTabLayout.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

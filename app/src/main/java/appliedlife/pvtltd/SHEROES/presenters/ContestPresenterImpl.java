@@ -95,20 +95,20 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
         Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
-                //getMvpView().stopProgressBar();
+                getMvpView().stopProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                //getMvpView().stopProgressBar();
+                getMvpView().stopProgressBar();
                 getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
 
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-                //getMvpView().stopProgressBar();
+                getMvpView().stopProgressBar();
                 // LogUtils.info(TAG, "********response***********");
                 FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
                 if (null != feedResponsePojo) {
