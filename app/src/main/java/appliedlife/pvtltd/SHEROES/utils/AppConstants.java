@@ -22,7 +22,7 @@ public class AppConstants {
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;
     public static final int CONNECTION_TIME_OUT = 60;
-    public static final int FEED_FIRST_TIME = 5;
+    public static final int FEED_FIRST_TIME = 10;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
