@@ -44,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -389,12 +388,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     private void menuItemDeleteOrEdit() {
-        int editOrDelete = ((JobFeedSolrObj)mFeedDetail).getExperiecneFrom();
+        int editOrDelete = ((UserPostSolrObj)mFeedDetail).getIsEditOrDelete();
         switch (editOrDelete) {
             case AppConstants.ONE_CONSTANT:
                 List<Comment> lastCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastCommentList)) {
-                    int commentId = lastCommentList.get(((JobFeedSolrObj)mFeedDetail).getNoOfOpenings()).getId();
+                    int commentId = lastCommentList.get(((UserPostSolrObj)mFeedDetail).getNoOfOpenings()).getId();
                     for (Comment comment : mCommentList) {
                         if (commentId == comment.getId()) {
 
@@ -414,7 +413,7 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             case AppConstants.TWO_CONSTANT:
                 List<Comment> lastDeleteCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastDeleteCommentList)) {
-                    int commentId = lastDeleteCommentList.get(((JobFeedSolrObj)mFeedDetail).getNoOfOpenings()).getId();
+                    int commentId = lastDeleteCommentList.get(((UserPostSolrObj)mFeedDetail).getNoOfOpenings()).getId();
                     for (Comment comment : mCommentList) {
                         if (commentId == comment.getId()) {
                             comment.setActive(false);

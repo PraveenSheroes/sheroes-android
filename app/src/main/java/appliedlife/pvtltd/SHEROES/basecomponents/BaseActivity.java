@@ -786,7 +786,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (null != mFeedDetail) {
                     mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    ((JobFeedSolrObj)mFeedDetail).setExperiecneFrom(AppConstants.ONE_CONSTANT);
+                    ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.ONE_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -814,7 +814,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     mFragmentOpen.setCommentList(true);
                     mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    ((JobFeedSolrObj)mFeedDetail).setExperiecneFrom(AppConstants.TWO_CONSTANT);
+                    ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.TWO_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;

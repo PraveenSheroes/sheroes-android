@@ -80,7 +80,8 @@ public class UserPostSolrObj extends FeedDetail {
     private String challengeAcceptPostText;
 
     //this field are added by own
-    private Integer noOfOpenings;
+    private int noOfOpenings;
+    private int isEditOrDelete;
 
     public List<Long> getImagesIds() {
         return imagesIds;
@@ -266,11 +267,11 @@ public class UserPostSolrObj extends FeedDetail {
         this.challengeAcceptPostText = challengeAcceptPostText;
     }
 
-    public Integer getNoOfOpenings() {
+    public int getNoOfOpenings() {
         return noOfOpenings;
     }
 
-    public void setNoOfOpenings(Integer noOfOpenings) {
+    public void setNoOfOpenings(int noOfOpenings) {
         this.noOfOpenings = noOfOpenings;
     }
 
@@ -288,5 +289,13 @@ public class UserPostSolrObj extends FeedDetail {
 
     public String getChallengeAcceptPostText() {
         return challengeAcceptPostText;
+    }
+
+    public int getIsEditOrDelete() {
+        return isEditOrDelete;
+    }
+
+    public void setIsEditOrDelete(int isEditOrDelete) {
+        this.isEditOrDelete = isEditOrDelete;
     }
 }
