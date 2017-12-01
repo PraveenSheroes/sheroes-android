@@ -8,6 +8,7 @@ import org.parceler.Parcel;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 /**
@@ -17,5 +18,5 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 public class AllCommunitiesResponse extends BaseResponse {
     @SerializedName("docs")
     @Expose
-    public List<FeedDetail> feedDetails = null;
+    public List<CommunityFeedSolrObj> feedDetails = null;
 }

@@ -1480,7 +1480,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 mPublicProfileGrowthBuddiesDialogFragment.notifyList(mentorDetailItem);
                 if (mFragmentOpen.getChampionViaCommentReaction() != AppConstants.ONE_CONSTANT) {
                     mFragmentOpen.setChampionViaCommentReaction(AppConstants.NO_REACTION_CONSTANT);
-                    FeedDetail feedDetail = intent.getParcelableExtra(AppConstants.FEED_SCREEN);
+                    FeedDetail feedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);

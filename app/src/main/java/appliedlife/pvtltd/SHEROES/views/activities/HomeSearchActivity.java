@@ -67,7 +67,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            mFragmentOpen = getIntent().getParcelableExtra(AppConstants.ALL_SEARCH);
+            mFragmentOpen = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.ALL_SEARCH));
         }
         renderSearchFragmentView();
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_JOB_SEARCH_RESULT));

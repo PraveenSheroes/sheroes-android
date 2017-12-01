@@ -510,7 +510,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 break;
             case R.id.tv_feed_community_post_card_title:
-                if(((CommunityFeedSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
+                if(((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
                     if(null!=mFeedDetail) {
                         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                             mUserId = userPreference.get().getUserSummary().getUserId();
