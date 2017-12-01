@@ -231,6 +231,7 @@ public class AppConstants {
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
+    public static final String NAV_DRAWER_FILE_NAME = "nav_items";
     public static final int MAX_WORD_COUNTER = 4000;
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String LEFT_BRACKET = "(";

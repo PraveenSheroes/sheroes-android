@@ -31,14 +31,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_NAV_D
  * Created by ravi on 01/12/17.
  */
 
-public class ActivityDataPresenter extends BasePresenter<NavigationActivityConnectView> {
+public class MainActivityPresenter extends BasePresenter<NavigationActivityConnectView> {
     @Inject
     Preference<NavigationItems> navigationItemsPreference;
     SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi sheroesAppServiceApi;
 
     @Inject
-    public ActivityDataPresenter(SheroesApplication mSheroesApplication,  Preference<NavigationItems> navigationItemsPreference,SheroesAppServiceApi sheroesAppServiceApi) {
+    public MainActivityPresenter(SheroesApplication mSheroesApplication, Preference<NavigationItems> navigationItemsPreference, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mSheroesApplication = mSheroesApplication;
         this.navigationItemsPreference=navigationItemsPreference;
         this.sheroesAppServiceApi=sheroesAppServiceApi;

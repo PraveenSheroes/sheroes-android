@@ -21,9 +21,9 @@ import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -34,10 +34,10 @@ import butterknife.ButterKnife;
  * This class provide functionality to load the content in Web-View
  */
 
-public class WebPageFragment extends BaseFragment {
+public class NavigateToWebViewFragment extends BaseFragment {
 
     private static final String SCREEN_LABEL = "WebUrl Screen";
-    private static final String TAG = WebPageFragment.class.getName();
+    private static final String TAG = NavigateToWebViewFragment.class.getName();
 
     @Bind(R.id.external_url_web_view)
     WebView webPagesView;
@@ -71,7 +71,11 @@ public class WebPageFragment extends BaseFragment {
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
                     if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
-                        String localUrl = mWebUrl+ "?auth=" + token + "&addHeader=false&addFooter=false";
+                        int indexOfThirdBackSlash = AppUtils.findNthIndexOf(mWebUrl, AppConstants.BACK_SLASH, 3);
+                        mWebUrl = mWebUrl.substring(indexOfThirdBackSlash + 1, mWebUrl.length());
+
+                       // String localUrl = BuildConfig.BASE_URL + mWebUrl+ "?auth=" + token + "&addHeader=false&addFooter=false";
+                        String localUrl = "http://52.71.218.71/sheroes/integration/" + mWebUrl+ "?auth=" + token + "&addHeader=false&addFooter=false";
                         LogUtils.info(TAG, "#######WebPage Url*****" + localUrl);
                         webPagesView.loadUrl(localUrl);
                     }

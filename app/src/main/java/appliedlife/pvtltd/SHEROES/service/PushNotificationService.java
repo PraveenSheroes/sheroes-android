@@ -53,6 +53,7 @@ public class PushNotificationService extends GcmListenerService {
     private static String MOENGAGE_ALERT_MSG="gcm_alert";
     private static String MOENGAGE_TITLE="gcm_title";
     public static String FROM_PUSH_NOTIFICATION = "From Push Notification";
+
     @Override
     public void onMessageReceived(String from, Bundle data) {
         SheroesApplication.getAppComponent(this).inject(this);

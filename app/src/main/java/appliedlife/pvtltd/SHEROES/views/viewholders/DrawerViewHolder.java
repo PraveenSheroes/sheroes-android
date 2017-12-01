@@ -60,6 +60,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
             tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
         } else{
             tvDrawerItem.setTextColor(Color.BLACK);
+            tvDrawerItem.setTextSize(13.0f);
         }
 
     }

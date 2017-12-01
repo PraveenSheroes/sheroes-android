@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,7 +88,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -96,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.presenters.ActivityDataPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -109,8 +111,8 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigationActivityConnectView;
-import appliedlife.pvtltd.SHEROES.views.fragments.WebPageFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
@@ -224,7 +226,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     @Inject
-    ActivityDataPresenter activityDataPresenter;
+    MainActivityPresenter activityDataPresenter;
     @Inject
     AppUtils mAppUtils;
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
@@ -469,14 +471,14 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     public  void openWebUrlFragment(String url) { //To open the webpages in app
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen); //add the changes related this
-        WebPageFragment webPageFragment = new WebPageFragment();
+        NavigateToWebViewFragment navigateToWebViewFragment = new NavigateToWebViewFragment();
         FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(WebPageFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle webLinks = new Bundle();
         webLinks.putString(AppConstants.WEB_URL_FRAGMENT, url);
-        webPageFragment.setArguments(webLinks);
+        navigateToWebViewFragment.setArguments(webLinks);
 
-        fm.beginTransaction().replace(R.id.fl_article_card_view, webPageFragment, WebPageFragment.class.getName()).addToBackStack(WebPageFragment.class.getName()).commitAllowingStateLoss();
+        fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.fab_filter)
@@ -1804,6 +1806,18 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
             List<NavMenuItem> navigationItems = mDrawerItems.get().getMenuItems();
             if (StringUtil.isNotEmptyCollection(navigationItems)) {
                 notifyNavigationDrawerItems(navigationItems);
+            } else{
+                String stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
+                NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
+                if (null != eventResponseList) {
+                    List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
+                    Collections.sort(navMenuItems, new Comparator<NavMenuItem>() { //Sort based on display order
+                        public int compare(NavMenuItem obj1, NavMenuItem obj2) {
+                            return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
+                        }
+                    });
+                    notifyNavigationDrawerItems(navMenuItems);
+                }
             }
         }
     }

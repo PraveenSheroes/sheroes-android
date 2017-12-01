@@ -6,7 +6,6 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.ContestListPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
@@ -52,7 +51,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WebPageFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -594,6 +593,6 @@ public interface SheroesAppComponent {
 
     void inject(AddressActivity addressActivity);
 
-    void inject(WebPageFragment webUrlFragment);
+    void inject(NavigateToWebViewFragment webUrlFragment);
 
 }

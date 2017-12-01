@@ -115,28 +115,6 @@
       "menu_type": 1
     },
     {
-      "menu_id": 16,
-      "display_order": 160,
-      "menu_name": "Feed",
-      "menu_desc": "View Sheroes Feed",
-      "menu_url": "https://sheroes.com/feed",
-      "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/no_icon.png",
-      "is_native": true,
-      "is_active": true,
-      "menu_type": 2
-    },
-    {
-      "menu_id": 17,
-      "display_order": 170,
-      "menu_name": "Communities",
-      "menu_desc": "View Sheroes Communities",
-      "menu_url": "https://sheroes.com/communities",
-      "menu_item_icon_url": "https://img.sheroes.in/img/app_icons/no_icon.png",
-      "is_native": true,
-      "is_active": true,
-      "menu_type": 2
-    },
-    {
       "menu_id": 18,
       "display_order": 180,
       "menu_name": "Logout",
