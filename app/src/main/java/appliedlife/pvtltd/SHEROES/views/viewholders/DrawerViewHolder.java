@@ -1,10 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,19 +10,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -55,8 +49,18 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         this.dataItem = item;
         llDrawerItem.setOnClickListener(this);
 
-        tvDrawerItem.setText(dataItem.getMenuName());
+        String itemName = dataItem.getMenuName();
+        tvDrawerItem.setText(itemName);
         setImageBackground(context, dataItem.getMenuItemIconUrl());
+
+        if(itemName.equalsIgnoreCase(context.getResources().getString(R.string.ID_LOGOUT))) {
+            tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
+            tvDrawerItem.setTextSize(16.0f);
+        } else if(itemName.equalsIgnoreCase(context.getResources().getString(R.string.ID_INVITE_WOMEN_FRIEND))){
+            tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        } else{
+            tvDrawerItem.setTextColor(Color.BLACK);
+        }
 
     }
 
