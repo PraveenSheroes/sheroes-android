@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.content.pm.PackageManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
@@ -67,6 +68,10 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
+import static appliedlife.pvtltd.SHEROES.utils.CommonUtil.getDeviceName;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -115,7 +120,8 @@ public class SheroesAppModule {
                 } else {
                      builder.header("Content-Type", "application/json");
                 }
-
+                builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
+                builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
                 if (!NetworkUtil.isConnected(mApplication)) {
                    // int maxAge =AppConstants.NO_REACTION_CONSTANT; // read from cache for 0 minute if connected
                     // builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
@@ -287,6 +293,34 @@ public class SheroesAppModule {
     @Singleton
     public SheroesAppServiceApi providesApiService(Retrofit retrofit) {
         return retrofit.create(SheroesAppServiceApi.class);
+    }
+
+    private static String getUserAgent(Context mContext) {
+        String userAgent = AppConstants.APP_NAME;
+        try {
+            String packageName = mContext.getPackageName();
+            String version = mContext.getPackageManager().getPackageInfo(packageName, 0).versionName;
+            String deviceModel = getDeviceName();
+            String androidVersion = android.os.Build.VERSION.RELEASE;
+
+            userAgent = userAgent + "/" + version + "/" + "Android" + "/" + androidVersion + "/" + deviceModel;
+        } catch (PackageManager.NameNotFoundException e) {
+            // Log.e(TAG, "Unable to find self by package name", e);
+        }
+
+        return userAgent;
+    }
+
+    private static String getAppVersionCode(Context mContext) {
+        String version = "0";
+        try {
+            String packageName = mContext.getPackageName();
+            version = Integer.toString(mContext.getPackageManager().getPackageInfo(packageName, 0).versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            // Log.e(TAG, "Unable to find self by package name", e);
+        }
+
+        return version;
     }
 
 }

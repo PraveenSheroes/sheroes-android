@@ -418,7 +418,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-            if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+           /* if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
                 tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                 String feedTitle = mUserPostObj.getAuthorName();
                 posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
@@ -427,9 +427,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
                 }
-            } else {
+            } else {*/
                 String feedTitle = mUserPostObj.getAuthorName();
-                String feedCommunityName = mUserPostObj.communityId == 0 ? mUserPostObj.getChallengeAcceptPostTextS() + " " + "Challenge" : mUserPostObj.getPostCommunityName();
+                String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS()==null ? "" :mUserPostObj.getChallengeAcceptPostTextS();
+                String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" :mUserPostObj.getPostCommunityName();
                 if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (mUserPostObj.isAuthorMentor()) {
@@ -489,9 +490,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedCommunityPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
             }
-
-
-        }
     }
 
     private void likeCommentOps() {

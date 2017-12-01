@@ -231,7 +231,7 @@
                 <data android:pathPrefix="/event"/>
                 <data android:pathPrefix="/helpline"/>
                 <data android:pathPrefix="/feed"/>
-                <data android:pathPrefix="/sheroes_challenge"/>
+                <data android:pathPrefix="/sheroes-challenge"/>
             </intent-filter>
         </activity>
         <activity

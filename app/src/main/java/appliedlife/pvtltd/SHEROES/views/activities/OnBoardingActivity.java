@@ -95,11 +95,11 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
                 tellUsAboutFragment();
-            } else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
+            } /*else if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN)) {
                 ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
                 position = 1;
                 setLookingForFragment();
-            } else {
+            }*/ else {
                Intent homeIntent = new Intent(this, HomeActivity.class);
                startActivity(homeIntent);
                 finish();
@@ -167,8 +167,10 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 loginResponse.setNextScreen(AppConstants.HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN);
                 userPreference.set(loginResponse);
                 mMasterDataResult = masterDataResult;
-                mFragmentOpen.setLookingForHowCanOpen(true);
-                setLookingForFragment();
+              //  mFragmentOpen.setLookingForHowCanOpen(true);
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+              //  setLookingForFragment();
                 break;
             case CURRENT_STATUS:
                 showCurrentStatusDialog(masterDataResult);

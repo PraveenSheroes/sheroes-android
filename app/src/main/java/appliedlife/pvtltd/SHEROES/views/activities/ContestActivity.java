@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -127,15 +128,17 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         setAllValues(mFragmentOpen);
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
-            mContest = (Contest)Parcels.unwrap(parcelable);
+            mContest = (Contest) Parcels.unwrap(parcelable);
             populateContest(mContest);
         } else {
             if (getIntent().getExtras() != null) {
                 mContestId = getIntent().getExtras().getString(Contest.CONTEST_ID);
             }
             if (CommonUtil.isNotEmpty(mContestId)) {
-                FeedRequestPojo feedRequestPojo =  mAppUtils.feedDetailRequestBuilder(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1, Long.valueOf(mContestId));
+                FeedRequestPojo feedRequestPojo = mAppUtils.feedDetailRequestBuilder(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1, Long.valueOf(mContestId));
                 mContestPresenter.fetchContest(feedRequestPojo);
+            } else {
+                finish();
             }
         }
 
@@ -330,7 +333,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
     }
 
     private void invalidateBottomBar(int position) {
-        if (mContest.hasMyPost) {
+        if (mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED) {
             mBottomBar.setVisibility(View.GONE);
             mBottomBarView.setVisibility(View.GONE);
             mBottomView.setVisibility(View.GONE);
@@ -389,7 +392,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (contest == null) {
             return;
         }
-        if (contest.hasMyPost) {
+        if (contest.hasMyPost || contest.getContestStatus() == ContestStatus.COMPLETED) {
             mBottomBar.setVisibility(View.GONE);
             mBottomBarView.setVisibility(View.GONE);
             mBottomBarView.setVisibility(View.GONE);
@@ -506,7 +509,6 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         }
         if (mFragmentOpen.isReactionList()) {
             mFragmentOpen.setReactionList(false);
-            mFragmentOpen.setCommentList(true);
             getSupportFragmentManager().popBackStackImmediate();
         }
     }

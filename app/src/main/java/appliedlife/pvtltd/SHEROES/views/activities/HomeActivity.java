@@ -604,6 +604,26 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null,0,0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
     }
 
+    public void openJobFragment() {
+        changeFragmentWithCommunities();
+        setAllValues(mFragmentOpen);
+        JobFragment jobFragment = new JobFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle jobBookMarks = new Bundle();
+        // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
+        jobFragment.setArguments(jobBookMarks);
+        fm.beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
+
+    }
+    public void jobUi()
+    {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mTvSearchBox.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
+    }
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
         int drawerItem = ((DrawerItems) baseResponse).getId();
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -618,6 +638,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 break;
             case AppConstants.THREE_CONSTANT:
                 //Job
+                openJobFragment();
+
                 break;
             case AppConstants.FOURTH_CONSTANT:
                 openBookMarkFragment();
@@ -986,7 +1008,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        mTvJob.setText(getString(R.string.ID_JOBS));
+        mTvJob.setText(getString(R.string.ID_CARRIER));
 
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
@@ -1075,7 +1097,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
         mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
         mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvJob.setText(getString(R.string.ID_JOBS));
+        mTvJob.setText(getString(R.string.ID_CARRIER));
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.VISIBLE);
@@ -1107,7 +1129,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
         mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_selected), null, null);
         mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-        mTvJob.setText(getString(R.string.ID_JOBS));
+        mTvJob.setText(getString(R.string.ID_CARRIER));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
     }
     @OnClick(R.id.tv_job_home)
@@ -1154,7 +1176,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvHome.setText(getString(R.string.ID_FEED));
         mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
         mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvJob.setText(getString(R.string.ID_JOBS));
+        mTvJob.setText(getString(R.string.ID_CARRIER));
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
@@ -1289,7 +1311,6 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 }
             } else if (mFragmentOpen.isReactionList()) {
                 mFragmentOpen.setReactionList(false);
-                mFragmentOpen.setCommentList(true);
                 getSupportFragmentManager().popBackStackImmediate();
             }else {
                 if (doubleBackToExitPressedOnce) {
