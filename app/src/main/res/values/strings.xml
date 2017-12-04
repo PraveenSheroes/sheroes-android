@@ -823,6 +823,7 @@
     <string name="contest.status.completed">Completed</string>
 
     <string name="contest.status.expired">Challenge Ended</string>
+    <string name="contest.status.challenge.completed">Challenge Completed</string>
 
     <string name="endsOn">ends on</string>
     <string name="starts_at">starts at</string>

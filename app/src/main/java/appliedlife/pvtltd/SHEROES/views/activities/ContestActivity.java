@@ -337,30 +337,39 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
     }
 
     private void invalidateBottomBar(int position) {
-        if (mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED) {
-            mBottomBar.setVisibility(View.VISIBLE);
-            mBottomBarView.setVisibility(View.VISIBLE);
-            mBottomView.setVisibility(View.VISIBLE);
-            mBottomBar.setText(R.string.contest_status_expired);
-            mBottomBar.setTextColor(getResources().getColor(R.color.gray_light));
-            mBottomBarView.setBackgroundResource(R.color.theme);
-        } else {
-            mBottomBar.setVisibility(View.VISIBLE);
-            mBottomBarView.setVisibility(View.VISIBLE);
-            mBottomView.setVisibility(View.VISIBLE);
-            mBottomBar.setText(R.string.submit_response);
-            mBottomBar.setTextColor(getResources().getColor(R.color.white));
-            mBottomBarView.setBackgroundResource(R.color.red);
-            if (position == FRAGMENT_RESPONSES) {
+        if (position == FRAGMENT_RESPONSES) {
+            mBottomBar.setVisibility(View.GONE);
+            mBottomBarView.setVisibility(View.GONE);
+            mBottomView.setVisibility(View.GONE);
+        }else {
+            if(mContest.getContestStatus() == ContestStatus.COMPLETED){
+                mBottomBar.setVisibility(View.VISIBLE);
+                mBottomBarView.setVisibility(View.VISIBLE);
+                mBottomView.setVisibility(View.VISIBLE);
+                mBottomBar.setText(R.string.contest_status_expired);
+                mBottomBar.setTextColor(getResources().getColor(R.color.gray_light));
+                mBottomBarView.setBackgroundResource(R.color.theme);
+            }
+            else if(mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING){
+                mBottomBar.setVisibility(View.VISIBLE);
+                mBottomBarView.setVisibility(View.VISIBLE);
+                mBottomView.setVisibility(View.VISIBLE);
+                mBottomBar.setText(R.string.contest_status_challenge_completed);
+                mBottomBar.setTextColor(getResources().getColor(R.color.green));
+                mBottomBarView.setBackgroundResource(R.color.theme);
+            }else if(!mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING){
+                mBottomBar.setVisibility(View.VISIBLE);
+                mBottomBarView.setVisibility(View.VISIBLE);
+                mBottomView.setVisibility(View.VISIBLE);
                 mBottomBar.setText(R.string.submit_response);
-            } else if (position == FRAGMENT_INFO) {
-                mBottomBar.setText(R.string.submit_response);
-            } else if (position == FRAGMENT_WINNER) {
-                if (mContest.isWinnerAnnounced) {
-                }
+                mBottomBar.setTextColor(getResources().getColor(R.color.white));
+                mBottomBarView.setBackgroundResource(R.color.red);
+            } else {
+                mBottomBar.setVisibility(View.GONE);
+                mBottomBarView.setVisibility(View.GONE);
+                mBottomView.setVisibility(View.GONE);
             }
         }
-
     }
     //endregion
 
@@ -392,7 +401,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (contest == null) {
             return;
         }
-        invalidateBottomBar(FRAGMENT_RESPONSES);
+        invalidateBottomBar(FRAGMENT_INFO);
     }
 
     @Override
@@ -570,10 +579,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (currentPage == FRAGMENT_WINNER && mContest.isWinner) {
            // AddressActivity.navigateTo(this, getScreenName(), CareServiceHelper.getUser().contestAddress, null);
         } else {
-            if (mContest.hasMyPost) {
-                mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
-                mHomeFragment.scrollToMySubmission();
-            } else {
+            if (!(mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED)) {
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.challengeId = mContest.remote_id;
                 communityPost.challengeType = mContest.authorType;
