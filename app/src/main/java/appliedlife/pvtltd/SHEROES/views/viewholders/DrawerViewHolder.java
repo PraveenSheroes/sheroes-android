@@ -55,12 +55,12 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
 
         if(itemName.equalsIgnoreCase(context.getResources().getString(R.string.ID_LOGOUT))) {
             tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
-            tvDrawerItem.setTextSize(16.0f);
+            tvDrawerItem.setTextSize(R.dimen.sp_size_16);
         } else if(itemName.equalsIgnoreCase(context.getResources().getString(R.string.ID_INVITE_WOMEN_FRIEND))){
             tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
         } else{
             tvDrawerItem.setTextColor(Color.BLACK);
-            tvDrawerItem.setTextSize(13.0f);
+            tvDrawerItem.setTextSize(R.dimen.sp_size_13);
         }
 
     }
