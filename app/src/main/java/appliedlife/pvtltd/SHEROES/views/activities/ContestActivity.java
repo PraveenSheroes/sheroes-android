@@ -338,32 +338,25 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
 
     private void invalidateBottomBar(int position) {
         if (mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED) {
-            mBottomBar.setVisibility(View.GONE);
-            mBottomBarView.setVisibility(View.GONE);
-            mBottomView.setVisibility(View.GONE);
+            mBottomBar.setVisibility(View.VISIBLE);
+            mBottomBarView.setVisibility(View.VISIBLE);
+            mBottomView.setVisibility(View.VISIBLE);
+            mBottomBar.setText(R.string.contest_status_expired);
+            mBottomBar.setTextColor(getResources().getColor(R.color.gray_light));
+            mBottomBarView.setBackgroundResource(R.color.theme);
         } else {
             mBottomBar.setVisibility(View.VISIBLE);
             mBottomBarView.setVisibility(View.VISIBLE);
             mBottomView.setVisibility(View.VISIBLE);
+            mBottomBar.setText(R.string.submit_response);
+            mBottomBar.setTextColor(getResources().getColor(R.color.white));
+            mBottomBarView.setBackgroundResource(R.color.red);
             if (position == FRAGMENT_RESPONSES) {
-                if (mContest.hasMyPost) {
-                    mBottomBar.setText(R.string.view_response);
-                } else {
-                    mBottomBar.setText(R.string.submit_response);
-                }
+                mBottomBar.setText(R.string.submit_response);
             } else if (position == FRAGMENT_INFO) {
-                if (mContest.hasMyPost) {
-                    mBottomBar.setText(R.string.view_response);
-                } else {
-                    mBottomBar.setText(R.string.submit_response);
-                }
+                mBottomBar.setText(R.string.submit_response);
             } else if (position == FRAGMENT_WINNER) {
                 if (mContest.isWinnerAnnounced) {
-               /* if (CareServiceHelper.getUser().contestAddress == null) {
-                    mBottomBar.setText(R.string.send_address);
-                } else {
-                    mBottomBar.setText(R.string.change_address);
-                }*/
                 }
             }
         }
