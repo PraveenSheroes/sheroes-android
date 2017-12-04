@@ -349,7 +349,6 @@ public interface SheroesAppServiceApi {
     @POST("participation/challenge/v2/response")
     Observable<CreateCommunityResponse> createChallengePost(@Body ChallengePostCreateRequest challengePostCreateRequest);
 
-    //Temp- As service currently hosted on this server
-    @POST("http://testservicesplay.sheroes.in/participant/appmenu/")
+    @POST("/participant/appmenu/")
     Observable<NavigationItems> getNavigationDrawerItems(@Body NavigationDrawerRequest navItems);
 }

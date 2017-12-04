@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDr
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigationActivityConnectView;
+import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -31,16 +30,13 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_NAV_D
  * Created by ravi on 01/12/17.
  */
 
-public class MainActivityPresenter extends BasePresenter<NavigationActivityConnectView> {
-    @Inject
-    Preference<NavigationItems> navigationItemsPreference;
+public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerView> {
     SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi sheroesAppServiceApi;
 
     @Inject
-    public MainActivityPresenter(SheroesApplication mSheroesApplication, Preference<NavigationItems> navigationItemsPreference, SheroesAppServiceApi sheroesAppServiceApi) {
+    public MainActivityPresenter(SheroesApplication mSheroesApplication, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mSheroesApplication = mSheroesApplication;
-        this.navigationItemsPreference=navigationItemsPreference;
         this.sheroesAppServiceApi=sheroesAppServiceApi;
     }
 
@@ -48,7 +44,7 @@ public class MainActivityPresenter extends BasePresenter<NavigationActivityConne
     //To get navigation drawer items
     public void getNavigationDrawerOptions(NavigationDrawerRequest navigationDrawerRequest) { //Request to get navigation drawer options
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_NAV_DRAWER);
+            getMvpView().getNavigationDrawerItemsFailed();
             return;
         };
 
@@ -80,7 +76,6 @@ public class MainActivityPresenter extends BasePresenter<NavigationActivityConne
                                     return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
                                 }
                             });
-                            navigationItemsPreference.set(navigationItems);
                             getMvpView().getNavigationDrawerItemsSuccess(navMenuItems);
                             break;
                         case AppConstants.FAILED:

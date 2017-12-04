@@ -1,6 +1,8 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer;
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,10 +12,10 @@ public class NavMenuItem extends BaseResponse{
 
     @SerializedName("menu_id")
     @Expose
-    private Integer menuId;
+    private int menuId;
     @SerializedName("display_order")
     @Expose
-    private Integer displayOrder;
+    private int displayOrder;
     @SerializedName("menu_name")
     @Expose
     private String menuName;
@@ -29,6 +31,17 @@ public class NavMenuItem extends BaseResponse{
     @SerializedName("is_native")
     @Expose
     private boolean isNative;
+    @SerializedName("menu_type")
+    @Expose
+    private int menuType;
+
+    public int getMenuType() {
+        return menuType;
+    }
+
+    public void setMenuType(int menuType) {
+        this.menuType = menuType;
+    }
 
     public boolean isNative() {
         return isNative;

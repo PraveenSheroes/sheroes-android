@@ -30,8 +30,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 
 /**
  * Created by Ajit Kumar on 11-04-2017.
@@ -194,8 +192,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
                     } else if(urlOfSharedCard.equals(AppConstants.FAQ_URL) || urlOfSharedCard.equals(AppConstants.FAQ_URL_COM)) {
                         homeActivityCall(AppConstants.FAQ_URL);
-                    } else if(urlOfSharedCard.equals(AppConstants.ICC_MEMEBERS_URL) || urlOfSharedCard.equals(AppConstants.ICC_MEMEBERS_URL_COM)) {
-                        homeActivityCall(AppConstants.ICC_MEMEBERS_URL);
+                    } else if(urlOfSharedCard.equals(AppConstants.ICC_MEMBERS_URL) || urlOfSharedCard.equals(AppConstants.ICC_MEMBERS_URL_COM)) {
+                        homeActivityCall(AppConstants.ICC_MEMBERS_URL);
                     }
                     else if (urlOfSharedCard.equals(AppConstants.COMMUNITY_URL) || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL_COM) || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL + "/") || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL_COM + "/")){
                         homeActivityCall("Community List");

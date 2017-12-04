@@ -1,10 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,38 +31,38 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
     @Bind(R.id.tv_drawer_image)
-    ImageView tvDrawerImage;
+    AppCompatImageView tvDrawerImage;
     @Bind(R.id.ll_drawer_item)
     LinearLayout llDrawerItem;
+    private static int selectedIndex = -1;
 
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
+        //selectedIndex = -1;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
 
     @Override
-    public void bindData(NavMenuItem item, final Context context, int position) {
+    public void bindData(NavMenuItem item, final Context context, final int position) {
         this.dataItem = item;
         llDrawerItem.setOnClickListener(this);
+        llDrawerItem.setTag(position);
 
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
+
         setImageBackground(context, dataItem.getMenuItemIconUrl());
 
-        if(itemName.equalsIgnoreCase(context.getResources().getString(R.string.ID_LOGOUT))) {
-            tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
-            tvDrawerItem.setTextSize(R.dimen.sp_size_16);
-        } else if(itemName.equalsIgnoreCase(context.getResources().getString(R.string.ID_INVITE_WOMEN_FRIEND))){
-            tvDrawerItem.setTextColor(ContextCompat.getColor(context, R.color.blue));
+        if(selectedIndex !=-1 && selectedIndex == position) {
+            tvDrawerImage.setColorFilter(context.getResources().getColor(R.color.red));
         } else{
-            tvDrawerItem.setTextColor(Color.BLACK);
-            tvDrawerItem.setTextSize(R.dimen.sp_size_13);
+            tvDrawerImage.setColorFilter(context.getResources().getColor(R.color.feed_article_label));
         }
-
     }
 
+    //set the image icon and cache it
     private void setImageBackground(Context context, String url) {
         if (StringUtil.isNotNullOrEmptyString(url)) {
             Glide.with(context)
@@ -74,7 +72,6 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
                     .into(tvDrawerImage);
         }
     }
-
 
     @Override
     public void viewRecycled() {
@@ -86,6 +83,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         int id = view.getId();
         switch (id) {
             case R.id.ll_drawer_item:
+                selectedIndex = (int) llDrawerItem.getTag();
                 viewInterface.handleOnClick(dataItem, view);
                 break;
             default:

@@ -209,6 +209,8 @@
 
     <string name="ID_ABOUT">ABOUT</string>
     <string name="ID_LETS_TALK"> Let’s Start Talking</string>
+    <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
+    <string name="PLACEHOLDER_WEBPAGE_URL">%1$s?auth=%2$s&amp;addHeader=false&amp;addFooter=false</string>
 
     <string name="ID_WELCOME_HEADER"> Talk About Things That Matter To You</string>
     <string name="ID_UPLOAD_LOGO">Upload load</string>

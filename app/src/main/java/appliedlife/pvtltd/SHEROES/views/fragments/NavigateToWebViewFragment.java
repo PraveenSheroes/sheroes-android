@@ -17,15 +17,15 @@ import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -55,6 +55,11 @@ public class NavigateToWebViewFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_web_url, container, false);
         ButterKnife.bind(this, view);
 
+        if(getActivity() instanceof HomeActivity){
+            ((HomeActivity)getActivity()).changeFragmentWithCommunities();
+            ((HomeActivity)getActivity()).resetUiSelectedOptions();
+
+        }
         pbWebView.setVisibility(View.VISIBLE);
         webPagesView.getSettings().setJavaScriptEnabled(true);
         webPagesView.setVerticalScrollBarEnabled(false);
@@ -71,13 +76,9 @@ public class NavigateToWebViewFragment extends BaseFragment {
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
                     if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
-                        int indexOfThirdBackSlash = AppUtils.findNthIndexOf(mWebUrl, AppConstants.BACK_SLASH, 3);
-                        mWebUrl = mWebUrl.substring(indexOfThirdBackSlash + 1, mWebUrl.length());
-
-                       // String localUrl = BuildConfig.BASE_URL + mWebUrl+ "?auth=" + token + "&addHeader=false&addFooter=false";
-                        String localUrl = "http://52.71.218.71/sheroes/integration/" + mWebUrl+ "?auth=" + token + "&addHeader=false&addFooter=false";
-                        LogUtils.info(TAG, "#######WebPage Url*****" + localUrl);
-                        webPagesView.loadUrl(localUrl);
+                        String webUrl = getResources().getString(R.string.PLACEHOLDER_WEBPAGE_URL, mWebUrl, token); //append token with url
+                        LogUtils.info(TAG, "#######WebPage Url*****" + webUrl);
+                        webPagesView.loadUrl(webUrl);
                     }
                 }
         }
@@ -88,9 +89,17 @@ public class NavigateToWebViewFragment extends BaseFragment {
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //Handle hyperlinks here
-                if (url != null) {
-                    LogUtils.info(TAG, "link url::" + url);
-                    webPagesView.loadUrl(url);
+
+                if (StringUtil.isNotNullOrEmptyString(url)) {
+                    if(url.startsWith("whatsapp://")) { //Share on WhatsApp
+                        CommonUtil.shareLinkToWhatsApp(getContext(), url);
+                    } else if(url.startsWith("http://www.facebook.com") ) { //Share on Facebook
+                        CommonUtil.shareLinkToFaceBook(getContext(), url);
+                    } else if(url.startsWith("http://twitter.com")) { //share on twitter
+                        CommonUtil.shareLinkToTwitter(getContext(), url);
+                    } else {
+                        webPagesView.loadUrl(url);
+                    }
                     return true;
                 } else {
                     return false;
@@ -109,6 +118,14 @@ public class NavigateToWebViewFragment extends BaseFragment {
                 return false;
             }
         });
+
+        webPagesView.setOnLongClickListener(new View.OnLongClickListener() { //To avoid default selection on long press
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+        webPagesView.setLongClickable(false);
 
         return view;
     }

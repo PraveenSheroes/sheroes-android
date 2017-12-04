@@ -232,6 +232,7 @@ public class AppConstants {
 
     //Community
     public static final String NAV_DRAWER_FILE_NAME = "nav_items";
+    public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
     public static final int MAX_WORD_COUNTER = 4000;
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String LEFT_BRACKET = "(";
@@ -282,8 +283,8 @@ public class AppConstants {
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String FAQ_URL = "https://sheroes.com/faq";
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
-    public static final String ICC_MEMEBERS_URL = "https://sheroes.in/icc-members";
-    public static final String ICC_MEMEBERS_URL_COM = "https://sheroes.com/icc-members";
+    public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
+    public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
     public static final String ARTICLE_ID = "article_id";
@@ -307,6 +308,8 @@ public class AppConstants {
     public static final int HALF_DONE =50;
     public static final int ALMOST_DONE =90;
     public static final int COMPLETE =100;
+    public static final String TWITTER_SHARE ="com.twitter.android";
+    public static final String TWITTER_SHARE_VIA_BROWSER ="https://twitter.com/intent/tweet?text=";
     public static final String FACEBOOK_SHARE ="com.facebook.katana";
     public static final String FACEBOOK_SHARE_VIA_BROSWER ="https://www.facebook.com/sharer/sharer.php?u=";
     public static final String JPG_FORMATE =".jpg";

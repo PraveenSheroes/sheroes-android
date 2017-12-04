@@ -163,12 +163,6 @@ public class SheroesAppModule {
         return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new GsonPreferenceAdapter<>(gson, InstallUpdateForMoEngage.class));
     }
 
-    @Singleton
-    @Provides
-    public Preference<NavigationItems> provideNavDrawerItemsPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.NAVIGATION_DRAWER_ITEMS_DATA, new GsonPreferenceAdapter<>(gson, NavigationItems.class));
-    }
-
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(Interceptor interceptor) {

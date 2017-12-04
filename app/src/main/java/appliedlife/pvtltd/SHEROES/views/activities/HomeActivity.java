@@ -43,8 +43,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.appevents.AppEventsConstants;
@@ -107,12 +105,12 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigationActivityConnectView;
+import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
@@ -140,17 +138,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements NavigationActivityConnectView,CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView,CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SCREEN_LABEL = "Home Screen";
     @Inject
     Preference<LoginResponse> mUserPreference;
 
-    @Inject
-    Preference<NavigationItems> mDrawerItems;
-
     @Bind(R.id.iv_drawer_profile_circle_icon)
-    RoundedImageView ivDrawerProfileCircleIcon;
+    CircleImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
     TextView mTvUserName;
     @Bind(R.id.tv_user_location)
@@ -209,6 +204,8 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     TextView mTitleText;
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
+    @Bind(R.id.pb_login_progress_bar)
+    ProgressBar pbNavDrawer;
     private JobFilterDialogFragment jobFilterDailogFragment;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -241,6 +238,8 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
     private List<String> mJobLocationList = new ArrayList<>();
     public List<String> mListOfOpportunity = new ArrayList<>();
+    private  boolean isSheUser = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,9 +252,13 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
         moEngageUtills = MoEngageUtills.getInstance();
         long timeSpentFeed = System.currentTimeMillis();
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
+            isSheUser = true;
+        }
         renderHomeFragmentView();
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime()) {
+        if(isSheUser && startedFirstTime()) {
             openHelplineFragment();
             mTitleText.setText(getString(R.string.ID_APP_NAME));
             mTitleText.setVisibility(View.VISIBLE);
@@ -277,7 +280,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
                     growthBuddiesInPublicProfile();
                 }else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)){
                     renderFAQSView();
-                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMEBERS_URL)){
+                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)){
                     renderICCMemberListView();
                 }
 
@@ -356,7 +359,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMEBERS_URL)){
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)){
                     if(mFragmentOpen.isCommentList()){
                         getSupportFragmentManager().popBackStack();
                     }
@@ -382,6 +385,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        pbNavDrawer.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
@@ -401,33 +405,26 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
             }
         }
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        initHomeViewPagerAndTabs();
-        //assignNavigationRecyclerListView();
+        if(!isSheUser) {
+            initHomeViewPagerAndTabs();
+        }
         if (mEventId > 0) {
             eventDetailDialog(mEventId);
         }
     }
 
-    private void setProfileImage() {
+    private void setProfileImage() { //Drawer top iamge
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-            Glide.with(this)
-                    .load(profile)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivDrawerProfileCircleIcon);
-            mTvUserName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
-            if (null != mUserPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getUserBO().getCityMaster())) {
-                mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
+            if(null!=profile) {
+                ivDrawerProfileCircleIcon.setCircularImage(true);
+                ivDrawerProfileCircleIcon.bindImage(profile);
             }
-            if (false != mUserPreference.get().isSheUser() && mUserPreference.get().getUserSummary().getEmailId() != null) {
+            String profileUserName = getResources().getString(R.string.PLACEHOLDER_PROFILE_USER_NAME, mUserPreference.get().getUserSummary().getFirstName(), mUserPreference.get().getUserSummary().getLastName());
+            mTvUserName.setText(profileUserName);
+            if (mUserPreference.get().getUserSummary().getEmailId() != null) {
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getEmailId());
             }
-            Glide.with(this)
-                    .load(profile)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(mIvSideDrawerProfileBlurBackground);
         }
     }
 
@@ -469,8 +466,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     }
 
     public  void openWebUrlFragment(String url) { //To open the webpages in app
-        changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen); //add the changes related this
+        setAllValues(mFragmentOpen);
         NavigateToWebViewFragment navigateToWebViewFragment = new NavigateToWebViewFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -691,6 +687,13 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
     }
 
+    public void resetUiSelectedOptions() {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
+        mTvSearchBox.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
+    }
+
 
     private void openNativeViews(String url) {
         if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
@@ -703,6 +706,8 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
 
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
         NavMenuItem navMenuItem = (NavMenuItem) baseResponse;
+
+        mAdapter.notifyDataSetChanged();
 
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
@@ -1003,6 +1008,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     }
 
     public void changeFragmentWithCommunities() {
+
         mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
         mTabLayout.setVisibility(View.GONE);
@@ -1018,6 +1024,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
 
+        mFloatActionBtn.setVisibility(View.GONE);
 
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
@@ -1133,6 +1140,8 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
         mTvJob.setText(getString(R.string.ID_CARRIER));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
     }
+
+
     @OnClick(R.id.tv_job_home)
     public void jobOnClick() {
         mTabLayout.setVisibility(View.GONE);
@@ -1265,7 +1274,7 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
         mFlHomeFooterList.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
+        if (isSheUser) {
             mICSheroes.setVisibility(View.GONE);
         } else{
             mICSheroes.setVisibility(View.VISIBLE);
@@ -1301,42 +1310,53 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     @Override
     public void onBackPressed() {
 
-        if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()||mFragmentOpen.isJobFragment()) {
-            if (mFragmentOpen.isCommentList()) {
-                mFragmentOpen.setCommentList(false);
-                getSupportFragmentManager().popBackStackImmediate();
-                if (mFragmentOpen.isBookmarkFragment()) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
-                    }
-                } else {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
-                    }
-                }
-            } else if (mFragmentOpen.isReactionList()) {
-                mFragmentOpen.setReactionList(false);
-                getSupportFragmentManager().popBackStackImmediate();
-            }else {
-                if (doubleBackToExitPressedOnce) {
-                    getSupportFragmentManager().popBackStackImmediate();
-                    finish();
-                    return;
-                }
-                doubleBackToExitPressedOnce = true;
-                homeOnClick();
-              //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        doubleBackToExitPressedOnce = false;
-                    }
-                }, 2000);
+        if (isSheUser) {
+            super.onBackPressed();
+            getFragmentManager().executePendingTransactions();
+            int count = getFragmentManager().getBackStackEntryCount();
+            if (count <= 1) {
+                finish();
+            } else {
+                getFragmentManager().popBackStack();
             }
         } else {
+            if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen() || mFragmentOpen.isJobFragment()) {
+                if (mFragmentOpen.isCommentList()) {
+                    mFragmentOpen.setCommentList(false);
+                    getSupportFragmentManager().popBackStackImmediate();
+                    if (mFragmentOpen.isBookmarkFragment()) {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
+                        }
+                    } else {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
+                        }
+                    }
+                } else if (mFragmentOpen.isReactionList()) {
+                    mFragmentOpen.setReactionList(false);
+                    getSupportFragmentManager().popBackStackImmediate();
+                } else {
+                    if (doubleBackToExitPressedOnce) {
+                        getSupportFragmentManager().popBackStackImmediate();
+                        finish();
+                        return;
+                    }
+                    doubleBackToExitPressedOnce = true;
+                    homeOnClick();
+                    //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce = false;
+                        }
+                    }, 2000);
+                }
+            } else {
                 super.onBackPressed();
+            }
         }
     }
 
@@ -1796,29 +1816,41 @@ public class HomeActivity extends BaseActivity implements NavigationActivityConn
     @Override
     public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
         if(StringUtil.isNotEmptyCollection(navigationItems)) {
-            notifyNavigationDrawerItems(navigationItems);
+            List<NavMenuItem> mNavigationDrawerItems=new ArrayList<>(); //Filter only navigation drawer items
+            for(NavMenuItem navMenuItem : navigationItems) {
+                if(navMenuItem.getMenuType() == 1) {
+                    mNavigationDrawerItems.add(navMenuItem);
+                }
+            }
+            pbNavDrawer.setVisibility(View.GONE);
+            notifyNavigationDrawerItems(mNavigationDrawerItems);
         }
     }
 
     @Override
     public void getNavigationDrawerItemsFailed() {
-        if (null != mDrawerItems.get()) {
-            List<NavMenuItem> navigationItems = mDrawerItems.get().getMenuItems();
-            if (StringUtil.isNotEmptyCollection(navigationItems)) {
-                notifyNavigationDrawerItems(navigationItems);
-            } else{
-                String stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
-                NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
-                if (null != eventResponseList) {
-                    List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
-                    Collections.sort(navMenuItems, new Comparator<NavMenuItem>() { //Sort based on display order
-                        public int compare(NavMenuItem obj1, NavMenuItem obj2) {
-                            return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
-                        }
-                    });
-                    notifyNavigationDrawerItems(navMenuItems);
+        pbNavDrawer.setVisibility(View.GONE);
+        String stringContent = "";
+        if (isSheUser) {
+            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_SHE_FILE_NAME); //read from local file
+        } else {
+            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
+        }
+        NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
+        if (null != eventResponseList) {
+            List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
+            List<NavMenuItem> mNavigationDrawerItems=new ArrayList<>(); //Filter only navigation drawer items
+            for(NavMenuItem navMenuItem : navMenuItems) {
+                if(navMenuItem.getMenuType() == 1) {
+                    mNavigationDrawerItems.add(navMenuItem);
                 }
             }
+            Collections.sort(mNavigationDrawerItems, new Comparator<NavMenuItem>() { //Sort based on display order
+                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
+                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
+                }
+            });
+            notifyNavigationDrawerItems(mNavigationDrawerItems);
         }
     }
 
