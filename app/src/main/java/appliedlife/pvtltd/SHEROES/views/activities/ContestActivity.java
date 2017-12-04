@@ -349,13 +349,15 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
                 mBottomBar.setText(R.string.contest_status_expired);
                 mBottomBar.setTextColor(getResources().getColor(R.color.gray_light));
                 mBottomBarView.setBackgroundResource(R.color.theme);
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
             else if(mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING){
                 mBottomBar.setVisibility(View.VISIBLE);
                 mBottomBarView.setVisibility(View.VISIBLE);
                 mBottomView.setVisibility(View.VISIBLE);
-                mBottomBar.setText(R.string.contest_status_challenge_completed);
-                mBottomBar.setTextColor(getResources().getColor(R.color.green));
+                mBottomBar.setText("completed");
+                mBottomBar.setTextColor(getResources().getColor(R.color.light_green));
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
                 mBottomBarView.setBackgroundResource(R.color.theme);
             }else if(!mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING){
                 mBottomBar.setVisibility(View.VISIBLE);
@@ -364,10 +366,12 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
                 mBottomBar.setText(R.string.submit_response);
                 mBottomBar.setTextColor(getResources().getColor(R.color.white));
                 mBottomBarView.setBackgroundResource(R.color.red);
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             } else {
                 mBottomBar.setVisibility(View.GONE);
                 mBottomBarView.setVisibility(View.GONE);
                 mBottomView.setVisibility(View.GONE);
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
     }
