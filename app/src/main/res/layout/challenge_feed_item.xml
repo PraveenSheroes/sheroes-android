@@ -113,10 +113,21 @@
         android:fontFamily="sans-serif-medium"
         android:textStyle="normal"
         android:textColor="@color/red"
-        android:drawablePadding="7dp"
         android:textAllCaps="true"
-        android:drawableLeft="@drawable/vector_live_dot"
+        android:text="live"
+
         android:letterSpacing="0.07" />
+
+    <ImageView
+        android:id="@+id/live_dot"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_below="@+id/title"
+        android:layout_alignBottom="@+id/contest_status"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="7dp"
+        android:src="@drawable/vector_live_dot"
+        android:layout_toLeftOf="@id/contest_status"/>
 
     <View
         android:id="@+id/divider_top"
