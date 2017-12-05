@@ -18,6 +18,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +120,7 @@ public class ProfileWorkExperienceSelfEmploymentFragment extends BaseDialogFragm
 
     private void initializeAllViews() {
         if (null != getArguments()) {
-            mExprienceEntity = getArguments().getParcelable(AppConstants.WORK_EXPERIENCE_TYPE);
+            mExprienceEntity = Parcels.unwrap(getArguments().getParcelable(AppConstants.WORK_EXPERIENCE_TYPE));
             editOrAdd = getString(R.string.ID_EDITED);
         } else {
             editOrAdd = getString(R.string.ID_ADDED);

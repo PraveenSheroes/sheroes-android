@@ -1,16 +1,17 @@
 package appliedlife.pvtltd.SHEROES.models.entities.challenge;
 
-import android.os.Parcel;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 /**
  * Created by Praveen_Singh on 25-05-2017.
  */
-
+@Parcel(analyze = {ChallengeDataItem.class,FeedDetail.class})
 public class ChallengeDataItem extends BaseResponse {
     private int itemPosition;
     private int stateChallengeAfterAccept;
@@ -189,62 +190,4 @@ public class ChallengeDataItem extends BaseResponse {
     public void setDeepLinkUrl(String deepLinkUrl) {
         this.deepLinkUrl = deepLinkUrl;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(this.itemPosition);
-        dest.writeInt(this.stateChallengeAfterAccept);
-        dest.writeInt(this.completionPercent);
-        dest.writeByte(this.is_accepted ? (byte) 1 : (byte) 0);
-        dest.writeString(this.authorImgUrl);
-        dest.writeString(this.authorName);
-        dest.writeLong(this.challengeId);
-        dest.writeInt(this.challengeDuration);
-        dest.writeString(this.challengeName);
-        dest.writeString(this.createdDate);
-        dest.writeString(this.endDate);
-        dest.writeInt(this.solrIgnoreAuthorId);
-        dest.writeInt(this.solrIgnoreCreateBy);
-        dest.writeInt(this.totalPeopleAccepted);
-        dest.writeInt(this.totalPeopleAcceptedDelhi);
-        dest.writeString(this.deepLinkUrl);
-    }
-
-    protected ChallengeDataItem(Parcel in) {
-        super(in);
-        this.itemPosition = in.readInt();
-        this.stateChallengeAfterAccept = in.readInt();
-        this.completionPercent = in.readInt();
-        this.is_accepted = in.readByte() != 0;
-        this.authorImgUrl = in.readString();
-        this.authorName = in.readString();
-        this.challengeId = in.readLong();
-        this.challengeDuration = in.readInt();
-        this.challengeName = in.readString();
-        this.createdDate = in.readString();
-        this.endDate = in.readString();
-        this.solrIgnoreAuthorId = in.readInt();
-        this.solrIgnoreCreateBy = in.readInt();
-        this.totalPeopleAccepted = in.readInt();
-        this.totalPeopleAcceptedDelhi = in.readInt();
-        this.deepLinkUrl = in.readString();
-    }
-
-    public static final Creator<ChallengeDataItem> CREATOR = new Creator<ChallengeDataItem>() {
-        @Override
-        public ChallengeDataItem createFromParcel(Parcel source) {
-            return new ChallengeDataItem(source);
-        }
-
-        @Override
-        public ChallengeDataItem[] newArray(int size) {
-            return new ChallengeDataItem[size];
-        }
-    };
 }

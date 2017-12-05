@@ -1,18 +1,19 @@
 package appliedlife.pvtltd.SHEROES.models.entities.challenge;
 
-import android.os.Parcel;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.CommonFeedResponse;
 
 /**
  * Created by Praveen_Singh on 25-05-2017.
  */
-
+@Parcel(analyze = {ChallengeListResponse.class,BaseResponse.class})
 public class ChallengeListResponse extends BaseResponse  {
     @SerializedName("total_people_completed")
     @Expose
@@ -50,36 +51,4 @@ public class ChallengeListResponse extends BaseResponse  {
     public void setTotalPeopleCompletedDelhi(int totalPeopleCompletedDelhi) {
         this.totalPeopleCompletedDelhi = totalPeopleCompletedDelhi;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(this.totalPeopleCompleted);
-        dest.writeInt(this.totalPeopleCompletedDelhi);
-        dest.writeTypedList(this.reponseList);
-    }
-
-    protected ChallengeListResponse(Parcel in) {
-        super(in);
-        this.totalPeopleCompleted = in.readInt();
-        this.totalPeopleCompletedDelhi = in.readInt();
-        this.reponseList = in.createTypedArrayList(ChallengeDataItem.CREATOR);
-    }
-
-    public static final Creator<ChallengeListResponse> CREATOR = new Creator<ChallengeListResponse>() {
-        @Override
-        public ChallengeListResponse createFromParcel(Parcel source) {
-            return new ChallengeListResponse(source);
-        }
-
-        @Override
-        public ChallengeListResponse[] newArray(int size) {
-            return new ChallengeListResponse[size];
-        }
-    };
 }

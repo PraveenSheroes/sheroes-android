@@ -1,12 +1,14 @@
 package appliedlife.pvtltd.SHEROES.models.entities.login;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProjectEntityBO implements Parcelable {
+import org.parceler.Parcel;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+
+@Parcel(analyze = {ProjectEntityBO.class})
+public class ProjectEntityBO {
 
 	@SerializedName("experience_id")
 	@Expose
@@ -120,50 +122,4 @@ public class ProjectEntityBO implements Parcelable {
 	public void setExperienceId(Long experienceId) {
 		this.experienceId = experienceId;
 	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeValue(this.experienceId);
-		dest.writeLong(this.id);
-		dest.writeString(this.name);
-		dest.writeInt(this.startDateMonth);
-		dest.writeInt(this.startDateYear);
-		dest.writeInt(this.endDateMonth);
-		dest.writeInt(this.endDateYear);
-		dest.writeInt(this.isProjectOngoing);
-		dest.writeString(this.projectUrl);
-		dest.writeString(this.descrption);
-		dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-	}
-
-	protected ProjectEntityBO(Parcel in) {
-		this.experienceId = (Long) in.readValue(Long.class.getClassLoader());
-		this.id = in.readLong();
-		this.name = in.readString();
-		this.startDateMonth = in.readInt();
-		this.startDateYear = in.readInt();
-		this.endDateMonth = in.readInt();
-		this.endDateYear = in.readInt();
-		this.isProjectOngoing = in.readInt();
-		this.projectUrl = in.readString();
-		this.descrption = in.readString();
-		this.isActive = in.readByte() != 0;
-	}
-
-	public static final Creator<ProjectEntityBO> CREATOR = new Creator<ProjectEntityBO>() {
-		@Override
-		public ProjectEntityBO createFromParcel(Parcel source) {
-			return new ProjectEntityBO(source);
-		}
-
-		@Override
-		public ProjectEntityBO[] newArray(int size) {
-			return new ProjectEntityBO[size];
-		}
-	};
 }

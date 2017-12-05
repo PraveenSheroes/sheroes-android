@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +40,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -126,10 +131,10 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     ViewPagerAdapter mViewPagerAdapter;
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
-    private FeedDetail mFeedDetail;
+    private CommunityFeedSolrObj communityFeedObj;
     private FragmentOpen mFragmentOpen;
     private Fragment mFragment;
-    private FeedDetail mMyCommunityPostFeedDetail;
+    private UserPostSolrObj mMyCommunityPostFeedDetail;
     private MentorDetailItem mMentorDetailItem;
     @Bind(R.id.pb_mentor_detail_progress_bar)
     ProgressBar mProgressBar;
@@ -153,36 +158,36 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         mAppBarLayout.addOnOffsetChangedListener(this);
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            mFeedDetail = getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL);
-            mMentorDetailItem = getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE);
+            communityFeedObj = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.COMMUNITY_DETAIL));
+            mMentorDetailItem = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
                 mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
                 mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
                 if (mChampionId > 0) {
-                    mFeedDetail = new FeedDetail();
-                    mFeedDetail.setIdOfEntityOrParticipant(mChampionId);
+                    communityFeedObj = new CommunityFeedSolrObj();
+                    communityFeedObj.setIdOfEntityOrParticipant(mChampionId);
                     mMentorDetailItem=new MentorDetailItem();
                     mMentorDetailItem.setEntityOrParticipantId(mChampionId);
-                    mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                    communityFeedObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
                 }
             }
-        if (null != mFeedDetail) {
+        if (null != communityFeedObj) {
             mFragmentOpen = new FragmentOpen();
             setAllValues(mFragmentOpen);
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.USER_SUB_TYPE, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.USER_SUB_TYPE, AppConstants.ONE_CONSTANT, communityFeedObj.getIdOfEntityOrParticipant()));
             setPagerAndLayouts();
-            mHomePresenter.getCountOfFollowerFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
+            mHomePresenter.getCountOfFollowerFromPresenter(mAppUtils.countFollowerRequestBuilder(communityFeedObj.getIdOfEntityOrParticipant()));
             ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
         }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void setProfileNameData() {
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
+        if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getImageUrl())) {
             Glide.with(this)
-                    .load(mFeedDetail.getImageUrl())
+                    .load(communityFeedObj.getImageUrl())
                     .into(mProfileIcon);
             Glide.with(this)
-                    .load(mFeedDetail.getImageUrl())
+                    .load(communityFeedObj.getImageUrl())
                     .into(ivPublicProfileImage);
         }
         if (null != mMentorDetailItem) {
@@ -199,46 +204,48 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             }
         } else {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                if (mUserPreference.get().getUserSummary().getUserId() == mFeedDetail.getIdOfEntityOrParticipant()) {
+                if (mUserPreference.get().getUserSummary().getUserId() == communityFeedObj.getIdOfEntityOrParticipant()) {
                     tvFollowUnfollowPublicProfile.setTextColor(ContextCompat.getColor(this, R.color.white));
                     tvFollowUnfollowPublicProfile.setText(getString(R.string.ID_EDIT_PROFILE));
                     tvFollowUnfollowPublicProfile.setBackgroundResource(R.drawable.rectangle_follow_unfollow);
                     fabChampionCommunityPost.setVisibility(View.VISIBLE);
                 } else {
                     fabChampionCommunityPost.setVisibility(View.GONE);
-                    mHomePresenter.getFollowedFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
+                    mHomePresenter.getFollowedFromPresenter(mAppUtils.countFollowerRequestBuilder(communityFeedObj.getIdOfEntityOrParticipant()));
                 }
             }
 
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
-            mTvMentorName.setText(mFeedDetail.getNameOrTitle());
-            // tvChampionTitle.setText(mFeedDetail.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getNameOrTitle())) {
+            mTvMentorName.setText(communityFeedObj.getNameOrTitle());
+            // tvChampionTitle.setText(communityFeedObj.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCityName())) {
-            tvMentorCityName.setText(mFeedDetail.getCityName());
-        }
-        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
+        // TODO: ujjwal
+     /*   if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getCityName())) {
+            tvMentorCityName.setText(communityFeedObj.getCityName());
+        }*/
+        if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getDescription())) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvMentorDescription.setText(Html.fromHtml(mFeedDetail.getDescription(), 0)); // for 24 api and more
+                tvMentorDescription.setText(Html.fromHtml(communityFeedObj.getDescription(), 0)); // for 24 api and more
             } else {
-                tvMentorDescription.setText(Html.fromHtml(mFeedDetail.getDescription()));// or for older api
+                tvMentorDescription.setText(Html.fromHtml(communityFeedObj.getDescription()));// or for older api
             }
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("\"").append(tvMentorDescription.getText().toString()).append("\"");
             mViewMoreDescription = stringBuilder.toString();
             tvMentorDescription.setText(mViewMoreDescription);
-            ViewMoreLayout.doResizeTextView(tvMentorDescription, 4, getString(R.string.ID_VIEW_MORE_MENTOR), true, mFeedDetail.getDescription());
+            ViewMoreLayout.doResizeTextView(tvMentorDescription, 4, getString(R.string.ID_VIEW_MORE_MENTOR), true, communityFeedObj.getDescription());
 
 
         }
-        if (StringUtil.isNotEmptyCollection(mFeedDetail.getCanHelpIns())) {
+        // TODO: ujjwal
+      /*  if (StringUtil.isNotEmptyCollection(communityFeedObj.getCanHelpIns())) {
             StringBuilder stringBuilder = new StringBuilder();
-            for (String str : mFeedDetail.getCanHelpIns()) {
+            for (String str : communityFeedObj.getCanHelpIns()) {
                 stringBuilder.append(str).append(AppConstants.COMMA).append(AppConstants.SPACE);
                 tvMentorExpertise.setText(stringBuilder.toString().substring(0, stringBuilder.toString().trim().length() - 1));
             }
-        }
+        }*/
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
@@ -248,7 +255,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         supportPostponeEnterTransition();
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_GROWTH_BUDDIES_PUBLIC_PROFILE));
+        mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(communityFeedObj, communityEnum, mCommunityPostId), getString(R.string.ID_GROWTH_BUDDIES_PUBLIC_PROFILE));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
     }
@@ -271,8 +278,10 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mMentorDetailItem);
-        bundle.putParcelable(AppConstants.FEED_SCREEN, mFeedDetail);
+        Parcelable parcelableMentorDetail = Parcels.wrap(mMentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
+        Parcelable parcelable = Parcels.wrap(communityFeedObj);
+        bundle.putParcelable(AppConstants.FEED_SCREEN, parcelable);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
     }
@@ -325,13 +334,13 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     }
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
-        FeedDetail feedDetail = (FeedDetail) baseResponse;
-        mMyCommunityPostFeedDetail = feedDetail;
+        UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
+        mMyCommunityPostFeedDetail = userPostSolrObj;
         int id = view.getId();
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
-        mFragmentOpen.setOwner(feedDetail.isCommunityOwner());
+        mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
     }
@@ -339,7 +348,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     @Override
     public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
-        mMyCommunityPostFeedDetail = feedDetail;
+        mMyCommunityPostFeedDetail = (UserPostSolrObj)feedDetail;
         onBackPressed();
     }
 
@@ -365,7 +374,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     @Override
     public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
         mFragmentOpen = isFragmentOpen;
-        mMyCommunityPostFeedDetail = feedDetail;
+        mMyCommunityPostFeedDetail = (UserPostSolrObj) feedDetail;
         if (mFragmentOpen.isReactionList()) {
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
             setAllValues(mFragmentOpen);
@@ -380,7 +389,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
             if (AppUtils.isFragmentUIActive(mFragment)) {
                 ((CommunitiesDetailFragment) mFragment).commentListRefresh(mMyCommunityPostFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.USER_SUB_TYPE, AppConstants.ONE_CONSTANT, mFeedDetail.getIdOfEntityOrParticipant()));
+            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.USER_SUB_TYPE, AppConstants.ONE_CONSTANT, communityFeedObj.getIdOfEntityOrParticipant()));
             mFragmentOpen.setCommentList(false);
         } else if (mFragmentOpen.isReactionList()) {
             getSupportFragmentManager().popBackStack();
@@ -446,8 +455,8 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mFeedDetail = feedDetailList.get(0);
-            mFeedDetail.setCallFromName(screenName);
+            communityFeedObj = (CommunityFeedSolrObj) feedDetailList.get(0);
+            communityFeedObj.setCallFromName(screenName);
             setProfileNameData();
         }
     }
@@ -476,7 +485,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
         switch (followedResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 MentorDetailItem mentorDetailItem = new MentorDetailItem();
-                mentorDetailItem.setEntityOrParticipantId(mFeedDetail.getIdOfEntityOrParticipant());
+                mentorDetailItem.setEntityOrParticipantId(communityFeedObj.getIdOfEntityOrParticipant());
                 mentorDetailItem.setFollowed(followedResponse.isFollowed());
                 mMentorDetailItem = mentorDetailItem;
                 isFollowUnfollow();
@@ -515,7 +524,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     protected void mentorFollowUnFollowSuccess(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
         switch (mentorFollowUnfollowResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mHomePresenter.getCountOfFollowerFromPresenter(mAppUtils.countFollowerRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant()));
+                mHomePresenter.getCountOfFollowerFromPresenter(mAppUtils.countFollowerRequestBuilder(communityFeedObj.getIdOfEntityOrParticipant()));
                 break;
             case AppConstants.FAILED:
                 if (!mMentorDetailItem.isFollowed()) {
@@ -553,10 +562,11 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
     private void championDetailActivity(Long userId) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        mFeedDetail = new FeedDetail();
-        mFeedDetail.setIdOfEntityOrParticipant(userId);
-        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        communityFeedObj = new CommunityFeedSolrObj();
+        communityFeedObj.setIdOfEntityOrParticipant(userId);
+        communityFeedObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        Parcelable parcelable = Parcels.wrap(communityFeedObj);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -580,7 +590,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mFeedDetail);
+                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(communityFeedObj);
                         }
                     }
                     break;
@@ -588,7 +598,7 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                     Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(activeFragment)) {
                         if (activeFragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) activeFragment).updateUiAccordingToFeedDetail(mFeedDetail);
+                            ((CommunitiesDetailFragment) activeFragment).updateUiAccordingToFeedDetail(communityFeedObj);
                         }
                     }
                     break;

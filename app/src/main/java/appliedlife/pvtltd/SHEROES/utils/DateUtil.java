@@ -23,6 +23,7 @@
      private static final String CONTEST_TIME = "d MMM, h aaa";
      public static final Locale LOCALE = Locale.US;
      public static final String PRETTY_DATE_WITHOUT_TIME = "d MMM yyyy";
+     public static final String DATE_ONLY_FORMAT = "yyyy-MM-dd";
      /**
       * Format a timestamp to standard format.
       *
@@ -155,5 +156,13 @@
          SimpleDateFormat dateFormat = new SimpleDateFormat(dateformat, LOCALE);
 
          return dateFormat.parse(dateStr);
+     }
+
+     public static String toDateOnlyString(Date date) {
+         if (!validateDate(date)) {
+             return "";
+         }
+         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_ONLY_FORMAT, LOCALE);
+         return dateFormat.format(date);
      }
  }

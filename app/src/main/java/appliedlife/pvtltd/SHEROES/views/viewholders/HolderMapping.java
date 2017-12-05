@@ -20,7 +20,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerList;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
@@ -482,14 +484,15 @@ public enum HolderMapping {
                                 returnView = FEED_JOB.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
+                                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                                 if(feedDetail.isSpamPost())
                                 {
-                                    if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
+                                    if(userId==feedDetail.getAuthorId()||userPostSolrObj.isCommunityOwner())
                                     {
-                                        if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                                        if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                             returnView = EVENT_CARD_HOLDER.ordinal();
 
-                                        }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())){
+                                        }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())){
                                             returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
                                         }
                                         else
@@ -501,10 +504,10 @@ public enum HolderMapping {
                                     }
                                 }else
                                 {
-                                    if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                                    if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                         returnView = EVENT_CARD_HOLDER.ordinal();
 
-                                    }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())){
+                                    }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())){
                                         returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
                                     }
                                     else
@@ -566,8 +569,9 @@ public enum HolderMapping {
                                 returnView = ARTICLE_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY:
+                                CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
                                 boolean isFeatured = feedDetail.isFeatured();
-                                if (isFeatured && !feedDetail.isOwner() && !feedDetail.isMember()) {
+                                if (isFeatured && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
                                 } else {
                                     returnView = MY_COMMUNITIES_CARD.ordinal();
@@ -577,13 +581,15 @@ public enum HolderMapping {
                                 returnView = FEED_JOB.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
+                                UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
+                                userPostSolrObj = (UserPostSolrObj) feedDetail;
                                 if(feedDetail.isSpamPost())
                                 {
-                                    if(userId==feedDetail.getAuthorId()||feedDetail.isCommunityOwner())
+                                    if(userId==feedDetail.getAuthorId()||userPostSolrObj.isCommunityOwner())
                                     {
-                                        if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID  && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                                        if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID  && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                             returnView = EVENT_CARD_HOLDER.ordinal();
-                                        }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())){
+                                        }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())){
                                             returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
                                         }
                                         else
@@ -595,9 +601,9 @@ public enum HolderMapping {
                                     }
                                 }else
                                 {
-                                    if (feedDetail.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && feedDetail.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                                    if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                         returnView = EVENT_CARD_HOLDER.ordinal();
-                                    }else if(feedDetail.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!feedDetail.isCommentAllowed())) {
+                                    }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
                                         returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
                                     }
                                     else

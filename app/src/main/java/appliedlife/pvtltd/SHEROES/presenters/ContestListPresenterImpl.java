@@ -2,11 +2,8 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,20 +12,15 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponseNew;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestListView;
 import rx.Observable;
@@ -37,8 +29,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.challengetRequestBuilder;
 
 
 /**
@@ -146,21 +136,22 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                 if(!CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())){
                     for (FeedDetail feedDetail : feedResponsePojo.getFeedDetails()){
                         if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.CHALLENGE_SUB_TYPE_NEW)){
+                            ChallengeSolrObj challengeSolrObj = (ChallengeSolrObj) feedDetail;
                             Contest contest = new Contest();
-                            contest.title = feedDetail.getChallengeTitle();
-                            contest.remote_id = (int) feedDetail.getIdOfEntityOrParticipant();
-                            contest.body = feedDetail.getListDescription();
-                            contest.createdDateString = feedDetail.getChallengeStartDate();
-                            contest.endDateString = feedDetail.getChallengeEndDate();
-                            contest.hasWinner = feedDetail.isChallengeHasWinner();
-                            contest.isWinner = feedDetail.isChallengeIsWinner();
-                            contest.authorName = feedDetail.getAuthorName();
-                            contest.authorType = feedDetail.getChallengeAuthorTypeS();
-                            contest.authorImageUrl = feedDetail.getAuthorImageUrl();
-                            contest.submissionCount = feedDetail.getChallengeAcceptedCount();
-                            contest.hasMyPost = feedDetail.isChallengeAccepted();
-                            contest.tag = feedDetail.getChallengeAcceptPostTextS();
-                            contest.thumbImage = feedDetail.getThumbnailImageUrl();
+                            contest.title = challengeSolrObj.getChallengeTitle();
+                            contest.remote_id = (int) challengeSolrObj.getIdOfEntityOrParticipant();
+                            contest.body = challengeSolrObj.getListDescription();
+                            contest.createdDateString = challengeSolrObj.getChallengeStartDate();
+                            contest.endDateString = challengeSolrObj.getChallengeEndDate();
+                            contest.hasWinner = challengeSolrObj.isChallengeHasWinner();
+                            contest.isWinner = challengeSolrObj.isChallengeIsWinner();
+                            contest.authorName = challengeSolrObj.getAuthorName();
+                            contest.authorType = challengeSolrObj.getChallengeAuthorTypeS();
+                            contest.authorImageUrl = challengeSolrObj.getAuthorImageUrl();
+                            contest.submissionCount = challengeSolrObj.getNoOfChallengeAccepted();
+                            contest.hasMyPost = challengeSolrObj.isChallengeAccepted();
+                            contest.tag = challengeSolrObj.getChallengeAcceptPostText();
+                            contest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
                             contest.shortUrl = feedDetail.getDeepLinkUrl();
                             contests.add(contest);
                         }

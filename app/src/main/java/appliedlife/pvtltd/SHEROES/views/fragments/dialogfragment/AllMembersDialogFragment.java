@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MembersList;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
@@ -60,7 +63,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
     private FragmentListRefreshData mFragmentListRefreshData;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private GenericRecyclerViewAdapter mAdapter;
-    FeedDetail mFeedDetail;
+    CommunityFeedSolrObj communityFeedObj;
     List<MembersList> memberdata = new ArrayList<>();
     int position;
     @Override
@@ -71,7 +74,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MEMBER_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mMemberpresenter.attachView(this);
         if (null != getArguments()) {
-            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL);
+            communityFeedObj = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunitiesDetailActivity) getActivity());
@@ -92,8 +95,8 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
 
             }
         });
-        mMemberpresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(mFeedDetail.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
-        mFragmentListRefreshData.setEnitityOrParticpantid(mFeedDetail.getIdOfEntityOrParticipant());
+        mMemberpresenter.getAllMembers(mAppUtils.getPandingMemberRequestBuilder(communityFeedObj.getIdOfEntityOrParticipant(), mFragmentListRefreshData.getPageNo()));
+        mFragmentListRefreshData.setEnitityOrParticpantid(communityFeedObj.getIdOfEntityOrParticipant());
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITY_MEMBERS));
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
@@ -101,7 +104,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
 
     @OnClick(R.id.fm_community_members_close)
     public void communityClosePress() {
-        ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
+        ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(communityFeedObj);
     }
 
     @Override
@@ -115,13 +118,13 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
         if (StringUtil.isNotEmptyCollection(listOfMember)) {
             memberdata.addAll(listOfMember);
             for (MembersList membersList : listOfMember) {
-                if (mFeedDetail.isOwner()) {
+                if (((CommunityFeedSolrObj)communityFeedObj).isOwner()) {
                     membersList.setIsOwner(true);
                 } else {
                     membersList.setIsOwner(false);
                 }
             }
-            tv_member_count.setText(AppConstants.LEFT_BRACKET + mFeedDetail.getNoOfMembers() + AppConstants.RIGHT_BRACKET);
+            tv_member_count.setText(AppConstants.LEFT_BRACKET + communityFeedObj.getNoOfMembers() + AppConstants.RIGHT_BRACKET);
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mAdapter.setSheroesGenericListData(memberdata);
@@ -136,7 +139,7 @@ public class AllMembersDialogFragment extends BaseDialogFragment implements AllM
                 if (StringUtil.isNotEmptyCollection(memberdata)) {
                     memberdata.remove(position);
                     tv_member_count.setText(AppConstants.LEFT_BRACKET + memberdata.size() + AppConstants.RIGHT_BRACKET);
-                    mFeedDetail.setNoOfMembers(memberdata.size());
+                    communityFeedObj.setNoOfMembers(memberdata.size());
                     mAdapter.setSheroesGenericListData(memberdata);
                     mAdapter.notifyDataSetChanged();
                 }

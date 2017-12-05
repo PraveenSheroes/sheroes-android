@@ -1,15 +1,16 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
-import android.os.Parcel;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
  * Created by sheroes on 29/03/17.
  */
+@Parcel(analyze = {ExprienceEntity.class, BaseResponse.class})
 public class ExprienceEntity extends BaseResponse {
     int itemPosition;
     @SerializedName("id")
@@ -396,103 +397,4 @@ public class ExprienceEntity extends BaseResponse {
     public void setSubType(String subType) {
         this.subType = subType;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(this.itemPosition);
-        dest.writeValue(this.id);
-        dest.writeLong(this.experienceType);
-        dest.writeString(this.experienceTypeString);
-        dest.writeLong(this.organisationType);
-        dest.writeString(this.organisationTypeString);
-        dest.writeLong(this.sector);
-        dest.writeString(this.company);
-        dest.writeLong(this.locationId);
-        dest.writeString(this.location);
-        dest.writeString(this.title);
-        dest.writeInt(this.startMonth);
-        dest.writeInt(this.startYear);
-        dest.writeInt(this.endMonth);
-        dest.writeInt(this.endYear);
-        dest.writeString(this.description);
-        dest.writeByte(this.isCurrentlyWorkingHere ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.functionalAreaId);
-        dest.writeString(this.functionalAreaName);
-        dest.writeString(this.orgBrandName);
-        dest.writeString(this.aboutOrg);
-        dest.writeString(this.orgWebUrl);
-        dest.writeString(this.orgContactNo);
-        dest.writeString(this.portfolioUrl);
-        dest.writeString(this.imageTitle);
-        dest.writeString(this.imageUrl);
-        dest.writeString(this.mobAppUrl);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeString(this.tag);
-        dest.writeString(this.tag1);
-        dest.writeString(this.title1);
-        dest.writeValue(this.startDay);
-        dest.writeValue(this.endDay);
-        dest.writeString(this.type);
-        dest.writeString(this.subType);
-    }
-
-    public ExprienceEntity() {
-    }
-
-    protected ExprienceEntity(Parcel in) {
-        super(in);
-        this.itemPosition = in.readInt();
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.experienceType = in.readLong();
-        this.experienceTypeString = in.readString();
-        this.organisationType = in.readLong();
-        this.organisationTypeString = in.readString();
-        this.sector = in.readLong();
-        this.company = in.readString();
-        this.locationId = in.readLong();
-        this.location = in.readString();
-        this.title = in.readString();
-        this.startMonth = in.readInt();
-        this.startYear = in.readInt();
-        this.endMonth = in.readInt();
-        this.endYear = in.readInt();
-        this.description = in.readString();
-        this.isCurrentlyWorkingHere = in.readByte() != 0;
-        this.functionalAreaId = in.readLong();
-        this.functionalAreaName = in.readString();
-        this.orgBrandName = in.readString();
-        this.aboutOrg = in.readString();
-        this.orgWebUrl = in.readString();
-        this.orgContactNo = in.readString();
-        this.portfolioUrl = in.readString();
-        this.imageTitle = in.readString();
-        this.imageUrl = in.readString();
-        this.mobAppUrl = in.readString();
-        this.isActive = in.readByte() != 0;
-        this.tag = in.readString();
-        this.tag1 = in.readString();
-        this.title1 = in.readString();
-        this.startDay = (int) in.readValue(int.class.getClassLoader());
-        this.endDay = (int) in.readValue(int.class.getClassLoader());
-        this.type = in.readString();
-        this.subType = in.readString();
-    }
-
-    public static final Creator<ExprienceEntity> CREATOR = new Creator<ExprienceEntity>() {
-        @Override
-        public ExprienceEntity createFromParcel(Parcel source) {
-            return new ExprienceEntity(source);
-        }
-
-        @Override
-        public ExprienceEntity[] newArray(int size) {
-            return new ExprienceEntity[size];
-        }
-    };
 }

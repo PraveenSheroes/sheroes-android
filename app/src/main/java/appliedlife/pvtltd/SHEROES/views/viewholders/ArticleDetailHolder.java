@@ -38,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;

@@ -1,16 +1,17 @@
 package appliedlife.pvtltd.SHEROES.models.entities.publicprofile;
 
-import android.os.Parcel;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 
 /**
  * Created by Praveen_Singh on 03-08-2017.
  */
-
+@Parcel(analyze = {MentorDetailItem.class, BaseResponse.class})
 public class MentorDetailItem extends BaseResponse {
     private int itemPosition;
     @SerializedName("mentor_name")
@@ -92,44 +93,4 @@ public class MentorDetailItem extends BaseResponse {
     public void setSolarIgnoreDeepLink(String solarIgnoreDeepLink) {
         this.solarIgnoreDeepLink = solarIgnoreDeepLink;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(this.itemPosition);
-        dest.writeString(this.mentorName);
-        dest.writeString(this.expertiesIn);
-        dest.writeByte(this.isFollowed ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.entityOrParticipantId);
-        dest.writeString(this.mentorImageUrl);
-        dest.writeString(this.solarIgnoreDeepLink);
-    }
-
-    protected MentorDetailItem(Parcel in) {
-        super(in);
-        this.itemPosition = in.readInt();
-        this.mentorName = in.readString();
-        this.expertiesIn = in.readString();
-        this.isFollowed = in.readByte() != 0;
-        this.entityOrParticipantId = in.readLong();
-        this.mentorImageUrl = in.readString();
-        this.solarIgnoreDeepLink = in.readString();
-    }
-
-    public static final Creator<MentorDetailItem> CREATOR = new Creator<MentorDetailItem>() {
-        @Override
-        public MentorDetailItem createFromParcel(Parcel source) {
-            return new MentorDetailItem(source);
-        }
-
-        @Override
-        public MentorDetailItem[] newArray(int size) {
-            return new MentorDetailItem[size];
-        }
-    };
 }

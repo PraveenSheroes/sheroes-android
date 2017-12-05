@@ -208,6 +208,37 @@ public class HomePresenter extends BasePresenter<HomeView> {
         registerSubscription(subscription);
     }
 
+    public void getNewFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getNewFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (null != feedResponsePojo) {
+                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
     public void getHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
@@ -215,6 +246,37 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
         getMvpView().startProgressBar();
         Subscription subscription = mHomeModel.getHomeFeedFromModel(feedRequestPojo, challengeRequest, appIntroScreenRequest,fragmentListRefreshData).subscribe(new Subscriber<List<FeedDetail>>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(List<FeedDetail> feedDetailList) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+                    getMvpView().showHomeFeedList(feedDetailList);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public void getNewHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, ChallengeRequest challengeRequest, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, challengeRequest, appIntroScreenRequest,fragmentListRefreshData).subscribe(new Subscriber<List<FeedDetail>>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -264,7 +326,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 getMvpView().stopProgressBar();
                 List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
                 if (!CommonUtil.isEmpty(feedDetailList)) {
-                    mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+                    mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
                 }
                 getMvpView().showHomeFeedList(feedDetailList);
             }

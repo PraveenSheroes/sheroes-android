@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -163,7 +165,7 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
                              Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         try {
-            mBaseResponse = (MyProfileView) getArguments().getParcelable(AppConstants.MODEL_KEY);
+            mBaseResponse = (MyProfileView) Parcels.unwrap(getArguments().getParcelable(AppConstants.MODEL_KEY));
         } catch (ClassCastException ex) {
             LogUtils.error(TAG, "Error while casting", ex);
         }
