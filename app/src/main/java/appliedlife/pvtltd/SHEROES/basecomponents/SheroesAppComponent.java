@@ -52,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -592,5 +593,7 @@ public interface SheroesAppComponent {
     void inject(ChallengeFeedHolder challengeFeedHolder);
 
     void inject(AddressActivity addressActivity);
+
+    void inject(LikeListBottomSheetFragment likeListBottomSheetFragment);
 
 }
