@@ -602,6 +602,24 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                         }
                     }
                     break;
+                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
+                        if (fragmentCommunityDetail instanceof CommunitiesDetailFragment) {
+                            Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                            UserPostSolrObj userPostSolrObj = null;
+                            if (parcelable != null) {
+                                userPostSolrObj = Parcels.unwrap(parcelable);
+                                isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                            }
+                            if(isPostDeleted){
+                                ((CommunitiesDetailFragment) fragmentCommunityDetail).commentListRefresh(userPostSolrObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                            }else {
+                                ((CommunitiesDetailFragment) fragmentCommunityDetail).commentListRefresh(userPostSolrObj, FeedParticipationEnum.COMMENT_REACTION);
+                            }
+                        }
+                    }
                 default:
 
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);

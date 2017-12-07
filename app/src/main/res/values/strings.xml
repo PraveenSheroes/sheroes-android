@@ -839,6 +839,7 @@
     <string name="view_response">View response</string>
     <string name="joined">Joined</string>
     <string name="title.contest_list">My Challenges</string>
+    <string name="title.question">Question</string>
     <string name="soon">soon</string>
 
     <string name="hint.full_name">Full Name</string>

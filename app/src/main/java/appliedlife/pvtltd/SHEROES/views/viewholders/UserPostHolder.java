@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -37,8 +35,8 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -62,8 +60,6 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
  * Created by Praveen_Singh on 22-01-2017.
  */
 public class UserPostHolder extends BaseViewHolder<FeedDetail> {
-    private static final String LEFT_POSTED = "<font color='#8a8d8e'>";
-    private static final String RIGHT_POSTED = "</font>";
     private final String TAG = LogUtils.makeLogTag(UserPostHolder.class);
     @Inject
     DateUtil mDateUtil;
@@ -158,7 +154,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
 
-    BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
     private Context mContext;
     private int mItemPosition;
@@ -168,11 +163,13 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private String mPhotoUrl;
     private Handler mHandler;
 
-    public UserPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    private PostDetailCallBack mPostDetailCallback;
+
+    public UserPostHolder(View itemView, PostDetailCallBack postDetailCallBack) {
         super(itemView);
+        this.mPostDetailCallback = postDetailCallBack;
         ButterKnife.bind(this, itemView);
         mHandler = new Handler();
-        this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             mUserId = userPreference.get().getUserSummary().getUserId();
@@ -192,6 +189,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
+
         this.mUserPostObj = (UserPostSolrObj)item;
         mContext = context;
         mUserPostObj.setItemPosition(position);
@@ -633,17 +631,17 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.user_post_images)
     public void communityPostImageClick() {
-        viewInterface.dataOperationOnClick(mUserPostObj);
+        mPostDetailCallback.onPostImageClicked(mUserPostObj);
     }
 
     @OnClick(R.id.post_menu)
     public void userMenuClick() {
-        viewInterface.handleOnClick(mUserPostObj, mPostMenu);
+        mPostDetailCallback.onPostMenuClicked(mUserPostObj, mPostMenu);
     }
 
     @OnClick(R.id.tv_spam_post_menu)
     public void spamMenuClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
+        mPostDetailCallback.onSpamMenuClicked(mUserPostObj, tvSpamPostMenu);
     }
 
     @Override
@@ -652,17 +650,17 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         switch (id) {
             case R.id.iv_first: {
                 mUserPostObj.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                mPostDetailCallback.onPostImageClicked(mUserPostObj);
                 break;
             }
             case R.id.iv_second: {
                 mUserPostObj.setItemPosition(AppConstants.ONE_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                mPostDetailCallback.onPostImageClicked(mUserPostObj);
                 break;
             }
             case R.id.iv_third: {
                 mUserPostObj.setItemPosition(AppConstants.TWO_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                mPostDetailCallback.onPostImageClicked(mUserPostObj);
                 break;
             }
 
@@ -675,7 +673,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.share_button)
     public void tvShareClick() {
-        viewInterface.handleOnClick(mUserPostObj, mShare);
+        mPostDetailCallback.onShareButtonClicked(mUserPostObj, mShare);
         if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_FEEDBACK_POST, mUserPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + mUserPostObj.getIdOfEntityOrParticipant());
         } else {
@@ -684,19 +682,24 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.like_button)
-    public void reaction1Click() {
-        viewInterface.handleOnClick(mUserPostObj, mLikesCount);
-    }
-
-    @OnClick(R.id.like_button)
     public void userReactionClick() {
         if ((Boolean) mLikeButtonText.getTag()) {
-            userReactionWithouLongPress();
+            if(mUserPostObj.getReactedValue() != AppConstants.NO_REACTION_CONSTANT){
+                mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                mLikeButtonText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                mPostDetailCallback.onPostUnLikeClicked(mUserPostObj);
+            }else {
+                mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mLikeButtonText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                mPostDetailCallback.onPostLikeClicked(mUserPostObj);
+            }
         }
     }
 
 
-    private void userReactionWithouLongPress() {
+ /*   private void userReactionWithouLongPress() {
         mLikeButtonText.setTag(false);
         mUserPostObj.setTrending(true);
         mUserPostObj.setLongPress(false);
@@ -728,12 +731,12 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
         }
         likeCommentOps();
-    }
+    }*/
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
         if (mUserPostObj.isAuthorMentor()) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 
@@ -746,7 +749,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             public void onClick(View textView) {
 
                 if (mUserPostObj.isAuthorMentor()) {
-                    viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
 
@@ -771,7 +774,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                viewInterface.handleOnClick(mUserPostObj, mTitle);
+                   mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
             }
 
             @Override
@@ -813,7 +816,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                viewInterface.handleOnClick(mUserPostObj, mTitle);
+               // TODO : ujjwal
+                // viewInterface.handleOnClick(mUserPostObj, mTitle);
             }
 
             @Override
@@ -879,12 +883,17 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_approve_spam_post)
     public void onApproveSpamPostClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvApproveSpamPost);
+        mPostDetailCallback.onSpamApprovedClicked(mUserPostObj, tvApproveSpamPost);
     }
 
     @OnClick(R.id.tv_delete_spam_post)
     public void onDeleteSpamPostClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvDeleteSpamPost);
+        mPostDetailCallback.onSpamPostDeleteClicked(mUserPostObj, tvDeleteSpamPost);
+    }
+
+    @OnClick(R.id.comment_button)
+    public void onCommentButtonClicked(){
+        mPostDetailCallback.onCommentButtonClicked();
     }
 
 }

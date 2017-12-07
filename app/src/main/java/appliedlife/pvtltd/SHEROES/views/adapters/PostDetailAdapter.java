@@ -10,12 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
+import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 
 /**
@@ -25,17 +29,21 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Context mContext;
     private List<BaseResponse> mFeedDetail;
-    private final View.OnClickListener mOnClickListener;
+    private final PostDetailCallBack mPostDetailCallback;
+    private final CommentCallBack mCommentCallback;
     private static final int TYPE_LOADER = 1;
     private static final int TYPE_USER_POST = 2;
     private static final int TYPE_COMMENT = 3;
     private boolean showLoader = false;
+    private boolean hasMoreItem = false;
+    private int loaderPostion;
 
     //region Constructor
-    public PostDetailAdapter(Context context, View.OnClickListener onClickListener) {
+    public PostDetailAdapter(Context context, PostDetailCallBack postDetailCallBack, CommentCallBack commentCallBack) {
         this.mContext = context;
         mFeedDetail = new ArrayList<>();
-        this.mOnClickListener = onClickListener;
+        this.mPostDetailCallback = postDetailCallBack;
+        this.mCommentCallback = commentCallBack;
     }
     //endregion
 
@@ -46,10 +54,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (viewType) {
             case TYPE_USER_POST:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_post, parent, false);
-                return new UserPostHolder(view, null);
+                return new UserPostHolder(view, mPostDetailCallback);
             case TYPE_COMMENT:
-                View viewAlbum = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_comments_list_layout, parent, false);
-                return new CommentHolder(viewAlbum, null);
+                View viewAlbum = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_new_layout, parent, false);
+                return new CommentNewViewHolder(viewAlbum, mCommentCallback);
             case TYPE_LOADER:
                 return new LoaderViewHolder(mInflater.inflate(R.layout.comment_loader_view, parent, false));
         }
@@ -68,13 +76,13 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 userPostHolder.bindData(feedDetail, mContext, position);
                 break;
             case TYPE_COMMENT:
-                CommentHolder commentHolder = (CommentHolder) holder;
+                CommentNewViewHolder commentNewViewHolder = (CommentNewViewHolder) holder;
                 BaseResponse baseResponse = (BaseResponse) mFeedDetail.get(position);
-                commentHolder.bindData((Comment) baseResponse, mContext, position);
+                commentNewViewHolder.bindData((Comment) baseResponse, mContext, position);
                 break;
             case TYPE_LOADER:
                 LoaderViewHolder loaderViewHolder = ((LoaderViewHolder) holder);
-                loaderViewHolder.bindData(holder.getAdapterPosition(), showLoader);
+                loaderViewHolder.bindData(holder.getAdapterPosition(), showLoader, mPostDetailCallback);
         }
     }
 
@@ -102,12 +110,73 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (feedDetail instanceof Comment) {
             return TYPE_COMMENT;
         }
-        return 0;
+        return TYPE_LOADER;
     }
 
-    public void addData(UserPostSolrObj userPostSolrObj) {
-        mFeedDetail.add(0,userPostSolrObj);
-        notifyItemChanged(0);
+    public void addData(BaseResponse response, int indexAt) {
+        mFeedDetail.add(indexAt, response);
+        notifyItemInserted(indexAt);
+    }
+
+    public void addData(BaseResponse baseResponse) {
+        int size = mFeedDetail.size();
+        mFeedDetail.add(baseResponse);
+        notifyItemInserted(size);
+    }
+
+    public void commentStartedLoading() {
+        if (showLoader) return;
+        showLoader = true;
+        int loadingPos = getLoaderPostion();
+        if (loadingPos != RecyclerView.NO_POSITION) {
+            notifyItemChanged(loadingPos);
+        }
+    }
+
+    public void commentFinishedLoading() {
+        if (!showLoader) return;
+        final int loadingPos = getLoaderPostion();
+        showLoader = false;
+        if (loadingPos != RecyclerView.NO_POSITION) {
+            notifyItemChanged(loadingPos);
+        }
+    }
+
+    public int getLoaderPostion() {
+        int pos = RecyclerView.NO_POSITION;
+        if(hasMoreItem){
+            if(!CommonUtil.isEmpty(mFeedDetail)){
+                BaseResponse baseResponse = mFeedDetail.get(0);
+                if(baseResponse instanceof UserPostSolrObj){
+                    pos = 1;
+                }
+            }
+        }
+        return pos;
+    }
+
+    public void setHasMoreComments(boolean hasMoreComments) {
+        if(!hasMoreComments){
+            int lodPos = getLoaderPostion();
+            mFeedDetail.remove(lodPos);
+            notifyItemRemoved(lodPos);
+        }
+        this.hasMoreItem = hasMoreComments;
+    }
+
+    public void addDatas(int startIndex, List<Comment> commentList) {
+        mFeedDetail.addAll(startIndex, commentList);
+        notifyItemRangeInserted(startIndex, commentList.size());
+    }
+
+    public void removeData(int index) {
+        mFeedDetail.remove(index);
+        notifyItemRemoved(index);
+    }
+
+    public void setData(int index, BaseResponse baseResponse) {
+        mFeedDetail.set(index, baseResponse);
+        notifyItemChanged(index);
     }
 
     //endregion

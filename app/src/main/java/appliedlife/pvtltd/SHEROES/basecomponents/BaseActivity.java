@@ -473,7 +473,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
-                mFragmentOpen.setCommentList(true);
+                //mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_images:
@@ -528,6 +528,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                         Bundle bundleFromPost = new Bundle();
                         bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                        intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
                         Parcelable parcelablesss = Parcels.wrap(mFeedDetail);
                         bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                         bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
@@ -887,7 +888,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        if (AppUtils.isFragmentUIActive(mFragment)) {
+      /*  if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof CommunitiesDetailFragment) {
                 CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
                 Bundle bundleArticle = new Bundle();
@@ -899,8 +900,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
             }
-        } else {
-            PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, null);
+        } else {*/
+            PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
             /*CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
             Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
@@ -909,7 +910,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
-        }
+       // }
     }
 
     @Override

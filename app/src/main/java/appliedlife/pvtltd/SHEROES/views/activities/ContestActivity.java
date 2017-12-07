@@ -495,7 +495,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
+       /* mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
         CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
         Bundle bundleArticle = new Bundle();
         Parcelable parcelableFragment = Parcels.wrap(mFragmentOpen);
@@ -503,7 +503,8 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         Parcelable parcelable = Parcels.wrap(feedDetail);
         bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
         commentReactionFragmentForArticle.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.comment_from_contest, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.comment_from_contest, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
+        PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
     }
 
     @Override

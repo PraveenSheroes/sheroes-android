@@ -132,6 +132,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -602,5 +603,6 @@ public interface SheroesAppComponent {
 
     void inject(UserPostHolder userPostHolder);
 
+    void inject(CommentNewViewHolder commentNewViewHolder);
 
 }

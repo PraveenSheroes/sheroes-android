@@ -166,6 +166,7 @@
 
 
     <dimen name="comment_icon">30dp</dimen>
+    <dimen name="user_comment_icon">40dp</dimen>
     <dimen name="multiple_image_rectangle">118dp</dimen>
     <dimen name="two_image_rectangle">180dp</dimen>
     <dimen name="tell_us_image_width">316dp</dimen>
