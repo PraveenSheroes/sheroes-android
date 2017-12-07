@@ -68,6 +68,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
@@ -899,14 +900,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
             }
         } else {
-            CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
+            PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, null);
+            /*CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
             Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
             bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelable1);
             Parcelable parcelable = Parcels.wrap(feedDetail);
             bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
         }
     }
 

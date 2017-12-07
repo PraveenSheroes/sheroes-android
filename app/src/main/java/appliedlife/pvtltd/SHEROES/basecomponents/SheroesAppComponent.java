@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
@@ -194,6 +195,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.TagSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.TagsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.WorkExperienceCardHolder;
 import dagger.Component;
 
@@ -595,5 +597,10 @@ public interface SheroesAppComponent {
     void inject(AddressActivity addressActivity);
 
     void inject(LikeListBottomSheetFragment likeListBottomSheetFragment);
+
+    void inject(PostDetailActivity postDetailActivity);
+
+    void inject(UserPostHolder userPostHolder);
+
 
 }
