@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -84,7 +85,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
-    private FeedDetail mFeedDetail;
+    private CommunityFeedSolrObj mCommunityFeedObj;
     private FeedDetail feedUserObject;
 
     @Override
@@ -97,7 +98,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
         createCommunityPresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
+            mCommunityFeedObj = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
         }
         tvInviteText.setText(getString(R.string.ID_INVITE_OWNER_COMMUNITY));
         mSearchEditText.setHint(getString(R.string.ID_SEARCH_USER));
@@ -198,7 +199,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
 
     public void callAddOwner(FeedDetail feedDetail, Long userid) {
         feedUserObject = feedDetail;
-        Long communityid = mFeedDetail.getIdOfEntityOrParticipant();
+        Long communityid = mCommunityFeedObj.getIdOfEntityOrParticipant();
         createCommunityPresenter.postCreateCommunityOwner(mAppUtils.inviteOwnerRequestBuilder(communityid, userid));
     }
 
@@ -210,7 +211,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
         (getActivity()).getSupportFragmentManager().popBackStack();
-        ((CommunitiesDetailActivity) getActivity()).communityOpenAboutFragment(mFeedDetail);
+        ((CommunitiesDetailActivity) getActivity()).communityOpenAboutFragment(mCommunityFeedObj);
     }
 
     public void onAddMemberClick(FeedDetail feedDetail) {
@@ -262,7 +263,7 @@ public class InviteCommunityOwner extends BaseFragment implements CommunityView,
     public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
         switch (createCommunityOwnerResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mFeedDetail.setNoOfMembers(mFeedDetail.getNoOfMembers() + 1);
+                mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
                 feedUserObject.setTrending(true);
                 mAdapter.notifyItemChanged(feedUserObject.getItemPosition(), feedUserObject);
                 if (mRecyclerView.getItemAnimator() instanceof SimpleItemAnimator) {

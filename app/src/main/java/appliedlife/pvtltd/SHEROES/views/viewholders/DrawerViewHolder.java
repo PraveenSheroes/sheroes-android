@@ -34,13 +34,12 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     AppCompatImageView tvDrawerImage;
     @Bind(R.id.ll_drawer_item)
     LinearLayout llDrawerItem;
-    private static int selectedIndex = -1;
+    public static int selectedIndex = -1;
 
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
-        //selectedIndex = -1;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
 
@@ -53,13 +52,18 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
 
-        setImageBackground(context, dataItem.getMenuItemIconUrl());
-
-        if(selectedIndex !=-1 && selectedIndex == position) {
-            tvDrawerImage.setColorFilter(context.getResources().getColor(R.color.red));
-        } else{
-            tvDrawerImage.setColorFilter(context.getResources().getColor(R.color.feed_article_label));
+        String iconUrl = dataItem.getMenuItemIconUrl();   //default icon
+        if(StringUtil.isNotNullOrEmptyString(iconUrl)) {
+            setImageBackground(context, iconUrl);
         }
+
+        if(selectedIndex!=-1 && selectedIndex == position) {
+            String iconSelectedUrl = dataItem.getMenuItemIconUrlSelected();  //Selected icon
+            if(StringUtil.isNotNullOrEmptyString(iconSelectedUrl)) {
+                setImageBackground(context, iconSelectedUrl);
+            }
+        }
+
     }
 
     //set the image icon and cache it

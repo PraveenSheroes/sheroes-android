@@ -51,10 +51,10 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -173,7 +173,7 @@ public class HomeFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             isChallenge = bundle.getBoolean(ContestActivity.IS_CHALLENGE, false);
-            mFeedDetail = bundle.getParcelable(AppConstants.HOME_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_FRAGMENT));
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         if(isChallenge){
@@ -255,7 +255,7 @@ public class HomeFragment extends BaseFragment {
                     }else {
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-                        mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+                        mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder(TAG), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
                         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
                     }
                 }
@@ -365,7 +365,7 @@ public class HomeFragment extends BaseFragment {
         }else {
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-            mHomePresenter.getHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder("feed"), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
+            mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, challengetRequestBuilder("feed"), mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
             mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
             mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         }
@@ -414,7 +414,7 @@ public class HomeFragment extends BaseFragment {
                         if (mIsSpam) {
                             commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
                         } else {
-                            feedDetail.setSpamPost(false);
+                            ((UserPostSolrObj)feedDetail).setSpamPost(false);
                             commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
                     } catch (CloneNotSupportedException e) {
@@ -483,7 +483,7 @@ public class HomeFragment extends BaseFragment {
                                     }
                                     challengeDataItemList.remove(mChallengeDataItem.getItemPosition());
                                     challengeDataItemList.add(mChallengeDataItem.getItemPosition(), mChallengeDataItem);
-                                    challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
+                                    //challengeFeedDetail.setNoOfMembers(mChallengeDataItem.getItemPosition());
                                     challengeFeedDetail.setChallengeDataItems(challengeDataItemList);
                                     break;
                                 }

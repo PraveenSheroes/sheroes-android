@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -70,12 +72,12 @@ public class OwnerRemoveDialog extends BaseDialogFragment implements CommunityVi
         if (null != getArguments()) {
             isOwner = getArguments().getBoolean(AppConstants.COMMUNITY_POST_FRAGMENT);
             if (isOwner) {
-                mOwner = getArguments().getParcelable(AppConstants.OWNER_SUB_TYPE);
+                mOwner = Parcels.unwrap(getArguments().getParcelable(AppConstants.OWNER_SUB_TYPE));
                 if (null != mOwner) {
                     tv_owner_name.setText(mOwner.getName());
                 }
             } else {
-                members = getArguments().getParcelable(AppConstants.MEMBER);
+                members = Parcels.unwrap(getArguments().getParcelable(AppConstants.MEMBER));
                 community_id = getArguments().getLong(AppConstants.COMMUNITY_DETAIL);
                 if (null != members) {
                     tv_owner_name.setText(members.getCommunityUserFirstName());

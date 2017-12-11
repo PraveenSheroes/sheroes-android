@@ -1,16 +1,17 @@
 package appliedlife.pvtltd.SHEROES.models.entities.home;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
+
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 
 /**
  * Created by Praveen_Singh on 26-07-2017.
  */
-
-public class AppIntroData implements Parcelable {
+@Parcel(analyze = {AppIntroData.class})
+public class AppIntroData{
     @SerializedName("value")
     @Expose
     private int value;
@@ -77,43 +78,4 @@ public class AppIntroData implements Parcelable {
     public void setImageLinkUrl(String imageLinkUrl) {
         this.imageLinkUrl = imageLinkUrl;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.value);
-        dest.writeString(this.label);
-        dest.writeString(this.category);
-        dest.writeString(this.designation);
-        dest.writeString(this.description);
-        dest.writeString(this.imageLinkUrl);
-    }
-
-    public AppIntroData() {
-    }
-
-    protected AppIntroData(Parcel in) {
-        this.value = in.readInt();
-        this.label = in.readString();
-        this.category = in.readString();
-        this.designation = in.readString();
-        this.description = in.readString();
-        this.imageLinkUrl = in.readString();
-    }
-
-    public static final Parcelable.Creator<AppIntroData> CREATOR = new Parcelable.Creator<AppIntroData>() {
-        @Override
-        public AppIntroData createFromParcel(Parcel source) {
-            return new AppIntroData(source);
-        }
-
-        @Override
-        public AppIntroData[] newArray(int size) {
-            return new AppIntroData[size];
-        }
-    };
 }

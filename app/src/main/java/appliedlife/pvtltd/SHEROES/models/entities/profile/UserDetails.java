@@ -1,20 +1,20 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Date;
+import org.parceler.Parcel;
+
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 
 /**
  * Created by sheroes on 29/03/17.
  */
-public class UserDetails implements Parcelable {
+@Parcel(analyze = {UserDetails.class})
+public class UserDetails{
     @SerializedName("id")
     @Expose
     private long id;
@@ -671,149 +671,4 @@ public class UserDetails implements Parcelable {
     public void setTravelFlexibility(int travelFlexibility) {
         this.travelFlexibility = travelFlexibility;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
-        dest.writeLong(this.participantId);
-        dest.writeInt(this.userTypeId);
-        dest.writeLong(this.cityMasterId);
-        dest.writeString(this.cityMaster);
-        dest.writeString(this.emailid);
-        dest.writeString(this.mobile);
-        dest.writeString(this.firstName);
-        dest.writeString(this.lastName);
-        dest.writeString(this.address);
-        dest.writeString(this.crdt);
-        dest.writeString(this.lastLogin);
-        dest.writeString(this.lastModifiedOn);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeString(this.photoUrlPath);
-        dest.writeLong(this.jobFunctionId);
-        dest.writeString(this.maritalStatus);
-        dest.writeValue(this.dob);
-        dest.writeLong(this.sectorId);
-        dest.writeString(this.jobTitle);
-        dest.writeLong(this.employmentTypeId);
-        dest.writeInt(this.totalExp);
-        dest.writeInt(this.totalExpMonth);
-        dest.writeString(this.personalBios);
-        dest.writeString(this.interest);
-        dest.writeString(this.industry);
-        dest.writeLong(this.opportunityTypeId);
-        dest.writeLong(this.jobTagId);
-        dest.writeLong(this.companyProfileid);
-        dest.writeLong(this.profileWeight);
-        dest.writeByte(this.isEmailVerified ? (byte) 1 : (byte) 0);
-        dest.writeString(this.gender);
-        dest.writeByte(this.isCompanyAdmin ? (byte) 1 : (byte) 0);
-        dest.writeString(this.department);
-        dest.writeString(this.year);
-        dest.writeString(this.collage);
-        dest.writeInt(this.userJobViewCount);
-        dest.writeInt(this.userJobApplyCount);
-        dest.writeString(this.pincode);
-        dest.writeDouble(this.latitude);
-        dest.writeDouble(this.longitude);
-        dest.writeString(this.numberOfFollowers);
-        dest.writeInt(this.currentCtc);
-        dest.writeString(this.userSummary);
-        dest.writeString(this.name);
-        dest.writeString(this.twitterUsername);
-        dest.writeInt(this.noOfChildren);
-        dest.writeLong(this.profileId);
-        dest.writeString(this.tag);
-        dest.writeTypedList(this.skills);
-        dest.writeTypedList(this.interests);
-        dest.writeTypedList(this.opportunityTypes);
-        dest.writeTypedList(this.language);
-        dest.writeTypedList(this.canHelpIns);
-        dest.writeString(this.sector);
-        dest.writeString(this.employmentType);
-        dest.writeString(this.jobFunction);
-        dest.writeString(this.jobTag);
-        dest.writeInt(this.travelFlexibility);
-    }
-
-    public UserDetails() {
-    }
-
-    protected UserDetails(Parcel in) {
-        this.id = in.readLong();
-        this.participantId = in.readLong();
-        this.userTypeId = in.readInt();
-        this.cityMasterId = in.readLong();
-        this.cityMaster = in.readString();
-        this.emailid = in.readString();
-        this.mobile = in.readString();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
-        this.address = in.readString();
-        this.crdt = in.readString();
-        this.lastLogin = in.readString();
-        this.lastModifiedOn = in.readString();
-        this.isActive = in.readByte() != 0;
-        this.photoUrlPath = in.readString();
-        this.jobFunctionId = in.readLong();
-        this.maritalStatus = in.readString();
-        this.dob = (Long) in.readValue(Long.class.getClassLoader());
-        this.sectorId = in.readLong();
-        this.jobTitle = in.readString();
-        this.employmentTypeId = in.readLong();
-        this.totalExp = in.readInt();
-        this.totalExpMonth = in.readInt();
-        this.personalBios = in.readString();
-        this.interest = in.readString();
-        this.industry = in.readString();
-        this.opportunityTypeId = in.readLong();
-        this.jobTagId = in.readLong();
-        this.companyProfileid = in.readLong();
-        this.profileWeight = in.readLong();
-        this.isEmailVerified = in.readByte() != 0;
-        this.gender = in.readString();
-        this.isCompanyAdmin = in.readByte() != 0;
-        this.department = in.readString();
-        this.year = in.readString();
-        this.collage = in.readString();
-        this.userJobViewCount = in.readInt();
-        this.userJobApplyCount = in.readInt();
-        this.pincode = in.readString();
-        this.latitude = in.readDouble();
-        this.longitude = in.readDouble();
-        this.numberOfFollowers = in.readString();
-        this.currentCtc = in.readInt();
-        this.userSummary = in.readString();
-        this.name = in.readString();
-        this.twitterUsername = in.readString();
-        this.noOfChildren = in.readInt();
-        this.profileId = in.readLong();
-        this.tag = in.readString();
-        this.skills = in.createTypedArrayList(LabelValue.CREATOR);
-        this.interests = in.createTypedArrayList(LabelValue.CREATOR);
-        this.opportunityTypes = in.createTypedArrayList(LabelValue.CREATOR);
-        this.language = in.createTypedArrayList(LabelValue.CREATOR);
-        this.canHelpIns = in.createTypedArrayList(LabelValue.CREATOR);
-        this.sector = in.readString();
-        this.employmentType = in.readString();
-        this.jobFunction = in.readString();
-        this.jobTag = in.readString();
-        this.travelFlexibility = in.readInt();
-    }
-
-    public static final Parcelable.Creator<UserDetails> CREATOR = new Parcelable.Creator<UserDetails>() {
-        @Override
-        public UserDetails createFromParcel(Parcel source) {
-            return new UserDetails(source);
-        }
-
-        @Override
-        public UserDetails[] newArray(int size) {
-            return new UserDetails[size];
-        }
-    };
 }

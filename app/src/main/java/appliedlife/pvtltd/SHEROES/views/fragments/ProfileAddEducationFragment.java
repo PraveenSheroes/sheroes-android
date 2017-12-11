@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -101,7 +103,7 @@ public class ProfileAddEducationFragment extends BaseFragment implements Profile
 
         if(null !=getArguments())
         {
-             myProfileView=getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
+             myProfileView= Parcels.unwrap(getArguments().getParcelable(AppConstants.EDUCATION_PROFILE));
 
             List<EducationEntity> educationEntity=this.myProfileView.getEducationEntity();
 

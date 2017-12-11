@@ -4,18 +4,19 @@ package appliedlife.pvtltd.SHEROES.models.entities.feed;
  * Created by Praveen_Singh on 10-02-2017.
  */
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import org.parceler.Parcel;
+
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 
-public class FeedRequestPojo extends BaseRequest implements Parcelable {
+@Parcel(analyze = {FeedRequestPojo.class,BaseRequest.class})
+public class FeedRequestPojo extends BaseRequest{
 
     @SerializedName("posting_date_dt")
     @Expose
@@ -230,65 +231,4 @@ public class FeedRequestPojo extends BaseRequest implements Parcelable {
     public void setPostingDate(String postingDate) {
         this.postingDate = postingDate;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.postingDate);
-        dest.writeByte(this.isSpamPost ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.idForFeedDetail);
-        dest.writeByte(this.onlyActive ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isAcceptedOrActive ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.autherId);
-        dest.writeString(this.subType);
-        dest.writeString(this.question);
-        dest.writeStringList(this.articleCategories);
-        dest.writeList(this.categoryIds);
-        dest.writeValue(this.communityId);
-        dest.writeStringList(this.cities);
-        dest.writeValue(this.experienceFrom);
-        dest.writeValue(this.experienceTo);
-        dest.writeStringList(this.functionalAreas);
-        dest.writeStringList(this.opportunityTypes);
-        dest.writeStringList(this.skills);
-        dest.writeValue(this.sourceEntityId);
-    }
-
-    protected FeedRequestPojo(Parcel in) {
-        this.postingDate = in.readString();
-        this.isSpamPost = in.readByte() != 0;
-        this.idForFeedDetail = (Long) in.readValue(Long.class.getClassLoader());
-        this.onlyActive = in.readByte() != 0;
-        this.isAcceptedOrActive = in.readByte() != 0;
-        this.autherId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.subType = in.readString();
-        this.question = in.readString();
-        this.articleCategories = in.createStringArrayList();
-        this.categoryIds = new ArrayList<Long>();
-        in.readList(this.categoryIds, Long.class.getClassLoader());
-        this.communityId = (Long) in.readValue(Long.class.getClassLoader());
-        this.cities = in.createStringArrayList();
-        this.experienceFrom = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.experienceTo = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.functionalAreas = in.createStringArrayList();
-        this.opportunityTypes = in.createStringArrayList();
-        this.skills = in.createStringArrayList();
-        this.sourceEntityId = (Integer) in.readValue(Integer.class.getClassLoader());
-    }
-
-    public static final Creator<FeedRequestPojo> CREATOR = new Creator<FeedRequestPojo>() {
-        @Override
-        public FeedRequestPojo createFromParcel(Parcel source) {
-            return new FeedRequestPojo(source);
-        }
-
-        @Override
-        public FeedRequestPojo[] newArray(int size) {
-            return new FeedRequestPojo[size];
-        }
-    };
 }

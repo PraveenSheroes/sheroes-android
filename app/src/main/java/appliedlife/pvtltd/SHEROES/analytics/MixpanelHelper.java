@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.mixpanel.android.mpmetrics.MixpanelAPI.People;
 
 import org.json.JSONObject;
 
@@ -22,11 +21,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 
 @Singleton
 public class MixpanelHelper {
@@ -91,7 +87,6 @@ public class MixpanelHelper {
             }*/
 
             mixpanel.registerSuperPropertiesOnce(superPropertiesBuilder.build());
-
             if (userSummary.getUserBO().getInterestLabel() != null && !userSummary.getUserBO().getInterestLabel().isEmpty()) {
                 mixpanel.getPeople().set(PeopleProperty.INTEREST.getString(), userSummary.getUserBO().getInterestLabel());
             }

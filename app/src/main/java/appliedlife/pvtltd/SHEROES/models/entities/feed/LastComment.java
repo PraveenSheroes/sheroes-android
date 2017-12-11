@@ -1,16 +1,17 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 /**
  * Created by Praveen_Singh on 14-02-2017.
  */
-
-public class LastComment implements Parcelable {
+@Parcel(analyze = {LastComment.class})
+public class LastComment{
 
     @SerializedName("id")
     @Expose
@@ -210,59 +211,4 @@ public class LastComment implements Parcelable {
         isVerifiedMentor = verifiedMentor;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeInt(this.entityId);
-        dest.writeInt(this.participantId);
-        dest.writeInt(this.commentsId);
-        dest.writeInt(this.participationTypeId);
-        dest.writeString(this.createdOn);
-        dest.writeString(this.lastModifiedOn);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isAnonymous ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.likeValue);
-        dest.writeString(this.comment);
-        dest.writeString(this.participantName);
-        dest.writeString(this.participantImageUrl);
-        dest.writeInt(this.entityAuthorUserIdL);
-        dest.writeByte(this.myOwnParticipation ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
-    }
-
-    protected LastComment(Parcel in) {
-        this.id = in.readInt();
-        this.entityId = in.readInt();
-        this.participantId = in.readInt();
-        this.commentsId = in.readInt();
-        this.participationTypeId = in.readInt();
-        this.createdOn = in.readString();
-        this.lastModifiedOn = in.readString();
-        this.isActive = in.readByte() != 0;
-        this.isAnonymous = in.readByte() != 0;
-        this.likeValue = in.readInt();
-        this.comment = in.readString();
-        this.participantName = in.readString();
-        this.participantImageUrl = in.readString();
-        this.entityAuthorUserIdL = in.readInt();
-        this.myOwnParticipation = in.readByte() != 0;
-        this.isVerifiedMentor = in.readByte() != 0;
-    }
-
-    public static final Creator<LastComment> CREATOR = new Creator<LastComment>() {
-        @Override
-        public LastComment createFromParcel(Parcel source) {
-            return new LastComment(source);
-        }
-
-        @Override
-        public LastComment[] newArray(int size) {
-            return new LastComment[size];
-        }
-    };
 }

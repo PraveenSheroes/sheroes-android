@@ -1,17 +1,17 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
  * Created by sheroes on 29/03/17.
  */
-public class EducationEntity extends BaseResponse implements Parcelable{
+@Parcel(analyze = {EducationEntity.class})
+public class EducationEntity extends BaseResponse{
     @SerializedName("id")
     @Expose
     private long id;
@@ -236,75 +236,4 @@ public class EducationEntity extends BaseResponse implements Parcelable{
     @SerializedName("grade")
     @Expose
     private String grade;
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeLong(this.id);
-        dest.writeLong(this.fieldOfStudyMasterId);
-        dest.writeLong(this.degreeNameMasterId);
-        dest.writeLong(this.schoolNameMasterId);
-        dest.writeString(this.school);
-        dest.writeInt(this.sessionStartYear);
-        dest.writeInt(this.sessionEndYear);
-        dest.writeInt(this.sessionStartMonth);
-        dest.writeInt(this.sessionEndMonth);
-        dest.writeString(this.degree);
-        dest.writeString(this.fieldOfStudy);
-        dest.writeString(this.description);
-        dest.writeString(this.activities);
-        dest.writeInt(this.displayOrder);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeString(this.tag);
-        dest.writeParcelable(this.educationEntity, flags);
-        dest.writeValue(this.isCurrentlyAttending);
-        dest.writeValue(this.isGrade);
-        dest.writeString(this.maxGrade);
-        dest.writeString(this.grade);
-    }
-
-    public EducationEntity() {
-    }
-
-    protected EducationEntity(Parcel in) {
-        super(in);
-        this.id = in.readLong();
-        this.fieldOfStudyMasterId = in.readLong();
-        this.degreeNameMasterId = in.readLong();
-        this.schoolNameMasterId = in.readLong();
-        this.school = in.readString();
-        this.sessionStartYear = in.readInt();
-        this.sessionEndYear = in.readInt();
-        this.sessionStartMonth = in.readInt();
-        this.sessionEndMonth = in.readInt();
-        this.degree = in.readString();
-        this.fieldOfStudy = in.readString();
-        this.description = in.readString();
-        this.activities = in.readString();
-        this.displayOrder = in.readInt();
-        this.isActive = in.readByte() != 0;
-        this.tag = in.readString();
-        this.educationEntity = in.readParcelable(EducationEntity.class.getClassLoader());
-        this.isCurrentlyAttending = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.isGrade = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.maxGrade = in.readString();
-        this.grade = in.readString();
-    }
-
-    public static final Creator<EducationEntity> CREATOR = new Creator<EducationEntity>() {
-        @Override
-        public EducationEntity createFromParcel(Parcel source) {
-            return new EducationEntity(source);
-        }
-
-        @Override
-        public EducationEntity[] newArray(int size) {
-            return new EducationEntity[size];
-        }
-    };
 }

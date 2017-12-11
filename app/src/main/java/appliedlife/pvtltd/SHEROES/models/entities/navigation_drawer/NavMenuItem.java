@@ -28,6 +28,9 @@ public class NavMenuItem extends BaseResponse{
     @SerializedName("menu_item_icon_url")
     @Expose
     private String menuItemIconUrl;
+    @SerializedName("menu_item_icon_selected_url")
+    @Expose
+    private String menuItemIconUrlSelected;
     @SerializedName("is_native")
     @Expose
     private boolean isNative;
@@ -99,4 +102,11 @@ public class NavMenuItem extends BaseResponse{
         this.menuItemIconUrl = menuItemIconUrl;
     }
 
+    public String getMenuItemIconUrlSelected() {
+        return menuItemIconUrlSelected;
+    }
+
+    public void setMenuItemIconUrlSelected(String menuItemIconUrlSelected) {
+        this.menuItemIconUrlSelected = menuItemIconUrlSelected;
+    }
 }

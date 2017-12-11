@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -130,7 +132,7 @@ public class CommunitySearchTagsDialogFragment extends BaseDialogFragment implem
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ALL_SEARCH, AppConstants.NO_REACTION_CONSTANT);
 
         if (null != getArguments()) {
-            mFeedDetail = getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL);
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITIES_DETAIL));
             encImage = getArguments().getString(AppConstants.COVER_IMAGE);
         }
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {

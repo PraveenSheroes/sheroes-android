@@ -1,15 +1,15 @@
 package appliedlife.pvtltd.SHEROES.models.entities.onboarding;
 
-import android.os.Parcel;
-
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
  * Created by Praveen on 16/11/17.
  */
-
+@Parcel(analyze = {LookingForLabelValues.class})
 public class LookingForLabelValues extends BaseResponse {
     @SerializedName("value")
     long value;
@@ -72,42 +72,4 @@ public class LookingForLabelValues extends BaseResponse {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeLong(this.value);
-        dest.writeString(this.label);
-        dest.writeString(this.desc);
-        dest.writeString(this.imgUrl);
-        dest.writeInt(this.position);
-        dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
-    }
-
-    protected LookingForLabelValues(Parcel in) {
-        super(in);
-        this.value = in.readLong();
-        this.label = in.readString();
-        this.desc = in.readString();
-        this.imgUrl = in.readString();
-        this.position = in.readInt();
-        this.isSelected = in.readByte() != 0;
-    }
-
-    public static final Creator<LookingForLabelValues> CREATOR = new Creator<LookingForLabelValues>() {
-        @Override
-        public LookingForLabelValues createFromParcel(Parcel source) {
-            return new LookingForLabelValues(source);
-        }
-
-        @Override
-        public LookingForLabelValues[] newArray(int size) {
-            return new LookingForLabelValues[size];
-        }
-    };
 }

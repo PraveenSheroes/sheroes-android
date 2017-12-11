@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -88,7 +90,7 @@ public class ProfileAboutMeFragment extends BaseFragment implements ProfileView 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         try {
-            mProfileView = (MyProfileView) getArguments().getParcelable(AppConstants.MODEL_KEY);
+            mProfileView = (MyProfileView) Parcels.unwrap(getArguments().getParcelable(AppConstants.MODEL_KEY));
         } catch (ClassCastException ex) {
             LogUtils.error(TAG, "Error while casting MyProfileView", ex);
         }

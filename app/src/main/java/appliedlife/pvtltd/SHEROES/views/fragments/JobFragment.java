@@ -161,7 +161,7 @@ public class JobFragment extends BaseFragment {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT) {
-                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
             }
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);

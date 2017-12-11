@@ -53,6 +53,8 @@ import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -79,8 +81,11 @@ import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -129,6 +134,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDial
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -257,6 +263,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             isSheUser = true;
         }
         renderHomeFragmentView();
+        assignNavigationRecyclerListView();
 
         if(isSheUser && startedFirstTime()) {
             openHelplineFragment();
@@ -280,14 +287,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     renderFAQSView();
                 } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)){
                     renderICCMemberListView();
-                }
-
-
-            }
-
-            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
-                    growthBuddiesInPublicProfile();
                 }
             }
         }
@@ -386,6 +385,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+    private void assignNavigationRecyclerListView() {
+        mAdapter = new GenericRecyclerViewAdapter(this, this);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -422,6 +428,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             if(null!=profile) {
                 ivDrawerProfileCircleIcon.setCircularImage(true);
+                ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.default_img);
+                ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.default_img);
                 ivDrawerProfileCircleIcon.bindImage(profile);
             }
             String profileUserName = getResources().getString(R.string.PLACEHOLDER_PROFILE_USER_NAME, mUserPreference.get().getUserSummary().getFirstName(), mUserPreference.get().getUserSummary().getLastName());
@@ -696,6 +704,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
 
@@ -721,7 +730,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         if (url.contains(getString(R.string.logoutUrl))) {
             logOut();
-        } else if (url.contains("#") || url.equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
+        } else if (url.contains("#") && navMenuItem.getMenuName().equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
             inviteMyCommunityDialog();
         } else {
             if (navMenuItem.isNative()) {
@@ -754,9 +763,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 break;
             case R.id.share:
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
+                String sourceId = "";
+                if(baseResponse instanceof UserPostSolrObj){
+                    sourceId = Long.toString(((UserPostSolrObj)baseResponse).getUserPostSourceEntityId());
+                }else if(baseResponse instanceof ChallengeSolrObj){
+                    sourceId = Long.toString(((ChallengeSolrObj)baseResponse).getIdOfEntityOrParticipant());
+                }
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
-                                .id(Long.toString(((FeedDetail) baseResponse).getUserPostSourceEntityId()))
+                                .id(sourceId)
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED, properties);
                 ShareBottomSheetFragment.showDialog(this, shareText,((FeedDetail) baseResponse).getThumbnailImageUrl(),  ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true,  ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
@@ -785,7 +800,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 break;
             default:
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
-                mFragmentOpen.setOwner(mFeedDetail.isCommunityOwner());
+                if (mFeedDetail instanceof UserPostSolrObj) {
+                    mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
+                }
                 setAllValues(mFragmentOpen);
                 setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
                 super.feedCardsHandled(view, baseResponse);
@@ -814,12 +831,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void openMentorProfileDetail(MentorDetailItem mentorDetailItem) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        mFeedDetail = new FeedDetail();
-        mFeedDetail.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(mentorDetailItem.getEntityOrParticipantId());
         //   mFeedDetail.setIdOfEntityOrParticipant(157);
-        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, mentorDetailItem);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        mFeedDetail = communityFeedSolrObj;
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        Parcelable parcelableMentor = Parcels.wrap(mentorDetailItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -909,7 +929,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (updateProgressDialogFragment == null) {
             updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, challengeDataItem);
+            Parcelable parcelable = Parcels.wrap(challengeDataItem);
+            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, parcelable);
             updateProgressDialogFragment.setArguments(bundle);
         }
         if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -929,7 +950,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mChallengeSuccessDialogFragment == null) {
             mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.SUCCESS, challengeDataItem);
+            Parcelable parcelable = Parcels.wrap(challengeDataItem);
+            bundle.putParcelable(AppConstants.SUCCESS, parcelable);
             mChallengeSuccessDialogFragment.setArguments(bundle);
         }
         if (!mChallengeSuccessDialogFragment.isVisible() && !mChallengeSuccessDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -943,7 +965,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             eventDetailDialogFragment = new EventDetailDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putLong(AppConstants.EVENT_ID, eventID);
-            bundle.putParcelable(AppConstants.EVENT_DETAIL, mFeedDetail);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
             eventDetailDialogFragment.setArguments(bundle);
         }
         if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
@@ -971,12 +994,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void notifyNavigationDrawerItems(List<NavMenuItem> menuItems) {
-        mAdapter = new GenericRecyclerViewAdapter(this, this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setSheroesGenericListData(menuItems);
-        mAdapter.notifyDataSetChanged();
+        if(mRecyclerView!=null && mAdapter!=null) {
+            mAdapter.setSheroesGenericListData(menuItems);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -1047,7 +1068,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.HOME_FRAGMENT, parcelable);
         bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
         homeFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
@@ -1065,7 +1087,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void searchButtonClick() {
         Intent intent = new Intent(this, HomeSearchActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(AppConstants.ALL_SEARCH, mFragmentOpen);
+        Parcelable parcelable = Parcels.wrap(mFragmentOpen);
+        bundle.putParcelable(AppConstants.ALL_SEARCH, parcelable);
         intent.putExtras(bundle);
         startActivity(intent);
     }
@@ -1081,13 +1104,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
             mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
-            bundle.putParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT, (ArrayList<? extends Parcelable>) mHomeSpinnerItemList);
+            Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
+            bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
             mArticleCategorySpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
+        resetHamburgerSelectedItems();
         mFragmentOpen.setFeedOpen(true);
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
@@ -1095,6 +1120,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTabLayout.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         initHomeViewPagerAndTabs();
+    }
+
+    private void resetHamburgerSelectedItems() { //Reset navigation drawer selected item
+        DrawerViewHolder.selectedIndex = -1;
+        if (null != mAdapter) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public void homeButtonUi() {
@@ -1148,6 +1180,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.tv_job_home)
     public void jobOnClick() {
+        resetHamburgerSelectedItems();
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
@@ -1166,6 +1199,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
+        resetHamburgerSelectedItems();
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         flFeedFullView.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
@@ -1304,7 +1338,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         setAllValues(mFragmentOpen);
         BookmarksFragment bookmarksFragment = new BookmarksFragment();
         Bundle bundleBookMarks = new Bundle();
-        bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, mFeedDetail);
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, parcelable);
         bookmarksFragment.setArguments(bundleBookMarks);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -1444,6 +1479,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+         resetHamburgerSelectedItems();
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
@@ -1507,11 +1543,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void checkPublicProfileMentorFollow(Intent intent) {
         if (null != mPublicProfileGrowthBuddiesDialogFragment) {
             if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                MentorDetailItem mentorDetailItem = (MentorDetailItem) intent.getExtras().get(AppConstants.GROWTH_PUBLIC_PROFILE);
+                MentorDetailItem mentorDetailItem = (MentorDetailItem)Parcels.unwrap(intent.getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
                 mPublicProfileGrowthBuddiesDialogFragment.notifyList(mentorDetailItem);
                 if (mFragmentOpen.getChampionViaCommentReaction() != AppConstants.ONE_CONSTANT) {
                     mFragmentOpen.setChampionViaCommentReaction(AppConstants.NO_REACTION_CONSTANT);
-                    FeedDetail feedDetail = intent.getParcelableExtra(AppConstants.FEED_SCREEN);
+                    FeedDetail feedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
@@ -1551,7 +1587,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void editCommunityPostResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITY_POST_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
             if (null != mFeedDetail) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -1571,7 +1607,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void createCommunityActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
             if (AppUtils.isFragmentUIActive(community)) {
                 if (null != mFeedDetail) {
@@ -1585,7 +1622,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void articleDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
+            mFeedDetail =(FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
             if (mFragmentOpen.isArticleFragment()) {
                 Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentArticle)) {
@@ -1614,7 +1652,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void jobDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
+            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
             if (mFragmentOpen.isJobFragment()) {
                 Fragment fragmentJob = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentJob)) {
@@ -1630,8 +1669,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras() && null != (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
-            mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
+        if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
+            CommunityFeedSolrObj communityFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
             CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
             if (null != communityEnum) {
                 switch (communityEnum) {
@@ -1641,29 +1680,29 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         }
                         Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(feature)) {
-                            if (mFeedDetail.isFeatured() && mFeedDetail.isMember()) {
+                            if (communityFeedSolrObj.isFeatured() && communityFeedSolrObj.isMember()) {
                                 communityOnClick();
                             } else {
-                                ((FeaturedFragment) feature).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                ((FeaturedFragment) feature).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                             }
                         }
                         break;
                     case MY_COMMUNITY:
-                        if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getCallFromName()) && mFeedDetail.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+                        if (StringUtil.isNotNullOrEmptyString(communityFeedSolrObj.getCallFromName()) && communityFeedSolrObj.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
                             communityOnClick();
                         } else {
                             if (null != mViewPagerAdapter) {
                                 Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
                                 if (AppUtils.isFragmentUIActive(community)) {
-                                    ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                    ((MyCommunitiesFragment) community).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                 }
                             } else {
-                                if (mFeedDetail.isViewed()) {
+                                if (communityFeedSolrObj.isViewed()) {
                                     homeOnClick();
                                 } else {
                                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                                     if (AppUtils.isFragmentUIActive(fragment)) {
-                                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                                        ((HomeFragment) fragment).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                                     }
                                 }
                             }
@@ -1801,11 +1840,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void championDetailActivity(Long userId, int position) {
         Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        mFeedDetail = new FeedDetail();
-        mFeedDetail.setIdOfEntityOrParticipant(userId);
-        mFeedDetail.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        mFeedDetail.setItemPosition(position);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, mFeedDetail);
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        mFeedDetail = communityFeedSolrObj;
+        Parcelable parcelable = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
 
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtras(bundle);
@@ -1833,7 +1874,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void getNavigationDrawerItemsFailed() {
-        pbNavDrawer.setVisibility(View.GONE);
+        if(null!= pbNavDrawer) {
+            pbNavDrawer.setVisibility(View.GONE);
+        }
+
         String stringContent = "";
         if (isSheUser) {
             stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_SHE_FILE_NAME); //read from local file

@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -104,7 +106,7 @@ public class ProfileAddEditEducationFragment extends BaseDialogFragment implemen
 
         if (null != getArguments()) {
 
-            educationEntity = getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
+            educationEntity = Parcels.unwrap(getArguments().getParcelable(AppConstants.EDUCATION_PROFILE));
 
             if (null != educationEntity) {
                 if (educationEntity.getId() > 0) {

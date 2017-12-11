@@ -1,10 +1,9 @@
 package appliedlife.pvtltd.SHEROES.models.entities.login;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.parceler.Parcel;
 
 import java.util.List;
 
@@ -16,7 +15,8 @@ import java.util.List;
  * @since 29/12/2016.
  * Title:User summary
  */
-public class UserSummary implements Parcelable {
+@Parcel(analyze = {UserSummary.class})
+public class UserSummary{
 
     @SerializedName("user_id")
     @Expose
@@ -147,50 +147,4 @@ public class UserSummary implements Parcelable {
     public void setFbVerificationRequired(boolean fbVerificationRequired) {
         this.fbVerificationRequired = fbVerificationRequired;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.userId);
-        dest.writeString(this.emailId);
-        dest.writeString(this.mobile);
-        dest.writeString(this.firstName);
-        dest.writeString(this.lastName);
-        dest.writeString(this.photoUrl);
-        dest.writeParcelable(this.userBO, flags);
-        dest.writeTypedList(this.educationBO);
-        dest.writeTypedList(this.exprienceBO);
-        dest.writeTypedList(this.projectsBO);
-        dest.writeByte(this.fbVerificationRequired ? (byte) 1 : (byte) 0);
-    }
-
-    protected UserSummary(Parcel in) {
-        this.userId = in.readLong();
-        this.emailId = in.readString();
-        this.mobile = in.readString();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
-        this.photoUrl = in.readString();
-        this.userBO = in.readParcelable(UserBO.class.getClassLoader());
-        this.educationBO = in.createTypedArrayList(EducationEntityBO.CREATOR);
-        this.exprienceBO = in.createTypedArrayList(ExprienceEntityBO.CREATOR);
-        this.projectsBO = in.createTypedArrayList(ProjectEntityBO.CREATOR);
-        this.fbVerificationRequired = in.readByte() != 0;
-    }
-
-    public static final Creator<UserSummary> CREATOR = new Creator<UserSummary>() {
-        @Override
-        public UserSummary createFromParcel(Parcel source) {
-            return new UserSummary(source);
-        }
-
-        @Override
-        public UserSummary[] newArray(int size) {
-            return new UserSummary[size];
-        }
-    };
 }
