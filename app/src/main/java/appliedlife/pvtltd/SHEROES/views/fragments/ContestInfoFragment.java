@@ -1,5 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,6 +14,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -20,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Interpolator;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -81,11 +87,18 @@ public class ContestInfoFragment extends BaseFragment {
 
     @Bind(R.id.response_views_counts)
     TextView mResponseCount;
+
+    @Bind(R.id.contest_status)
+    TextView mContestStatus;
+
+    @Bind(R.id.live_dot)
+    ImageView mLiveDot;
     //endregion
 
     private Contest mContest;
     private WebViewClickListener webViewClickListener = null;
     private boolean showFeatureImage = true;
+    ValueAnimator mAlphaAnimator;
     //endregion
 
     //region fragment lifecycle
@@ -130,6 +143,21 @@ public class ContestInfoFragment extends BaseFragment {
             showAuthorDetails();
             showDaysParticipantsInfo();
             showContestInfo();
+            showContestStatus();
+        }
+    }
+
+    private void showContestStatus() {
+        ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt());
+        if (contestStatus == ContestStatus.ONGOING) {
+            mContestStatus.setText(R.string.contest_status_ongoing);
+            mLiveDot.setImageResource(R.drawable.vector_live_dot);
+            mLiveDot.setVisibility(View.VISIBLE);
+            animateLiveDot();
+            mContestStatus.setVisibility(View.VISIBLE);
+        } else {
+            mContestStatus.setVisibility(View.GONE);
+            mLiveDot.setVisibility(View.GONE);
         }
     }
 
@@ -267,6 +295,19 @@ public class ContestInfoFragment extends BaseFragment {
     public void setContest(Contest contest){
         mContest = contest;
         showContest(contest);
+    }
+
+    private void animateLiveDot(){
+        mAlphaAnimator = ObjectAnimator.ofFloat(mLiveDot, "alpha", 0f, 1f);
+        mAlphaAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mAlphaAnimator.setRepeatCount(Animation.INFINITE);
+        mAlphaAnimator.setDuration(300);
+
+        Interpolator mSelectedInterpolator = new FastOutSlowInInterpolator();
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setInterpolator(mSelectedInterpolator);
+        animatorSet.play(mAlphaAnimator);
+        animatorSet.start();
     }
 
     //endregion

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/root"
@@ -19,12 +21,40 @@
         
         <TextView
             android:id="@+id/contest_tag"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:textColor="#90949c"
-            android:layout_below="@id/image"/>
+            android:textSize="12sp"
+            android:layout_below="@id/image"
+            tools:text="#My Challenge dbajbdsh adbahsj asdb had b"/>
+        <TextView
+            android:id="@+id/contest_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="normal"
+            android:textColor="@color/red"
+            android:textAllCaps="true"
+            android:text="live"
+            android:letterSpacing="0.07" />
+
+        <ImageView
+            android:id="@+id/live_dot"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_below="@+id/image"
+            android:layout_alignBottom="@+id/contest_status"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="7dp"
+            android:src="@drawable/vector_live_dot"
+            android:layout_toLeftOf="@id/contest_status"/>
 
         <TextView
             android:id="@+id/title"

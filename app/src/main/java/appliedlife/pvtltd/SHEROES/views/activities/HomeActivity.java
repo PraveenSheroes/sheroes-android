@@ -270,9 +270,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         if (getIntent() != null) {
             if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
-                    openArticleFragment(setCategoryIds(), false);
-                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
                     communityOnClick();
                 } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)){
                     openJobFragment();
@@ -285,6 +283,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
 
 
+            }
+
+            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
+                    growthBuddiesInPublicProfile();
+                }
             }
         }
     }

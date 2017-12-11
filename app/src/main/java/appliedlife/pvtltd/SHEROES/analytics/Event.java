@@ -57,6 +57,7 @@ public enum Event {
     CHALLENGE_ACCEPTED(AnalyticsEventType.CHALLENGE, "Accepted"),
     CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared"),
     CHALLENGE_COMPLETED(AnalyticsEventType.CHALLENGE, "Completed"),
+    CHALLENGE_SUBMIT_CLICKED(AnalyticsEventType.CHALLENGE, "Submit Clicked"),
     //endregion
 
     //region Community related events

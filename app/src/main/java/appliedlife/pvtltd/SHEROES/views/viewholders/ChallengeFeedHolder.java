@@ -1,39 +1,35 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
-import android.app.Activity;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Interpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.w3c.dom.Text;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import butterknife.Bind;
-import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -70,6 +66,9 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.contest_status)
     TextView mContestStatus;
 
+    @Bind(R.id.live_dot)
+    ImageView mLiveDot;
+
     @Bind(R.id.join_challenge_text)
     TextView mJoinChallengeText;
 
@@ -81,6 +80,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     private FeedDetail mFeedDetail;
     private Context mContext;
 
+    ValueAnimator mAlphaAnimator;
 
     public ChallengeFeedHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -117,17 +117,19 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         if(contestStatus==ContestStatus.ONGOING){
             mContestEndText.setText("Ends" + " " + DateUtil.getRelativeTimeSpanString(mContest.getEndAt()));
             mContestStatus.setText(R.string.contest_status_ongoing);
-            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_live_dot, 0, 0, 0);
+            mLiveDot.setImageResource(R.drawable.vector_live_dot);
+            animateLiveDot();
             mContestStatus.setVisibility(View.VISIBLE);
         }
         if(contestStatus==ContestStatus.UPCOMING){
             mContestStatus.setText(context.getString(R.string.contest_status_upcoming));
+            mLiveDot.setVisibility(View.GONE);
             mContestStatus.setVisibility(View.VISIBLE);
         }
         if(contestStatus==ContestStatus.COMPLETED){
             mContestStatus.setText(context.getString(R.string.contest_status_completed));
             mContestStatus.setTextColor(context.getResources().getColor(R.color.light_green));
-            mContestStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
+            mLiveDot.setImageResource(R.drawable.vector_contest_completed);
             mContestStatus.setVisibility(View.VISIBLE);
         }
         if (mContest.hasMyPost) {
@@ -190,6 +192,19 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void onClick(View view) {
 
+    }
+
+    private void animateLiveDot(){
+        mAlphaAnimator = ObjectAnimator.ofFloat(mLiveDot, "alpha", 0f, 1f);
+        mAlphaAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mAlphaAnimator.setRepeatCount(Animation.INFINITE);
+        mAlphaAnimator.setDuration(300);
+
+        Interpolator mSelectedInterpolator = new FastOutSlowInInterpolator();
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setInterpolator(mSelectedInterpolator);
+        animatorSet.play(mAlphaAnimator);
+        animatorSet.start();
     }
 }
 

@@ -270,11 +270,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         // "Remember to also call the unregister method when
         // appropriate."
         if (trackScreenTime() && shouldTrackScreen()) {
-          /*  Map<String, Object> properties = getExtraPropertiesToTrack();
-            if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
+            Map<String, Object> properties = getExtraPropertiesToTrack();
+            /*if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
                 properties.putAll(mPreviousScreenProperties);
             }*/
-            AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), null);
+            AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
         super.onPause();
     }

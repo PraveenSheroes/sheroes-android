@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -98,6 +99,10 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
 
     @Bind(R.id.title_toolbar)
     TextView toolbarTitle;
+
+
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     @Bind(R.id.bottom_bar)
     FrameLayout mBottomBarView;
@@ -332,34 +337,43 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
     }
 
     private void invalidateBottomBar(int position) {
-        if (mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED) {
+        if (position == FRAGMENT_RESPONSES) {
             mBottomBar.setVisibility(View.GONE);
             mBottomBarView.setVisibility(View.GONE);
             mBottomView.setVisibility(View.GONE);
-        } else {
-            if (position == FRAGMENT_RESPONSES) {
-                if (mContest.hasMyPost) {
-                    mBottomBar.setText(R.string.view_response);
-                } else {
-                    mBottomBar.setText(R.string.submit_response);
-                }
-            } else if (position == FRAGMENT_INFO) {
-                if (mContest.hasMyPost) {
-                    mBottomBar.setText(R.string.view_response);
-                } else {
-                    mBottomBar.setText(R.string.submit_response);
-                }
-            } else if (position == FRAGMENT_WINNER) {
-                if (mContest.isWinnerAnnounced) {
-               /* if (CareServiceHelper.getUser().contestAddress == null) {
-                    mBottomBar.setText(R.string.send_address);
-                } else {
-                    mBottomBar.setText(R.string.change_address);
-                }*/
-                }
+        }else {
+            if(mContest.getContestStatus() == ContestStatus.COMPLETED){
+                mBottomBar.setVisibility(View.VISIBLE);
+                mBottomBarView.setVisibility(View.VISIBLE);
+                mBottomView.setVisibility(View.VISIBLE);
+                mBottomBar.setText(R.string.contest_status_expired);
+                mBottomBar.setTextColor(getResources().getColor(R.color.gray_light));
+                mBottomBarView.setBackgroundResource(R.color.theme);
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            }
+            else if(mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING){
+                mBottomBar.setVisibility(View.VISIBLE);
+                mBottomBarView.setVisibility(View.VISIBLE);
+                mBottomView.setVisibility(View.VISIBLE);
+                mBottomBar.setText("completed");
+                mBottomBar.setTextColor(getResources().getColor(R.color.light_green));
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
+                mBottomBarView.setBackgroundResource(R.color.theme);
+            }else if(!mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING){
+                mBottomBar.setVisibility(View.VISIBLE);
+                mBottomBarView.setVisibility(View.VISIBLE);
+                mBottomView.setVisibility(View.VISIBLE);
+                mBottomBar.setText(R.string.submit_response);
+                mBottomBar.setTextColor(getResources().getColor(R.color.white));
+                mBottomBarView.setBackgroundResource(R.color.red);
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            } else {
+                mBottomBar.setVisibility(View.GONE);
+                mBottomBarView.setVisibility(View.GONE);
+                mBottomView.setVisibility(View.GONE);
+                mBottomBar.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
-
     }
     //endregion
 
@@ -391,12 +405,7 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (contest == null) {
             return;
         }
-        if (contest.hasMyPost || contest.getContestStatus() == ContestStatus.COMPLETED) {
-            mBottomBar.setVisibility(View.GONE);
-            mBottomBarView.setVisibility(View.GONE);
-            mBottomBarView.setVisibility(View.GONE);
-        }
-        invalidateBottomBar(FRAGMENT_RESPONSES);
+        invalidateBottomBar(FRAGMENT_INFO);
     }
 
     @Override
@@ -409,12 +418,17 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
 
     @Override
     public void startProgressBar() {
-
+        mBottomBarView.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
+        mViewPager.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgressBar() {
-
+        mTabLayout.setVisibility(View.VISIBLE);
+        mViewPager.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -558,14 +572,18 @@ public class ContestActivity extends BaseActivity implements IContestView,Commen
         if (mContest == null) {
             return;
         }
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Integer.toString(mContest.remote_id))
+                        .title(mContest.title)
+                        .build();
+        trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
+
         int currentPage = mViewPager.getCurrentItem();
         if (currentPage == FRAGMENT_WINNER && mContest.isWinner) {
            // AddressActivity.navigateTo(this, getScreenName(), CareServiceHelper.getUser().contestAddress, null);
         } else {
-            if (mContest.hasMyPost) {
-                mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
-                mHomeFragment.scrollToMySubmission();
-            } else {
+            if (!(mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED)) {
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.challengeId = mContest.remote_id;
                 communityPost.challengeType = mContest.authorType;
