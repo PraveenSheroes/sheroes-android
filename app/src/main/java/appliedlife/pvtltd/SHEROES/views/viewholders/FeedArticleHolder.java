@@ -29,9 +29,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -110,7 +112,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_feed_article_login_user_name)
     TextView tvFeedArticleLoginUserName;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    ArticleSolrObj articleObj;
     private Context mContext;
     private String mViewMoreDescription;
     private int mItemPosition;
@@ -140,28 +142,37 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        articleObj = new ArticleSolrObj();
+        if (item instanceof ArticleSolrObj) {
+            articleObj = (ArticleSolrObj) item;
+        }
+        if (articleObj == null) {
+            return;
+        }
+
+        //this.dataItem = item;
         this.mContext = context;
         tvFeedArticleUserBookmark.setEnabled(true);
         tvFeedArticleUserReaction.setTag(true);
-        dataItem.setItemPosition(position);
-        dataItem.setLastReactionValue(dataItem.getReactionValue());
-        dataItem.setListDescription(null);
+        articleObj.setItemPosition(position);
+        articleObj .setLastReactionValue(articleObj .getReactionValue());
+        articleObj .setListDescription(null);
         allTextViewStringOperations(context);
         onBookMarkClick();
-        if (!dataItem.isTrending()) {
+        if (!articleObj.isTrending()) {
             imageOperations(context);
         }
-            if (dataItem.getAuthorId() == mUserId || dataItem.isOwner()) {
-                tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
-            } else {
-                tvFeedArticleUserMenu.setVisibility(View.GONE);
-            }
+        // TODO : ujjwal
+        if (articleObj.getAuthorId() == mUserId /*|| articleObj.isOwner()*/) {
+            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
+        } else {
+            tvFeedArticleUserMenu.setVisibility(View.GONE);
+        }
 
     }
 
     private void onBookMarkClick() {
-        if (dataItem.isBookmarked()) {
+        if (articleObj .isBookmarked()) {
             tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
         } else {
             tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
@@ -170,7 +181,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
-        mViewMoreDescription = dataItem.getShortDescription();
+        mViewMoreDescription = articleObj .getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -182,30 +193,30 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
-            tvFeedArticleCardTitle.setText(dataItem.getAuthorName());
+        if (StringUtil.isNotNullOrEmptyString(articleObj .getAuthorName())) {
+            tvFeedArticleCardTitle.setText(articleObj .getAuthorName());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
-            long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
+        if (StringUtil.isNotNullOrEmptyString(articleObj .getCreatedDate())) {
+            long createdDate = mDateUtil.getTimeInMillis(articleObj .getCreatedDate(), AppConstants.DATE_FORMAT);
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
-            if (dataItem.getCharCount() > 0) {
-                stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
+               if (articleObj .getCharCount() > 0) {
+                stringBuilder.append(AppConstants.DOT).append(articleObj .getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
             }
             tvFeedArticleTitleLabel.setText(stringBuilder);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvFeedArticleHeader.setText(dataItem.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(articleObj .getNameOrTitle())) {
+            tvFeedArticleHeader.setText(articleObj .getNameOrTitle());
         }
-        if (dataItem.getNoOfLikes() < AppConstants.ONE_CONSTANT && dataItem.getNoOfComments() < AppConstants.ONE_CONSTANT) {
+        if (articleObj .getNoOfLikes() < AppConstants.ONE_CONSTANT && articleObj .getNoOfComments() < AppConstants.ONE_CONSTANT) {
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             rlFeedArticleNoReactionComment.setVisibility(View.GONE);
             lineForNoImage.setVisibility(View.GONE);
         }
         tvFeedArticleReaction1.setVisibility(View.VISIBLE);
-        switch (dataItem.getNoOfLikes()) {
+        switch (articleObj .getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
-                if (dataItem.getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
+                if (articleObj .getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
                     rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                     lineForNoImage.setVisibility(View.GONE);
                     tvFeedArticleTotalReactions.setVisibility(View.GONE);
@@ -230,11 +241,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 lineForNoImage.setVisibility(View.VISIBLE);
                 userLike();
         }
-        String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, dataItem.getNoOfLikes());
-        tvFeedArticleTotalReactions.setText(String.valueOf(dataItem.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
-        switch (dataItem.getNoOfComments()) {
+        String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, articleObj .getNoOfLikes());
+        tvFeedArticleTotalReactions.setText(String.valueOf(articleObj .getNoOfLikes() + AppConstants.SPACE + pluralLikes));
+        switch (articleObj .getNoOfComments()) {
             case AppConstants.NO_REACTION_CONSTANT:
-                if (dataItem.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
+                if (articleObj .getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
                     rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                     lineForNoImage.setVisibility(View.VISIBLE);
                     tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
@@ -256,13 +267,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 liFeedArticleUserComments.setVisibility(View.VISIBLE);
                 userComments();
         }
-        String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfComments, dataItem.getNoOfComments());
-        tvFeedArticleTotalReplies.setText(String.valueOf(dataItem.getNoOfComments() + AppConstants.SPACE + pluralComments));
+        String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfComments, articleObj .getNoOfComments());
+        tvFeedArticleTotalReplies.setText(String.valueOf(articleObj .getNoOfComments() + AppConstants.SPACE + pluralComments));
     }
 
     private void userLike() {
 
-        switch (dataItem.getReactionValue()) {
+        switch (articleObj .getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
 
@@ -284,13 +295,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
                 break;
             default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + dataItem.getReactionValue());
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + articleObj .getReactionValue());
         }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void userComments() {
-        List<Comment> lastCommentList = dataItem.getLastComments();
+        List<Comment> lastCommentList = articleObj .getLastComments();
         Comment lastComment;
         if (StringUtil.isNotEmptyCollection(lastCommentList)) {
             mItemPosition = lastCommentList.size() - 1;
@@ -356,7 +367,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void imageOperations(Context context) {
-        String feedCircleIconUrl = dataItem.getAuthorImageUrl();
+        String feedCircleIconUrl = articleObj .getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivFeedArticleCircleIcon.setCircularImage(true);
             ivFeedArticleCircleIcon.bindImage(feedCircleIconUrl);
@@ -368,7 +379,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
 
 
-        String backgrndImageUrl = dataItem.getImageUrl();
+        String backgrndImageUrl = articleObj .getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgrndImageUrl)) {
             liFeedArticleImages.removeAllViews();
             liFeedArticleImages.removeAllViewsInLayout();
@@ -378,12 +389,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             StringBuilder stringBuilder = new StringBuilder();
-            if (dataItem.getNoOfViews() > 1) {
-                stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+            if (articleObj .getNoOfViews() > 1) {
+                stringBuilder.append(numericToThousand(articleObj .getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            } else if (dataItem.getNoOfViews() == 1) {
-                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
+            } else if (articleObj .getNoOfViews() == 1) {
+                stringBuilder.append(articleObj .getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
             } else {
@@ -410,53 +421,53 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_menu)
     public void menuItemClick() {
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserMenu);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserMenu);
     }
 
     @OnClick(R.id.tv_feed_article_user_comment_post_menu)
     public void commentItemClick() {
-        dataItem.setItemPosition(mItemPosition);
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserCommentPostMenu);
+        articleObj .setItemPosition(mItemPosition);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserCommentPostMenu);
     }
 
     @OnClick(R.id.tv_feed_article_total_reactions)
     public void reactionClick() {
-        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleTotalReactions);
     }
 
     @OnClick(R.id.tv_feed_article_reaction1)
     public void reaction1Click() {
-        viewInterface.handleOnClick(dataItem, tvFeedArticleTotalReactions);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleTotalReactions);
     }
 
     @OnClick(R.id.tv_feed_article_user_bookmark)
     public void isBookMarkClick() {
-        dataItem.setTrending(true);
+        articleObj .setTrending(true);
         tvFeedArticleUserBookmark.setEnabled(false);
-        if (dataItem.isBookmarked()) {
-            viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
+        if (articleObj .isBookmarked()) {
+            viewInterface.handleOnClick(articleObj , tvFeedArticleUserBookmark);
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.handleOnClick(dataItem, tvFeedArticleUserBookmark);
+            viewInterface.handleOnClick(articleObj , tvFeedArticleUserBookmark);
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
-        if (!dataItem.isBookmarked()) {
-            dataItem.setBookmarked(true);
+        if (!articleObj .isBookmarked()) {
+            articleObj .setBookmarked(true);
         } else {
-            dataItem.setBookmarked(false);
+            articleObj .setBookmarked(false);
         }
         onBookMarkClick();
     }
 
     @OnClick(R.id.tv_feed_article_user_share)
     public void tvShareClick() {
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserShare);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserShare);
         ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.li_feed_article_images)
     public void articleImageClick() {
-        viewInterface.handleOnClick(dataItem, liFeedArticleImages);
+        viewInterface.handleOnClick(articleObj , liFeedArticleImages);
     }
 
     @OnClick(R.id.tv_feed_article_user_reaction)
@@ -468,22 +479,22 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     private void userReactionWithOutLongPress() {
         tvFeedArticleUserReaction.setTag(false);
-        dataItem.setTrending(true);
-        dataItem.setLongPress(false);
-        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+        articleObj .setTrending(true);
+        articleObj .setLongPress(false);
+        if (articleObj .getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            viewInterface.userCommentLikeRequest(articleObj , AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.userCommentLikeRequest(dataItem, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            viewInterface.userCommentLikeRequest(articleObj , AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ARTICLE, AppConstants.EMPTY_STRING);
         }
-        if (dataItem.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            dataItem.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-            dataItem.setNoOfLikes(dataItem.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+        if (articleObj .getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            articleObj .setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            articleObj .setNoOfLikes(articleObj .getNoOfLikes() - AppConstants.ONE_CONSTANT);
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
         } else {
-            dataItem.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-            dataItem.setNoOfLikes(dataItem.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            articleObj .setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            articleObj .setNoOfLikes(articleObj .getNoOfLikes() + AppConstants.ONE_CONSTANT);
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
         allTextViewStringOperations(mContext);
@@ -492,7 +503,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_header_lebel)
     public void viewMoreClick() {
-        viewInterface.handleOnClick(dataItem, liFeedArticleImages);
+        viewInterface.handleOnClick(articleObj , liFeedArticleImages);
     }
 
     @Override
@@ -502,32 +513,32 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_total_replies)
     public void openCommentClick() {
-        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserComment);
+        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
     }
 
     @OnClick(R.id.tv_feed_article_user_comment_post)
     public void recentCommentClick() {
-        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserComment);
+        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
     }
 
     @OnClick(R.id.tv_article_join_conversation)
     public void joinConversationClick() {
-        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserComment);
+        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
     }
 
     @OnClick(R.id.tv_feed_article_user_comment)
     public void articleUserCommentClick() {
-        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserComment);
+        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
     }
 
     @OnClick(R.id.li_feed_article_user_comments)
     public void articleUserRecentCommentClick() {
-        dataItem.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(dataItem, tvFeedArticleUserComment);
+        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
     }
 
 }

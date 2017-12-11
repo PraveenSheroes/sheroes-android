@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -81,7 +82,7 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
     private FragmentListRefreshData mFragmentListRefreshData;
     private Handler mHandler = new Handler();
     private List<Long> mUserIdForAddMember = new ArrayList<>();
-    private FeedDetail mFeedDetail;
+    private CommunityFeedSolrObj mCommunityFeedObj;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private LinearLayoutManager manager;
     private MoEHelper mMoEHelper;
@@ -100,7 +101,7 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
         moEngageUtills= MoEngageUtills.getInstance();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mFeedDetail = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
+            mCommunityFeedObj = bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL);
         }
         tvInviteText.setText(getString(R.string.ID_INVITE_MEMBER_COMMUNITY));
         mSearchEditText.setHint(getString(R.string.ID_SEARCH_USER));
@@ -108,7 +109,7 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
         editTextWatcher();
         liInviteMember.setVisibility(View.VISIBLE);
 
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(), mSearchDataName);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.INVITE_MEMBER, mCommunityFeedObj.getIdOfEntityOrParticipant(), mSearchDataName);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunitiesDetailActivity) getActivity());
         manager = new LinearLayoutManager(getActivity());
@@ -205,7 +206,7 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
         @Override
         public void run() {
             if (!isDetached()) {
-                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.INVITE_PAGE_SIZE));
+                mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mSearchDataName, mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.INVITE_PAGE_SIZE));
             }
         }
     };
@@ -225,13 +226,13 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 Toast.makeText(getActivity(), getString(R.string.ID_ADDED), Toast.LENGTH_SHORT).show();
-                if (null != mFeedDetail && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
-                    int count = mFeedDetail.getNoOfMembers();
+                if (null != mCommunityFeedObj && StringUtil.isNotEmptyCollection(mUserIdForAddMember)) {
+                    int count = mCommunityFeedObj.getNoOfMembers();
                     count += mUserIdForAddMember.size();
-                    mFeedDetail.setNoOfMembers(count);
-                    ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mFeedDetail);
-                    if(null!=mFeedDetail) {
-                        moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), mFeedDetail.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mFeedDetail.isMember(), mFeedDetail.getNoOfMembers());
+                    mCommunityFeedObj.setNoOfMembers(count);
+                    ((CommunitiesDetailActivity) getActivity()).updateOpenAboutFragment(mCommunityFeedObj);
+                    if(null!=mCommunityFeedObj) {
+                        moEngageUtills.entityMoEngageAddedMember(getActivity(),mMoEHelper,payloadBuilder,mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, mCommunityFeedObj.isMember(), mCommunityFeedObj.getNoOfMembers());
                     }
                 }
 
@@ -254,8 +255,8 @@ public class InviteCommunityMemberDialogFragment extends BaseDialogFragment impl
 
     @OnClick(R.id.tv_invite_post_submit)
     public void inviteSubmit() {
-        if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mFeedDetail) {
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mFeedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+        if (StringUtil.isNotEmptyCollection(mUserIdForAddMember) && null != mCommunityFeedObj) {
+            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(mUserIdForAddMember, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
     }
 

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 
@@ -25,10 +26,10 @@ public class WebViewClickListener {
 
     @JavascriptInterface
     public void openImageActivity(String imageSource) {
-        FeedDetail feedDetail = new FeedDetail();
+        UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
         List<String> imageUrls = new ArrayList<>();
         imageUrls.add(imageSource);
-        feedDetail.setImageUrls(imageUrls);
-        AlbumActivity.navigateTo((ArticleActivity) mContext, feedDetail, ArticleActivity.SCREEN_LABEL, null);
+        //feedDetail.setImageUrls(imageUrls);
+        AlbumActivity.navigateTo((ArticleActivity) mContext, userPostSolrObj, ArticleActivity.SCREEN_LABEL, null);
     }
 }

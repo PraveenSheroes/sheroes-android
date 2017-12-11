@@ -23,8 +23,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -49,7 +51,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.iv_communities_detail)
     ImageView iv_communities_detail;
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private CommunityFeedSolrObj communityFeedObj;
     private Context mContext;
     @Inject
     Preference<LoginResponse> userPreference;
@@ -65,22 +67,22 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = item;
+        this.communityFeedObj = (CommunityFeedSolrObj)item;
         this.mContext = context;
 
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getThumbnailImageUrl())) {
-            Glide.with(context).load(dataItem.getThumbnailImageUrl()).transform(new CircleTransform(mContext)).into(iv_communities_detail);
+        if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getThumbnailImageUrl())) {
+            Glide.with(context).load(communityFeedObj.getThumbnailImageUrl()).transform(new CircleTransform(mContext)).into(iv_communities_detail);
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvCommunityName.setText(dataItem.getNameOrTitle());
+        if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getNameOrTitle())) {
+            tvCommunityName.setText(communityFeedObj.getNameOrTitle());
         }
-        if (StringUtil.isNotNullOrEmptyString(dataItem.getCommunityType())) {
-            tvCommunityRelated.setText(dataItem.getCommunityType());
+        if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getCommunityType())) {
+            tvCommunityRelated.setText(communityFeedObj.getCommunityType());
         }
-      /*  if (StringUtil.isNotNullOrEmptyString(dataItem.getScreenName())) {
-            switch (dataItem.getScreenName()) {
+      /*  if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getScreenName())) {
+            switch (communityFeedObj.getScreenName()) {
                 case AppConstants.ALL_SEARCH:
-                    if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
+                    if (!communityFeedObj.isMember() && !communityFeedObj.isOwner() && !communityFeedObj.isRequestPending()) {
                         tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                         tvJoin.setText(mContext.getString(R.string.ID_JOIN));
                         tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -89,7 +91,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
                     }
                     break;
                 case AppConstants.FEATURE_FRAGMENT:
-                    if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()) {
+                    if (!communityFeedObj.isMember() && !communityFeedObj.isOwner() && !communityFeedObj.isRequestPending()) {
                         tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                         tvJoin.setText(mContext.getString(R.string.ID_JOIN));
                         tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -101,10 +103,10 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
                     tvJoin.setVisibility(View.GONE);
                     break;
                 default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + dataItem.getScreenName());
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityFeedObj.getScreenName());
             }
         }*/
-        if (!dataItem.isMember() && !dataItem.isOwner() && !dataItem.isRequestPending()&&dataItem.isFeatured()) {
+        if (!communityFeedObj.isMember() && !communityFeedObj.isOwner() && !communityFeedObj.isRequestPending()&&communityFeedObj.isFeatured()) {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvJoin.setText(mContext.getString(R.string.ID_JOIN));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -117,7 +119,7 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.card_community_detail)
     public void onBackClick() {
-        viewInterface.handleOnClick(dataItem, cardCommunityDetail);
+        viewInterface.handleOnClick(communityFeedObj, cardCommunityDetail);
     }
 
     @Override
@@ -173,6 +175,6 @@ public class CommunityCardDetailHeader extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_join_view_holder)
     public void onJoinButtonClick() {
-        viewInterface.handleOnClick(dataItem, tvJoin);
+        viewInterface.handleOnClick(communityFeedObj, tvJoin);
     }
 }

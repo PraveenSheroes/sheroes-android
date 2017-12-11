@@ -1,13 +1,14 @@
 package appliedlife.pvtltd.SHEROES.models.entities.miscellanous;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import org.parceler.Parcel;
+
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 
 /**
  * Created by Praveen_Singh on 28-07-2017.
  */
-
-public class LatLongWithLocation implements Parcelable {
+@Parcel(analyze = {LatLongWithLocation.class})
+public class LatLongWithLocation {
 
     private Long entityOrParticipantId;
     private Double latitude;
@@ -75,43 +76,5 @@ public class LatLongWithLocation implements Parcelable {
     public void setEntityOrParticipantId(Long entityOrParticipantId) {
         this.entityOrParticipantId = entityOrParticipantId;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.entityOrParticipantId);
-        dest.writeValue(this.latitude);
-        dest.writeValue(this.longitude);
-        dest.writeString(this.cityName);
-        dest.writeString(this.locality);
-        dest.writeString(this.state);
-        dest.writeString(this.description);
-    }
-
-    protected LatLongWithLocation(Parcel in) {
-        this.entityOrParticipantId = (Long) in.readValue(Long.class.getClassLoader());
-        this.latitude = (Double) in.readValue(Double.class.getClassLoader());
-        this.longitude = (Double) in.readValue(Double.class.getClassLoader());
-        this.cityName = in.readString();
-        this.locality = in.readString();
-        this.state = in.readString();
-        this.description = in.readString();
-    }
-
-    public static final Creator<LatLongWithLocation> CREATOR = new Creator<LatLongWithLocation>() {
-        @Override
-        public LatLongWithLocation createFromParcel(Parcel source) {
-            return new LatLongWithLocation(source);
-        }
-
-        @Override
-        public LatLongWithLocation[] newArray(int size) {
-            return new LatLongWithLocation[size];
-        }
-    };
 }
 

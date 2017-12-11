@@ -1,18 +1,19 @@
 package appliedlife.pvtltd.SHEROES.models.entities.comment;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.CommonFeedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 
 /**
  * Created by Praveen_Singh on 15-02-2017.
  */
-
-public class Comment extends BaseResponse implements Parcelable {
+@Parcel(analyze = {Comment.class,BaseResponse.class})
+public class Comment extends BaseResponse{
     int byDefaultMenuOpen;
     boolean isEdit;
     int itemPosition;
@@ -265,78 +266,4 @@ public class Comment extends BaseResponse implements Parcelable {
     public void setVerifiedMentor(boolean verifiedMentor) {
         isVerifiedMentor = verifiedMentor;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeInt(this.byDefaultMenuOpen);
-        dest.writeByte(this.isEdit ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.itemPosition);
-        dest.writeString(this.comment);
-        dest.writeLong(this.commentsId);
-        dest.writeString(this.createdOn);
-        dest.writeLong(this.entityId);
-        dest.writeInt(this.id);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isAnonymous ? (byte) 1 : (byte) 0);
-        dest.writeString(this.lastModifiedOn);
-        dest.writeInt(this.likeValue);
-        dest.writeLong(this.participantId);
-        dest.writeString(this.participantImageUrl);
-        dest.writeString(this.participantName);
-        dest.writeLong(this.participationTypeId);
-        dest.writeByte(this.myOwnParticipation ? (byte) 1 : (byte) 0);
-        dest.writeString(this.postedDate);
-        dest.writeString(this.city);
-        dest.writeValue(this.entityAuthorUserId);
-        dest.writeByte(this.participantActive ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isVerifiedMentor ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.likeCount);
-        dest.writeByte(this.isLiked ? (byte) 1 : (byte) 0);
-    }
-
-    protected Comment(Parcel in) {
-        super(in);
-        this.byDefaultMenuOpen = in.readInt();
-        this.isEdit = in.readByte() != 0;
-        this.itemPosition = in.readInt();
-        this.comment = in.readString();
-        this.commentsId = in.readLong();
-        this.createdOn = in.readString();
-        this.entityId = in.readLong();
-        this.id = in.readInt();
-        this.isActive = in.readByte() != 0;
-        this.isAnonymous = in.readByte() != 0;
-        this.lastModifiedOn = in.readString();
-        this.likeValue = in.readInt();
-        this.participantId = in.readLong();
-        this.participantImageUrl = in.readString();
-        this.participantName = in.readString();
-        this.participationTypeId = in.readLong();
-        this.myOwnParticipation = in.readByte() != 0;
-        this.postedDate = in.readString();
-        this.city = in.readString();
-        this.entityAuthorUserId = (Long) in.readValue(Long.class.getClassLoader());
-        this.participantActive = in.readByte() != 0;
-        this.isVerifiedMentor = in.readByte() != 0;
-        this.likeCount = in.readInt();
-        this.isLiked = in.readByte() != 0;
-    }
-
-    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
-        @Override
-        public Comment createFromParcel(Parcel source) {
-            return new Comment(source);
-        }
-
-        @Override
-        public Comment[] newArray(int size) {
-            return new Comment[size];
-        }
-    };
 }

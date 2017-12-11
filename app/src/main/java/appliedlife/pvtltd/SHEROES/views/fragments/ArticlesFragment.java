@@ -174,7 +174,7 @@ public class ArticlesFragment extends BaseFragment {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT) {
-                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostingDate());
+                mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
             }
             if (isTrendingData) {
                 for (FeedDetail feedDetail : feedDetailList) {

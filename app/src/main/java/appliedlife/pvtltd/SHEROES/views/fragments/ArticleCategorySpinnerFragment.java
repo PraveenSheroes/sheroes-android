@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +70,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mHomeSpinnerItemList = bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT);
+            mHomeSpinnerItemList = Parcels.unwrap((Parcelable)bundle.getParcelableArrayList(AppConstants.HOME_SPINNER_FRAGMENT));
         }
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);

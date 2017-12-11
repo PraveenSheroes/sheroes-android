@@ -1,13 +1,13 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import org.parceler.Parcel;
 
 /**
  * Created by sheroes on 09/04/17.
  */
 
-public class CanHelpIn implements Parcelable {
+@Parcel(analyze = {CanHelpIn.class})
+public class CanHelpIn {
     private Long id;
     private String name;
 
@@ -27,34 +27,4 @@ public class CanHelpIn implements Parcelable {
         this.name = name;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.id);
-        dest.writeString(this.name);
-    }
-
-    public CanHelpIn() {
-    }
-
-    protected CanHelpIn(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.name = in.readString();
-    }
-
-    public static final Parcelable.Creator<CanHelpIn> CREATOR = new Parcelable.Creator<CanHelpIn>() {
-        @Override
-        public CanHelpIn createFromParcel(Parcel source) {
-            return new CanHelpIn(source);
-        }
-
-        @Override
-        public CanHelpIn[] newArray(int size) {
-            return new CanHelpIn[size];
-        }
-    };
 }
