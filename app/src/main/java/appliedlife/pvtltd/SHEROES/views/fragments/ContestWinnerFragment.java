@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import org.parceler.Parcels;
@@ -21,9 +22,9 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Prize;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
+import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
-import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -32,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Ujjwal on 10/10/17.
@@ -49,6 +51,9 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
 
     @Bind(R.id.empty_view)
     View emptyView;
+
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
     //endregion
 
     //region private methods
@@ -84,7 +89,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         }
         initAdapter();
 
-        mContestWinnerPresenter.fetchPrizes(Integer.toString(mContest.remote_id));
+        mContestWinnerPresenter.fetchWinners(Integer.toString(mContest.remote_id));
 
         return view;
     }
@@ -93,8 +98,11 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
 
     //region IContestWinnerView
     @Override
-    public void showPrizes(List<Prize> prizeList) {
-        mWinnerListAdapter.setData(prizeList);
+    public void showPrizes(List<Winner> winners) {
+        Winner winner = new Winner();
+        winner.isHeader = true;
+        winners.add(0, winner);
+        mWinnerListAdapter.setData(winners);
     }
 
     //endregion
@@ -113,6 +121,22 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         mWinnerListAdapter = new WinnerListAdapter(getActivity());
         mRecyclerView.setAdapter(mWinnerListAdapter);
     }
+
+    @Override
+    public void startProgressBar() {
+        if (null != mProgressBar) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void stopProgressBar() {
+        if (null != mProgressBar) {
+            mProgressBar.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
     //endregion
 
     //region static methods
@@ -123,6 +147,6 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
 
     @Override
     public String getScreenName() {
-        return null;
+        return SCREEN_LABEL;
     }
 }

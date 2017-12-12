@@ -72,7 +72,7 @@ public class ChallengeSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_winner_rank_i")
     private Integer winnerRank;
 
-    @SerializedName("challenge_has_winner")
+    @SerializedName("challenge_has_winner_b")
     private boolean challengeHasWinner;
 
     @SerializedName("challenge_winner_announcement_dt")
@@ -81,6 +81,10 @@ public class ChallengeSolrObj extends FeedDetail {
 
     @SerializedName("solr_ignore_is_future_challenge")
     private boolean isFutureChallenge;
+
+    @SerializedName("solr_ignore_winner_address_updated")
+    public boolean winnerAddressUpdated;
+
 
     public boolean getChallengeIsPublic() {
         return challengeIsPublic;

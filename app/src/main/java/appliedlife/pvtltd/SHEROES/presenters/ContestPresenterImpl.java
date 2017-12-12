@@ -130,6 +130,8 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                     mContest.tag = challengeSolrObj.getChallengeAcceptPostText();
                     mContest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
                     mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
+                    mContest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
+                    mContest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
                     getMvpView().showContestFromId(mContest);
                 }
             }
