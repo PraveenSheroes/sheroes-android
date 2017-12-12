@@ -11,6 +11,8 @@ import java.util.List;
  */
 @Parcel(analyze = {UserPostSolrObj.class,FeedDetail.class})
 public class UserPostSolrObj extends FeedDetail {
+    public static final String USER_POST_OBJ = "USER_POST_OBJ";
+    public static final String USER_POST_ID = "USER_POST_ID";
     @SerializedName(value = "search_id_post_image")
     private List<Long> imagesIds;
 

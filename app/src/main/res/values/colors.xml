@@ -58,6 +58,7 @@
     <color name="green">#28b51b</color>
     <color name="light_green">#6bba28</color>
     <color name="email">#dc4541</color>
+    <color name="red_opacity">#f5c7c5</color>
     <color name="chat_incomming_text_color">#814edf</color>
     <color name="link_color">#008cc9</color>
 

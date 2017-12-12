@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.PandingMember;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -811,6 +812,24 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
                         }
                     }
                     break;
+                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                    if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
+                        if (fragmentCommunityDetail instanceof CommunitiesDetailFragment) {
+                            Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                            UserPostSolrObj userPostSolrObj = null;
+                            if (parcelable != null) {
+                                userPostSolrObj = Parcels.unwrap(parcelable);
+                                isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                            }
+                            if(isPostDeleted){
+                                ((CommunitiesDetailFragment) fragmentCommunityDetail).commentListRefresh(userPostSolrObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                            }else {
+                                ((CommunitiesDetailFragment) fragmentCommunityDetail).commentListRefresh(userPostSolrObj, FeedParticipationEnum.COMMENT_REACTION);
+                            }
+                        }
+                    }
                 default:
                     if (null != mProgressDialog) {
                         mProgressDialog.dismiss();
