@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -27,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
@@ -76,6 +78,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsReque
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
+import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
@@ -349,4 +353,9 @@ public interface SheroesAppServiceApi {
     @POST("participation/challenge/v2/response")
     Observable<CreateCommunityResponse> createChallengePost(@Body ChallengePostCreateRequest challengePostCreateRequest);
 
+    @POST("participation/challenge/get/winners")
+    Observable<WinnerResponse> getWinners(@Body WinnerRequest winnerRequest);
+
+    @POST("participation/challenge/add/winner/address")
+    Observable<BaseResponse> updateAddress(@Body Address address);
 }

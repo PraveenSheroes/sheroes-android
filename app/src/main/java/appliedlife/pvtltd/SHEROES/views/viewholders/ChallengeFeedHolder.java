@@ -111,6 +111,8 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         mContest.tag = challengeSolrObj.getChallengeAcceptPostText();
         mContest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
         mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
+        mContest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
+        mContest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
         mTitle.setText(mContest.title);
         int featureImageHeight = (CommonUtil.getWindowWidth(mContext) / 2);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);

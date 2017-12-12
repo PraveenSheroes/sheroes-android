@@ -103,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwner
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
@@ -2023,6 +2024,17 @@ public class AppUtils {
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
     }
+    public WinnerRequest winnerRequestBuilder(String contestId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        WinnerRequest winnerRequest = new WinnerRequest();
+        winnerRequest.setAppVersion(appUtils.getAppVersionName());
+        winnerRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        winnerRequest.setScreenName("Feed");
+        winnerRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        winnerRequest.challengeId = contestId;
+        return winnerRequest;
+    }
+
     public static FeedRequestPojo makeFeedRequest(String typeOfFeed, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();

@@ -67,10 +67,25 @@ public class Contest{
     public Date startAt;
     public int totalViews;
     public Date endAt;
+
+    @SerializedName("challenge_has_winner_b")
     public boolean hasWinner = true;
+
+    @SerializedName("is_challenge_winner_announced_b")
     public boolean isWinnerAnnounced = true;
+
+    @SerializedName("solr_ignore_is_winner")
     public boolean isWinner;
+
+    @SerializedName("Challenge_winner_announcement_dt")
     public Date winnerAnnouncementDate;
+
+    @SerializedName("solr_ignore_winner_address_updated")
+    public boolean winnerAddressUpdated;
+
+    @SerializedName("solr_ignore_winner_address_s")
+    public String mWinnerAddress;
+
     public List<FeedDetail> submissions;
     public String thumbImage;
 

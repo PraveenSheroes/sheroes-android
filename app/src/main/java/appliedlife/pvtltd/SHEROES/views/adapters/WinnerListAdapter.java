@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,8 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Prize;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
+import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
@@ -28,10 +28,13 @@ import butterknife.ButterKnife;
  * Created by ujjwal on 10/10/17.
  */
 
-public class WinnerListAdapter extends RecyclerView.Adapter<WinnerListAdapter.WinnerListItemViewHolder> {
+public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context mContext;
-    private List<Prize> mPrizes;
+    private List<Winner> mPrizes;
+
+    private static final int TYPE_WINNER = 1;
+    private static final int TYPE_HEADER = 2;
 
     public WinnerListAdapter(Context context) {
         this.mContext = context;
@@ -39,60 +42,41 @@ public class WinnerListAdapter extends RecyclerView.Adapter<WinnerListAdapter.Wi
     }
 
     @Override
-    public WinnerListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_winner_item, parent, false);
-        return new WinnerListItemViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        switch (viewType) {
+            case TYPE_HEADER:
+                return new WinnerHeaderItemViewHolder(mInflater.inflate(R.layout.list_winner_header_item, parent, false));
+            case TYPE_WINNER:
+                return new WinnerListItemViewHolder(mInflater.inflate(R.layout.list_winner_item, parent, false));
+        }
+        return null;
     }
 
     @Override
-    public void onBindViewHolder(WinnerListItemViewHolder holder, int position) {
-        Prize prize = mPrizes.get(position);
-        holder.mWinnerTitle.setText(prize.title);
-        int pos = 0;
-        if (!CommonUtil.isEmpty(prize.winners)) {
-            for (final UserBO user : prize.winners) {
-                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.layout_user_winner, null);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        switch (holder.getItemViewType()) {
+            case TYPE_HEADER:
+                WinnerHeaderItemViewHolder winnerHeaderItemViewHolder = (WinnerHeaderItemViewHolder) holder;
+                Winner winner =  mPrizes.get(position);
+                winnerHeaderItemViewHolder.bindData(winner, mContext);
+                break;
+            case TYPE_WINNER:
+                WinnerListItemViewHolder winnerListItemViewHolder = (WinnerListItemViewHolder) holder;
+                Winner winnerr =  mPrizes.get(position);
+                winnerListItemViewHolder.bindData(winnerr, mContext);
+                break;
+        }
 
-                ImageView profilePic = ButterKnife.findById(view, R.id.profile_pic);
-                TextView name = ButterKnife.findById(view, R.id.name);
-                TextView ageInfo = ButterKnife.findById(view, R.id.age_info);
-                TextView mDescription = ButterKnife.findById(view, R.id.description);
-                ImageView mTrophyImage = ButterKnife.findById(view, R.id.trophy_image);
-                View dividerView = ButterKnife.findById(view, R.id.divider);
+    }
 
-                if(pos == prize.winners.size() - 1){
-                    dividerView.setVisibility(View.GONE);
-                }
-                mDescription.setText(prize.description);
-
-                if (CommonUtil.isNotEmpty(prize.featureImage)) {
-                    String trophyImage = CommonUtil.getImgKitUri(prize.featureImage, holder.authorPicSize, holder.authorPicSize);
-                    Glide.with(profilePic.getContext())
-                            .load(trophyImage)
-                            .into(mTrophyImage);
-                }
-
-                if (user != null) {
-                    name.setText(user.getName());
-                    ageInfo.setText(user.getJobTag());
-
-                    if (user.getPhotoUrlPath() != null && CommonUtil.isNotEmpty(user.getPhotoUrlPath())) {
-                        String userImage = CommonUtil.getImgKitUri(user.getPhotoUrlPath(), holder.authorPicSize, holder.authorPicSize);
-                        Glide.with(profilePic.getContext())
-                                .load(userImage)
-                                //.placeholder(user.getPlaceholder())
-                                .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
-                                .into(profilePic);
-                    } /*else {
-                        profilePic.setImageResource(user.getPlaceholder());
-                    }*/
-
-                }
-
-                holder.winnersView.addView(view);
-                pos ++;
-            }
+    @Override
+    public int getItemViewType(int position) {
+        Winner winner = mPrizes.get(position);
+        if (winner.isHeader) {
+            return TYPE_HEADER;
+        } else {
+            return TYPE_WINNER;
         }
     }
 
@@ -101,27 +85,71 @@ public class WinnerListAdapter extends RecyclerView.Adapter<WinnerListAdapter.Wi
         return mPrizes == null ? 0 : mPrizes.size();
     }
 
-    public void setData(List<Prize> prizeList) {
-        mPrizes = prizeList;
+    public void setData(List<Winner> winners) {
+        mPrizes = winners;
         notifyDataSetChanged();
     }
 
     // region Winner List Item ViewHolder
     static class WinnerListItemViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.winner_title)
-        TextView mWinnerTitle;
+        @Bind(R.id.profile_pic)
+        ImageView mProfilePic;
 
-        @BindDimen(R.dimen.dp_size_70)
-        int authorPicSize;
+        @Bind(R.id.trophy_image)
+        ImageView mTrophyImage;
 
+        @Bind(R.id.name)
+        TextView mName;
 
-        @Bind(R.id.list_winners)
-        LinearLayout winnersView;
+        @Bind(R.id.rank)
+        TextView mRank;
+
+        @Bind(R.id.description)
+        TextView mDescription;
+
+        @BindDimen(R.dimen.dp_size_40)
+        int mUserPicSize;
+
+        @BindDimen(R.dimen.dp_size_24)
+        int mTrophySize;
+
 
         public WinnerListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public void bindData(Winner prize, Context context){
+            if (prize!=null) {
+                mDescription.setText(prize.prizeDescription);
+                if (CommonUtil.isNotEmpty(prize.mPrizeIcon)) {
+                    String trophyImageUrl = CommonUtil.getImgKitUri(prize.mPrizeIcon, mTrophySize, mTrophySize);
+                    Glide.with(mTrophyImage.getContext())
+                            .load(trophyImageUrl)
+                            .into(mTrophyImage);
+                }
+                mName.setText(prize.name);
+                mRank.setText(prize.rank);
+                if (prize.imageUrl != null && CommonUtil.isNotEmpty(prize.imageUrl)) {
+                    String userImage = CommonUtil.getImgKitUri(prize.imageUrl, mUserPicSize, mUserPicSize);
+                    Glide.with(mProfilePic.getContext())
+                            .load(userImage)
+                            .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(context))
+                            .into(mProfilePic);
+                }
+            }
+        }
+    }
+
+    static class WinnerHeaderItemViewHolder extends RecyclerView.ViewHolder {
+        public WinnerHeaderItemViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bindData(Winner prize, Context context){
+
         }
     }
 
