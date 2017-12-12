@@ -1,13 +1,10 @@
-
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import org.parceler.Parcel;
+
+import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -15,1407 +12,209 @@ import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
-public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
+/**
+ * Created by ujjwal on 26/11/17.
+ */
+@Parcel(analyze = {FeedDetail.class, BaseResponse.class})
+public class FeedDetail extends BaseResponse implements Cloneable{
     public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
     public static final String FEED_DETAIL_ID = "FEED_DETAIL_ID";
-    @SerializedName("post_image_height_is")
-    @Expose
-    private List<Integer> imageHeight;
+    @SerializedName(value = "id")
+    private String id;
 
-    @SerializedName("post_image_width_is")
-    @Expose
-    private List<Integer> imageWidth;
-    @SerializedName("post_image_dimention_ratio_ds")
-    @Expose
-    private List<Double>  imageRatio;
+    @SerializedName(value = "entity_or_participant_id")
+    private long entityOrParticipantId;
+
+    @SerializedName(value = "entity_or_participant_type_id_i")
+    private Integer entityOrParticipantTypeId;
+
+    @SerializedName(value = "display_id_profile_id")
+    private long profileId;
+
+    @SerializedName(value = "created_by_l")
+    private long createdBy;
+
+    @SerializedName(value = "id_of_entity_or_participant")
+    private long idOfEntityOrParticipant;
+
+    @SerializedName(value = "type")
+    private String type;
+
+    @SerializedName(value = "sub_type")
+    public String subType;
+
+    @SerializedName(value = "name")
+    private String nameOrTitle;
+
+    @SerializedName(value = "image_url")
+    private String imageUrl;
+
+    @SerializedName(value = "thumbnail_image_url")
+    private String thumbnailImageUrl;
+
+    @SerializedName(value = "short_description")
+    private String shortDescription;
+
+    @SerializedName(value = "description")
+    private String description;
+
+    @SerializedName(value = "list_short_description")
+    private String listShortDescription;
+
+    @SerializedName(value = "list_description")
+    private String listDescription;
+
+    @SerializedName(value = "p_is_deleted")
+    private boolean isDeleted;
+
+    @SerializedName(value = "p_is_active")
+    private boolean isActive;
+
+    @SerializedName(value = "p_crdt")
+    private String createdDate;
+
+
+    @SerializedName(value = "posting_date_dt")
+    private String postingDate;
+
+    @SerializedName(value = "posting_date_only_dt")
+    private Date postingDateOnly;
+
+    @SerializedName(value = "is_expired")
+    private boolean isExpired;
+
+    @SerializedName(value = "p_last_modified_on")
+    private Date lastModifiedDate;
+
+    @SerializedName(value = "author_participant_id")
+    private long authorParticipantId;
+
+    @SerializedName(value = "author_id")
+    private long authorId;
+
+    @SerializedName(value = "is_author_confidential")
+    private boolean isAuthorConfidential;
+
+    @SerializedName(value = "author_participant_type")
+    private String authorParticipantType;
+
+    @SerializedName(value = "author_first_name")
+    private String authorFirstName;
+
+    @SerializedName(value = "author_last_name")
+    private String authorLastName;
+
+    @SerializedName(value = "author_name")
+    private String authorName;
+
+    @SerializedName(value = "author_image_url")
+    private String authorImageUrl;
+
+    @SerializedName(value = "is_author_image_public")
+    private boolean isAuthorImagePublic;
+
+    @SerializedName(value = "author_city_id")
+    private String authorCityId;
+
+    @SerializedName(value = "author_city_name")
+    private String authorCityName;
+
+    @SerializedName(value = "author_short_description")
+    private String authorShortDescription;
+
+    @SerializedName(value = "is_featured")
+    private boolean isFeatured;
+
+    @SerializedName(value = "solr_ignore_no_of_likes")
+    private int noOfLikes = 0;
+
+    @SerializedName(value = "solr_ignore_no_of_comments")
+    private int noOfComments = 0;
+
+    @SerializedName(value = "solr_ignore_last_comments")
+    private List<Comment> lastComments;
+
+    @SerializedName(value = "solr_ignore_reacted_value")
+    private int reactedValue;
+
+    @SerializedName(value = "solr_ignore_is_bookmarked")
+    private boolean isBookmarked;
+
+    @SerializedName(value = "solr_ignore_no_of_bookmarks")
+    private int noOfBookmarks = 0;
+
+    @SerializedName(value = "solr_ignore_no_of_views")
+    private int noOfViews = 0;
+
+    @SerializedName(value = "solr_ignore_no_of_challenge_accepted")
+    private int noOfChallengeAccepted = 0;
+
+    @SerializedName(value = "solr_ignore_is_challenge_accepted")
+    private boolean isChallengeAccepted;
+
+    @SerializedName("solr_ignore_deep_link_url")
+    private String deepLinkUrl;
+
+    @SerializedName(value = "solr_ignore_is_applied")
+    private boolean isApplied;
+
+    @SerializedName(value = "solr_ignore_is_viewed")
+    private boolean isViewed;
+
+    @SerializedName(value = "solr_ignore_no_of_applies")
+    private int noOfApplied;
+
+    @SerializedName(value = "tag_ids")
+    private List<Long> tag_ids;
+
+    @SerializedName(value = "tag_names")
+    private List<String> tags;
+
+    @SerializedName(value = "solr_ignore_participant_deep_link_url")
+    private String participantDeepLinkingUrl;
+
+    @SerializedName(value = "solr_ignore_entity_deep_link_url")
+    private String entityDeepLinkingUrl;
+
+    @SerializedName(value = "og_image_url_s")
+    private String ogImageUrlS;
+
+    @SerializedName(value = "og_title_s")
+    private String ogTitleS;
+
+    @SerializedName(value = "og_description_s")
+    private String ogDescriptionS;
+
+    @SerializedName(value = "og_requested_url_s")
+    private String ogRequestedUrlS;
+
+    @SerializedName(value = "is_og_video_link_b")
+    private boolean isOgVideoLinkB;
+
+    @SerializedName("solr_ignore_is_author_mentor")
+    private boolean isAuthorMentor;
+
+    @SerializedName(value = "solr_ignore_mentor_deep_link_url")
+    private String mentorDeepLinkUrl;
+
+    @SerializedName(value = "blog_link_s")
+    private String blogLinkUrl;
+
+    @SerializedName("user_sub_type_s")
+    private String userSubType;
+
+    @SerializedName("is_spam_post_b")
+    private boolean isSpamPost;
+
+    //These fields are not from API response
     private int itemPosition;
     private boolean isLongPress;
     private String callFromName;
     private boolean isTrending;
     private boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
-
-    @SerializedName("is_spam_post_b")
-    @Expose
-    private boolean isSpamPost;
-    @SerializedName("solr_ignore_is_community_owner")
-    @Expose
-    private boolean isCommunityOwner;
-    @SerializedName("solr_ignore_is_author_mentor")
-    @Expose
-    private boolean isAuthorMentor;
-    @SerializedName("community_participant_id_l")
-    @Expose
-    private int communityParticipantIdL;
-
-    @SerializedName("is_og_video_link_b")
-    @Expose
-    private boolean isOgVideoLinkB;
-
-    @SerializedName("og_description_s")
-    @Expose
-    private String ogDescriptionS;
-    @SerializedName("og_image_url_s")
-    @Expose
-    private String ogImageUrlS;
-    @SerializedName("og_requested_url_s")
-    @Expose
-    private String ogRequestedUrlS;
-    @SerializedName("og_title_s")
-    @Expose
-    private String ogTitleS;
-    @SerializedName("solr_ignore_p_crdt")
-    @Expose
-    private String solrIgnorePCrdt;
-    @SerializedName("solr_ignore_p_last_modified_on")
-    @Expose
-    private String solrIgnorePLastModifiedOn;
-    @SerializedName("solr_ignore_post_community_logo")
-    @Expose
-    private String solrIgnorePostCommunityLogo;
-
-    private List<ChallengeDataItem> challengeDataItems = null;
-
-    @SerializedName("s_disp_third_party_unique_id")
-    @Expose
-    private String dispThirdPartyUniqueId;
-    @SerializedName("start_date_dt")
-    @Expose
-    private String startDateForEvent;
-    @SerializedName("solr_ignore_posting_date_only_dt")
-    @Expose
-    private String postedOnlyDateFormat;
-    @SerializedName("solr_ignore_posting_date_dt")
-    @Expose
-    private String postedDate;
-    @SerializedName("solr_ignore_deep_link_url")
-    @Expose
-    private String deepLinkUrl;
-
-    /*Community post*/
-
-    @SerializedName("search_id_post_image")
-    @Expose
-    private List<Long> imagesIds;
-    @SerializedName("display_text_image_url")
-    @Expose
-    private List<String> imageUrls;
-    @SerializedName("community_i")
-    @Expose
-    public long communityId;
-    @SerializedName("is_commumity_post_b")
-    @Expose
-    public boolean isCommunityPost;
-    @SerializedName("is_anonymous_b")
-    @Expose
-    public boolean isAnonymous;
-    @SerializedName("solr_ignore_post_community_name")
-    @Expose
-    private String postCommunityName;
-    @SerializedName("solr_ignore_is_closed")
-    @Expose
-    private boolean postCommunityClosed;
-
-    /*Job*/
-    @SerializedName("company_profile_id_l")
-    @Expose
-    private int companyProfileIdL;
-    @SerializedName("top_company_tag_link_id_l")
-    @Expose
-    private String topCompanyTagLinkIdL;
-    @SerializedName("sector_id_l")
-    @Expose
-    private int sectorIdL;
-    @SerializedName("sector_name_s")
-    @Expose
-    private String sectorNameS;
-
-    @SerializedName("job_city_id_l")
-    @Expose
-    private String jobCityIdL;
-    @SerializedName("job_city_name_s")
-    @Expose
-    private String jobCityNameS;
-    @SerializedName("is_from_search_firm_b")
-    @Expose
-    private boolean isFromSearchFirmB;
-
-    @SerializedName("is_search_firm_b")
-    @Expose
-    private boolean isSearchFirmB;
-    @SerializedName("h_company_name_s")
-    @Expose
-    private String hCompanyNameS;
-    @SerializedName("h_company_logo_s")
-    @Expose
-    private String hCompanyLogoS;
-    @SerializedName("experience_from_i")
-    @Expose
-    private int experienceFromI;
-    @SerializedName("experience_to_i")
-    @Expose
-    private int experienceToI;
-    @SerializedName("search_id_job_opp_types")
-    @Expose
-    private List<Integer> searchIdJobOppTypes = null;
-    @SerializedName("search_text_job_emp_types")
-    @Expose
-    private List<String> searchTextJobEmpTypes = null;
-
-
-    @SerializedName("job_Type_s")
-    @Expose
-    private String jobType;
-
-    @SerializedName("solr_ignore_end_date_dt")
-    private String endDate;
-
-    @SerializedName("solr_ignore_start_date_dt")
-    @Expose
-    private String startDate;
-
-    @SerializedName("is_assisted_b")
-    @Expose
-    private boolean isAssisted;
-
-    @SerializedName("is_premium_b")
-    @Expose
-    private boolean isPremimiun;
-
-    @SerializedName("is_ctc_required_b")
-    @Expose
-    private boolean isCtcRequired;
-
-    @SerializedName("compensation_from_l")
-    @Expose
-    private long compensationFrom;
-
-    @SerializedName("compensation_to_l")
-    @Expose
-    private long compensationTo;
-
-    @SerializedName("no_of_openings_i")
-    @Expose
-    private int noOfOpenings;
-
-    @SerializedName("compensation_details_s")
-    @Expose
-    private String compensationDetails;
-
-    @SerializedName("company_master_id_l")
-    @Expose
-    private Long companyMasterId;
-
-    @SerializedName("s_disp_external_application_url")
-    @Expose
-    private String externalApplicationUrl;
-
-    @SerializedName("address_s")
-    @Expose
-    private String address;
-
-    @SerializedName("s_disp_emailid")
-    @Expose
-    private String companyEmailId;
-    @SerializedName("s_disp_compensation_currency")
-    @Expose
-    private String compensationCurrency;
-
-    /*Community*/
-    @SerializedName("community_type_s")
-    @Expose
-    public String communityType;
-
-    @SerializedName("community_type_l")
-    @Expose
-    public long communityTypeL;
-
-    /*Article*/
-    @SerializedName("slug_s")
-    @Expose
-    private String slugS;
-    @SerializedName("published_in_s")
-    @Expose
-    private String publishedInS;
-    @SerializedName("meta_description_s")
-    @Expose
-    private String metaDescriptionS;
-    @SerializedName("meta_title_s")
-    @Expose
-    private String metaTitleS;
-    @SerializedName("article_status_i")
-    @Expose
-    private String articleStatusI;
-    @SerializedName("third_party_id_s")
-    @Expose
-    private String thirdPartyIdS;
-
-    @SerializedName("article_category_name_s")
-    @Expose
-    private String articleCategoryNameS;
-
-    @SerializedName("article_category_l")
-    @Expose
-    private int articleCategoryL;
-
-    /*User*/
-    @SerializedName("total_exp_i")
-    @Expose
-    private int totalExperienceUser;
-    @SerializedName("id_city_l")
-    @Expose
-    private Long cityId;
-    @SerializedName("city_name_s")
-    @Expose
-    private String cityName;
-    @SerializedName("search_id_job_skills")
-    @Expose
-    private List<Long> skillJobIds;
-    @SerializedName("search_text_job_skills")
-    @Expose
-    private List<String> searchTextJobSkills;
-    @SerializedName("search_id_opportunities")
-    @Expose
-    private List<Long> opportunityTypeIds;
-    @SerializedName("search_text_opportunities")
-    @Expose
-    private List<String> searchIdOpportunityTypes;
-    @SerializedName("search_id_can_help_in")
-    @Expose
-    private List<Long> canHelpInIds;
-    @SerializedName("search_text_can_help_in")
-    @Expose
-    private List<String> canHelpIns;
-    @SerializedName("search_id_experience")
-    @Expose
-    private List<Long> experienceIds;
-    @SerializedName("search_text_experience_title")
-    @Expose
-    private List<String> experienceTitles;
-    @SerializedName("search_id_experience_company")
-    @Expose
-    private List<Long> experienceCompanyIds;
-    @SerializedName("search_text_experience_company")
-    @Expose
-    private List<String> experienceCompanyNames;
-    @SerializedName("display_id_curr_experience")
-    @Expose
-    private List<Long> currExperienceIds;
-    @SerializedName("display_text_curr_experience_title")
-    @Expose
-    private List<String> currExperienceTitles;
-    @SerializedName("display_id_curr_experience_company")
-    @Expose
-    private List<Long> currExperienceCompanyIds;
-    @SerializedName("display_text_curr_experience_company")
-    @Expose
-    private List<String> currExperienceCompanyNames;
-    @SerializedName("search_id_education_id")
-    @Expose
-    private List<Long> educationIds;
-    @SerializedName("search_id_education_school")
-    @Expose
-    private List<Long> educationSchoolIds;
-    @SerializedName("search_text_education_school_name")
-    @Expose
-    private List<String> educationSchoolNames;
-    @SerializedName("search_id_education_degree")
-    @Expose
-    private List<Long> educationDegreeIds;
-    @SerializedName("search_text_education_degree_name")
-    @Expose
-    private List<String> educationDegreeNames;
-    @SerializedName("search_id_field_of_study_master")
-    @Expose
-    private List<Long> fieldOfStudyMasterIds;
-    @SerializedName("search_text_field_of_study_master_name")
-    @Expose
-    private List<String> fieldOfStudyMasterNames;
-    @SerializedName("gender_s")
-    @Expose
-    private String gender;
-    @SerializedName("currently_l")
-    @Expose
-    private long currently_id;
-    @SerializedName("profile_id_l")
-    @Expose
-    private long profileId;
-    @SerializedName("currently_s")
-    @Expose
-    private String currently;
-    @SerializedName("no_of_children_i")
-    @Expose
-    private int noOfChildren;
-    @SerializedName("interest_ls")
-    @Expose
-    private List<Long> interestId;
-    @SerializedName("ineterest_ss")
-    @Expose
-    private List<String> interestNames;
-    @SerializedName("functional_area_ls")
-    @Expose
-    private List<Long> functionalAreaIds;
-    @SerializedName("functional_area_ss")
-    @Expose
-    private List<String> functionalAreaNames;
-    @SerializedName("last_activity_date_dt")
-    @Expose
-    private List<String> lastActivityDate;
-
-    /*Common*/
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("entity_or_participant_id")
-    @Expose
-    private long entityOrParticipantId;
-    @SerializedName("entity_or_participant_type_id_i")
-    @Expose
-    private int entityOrParticipantTypeIdI;
-    @SerializedName("display_id_profile_id")
-    @Expose
-    private String displayIdProfileId;
-    @SerializedName("created_by_l")
-    @Expose
-    private long createdBy;
-    @SerializedName("id_of_entity_or_participant")
-    @Expose
-    private long idOfEntityOrParticipant;
-    @SerializedName("type")
-    @Expose
-    private String type;
-    @SerializedName("sub_type")
-    @Expose
-    private String subType;
-    @SerializedName("name")
-    @Expose
-    private String nameOrTitle;
-    @SerializedName("image_url")
-    @Expose
-    private String imageUrl;
-    @SerializedName("thumbnail_image_url")
-    @Expose
-    private String thumbnailImageUrl;
-    @SerializedName("short_description")
-    @Expose
-    private String shortDescription;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("list_short_description")
-    @Expose
-    private String listShortDescription;
-    @SerializedName("list_description")
-    @Expose
-    private String listDescription;
-    @SerializedName("tag_names")
-    @Expose
-    private List<String> tags;
-    @SerializedName("tag_ids")
-    @Expose
-    private List<Long> tag_ids;
-    @SerializedName("p_is_deleted")
-    @Expose
-    private boolean isDeleted;
-    @SerializedName("p_is_active")
-    @Expose
-    private boolean isActive;
-    @SerializedName("p_crdt")
-    @Expose
-    private String createdDate;
-    @SerializedName("posting_date_dt")
-    @Expose
-    private String postingDate;
-    @SerializedName("posting_date_only_dt")
-    @Expose
-    private String postingDateOnly;
-    @SerializedName("is_expired")
-    @Expose
-    private boolean isExpired;
-    @SerializedName("p_last_modified_on")
-    @Expose
-    private String lastModifiedDate;
-    @SerializedName("author_participant_id")
-    @Expose
-    private long authorParticipantId;
-    @SerializedName("author_id")
-    @Expose
-    private long authorId;
-    @SerializedName("is_author_confidential")
-    @Expose
-    private boolean isAuthorConfidential;
-    @SerializedName("author_participant_type")
-    @Expose
-    private String authorParticipantType;
-    @SerializedName("author_first_name")
-    @Expose
-    private String authorFirstName;
-    @SerializedName("author_last_name")
-    @Expose
-    private String authorLastName;
-    @SerializedName("author_name")
-    @Expose
-    private String authorName;
-    @SerializedName("author_image_url")
-    @Expose
-    private String authorImageUrl;
-    @SerializedName("is_author_image_public")
-    @Expose
-    private boolean isAuthorImagePublic;
-    @SerializedName("author_city_id")
-    @Expose
-    private String authorCityId;
-    @SerializedName("author_city_name")
-    @Expose
-    private String authorCityName;
-    @SerializedName("author_short_description")
-    @Expose
-    private String authorShortDescription;
-    @SerializedName("is_featured")
-    @Expose
-    private boolean isFeatured;
-    /*Like and comment*/
     private int lastReactionValue;
-    @SerializedName("solr_ignore_reacted_value")
-    @Expose
-    private int reactionValue;
-    @SerializedName("solr_ignore_no_of_likes")
-    @Expose
-    private int noOfLikes;
-    @SerializedName("solr_ignore_no_of_comments")
-    @Expose
-    private int noOfComments;
-    @SerializedName("solr_ignore_last_comments")
-    @Expose
-    private List<Comment> lastComments = null;
-    @SerializedName("solr_ignore_no_of_views")
-    @Expose
-    private int noOfViews;
-    @SerializedName("solr_ignore_is_applied")
-    @Expose
-    private boolean isApplied;
-    @SerializedName("solr_ignore_is_bookmarked")
-    @Expose
-    private boolean isBookmarked;
-    @SerializedName("solr_ignore_no_of_applies")
-    @Expose
-    private int noOfApplied;
-
-    @SerializedName("solr_ignore_is_viewed")
-    @Expose
-    private boolean isViewed;
-    @SerializedName("char_count_i")
-    @Expose
-    private int charCount;
-
-
-    @SerializedName("is_closed_b")
-    @Expose
-    private boolean isClosedCommunity;
-    @SerializedName("solr_ignore_no_of_members")
-    @Expose
-    private int noOfMembers;
-    @SerializedName("solr_ignore_no_of_pending_requests")
-    @Expose
-    private int noOfPendingRequest;
-    @SerializedName("solr_ignore_is_owner")
-    @Expose
-    private boolean isOwner;
-    @SerializedName("solr_ignore_is_member")
-    @Expose
-    private boolean isMember;
-    @SerializedName("solr_ignore_is_request_pending")
-    @Expose
-    private boolean isRequestPending;
-    @SerializedName("solr_ignore_no_of_bookmarks")
-    @Expose
-    private int noOfBookmarks;
-    @SerializedName("display_id_speaker_id")
-    @Expose
-    private List<Integer> speakerId;
-    @SerializedName("display_text_speaker_name")
-    @Expose
-    private List<String> speakerName;
-    @SerializedName("display_text_speaker_designation")
-    @Expose
-    private List<String> speakerDesignation;
-    @SerializedName("display_text_speaker_desc")
-    @Expose
-    private List<String> speakerDescription;
-    @SerializedName("display_text_speaker_image_url")
-    @Expose
-    private List<String> speakerImageUrl;
-    @SerializedName("display_id_sponser_id")
-    @Expose
-    private List<Integer> sponsorId;
-    @SerializedName("display_text_sponser_name")
-    @Expose
-    private List<String> sponsorName;
-    @SerializedName("display_text_sponser_url")
-    @Expose
-    private List<String> sponsorUrl;
-    @SerializedName("display_text_sponser_logo_url")
-    @Expose
-    private List<String> sponsorLogoUrl;
-    @SerializedName("s_disp_start_hour")
-    @Expose
-    private String displayTextStartHour;
-    @SerializedName("s_disp_start_minute")
-    @Expose
-    private String displayTextStartMinute;
-    @SerializedName("s_disp_end_hour")
-    @Expose
-    private String displayTextEndHour;
-    @SerializedName("s_disp_end_minute")
-    @Expose
-    private String displayTextEndMinute;
-    @SerializedName("s_disp_event_venue")
-    @Expose
-    private String eventVenu;
-
-    @SerializedName("solr_ignore_community_type_id")
-    @Expose
-    private long communityTypeId;
-
-    @SerializedName("rating_i")
-    @Expose
-    private int rating;
-
-    @SerializedName("is_comment_allowed_b")
-    @Expose
-    private boolean isCommentAllowed;
-
-    @SerializedName("thumbnailImage_width_i")
-    @Expose
-    private int thumbImageWidth;
-
-    @SerializedName("solr_ignore_is_challenge_accepted")
-    @Expose
-    private boolean isChallengeAccepted;
-    @SerializedName("solr_ignore_no_of_challenge_accepted")
-    @Expose
-    private int challengeAcceptedCount;
-
-    @SerializedName("challenge_last_modified_on_dt")
-    @Expose
-    private String challengeLastModifiedDate;
-
-    @SerializedName("challenge_start_date_dt")
-    @Expose
-    private String challengeStartDate;
-
-    @SerializedName("challenge_end_date_dt")
-    @Expose
-    private String challengeEndDate;
-
-    @SerializedName("challenge_title_s")
-    @Expose
-    private String challengeTitle;
-
-    @SerializedName("challenge_is_anonymous_b")
-    @Expose
-    private boolean challengeIsAnonymous;
-
-    @SerializedName("challenge_accept_post_text_s")
-    @Expose
-    private String challengeAcceptPostTextS;
-
-    @SerializedName("challenge_update_post_text_s")
-    @Expose
-    private String challengeUpdatePostTextS;
-
-    @SerializedName("challenge_hours_i")
-    @Expose
-    private int challengeHourI;
-
-    @SerializedName("challenge_minute_i")
-    @Expose
-    private int challengeMinuteI;
-
-    @SerializedName("challenge_author_type_s")
-    @Expose
-    private String challengeAuthorTypeS;
-
-
-    @SerializedName("solr_ignore_not_interested")
-    @Expose
-    private boolean challngeIsNotIntrested;
-
-    @SerializedName("solr_ignore_is_winner")
-    @Expose
-    private boolean challengeIsWinner;
-
-    @SerializedName("solr_ignore_is_challenge_completed")
-    @Expose
-    private boolean challengeIsCompleted;
-
-    @SerializedName("challenge_is_public_b")
-    @Expose
-    private boolean challengeIsPublic;
-
-    @SerializedName("challenge_author_email_id_s")
-    @Expose
-    private boolean challengeAuthorEmailId;
-
-    @SerializedName("solr_ignore_winner_address_s")
-    @Expose
-    private String challengeWinnerAddress;
-
-    @SerializedName("solr_ignore_prize_discription_s")
-    @Expose
-    private String challengePrizeDescription;
-
-    @SerializedName("solr_ignore_prize_icon_link_url_s")
-    @Expose
-    private String challengePrizeIconLinkUrl;
-
-    @SerializedName("solr_ignore_winner_rank_i")
-    @Expose
-    private int challengeWinnerRank;
-
-    @SerializedName("challenge_has_winner")
-    @Expose
-    private boolean challengeHasWinner;
-
-    @SerializedName("challenge_winner_announcement_dt")
-    @Expose
-    private String challengeWinnerAnnouncementDate;
-
-    @SerializedName("solr_ignore_is_future_challenge")
-    @Expose
-    private boolean isFutureChallenge;
-
-    public int getChallengeAcceptedCount() {
-        return challengeAcceptedCount;
-    }
-
-    public void setChallengeAcceptedCount(int challengeAcceptedCount) {
-        this.challengeAcceptedCount = challengeAcceptedCount;
-    }
-
-
-    public boolean isChallengeAccepted() {
-        return isChallengeAccepted;
-    }
-
-    public void setChallengeAccepted(boolean challengeAccepted) {
-        isChallengeAccepted = challengeAccepted;
-    }
-
-    @SerializedName("parent_participation_id")
-    @Expose
-    public long commentId = -1;
-
-    public int getThumbImageHeight() {
-        return thumbImageHeight;
-    }
-
-    public void setThumbImageHeight(int thumbImageHeight) {
-        this.thumbImageHeight = thumbImageHeight;
-    }
-
-    @SerializedName("thumbnailImage_height_i")
-    @Expose
-    public int thumbImageHeight;
-
-    @SerializedName("highresImage_width_i")
-    @Expose
-    public int highresImageWidth;
-
-    @SerializedName("author_participant_id_l")
-    @Expose
-    public long authorParticipantIdl;
-    @SerializedName("user_post_source_entity_id_l")
-    @Expose
-    public long userPostSourceEntityId;
-
-    public int getHighresImageHeight() {
-        return highresImageHeight;
-    }
-
-    public void setHighresImageHeight(int highresImageHeight) {
-        this.highresImageHeight = highresImageHeight;
-    }
-
-    @SerializedName("highresImage_height_i")
-    @Expose
-    private int highresImageHeight;
-
-    public int getItemPosition() {
-        return itemPosition;
-    }
-
-    public void setItemPosition(int itemPosition) {
-        this.itemPosition = itemPosition;
-    }
-
-    public boolean isLongPress() {
-        return isLongPress;
-    }
-
-    public void setLongPress(boolean longPress) {
-        isLongPress = longPress;
-    }
-
-    public boolean isTrending() {
-        return isTrending;
-    }
-
-    public void setTrending(boolean trending) {
-        isTrending = trending;
-    }
-
-    public boolean isFromHome() {
-        return isFromHome;
-    }
-
-    public void setFromHome(boolean fromHome) {
-        isFromHome = fromHome;
-    }
-
-    public List<Long> getImagesIds() {
-        return imagesIds;
-    }
-
-    public void setImagesIds(List<Long> imagesIds) {
-        this.imagesIds = imagesIds;
-    }
-
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
-    public long getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(long communityId) {
-        this.communityId = communityId;
-    }
-
-    public boolean isCommunityPost() {
-        return isCommunityPost;
-    }
-
-    public void setChallengeWinnerRank(int challengeWinnerRank) {
-        this.challengeWinnerRank = challengeWinnerRank;
-    }
-
-    public void setCommunityPost(boolean communityPost) {
-        isCommunityPost = communityPost;
-    }
-
-    public boolean isAnonymous() {
-        return isAnonymous;
-    }
-
-    public void setAnonymous(boolean anonymous) {
-        isAnonymous = anonymous;
-    }
-
-    public String getPostCommunityName() {
-        return postCommunityName;
-    }
-
-    public void setPostCommunityName(String postCommunityName) {
-        this.postCommunityName = postCommunityName;
-    }
-
-    public boolean isPostCommunityClosed() {
-        return postCommunityClosed;
-    }
-
-    public void setPostCommunityClosed(boolean postCommunityClosed) {
-        this.postCommunityClosed = postCommunityClosed;
-    }
-
-    public int getCompanyProfileIdL() {
-        return companyProfileIdL;
-    }
-
-    public void setCompanyProfileIdL(int companyProfileIdL) {
-        this.companyProfileIdL = companyProfileIdL;
-    }
-
-    public String getTopCompanyTagLinkIdL() {
-        return topCompanyTagLinkIdL;
-    }
-
-    public void setTopCompanyTagLinkIdL(String topCompanyTagLinkIdL) {
-        this.topCompanyTagLinkIdL = topCompanyTagLinkIdL;
-    }
-
-    public int getSectorIdL() {
-        return sectorIdL;
-    }
-
-    public void setSectorIdL(int sectorIdL) {
-        this.sectorIdL = sectorIdL;
-    }
-
-    public String getSectorNameS() {
-        return sectorNameS;
-    }
-
-    public void setSectorNameS(String sectorNameS) {
-        this.sectorNameS = sectorNameS;
-    }
-
-    public String getJobCityIdL() {
-        return jobCityIdL;
-    }
-
-    public void setJobCityIdL(String jobCityIdL) {
-        this.jobCityIdL = jobCityIdL;
-    }
-
-    public String getJobCityNameS() {
-        return jobCityNameS;
-    }
-
-    public void setJobCityNameS(String jobCityNameS) {
-        this.jobCityNameS = jobCityNameS;
-    }
-
-    public boolean isFromSearchFirmB() {
-        return isFromSearchFirmB;
-    }
-
-    public void setFromSearchFirmB(boolean fromSearchFirmB) {
-        isFromSearchFirmB = fromSearchFirmB;
-    }
-
-    public boolean isSearchFirmB() {
-        return isSearchFirmB;
-    }
-
-    public long getUserPostSourceEntityId() {
-        return userPostSourceEntityId;
-    }
-
-    public void setUserPostSourceEntityId(long userPostSourceEntityId) {
-        this.userPostSourceEntityId = userPostSourceEntityId;
-    }
-
-    public void setSearchFirmB(boolean searchFirmB) {
-        isSearchFirmB = searchFirmB;
-    }
-
-    public String gethCompanyNameS() {
-        return hCompanyNameS;
-    }
-
-    public void sethCompanyNameS(String hCompanyNameS) {
-        this.hCompanyNameS = hCompanyNameS;
-    }
-
-    public String gethCompanyLogoS() {
-        return hCompanyLogoS;
-    }
-
-    public void sethCompanyLogoS(String hCompanyLogoS) {
-        this.hCompanyLogoS = hCompanyLogoS;
-    }
-
-    public int getExperienceFromI() {
-        return experienceFromI;
-    }
-
-    public void setExperienceFromI(int experienceFromI) {
-        this.experienceFromI = experienceFromI;
-    }
-
-    public int getExperienceToI() {
-        return experienceToI;
-    }
-
-    public void setExperienceToI(int experienceToI) {
-        this.experienceToI = experienceToI;
-    }
-
-    public List<Integer> getSearchIdJobOppTypes() {
-        return searchIdJobOppTypes;
-    }
-
-    public void setSearchIdJobOppTypes(List<Integer> searchIdJobOppTypes) {
-        this.searchIdJobOppTypes = searchIdJobOppTypes;
-    }
-
-    public List<String> getSearchTextJobEmpTypes() {
-        return searchTextJobEmpTypes;
-    }
-
-    public void setSearchTextJobEmpTypes(List<String> searchTextJobEmpTypes) {
-        this.searchTextJobEmpTypes = searchTextJobEmpTypes;
-    }
-
-    public String getJobType() {
-        return jobType;
-    }
-
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public boolean isAssisted() {
-        return isAssisted;
-    }
-
-    public void setAssisted(boolean assisted) {
-        isAssisted = assisted;
-    }
-
-    public boolean isPremimiun() {
-        return isPremimiun;
-    }
-
-    public void setPremimiun(boolean premimiun) {
-        isPremimiun = premimiun;
-    }
-
-    public boolean isCtcRequired() {
-        return isCtcRequired;
-    }
-
-    public void setCtcRequired(boolean ctcRequired) {
-        isCtcRequired = ctcRequired;
-    }
-
-    public long getCompensationFrom() {
-        return compensationFrom;
-    }
-
-    public void setCompensationFrom(long compensationFrom) {
-        this.compensationFrom = compensationFrom;
-    }
-
-    public long getCompensationTo() {
-        return compensationTo;
-    }
-
-    public void setCompensationTo(long compensationTo) {
-        this.compensationTo = compensationTo;
-    }
-
-    public int getNoOfOpenings() {
-        return noOfOpenings;
-    }
-
-    public void setNoOfOpenings(int noOfOpenings) {
-        this.noOfOpenings = noOfOpenings;
-    }
-
-    public String getCompensationDetails() {
-        return compensationDetails;
-    }
-
-    public void setCompensationDetails(String compensationDetails) {
-        this.compensationDetails = compensationDetails;
-    }
-
-    public Long getCompanyMasterId() {
-        return companyMasterId;
-    }
-
-    public void setCompanyMasterId(Long companyMasterId) {
-        this.companyMasterId = companyMasterId;
-    }
-
-    public String getExternalApplicationUrl() {
-        return externalApplicationUrl;
-    }
-
-    public void setExternalApplicationUrl(String externalApplicationUrl) {
-        this.externalApplicationUrl = externalApplicationUrl;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getCompanyEmailId() {
-        return companyEmailId;
-    }
-
-    public void setCompanyEmailId(String companyEmailId) {
-        this.companyEmailId = companyEmailId;
-    }
-
-    public String getCommunityType() {
-        return communityType;
-    }
-
-    public void setCommunityType(String communityType) {
-        this.communityType = communityType;
-    }
-
-    public long getCommunityTypeL() {
-        return communityTypeL;
-    }
-
-    public void setCommunityTypeL(long communityTypeL) {
-        this.communityTypeL = communityTypeL;
-    }
-
-    public String getSlugS() {
-        return slugS;
-    }
-
-    public void setSlugS(String slugS) {
-        this.slugS = slugS;
-    }
-
-    public String getPublishedInS() {
-        return publishedInS;
-    }
-
-    public void setPublishedInS(String publishedInS) {
-        this.publishedInS = publishedInS;
-    }
-
-    public String getMetaDescriptionS() {
-        return metaDescriptionS;
-    }
-
-    public void setMetaDescriptionS(String metaDescriptionS) {
-        this.metaDescriptionS = metaDescriptionS;
-    }
-
-    public String getMetaTitleS() {
-        return metaTitleS;
-    }
-
-    public void setMetaTitleS(String metaTitleS) {
-        this.metaTitleS = metaTitleS;
-    }
-
-    public String getArticleStatusI() {
-        return articleStatusI;
-    }
-
-    public void setArticleStatusI(String articleStatusI) {
-        this.articleStatusI = articleStatusI;
-    }
-
-    public String getThirdPartyIdS() {
-        return thirdPartyIdS;
-    }
-
-    public void setThirdPartyIdS(String thirdPartyIdS) {
-        this.thirdPartyIdS = thirdPartyIdS;
-    }
-
-    public String getArticleCategoryNameS() {
-        return articleCategoryNameS;
-    }
-
-    public void setArticleCategoryNameS(String articleCategoryNameS) {
-        this.articleCategoryNameS = articleCategoryNameS;
-    }
-
-    public int getArticleCategoryL() {
-        return articleCategoryL;
-    }
-
-    public void setArticleCategoryL(int articleCategoryL) {
-        this.articleCategoryL = articleCategoryL;
-    }
-
-    public int getTotalExperienceUser() {
-        return totalExperienceUser;
-    }
-
-    public void setTotalExperienceUser(int totalExperienceUser) {
-        this.totalExperienceUser = totalExperienceUser;
-    }
-
-    public Long getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public List<Long> getSkillJobIds() {
-        return skillJobIds;
-    }
-
-    public void setSkillJobIds(List<Long> skillJobIds) {
-        this.skillJobIds = skillJobIds;
-    }
-
-    public List<String> getSearchTextJobSkills() {
-        return searchTextJobSkills;
-    }
-
-    public void setSearchTextJobSkills(List<String> searchTextJobSkills) {
-        this.searchTextJobSkills = searchTextJobSkills;
-    }
-
-    public List<Long> getOpportunityTypeIds() {
-        return opportunityTypeIds;
-    }
-
-    public void setOpportunityTypeIds(List<Long> opportunityTypeIds) {
-        this.opportunityTypeIds = opportunityTypeIds;
-    }
-
-    public List<String> getSearchIdOpportunityTypes() {
-        return searchIdOpportunityTypes;
-    }
-
-    public void setSearchIdOpportunityTypes(List<String> searchIdOpportunityTypes) {
-        this.searchIdOpportunityTypes = searchIdOpportunityTypes;
-    }
-
-    public List<Long> getCanHelpInIds() {
-        return canHelpInIds;
-    }
-
-    public void setCanHelpInIds(List<Long> canHelpInIds) {
-        this.canHelpInIds = canHelpInIds;
-    }
-
-    public List<String> getCanHelpIns() {
-        return canHelpIns;
-    }
-
-    public void setCanHelpIns(List<String> canHelpIns) {
-        this.canHelpIns = canHelpIns;
-    }
-
-    public List<Long> getExperienceIds() {
-        return experienceIds;
-    }
-
-    public void setExperienceIds(List<Long> experienceIds) {
-        this.experienceIds = experienceIds;
-    }
-
-    public List<String> getExperienceTitles() {
-        return experienceTitles;
-    }
-
-    public void setExperienceTitles(List<String> experienceTitles) {
-        this.experienceTitles = experienceTitles;
-    }
-
-    public List<Long> getExperienceCompanyIds() {
-        return experienceCompanyIds;
-    }
-
-    public void setExperienceCompanyIds(List<Long> experienceCompanyIds) {
-        this.experienceCompanyIds = experienceCompanyIds;
-    }
-
-    public List<String> getExperienceCompanyNames() {
-        return experienceCompanyNames;
-    }
-
-    public void setExperienceCompanyNames(List<String> experienceCompanyNames) {
-        this.experienceCompanyNames = experienceCompanyNames;
-    }
-
-    public List<Long> getCurrExperienceIds() {
-        return currExperienceIds;
-    }
-
-    public void setCurrExperienceIds(List<Long> currExperienceIds) {
-        this.currExperienceIds = currExperienceIds;
-    }
-
-    public List<String> getCurrExperienceTitles() {
-        return currExperienceTitles;
-    }
-
-    public void setCurrExperienceTitles(List<String> currExperienceTitles) {
-        this.currExperienceTitles = currExperienceTitles;
-    }
-
-    public List<Long> getCurrExperienceCompanyIds() {
-        return currExperienceCompanyIds;
-    }
-
-    public void setCurrExperienceCompanyIds(List<Long> currExperienceCompanyIds) {
-        this.currExperienceCompanyIds = currExperienceCompanyIds;
-    }
-
-    public List<String> getCurrExperienceCompanyNames() {
-        return currExperienceCompanyNames;
-    }
-
-    public void setCurrExperienceCompanyNames(List<String> currExperienceCompanyNames) {
-        this.currExperienceCompanyNames = currExperienceCompanyNames;
-    }
-
-    public List<Long> getEducationIds() {
-        return educationIds;
-    }
-
-    public void setEducationIds(List<Long> educationIds) {
-        this.educationIds = educationIds;
-    }
-
-    public List<Long> getEducationSchoolIds() {
-        return educationSchoolIds;
-    }
-
-    public void setEducationSchoolIds(List<Long> educationSchoolIds) {
-        this.educationSchoolIds = educationSchoolIds;
-    }
-
-    public List<String> getEducationSchoolNames() {
-        return educationSchoolNames;
-    }
-
-    public void setEducationSchoolNames(List<String> educationSchoolNames) {
-        this.educationSchoolNames = educationSchoolNames;
-    }
-
-    public List<Long> getEducationDegreeIds() {
-        return educationDegreeIds;
-    }
-
-    public void setEducationDegreeIds(List<Long> educationDegreeIds) {
-        this.educationDegreeIds = educationDegreeIds;
-    }
-
-    public List<String> getEducationDegreeNames() {
-        return educationDegreeNames;
-    }
-
-    public void setEducationDegreeNames(List<String> educationDegreeNames) {
-        this.educationDegreeNames = educationDegreeNames;
-    }
-
-    public List<Long> getFieldOfStudyMasterIds() {
-        return fieldOfStudyMasterIds;
-    }
-
-    public void setFieldOfStudyMasterIds(List<Long> fieldOfStudyMasterIds) {
-        this.fieldOfStudyMasterIds = fieldOfStudyMasterIds;
-    }
-
-    public List<String> getFieldOfStudyMasterNames() {
-        return fieldOfStudyMasterNames;
-    }
-
-    public void setFieldOfStudyMasterNames(List<String> fieldOfStudyMasterNames) {
-        this.fieldOfStudyMasterNames = fieldOfStudyMasterNames;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public long getCurrently_id() {
-        return currently_id;
-    }
-
-    public void setCurrently_id(long currently_id) {
-        this.currently_id = currently_id;
-    }
-
-    public long getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(long profileId) {
-        this.profileId = profileId;
-    }
-
-    public String getCurrently() {
-        return currently;
-    }
-
-    public void setCurrently(String currently) {
-        this.currently = currently;
-    }
-
-    public int getNoOfChildren() {
-        return noOfChildren;
-    }
-
-    public void setNoOfChildren(int noOfChildren) {
-        this.noOfChildren = noOfChildren;
-    }
-
-    public List<Long> getInterestId() {
-        return interestId;
-    }
-
-    public void setInterestId(List<Long> interestId) {
-        this.interestId = interestId;
-    }
-
-    public List<String> getInterestNames() {
-        return interestNames;
-    }
-
-    public void setInterestNames(List<String> interestNames) {
-        this.interestNames = interestNames;
-    }
-
-    public List<Long> getFunctionalAreaIds() {
-        return functionalAreaIds;
-    }
-
-    public void setFunctionalAreaIds(List<Long> functionalAreaIds) {
-        this.functionalAreaIds = functionalAreaIds;
-    }
-
-    public List<String> getFunctionalAreaNames() {
-        return functionalAreaNames;
-    }
-
-    public void setFunctionalAreaNames(List<String> functionalAreaNames) {
-        this.functionalAreaNames = functionalAreaNames;
-    }
-
-    public List<String> getLastActivityDate() {
-        return lastActivityDate;
-    }
-
-    public void setLastActivityDate(List<String> lastActivityDate) {
-        this.lastActivityDate = lastActivityDate;
-    }
+    private List<ChallengeDataItem> challengeDataItems = null;
 
     public String getId() {
         return id;
@@ -1433,20 +232,20 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.entityOrParticipantId = entityOrParticipantId;
     }
 
-    public int getEntityOrParticipantTypeIdI() {
-        return entityOrParticipantTypeIdI;
+    public Integer getEntityOrParticipantTypeId() {
+        return entityOrParticipantTypeId;
     }
 
-    public void setEntityOrParticipantTypeIdI(int entityOrParticipantTypeIdI) {
-        this.entityOrParticipantTypeIdI = entityOrParticipantTypeIdI;
+    public void setEntityOrParticipantTypeId(Integer entityOrParticipantTypeId) {
+        this.entityOrParticipantTypeId = entityOrParticipantTypeId;
     }
 
-    public String getDisplayIdProfileId() {
-        return displayIdProfileId;
+    public long getProfileId() {
+        return profileId;
     }
 
-    public void setDisplayIdProfileId(String displayIdProfileId) {
-        this.displayIdProfileId = displayIdProfileId;
+    public void setProfileId(long profileId) {
+        this.profileId = profileId;
     }
 
     public long getCreatedBy() {
@@ -1537,22 +336,6 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.listDescription = listDescription;
     }
 
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
-    public List<Long> getTag_ids() {
-        return tag_ids;
-    }
-
-    public void setTag_ids(List<Long> tag_ids) {
-        this.tag_ids = tag_ids;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
@@ -1577,19 +360,19 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.createdDate = createdDate;
     }
 
-    public String getPostingDate() {
+    public String getPostedDate() {
         return postingDate;
     }
 
-    public void setPostingDate(String postingDate) {
+    public void setPostedDate(String postingDate) {
         this.postingDate = postingDate;
     }
 
-    public String getPostingDateOnly() {
+    public Date getPostingDateOnly() {
         return postingDateOnly;
     }
 
-    public void setPostingDateOnly(String postingDateOnly) {
+    public void setPostingDateOnly(Date postingDateOnly) {
         this.postingDateOnly = postingDateOnly;
     }
 
@@ -1601,11 +384,11 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isExpired = expired;
     }
 
-    public String getLastModifiedDate() {
+    public Date getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(String lastModifiedDate) {
+    public void setLastModifiedDate(Date lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 
@@ -1713,14 +496,6 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isFeatured = featured;
     }
 
-    public int getReactionValue() {
-        return reactionValue;
-    }
-
-    public void setReactionValue(int reactionValue) {
-        this.reactionValue = reactionValue;
-    }
-
     public int getNoOfLikes() {
         return noOfLikes;
     }
@@ -1745,20 +520,12 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.lastComments = lastComments;
     }
 
-    public int getNoOfViews() {
-        return noOfViews;
+    public int getReactionValue() {
+        return reactedValue;
     }
 
-    public void setNoOfViews(int noOfViews) {
-        this.noOfViews = noOfViews;
-    }
-
-    public boolean isApplied() {
-        return isApplied;
-    }
-
-    public void setApplied(boolean applied) {
-        isApplied = applied;
+    public void setReactionValue(int reactedValue) {
+        this.reactedValue = reactedValue;
     }
 
     public boolean isBookmarked() {
@@ -1769,103 +536,52 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isBookmarked = bookmarked;
     }
 
-    public int getNoOfApplied() {
-        return noOfApplied;
+    public int getNoOfBookmarks() {
+        return noOfBookmarks;
     }
 
-    public void setNoOfApplied(int noOfApplied) {
-        this.noOfApplied = noOfApplied;
+    public void setNoOfBookmarks(int noOfBookmarks) {
+        this.noOfBookmarks = noOfBookmarks;
     }
 
-    public boolean isViewed() {
-        return isViewed;
+    public int getNoOfViews() {
+        return noOfViews;
     }
 
-    public void setViewed(boolean viewed) {
-        isViewed = viewed;
+    public void setNoOfViews(int noOfViews) {
+        this.noOfViews = noOfViews;
     }
 
-    public int getCharCount() {
-        return charCount;
+    public int getNoOfChallengeAccepted() {
+        return noOfChallengeAccepted;
     }
 
-    public void setCharCount(int charCount) {
-        this.charCount = charCount;
+    public void setNoOfChallengeAccepted(int noOfChallengeAccepted) {
+        this.noOfChallengeAccepted = noOfChallengeAccepted;
     }
 
-    public boolean isClosedCommunity() {
-        return isClosedCommunity;
+    public boolean isChallengeAccepted() {
+        return isChallengeAccepted;
     }
 
-    public void setClosedCommunity(boolean closedCommunity) {
-        isClosedCommunity = closedCommunity;
+    public void setChallengeAccepted(boolean challengeAccepted) {
+        isChallengeAccepted = challengeAccepted;
     }
 
-    public int getNoOfMembers() {
-        return noOfMembers;
+    public int getItemPosition() {
+        return itemPosition;
     }
 
-    public void setNoOfMembers(int noOfMembers) {
-        this.noOfMembers = noOfMembers;
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
     }
 
-    public int getNoOfPendingRequest() {
-        return noOfPendingRequest;
+    public boolean isLongPress() {
+        return isLongPress;
     }
 
-    public void setNoOfPendingRequest(int noOfPendingRequest) {
-        this.noOfPendingRequest = noOfPendingRequest;
-    }
-
-    public boolean isOwner() {
-        return isOwner;
-    }
-
-    public void setOwner(boolean owner) {
-        isOwner = owner;
-    }
-
-    public boolean isMember() {
-        return isMember;
-    }
-
-    public void setMember(boolean member) {
-        isMember = member;
-    }
-
-    public boolean isRequestPending() {
-        return isRequestPending;
-    }
-
-    public void setRequestPending(boolean requestPending) {
-        isRequestPending = requestPending;
-    }
-
-    public FeedDetail() {
-    }
-
-    public String getCompensationCurrency() {
-        return compensationCurrency;
-    }
-
-    public void setCompensationCurrency(String compensationCurrency) {
-        this.compensationCurrency = compensationCurrency;
-    }
-
-    public String getDeepLinkUrl() {
-        return deepLinkUrl;
-    }
-
-    public void setDeepLinkUrl(String deepLinkUrl) {
-        this.deepLinkUrl = deepLinkUrl;
-    }
-
-    public String getPostedDate() {
-        return postedDate;
-    }
-
-    public void setPostedDate(String postedDate) {
-        this.postedDate = postedDate;
+    public void setLongPress(boolean longPress) {
+        isLongPress = longPress;
     }
 
     public String getCallFromName() {
@@ -1874,6 +590,38 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
 
     public void setCallFromName(String callFromName) {
         this.callFromName = callFromName;
+    }
+
+    public boolean isTrending() {
+        return isTrending;
+    }
+
+    public void setTrending(boolean trending) {
+        isTrending = trending;
+    }
+
+    public boolean isFromHome() {
+        return isFromHome;
+    }
+
+    public void setFromHome(boolean fromHome) {
+        isFromHome = fromHome;
+    }
+
+    public AppIntroData getAppIntroDataItems() {
+        return appIntroDataItems;
+    }
+
+    public void setAppIntroDataItems(AppIntroData appIntroDataItems) {
+        this.appIntroDataItems = appIntroDataItems;
+    }
+
+    public String getDeepLinkUrl() {
+        return deepLinkUrl;
+    }
+
+    public void setDeepLinkUrl(String deepLinkUrl) {
+        this.deepLinkUrl = deepLinkUrl;
     }
 
     public int getLastReactionValue() {
@@ -1896,172 +644,76 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.challengeDataItems = challengeDataItems;
     }
 
-    public String getPostedOnlyDateFormat() {
-        return postedOnlyDateFormat;
+    public String getPostingDate() {
+        return postingDate;
     }
 
-    public void setPostedOnlyDateFormat(String postedOnlyDateFormat) {
-        this.postedOnlyDateFormat = postedOnlyDateFormat;
+    public void setPostingDate(String postingDate) {
+        this.postingDate = postingDate;
     }
 
-    public int getNoOfBookmarks() {
-        return noOfBookmarks;
+    public int getReactedValue() {
+        return reactedValue;
     }
 
-    public void setNoOfBookmarks(int noOfBookmarks) {
-        this.noOfBookmarks = noOfBookmarks;
+    public void setReactedValue(int reactedValue) {
+        this.reactedValue = reactedValue;
     }
 
-    public List<String> getSpeakerName() {
-        return speakerName;
+    public boolean isApplied() {
+        return isApplied;
     }
 
-    public void setSpeakerName(List<String> speakerName) {
-        this.speakerName = speakerName;
+    public void setApplied(boolean applied) {
+        isApplied = applied;
     }
 
-    public List<String> getSpeakerDesignation() {
-        return speakerDesignation;
+    public boolean isViewed() {
+        return isViewed;
     }
 
-    public void setSpeakerDesignation(List<String> speakerDesignation) {
-        this.speakerDesignation = speakerDesignation;
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
     }
 
-    public List<String> getSpeakerDescription() {
-        return speakerDescription;
+    public int getNoOfApplied() {
+        return noOfApplied;
     }
 
-    public void setSpeakerDescription(List<String> speakerDescription) {
-        this.speakerDescription = speakerDescription;
+    public void setNoOfApplied(int noOfApplied) {
+        this.noOfApplied = noOfApplied;
     }
 
-    public List<String> getSpeakerImageUrl() {
-        return speakerImageUrl;
+    public List<Long> getTag_ids() {
+        return tag_ids;
     }
 
-    public void setSpeakerImageUrl(List<String> speakerImageUrl) {
-        this.speakerImageUrl = speakerImageUrl;
+    public void setTag_ids(List<Long> tag_ids) {
+        this.tag_ids = tag_ids;
     }
 
-    public List<String> getSponsorName() {
-        return sponsorName;
+    public List<String> getTags() {
+        return tags;
     }
 
-    public void setSponsorName(List<String> sponsorName) {
-        this.sponsorName = sponsorName;
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
-    public List<String> getSponsorUrl() {
-        return sponsorUrl;
+    public String getParticipantDeepLinkingUrl() {
+        return participantDeepLinkingUrl;
     }
 
-    public void setSponsorUrl(List<String> sponsorUrl) {
-        this.sponsorUrl = sponsorUrl;
+    public void setParticipantDeepLinkingUrl(String participantDeepLinkingUrl) {
+        this.participantDeepLinkingUrl = participantDeepLinkingUrl;
     }
 
-    public List<String> getSponsorLogoUrl() {
-        return sponsorLogoUrl;
+    public String getEntityDeepLinkingUrl() {
+        return entityDeepLinkingUrl;
     }
 
-    public void setSponsorLogoUrl(List<String> sponsorLogoUrl) {
-        this.sponsorLogoUrl = sponsorLogoUrl;
-    }
-
-    public String getDisplayTextStartHour() {
-        return displayTextStartHour;
-    }
-
-    public void setDisplayTextStartHour(String displayTextStartHour) {
-        this.displayTextStartHour = displayTextStartHour;
-    }
-
-    public String getDisplayTextStartMinute() {
-        return displayTextStartMinute;
-    }
-
-    public void setDisplayTextStartMinute(String displayTextStartMinute) {
-        this.displayTextStartMinute = displayTextStartMinute;
-    }
-
-    public String getDisplayTextEndHour() {
-        return displayTextEndHour;
-    }
-
-    public void setDisplayTextEndHour(String displayTextEndHour) {
-        this.displayTextEndHour = displayTextEndHour;
-    }
-
-    public String getDisplayTextEndMinute() {
-        return displayTextEndMinute;
-    }
-
-    public void setDisplayTextEndMinute(String displayTextEndMinute) {
-        this.displayTextEndMinute = displayTextEndMinute;
-    }
-
-    public void setSpeakerId(List<Integer> speakerId) {
-        this.speakerId = speakerId;
-    }
-
-    public void setSponsorId(List<Integer> sponsorId) {
-        this.sponsorId = sponsorId;
-    }
-
-    public List<Integer> getSpeakerId() {
-        return speakerId;
-    }
-
-    public List<Integer> getSponsorId() {
-        return sponsorId;
-    }
-
-    public String getEventVenu() {
-        return eventVenu;
-    }
-
-    public void setEventVenu(String eventVenu) {
-        this.eventVenu = eventVenu;
-    }
-
-    public String getDispThirdPartyUniqueId() {
-        return dispThirdPartyUniqueId;
-    }
-
-    public void setDispThirdPartyUniqueId(String dispThirdPartyUniqueId) {
-        this.dispThirdPartyUniqueId = dispThirdPartyUniqueId;
-    }
-
-    public String getStartDateForEvent() {
-        return startDateForEvent;
-    }
-
-    public void setStartDateForEvent(String startDateForEvent) {
-        this.startDateForEvent = startDateForEvent;
-    }
-
-    public int getCommunityParticipantIdL() {
-        return communityParticipantIdL;
-    }
-
-    public void setCommunityParticipantIdL(int communityParticipantIdL) {
-        this.communityParticipantIdL = communityParticipantIdL;
-    }
-
-    public boolean isOgVideoLinkB() {
-        return isOgVideoLinkB;
-    }
-
-    public void setOgVideoLinkB(boolean ogVideoLinkB) {
-        isOgVideoLinkB = ogVideoLinkB;
-    }
-
-    public String getOgDescriptionS() {
-        return ogDescriptionS;
-    }
-
-    public void setOgDescriptionS(String ogDescriptionS) {
-        this.ogDescriptionS = ogDescriptionS;
+    public void setEntityDeepLinkingUrl(String entityDeepLinkingUrl) {
+        this.entityDeepLinkingUrl = entityDeepLinkingUrl;
     }
 
     public String getOgImageUrlS() {
@@ -2072,14 +724,6 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.ogImageUrlS = ogImageUrlS;
     }
 
-    public String getOgRequestedUrlS() {
-        return ogRequestedUrlS;
-    }
-
-    public void setOgRequestedUrlS(String ogRequestedUrlS) {
-        this.ogRequestedUrlS = ogRequestedUrlS;
-    }
-
     public String getOgTitleS() {
         return ogTitleS;
     }
@@ -2088,36 +732,28 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         this.ogTitleS = ogTitleS;
     }
 
-    public String getSolrIgnorePCrdt() {
-        return solrIgnorePCrdt;
+    public String getOgDescriptionS() {
+        return ogDescriptionS;
     }
 
-    public void setSolrIgnorePCrdt(String solrIgnorePCrdt) {
-        this.solrIgnorePCrdt = solrIgnorePCrdt;
+    public void setOgDescriptionS(String ogDescriptionS) {
+        this.ogDescriptionS = ogDescriptionS;
     }
 
-    public String getSolrIgnorePLastModifiedOn() {
-        return solrIgnorePLastModifiedOn;
+    public String getOgRequestedUrlS() {
+        return ogRequestedUrlS;
     }
 
-    public void setSolrIgnorePLastModifiedOn(String solrIgnorePLastModifiedOn) {
-        this.solrIgnorePLastModifiedOn = solrIgnorePLastModifiedOn;
+    public void setOgRequestedUrlS(String ogRequestedUrlS) {
+        this.ogRequestedUrlS = ogRequestedUrlS;
     }
 
-    public String getSolrIgnorePostCommunityLogo() {
-        return solrIgnorePostCommunityLogo;
+    public boolean isOgVideoLinkB() {
+        return isOgVideoLinkB;
     }
 
-    public void setSolrIgnorePostCommunityLogo(String solrIgnorePostCommunityLogo) {
-        this.solrIgnorePostCommunityLogo = solrIgnorePostCommunityLogo;
-    }
-
-    public AppIntroData getAppIntroDataItems() {
-        return appIntroDataItems;
-    }
-
-    public void setAppIntroDataItems(AppIntroData appIntroDataItems) {
-        this.appIntroDataItems = appIntroDataItems;
+    public void setOgVideoLinkB(boolean ogVideoLinkB) {
+        isOgVideoLinkB = ogVideoLinkB;
     }
 
     public boolean isAuthorMentor() {
@@ -2128,6 +764,30 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
         isAuthorMentor = authorMentor;
     }
 
+    public String getMentorDeepLinkUrl() {
+        return mentorDeepLinkUrl;
+    }
+
+    public void setMentorDeepLinkUrl(String mentorDeepLinkUrl) {
+        this.mentorDeepLinkUrl = mentorDeepLinkUrl;
+    }
+
+    public String getBlogLinkUrl() {
+        return blogLinkUrl;
+    }
+
+    public void setBlogLinkUrl(String blogLinkUrl) {
+        this.blogLinkUrl = blogLinkUrl;
+    }
+
+    public String getUserSubType() {
+        return userSubType;
+    }
+
+    public void setUserSubType(String userSubType) {
+        this.userSubType = userSubType;
+    }
+
     public boolean isSpamPost() {
         return isSpamPost;
     }
@@ -2135,731 +795,4 @@ public class FeedDetail extends BaseResponse implements Parcelable, Cloneable {
     public void setSpamPost(boolean spamPost) {
         isSpamPost = spamPost;
     }
-
-    public boolean isCommunityOwner() {
-        return isCommunityOwner;
-    }
-
-    public void setCommunityOwner(boolean communityOwner) {
-        isCommunityOwner = communityOwner;
-    }
-
-
-    public long getCommunityTypeId() {
-        return communityTypeId;
-    }
-
-    public void setCommunityTypeId(long communityTypeId) {
-        this.communityTypeId = communityTypeId;
-    }
-
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public boolean isCommentAllowed() {
-        return isCommentAllowed;
-    }
-
-    public void setCommentAllowed(boolean commentAllowed) {
-        isCommentAllowed = commentAllowed;
-    }
-
-
-    public List<Integer> getImageHeight() {
-        return imageHeight;
-    }
-
-    public void setImageHeight(List<Integer> imageHeight) {
-        this.imageHeight = imageHeight;
-    }
-
-    public List<Integer> getImageWidth() {
-        return imageWidth;
-    }
-
-    public void setImageWidth(List<Integer> imageWidth) {
-        this.imageWidth = imageWidth;
-    }
-
-    public List<Double> getImageRatio() {
-        return imageRatio;
-    }
-
-    public void setImageRatio(List<Double> imageRatio) {
-        this.imageRatio = imageRatio;
-    }
-
-    public int getHighresImageWidth() {
-        return highresImageWidth;
-    }
-
-    public String getChallengeLastModifiedDate() {
-        return challengeLastModifiedDate;
-    }
-
-    public void setChallengeLastModifiedDate(String challengeLastModifiedDate) {
-        this.challengeLastModifiedDate = challengeLastModifiedDate;
-    }
-
-    public String getChallengeStartDate() {
-        return challengeStartDate;
-    }
-
-    public void setChallengeStartDate(String challengeStartDate) {
-        this.challengeStartDate = challengeStartDate;
-    }
-
-    public String getChallengeEndDate() {
-        return challengeEndDate;
-    }
-
-    public void setChallengeEndDate(String challengeEndDate) {
-        this.challengeEndDate = challengeEndDate;
-    }
-
-    public String getChallengeTitle() {
-        return challengeTitle;
-    }
-
-    public void setChallengeTitle(String challengeTitle) {
-        this.challengeTitle = challengeTitle;
-    }
-
-    public boolean isChallengeIsAnonymous() {
-        return challengeIsAnonymous;
-    }
-
-    public void setChallengeIsAnonymous(boolean challengeIsAnonymous) {
-        this.challengeIsAnonymous = challengeIsAnonymous;
-    }
-
-    public String getChallengeAcceptPostTextS() {
-        return challengeAcceptPostTextS;
-    }
-
-    public void setChallengeAcceptPostTextS(String challengeAcceptPostTextS) {
-        this.challengeAcceptPostTextS = challengeAcceptPostTextS;
-    }
-
-    public String getChallengeUpdatePostTextS() {
-        return challengeUpdatePostTextS;
-    }
-
-    public void setChallengeUpdatePostTextS(String challengeUpdatePostTextS) {
-        this.challengeUpdatePostTextS = challengeUpdatePostTextS;
-    }
-
-    public int getChallengeHourI() {
-        return challengeHourI;
-    }
-
-    public void setChallengeHourI(int challengeHourI) {
-        this.challengeHourI = challengeHourI;
-    }
-
-    public int getChallengeMinuteI() {
-        return challengeMinuteI;
-    }
-
-    public void setChallengeMinuteI(int challengeMinuteI) {
-        this.challengeMinuteI = challengeMinuteI;
-    }
-
-    public String getChallengeAuthorTypeS() {
-        return challengeAuthorTypeS;
-    }
-
-    public void setChallengeAuthorTypeS(String challengeAuthorTypeS) {
-        this.challengeAuthorTypeS = challengeAuthorTypeS;
-    }
-
-    public boolean isChallngeIsNotIntrested() {
-        return challngeIsNotIntrested;
-    }
-
-    public void setChallngeIsNotIntrested(boolean challngeIsNotIntrested) {
-        this.challngeIsNotIntrested = challngeIsNotIntrested;
-    }
-
-    public boolean isChallengeIsWinner() {
-        return challengeIsWinner;
-    }
-
-    public void setChallengeIsWinner(boolean challengeIsWinner) {
-        this.challengeIsWinner = challengeIsWinner;
-    }
-
-    public boolean isChallengeIsCompleted() {
-        return challengeIsCompleted;
-    }
-
-    public void setChallengeIsCompleted(boolean challengeIsCompleted) {
-        this.challengeIsCompleted = challengeIsCompleted;
-    }
-
-    public boolean isChallengeIsPublic() {
-        return challengeIsPublic;
-    }
-
-    public void setChallengeIsPublic(boolean challengeIsPublic) {
-        this.challengeIsPublic = challengeIsPublic;
-    }
-
-    public boolean isChallengeAuthorEmailId() {
-        return challengeAuthorEmailId;
-    }
-
-    public void setChallengeAuthorEmailId(boolean challengeAuthorEmailId) {
-        this.challengeAuthorEmailId = challengeAuthorEmailId;
-    }
-
-    public String getChallengeWinnerAddress() {
-        return challengeWinnerAddress;
-    }
-
-    public void setChallengeWinnerAddress(String challengeWinnerAddress) {
-        this.challengeWinnerAddress = challengeWinnerAddress;
-    }
-
-    public String getChallengePrizeDescription() {
-        return challengePrizeDescription;
-    }
-
-    public void setChallengePrizeDescription(String challengePrizeDescription) {
-        this.challengePrizeDescription = challengePrizeDescription;
-    }
-
-    public String getChallengePrizeIconLinkUrl() {
-        return challengePrizeIconLinkUrl;
-    }
-
-    public void setChallengePrizeIconLinkUrl(String challengePrizeIconLinkUrl) {
-        this.challengePrizeIconLinkUrl = challengePrizeIconLinkUrl;
-    }
-
-    public Integer getChallengeWinnerRank() {
-        return challengeWinnerRank;
-    }
-
-    public void setChallengeWinnerRank(Integer challengeWinnerRank) {
-        this.challengeWinnerRank = challengeWinnerRank;
-    }
-
-    public boolean isChallengeHasWinner() {
-        return challengeHasWinner;
-    }
-
-    public void setChallengeHasWinner(boolean challengeHasWinner) {
-        this.challengeHasWinner = challengeHasWinner;
-    }
-
-    public String getChallengeWinnerAnnouncementDate() {
-        return challengeWinnerAnnouncementDate;
-    }
-
-    public void setChallengeWinnerAnnouncementDate(String challengeWinnerAnnouncementDate) {
-        this.challengeWinnerAnnouncementDate = challengeWinnerAnnouncementDate;
-    }
-
-    public boolean isFutureChallenge() {
-        return isFutureChallenge;
-    }
-
-    public void setFutureChallenge(boolean futureChallenge) {
-        isFutureChallenge = futureChallenge;
-    }
-
-
-    public void setHighresImageWidth(int highresImageWidth) {
-        this.highresImageWidth = highresImageWidth;
-    }
-
-    public int getThumbImageWidth() {
-        return thumbImageWidth;
-    }
-
-    public void setThumbImageWidth(int thumbImageWidth) {
-        this.thumbImageWidth = thumbImageWidth;
-    }
-
-    public long getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(long commentId) {
-        this.commentId = commentId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeList(this.imageHeight);
-        dest.writeList(this.imageWidth);
-        dest.writeList(this.imageRatio);
-        dest.writeInt(this.itemPosition);
-        dest.writeByte(this.isLongPress ? (byte) 1 : (byte) 0);
-        dest.writeString(this.callFromName);
-        dest.writeByte(this.isTrending ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isFromHome ? (byte) 1 : (byte) 0);
-        dest.writeParcelable(this.appIntroDataItems, flags);
-        dest.writeByte(this.isSpamPost ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isCommunityOwner ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isAuthorMentor ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.communityParticipantIdL);
-        dest.writeByte(this.isOgVideoLinkB ? (byte) 1 : (byte) 0);
-        dest.writeString(this.ogDescriptionS);
-        dest.writeString(this.ogImageUrlS);
-        dest.writeString(this.ogRequestedUrlS);
-        dest.writeString(this.ogTitleS);
-        dest.writeString(this.solrIgnorePCrdt);
-        dest.writeString(this.solrIgnorePLastModifiedOn);
-        dest.writeString(this.solrIgnorePostCommunityLogo);
-        dest.writeTypedList(this.challengeDataItems);
-        dest.writeString(this.dispThirdPartyUniqueId);
-        dest.writeString(this.startDateForEvent);
-        dest.writeString(this.postedOnlyDateFormat);
-        dest.writeString(this.postedDate);
-        dest.writeString(this.deepLinkUrl);
-        dest.writeList(this.imagesIds);
-        dest.writeStringList(this.imageUrls);
-        dest.writeLong(this.communityId);
-        dest.writeByte(this.isCommunityPost ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isAnonymous ? (byte) 1 : (byte) 0);
-        dest.writeString(this.postCommunityName);
-        dest.writeByte(this.postCommunityClosed ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.companyProfileIdL);
-        dest.writeString(this.topCompanyTagLinkIdL);
-        dest.writeInt(this.sectorIdL);
-        dest.writeString(this.sectorNameS);
-        dest.writeString(this.jobCityIdL);
-        dest.writeString(this.jobCityNameS);
-        dest.writeByte(this.isFromSearchFirmB ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isSearchFirmB ? (byte) 1 : (byte) 0);
-        dest.writeString(this.hCompanyNameS);
-        dest.writeString(this.hCompanyLogoS);
-        dest.writeInt(this.experienceFromI);
-        dest.writeInt(this.experienceToI);
-        dest.writeList(this.searchIdJobOppTypes);
-        dest.writeStringList(this.searchTextJobEmpTypes);
-        dest.writeString(this.jobType);
-        dest.writeString(this.endDate);
-        dest.writeString(this.startDate);
-        dest.writeByte(this.isAssisted ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isPremimiun ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isCtcRequired ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.compensationFrom);
-        dest.writeLong(this.compensationTo);
-        dest.writeInt(this.noOfOpenings);
-        dest.writeString(this.compensationDetails);
-        dest.writeValue(this.companyMasterId);
-        dest.writeString(this.externalApplicationUrl);
-        dest.writeString(this.address);
-        dest.writeString(this.companyEmailId);
-        dest.writeString(this.compensationCurrency);
-        dest.writeString(this.communityType);
-        dest.writeLong(this.communityTypeL);
-        dest.writeString(this.slugS);
-        dest.writeString(this.publishedInS);
-        dest.writeString(this.metaDescriptionS);
-        dest.writeString(this.metaTitleS);
-        dest.writeString(this.articleStatusI);
-        dest.writeString(this.thirdPartyIdS);
-        dest.writeString(this.articleCategoryNameS);
-        dest.writeInt(this.articleCategoryL);
-        dest.writeInt(this.totalExperienceUser);
-        dest.writeValue(this.cityId);
-        dest.writeString(this.cityName);
-        dest.writeList(this.skillJobIds);
-        dest.writeStringList(this.searchTextJobSkills);
-        dest.writeList(this.opportunityTypeIds);
-        dest.writeStringList(this.searchIdOpportunityTypes);
-        dest.writeList(this.canHelpInIds);
-        dest.writeStringList(this.canHelpIns);
-        dest.writeList(this.experienceIds);
-        dest.writeStringList(this.experienceTitles);
-        dest.writeList(this.experienceCompanyIds);
-        dest.writeStringList(this.experienceCompanyNames);
-        dest.writeList(this.currExperienceIds);
-        dest.writeStringList(this.currExperienceTitles);
-        dest.writeList(this.currExperienceCompanyIds);
-        dest.writeStringList(this.currExperienceCompanyNames);
-        dest.writeList(this.educationIds);
-        dest.writeList(this.educationSchoolIds);
-        dest.writeStringList(this.educationSchoolNames);
-        dest.writeList(this.educationDegreeIds);
-        dest.writeStringList(this.educationDegreeNames);
-        dest.writeList(this.fieldOfStudyMasterIds);
-        dest.writeStringList(this.fieldOfStudyMasterNames);
-        dest.writeString(this.gender);
-        dest.writeLong(this.currently_id);
-        dest.writeLong(this.profileId);
-        dest.writeString(this.currently);
-        dest.writeInt(this.noOfChildren);
-        dest.writeList(this.interestId);
-        dest.writeStringList(this.interestNames);
-        dest.writeList(this.functionalAreaIds);
-        dest.writeStringList(this.functionalAreaNames);
-        dest.writeStringList(this.lastActivityDate);
-        dest.writeString(this.id);
-        dest.writeLong(this.entityOrParticipantId);
-        dest.writeInt(this.entityOrParticipantTypeIdI);
-        dest.writeString(this.displayIdProfileId);
-        dest.writeLong(this.createdBy);
-        dest.writeLong(this.idOfEntityOrParticipant);
-        dest.writeString(this.type);
-        dest.writeString(this.subType);
-        dest.writeString(this.nameOrTitle);
-        dest.writeString(this.imageUrl);
-        dest.writeString(this.thumbnailImageUrl);
-        dest.writeString(this.shortDescription);
-        dest.writeString(this.description);
-        dest.writeString(this.listShortDescription);
-        dest.writeString(this.listDescription);
-        dest.writeStringList(this.tags);
-        dest.writeList(this.tag_ids);
-        dest.writeByte(this.isDeleted ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-        dest.writeString(this.createdDate);
-        dest.writeString(this.postingDate);
-        dest.writeString(this.postingDateOnly);
-        dest.writeByte(this.isExpired ? (byte) 1 : (byte) 0);
-        dest.writeString(this.lastModifiedDate);
-        dest.writeLong(this.authorParticipantId);
-        dest.writeLong(this.authorId);
-        dest.writeByte(this.isAuthorConfidential ? (byte) 1 : (byte) 0);
-        dest.writeString(this.authorParticipantType);
-        dest.writeString(this.authorFirstName);
-        dest.writeString(this.authorLastName);
-        dest.writeString(this.authorName);
-        dest.writeString(this.authorImageUrl);
-        dest.writeByte(this.isAuthorImagePublic ? (byte) 1 : (byte) 0);
-        dest.writeString(this.authorCityId);
-        dest.writeString(this.authorCityName);
-        dest.writeString(this.authorShortDescription);
-        dest.writeByte(this.isFeatured ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.lastReactionValue);
-        dest.writeInt(this.reactionValue);
-        dest.writeInt(this.noOfLikes);
-        dest.writeInt(this.noOfComments);
-        dest.writeTypedList(this.lastComments);
-        dest.writeInt(this.noOfViews);
-        dest.writeByte(this.isApplied ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isBookmarked ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.noOfApplied);
-        dest.writeByte(this.isViewed ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.charCount);
-        dest.writeByte(this.isClosedCommunity ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.noOfMembers);
-        dest.writeInt(this.noOfPendingRequest);
-        dest.writeByte(this.isOwner ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isMember ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.isRequestPending ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.noOfBookmarks);
-        dest.writeList(this.speakerId);
-        dest.writeStringList(this.speakerName);
-        dest.writeStringList(this.speakerDesignation);
-        dest.writeStringList(this.speakerDescription);
-        dest.writeStringList(this.speakerImageUrl);
-        dest.writeList(this.sponsorId);
-        dest.writeStringList(this.sponsorName);
-        dest.writeStringList(this.sponsorUrl);
-        dest.writeStringList(this.sponsorLogoUrl);
-        dest.writeString(this.displayTextStartHour);
-        dest.writeString(this.displayTextStartMinute);
-        dest.writeString(this.displayTextEndHour);
-        dest.writeString(this.displayTextEndMinute);
-        dest.writeString(this.eventVenu);
-        dest.writeLong(this.communityTypeId);
-        dest.writeInt(this.rating);
-        dest.writeByte(this.isCommentAllowed ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.thumbImageWidth);
-        dest.writeByte(this.isChallengeAccepted ? (byte) 1 : (byte) 0);
-        dest.writeInt(this.challengeAcceptedCount);
-        dest.writeString(this.challengeLastModifiedDate);
-        dest.writeString(this.challengeStartDate);
-        dest.writeString(this.challengeEndDate);
-        dest.writeString(this.challengeTitle);
-        dest.writeByte(this.challengeIsAnonymous ? (byte) 1 : (byte) 0);
-        dest.writeString(this.challengeAcceptPostTextS);
-        dest.writeString(this.challengeUpdatePostTextS);
-        dest.writeInt(this.challengeHourI);
-        dest.writeInt(this.challengeMinuteI);
-        dest.writeString(this.challengeAuthorTypeS);
-        dest.writeByte(this.challngeIsNotIntrested ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.challengeIsWinner ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.challengeIsCompleted ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.challengeIsPublic ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.challengeAuthorEmailId ? (byte) 1 : (byte) 0);
-        dest.writeString(this.challengeWinnerAddress);
-        dest.writeString(this.challengePrizeDescription);
-        dest.writeString(this.challengePrizeIconLinkUrl);
-        dest.writeInt(this.challengeWinnerRank);
-        dest.writeByte(this.challengeHasWinner ? (byte) 1 : (byte) 0);
-        dest.writeString(this.challengeWinnerAnnouncementDate);
-        dest.writeByte(this.isFutureChallenge ? (byte) 1 : (byte) 0);
-        dest.writeLong(this.commentId);
-        dest.writeInt(this.thumbImageHeight);
-        dest.writeInt(this.highresImageWidth);
-        dest.writeLong(this.authorParticipantIdl);
-        dest.writeLong(this.userPostSourceEntityId);
-        dest.writeInt(this.highresImageHeight);
-    }
-
-    protected FeedDetail(Parcel in) {
-        super(in);
-        this.imageHeight = new ArrayList<Integer>();
-        in.readList(this.imageHeight, Integer.class.getClassLoader());
-        this.imageWidth = new ArrayList<Integer>();
-        in.readList(this.imageWidth, Integer.class.getClassLoader());
-        this.imageRatio = new ArrayList<Double>();
-        in.readList(this.imageRatio, Double.class.getClassLoader());
-        this.itemPosition = in.readInt();
-        this.isLongPress = in.readByte() != 0;
-        this.callFromName = in.readString();
-        this.isTrending = in.readByte() != 0;
-        this.isFromHome = in.readByte() != 0;
-        this.appIntroDataItems = in.readParcelable(AppIntroData.class.getClassLoader());
-        this.isSpamPost = in.readByte() != 0;
-        this.isCommunityOwner = in.readByte() != 0;
-        this.isAuthorMentor = in.readByte() != 0;
-        this.communityParticipantIdL = in.readInt();
-        this.isOgVideoLinkB = in.readByte() != 0;
-        this.ogDescriptionS = in.readString();
-        this.ogImageUrlS = in.readString();
-        this.ogRequestedUrlS = in.readString();
-        this.ogTitleS = in.readString();
-        this.solrIgnorePCrdt = in.readString();
-        this.solrIgnorePLastModifiedOn = in.readString();
-        this.solrIgnorePostCommunityLogo = in.readString();
-        this.challengeDataItems = in.createTypedArrayList(ChallengeDataItem.CREATOR);
-        this.dispThirdPartyUniqueId = in.readString();
-        this.startDateForEvent = in.readString();
-        this.postedOnlyDateFormat = in.readString();
-        this.postedDate = in.readString();
-        this.deepLinkUrl = in.readString();
-        this.imagesIds = new ArrayList<Long>();
-        in.readList(this.imagesIds, Long.class.getClassLoader());
-        this.imageUrls = in.createStringArrayList();
-        this.communityId = in.readLong();
-        this.isCommunityPost = in.readByte() != 0;
-        this.isAnonymous = in.readByte() != 0;
-        this.postCommunityName = in.readString();
-        this.postCommunityClosed = in.readByte() != 0;
-        this.companyProfileIdL = in.readInt();
-        this.topCompanyTagLinkIdL = in.readString();
-        this.sectorIdL = in.readInt();
-        this.sectorNameS = in.readString();
-        this.jobCityIdL = in.readString();
-        this.jobCityNameS = in.readString();
-        this.isFromSearchFirmB = in.readByte() != 0;
-        this.isSearchFirmB = in.readByte() != 0;
-        this.hCompanyNameS = in.readString();
-        this.hCompanyLogoS = in.readString();
-        this.experienceFromI = in.readInt();
-        this.experienceToI = in.readInt();
-        this.searchIdJobOppTypes = new ArrayList<Integer>();
-        in.readList(this.searchIdJobOppTypes, Integer.class.getClassLoader());
-        this.searchTextJobEmpTypes = in.createStringArrayList();
-        this.jobType = in.readString();
-        this.endDate = in.readString();
-        this.startDate = in.readString();
-        this.isAssisted = in.readByte() != 0;
-        this.isPremimiun = in.readByte() != 0;
-        this.isCtcRequired = in.readByte() != 0;
-        this.compensationFrom = in.readLong();
-        this.compensationTo = in.readLong();
-        this.noOfOpenings = in.readInt();
-        this.compensationDetails = in.readString();
-        this.companyMasterId = (Long) in.readValue(Long.class.getClassLoader());
-        this.externalApplicationUrl = in.readString();
-        this.address = in.readString();
-        this.companyEmailId = in.readString();
-        this.compensationCurrency = in.readString();
-        this.communityType = in.readString();
-        this.communityTypeL = in.readLong();
-        this.slugS = in.readString();
-        this.publishedInS = in.readString();
-        this.metaDescriptionS = in.readString();
-        this.metaTitleS = in.readString();
-        this.articleStatusI = in.readString();
-        this.thirdPartyIdS = in.readString();
-        this.articleCategoryNameS = in.readString();
-        this.articleCategoryL = in.readInt();
-        this.totalExperienceUser = in.readInt();
-        this.cityId = (Long) in.readValue(Long.class.getClassLoader());
-        this.cityName = in.readString();
-        this.skillJobIds = new ArrayList<Long>();
-        in.readList(this.skillJobIds, Long.class.getClassLoader());
-        this.searchTextJobSkills = in.createStringArrayList();
-        this.opportunityTypeIds = new ArrayList<Long>();
-        in.readList(this.opportunityTypeIds, Long.class.getClassLoader());
-        this.searchIdOpportunityTypes = in.createStringArrayList();
-        this.canHelpInIds = new ArrayList<Long>();
-        in.readList(this.canHelpInIds, Long.class.getClassLoader());
-        this.canHelpIns = in.createStringArrayList();
-        this.experienceIds = new ArrayList<Long>();
-        in.readList(this.experienceIds, Long.class.getClassLoader());
-        this.experienceTitles = in.createStringArrayList();
-        this.experienceCompanyIds = new ArrayList<Long>();
-        in.readList(this.experienceCompanyIds, Long.class.getClassLoader());
-        this.experienceCompanyNames = in.createStringArrayList();
-        this.currExperienceIds = new ArrayList<Long>();
-        in.readList(this.currExperienceIds, Long.class.getClassLoader());
-        this.currExperienceTitles = in.createStringArrayList();
-        this.currExperienceCompanyIds = new ArrayList<Long>();
-        in.readList(this.currExperienceCompanyIds, Long.class.getClassLoader());
-        this.currExperienceCompanyNames = in.createStringArrayList();
-        this.educationIds = new ArrayList<Long>();
-        in.readList(this.educationIds, Long.class.getClassLoader());
-        this.educationSchoolIds = new ArrayList<Long>();
-        in.readList(this.educationSchoolIds, Long.class.getClassLoader());
-        this.educationSchoolNames = in.createStringArrayList();
-        this.educationDegreeIds = new ArrayList<Long>();
-        in.readList(this.educationDegreeIds, Long.class.getClassLoader());
-        this.educationDegreeNames = in.createStringArrayList();
-        this.fieldOfStudyMasterIds = new ArrayList<Long>();
-        in.readList(this.fieldOfStudyMasterIds, Long.class.getClassLoader());
-        this.fieldOfStudyMasterNames = in.createStringArrayList();
-        this.gender = in.readString();
-        this.currently_id = in.readLong();
-        this.profileId = in.readLong();
-        this.currently = in.readString();
-        this.noOfChildren = in.readInt();
-        this.interestId = new ArrayList<Long>();
-        in.readList(this.interestId, Long.class.getClassLoader());
-        this.interestNames = in.createStringArrayList();
-        this.functionalAreaIds = new ArrayList<Long>();
-        in.readList(this.functionalAreaIds, Long.class.getClassLoader());
-        this.functionalAreaNames = in.createStringArrayList();
-        this.lastActivityDate = in.createStringArrayList();
-        this.id = in.readString();
-        this.entityOrParticipantId = in.readLong();
-        this.entityOrParticipantTypeIdI = in.readInt();
-        this.displayIdProfileId = in.readString();
-        this.createdBy = in.readLong();
-        this.idOfEntityOrParticipant = in.readLong();
-        this.type = in.readString();
-        this.subType = in.readString();
-        this.nameOrTitle = in.readString();
-        this.imageUrl = in.readString();
-        this.thumbnailImageUrl = in.readString();
-        this.shortDescription = in.readString();
-        this.description = in.readString();
-        this.listShortDescription = in.readString();
-        this.listDescription = in.readString();
-        this.tags = in.createStringArrayList();
-        this.tag_ids = new ArrayList<Long>();
-        in.readList(this.tag_ids, Long.class.getClassLoader());
-        this.isDeleted = in.readByte() != 0;
-        this.isActive = in.readByte() != 0;
-        this.createdDate = in.readString();
-        this.postingDate = in.readString();
-        this.postingDateOnly = in.readString();
-        this.isExpired = in.readByte() != 0;
-        this.lastModifiedDate = in.readString();
-        this.authorParticipantId = in.readLong();
-        this.authorId = in.readLong();
-        this.isAuthorConfidential = in.readByte() != 0;
-        this.authorParticipantType = in.readString();
-        this.authorFirstName = in.readString();
-        this.authorLastName = in.readString();
-        this.authorName = in.readString();
-        this.authorImageUrl = in.readString();
-        this.isAuthorImagePublic = in.readByte() != 0;
-        this.authorCityId = in.readString();
-        this.authorCityName = in.readString();
-        this.authorShortDescription = in.readString();
-        this.isFeatured = in.readByte() != 0;
-        this.lastReactionValue = in.readInt();
-        this.reactionValue = in.readInt();
-        this.noOfLikes = in.readInt();
-        this.noOfComments = in.readInt();
-        this.lastComments = in.createTypedArrayList(Comment.CREATOR);
-        this.noOfViews = in.readInt();
-        this.isApplied = in.readByte() != 0;
-        this.isBookmarked = in.readByte() != 0;
-        this.noOfApplied = in.readInt();
-        this.isViewed = in.readByte() != 0;
-        this.charCount = in.readInt();
-        this.isClosedCommunity = in.readByte() != 0;
-        this.noOfMembers = in.readInt();
-        this.noOfPendingRequest = in.readInt();
-        this.isOwner = in.readByte() != 0;
-        this.isMember = in.readByte() != 0;
-        this.isRequestPending = in.readByte() != 0;
-        this.noOfBookmarks = in.readInt();
-        this.speakerId = new ArrayList<Integer>();
-        in.readList(this.speakerId, Integer.class.getClassLoader());
-        this.speakerName = in.createStringArrayList();
-        this.speakerDesignation = in.createStringArrayList();
-        this.speakerDescription = in.createStringArrayList();
-        this.speakerImageUrl = in.createStringArrayList();
-        this.sponsorId = new ArrayList<Integer>();
-        in.readList(this.sponsorId, Integer.class.getClassLoader());
-        this.sponsorName = in.createStringArrayList();
-        this.sponsorUrl = in.createStringArrayList();
-        this.sponsorLogoUrl = in.createStringArrayList();
-        this.displayTextStartHour = in.readString();
-        this.displayTextStartMinute = in.readString();
-        this.displayTextEndHour = in.readString();
-        this.displayTextEndMinute = in.readString();
-        this.eventVenu = in.readString();
-        this.communityTypeId = in.readLong();
-        this.rating = in.readInt();
-        this.isCommentAllowed = in.readByte() != 0;
-        this.thumbImageWidth = in.readInt();
-        this.isChallengeAccepted = in.readByte() != 0;
-        this.challengeAcceptedCount = in.readInt();
-        this.challengeLastModifiedDate = in.readString();
-        this.challengeStartDate = in.readString();
-        this.challengeEndDate = in.readString();
-        this.challengeTitle = in.readString();
-        this.challengeIsAnonymous = in.readByte() != 0;
-        this.challengeAcceptPostTextS = in.readString();
-        this.challengeUpdatePostTextS = in.readString();
-        this.challengeHourI = in.readInt();
-        this.challengeMinuteI = in.readInt();
-        this.challengeAuthorTypeS = in.readString();
-        this.challngeIsNotIntrested = in.readByte() != 0;
-        this.challengeIsWinner = in.readByte() != 0;
-        this.challengeIsCompleted = in.readByte() != 0;
-        this.challengeIsPublic = in.readByte() != 0;
-        this.challengeAuthorEmailId = in.readByte() != 0;
-        this.challengeWinnerAddress = in.readString();
-        this.challengePrizeDescription = in.readString();
-        this.challengePrizeIconLinkUrl = in.readString();
-        this.challengeWinnerRank = in.readInt();
-        this.challengeHasWinner = in.readByte() != 0;
-        this.challengeWinnerAnnouncementDate = in.readString();
-        this.isFutureChallenge = in.readByte() != 0;
-        this.commentId = in.readLong();
-        this.thumbImageHeight = in.readInt();
-        this.highresImageWidth = in.readInt();
-        this.authorParticipantIdl = in.readLong();
-        this.userPostSourceEntityId = in.readLong();
-        this.highresImageHeight = in.readInt();
-    }
-
-    public static final Creator<FeedDetail> CREATOR = new Creator<FeedDetail>() {
-        @Override
-        public FeedDetail createFromParcel(Parcel source) {
-            return new FeedDetail(source);
-        }
-
-        @Override
-        public FeedDetail[] newArray(int size) {
-            return new FeedDetail[size];
-        }
-    };
 }

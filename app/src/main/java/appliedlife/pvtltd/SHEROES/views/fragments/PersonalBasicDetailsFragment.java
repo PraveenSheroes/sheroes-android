@@ -17,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.parceler.Parcels;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -124,7 +126,7 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         mSpinnerRelationStatus.setAdapter(new ProfileSpinnerAdapter(getActivity(), R.layout.profile_current_status_spinner, getResources().getStringArray(R.array.relationship_status_arr)));
 
         if (null != getArguments()) {
-            myProfileView = getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
+            myProfileView = Parcels.unwrap(getArguments().getParcelable(AppConstants.EDUCATION_PROFILE));
             if (myProfileView != null && myProfileView.getUserDetails() != null) {
                 UserDetails userDetails = myProfileView.getUserDetails();
                 if (userDetails != null) {

@@ -20,9 +20,11 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
@@ -85,7 +87,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
     private LinearLayoutManager mLayoutManager;
     private GridLayoutManager mGridManager;
     Context mContext;
-    private FeedDetail mFeedDetail;
+    private EventSolrObj mFeedDetail;
 
     public EventDetailHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -99,7 +101,7 @@ public class EventDetailHolder extends BaseViewHolder<EventDetailPojo> {
     public void bindData(EventDetailPojo item, Context context, int position) {
         this.dataItem = item;
         mContext = context;
-        mFeedDetail = dataItem.getFeedDetail();
+        mFeedDetail = (EventSolrObj)dataItem.getFeedDetail();
         mTvEventInterestedBtn.setEnabled(true);
         if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getNameOrTitle())) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {

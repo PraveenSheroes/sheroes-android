@@ -1,19 +1,19 @@
 package appliedlife.pvtltd.SHEROES.models.entities.onboarding;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 
 /**
  * Created by Praveen_Singh on 26-03-2017.
  */
-
-public class BoardingInterestJobSearch  extends BaseResponse implements Parcelable {
+@Parcel(analyze = {BoardingInterestJobSearch.class, BaseResponse.class})
+public class BoardingInterestJobSearch  extends BaseResponse{
     OnBoardingEnum onBoardingEnum;
     @SerializedName("id")
     @Expose
@@ -94,42 +94,4 @@ public class BoardingInterestJobSearch  extends BaseResponse implements Parcelab
         this.onBoardingEnum = onBoardingEnum;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.onBoardingEnum == null ? -1 : this.onBoardingEnum.ordinal());
-        dest.writeString(this.id);
-        dest.writeString(this.title);
-        dest.writeString(this.category);
-        dest.writeString(this.logo);
-        dest.writeString(this.communityType);
-        dest.writeByte(this.isCommunityClosed ? (byte) 1 : (byte) 0);
-    }
-
-    protected BoardingInterestJobSearch(Parcel in) {
-        int tmpOnBoardingEnum = in.readInt();
-        this.onBoardingEnum = tmpOnBoardingEnum == -1 ? null : OnBoardingEnum.values()[tmpOnBoardingEnum];
-        this.id = in.readString();
-        this.title = in.readString();
-        this.category = in.readString();
-        this.logo = in.readString();
-        this.communityType = in.readString();
-        this.isCommunityClosed = in.readByte() != 0;
-    }
-
-    public static final Creator<BoardingInterestJobSearch> CREATOR = new Creator<BoardingInterestJobSearch>() {
-        @Override
-        public BoardingInterestJobSearch createFromParcel(Parcel source) {
-            return new BoardingInterestJobSearch(source);
-        }
-
-        @Override
-        public BoardingInterestJobSearch[] newArray(int size) {
-            return new BoardingInterestJobSearch[size];
-        }
-    };
 }

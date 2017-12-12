@@ -1,12 +1,12 @@
 package appliedlife.pvtltd.SHEROES.models.entities.login;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ExprienceEntityBO implements Parcelable {
+import org.parceler.Parcel;
+
+@Parcel(analyze = {ExprienceEntityBO.class})
+public class ExprienceEntityBO{
 
 	@SerializedName("experience_type_string")
 	@Expose	
@@ -252,81 +252,6 @@ public class ExprienceEntityBO implements Parcelable {
 	public void setActive(boolean active) {
 		isActive = active;
 	}
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeLong(this.id);
-		dest.writeLong(this.experienceType);
-		dest.writeLong(this.organisationType);
-		dest.writeLong(this.sector);
-		dest.writeLong(this.companyId);
-		dest.writeString(this.company);
-		dest.writeLong(this.locationId);
-		dest.writeString(this.title);
-		dest.writeInt(this.startMonth);
-		dest.writeInt(this.startYear);
-		dest.writeInt(this.endMonth);
-		dest.writeInt(this.endYear);
-		dest.writeString(this.description);
-		dest.writeByte(this.isCurrentlyWorkingHere ? (byte) 1 : (byte) 0);
-		dest.writeLong(this.functionalAreaId);
-		dest.writeString(this.functionalAreaName);
-		dest.writeString(this.orgBrandName);
-		dest.writeString(this.aboutOrg);
-		dest.writeString(this.orgWebUrl);
-		dest.writeString(this.orgContactNo);
-		dest.writeString(this.portfolioUrl);
-		dest.writeString(this.imageTitle);
-		dest.writeString(this.imageUrl);
-		dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
-	}
-
-	public ExprienceEntityBO() {
-	}
-
-	protected ExprienceEntityBO(Parcel in) {
-		this.id = in.readLong();
-		this.experienceType = in.readLong();
-		this.organisationType = in.readLong();
-		this.sector = in.readLong();
-		this.companyId = in.readLong();
-		this.company = in.readString();
-		this.locationId = in.readLong();
-		this.title = in.readString();
-		this.startMonth = in.readInt();
-		this.startYear = in.readInt();
-		this.endMonth = in.readInt();
-		this.endYear = in.readInt();
-		this.description = in.readString();
-		this.isCurrentlyWorkingHere = in.readByte() != 0;
-		this.functionalAreaId = in.readLong();
-		this.functionalAreaName = in.readString();
-		this.orgBrandName = in.readString();
-		this.aboutOrg = in.readString();
-		this.orgWebUrl = in.readString();
-		this.orgContactNo = in.readString();
-		this.portfolioUrl = in.readString();
-		this.imageTitle = in.readString();
-		this.imageUrl = in.readString();
-		this.isActive = in.readByte() != 0;
-	}
-
-	public static final Parcelable.Creator<ExprienceEntityBO> CREATOR = new Parcelable.Creator<ExprienceEntityBO>() {
-		@Override
-		public ExprienceEntityBO createFromParcel(Parcel source) {
-			return new ExprienceEntityBO(source);
-		}
-
-		@Override
-		public ExprienceEntityBO[] newArray(int size) {
-			return new ExprienceEntityBO[size];
-		}
-	};
 
 	public String getExperienceTypeString() {
 		return experienceTypeString;

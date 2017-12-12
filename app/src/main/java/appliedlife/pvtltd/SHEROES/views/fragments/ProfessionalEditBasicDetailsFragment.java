@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,7 +124,7 @@ public class ProfessionalEditBasicDetailsFragment extends BaseFragment implement
 
 
         if (null != getArguments()) {
-            myProfileView = getArguments().getParcelable(AppConstants.EDUCATION_PROFILE);
+            myProfileView = Parcels.unwrap(getArguments().getParcelable(AppConstants.EDUCATION_PROFILE));
             if (myProfileView != null && myProfileView.getUserDetails() != null) {
                 UserDetails userDetails = myProfileView.getUserDetails();
 

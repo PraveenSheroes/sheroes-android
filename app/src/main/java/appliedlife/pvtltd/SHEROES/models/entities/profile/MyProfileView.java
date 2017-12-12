@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.models.entities.profile;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import org.parceler.Parcel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -11,8 +9,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 /**
  * Created by priyanka on 07/04/17.
  */
-
-public class MyProfileView extends BaseResponse implements Parcelable {
+@Parcel(analyze = {MyProfileView.class, BaseResponse.class})
+public class MyProfileView extends BaseResponse{
 
     private String type;
     private String iteam1;
@@ -122,62 +120,4 @@ public class MyProfileView extends BaseResponse implements Parcelable {
     public void setClientSideLocation(ClientSideLocation clientSideLocation) {
         this.clientSideLocation = clientSideLocation;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeString(this.type);
-        dest.writeString(this.iteam1);
-        dest.writeParcelable(this.userDetails, flags);
-        dest.writeList(this.educationEntity);
-        dest.writeTypedList(this.exprienceEntity);
-        dest.writeTypedList(this.projectEntity);
-        dest.writeList(this.goodAtSkill);
-        dest.writeList(this.opportunityType);
-        dest.writeList(this.interestType);
-        dest.writeParcelable(this.aboutMe, flags);
-        dest.writeList(this.canHelpIn);
-        dest.writeParcelable(this.clientSideLocation, flags);
-    }
-
-    public MyProfileView() {
-    }
-
-    protected MyProfileView(Parcel in) {
-        super(in);
-        this.type = in.readString();
-        this.iteam1 = in.readString();
-        this.userDetails = in.readParcelable(UserDetails.class.getClassLoader());
-        this.educationEntity = new ArrayList<EducationEntity>();
-        in.readList(this.educationEntity, EducationEntity.class.getClassLoader());
-        this.exprienceEntity = in.createTypedArrayList(ExprienceEntity.CREATOR);
-        this.projectEntity = in.createTypedArrayList(ProjectEntity.CREATOR);
-        this.goodAtSkill = new ArrayList<GoodAtSkill>();
-        in.readList(this.goodAtSkill, GoodAtSkill.class.getClassLoader());
-        this.opportunityType = new ArrayList<OpportunityType>();
-        in.readList(this.opportunityType, OpportunityType.class.getClassLoader());
-        this.interestType = new ArrayList<InterestType>();
-        in.readList(this.interestType, InterestType.class.getClassLoader());
-        this.aboutMe = in.readParcelable(AboutMe.class.getClassLoader());
-        this.canHelpIn = new ArrayList<CanHelpIn>();
-        in.readList(this.canHelpIn, CanHelpIn.class.getClassLoader());
-        this.clientSideLocation = in.readParcelable(ClientSideLocation.class.getClassLoader());
-    }
-
-    public static final Creator<MyProfileView> CREATOR = new Creator<MyProfileView>() {
-        @Override
-        public MyProfileView createFromParcel(Parcel source) {
-            return new MyProfileView(source);
-        }
-
-        @Override
-        public MyProfileView[] newArray(int size) {
-            return new MyProfileView[size];
-        }
-    };
 }

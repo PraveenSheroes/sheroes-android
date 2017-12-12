@@ -1,13 +1,12 @@
 package appliedlife.pvtltd.SHEROES.models.entities.login;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -18,7 +17,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
  * Title:Token use for user login
  * This token will remain throughout user login.
  */
-public class LoginResponse extends BaseResponse implements Parcelable {
+@Parcel(analyze = {LoginResponse.class,BaseResponse.class})
+public class LoginResponse extends BaseResponse{
     @SerializedName("token")
     @Expose
     private String token;
@@ -103,46 +103,4 @@ public class LoginResponse extends BaseResponse implements Parcelable {
     public void setAppContactAccessed(boolean appContactAccessed) {
         isAppContactAccessed = appContactAccessed;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeString(this.token);
-        dest.writeParcelable(this.userSummary, flags);
-        dest.writeString(this.tokenType);
-        dest.writeLong(this.tokenTime);
-        dest.writeString(this.gcmId);
-        dest.writeString(this.nextScreen);
-        dest.writeByte((byte) (this.sheUser ? 1 : 0));
-        dest.writeByte((byte) (this.isAppContactAccessed ? 1 : 0));
-    }
-
-    protected LoginResponse(Parcel in) {
-        super(in);
-        this.token = in.readString();
-        this.userSummary = in.readParcelable(UserSummary.class.getClassLoader());
-        this.tokenType = in.readString();
-        this.tokenTime = in.readLong();
-        this.gcmId = in.readString();
-        this.nextScreen = in.readString();
-        this.sheUser = in.readByte() != 0;
-        this.isAppContactAccessed = in.readByte() != 0;
-    }
-
-    public static final Creator<LoginResponse> CREATOR = new Creator<LoginResponse>() {
-        @Override
-        public LoginResponse createFromParcel(Parcel source) {
-            return new LoginResponse(source);
-        }
-
-        @Override
-        public LoginResponse[] newArray(int size) {
-            return new LoginResponse[size];
-        }
-    };
 }

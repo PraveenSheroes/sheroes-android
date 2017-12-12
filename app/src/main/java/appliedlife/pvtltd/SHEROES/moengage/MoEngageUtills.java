@@ -11,6 +11,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -138,7 +139,7 @@ public class MoEngageUtills {
                 case AppConstants.FEED_JOB:
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(feedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(feedDetail.getAuthorName()).append(feedDetail.getAuthorCityName());
-                    entityMoEngageBookmark(mMoEHelper, payloadBuilder, MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, feedDetail.getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                    entityMoEngageBookmark(mMoEHelper, payloadBuilder, MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, ((JobFeedSolrObj)feedDetail).getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                     break;
             }
         }
@@ -243,7 +244,7 @@ public class MoEngageUtills {
                 case AppConstants.FEED_JOB:
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append(feedDetail.getNameOrTitle()).append(AppConstants.SPACE).append(feedDetail.getAuthorName()).append(feedDetail.getAuthorCityName());
-                    entityMoEngageShareCard(mMoEHelper, payloadBuilder, shareType,MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, feedDetail.getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                    entityMoEngageShareCard(mMoEHelper, payloadBuilder, shareType,MoEngageConstants.JOB, feedDetail.getEntityOrParticipantId(), stringBuilder.toString(), MoEngageConstants.OPPORTUNITY_TYPE, MoEngageConstants.FUNCTION_AREA_FOR_JOB, ((JobFeedSolrObj)feedDetail).getCompanyEmailId(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                     break;
             }
         }

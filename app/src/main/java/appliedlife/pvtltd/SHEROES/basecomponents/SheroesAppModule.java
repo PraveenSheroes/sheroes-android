@@ -2,27 +2,54 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.content.pm.PackageManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -61,6 +88,11 @@ public class SheroesAppModule {
     File cacheFile;
     SheroesApplication mApplication;
     final static long CACHE_SIZE = 10 * 1024 * 1024;
+
+    private static final String[] DATE_FORMATS = new String[]{
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd"
+    };
 
     @Provides
     @Singleton
@@ -106,6 +138,58 @@ public class SheroesAppModule {
                 return response;
             }
         };
+    }
+
+    private static Gson initGSONSerializers() {
+
+        final RuntimeTypeAdapterFactory<FeedDetail> typeFactory = RuntimeTypeAdapterFactory
+                .of(FeedDetail.class, "sub_type")
+                .registerSubtype(ArticleSolrObj.class, "A")
+                .registerSubtype(UserSolrObj.class, "U")
+                .registerSubtype(JobFeedSolrObj.class, "J")
+                .registerSubtype(CommunityFeedSolrObj.class, "C")
+                .registerSubtype(UserPostSolrObj.class, "P")
+                .registerSubtype(EventSolrObj.class, "E")
+                .registerSubtype(OrganizationFeedObj.class, "O")
+                .registerSubtype(ChallengeSolrObj.class, "H");
+
+        return new GsonBuilder()
+                .setDateFormat(DATE_FORMATS[0])
+                .registerTypeAdapter(Date.class, new DateDeserializer())
+                .registerTypeAdapterFactory(typeFactory)
+                .create();
+    }
+
+    private static class DateDeserializer implements JsonSerializer<Date>, JsonDeserializer<Date> {
+        @Override
+        public Date deserialize(JsonElement jsonElement, Type typeOF,
+                                JsonDeserializationContext context) throws JsonParseException {
+            if (TextUtils.isEmpty(jsonElement.getAsString())) {
+                return null;
+            }
+
+            for (String format : DATE_FORMATS) {
+                try {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.US);
+                    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    return simpleDateFormat.parse(jsonElement.getAsString());
+                } catch (ParseException ignored) {
+                    // Bamboo.e(TAG, ignored.toString() + " Format - " + format);
+                }
+            }
+            Crashlytics.getInstance().core.logException(new JsonParseException("Unparseable date: \"" + jsonElement.getAsString()
+                    + "\". Supported formats: " + Arrays.toString(DATE_FORMATS)));
+            return null;
+        }
+
+        @Override
+        public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+            if (src == null) {
+                return JsonNull.INSTANCE;
+            }
+
+            return new JsonPrimitive(DateUtil.toDateOnlyString(src));
+        }
     }
 
     @Singleton
@@ -184,14 +268,23 @@ public class SheroesAppModule {
         return okHttpClientBuilder.build();
     }
 
+
+    public static Gson ensureGson() {
+        if (sGson == null) {
+            sGson = initGSONSerializers();
+        }
+        return sGson;
+    }
+
+    private static Gson sGson;
+
     @Provides
     @Singleton
     Retrofit provideSheroesNetworkCall(OkHttpClient okHttpClient, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(ensureGson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
     }

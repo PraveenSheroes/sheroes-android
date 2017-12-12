@@ -3,6 +3,10 @@ package appliedlife.pvtltd.SHEROES.basecomponents.baserequest;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 /**
@@ -12,7 +16,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
  * @version 1.0
  * @since 23/01/2017.
  */
-public abstract class BaseRequest {
+
+@Parcel(analyze = {BaseRequest.class})
+public class BaseRequest {
 
     @SerializedName("appVersion")
     @Expose
@@ -49,20 +55,6 @@ public abstract class BaseRequest {
     @Expose
     private String testUserType = AppConstants.orgUserType;
     // For getting org cards
-    public BaseRequest(  String appVersion, String cloudMessagingId, String deviceUniqueId, String screenName, String lastScreenName, int pageNo, int pageSize) {
-        this.appVersion = appVersion;
-        this.cloudMessagingId = cloudMessagingId;
-        this.deviceUniqueId = deviceUniqueId;
-        this.screenName = screenName;
-        this.lastScreenName = lastScreenName;
-        this.pageNo = pageNo;
-        this.pageSize = pageSize;
-    }
-
-    public BaseRequest() {
-    }
-
-
 
     public String getAppVersion() {
         return appVersion;

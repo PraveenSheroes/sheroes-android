@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Album;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
@@ -248,11 +249,12 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
     //region public helper methods
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties) {
-        if (feedDetail == null || CommonUtil.isEmpty(feedDetail.getImageUrls())) {
+        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
+        if (feedDetail == null || CommonUtil.isEmpty(userPostObj.getImageUrls())) {
             return;
         }
         Album album = new Album();
-        for (String url : feedDetail.getImageUrls()) {
+        for (String url : userPostObj.getImageUrls()) {
             Photo photo = new Photo();
             photo.url = url;
             album.photos.add(photo);

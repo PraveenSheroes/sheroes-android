@@ -23,6 +23,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -158,8 +160,8 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         if (null != getArguments()) {
-            mFragmentOpen = getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK);
-            mFeedDetail = getArguments().getParcelable(AppConstants.COMMENTS);
+            mFragmentOpen = Parcels.unwrap(getArguments().getParcelable(AppConstants.FRAGMENT_FLAG_CHECK));
+            mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMENTS));
             if (null != mFeedDetail) {
                 mTotalComments = mFeedDetail.getNoOfComments();
                 if (mFeedDetail.getNoOfLikes() < 1) {
@@ -386,12 +388,12 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
     }
 
     private void menuItemDeleteOrEdit() {
-        int editOrDelete = mFeedDetail.getExperienceFromI();
+        int editOrDelete = ((UserPostSolrObj)mFeedDetail).getIsEditOrDelete();
         switch (editOrDelete) {
             case AppConstants.ONE_CONSTANT:
                 List<Comment> lastCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastCommentList)) {
-                    int commentId = lastCommentList.get(mFeedDetail.getNoOfOpenings()).getId();
+                    int commentId = lastCommentList.get(((UserPostSolrObj)mFeedDetail).getNoOfOpenings()).getId();
                     for (Comment comment : mCommentList) {
                         if (commentId == comment.getId()) {
 
@@ -411,11 +413,11 @@ public class CommentReactionFragment extends BaseFragment implements AllCommentR
             case AppConstants.TWO_CONSTANT:
                 List<Comment> lastDeleteCommentList = mFeedDetail.getLastComments();
                 if (StringUtil.isNotEmptyCollection(lastDeleteCommentList)) {
-                    int commentId = lastDeleteCommentList.get(mFeedDetail.getNoOfOpenings()).getId();
+                    int commentId = lastDeleteCommentList.get(((UserPostSolrObj)mFeedDetail).getNoOfOpenings()).getId();
                     for (Comment comment : mCommentList) {
                         if (commentId == comment.getId()) {
                             comment.setActive(false);
-                            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), mFeedDetail.isAnonymous(), comment.isActive(), comment.getId()), AppConstants.TWO_CONSTANT);
+                            mCommentReactionPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), ((UserPostSolrObj)mFeedDetail).isAnonymous(), comment.isActive(), comment.getId()), AppConstants.TWO_CONSTANT);
                             mCommentList.remove(comment);
                             break;
                         }
