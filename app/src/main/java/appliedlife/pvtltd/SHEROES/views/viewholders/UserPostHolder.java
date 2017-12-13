@@ -214,7 +214,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         viewContainer.setVisibility(View.VISIBLE);
         mLikeButtonText.setTag(true);
         mUserPostObj.setLastReactionValue(mUserPostObj.getReactionValue());
-        if (!mUserPostObj.isTrending()) {
+        //if (!mUserPostObj.isTrending()) {
             imageOperations(mContext);
             if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
                 userPostImages.removeAllViews();
@@ -227,7 +227,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             }
             multipleImageURLs();
             populatePostText();
-        }
+        //}
         allTextViewStringOperations(mContext);
         likeCommentOps();
 

@@ -308,7 +308,8 @@
             android:paddingLeft="@dimen/dp_size_10"
             android:paddingRight="@dimen/dp_size_10"
             android:paddingTop="@dimen/dp_size_5"
-            android:paddingBottom="@dimen/dp_size_20" />
+            android:paddingBottom="@dimen/dp_size_20"
+            android:visibility="gone"/>
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/rl_feed_article_join_conversation"

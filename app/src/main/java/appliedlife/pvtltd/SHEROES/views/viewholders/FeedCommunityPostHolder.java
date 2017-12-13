@@ -242,7 +242,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setTag(true);
         mUserPostObj.setLastReactionValue(mUserPostObj.getReactionValue());
-        if (!mUserPostObj.isTrending()) {
+        //if (!mUserPostObj.isTrending()) {
             imageOperations(mContext);
             if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
                 liFeedCommunityUserPostImages.removeAllViews();
@@ -255,7 +255,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
             multipleImageURLs();
             populatePostText();
-        }
+        //}
         onBookMarkClick();
         allTextViewStringOperations(mContext);
         likeCommentOps();
@@ -454,13 +454,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_ASK_FEEDBACK)).append(AppConstants.SPACE).append(feedCommunityName);
                             clickOnMentorAndCommunityName(posted.toString(), feedTitle, mContext.getString(R.string.ID_POSTED_ASK_FEEDBACK));
                         }
-                        if (!mUserPostObj.isTrending()) {
+                       // if (!mUserPostObj.isTrending()) {
                             if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getSolrIgnorePostCommunityLogo())) {
                                 Glide.with(context)
                                         .load(mUserPostObj.getSolrIgnorePostCommunityLogo())
                                         .into(ivCompanyThumbnailCommPost);
                             }
-                        }
+                       // }
                         tvCompanyNameCommPost.setText(feedCommunityName);
                         orgCommPostSeparateLine.setVisibility(View.VISIBLE);
 
@@ -886,7 +886,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
     public void isBookMarkClick() {
-        mUserPostObj.setTrending(true);
+       // mUserPostObj.setTrending(true);
         tvFeedCommunityPostUserBookmark.setEnabled(false);
         if (mUserPostObj.isBookmarked()) {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserBookmark);
@@ -933,7 +933,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void userReactionWithouLongPress() {
         tvFeedCommunityPostUserReaction.setTag(false);
-        mUserPostObj.setTrending(true);
+       // mUserPostObj.setTrending(true);
         mUserPostObj.setLongPress(false);
         if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(mUserPostObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());

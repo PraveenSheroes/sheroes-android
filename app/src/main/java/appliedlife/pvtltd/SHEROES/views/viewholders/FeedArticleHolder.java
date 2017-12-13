@@ -355,11 +355,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
                 tvFeedArticleCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
             }
-            if (lastComment.isMyOwnParticipation()) {
+           /* if (lastComment.isMyOwnParticipation()) {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
-            }
+            }*/
         } else {
             liFeedArticleUserComments.setVisibility(View.GONE);
             tvFeedArticleTotalReplies.setVisibility(View.GONE);
@@ -426,8 +426,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_comment_post_menu)
     public void commentItemClick() {
-        articleObj .setItemPosition(mItemPosition);
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserCommentPostMenu);
+        /*articleObj .setItemPosition(mItemPosition);
+        viewInterface.handleOnClick(articleObj , tvFeedArticleUserCommentPostMenu);*/
     }
 
     @OnClick(R.id.tv_feed_article_total_reactions)

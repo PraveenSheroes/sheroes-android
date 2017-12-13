@@ -45,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
@@ -469,7 +470,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);*/
                 break;
             case R.id.tv_feed_article_user_comment:
-                mFragmentOpen.setCommentList(true);
+              //  mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
@@ -477,7 +478,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_images:
-                ArticleActivity.navigateTo(this, mFeedDetail, "da", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intent = new Intent(this, ArticleDetailActivity.class);
                 intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
@@ -489,7 +490,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             case R.id.li_article_cover_image:
-                ArticleActivity.navigateTo(this, mFeedDetail, "da", null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
@@ -788,8 +789,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
-                    mFragmentOpen.setCommentList(true);
-                    mFeedDetail.setTrending(true);
+                   // mFragmentOpen.setCommentList(true);
+                   // mFeedDetail.setTrending(true);
                     ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.ONE_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
@@ -815,9 +816,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
-                    mFragmentOpen.setCommentList(true);
-                    mFragmentOpen.setCommentList(true);
-                    mFeedDetail.setTrending(true);
+                  //  mFragmentOpen.setCommentList(true);
+                   // mFragmentOpen.setCommentList(true);
+                   // mFeedDetail.setTrending(true);
                     ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.TWO_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
@@ -901,7 +902,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
             }
         } else {*/
-            PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
+            if(feedDetail instanceof UserPostSolrObj){
+                PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
+            }else if(feedDetail instanceof ArticleSolrObj){
+                ArticleActivity.navigateTo(this, feedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+            }
+
             /*CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
             Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
