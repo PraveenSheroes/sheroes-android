@@ -74,7 +74,7 @@ import butterknife.OnClick;
  */
 
 public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack {
-    public static final String SCREEN_LABEL = "Post Detial Screen";
+    public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
