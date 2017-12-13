@@ -298,7 +298,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-        if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+       /* if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             mPostDescription.setVisibility(View.GONE);
             userPostImages.removeAllViews();
             userPostImages.removeAllViewsInLayout();
@@ -320,7 +320,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 ivChallenge.setBackgroundResource(R.drawable.challenge_post);
             }
             userPostImages.addView(child);
-        } else {
+        } else {*/
             mPostDescription.setVisibility(View.VISIBLE);
             if (StringUtil.isNotEmptyCollection(mUserPostObj.getImageUrls())) {
                 userPostImages.setVisibility(View.VISIBLE);
@@ -371,7 +371,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 userPostImages.setVisibility(View.GONE);
             }
             //}
-        }
+       // }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
