@@ -60,6 +60,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     private SheroesApplication mSheroesApplication;
     private int headerCount = 0;
     private int pageNumber = 1;
+    private Comment lastComment;
 
     @Inject
     public PostDetailViewImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
@@ -138,6 +139,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     smoothScrollToBottom = false;
                 }else {
                     smoothScrollToBottom = true;
+                    if(mUserPostObj.getIsEditOrDelete() == 1){
+                        mUserPostObj.setIsEditOrDelete(0);
+                        mBaseResponseList.set(0, mUserPostObj);
+                        getMvpView().editLastComment();
+                    }
+                    if(mUserPostObj.getIsEditOrDelete() == 2){
+                        mUserPostObj.setIsEditOrDelete(0);
+                        mBaseResponseList.set(0, mUserPostObj);
+                        getMvpView().deleteLastComment();
+                    }
                 }
                 if(smoothScrollToBottom){
                     getMvpView().smoothScrollToBottom();
@@ -541,6 +552,18 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         mUserPostObj = userPostSolrObj;
         mBaseResponseList.set(0, userPostSolrObj);
         getMvpView().setData(0, userPostSolrObj);
+    }
+
+    public Comment getLastComment() {
+        if(!CommonUtil.isEmpty(mBaseResponseList)){
+            BaseResponse baseResponse = mBaseResponseList.get(mBaseResponseList.size() - 1);
+            if(baseResponse instanceof Comment){
+                return (Comment) baseResponse;
+            }else {
+                return null;
+            }
+        }
+        return null;
     }
 
     //endregion

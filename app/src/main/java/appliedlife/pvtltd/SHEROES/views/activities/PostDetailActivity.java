@@ -248,6 +248,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
+    public void editLastComment() {
+        Comment comment = mPostDetailPresenter.getLastComment();
+        if(comment!=null){
+            onEditMenuClicked(comment);
+        }
+    }
+
+    @Override
+    public void deleteLastComment() {
+        Comment comment = mPostDetailPresenter.getLastComment();
+        if(comment!=null){
+            onDeleteMenuClicked(comment);
+        }
+    }
+
+    @Override
     public void addData(BaseResponse baseResponse) {
         mPostDetailListAdapter.addData(baseResponse);
     }
@@ -545,28 +561,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.edit:
-                            HashMap<String, Object> properties =
-                                    new EventProperty.Builder()
-                                            .id(Long.toString(comment.getId()))
-                                            .postId(Long.toString(comment.getEntityId()))
-                                            .postType(AnalyticsEventType.COMMUNITY.toString())
-                                            .body(comment.getComment())
-                                            .build();
-                            AnalyticsManager.trackEvent(Event.REPLY_EDITED, properties);
-                            mInputText.setText(comment.getComment());
-                            mInputText.setSelection(comment.getComment().length());
-                            mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+                            onEditMenuClicked(comment);
                             return true;
                         case R.id.delete:
-                            HashMap<String, Object> propertiesDelete =
-                                    new EventProperty.Builder()
-                                            .id(Long.toString(comment.getId()))
-                                            .postId(Long.toString(comment.getEntityId()))
-                                            .postType(AnalyticsEventType.COMMUNITY.toString())
-                                            .body(comment.getComment())
-                                            .build();
-                            AnalyticsManager.trackEvent(Event.REPLY_DELETED, propertiesDelete);
-                            mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+                            onDeleteMenuClicked(comment);
                             return true;
                         default:
                             return false;
@@ -575,6 +573,32 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             });
         }
         popup.show();
+    }
+
+    private void onDeleteMenuClicked(Comment comment) {
+        HashMap<String, Object> propertiesDelete =
+                new EventProperty.Builder()
+                        .id(Long.toString(comment.getId()))
+                        .postId(Long.toString(comment.getEntityId()))
+                        .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .body(comment.getComment())
+                        .build();
+        AnalyticsManager.trackEvent(Event.REPLY_DELETED, propertiesDelete);
+        mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+    }
+
+    private void onEditMenuClicked(Comment comment) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(comment.getId()))
+                        .postId(Long.toString(comment.getEntityId()))
+                        .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .body(comment.getComment())
+                        .build();
+        AnalyticsManager.trackEvent(Event.REPLY_EDITED, properties);
+        mInputText.setText(comment.getComment());
+        mInputText.setSelection(comment.getComment().length());
+        mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
     }
 
     @Override
