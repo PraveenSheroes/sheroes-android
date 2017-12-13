@@ -1,0 +1,56 @@
+{
+  "status": "SUCCESS",
+  "fieldErrorMessageMap": {},
+  "numFound": 4,
+  "screen_name": null,
+  "menu_items": [
+    {
+      "menu_id": 2,
+      "display_order": 20,
+      "menu_name": "Ask Sheroes",
+      "menu_desc": "Ask the sheroes for SHE users",
+      "menu_url": "https://sheroes.com/helpline",
+      "menu_item_icon_url": "http://img.sheroes.in/app/navicons/ask_sheroes.png",
+      "menu_item_icon_selected_url": "http://img.sheroes.in/app/navicons/ask_sheroes_clicked.png",
+      "is_native": true,
+      "is_active": true,
+      "menu_type": 1
+    },
+    {
+      "menu_id": 3,
+      "display_order": 30,
+      "menu_name": "ICC Members",
+      "menu_desc": "List of ICC members",
+      "menu_url": "https://sheroes.com/icc-members",
+      "menu_item_icon_url": "http://img.sheroes.in/app/navicons/icc_member.png",
+      "menu_item_icon_selected_url": "http://img.sheroes.in/app/navicons/icc_member_clicked.png",
+      "is_native": true,
+      "is_active": true,
+      "menu_type": 1
+    },
+    {
+      "menu_id": 4,
+      "display_order": 40,
+      "menu_name": "FAQ",
+      "menu_desc": "Frequency Asked Questions",
+      "menu_url": "https://sheroes.com/faq",
+      "menu_item_icon_url": "http://img.sheroes.in/app/navicons/faq.png",
+      "menu_item_icon_selected_url": "http://img.sheroes.in/app/navicons/faq_clicked.png",
+      "is_native": true,
+      "is_active": true,
+      "menu_type": 1
+    },
+    {
+      "menu_id": 18,
+      "display_order": 180,
+      "menu_name": "Logout",
+      "menu_desc": "Logout from App",
+      "menu_url": "https://sheroes.com/users/logout",
+      "menu_item_icon_url": "http://img.sheroes.in/app/navicons/logout.png",
+      "menu_item_icon_selected_url": "http://img.sheroes.in/app/navicons/logout_clicked.png",
+      "is_native": true,
+      "is_active": true,
+      "menu_type": 1
+    }
+  ]
+}

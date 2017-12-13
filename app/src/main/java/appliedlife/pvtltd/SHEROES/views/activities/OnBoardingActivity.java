@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingLookingForFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -86,6 +87,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         setPagerAndLayouts();
+        DrawerViewHolder.selectedIndex = -1;
     }
 
     public void setPagerAndLayouts() {

@@ -28,6 +28,7 @@ public class AppConstants {
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String ALL_COMMUNITY_LIST = "all community list";
     public static final String MASTER_DATA = "master_data";
+    public static final String NAVIGATION_DRAWER_ITEMS_DATA = "nav_items_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
@@ -142,6 +143,7 @@ public class AppConstants {
     public static final String PANDING_MEMBER = "PandingMember";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
+    public static final String WEB_URL_FRAGMENT = "web_url";
 
     public static final String EMAIL = "email";
 
@@ -156,6 +158,7 @@ public class AppConstants {
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
     public static final String YOUR_INTEREST = "your_interest";
+
 
     public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";
@@ -230,6 +233,8 @@ public class AppConstants {
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
+    public static final String NAV_DRAWER_FILE_NAME = "nav_items";
+    public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
     public static final int MAX_WORD_COUNTER = 4000;
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String LEFT_BRACKET = "(";
@@ -271,10 +276,17 @@ public class AppConstants {
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
     public static final String USER_URL = "https://sheroes.in/users";
+    public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
     public static final String CHALLENGE_NEW_URL = "https://sheroes.in/sheroes-challenge";
     public static final String CHALLENGE_NEW_URL_COM = "https://sheroes.com/sheroes-challenge";
+    public static final String MY_CHALLENGE_NEW_URL = "https://sheroes.in/my-challenges";
+    public static final String MY_CHALLENGE_NEW_URL_COM = "https://sheroes.com/my-challenges";
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
+    public static final String FAQ_URL = "https://sheroes.com/faq";
+    public static final String FAQ_URL_COM = "https://sheroes.com/faq";
+    public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
+    public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
     public static final String ARTICLE_ID = "article_id";
@@ -298,6 +310,8 @@ public class AppConstants {
     public static final int HALF_DONE =50;
     public static final int ALMOST_DONE =90;
     public static final int COMPLETE =100;
+    public static final String TWITTER_SHARE ="com.twitter.android";
+    public static final String TWITTER_SHARE_VIA_BROWSER ="https://twitter.com/intent/tweet?text=";
     public static final String FACEBOOK_SHARE ="com.facebook.katana";
     public static final String FACEBOOK_SHARE_VIA_BROSWER ="https://www.facebook.com/sharer/sharer.php?u=";
     public static final String JPG_FORMATE =".jpg";

@@ -70,6 +70,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
@@ -353,6 +355,8 @@ public interface SheroesAppServiceApi {
     @POST("participation/challenge/v2/response")
     Observable<CreateCommunityResponse> createChallengePost(@Body ChallengePostCreateRequest challengePostCreateRequest);
 
+    @POST("/participant/appmenu/")
+    Observable<NavigationItems> getNavigationDrawerItems(@Body NavigationDrawerRequest navItems);
     @POST("participation/challenge/get/winners")
     Observable<WinnerResponse> getWinners(@Body WinnerRequest winnerRequest);
 

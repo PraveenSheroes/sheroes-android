@@ -38,12 +38,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.facebook.appevents.AppEventsConstants;
@@ -61,6 +60,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -87,35 +88,36 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.DrawerItems;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.CustomeDataList;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -133,6 +135,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDial
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MyCommunityInviteMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -142,13 +145,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView,CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SCREEN_LABEL = "Home Screen";
     @Inject
     Preference<LoginResponse> mUserPreference;
+
     @Bind(R.id.iv_drawer_profile_circle_icon)
-    RoundedImageView ivDrawerProfileCircleIcon;
+    CircleImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
     TextView mTvUserName;
     @Bind(R.id.tv_user_location)
@@ -207,6 +211,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     TextView mTitleText;
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
+    @Bind(R.id.pb_login_progress_bar)
+    ProgressBar pbNavDrawer;
     private JobFilterDialogFragment jobFilterDailogFragment;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -224,6 +230,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     @Inject
+    MainActivityPresenter activityDataPresenter;
+    @Inject
     AppUtils mAppUtils;
     public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     private long mChallengeId;
@@ -237,17 +245,28 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
     private List<String> mJobLocationList = new ArrayList<>();
     public List<String> mListOfOpportunity = new ArrayList<>();
+    private  boolean isSheUser = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        activityDataPresenter.attachView(this);
+        //For navigation drawer items
+        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         long timeSpentFeed = System.currentTimeMillis();
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
+            isSheUser = true;
+        }
         renderHomeFragmentView();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser() && startedFirstTime()) {
+        assignNavigationRecyclerListView();
+
+        if(isSheUser && startedFirstTime()) {
             openHelplineFragment();
             mTitleText.setText(getString(R.string.ID_APP_NAME));
             mTitleText.setVisibility(View.VISIBLE);
@@ -259,23 +278,16 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
         if (getIntent() != null) {
             if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
-                    openArticleFragment(setCategoryIds(), false);
-                }
-
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(JobFragment.SCREEN_LABEL)){
-                    openJobFragment();
-                }
-            }
-            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")){
                     communityOnClick();
-                }
-            }
-
-            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
+                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)){
+                    openJobFragment();
+                }else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
                     growthBuddiesInPublicProfile();
+                }else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)){
+                    renderFAQSView();
+                } else if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)){
+                    renderICCMemberListView();
                 }
             }
         }
@@ -299,6 +311,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent != null) {
+
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)){
                     if(mFragmentOpen.isCommentList()){
@@ -324,7 +337,15 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(JobFragment.SCREEN_LABEL)){
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    growthBuddiesInPublicProfile();
+                }
+            }
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)){
                     if(mFragmentOpen.isCommentList()){
                         getSupportFragmentManager().popBackStack();
                     }
@@ -333,13 +354,23 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(PublicProfileGrowthBuddiesDialogFragment.SCREEN_LABEL)){
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)){
                     if(mFragmentOpen.isCommentList()){
                         getSupportFragmentManager().popBackStack();
                     }
-                    growthBuddiesInPublicProfile();
+                    renderFAQSView();
                 }
             }
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)){
+                    if(mFragmentOpen.isCommentList()){
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    renderICCMemberListView();
+                }
+            }
+
         }
     }
 
@@ -355,9 +386,17 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         }
     }
 
+    private void assignNavigationRecyclerListView() {
+        mAdapter = new GenericRecyclerViewAdapter(this, this);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        pbNavDrawer.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
@@ -377,33 +416,28 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
             }
         }
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        initHomeViewPagerAndTabs();
-        assignNavigationRecyclerListView();
+        if(!isSheUser) {
+            initHomeViewPagerAndTabs();
+        }
         if (mEventId > 0) {
             eventDetailDialog(mEventId);
         }
     }
 
-    private void setProfileImage() {
+    private void setProfileImage() { //Drawer top iamge
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-            Glide.with(this)
-                    .load(profile)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(ivDrawerProfileCircleIcon);
-            mTvUserName.setText(mUserPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + mUserPreference.get().getUserSummary().getLastName());
-            if (null != mUserPreference.get().getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getUserBO().getCityMaster())) {
-                mTvUserLocation.setText(mUserPreference.get().getUserSummary().getUserBO().getCityMaster());
+            if(null!=profile) {
+                ivDrawerProfileCircleIcon.setCircularImage(true);
+                ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.default_img);
+                ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.default_img);
+                ivDrawerProfileCircleIcon.bindImage(profile);
             }
-            if (false != mUserPreference.get().isSheUser() && mUserPreference.get().getUserSummary().getEmailId() != null) {
+            String profileUserName = getResources().getString(R.string.PLACEHOLDER_PROFILE_USER_NAME, mUserPreference.get().getUserSummary().getFirstName(), mUserPreference.get().getUserSummary().getLastName());
+            mTvUserName.setText(profileUserName);
+            if (mUserPreference.get().getUserSummary().getEmailId() != null) {
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getEmailId());
             }
-            Glide.with(this)
-                    .load(profile)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
-                    .into(mIvSideDrawerProfileBlurBackground);
         }
     }
 
@@ -442,6 +476,18 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
                 //  mDrawer.openDrawer(Gravity.LEFT);
             }
         };
+    }
+
+    public  void openWebUrlFragment(String url) { //To open the webpages in app
+        setAllValues(mFragmentOpen);
+        NavigateToWebViewFragment navigateToWebViewFragment = new NavigateToWebViewFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Bundle webLinks = new Bundle();
+        webLinks.putString(AppConstants.WEB_URL_FRAGMENT, url);
+        navigateToWebViewFragment.setArguments(webLinks);
+
+        fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.fab_filter)
@@ -545,8 +591,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
-        }
-        else if (baseResponse instanceof DrawerItems) {
+        } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof ChallengeDataItem) {
             int id = view.getId();
@@ -654,73 +699,48 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mICSheroes.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
     }
+
+    public void resetUiSelectedOptions() {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
+        mTvSearchBox.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+    }
+
+
+    private void openNativeViews(String url) {
+        if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+    }
+
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
-        int drawerItem = ((DrawerItems) baseResponse).getId();
+        NavMenuItem navMenuItem = (NavMenuItem) baseResponse;
+
+        mAdapter.notifyDataSetChanged();
+
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         }
-        switch (drawerItem) {
-            case AppConstants.ONE_CONSTANT:
-                openProfileActivity();
-                break;
-            case AppConstants.TWO_CONSTANT:
-                openArticleFragment(setCategoryIds(),true);
-                break;
-            case AppConstants.THREE_CONSTANT:
-                //Job
-                openJobFragment();
 
-                break;
-            case AppConstants.FOURTH_CONSTANT:
-                openBookMarkFragment();
-                break;
-            case 6:
-                handleHelpLineFragmentFromDeepLinkAndLoading();
-                break;
-            case AppConstants.SEVENTH_CONSTANT:
-                    openHelplineFragment();
-                    mTitleText.setText(getString(R.string.ID_APP_NAME));
-                    mTitleText.setVisibility(View.VISIBLE);
-                    mICSheroes.setVisibility(View.GONE);
-                break;
-            case AppConstants.EIGHTH_CONSTANT:
-                    mFragmentOpen.setICCMemberListFragment(true);
-                    renderICCMemberListView();
-                break;
-            case AppConstants.NINTH_CONSTANT:
-                    mFragmentOpen.setFAQSFragment(true);
-                    renderFAQSView();
-                break;
-            case AppConstants.TENTH_CONSTANT:
-                    renderFeedFragment();
-                break;
-            case AppConstants.ELEVENTH_CONSTANT:
-                logOut();
-                break;
-            case 12:
-                inviteMyCommunityDialog();
-                break;
-            case 13:
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setMessage(getString(R.string.ID_INVITE_REFERRAL_FRIEND));
-                mProgressDialog.setCancelable(true);
-                mProgressDialog.show();
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
-                    LoginResponse loginResponse = mUserPreference.get();
-                    if (null != loginResponse)
-                        referralUserAttribute(this, loginResponse);
-                }
-                isInviteReferral = true;
-                break;
-            case 14:
-                growthBuddiesInPublicProfile();
-                break;
-            case 15 :
-                ContestListActivity.navigateTo(this, SCREEN_LABEL, null);
-                break;
-            default:
+        String url = navMenuItem.getMenuUrl();
 
+        if (url.contains(getString(R.string.logoutUrl))) {
+            logOut();
+        } else if (url.contains("#") && navMenuItem.getMenuName().equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
+            inviteMyCommunityDialog();
+        } else {
+            if (navMenuItem.isNative()) {
+                openNativeViews(url);
+            } else {
+                openWebUrlFragment(url);
+            }
         }
+
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -974,61 +994,47 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     public void onDrawerClosed() {
     }
 
+    public void notifyNavigationDrawerItems(List<NavMenuItem> menuItems) {
+        if(mRecyclerView!=null && mAdapter!=null) {
+            mAdapter.setSheroesGenericListData(menuItems);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
 
-    private void assignNavigationRecyclerListView() {
-        mAdapter = new GenericRecyclerViewAdapter(this, this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(manager);
-        boolean isSheUser = false;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
-            isSheUser = true;
-        } else {
-            isSheUser = false;
-        }
-        mAdapter.setSheroesGenericListData(CustomeDataList.makeDrawerItemList(isSheUser));
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-    }
-
     private void renderFAQSView() {
 
-        FAQSFragment faqsFragment = new FAQSFragment();
-        mToolbar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        flFeedFullView.setVisibility(View.GONE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFlHomeFooterList.setVisibility(View.GONE);
-        mTitleText.setText(getString(R.string.ID_FAQS));
+        changeFragmentWithCommunities();
+        setAllValues(mFragmentOpen);
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
+        FAQSFragment faqsFragment = new FAQSFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
     }
 
 
     private void renderICCMemberListView() {
 
+        changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
-        ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
-        mToolbar.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        flFeedFullView.setVisibility(View.GONE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFlHomeFooterList.setVisibility(View.GONE);
-        mTitleText.setText(getString(R.string.ID_ICC_MEMBERS));
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
+        ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
     }
 
     public void changeFragmentWithCommunities() {
+
         mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
         mTabLayout.setVisibility(View.GONE);
@@ -1044,6 +1050,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
         mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
 
+        mFloatActionBtn.setVisibility(View.GONE);
 
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
@@ -1106,6 +1113,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
+        resetHamburgerSelectedItems();
         mFragmentOpen.setFeedOpen(true);
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
@@ -1113,6 +1121,13 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTabLayout.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         initHomeViewPagerAndTabs();
+    }
+
+    private void resetHamburgerSelectedItems() { //Reset navigation drawer selected item
+        DrawerViewHolder.selectedIndex = -1;
+        if (null != mAdapter) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     public void homeButtonUi() {
@@ -1162,8 +1177,11 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mTvJob.setText(getString(R.string.ID_CARRIER));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
     }
+
+
     @OnClick(R.id.tv_job_home)
     public void jobOnClick() {
+        resetHamburgerSelectedItems();
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
@@ -1182,6 +1200,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
+        resetHamburgerSelectedItems();
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         flFeedFullView.setVisibility(View.GONE);
         mViewPager.setVisibility(View.VISIBLE);
@@ -1280,6 +1299,8 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     private void openHelplineFragment() {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
+        mTitleText.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
         HelplineFragment helplineFragment = new HelplineFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -1292,7 +1313,12 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
         mFlHomeFooterList.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
+        if (isSheUser) {
+            mICSheroes.setVisibility(View.GONE);
+        } else{
+            mICSheroes.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void openBookMarkFragment() {
@@ -1324,42 +1350,53 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Override
     public void onBackPressed() {
 
-        if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()||mFragmentOpen.isJobFragment()) {
-            if (mFragmentOpen.isCommentList()) {
-                mFragmentOpen.setCommentList(false);
-                getSupportFragmentManager().popBackStackImmediate();
-                if (mFragmentOpen.isBookmarkFragment()) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
-                    }
-                } else {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
-                    }
-                }
-            } else if (mFragmentOpen.isReactionList()) {
-                mFragmentOpen.setReactionList(false);
-                getSupportFragmentManager().popBackStackImmediate();
-            }else {
-                if (doubleBackToExitPressedOnce) {
-                    getSupportFragmentManager().popBackStackImmediate();
-                    finish();
-                    return;
-                }
-                doubleBackToExitPressedOnce = true;
-                homeOnClick();
-              //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        doubleBackToExitPressedOnce = false;
-                    }
-                }, 2000);
+        if (isSheUser) {
+            super.onBackPressed();
+            getFragmentManager().executePendingTransactions();
+            int count = getFragmentManager().getBackStackEntryCount();
+            if (count <= 1) {
+                finish();
+            } else {
+                getFragmentManager().popBackStack();
             }
         } else {
+            if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen() || mFragmentOpen.isJobFragment()) {
+                if (mFragmentOpen.isCommentList()) {
+                    mFragmentOpen.setCommentList(false);
+                    getSupportFragmentManager().popBackStackImmediate();
+                    if (mFragmentOpen.isBookmarkFragment()) {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
+                        }
+                    } else {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
+                        }
+                    }
+                } else if (mFragmentOpen.isReactionList()) {
+                    mFragmentOpen.setReactionList(false);
+                    getSupportFragmentManager().popBackStackImmediate();
+                } else {
+                    if (doubleBackToExitPressedOnce) {
+                        getSupportFragmentManager().popBackStackImmediate();
+                        finish();
+                        return;
+                    }
+                    doubleBackToExitPressedOnce = true;
+                    homeOnClick();
+                    //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce = false;
+                        }
+                    }, 2000);
+                }
+            } else {
                 super.onBackPressed();
+            }
         }
     }
 
@@ -1443,6 +1480,7 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+         resetHamburgerSelectedItems();
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
@@ -1836,5 +1874,75 @@ public class HomeActivity extends BaseActivity implements CustiomActionBarToggle
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
+        if(StringUtil.isNotEmptyCollection(navigationItems)) {
+            List<NavMenuItem> mNavigationDrawerItems=new ArrayList<>(); //Filter only navigation drawer items
+            for(NavMenuItem navMenuItem : navigationItems) {
+                if(navMenuItem.getMenuType() == 1) {
+                    mNavigationDrawerItems.add(navMenuItem);
+                }
+            }
+            pbNavDrawer.setVisibility(View.GONE);
+            notifyNavigationDrawerItems(mNavigationDrawerItems);
+        }
+    }
+
+    @Override
+    public void getNavigationDrawerItemsFailed() {
+        if(null!= pbNavDrawer) {
+            pbNavDrawer.setVisibility(View.GONE);
+        }
+
+        String stringContent = "";
+        if (isSheUser) {
+            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_SHE_FILE_NAME); //read from local file
+        } else {
+            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
+        }
+        NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
+        if (null != eventResponseList) {
+            List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
+            List<NavMenuItem> mNavigationDrawerItems=new ArrayList<>(); //Filter only navigation drawer items
+            for(NavMenuItem navMenuItem : navMenuItems) {
+                if(navMenuItem.getMenuType() == 1) {
+                    mNavigationDrawerItems.add(navMenuItem);
+                }
+            }
+            Collections.sort(mNavigationDrawerItems, new Comparator<NavMenuItem>() { //Sort based on display order
+                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
+                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
+                }
+            });
+            notifyNavigationDrawerItems(mNavigationDrawerItems);
+        }
+    }
+
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
 }

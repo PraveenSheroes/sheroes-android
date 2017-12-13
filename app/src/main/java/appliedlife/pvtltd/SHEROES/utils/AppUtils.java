@@ -125,6 +125,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.Device;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
@@ -748,7 +749,7 @@ public class AppUtils {
     }
 
     // Nikhil
-    public <T> T parseUsingGSONFromJSON(String is, String classPath) {
+    public static <T> T parseUsingGSONFromJSON(String is, String classPath) {
         LogUtils.enter(TAG, LogUtils.getMethodName());
         T queryResult = null;
 
@@ -1394,6 +1395,38 @@ public class AppUtils {
         return mDisplayMetrics;
     }
 
+    /**
+     * Request for Navigation drawer items
+     */
+    public  NavigationDrawerRequest navigationOptionsRequestBuilder() {
+        AppUtils appUtils = AppUtils.getInstance();
+        NavigationDrawerRequest navigationDrawerRequest =  new NavigationDrawerRequest();
+        navigationDrawerRequest.setDisplayDefault(false);
+        navigationDrawerRequest.setSource(AppConstants.SOURCE_NAME);
+        navigationDrawerRequest.setAppVersion(appUtils.getAppVersionName());
+        return navigationDrawerRequest;
+    }
+
+    public static String getStringContent(String fileName) {
+        AssetManager assetManager = AppUtils.getInstance().getApplicationContext().getAssets();
+        InputStream input;
+        String content = "";
+
+        try {
+            input = assetManager.open(fileName);
+
+            int size = input.available();
+            byte[] buffer = new byte[size];
+            input.read(buffer);
+            input.close();
+
+            content = new String(buffer);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
 
     /**
      * @param imageURL      : the original image url

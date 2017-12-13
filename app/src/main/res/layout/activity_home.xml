@@ -17,57 +17,37 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        android:fitsSystemWindows="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:fitsSystemWindows="true">
 
-            <include
-                android:id="@+id/home_drawer"
-                layout="@layout/activity_home_drawer" />
-
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_drawer"
+                <include
+                    android:id="@+id/home_drawer"
+                    layout="@layout/activity_home_drawer" />
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/dp_size_50" />
+                    android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:orientation="vertical">
-                    <View
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_drawer"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_size_1"
-                        android:background="@color/search_tab_unselected_text" />
+                        android:layout_height="match_parent" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:drawableTop="@drawable/ic_sheroes"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:gravity="center"
-                        android:padding="@dimen/dp_size_10"
-                        android:textColor="@color/searchbox_text_color"
-                        android:textSize="@dimen/sp_size_12" />
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </android.support.design.widget.NavigationView>
+                    <include layout="@layout/progress_bar_login" />
+
+                </FrameLayout>
+            </LinearLayout>
+        </android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

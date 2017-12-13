@@ -2,10 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_size_180"
+    android:layout_height="@dimen/dp_size_172"
     android:orientation="vertical">
 
     <ImageView
+        android:background="@drawable/profile_background"
         android:id="@+id/iv_side_drawer_profile_blur_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,35 +33,36 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_drawer_profile_circle_icon"
-                android:layout_width="@dimen/drawer_profile_icon_size"
-                android:layout_height="@dimen/drawer_profile_icon_size"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_20"
-                app:riv_border_width="@dimen/dp_size_6"
-                app:riv_corner_radius="@dimen/dp_size_12"
-                app:riv_oval="true" />
+                android:layout_width="@dimen/dp_size_64"
+                android:layout_height="@dimen/dp_size_64"
+                android:layout_marginTop="@dimen/dp_size_40"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginStart="@dimen/dp_size_16"/>
 
             <TextView
+                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginStart="@dimen/dp_size_16"
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_15" />
+                android:textSize="@dimen/sp_size_14" />
 
             <TextView
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginStart="@dimen/dp_size_16"
                 android:id="@+id/tv_user_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_10"
+                android:layout_marginTop="@dimen/dp_size_6"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
         </LinearLayout>
     </FrameLayout>
 </FrameLayout>
