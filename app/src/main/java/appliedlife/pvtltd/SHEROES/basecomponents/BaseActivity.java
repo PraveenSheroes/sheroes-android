@@ -68,6 +68,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
@@ -79,6 +80,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
@@ -461,16 +463,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_total_reactions:
-                mFragmentOpen.setCommentList(false);
+                LikeListBottomSheetFragment.showDialog(this, "", mFeedDetail.getEntityOrParticipantId());
+                /*mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);
-                openCommentReactionFragment(mFeedDetail);
+                openCommentReactionFragment(mFeedDetail);*/
                 break;
             case R.id.tv_feed_article_user_comment:
                 mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
-                mFragmentOpen.setCommentList(true);
+                //mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.li_feed_article_images:
@@ -525,6 +528,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                         Bundle bundleFromPost = new Bundle();
                         bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                        intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
                         Parcelable parcelablesss = Parcels.wrap(mFeedDetail);
                         bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                         bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
@@ -884,7 +888,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        if (AppUtils.isFragmentUIActive(mFragment)) {
+      /*  if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof CommunitiesDetailFragment) {
                 CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
                 Bundle bundleArticle = new Bundle();
@@ -896,16 +900,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
             }
-        } else {
-            CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
+        } else {*/
+            PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
+            /*CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
             Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
             bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelable1);
             Parcelable parcelable = Parcels.wrap(feedDetail);
             bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        }
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
+       // }
     }
 
     @Override

@@ -841,6 +841,7 @@
     <string name="view_response">View response</string>
     <string name="joined">Joined</string>
     <string name="title.contest_list">My Challenges</string>
+    <string name="title.question">Question</string>
     <string name="soon">soon</string>
 
     <string name="hint.full_name">Full Name</string>
@@ -858,7 +859,9 @@
     <string name="title.send_address">Send Address</string>
     <string name="action_send">Send</string>
     <string name="snackbar.submission_submited">Your submission has been submitted successfully</string>
+    <string name="snackbar.address_updated">Your address has been send successfully</string>
     <string name="empty_challenge_text">No Challenges yet!</string>
     <string name="empty_challenge_sub_text">Come back after sometime</string>
     <string name="logoutUrl">/users/logout</string>
+    <string name="change_address">change address</string>
 </resources>

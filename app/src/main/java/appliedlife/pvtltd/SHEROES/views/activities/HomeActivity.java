@@ -86,6 +86,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -1497,6 +1498,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             }
                         }
                         break;
+
+                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        if (parcelable != null) {
+                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
+                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                            mFeedDetail = userPostSolrObj;
+                        }
+                        if(isPostDeleted){
+                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                        }else {
+                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                        }
+                    }
                 case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
                     jobDetailActivityResponse(intent);
                     break;

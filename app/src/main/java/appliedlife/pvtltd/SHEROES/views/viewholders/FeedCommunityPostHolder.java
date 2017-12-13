@@ -52,6 +52,8 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -330,7 +332,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-        if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
+       /* if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
             liFeedCommunityUserPostImages.removeAllViews();
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
@@ -352,7 +354,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 ivChallenge.setBackgroundResource(R.drawable.challenge_post);
             }
             liFeedCommunityUserPostImages.addView(child);
-        } else {
+        } else {*/
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
             if (StringUtil.isNotEmptyCollection(mUserPostObj.getImageUrls())) {
                 liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
@@ -403,7 +405,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 liFeedCommunityUserPostImages.setVisibility(View.GONE);
             }
             //}
-        }
+       // }
     }
 
     private void onBookMarkClick() {

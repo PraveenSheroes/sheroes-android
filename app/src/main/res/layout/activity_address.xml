@@ -107,7 +107,6 @@
                 android:id="@+id/pin_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:hint="@string/hint.pin_code"
                 android:maxLines="1"

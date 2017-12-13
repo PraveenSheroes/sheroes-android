@@ -611,7 +611,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.community = new Community();
             communityPost.community.id = userPostObj.getCommunityTypeId();
             communityPost.body = userPostObj.getListDescription();
-            communityPost.community.name = userPostObj.getNameOrTitle();
+            communityPost.community.name = userPostObj.getPostCommunityName();
             communityPost.community.isOwner = userPostObj.isCommunityOwner();
             communityPost.isMyPost =userPostObj.isCommunityOwner();
 

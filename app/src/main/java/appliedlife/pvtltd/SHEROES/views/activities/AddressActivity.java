@@ -45,6 +45,8 @@ import butterknife.ButterKnife;
 
 public class AddressActivity extends BaseActivity implements IAddressView {
     private static final String SCREEN_LABEL = "Address Activity";
+    private static final String IS_ADDRESS_UPDATED = "Is Address Updated";
+
 
     @Inject
     AddressPresenterImpl mAddressPresenter;
@@ -85,6 +87,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     //endregion
 
     private Address originalAddress;
+    private boolean wasAddressUpdated;
 
     //region activity lifecycle methods
     @Override
@@ -94,11 +97,11 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         setContentView(R.layout.activity_address);
         ButterKnife.bind(this);
         mAddressPresenter.attachView(this);
-
+        wasAddressUpdated = getIntent().getBooleanExtra(IS_ADDRESS_UPDATED, false);
         Parcelable parcelable = getIntent().getParcelableExtra(Address.ADDRESS_OBJ);
         if (parcelable != null) {
             originalAddress = Parcels.unwrap(parcelable);
-            if (originalAddress != null) {
+            if (originalAddress != null && wasAddressUpdated) {
                 prePopulateFields();
             }
         }
@@ -127,6 +130,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             if (validateFields()) {
                 Address address = new Address();
                 getAddressFromField(address);
+                address.challengeId = originalAddress.challengeId;
                 mAddressPresenter.postAddress(address);
             }
             return true;
@@ -169,30 +173,35 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         boolean pinCodeValidation = (TextUtils.isDigitsOnly(pinCode));
 
         if (!nameValidation) {
+            mNameView.requestFocus();
             mNameView.setError(mErrorNameString);
         } else {
             mNameView.setError(null);
         }
 
         if (!phoneNumberValidation) {
+            mPhoneNumberView.requestFocus();
             mPhoneNumberView.setError(mInvalidMobileString);
         } else {
             mPhoneNumberView.setError(null);
         }
 
         if (!emailValidation) {
+            mEmailView.requestFocus();
             mEmailView.setError(mErrorEmailString);
         } else {
             mEmailView.setError(null);
         }
 
         if (!addressValidation) {
+            mAddressView.requestFocus();
             mAddressView.setError(mInvalidAddressString);
         } else {
             mAddressView.setError(null);
         }
 
         if (!pinCodeValidation) {
+            mPinCodeView.requestFocus();
             mPinCodeView.setError(mInvalidPinCodeString);
         } else {
             mPhoneNumberView.setError(null);
@@ -213,6 +222,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    CommonUtil.hideKeyboard(AddressActivity.this);
                     AddressActivity.this.finish();
                 }
             });
@@ -220,6 +230,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             builder.create();
             builder.show();
         } else {
+            CommonUtil.hideKeyboard(AddressActivity.this);
             onBackPressed();
         }
 
@@ -262,19 +273,24 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     //endregion
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, String sourceScreen, Address address, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, String sourceScreen, Address address, int requestCode, boolean isAddressUpdated, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, AddressActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         Parcelable parcelable = Parcels.wrap(address);
         intent.putExtra(Address.ADDRESS_OBJ, parcelable);
+        intent.putExtra(IS_ADDRESS_UPDATED, isAddressUpdated);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
     @Override
     public void finishActivity() {
+        CommonUtil.hideKeyboard(AddressActivity.this);
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         finish();
     }
 

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/li_list_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/image_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/user_profile_pic"
+            android:layout_width="@dimen/user_comment_icon"
+            android:layout_height="@dimen/user_comment_icon"
+            android:src="@drawable/ic_createc_ommunity_icon" />
+
+        <ImageView
+            android:id="@+id/profile_verified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/ic_verified"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_list_user_comment_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/comment_author_name"
+        android:layout_marginTop="6dp"
+        android:text="2 min"
+        android:textColor="@color/text_grey"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/comment_author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/image_container"
+        android:layout_toLeftOf="@+id/tv_list_user_comment_time"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textColor="#3c3c3c"
+        android:lineSpacingExtra="4sp"
+        tools:text="Anupriya Udai" />
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
+        android:id="@+id/tv_list_user_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/image_container"
+        android:layout_toRightOf="@id/image_container"
+        android:layout_marginRight="8dp"
+        android:layout_below="@+id/comment_author_name"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="4sp"
+        android:textColor="#3c3c3c"
+        android:textColorLink="@color/view_more"
+        android:textSize="@dimen/sp_size_14"
+        tools:text="Anyone on the other end who is interviewing you or trying to recruit you\nlooks for honesty and zeal to learn and adapt. Be honest ..." />
+
+    <TextView
+        android:id="@+id/like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/image_container"
+        android:layout_below="@+id/tv_list_user_comment"
+        android:drawablePadding="8dp"
+        android:gravity="center"
+        android:paddingBottom="12dp"
+        android:paddingRight="16dp"
+        android:paddingTop="12dp"
+        android:text="1"
+        android:textColor="@color/text_grey"
+        android:drawableLeft="@drawable/vector_like_red_18dp"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/tv_user_comment_list_menu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignBottom="@id/comment_like_count"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_list_user_comment"
+        android:layout_toRightOf="@id/comment_like"
+        android:paddingRight="16dp"
+        android:src="@drawable/vector_menu_horizontal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_below="@+id/like"
+        android:background="#90949c" />
+
+</RelativeLayout>

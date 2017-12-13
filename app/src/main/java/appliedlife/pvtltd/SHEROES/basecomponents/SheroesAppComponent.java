@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
@@ -52,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -130,6 +132,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -193,6 +196,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.TagSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.TagsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.WorkExperienceCardHolder;
 import dagger.Component;
 
@@ -592,6 +596,14 @@ public interface SheroesAppComponent {
     void inject(ChallengeFeedHolder challengeFeedHolder);
 
     void inject(AddressActivity addressActivity);
+
+    void inject(LikeListBottomSheetFragment likeListBottomSheetFragment);
+
+    void inject(PostDetailActivity postDetailActivity);
+
+    void inject(UserPostHolder userPostHolder);
+
+    void inject(CommentNewViewHolder commentNewViewHolder);
 
     void inject(NavigateToWebViewFragment webUrlFragment);
 

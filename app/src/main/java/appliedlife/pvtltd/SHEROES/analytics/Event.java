@@ -36,6 +36,8 @@ public enum Event {
     REPLY_EDITED(AnalyticsEventType.REPLY, "Edited"),
     REPLY_DELETED(AnalyticsEventType.REPLY, "Deleted"),
     REPLY_REPORTED(AnalyticsEventType.REPLY, "Reported"),
+    REPLY_LIKED(AnalyticsEventType.REPLY, "Liked"),
+    REPLY_UNLIKED(AnalyticsEventType.REPLY, "Unliked"),
     //endregion
 
     //region job related events
