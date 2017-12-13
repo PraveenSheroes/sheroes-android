@@ -171,7 +171,7 @@ public class HomeFragment extends BaseFragment {
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         if(isChallenge){
-            Parcelable parcelable = getArguments().getParcelable(ContestActivity.CHALLENGE_OBJ);
+            Parcelable parcelable = getArguments().getParcelable(Contest.CONTEST_OBJ);
             mContest = Parcels.unwrap(parcelable);
         }
         startedTime = System.currentTimeMillis();

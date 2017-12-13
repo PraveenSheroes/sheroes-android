@@ -278,18 +278,20 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
         Adapter adapter = new Adapter(getSupportFragmentManager());
         mHomeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(CHALLENGE_OBJ, Parcels.wrap(mContest));
+        bundle.putParcelable(Contest.CONTEST_OBJ, Parcels.wrap(mContest));
         bundle.putBoolean(IS_CHALLENGE, true);
         mHomeFragment.setArguments(bundle);
         mContestInfoFragment = (ContestInfoFragment) ContestInfoFragment.instance();
+        mContestInfoFragment.setArguments(bundle);
         adapter.addFragment(mContestInfoFragment, "Overview");
         adapter.addFragment(mHomeFragment, "Responses");
         if (mContest.hasWinner) {
             ContestWinnerFragment mContestWinnerFragment = new ContestWinnerFragment();
+            mContestWinnerFragment.setArguments(bundle);
             adapter.addFragment(mContestWinnerFragment, "Winner");
         }
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

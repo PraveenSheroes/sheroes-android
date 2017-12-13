@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.WinnerListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
@@ -67,9 +68,20 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.framgment_contest_winner, container, false);
         ButterKnife.bind(this, view);
-        Parcelable parcelable = getActivity().getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
+        Parcelable parcelable = null;
+        if (getArguments() != null) {
+            if (getArguments().getParcelable(Contest.CONTEST_OBJ) != null) {
+                parcelable = getArguments().getParcelable(Contest.CONTEST_OBJ);
+            }
+        } else {
+            if (getActivity().getIntent() != null) {
+                parcelable = getActivity().getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
+            }
+        }
         if (parcelable != null) {
             mContest = Parcels.unwrap(parcelable);
+        }else {
+            return view;
         }
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
