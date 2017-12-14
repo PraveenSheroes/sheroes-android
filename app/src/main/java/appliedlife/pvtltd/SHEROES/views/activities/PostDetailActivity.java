@@ -407,7 +407,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             CommunityPostActivity.navigateTo(PostDetailActivity.this, userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
                             return true;
                         case R.id.delete:
-                            AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj);
+                            AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
                             mPostDetailPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()));
                             return true;
                         default:
@@ -426,7 +426,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onShareButtonClicked(UserPostSolrObj userPostObj, TextView shareView) {
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, userPostObj);
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, userPostObj, getScreenName());
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, userPostObj.getDeepLinkUrl());
@@ -583,7 +583,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .body(comment.getComment())
                         .build();
-        AnalyticsManager.trackEvent(Event.REPLY_DELETED, propertiesDelete);
+        trackEvent(Event.REPLY_DELETED, propertiesDelete);
         mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
     }
 
@@ -595,7 +595,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .body(comment.getComment())
                         .build();
-        AnalyticsManager.trackEvent(Event.REPLY_EDITED, properties);
+        trackEvent(Event.REPLY_EDITED, properties);
         mInputText.setText(comment.getComment());
         mInputText.setSelection(comment.getComment().length());
         mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);

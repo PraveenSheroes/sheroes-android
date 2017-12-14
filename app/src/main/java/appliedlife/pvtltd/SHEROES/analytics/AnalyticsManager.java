@@ -88,8 +88,8 @@ public class AnalyticsManager {
     }
 
     @Deprecated
-    public static void trackEvent(Event event, Map<String, Object> properties){
-        trackEvent(event, null, properties);
+    public static void trackEvent(Event event, Map<String, Object> properties, String sourceScreen){
+        trackEvent(event, sourceScreen, properties);
     }
 
     public static void trackNonInteractionEvent(Event event, Map<String, Object> properties){
@@ -131,11 +131,11 @@ public class AnalyticsManager {
 
     }
 
-    public static void trackPostAction(Event event, FeedDetail feedDetail) {
+    public static void trackPostAction(Event event, FeedDetail feedDetail, String screenName) {
         if (!canSend()) {
             return;
         }
-        MixpanelHelper.trackPostActionEvent(event, feedDetail);
+        MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName);
     }
 
     public static void timeEvent(Event event) {

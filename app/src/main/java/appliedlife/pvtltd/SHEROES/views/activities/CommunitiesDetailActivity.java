@@ -542,7 +542,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
             inviteCommunityMemberDialog();
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(feedDetail.getEntityOrParticipantId())).name(feedDetail.getNameOrTitle()).build();
-            AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, properties);
+            AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, getScreenName(), properties);
         }
     }
 

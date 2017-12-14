@@ -132,6 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
                 trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
             }
+            mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
         }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
@@ -470,7 +471,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);*/
                 break;
             case R.id.tv_feed_article_user_comment:
-              //  mFragmentOpen.setCommentList(true);
+                mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
@@ -490,7 +491,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
                 break;
             case R.id.li_article_cover_image:
-                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                String sourceScreen = "";
+                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
@@ -611,7 +613,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             .build();
             trackEvent(Event.JOBS_SHARED, properties);
         }else {
-            AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail);
+            AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
         }
     }
 
@@ -790,7 +792,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
                    // mFragmentOpen.setCommentList(true);
-                   // mFeedDetail.setTrending(true);
+                    mFeedDetail.setTrending(true);
                     ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.ONE_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
@@ -818,7 +820,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (null != mFeedDetail) {
                   //  mFragmentOpen.setCommentList(true);
                    // mFragmentOpen.setCommentList(true);
-                   // mFeedDetail.setTrending(true);
+                    mFeedDetail.setTrending(true);
                     ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.TWO_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
@@ -903,9 +905,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
         } else {*/
             if(feedDetail instanceof UserPostSolrObj){
-                PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
+                PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
             }else if(feedDetail instanceof ArticleSolrObj){
-                ArticleActivity.navigateTo(this, feedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
             }
 
             /*CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
@@ -1002,5 +1004,16 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     public void invalidateLikeUnlike(Comment comment) {
 
+    }
+
+    public String screenName(){
+        String sourceScreen = "";
+        if(getSupportFragmentManager() !=null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())){
+            int size = getSupportFragmentManager().getFragments().size();
+            sourceScreen = getSupportFragmentManager().getFragments().get(size -1).getClass().getSimpleName();
+        }else{
+            getScreenName();
+        }
+        return sourceScreen;
     }
 }

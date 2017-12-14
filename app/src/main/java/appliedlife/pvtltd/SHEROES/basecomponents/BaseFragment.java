@@ -307,7 +307,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 Toast.makeText(getContext(), AppConstants.MARK_AS_SPAM, Toast.LENGTH_SHORT).show();
                 mFeedDetail.setFromHome(true);
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                AnalyticsManager.trackPostAction(Event.POST_REPORTED, mFeedDetail);
+                AnalyticsManager.trackPostAction(Event.POST_REPORTED, mFeedDetail, getScreenName());
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), MARK_AS_SPAM);
@@ -321,7 +321,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 commentListRefresh(mFeedDetail, DELETE_COMMUNITY_POST);
-                AnalyticsManager.trackPostAction(Event.POST_DELETED, mFeedDetail);
+                AnalyticsManager.trackPostAction(Event.POST_DELETED, mFeedDetail, getScreenName());
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -346,7 +346,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                 //moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), ((CommunityFeedSolrObj)mFeedDetail).isClosed(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
+                AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                 break;
             case AppConstants.FAILED:
                 mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
@@ -366,7 +366,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                         Comment lastComment = lastCommentList.get(lastCommentList.size() - 1);
                         lastCommentList.remove(lastComment);
                         mFeedDetail.setLastComments(lastCommentList);
-                        AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail);
+                        AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail, getScreenName());
                     }
                     mAdapter.notifyDataSetChanged();
                     break;
@@ -416,7 +416,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
-                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, mFeedDetail);
+                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, mFeedDetail, getScreenName());
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isBookmarked()) {
@@ -451,10 +451,10 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
                     if(mFeedDetail instanceof OrganizationFeedObj){
-                        AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail);
+                        AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail, getScreenName());
                     }
                     else {
-                        AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail);
+                        AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail, getScreenName());
                     }
                     break;
                 case AppConstants.FAILED:

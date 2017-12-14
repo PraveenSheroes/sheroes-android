@@ -120,7 +120,7 @@ public class SearchJobFragment extends BaseFragment implements HomeView {
         HashMap<String, Object> properties = new EventProperty.Builder()
                 .keyword(mFragmentListRefreshData.getSearchStringName())
                 .build();
-        AnalyticsManager.trackEvent(Event.JOBS_SEARCH, properties);
+        AnalyticsManager.trackEvent(Event.JOBS_SEARCH, getScreenName(),  properties);
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

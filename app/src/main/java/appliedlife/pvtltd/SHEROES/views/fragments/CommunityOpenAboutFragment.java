@@ -570,7 +570,7 @@ public class CommunityOpenAboutFragment extends BaseFragment implements Communit
                 {
                     moEngageUtills.entityMoEngageLeaveCommunity(getActivity(),mMoEHelper,payloadBuilder,communityFeedObj.getNameOrTitle(), communityFeedObj.getIdOfEntityOrParticipant(), communityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, communityFeedObj.isMember());
                     HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedObj.getIdOfEntityOrParticipant())).name(communityFeedObj.getNameOrTitle()).build();
-                    AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, properties);
+                    AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
                 }
                 break;
             case AppConstants.FAILED:

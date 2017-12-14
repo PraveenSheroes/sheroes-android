@@ -241,7 +241,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                         .id(String.valueOf(lookingForLabelValues.getValue()))
                         .lookingForName(lookingForLabelValues.getLabel())
                         .build();
-        AnalyticsManager.trackEvent(Event.LOOKING_FOR, properties);
+        AnalyticsManager.trackEvent(Event.LOOKING_FOR, getScreenName(), properties);
 
         LoginResponse loginResponse = userPreference.get();
         loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
