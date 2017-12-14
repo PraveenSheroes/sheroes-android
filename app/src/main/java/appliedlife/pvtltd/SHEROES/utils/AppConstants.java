@@ -341,4 +341,14 @@ public class AppConstants {
     public static final String javascriptcode = "<script type=\"text/javascript\" src=\"jquery.js\"></script> <script type=\"text/javascript\" src=\"jquerylazyload.js\"></script> <script type=\"text/javascript\" language=\"javascript\"> /*source: http://www.appelsiini.net/projects/lazyload*/ function initials() { loadVideo(); convertImages(); loadImages(); } function loadImages() { $(\"img.lazy\").lazyload({ effect: \"fadeIn\" }); $(\"img.lazy\").click(function() { image.openImageActivity($(this).attr(\"data-original\")); }); } function loadVideo() { var n, v = document.getElementsByClassName(\"youtube\"); var l = v.length; for (n = 0; n < l; n++) { var iframe = document.createElement(\"iframe\"); iframe.setAttribute(\"src\", \"https://www.youtube.com/embed/\" + v[n].dataset.id + \"?rel=0&fs=1\"); iframe.setAttribute(\"frameborder\", \"0\"); iframe.setAttribute(\"width\", \"100%\"); iframe.setAttribute(\"id\", \"player\"); iframe.setAttribute(\"height\", \"240\"); iframe.setAttribute(\"allowfullscreen\", \"1\"); while (v[n].firstChild) { v[n].removeChild(v[n].firstChild); } v[n].appendChild(iframe); } } function convertImages() { var n, v = document.getElementsByTagName(\"img\"); var l = v.length; for (n = 0; n < l; n++) { v[n].setAttribute(\"data-original\", v[n].src); v[n].setAttribute(\"src\", \"placeholder.png\"); v[n].setAttribute(\"class\", \"lazy\"); } } </script>";
     public static final String VIEW_MORE_TEXT = "View More";
     public static final String APP_NAME = "Sheroes";
+
+    //Tags - for maintaining the Nav selection of current class
+    public static final String NAV_PROFILE= "Profile";
+    public static final String NAV_CHAMPIONS= "Champions";
+    public static final String NAV_ARTICLES= "Articles";
+    public static final String NAV_CHALLENGE= "My Challenges";
+    public static final String NAV_ASK_SHEROES= "Ask Sheroes";
+    public static final String NAV_ICC_MEMBERS= "ICC Members";
+    public static final String NAV_FAQ= "FAQ";
+    public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
 }

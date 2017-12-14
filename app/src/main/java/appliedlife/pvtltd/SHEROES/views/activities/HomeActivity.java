@@ -304,7 +304,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else {
             setProfileImage();
         }
-
+        resetHamburgerSelectedItems();
     }
 
     @Override
@@ -478,16 +478,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         };
     }
 
-    public  void openWebUrlFragment(String url) { //To open the webpages in app
+    public  void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
         setAllValues(mFragmentOpen);
-        NavigateToWebViewFragment navigateToWebViewFragment = new NavigateToWebViewFragment();
+        NavigateToWebViewFragment navigateToWebViewFragment =  NavigateToWebViewFragment.newInstance(url, menuItemName);
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle webLinks = new Bundle();
-        webLinks.putString(AppConstants.WEB_URL_FRAGMENT, url);
-        navigateToWebViewFragment.setArguments(webLinks);
-
         fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
+
+        DrawerViewHolder.selectedOptionName = menuItemName;
+        resetHamburgerSelectedItems();
     }
 
     @OnClick(R.id.fab_filter)
@@ -721,26 +720,25 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
         NavMenuItem navMenuItem = (NavMenuItem) baseResponse;
 
-        mAdapter.notifyDataSetChanged();
-
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         }
 
         String url = navMenuItem.getMenuUrl();
+        String menuName = navMenuItem.getMenuName();
 
         if (url.contains(getString(R.string.logoutUrl))) {
             logOut();
-        } else if (url.contains("#") && navMenuItem.getMenuName().equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
+        } else if (url.contains("#") && menuName.equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
             inviteMyCommunityDialog();
         } else {
             if (navMenuItem.isNative()) {
                 openNativeViews(url);
             } else {
-                openWebUrlFragment(url);
+                openWebUrlFragment(url, menuName);
             }
         }
-
+        resetHamburgerSelectedItems();
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -1113,6 +1111,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.tv_home)
     public void homeOnClick() {
+        DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mFragmentOpen.setFeedOpen(true);
         flFeedFullView.setVisibility(View.VISIBLE);
@@ -1124,13 +1123,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void resetHamburgerSelectedItems() { //Reset navigation drawer selected item
-        DrawerViewHolder.selectedIndex = -1;
         if (null != mAdapter) {
             mAdapter.notifyDataSetChanged();
         }
     }
 
     public void homeButtonUi() {
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
@@ -1181,6 +1182,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.tv_job_home)
     public void jobOnClick() {
+        DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
@@ -1200,6 +1202,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
+        DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         flFeedFullView.setVisibility(View.GONE);
@@ -1398,6 +1401,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 super.onBackPressed();
             }
         }
+        resetHamburgerSelectedItems();
     }
 
     @Override
@@ -1480,7 +1484,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
-         resetHamburgerSelectedItems();
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:

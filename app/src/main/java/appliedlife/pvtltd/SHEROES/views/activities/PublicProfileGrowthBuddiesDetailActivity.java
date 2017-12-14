@@ -64,8 +64,8 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ViewMoreLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.PublicProfileGrowthBuddiesDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -170,6 +170,9 @@ public class PublicProfileGrowthBuddiesDetailActivity extends BaseActivity imple
                     communityFeedObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
                 }
             }
+
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_CHAMPIONS;
+
         if (null != communityFeedObj) {
             mFragmentOpen = new FragmentOpen();
             setAllValues(mFragmentOpen);

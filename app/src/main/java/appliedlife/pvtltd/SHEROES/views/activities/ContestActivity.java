@@ -60,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -148,7 +149,7 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
                 finish();
             }
         }
-
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_CHALLENGE;
         // Initialize ViewPager
         if (mContest != null) {
             initializeAllViews();

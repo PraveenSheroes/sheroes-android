@@ -117,6 +117,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileWorkExpe
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchGoodAtDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -206,6 +207,12 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
         setAllValues(mFragmentOpen);
         setPagerAndLayouts();
         setprogressbar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_PROFILE;
     }
 
     public void setProfileNameData() {

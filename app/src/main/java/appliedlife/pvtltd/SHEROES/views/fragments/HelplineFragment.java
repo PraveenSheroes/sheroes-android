@@ -45,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -121,6 +122,12 @@ public class HelplineFragment extends BaseFragment {
     @OnClick(R.id.btn_chat_voice)
     public void speechToText() {
         promptSpeechInput();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_ASK_SHEROES;
     }
 
     @Override

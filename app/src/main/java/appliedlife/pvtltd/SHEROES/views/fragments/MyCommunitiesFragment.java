@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -119,6 +120,12 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = null;
     }
 
     public void swipeAndRefreshList() {

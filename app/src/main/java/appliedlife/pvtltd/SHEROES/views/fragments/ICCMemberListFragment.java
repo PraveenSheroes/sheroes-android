@@ -23,10 +23,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.SHEPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SHEView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -74,6 +76,12 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
         ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_ICC_MEMBERS;
     }
 
     @Override

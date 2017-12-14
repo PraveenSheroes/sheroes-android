@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SHEView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -97,6 +98,12 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         shePresenter.getAllFAQS(AppUtils.sheFAQSRequestBuilder());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_FAQ;
     }
 
     @Override

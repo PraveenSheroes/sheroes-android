@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -155,6 +156,12 @@ public class ArticlesFragment extends BaseFragment {
         FeedRequestPojo feedRequestPojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_ARTICLES;
     }
 
     @Override

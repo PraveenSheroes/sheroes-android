@@ -87,7 +87,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         setPagerAndLayouts();
-        DrawerViewHolder.selectedIndex = -1;
+        DrawerViewHolder.selectedOptionName = null;
     }
 
     public void setPagerAndLayouts() {

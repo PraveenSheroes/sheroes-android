@@ -78,6 +78,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindDimen;
@@ -317,6 +318,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     protected void onResume() {
         super.onResume();
+        DrawerViewHolder.selectedOptionName = AppConstants.NAV_ARTICLES;
         try {
             Class.forName("android.webkit.WebView")
                     .getMethod("onResume", (Class[]) null)

@@ -157,7 +157,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
-            DrawerViewHolder.selectedIndex = -1;
+            DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
         } else {
             setContentView(R.layout.welcome_activity);

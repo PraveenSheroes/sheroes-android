@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -26,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -45,6 +47,18 @@ public class NavigateToWebViewFragment extends BaseFragment {
     ProgressBar pbWebView;
     @Inject
     Preference<LoginResponse> mUserPreference;
+    private String currentSelectedItemName;
+
+    public static NavigateToWebViewFragment newInstance(String webUrl, String menuName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.WEB_URL_FRAGMENT, webUrl);
+        bundle.putString(AppConstants.SELECTED_MENU_NAME, menuName);
+
+        NavigateToWebViewFragment fragment = new NavigateToWebViewFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -73,6 +87,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
 
         if (null != getArguments()) {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL_FRAGMENT);
+            currentSelectedItemName = getArguments().getString(AppConstants.SELECTED_MENU_NAME);
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
                     if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
@@ -84,6 +99,12 @@ public class NavigateToWebViewFragment extends BaseFragment {
         }
 
         webPagesView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                pbWebView.bringToFront();
+            }
+
             public void onPageFinished(WebView view, String url) {
                 pbWebView.setVisibility(View.GONE);  //Hide progress bar
             }
@@ -128,6 +149,12 @@ public class NavigateToWebViewFragment extends BaseFragment {
         webPagesView.setLongClickable(false);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = currentSelectedItemName;
     }
 
     @Override

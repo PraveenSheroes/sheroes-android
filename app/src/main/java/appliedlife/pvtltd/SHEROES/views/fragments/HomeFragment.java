@@ -65,9 +65,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -82,7 +79,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -350,6 +347,12 @@ public class HomeFragment extends BaseFragment {
     public void onRefreshClick() {
         tvRefresh.setVisibility(View.GONE);
         refreshFeedMethod();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DrawerViewHolder.selectedOptionName = null;
     }
 
     private void refreshFeedMethod() {

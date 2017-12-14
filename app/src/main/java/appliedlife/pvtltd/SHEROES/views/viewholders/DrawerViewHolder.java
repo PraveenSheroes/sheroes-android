@@ -34,7 +34,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     AppCompatImageView tvDrawerImage;
     @Bind(R.id.ll_drawer_item)
     LinearLayout llDrawerItem;
-    public static int selectedIndex = -1;
+    public static String selectedOptionName;
 
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -47,7 +47,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     public void bindData(NavMenuItem item, final Context context, final int position) {
         this.dataItem = item;
         llDrawerItem.setOnClickListener(this);
-        llDrawerItem.setTag(position);
+        llDrawerItem.setTag(item.getMenuName());
 
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
@@ -57,9 +57,9 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
             setImageBackground(context, iconUrl);
         }
 
-        if(selectedIndex!=-1 && selectedIndex == position) {
+        if (null != selectedOptionName && selectedOptionName.equalsIgnoreCase(itemName)) {
             String iconSelectedUrl = dataItem.getMenuItemIconUrlSelected();  //Selected icon
-            if(StringUtil.isNotNullOrEmptyString(iconSelectedUrl)) {
+            if (StringUtil.isNotNullOrEmptyString(iconSelectedUrl)) {
                 setImageBackground(context, iconSelectedUrl);
             }
         }
@@ -87,7 +87,11 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         int id = view.getId();
         switch (id) {
             case R.id.ll_drawer_item:
-                selectedIndex = (int) llDrawerItem.getTag();
+                if(null!= llDrawerItem.getTag()) {
+                    selectedOptionName = (String) llDrawerItem.getTag();
+                } else{
+                    selectedOptionName = null;
+                }
                 viewInterface.handleOnClick(dataItem, view);
                 break;
             default:
