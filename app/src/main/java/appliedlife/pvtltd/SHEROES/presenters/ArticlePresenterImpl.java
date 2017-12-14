@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
 import rx.Observable;
 import rx.Subscriber;
@@ -173,7 +174,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                     .postType(AnalyticsEventType.ARTICLE.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                     .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_DELETED, properties);
+                    AnalyticsManager.trackEvent(Event.REPLY_DELETED,ArticleActivity.SOURCE_SCREEN, properties);
                 }
             }
         });
@@ -211,7 +212,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                     .postType(AnalyticsEventType.ARTICLE.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                     .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_EDITED, properties);
+                    AnalyticsManager.trackEvent(Event.REPLY_EDITED, ArticleActivity.SCREEN_LABEL, properties);
                 }
             }
         });
@@ -250,7 +251,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                         .postType(AnalyticsEventType.ARTICLE.toString())
                                         .body(commentResponsePojo.getCommentReactionModel().getComment())
                                         .build();
-                        AnalyticsManager.trackEvent(Event.REPLY_CREATED, properties);
+                        AnalyticsManager.trackEvent(Event.REPLY_CREATED, ArticleActivity.SCREEN_LABEL, properties);
                     }
                 }
             }

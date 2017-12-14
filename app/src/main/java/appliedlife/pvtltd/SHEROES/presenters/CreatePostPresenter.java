@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -65,7 +66,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail());
+                AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
             }
 
         });
@@ -103,7 +104,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
                                     .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
                                     .type(MoEngageConstants.CHALLENGE_POST)
                                     .build();
-                    AnalyticsManager.trackEvent(Event.POST_CREATED, properties);
+                    AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
             }
 
         });
@@ -164,7 +165,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                AnalyticsManager.trackPostAction(Event.POST_EDITED, communityPostCreateResponse.getFeedDetail());
+                AnalyticsManager.trackPostAction(Event.POST_EDITED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
             }
 
         });

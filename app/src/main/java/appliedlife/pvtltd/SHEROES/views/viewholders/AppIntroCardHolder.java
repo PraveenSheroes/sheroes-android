@@ -119,7 +119,7 @@ public class AppIntroCardHolder extends BaseViewHolder<FeedDetail> {
                             .id(String.valueOf(dataItem.getAppIntroDataItems().getValue()))
                             .url(dataItem.getAppIntroDataItems().getImageLinkUrl())
                             .build();
-            AnalyticsManager.trackEvent(Event.PROMO_CARD, properties);
+            AnalyticsManager.trackEvent(Event.PROMO_CARD, null, properties);
         }
     }
 }

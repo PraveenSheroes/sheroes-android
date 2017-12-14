@@ -501,7 +501,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         updateUiAccordingToFeedDetail(mCommunityFeedObj);
                     }
                     HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedObj.getIdOfEntityOrParticipant())).name(mCommunityFeedObj.getNameOrTitle()).build();
-                    AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, properties);
+                    AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                     moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG, TAG, mCommunityFeedObj.getItemPosition());
                     break;
                 case AppConstants.FAILED:

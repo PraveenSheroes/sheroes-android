@@ -765,7 +765,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mFeedDetail == null) {
             return;
         } else {
-            AnalyticsManager.trackPostAction(event, mFeedDetail);
+            AnalyticsManager.trackPostAction(event, mFeedDetail, getScreenName());
         }
     }
 

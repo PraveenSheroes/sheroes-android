@@ -28,11 +28,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRespons
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import rx.Observable;
 import rx.Subscriber;
@@ -205,7 +208,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                     .postType(AnalyticsEventType.COMMUNITY.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                     .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_CREATED, properties);
+                    AnalyticsManager.trackEvent(Event.REPLY_CREATED, PostDetailActivity.SCREEN_LABEL, properties);
                 }
             }
         });
@@ -330,7 +333,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .build();
-                AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, properties);
+                AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
         });
         registerSubscription(subscription);
@@ -377,7 +380,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .build();
-                AnalyticsManager.trackEvent(Event.REPLY_LIKED, properties);
+                AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
         });
         registerSubscription(subscription);
@@ -462,7 +465,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     mBaseResponseList.set(0, userPostSolrObj);
                     getMvpView().setData(0, userPostSolrObj);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, userPostSolrObj);
+                AnalyticsManager.trackPostAction(Event.POST_LIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
                 getMvpView().setData(0, userPostSolrObj);
             }
         });
@@ -505,7 +508,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                     mBaseResponseList.set(0, userPostSolrObj);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, userPostSolrObj);
+                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
                 getMvpView().setData(0, userPostSolrObj);
             }
         });

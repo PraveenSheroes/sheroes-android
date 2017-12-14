@@ -159,7 +159,7 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.FOURTH_CONSTANT);
 
                 HashMap<String, Object> properties = new EventProperty.Builder().id(feedDetail.getId()).title(feedDetail.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.JOBS_SEARCH_RESULT_CLICKED, properties);
+                AnalyticsManager.trackEvent(Event.JOBS_SEARCH_RESULT_CLICKED, getScreenName(), properties);
 
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     if (fragment instanceof SearchJobFragment) {

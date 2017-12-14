@@ -523,7 +523,7 @@ public class CommonUtil {
             if (eventName.equals(Event.IMAGE_SHARED)) {
                 properties.put(EventProperty.URL.getString(), url);
             }
-            AnalyticsManager.trackEvent(eventName, properties);
+            AnalyticsManager.trackEvent(eventName, sourceScreen, properties);
 
         }
     }

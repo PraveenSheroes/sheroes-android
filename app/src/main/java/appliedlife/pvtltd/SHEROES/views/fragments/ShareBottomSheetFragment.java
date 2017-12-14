@@ -140,7 +140,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                 new EventProperty.Builder()
                         .id(mShareImageUrl)
                         .build();
-        AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, properties);
+        AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
         dismiss();
         Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
     }
@@ -175,7 +175,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                             EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
                             final HashMap<String, Object> properties = builder.build();
                             properties.put(EventProperty.URL.getString(), mShareImageUrl);
-                            AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);
+                            AnalyticsManager.trackEvent(Event.IMAGE_SHARED, SCREEN_LABEL, properties);
                         }
                     });
         }else {

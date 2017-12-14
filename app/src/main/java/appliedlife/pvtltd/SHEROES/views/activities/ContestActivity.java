@@ -551,7 +551,7 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
         bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
         commentReactionFragmentForArticle.setArguments(bundleArticle);
         getSupportFragmentManager().beginTransaction().replace(R.id.comment_from_contest, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
-        PostDetailActivity.navigateTo(this, SOURCE_SCREEN, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
+        PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
     }
 
     @Override

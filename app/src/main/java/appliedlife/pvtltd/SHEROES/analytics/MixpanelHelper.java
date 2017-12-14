@@ -173,7 +173,7 @@ public class MixpanelHelper {
         getInstance(context).getPeople().increment("App opens", 1);
     }
 
-    public static void trackPostActionEvent(Event event, FeedDetail feedDetail) {
+    public static void trackPostActionEvent(Event event, FeedDetail feedDetail, String screenName) {
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
@@ -182,6 +182,7 @@ public class MixpanelHelper {
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
                             .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
         }
     }
