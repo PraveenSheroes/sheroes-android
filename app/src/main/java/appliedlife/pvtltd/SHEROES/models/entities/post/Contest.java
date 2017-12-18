@@ -78,7 +78,7 @@ public class Contest{
     public boolean isWinner;
 
     @SerializedName("Challenge_winner_announcement_dt")
-    public Date winnerAnnouncementDate;
+    public String winnerAnnouncementDate;
 
     @SerializedName("solr_ignore_winner_address_updated")
     public boolean winnerAddressUpdated;

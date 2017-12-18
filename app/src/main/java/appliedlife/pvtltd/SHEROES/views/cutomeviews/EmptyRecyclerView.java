@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.ButterKnife;
 
 /**
@@ -118,14 +120,18 @@ public class EmptyRecyclerView extends RecyclerView {
         TextView emptyTextView = ButterKnife.findById(view, R.id.empty_text);
         if (emptyTextView != null) {
             if (CommonUtil.isNotEmpty(emptyTextString)) {
-                emptyTextView.setText(emptyTextString);
+                Spanned emptyTextTitle = StringUtil.fromHtml(emptyTextString);
+                emptyTextView.setText(emptyTextTitle);
             }
 
         }
 
         TextView emptySubTextView = ButterKnife.findById(view, R.id.empty_subtext);
         if (emptySubTextView != null) {
-            emptySubTextView.setText(emptySubTextString);
+            if (CommonUtil.isNotEmpty(emptySubTextString)) {
+                Spanned emptyTextSubTitle = StringUtil.fromHtml(emptySubTextString);
+                emptySubTextView.setText(emptyTextSubTitle);
+            }
         }
 
         ImageView emptyImageView = ButterKnife.findById(view, R.id.empty_image);

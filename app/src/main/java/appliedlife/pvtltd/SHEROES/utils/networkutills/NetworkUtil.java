@@ -17,7 +17,7 @@ public final class NetworkUtil {
 
   public static boolean isConnected(Context context) {
     NetworkInfo info = getNetworkInfo(context);
-    return info != null && info.isConnected();
+    return info != null && info.isConnected() && info.isAvailable();
   }
 
   public static boolean isConnectedWifi(Context context) {

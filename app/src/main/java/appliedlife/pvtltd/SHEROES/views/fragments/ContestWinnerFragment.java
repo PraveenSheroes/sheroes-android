@@ -23,18 +23,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
-import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.WinnerListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by Ujjwal on 10/10/17.
@@ -88,7 +86,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         mContestWinnerPresenter.attachView(this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text, getDateString(mContest.winnerAnnouncementDate)), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext));
+        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
         if (CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt()) == ContestStatus.COMPLETED) {
             if (!mContest.hasMyPost) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -121,11 +119,12 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
 
     //region private methods
 
-    private String getDateString(Date winnerAnnouncementDate) {
+    private String getDateString(String winnerAnnouncementDate) {
         if (winnerAnnouncementDate == null) {
             return this.getResources().getString(R.string.soon);
         } else {
-            return "on" + " " + DateUtil.toPrettyDateWithoutTime(mContest.winnerAnnouncementDate);
+            Date announcementDate = DateUtil.parseDateFormat(mContest.winnerAnnouncementDate, AppConstants.DATE_FORMAT);
+            return "on" + " <b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) +"</b>";
         }
     }
 
