@@ -240,6 +240,23 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
                     intentContest.putExtra(Contest.CONTEST_OBJ, parcelableContest);
                     setResult(RESULT_OK, intentContest);
                     break;
+
+                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (mHomeFragment!=null) {
+                        Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        if (parcelableUserPost != null) {
+                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                            isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                            mFeedDetail = userPostSolrObj;
+                        }
+                        if(isPostDeleted){
+                            mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                        }else {
+                            mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                        }
+                    }
             }
         }
     }
