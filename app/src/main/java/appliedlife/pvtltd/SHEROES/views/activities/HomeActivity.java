@@ -252,8 +252,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         activityDataPresenter.attachView(this);
-        //For navigation drawer items
-        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -265,6 +263,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
+        //For navigation drawer items
+        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
 
         if(isSheUser && startedFirstTime()) {
             openHelplineFragment();
@@ -1793,7 +1793,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mHomeSpinnerItemList.clear();
                 mHomeSpinnerItemList.addAll(localList);
             }
-            onBackPressed();
+
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                getSupportFragmentManager().popBackStack();
+            }
         }
     }
 
