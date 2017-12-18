@@ -104,7 +104,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(item);
         if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
-            mUserProfilePic.setImageResource(R.drawable.ic_anonomous);
+            mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
             StringBuilder stringBuilder = new StringBuilder();
            // stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
             //Spannable getCommentString = new SpannableString(stringBuilder.toString());

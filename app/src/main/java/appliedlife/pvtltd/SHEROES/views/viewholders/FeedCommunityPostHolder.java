@@ -636,7 +636,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
-                    ivFeedCommunityPostUserPic.setImageResource(R.drawable.ic_anonomous);
+                    ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
