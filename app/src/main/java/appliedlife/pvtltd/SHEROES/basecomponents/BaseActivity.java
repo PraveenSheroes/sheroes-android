@@ -587,6 +587,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 }
             }
         }
+        if(this instanceof ContestActivity){
+            ((ContestActivity) this).bookmarkPost(mFeedDetail);
+        }
     }
 
     private void bookMarkTrending() {
