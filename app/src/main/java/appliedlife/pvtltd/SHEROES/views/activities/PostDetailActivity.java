@@ -150,7 +150,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTitleToolbar.setText(R.string.title_question);
+        mTitleToolbar.setText(R.string.ID_COMMENTS);
         setupEditInputText();
     }
 
@@ -194,7 +194,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             .startActivities();
                     onBackPressed();
                 } else {
-                    finish();
+                    onBackPressed();
+                   // finish();
                         //NavUtils.navigateUpFromSameTask(this);
                 }
                 break;

@@ -122,7 +122,7 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
 
     //region private member variable
     private HomeFragment mHomeFragment;
-    ;
+
     private Contest mContest;
     private String mContestId;
     //endregion
@@ -346,7 +346,7 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
                     if (flagActivity == 0/*ContestListActivity.CONTEST_LIST_ACTIVITY*/) {
                         finish();
                     } else {
-                        NavUtils.navigateUpFromSameTask(this);
+                        onBackPressed();
                     }
                 }
                 break;
