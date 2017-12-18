@@ -2,10 +2,11 @@ package appliedlife.pvtltd.SHEROES.utils.stringutils;
 
 
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
+import android.os.Build;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.text.util.Linkify;
 import android.widget.TextView;
@@ -21,12 +22,9 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.Charsets;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-
-import static appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication.mContext;
 
 public class StringUtil {
     private static final String TAG = LogUtils.makeLogTag(StringUtil.class);
@@ -586,6 +584,15 @@ public class StringUtil {
         } catch (Exception e) {
             LogUtils.error(TAG, e.toString(), e);
             return content;
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String source) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            return Html.fromHtml(source);
         }
     }
 }

@@ -834,8 +834,8 @@
 
     <string name="join_contest">join contest</string>
     <string name="submit_response">Submit a response</string>
-    <string name="empty_winner_text">Winner will be announced %1$s</string>
-    <string name="empty_winner_subtext">Till then keep checking this place</string>
+    <string name="empty_winner_text">&lt;b&gt;No winners announced yet!&lt;/b&gt;</string>
+    <string name="empty_winner_subtext">Winner will be announced %1$s. Till then keep checking this place</string>
     <string name="empty_challenge_response_text">No Responses yet!</string>
     <string name="empty_challenge_response_subtext">Be the first one to submit a response</string>
     <string name="view_response">View response</string>
