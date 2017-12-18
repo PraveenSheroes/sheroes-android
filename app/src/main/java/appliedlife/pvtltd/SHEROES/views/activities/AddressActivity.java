@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -54,6 +55,23 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     //region View variables
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+
+
+    @Bind(R.id.name_container)
+    TextInputLayout mNameViewContainer;
+
+    @Bind(R.id.phone_container)
+    TextInputLayout mPhoneNumberViewContainer;
+
+    @Bind(R.id.address_container)
+    TextInputLayout mAddressViewContainer;
+
+    @Bind(R.id.pin_code_container)
+    TextInputLayout mPinCodeViewContainer;
+
+    @Bind(R.id.email_id_container)
+    TextInputLayout mEmailViewContainer;
 
     @Bind(R.id.name)
     EditText mNameView;
@@ -162,49 +180,59 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         String address = mAddressView.getText().toString().trim();
         String pinCode = mPinCodeView.getText().toString().trim();
 
-        boolean phoneNumberValidation = (TextUtils.isDigitsOnly(phoneNumber)) && (phoneNumber.length() == 10 && phoneNumber.matches("^[^0][0-9]{9}$"));
-
         boolean nameValidation = !TextUtils.isEmpty(name);
 
         boolean emailValidation = !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
 
         boolean addressValidation = !TextUtils.isEmpty(address);
 
-        boolean pinCodeValidation = (TextUtils.isDigitsOnly(pinCode));
+        boolean pinCodeValidation = CommonUtil.isNotEmpty(pinCode) && pinCode.matches("^[^0][0-9]{9}$");
+
+        boolean phoneNumberValidation = (CommonUtil.isNotEmpty(phoneNumber) && phoneNumber.length() == 10 && phoneNumber.matches("^[^0][0-9]{9}$"));
 
         if (!nameValidation) {
-            mNameView.requestFocus();
-            mNameView.setError(mErrorNameString);
+            mNameViewContainer.setErrorEnabled(true);
+            mNameViewContainer.requestFocus();
+            mNameViewContainer.setError(mErrorNameString);
         } else {
-            mNameView.setError(null);
+            mNameViewContainer.setErrorEnabled(false );
+            mNameViewContainer.setError(null);
         }
 
         if (!phoneNumberValidation) {
-            mPhoneNumberView.requestFocus();
-            mPhoneNumberView.setError(mInvalidMobileString);
+            mPhoneNumberViewContainer.setErrorEnabled(true);
+            mPhoneNumberViewContainer.requestFocus();
+            mPhoneNumberViewContainer.setError(mInvalidMobileString);
         } else {
-            mPhoneNumberView.setError(null);
+            mPhoneNumberViewContainer.setErrorEnabled(false);
+            mPhoneNumberViewContainer.setError(null);
         }
 
         if (!emailValidation) {
-            mEmailView.requestFocus();
-            mEmailView.setError(mErrorEmailString);
+            mEmailViewContainer.setErrorEnabled(true);
+            mEmailViewContainer.requestFocus();
+            mEmailViewContainer.setError(mErrorEmailString);
         } else {
-            mEmailView.setError(null);
+            mEmailViewContainer.setErrorEnabled(false);
+            mEmailViewContainer.setError(null);
         }
 
         if (!addressValidation) {
-            mAddressView.requestFocus();
-            mAddressView.setError(mInvalidAddressString);
+            mAddressViewContainer.setErrorEnabled(true);
+            mAddressViewContainer.requestFocus();
+            mAddressViewContainer.setError(mInvalidAddressString);
         } else {
-            mAddressView.setError(null);
+            mAddressViewContainer.setErrorEnabled(false);
+            mAddressViewContainer.setError(null);
         }
 
         if (!pinCodeValidation) {
-            mPinCodeView.requestFocus();
-            mPinCodeView.setError(mInvalidPinCodeString);
+            mPinCodeViewContainer.setErrorEnabled(true);
+            mPinCodeViewContainer.requestFocus();
+            mPinCodeViewContainer.setError(mInvalidPinCodeString);
         } else {
-            mPhoneNumberView.setError(null);
+            mPinCodeViewContainer.setErrorEnabled(false);
+            mPinCodeViewContainer.setError(null);
         }
 
         return nameValidation && phoneNumberValidation && emailValidation && addressValidation && pinCodeValidation;
@@ -283,7 +311,6 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-        ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
     @Override
