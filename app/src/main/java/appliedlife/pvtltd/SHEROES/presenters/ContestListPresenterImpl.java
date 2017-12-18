@@ -155,6 +155,7 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                             contest.shortUrl = feedDetail.getDeepLinkUrl();
                             contest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
                             contest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
+                            contest.winnerAnnouncementDate = challengeSolrObj.getChallengeAnnouncementDate(); //Fix for winner announcement
                             contests.add(contest);
                         }
                     }

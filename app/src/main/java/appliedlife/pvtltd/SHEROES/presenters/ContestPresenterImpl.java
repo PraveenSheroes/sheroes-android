@@ -136,6 +136,7 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                     mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
                     mContest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
                     mContest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
+                    mContest.winnerAnnouncementDate = challengeSolrObj.getChallengeAnnouncementDate(); //Fix for winner announcement
                     getMvpView().showContestFromId(mContest);
                 }
             }
