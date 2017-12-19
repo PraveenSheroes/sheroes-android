@@ -71,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
+import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -213,6 +214,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     ImageView mICSheroes;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar pbNavDrawer;
+    @Bind(R.id.snow_flake_view)
+    SnowFlakeView mSnowFlakView;
     private JobFilterDialogFragment jobFilterDailogFragment;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -396,6 +399,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        if (shouldShowSnowFlake()) {
+            mSnowFlakView.setVisibility(View.VISIBLE);
+        } else {
+            mSnowFlakView.setVisibility(View.GONE);
+        }
         pbNavDrawer.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
@@ -422,6 +430,20 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mEventId > 0) {
             eventDetailDialog(mEventId);
         }
+    }
+
+    private boolean shouldShowSnowFlake() {
+        boolean showSnowFlake = false;
+        if(mUserPreferenceMasterData!=null && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("TAGS")!=null && mUserPreferenceMasterData.get().getData().get("TAGS").get("POPULAR")!=null){
+            String snowFlakeFlag = "";
+            snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("TAGS").get("POPULAR").get(0).toString();
+            if(CommonUtil.isNotEmpty(snowFlakeFlag)){
+                if(snowFlakeFlag.equalsIgnoreCase("show snow flake")){
+                    showSnowFlake = true;
+                }
+            }
+        }
+        return showSnowFlake;
     }
 
     private void setProfileImage() { //Drawer top iamge

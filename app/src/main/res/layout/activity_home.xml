@@ -10,6 +10,12 @@
 
     <include layout="@layout/activity_home_dashboard" />
 
+    <appliedlife.pvtltd.SHEROES.animation.SnowFlakeView
+        android:id="@+id/snow_flake_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <include
         android:id="@+id/fl_feed_comments"
         layout="@layout/fragment_container"

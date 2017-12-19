@@ -644,12 +644,6 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
         if (mContest == null) {
             return;
         }
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Integer.toString(mContest.remote_id))
-                        .title(mContest.title)
-                        .build();
-        trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
 
         int currentPage = mViewPager.getCurrentItem();
         if (currentPage == FRAGMENT_WINNER && mContest.isWinner) {
@@ -657,6 +651,12 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
             address.challengeId = Integer.toString(mContest.remote_id);
             boolean isAddressUpdated = false;
             if (!CommonUtil.isNotEmpty(mContest.mWinnerAddress)) {
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Integer.toString(mContest.remote_id))
+                                .title(mContest.title)
+                                .build();
+                trackEvent(Event.SEND_ADDRESS_CLICKED, properties);
                 AddressActivity.navigateTo(this, getScreenName(), address,AppConstants.REQUEST_CODE_FOR_ADDRESS, isAddressUpdated, null);
             }
         } else if (currentPage == FRAGMENT_RESPONSES) {
@@ -666,6 +666,12 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
                 communityPost.challengeType = mContest.authorType;
                 communityPost.isChallengeType = true;
                 communityPost.challengeHashTag = mContest.tag;
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Integer.toString(mContest.remote_id))
+                                .title(mContest.title)
+                                .build();
+                trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
                 CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
             }
         } else {
@@ -675,6 +681,12 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
                 communityPost.challengeType = mContest.authorType;
                 communityPost.isChallengeType = true;
                 communityPost.challengeHashTag = mContest.tag;
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Integer.toString(mContest.remote_id))
+                                .title(mContest.title)
+                                .build();
+                trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
                 CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
             }
         }

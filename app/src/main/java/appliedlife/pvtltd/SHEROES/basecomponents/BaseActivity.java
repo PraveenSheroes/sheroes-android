@@ -1009,13 +1009,29 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     }
 
+ /*   public String screenName(){
+        String sourceScreen = "";
+        if(getSupportFragmentManager() !=null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())){
+            sourceScreen = getSupportFragmentManager().getFragments().get(0).getClass().getSimpleName();
+        }else{
+            getScreenName();
+        }
+        return sourceScreen;
+    }*/
+
     public String screenName(){
         String sourceScreen = "";
         if(getSupportFragmentManager() !=null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())){
-            int size = getSupportFragmentManager().getFragments().size();
-            sourceScreen = getSupportFragmentManager().getFragments().get(size -1).getClass().getSimpleName();
-        }else{
-            getScreenName();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            List<Fragment> fragments = fragmentManager.getFragments();
+            if (fragments != null) {
+                for (Fragment fragment : fragments) {
+                    if (fragment != null && fragment.isVisible()){
+                        sourceScreen = ((BaseFragment) fragment).getScreenName();
+                        break;
+                    }
+                }
+            }
         }
         return sourceScreen;
     }

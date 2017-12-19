@@ -60,6 +60,7 @@ public enum Event {
     CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared"),
     CHALLENGE_COMPLETED(AnalyticsEventType.CHALLENGE, "Completed"),
     CHALLENGE_SUBMIT_CLICKED(AnalyticsEventType.CHALLENGE, "Submit Clicked"),
+    SEND_ADDRESS_CLICKED(AnalyticsEventType.CHALLENGE, "Send Address Clicked"),
     //endregion
 
     //region Community related events
