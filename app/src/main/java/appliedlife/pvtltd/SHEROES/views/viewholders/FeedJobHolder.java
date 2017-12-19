@@ -130,9 +130,9 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getAuthorName())) {
             tvFeedJobGroupName.setText(jobFeedObj.getAuthorName());
         }
-        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getStartDate())) {
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getFormattedSolrStartDate())) {
             tvFeedJobDateTime.setVisibility(View.VISIBLE);
-            tvFeedJobDateTime.setText(jobFeedObj.getStartDate());
+            tvFeedJobDateTime.setText(jobFeedObj.getFormattedSolrStartDate());
         }
         else
         {
@@ -149,11 +149,16 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
 
         if (StringUtil.isNotEmptyCollection(jobFeedObj.getSearchTextJobSkills())) {
             List<String> jobSkills = jobFeedObj.getSearchTextJobSkills();
-            String mergeJobSkills = AppConstants.EMPTY_STRING;
+            StringBuilder mergeJobSkills = new StringBuilder();
             for (String skill : jobSkills) {
-                mergeJobSkills += skill + AppConstants.COMMA;
+                mergeJobSkills.append(skill);
+                mergeJobSkills.append(AppConstants.COMMA);
+                mergeJobSkills.append(AppConstants.SPACE);
             }
-            tvFeedJobName.setText(mergeJobSkills.substring(0, mergeJobSkills.length() - 1));
+            String skills = mergeJobSkills.toString();
+            if(skills.length()>2) {
+                tvFeedJobName.setText(skills.substring(0, skills.length() - 2));
+            }
         }
         if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getAuthorCityName())) {
             StringBuilder stringBuilder=new StringBuilder();

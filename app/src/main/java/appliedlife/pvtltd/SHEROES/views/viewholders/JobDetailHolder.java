@@ -98,20 +98,22 @@ public class JobDetailHolder extends BaseViewHolder<JobDetailPojo> {
             for (String skill : jobSkills) {
                 mergeJobSkills.append(skill);
                 mergeJobSkills.append(AppConstants.COMMA);
+                mergeJobSkills.append(AppConstants.SPACE);
             }
-            mTvJobSkill.setText(mergeJobSkills.toString().substring(0, mergeJobSkills.toString().length() - 1));
+            String skills = mergeJobSkills.toString();
+            if(skills.length()>2) {
+                mTvJobSkill.setText(skills.substring(0, skills.length() - 2));
+            }
         } else {
             mTvJobSkill.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getStartDate())) {
-         //   long startDate = mDateUtil.getTimeInMillis(jobFeedObj.getStartDate(), AppConstants.DATE_FORMAT);
-            mTvJobStartDate.setText(jobFeedObj.getStartDate());
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getFormattedSolrStartDate())) {
+            mTvJobStartDate.setText(jobFeedObj.getFormattedSolrStartDate());
         } else {
             mTvJobStartDate.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getEndDate())) {
-         //   long endDate = mDateUtil.getTimeInMillis(jobFeedObj.getEndDate(), AppConstants.DATE_FORMAT);
-            mTvJobEndDate.setText(jobFeedObj.getEndDate());
+        if (StringUtil.isNotNullOrEmptyString(jobFeedObj.getFormattedSolrEndDate())) {
+            mTvJobEndDate.setText(jobFeedObj.getFormattedSolrEndDate());
         } else {
             mTvJobEndDate.setVisibility(View.GONE);
         }

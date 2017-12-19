@@ -104,7 +104,8 @@
                     android:drawableLeft="@drawable/ic_dead_line"
                     android:drawablePadding="@dimen/dp_size_10"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:textColor="@color/searchbox_hint_text_color" />
+                    android:textColor="@color/searchbox_hint_text_color"
+                    android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
 
             <TextView

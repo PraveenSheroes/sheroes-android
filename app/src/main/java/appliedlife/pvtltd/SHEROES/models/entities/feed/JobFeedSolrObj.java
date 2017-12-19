@@ -120,6 +120,13 @@ public class JobFeedSolrObj extends FeedDetail {
     @SerializedName(value="solr_ignore_job_level")
     private String jobLevel;
 
+    @SerializedName(value="solr_ignore_end_date_dt")
+    private String formattedSolrEndDate;
+
+    @SerializedName(value="solr_ignore_start_date_dt")
+    private String formattedSolrStartDate;
+
+
     public int getCompanyProfileId() {
         return companyProfileId;
     }
@@ -398,5 +405,21 @@ public class JobFeedSolrObj extends FeedDetail {
 
     public void setJobLevel(String jobLevel) {
         this.jobLevel = jobLevel;
+    }
+
+    public String getFormattedSolrStartDate() {
+        return formattedSolrStartDate;
+    }
+
+    public void setFormattedSolrStartDate(String formattedSolrStartDate) {
+        this.formattedSolrStartDate = formattedSolrStartDate;
+    }
+
+    public String getFormattedSolrEndDate() {
+        return formattedSolrEndDate;
+    }
+
+    public void setFormattedSolrEndDate(String formattedSolrEndDate) {
+        this.formattedSolrEndDate = formattedSolrEndDate;
     }
 }
