@@ -186,7 +186,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
 
         boolean addressValidation = !TextUtils.isEmpty(address);
 
-        boolean pinCodeValidation = CommonUtil.isNotEmpty(pinCode) && pinCode.matches("^[^0][0-9]{9}$");
+        boolean pinCodeValidation = CommonUtil.isNotEmpty(pinCode) && TextUtils.isDigitsOnly(pinCode);
 
         boolean phoneNumberValidation = (CommonUtil.isNotEmpty(phoneNumber) && phoneNumber.length() == 10 && phoneNumber.matches("^[^0][0-9]{9}$"));
 
