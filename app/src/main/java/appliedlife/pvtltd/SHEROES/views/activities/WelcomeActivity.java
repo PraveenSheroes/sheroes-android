@@ -167,7 +167,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 return;
             } else {
-            mLoginPresenter.getMasterDataToPresenter();
             mScrollView.post(new Runnable() {
                 public void run() {
                     mScrollView.fullScroll(mScrollView.FOCUS_DOWN);
@@ -178,6 +177,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
             ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
+        mLoginPresenter.getMasterDataToPresenter();
 
     }
 

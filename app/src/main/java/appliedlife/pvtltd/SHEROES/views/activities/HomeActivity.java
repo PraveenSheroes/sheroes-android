@@ -1,6 +1,11 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.NotificationManager;
@@ -36,6 +41,8 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -87,7 +94,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
@@ -149,6 +155,8 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView,CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final String SCREEN_LABEL = "Home Screen";
+    private static final int ANIMATION_DELAY_TIME = 2000;
+    private static final int ANIMATION_DURATION_TIME = 5000;
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -216,6 +224,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     ProgressBar pbNavDrawer;
     @Bind(R.id.snow_flake_view)
     SnowFlakeView mSnowFlakView;
+    @Bind(R.id.santa_view)
+    ImageView mSantaView;
     private JobFilterDialogFragment jobFilterDailogFragment;
     GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
@@ -400,7 +410,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         if (shouldShowSnowFlake()) {
-            mSnowFlakView.setVisibility(View.VISIBLE);
+            mSantaView.setVisibility(View.GONE);
+            animateSnowFlake();
         } else {
             mSnowFlakView.setVisibility(View.GONE);
         }
@@ -432,13 +443,37 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+    private void animateSnowFlake() {
+        mSnowFlakView.setVisibility(View.VISIBLE);
+        ValueAnimator getmTranslateAnimatorLeft;
+        getmTranslateAnimatorLeft = ObjectAnimator.ofFloat(mSantaView, "translationX", CommonUtil.convertDpToPixel(192, this), -(CommonUtil.getWindowWidth(this)));
+        Interpolator mSelectedInterpolator = new AccelerateDecelerateInterpolator();
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.setInterpolator(mSelectedInterpolator);
+        animatorSet.setStartDelay(ANIMATION_DELAY_TIME);
+        animatorSet.setDuration(ANIMATION_DURATION_TIME);
+        animatorSet.play(getmTranslateAnimatorLeft);
+        animatorSet.start();
+        getmTranslateAnimatorLeft.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mSantaView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mSantaView.setVisibility(View.GONE);
+            }
+        });
+    }
+
     private boolean shouldShowSnowFlake() {
         boolean showSnowFlake = false;
-        if(mUserPreferenceMasterData!=null && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("TAGS")!=null && mUserPreferenceMasterData.get().getData().get("TAGS").get("POPULAR")!=null){
+        if(mUserPreferenceMasterData!=null && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION")!=null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))){
             String snowFlakeFlag = "";
-            snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("TAGS").get("POPULAR").get(0).toString();
+            snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW").get(0).getLabel();
             if(CommonUtil.isNotEmpty(snowFlakeFlag)){
-                if(snowFlakeFlag.equalsIgnoreCase("show snow flake")){
+                if(snowFlakeFlag.equalsIgnoreCase("true")){
                     showSnowFlake = true;
                 }
             }

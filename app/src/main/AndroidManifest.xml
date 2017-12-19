@@ -138,7 +138,7 @@
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:screenOrientation="portrait"/>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity"

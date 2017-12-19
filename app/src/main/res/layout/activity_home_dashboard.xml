@@ -121,4 +121,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom" />
+
+    <ImageView
+        android:id="@+id/santa_view"
+        android:layout_width="192dp"
+        android:layout_height="90dp"
+        android:visibility="gone"
+        android:src="@drawable/vector_santa_claus"
+        android:layout_gravity="right|center_vertical"/>
 </android.support.design.widget.CoordinatorLayout>
