@@ -8,21 +8,15 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import com.f2prateek.rx.preferences.Preference;
-
-
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -45,6 +39,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     protected List<T> filterListData;
     private String mCallFromType = AppConstants.FOR_ALL;
     private long mUserId;
+    private int mPosition;
     public GenericRecyclerViewAdapter(Context context, BaseHolderInterface viewHolderInterface) {
         this.context = context;
         this.viewHolderInterface = viewHolderInterface;
@@ -53,6 +48,9 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     public void setSheroesGenericListData(List<T> mSheroesGenericListData) {
         this.mSheroesGenericListData = mSheroesGenericListData;
         this.filterListData = mSheroesGenericListData;
+    }
+    public void setSuggestedCardPosition(int position) {
+        mPosition = position;
     }
     public void setUserId(long userId) {
         mUserId = userId;
@@ -77,10 +75,10 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
             this.filterListData.add(position, (T) feedDetail);
         }
     }
-    public void setMentoreDataOnPosition(MentorDetailItem mentorDetailItem, int position) {
+    public void setMentoreDataOnPosition(UserSolrObj userSolrObj, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
-            this.filterListData.add(position, (T) mentorDetailItem);
+            this.filterListData.add(position, (T) userSolrObj);
         }
     }
 
@@ -114,6 +112,14 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
+        if(mCallFromType.equalsIgnoreCase(AppConstants.FOR_ALL)) {
+            if (filterListData.get(position) instanceof UserSolrObj) {
+                UserSolrObj userSolrObj = (UserSolrObj) filterListData.get(position);
+                userSolrObj.currentItemPosition=mPosition;
+                userSolrObj.setSuggested(true);
+                filterListData.set(position, (T) userSolrObj);
+            }
+        }
             holder.bindData(filterListData.get(position), context, position);
     }
 

@@ -69,7 +69,7 @@
     <color name="searchbox_hint_text_color">#1c2024</color>
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
-    <color name="footer_icon_text">#f2403c</color>
+    <color name="footer_icon_text">#dc4541</color>
     <color name="posted_in">#90949c</color>
     <color name="search_tab_text">#3949ab</color>
     <color name="search_box">#273691</color>
@@ -195,4 +195,6 @@
     <color name="transparent">#00000000</color>
     <color name="unavailable_grey">#80A9A9A9</color>
     <color name="lighter_grey">#E4E4E4</color>
+    <color name="mentor_green">#6bba29</color>
+    <color name="mentor_profession">#686868</color>
 </resources>

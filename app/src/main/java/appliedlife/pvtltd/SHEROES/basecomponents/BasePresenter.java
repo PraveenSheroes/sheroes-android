@@ -84,6 +84,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
             @Override
             public void onNext(MasterDataResponse masterDataResponse) {
+                mUserPreferenceMasterData.delete();
                 mUserPreferenceMasterData.set(masterDataResponse);
             }
         });

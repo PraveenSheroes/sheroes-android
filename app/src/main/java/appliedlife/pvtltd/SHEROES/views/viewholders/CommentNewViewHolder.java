@@ -145,9 +145,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             mCommentLike.setText("");
         }
         if (item.isLiked) {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_likes_heart, 0, 0, 0);
         } else {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_likes_heart_in_active, 0, 0, 0);
         }
     }
 

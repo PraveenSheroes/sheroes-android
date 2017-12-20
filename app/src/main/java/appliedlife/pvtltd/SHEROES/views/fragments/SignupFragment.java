@@ -99,7 +99,8 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  */
 
 public class SignupFragment extends BaseFragment implements LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
-    private static final String SCREEN_LABEL = "Login Screen";
+    private static final String SCREEN_LABEL = "Google Facebook Login Screen";
+    private static final  String EMAIL_SIGN_UP_SCREEN="Email Signup Screen";
     private final String TAG = LogUtils.makeLogTag(SignupFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -186,6 +187,7 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
         mFbSignUp.setFragment(this);
         mFbSignUp.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         fbSignIn();
+        mLoginPresenter.getMasterDataToPresenter();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_SIGN_UP_FORM));
         return view;
     }
@@ -825,9 +827,11 @@ public class SignupFragment extends BaseFragment implements LoginView, SocialLis
 
     @OnClick(R.id.tv_continue_sign_up)
     public void OnSignUpClick() {
+
         WelcomeActivity.isSignUpOpen = AppConstants.ONE_CONSTANT;
         liLoginViaFbGoogle.setVisibility(View.GONE);
         rlSignUpForm.setVisibility(View.VISIBLE);
+        AnalyticsManager.trackScreenView(EMAIL_SIGN_UP_SCREEN, SCREEN_LABEL, null);
     }
 
     @OnClick(R.id.tv_sign_up_back)

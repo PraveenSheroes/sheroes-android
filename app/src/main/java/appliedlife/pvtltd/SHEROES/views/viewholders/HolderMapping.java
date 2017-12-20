@@ -42,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
@@ -100,12 +99,6 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OwnerHolder(view, viewInterface);
-        }
-    },
-    INVITE_MEMBER_MODULE(R.layout.initvite_member_list_item) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new InviteMemberHolder(view, viewInterface);
         }
     },
     COMMUNITY_TAG_SEARCH(R.layout.community_tag_search) {
@@ -432,10 +425,16 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventSponsorHolder(view, viewInterface);
         }
-    }, GROWTH_BUDDIES_HOLDER(R.layout.growth_buddies_holder) {
+    }, FEED_MENTOR_CARD_HOLDER(R.layout.feed_mentor_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new GrowthBuddiesHolder(view, viewInterface);
+            return new MentorCard(view, viewInterface);
+        }
+    }
+    , MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new MentorSuggestedCardHorizontalView(view, viewInterface);
         }
     },
     HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
@@ -516,9 +515,6 @@ public enum HolderMapping {
                                     }
                                 }
                                 break;
-                            case AppConstants.USER_SUB_TYPE:
-                                returnView = INVITE_MEMBER_MODULE.ordinal();
-                                break;
                             case AppConstants.CHALLENGE_SUB_TYPE_NEW:
                                 returnView = FEED_CHALLENGE.ordinal();
                                 break;
@@ -533,6 +529,12 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.HEADER:
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
+                                break;
+                            case AppConstants.MENTOR_SUB_TYPE:
+                                returnView=MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
+                                break;
+                            case AppConstants.USER_SUB_TYPE:
+                                returnView = FEED_MENTOR_CARD_HOLDER.ordinal();
                                 break;
                             default:
                         }
@@ -620,6 +622,9 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.FEED_PROGRESS_BAR:
                                 returnView = FEED_PROGRESS_BAR_HOLDER.ordinal();
+                                break;
+                            case AppConstants.USER_SUB_TYPE:
+                                returnView = FEED_MENTOR_CARD_HOLDER.ordinal();
                                 break;
                             default:
                         }
@@ -728,8 +733,6 @@ public enum HolderMapping {
                     returnView = EVENT_SPEAKER_HOLDER.ordinal();
                 } else if (item instanceof EventSponsorData) {
                     returnView = EVENT_SPONSOR_HOLDER.ordinal();
-                } else if (item instanceof MentorDetailItem) {
-                    returnView = GROWTH_BUDDIES_HOLDER.ordinal();
                 }
             }
         }

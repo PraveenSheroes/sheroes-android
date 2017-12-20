@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -57,7 +58,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.PublicProfileGrowthBuddiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
@@ -119,7 +120,13 @@ public class CommunitiesDetailFragment extends BaseFragment {
         Bundle bundle = new Bundle();
         bundle.putLong(AppConstants.COMMUNITY_POST_ID, communityPostId);
         Parcelable parcelable = Parcels.wrap(feedDetail);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        if(feedDetail instanceof UserSolrObj)
+        {
+            bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelable);
+        }else if(feedDetail instanceof CommunityFeedSolrObj)
+        {
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        }
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
         communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
@@ -130,12 +137,29 @@ public class CommunitiesDetailFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
+        LogUtils.info(TAG,"########Communities detail");
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
             mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
-            mCommunityFeedObj = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
+            Parcelable parcelable=getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
+            if(null!=parcelable)
+            {
+                UserSolrObj mUserMentorObj= Parcels.unwrap(parcelable);
+                CommunityFeedSolrObj communityFeedSolrObj=new CommunityFeedSolrObj();
+                communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getEntityOrParticipantId());
+               // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
+                communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                mCommunityFeedObj=communityFeedSolrObj;
+            }else
+            {
+                mCommunityFeedObj = Parcels.unwrap(getArguments().getParcelable(AppConstants.COMMUNITY_DETAIL));
+            }
+            if(null==mCommunityFeedObj)
+            {
+                return view;
+            }
             communityEnum = (CommunityEnum) getArguments().getSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT);
         }
         if (null != mCommunityFeedObj) {
@@ -149,7 +173,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                mAdapter = new GenericRecyclerViewAdapter(getContext(), (PublicProfileGrowthBuddiesDetailActivity) getActivity());
+                mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileDashboardActivity) getActivity());
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             } else {
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
@@ -167,6 +191,10 @@ public class CommunitiesDetailFragment extends BaseFragment {
                                 mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                             }
                         }
+                        if(getActivity() instanceof MentorUserProfileDashboardActivity) {
+                            ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                        }
+
                     } catch (ClassCastException ex) {
                         LogUtils.error(TAG, ex.getMessage());
                     }
@@ -181,6 +209,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
                                 mTvJoinView.setVisibility(View.GONE);
                                 mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                             }
+                        }
+                        if(getActivity() instanceof MentorUserProfileDashboardActivity) {
+                            ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                         }
                     } catch (ClassCastException ex) {
                         LogUtils.error(TAG, ex.getMessage());
@@ -235,7 +266,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         if (null!= mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                 FeedDetail feedDetail = (FeedDetail) mCommunityFeedObj;
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
-                ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
+                ((MentorUserProfileDashboardActivity) getActivity()).createCommunityPostClick(feedDetail);
         } else {
             FeedDetail feedDetail = mCommunityFeedObj;
             feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
@@ -268,60 +299,62 @@ public class CommunitiesDetailFragment extends BaseFragment {
     }
 
     public void updateUiAccordingToFeedDetail(FeedDetail feedDetail) {
-        mCommunityFeedObj = (CommunityFeedSolrObj) feedDetail;
-        CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
-        if (null != communityEnum) {
-            switch (communityEnum) {
-                case SEARCH_COMMUNITY:
-                    mScreenName = AppConstants.ALL_SEARCH;
-                    if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
-                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                        mTvJoinView.setText(getString(R.string.ID_JOIN));
-                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                        mTvJoinView.setTag(true);
-                    } else {
-                        mTvJoinView.setVisibility(View.GONE);
-                        mTvJoinView.setTag(false);
-                    }
-                    break;
-                case FEATURE_COMMUNITY:
-                    if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                    } else {
-                        ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
-                    }
-                    mScreenName = AppConstants.FEATURE_FRAGMENT;
-                    if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
-                        mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                        mTvJoinView.setText(getString(R.string.ID_JOIN));
-                        mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                        mTvJoinView.setTag(true);
-                    } else {
-                        mTvJoinView.setVisibility(View.GONE);
-                        mTvJoinView.setTag(false);
-                    }
-                    break;
-                case MY_COMMUNITY:
-                    if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                    } else {
-                        ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
-                    }
+        if(feedDetail instanceof CommunityFeedSolrObj ) {
+            mCommunityFeedObj = (CommunityFeedSolrObj) feedDetail;
+            CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
+            if (null != communityEnum) {
+                switch (communityEnum) {
+                    case SEARCH_COMMUNITY:
+                        mScreenName = AppConstants.ALL_SEARCH;
+                        if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                            mTvJoinView.setText(getString(R.string.ID_JOIN));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                            mTvJoinView.setTag(true);
+                        } else {
+                            mTvJoinView.setVisibility(View.GONE);
+                            mTvJoinView.setTag(false);
+                        }
+                        break;
+                    case FEATURE_COMMUNITY:
+                        if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                        } else {
+                            ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
+                        }
+                        mScreenName = AppConstants.FEATURE_FRAGMENT;
+                        if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
+                            mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                            mTvJoinView.setText(getString(R.string.ID_JOIN));
+                            mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                            mTvJoinView.setTag(true);
+                        } else {
+                            mTvJoinView.setVisibility(View.GONE);
+                            mTvJoinView.setTag(false);
+                        }
+                        break;
+                    case MY_COMMUNITY:
+                        if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                        } else {
+                            ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
+                        }
 
-                    mTvJoinView.setVisibility(View.GONE);
-                    mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
-                    mTvJoinView.setTag(false);
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
-            }
-        } else {
-            if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
-                mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
-                mTvJoinView.setText(getString(R.string.ID_JOIN));
-                mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-                mTvJoinView.setTag(true);
+                        mTvJoinView.setVisibility(View.GONE);
+                        mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
+                        mTvJoinView.setTag(false);
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+                }
             } else {
-                mTvJoinView.setVisibility(View.GONE);
-                mTvJoinView.setTag(false);
+                if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
+                    mTvJoinView.setTextColor(ContextCompat.getColor(getContext(), R.color.footer_icon_text));
+                    mTvJoinView.setText(getString(R.string.ID_JOIN));
+                    mTvJoinView.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                    mTvJoinView.setTag(true);
+                } else {
+                    mTvJoinView.setVisibility(View.GONE);
+                    mTvJoinView.setTag(false);
+                }
             }
         }
         swipeToRefreshList();
@@ -351,16 +384,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                     mProgressBar.getLayoutParams().width=0;
                     mProgressBar.getLayoutParams().height=0;
-                    if (feedResponsePojo.getNumFound() > 0) {
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine1.setVisibility(View.VISIBLE);
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).viewLine2.setVisibility(View.VISIBLE);
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.VISIBLE);
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.VISIBLE);
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setText(String.valueOf(feedResponsePojo.getNumFound()));
-                    } else {
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.GONE);
-                        ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.GONE);
-                    }
+
                 }
 
             } else {
@@ -429,8 +453,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
             List<FeedDetail> noDataList = new ArrayList<>();
             try {
                 if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCountLable.setVisibility(View.GONE);
-                    ((PublicProfileGrowthBuddiesDetailActivity) getActivity()).tvPostCount.setVisibility(View.GONE);
 
                 } else {
                     CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mCommunityFeedObj.clone();

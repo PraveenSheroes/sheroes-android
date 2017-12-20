@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_home_footer_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="@dimen/dp_size_5">
+
+    <TextView
+        android:id="@+id/tv_mentor_answering_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rectangle_footer_mentor_dashboard"
+        android:drawablePadding="@dimen/dp_size_4"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="bottom|center_horizontal"
+        android:padding="@dimen/dp_size_20"
+        android:text="@string/ID_START_ANSWER_QUESTION"
+        android:textColor="@color/footer_icon_text"
+        android:textSize="@dimen/sp_size_14"
+        android:visibility="gone" />
+</android.support.v7.widget.CardView>
+

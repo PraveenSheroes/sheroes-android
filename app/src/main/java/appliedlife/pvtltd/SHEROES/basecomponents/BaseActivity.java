@@ -50,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -69,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
@@ -82,6 +84,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
@@ -523,6 +526,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
+                }else  if(((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR){
+                    if(null!=mFeedDetail) {
+
+                    }
                 }else {
                     if (((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == 0) {
                         ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj)mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
@@ -566,8 +573,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
+            if(mFragment instanceof CommunitiesDetailFragment)
+            {
                 ((CommunitiesDetailFragment) mFragment).bookMarkForCard(mFeedDetail);
+            }else
+            {
+                ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
         } else {
             if (mFragmentOpen.isBookmarkFragment()) {
@@ -834,9 +845,18 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                     } else {
-                        if (AppUtils.isFragmentUIActive(mFragment)) {
-                            ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                        if(mFragment instanceof CommunitiesDetailFragment)
+                        {
+                            if (AppUtils.isFragmentUIActive(mFragment)) {
+                                ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                            }
+                        }else
+                        {
+                            if (AppUtils.isFragmentUIActive(mFragment)) {
+                                ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                            }
                         }
+
                     }
 
                    /* if (mFragmentOpen.isBookmarkFragment()) {
@@ -875,9 +895,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
         if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
                 clickCommentReactionFragment(feedDetail);
-            }
         } else {
             if (mFragmentOpen.isBookmarkFragment()) {
                 Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());

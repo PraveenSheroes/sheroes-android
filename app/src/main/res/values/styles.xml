@@ -114,7 +114,8 @@
     </style>
     <style name="NavigationTabTextAppeareance" parent="TextAppearance.Design.Tab">
         <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
-        <item name="android:textSize">@dimen/dp_size_12</item>
+        <item name="android:textSize">@dimen/sp_size_14</item>
+        <item name="android:textAllCaps">true</item>
     </style>
     <style name="SubtitleCollapsingToolbar"
         parent="@style/Widget.Design.CollapsingToolbar">

@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -145,14 +146,15 @@ public class SheroesAppModule {
 
         final RuntimeTypeAdapterFactory<FeedDetail> typeFactory = RuntimeTypeAdapterFactory
                 .of(FeedDetail.class, "sub_type")
-                .registerSubtype(ArticleSolrObj.class, "A")
-                .registerSubtype(UserSolrObj.class, "U")
-                .registerSubtype(JobFeedSolrObj.class, "J")
-                .registerSubtype(CommunityFeedSolrObj.class, "C")
-                .registerSubtype(UserPostSolrObj.class, "P")
-                .registerSubtype(EventSolrObj.class, "E")
-                .registerSubtype(OrganizationFeedObj.class, "O")
-                .registerSubtype(ChallengeSolrObj.class, "H");
+                .registerSubtype(ArticleSolrObj.class, AppConstants.FEED_ARTICLE)
+                .registerSubtype(UserSolrObj.class, AppConstants.USER_SUB_TYPE)
+                .registerSubtype(JobFeedSolrObj.class, AppConstants.FEED_JOB)
+                .registerSubtype(CommunityFeedSolrObj.class, AppConstants.FEED_COMMUNITY)
+                .registerSubtype(UserPostSolrObj.class, AppConstants.FEED_COMMUNITY_POST)
+                .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)
+                .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
+                .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
+                .registerSubtype(MentorDataObj.class, AppConstants.MENTOR_SUB_TYPE);
 
         return new GsonBuilder()
                 .setDateFormat(DATE_FORMATS[0])

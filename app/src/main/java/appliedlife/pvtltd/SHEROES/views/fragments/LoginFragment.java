@@ -81,25 +81,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
     private ProgressDialog mProgressDialog;
-    private LoginActivityIntractionListner mLoginActivityIntractionListner;
     private MoEHelper mMoEHelper;
     private String mGcmId;
     private String email;
     private String password;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            if (getActivity() instanceof LoginActivityIntractionListner) {
-                mLoginActivityIntractionListner = (LoginActivityIntractionListner) getActivity();
-            }
-        } catch (InstantiationException exception) {
-            LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +103,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
+        mLoginPresenter.getMasterDataToPresenter();
         mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
         return view;
@@ -145,14 +133,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
-                        mLoginActivityIntractionListner.onLoginAuthToken();
+                        ((LoginActivity)getActivity()).onLoginAuthToken();
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
                         trackEvent(Event.APP_LOGIN, properties);
                         AnalyticsManager.initializeMixpanel(getActivity());
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
-                        mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                        ((LoginActivity)getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
                         break;
                 }
             } else {
@@ -165,11 +153,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
-                    mLoginActivityIntractionListner.onLoginAuthToken();
+                    ((LoginActivity)getActivity()).onLoginAuthToken();
                     AnalyticsManager.initializeMixpanel(getActivity());
                 } else {
                     LoginManager.getInstance().logOut();
-                    mLoginActivityIntractionListner.onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                    ((LoginActivity)getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
                 }
             }
         }
@@ -190,12 +178,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
-    }
-
-    public interface LoginActivityIntractionListner {
-        void onErrorOccurence(String errorMessage);
-
-        void onLoginAuthToken();
     }
 
     @OnClick(R.id.email_sign_in_button)

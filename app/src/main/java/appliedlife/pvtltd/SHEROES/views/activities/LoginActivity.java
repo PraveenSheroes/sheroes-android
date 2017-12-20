@@ -28,8 +28,7 @@ import butterknife.ButterKnife;
  * @since 04/01/2017.
  * Title: A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity implements LoginFragment.LoginActivityIntractionListner {
-    private static final String SCREEN_LABEL = "Login Screen";
+public class LoginActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
@@ -63,7 +62,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
         callFirstFragment(R.id.fragment_login, frag);
     }
 
-    @Override
+
     public void onErrorOccurence(String errorMessage) {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
@@ -76,7 +75,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
 
     }
 
-    @Override
+
     public void onLoginAuthToken() {
         if ( userPreference.get().isSheUser()  && userPreference.get().getNextScreen()!=null && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
             renderEmailVerifyFragmentView();
@@ -146,8 +145,13 @@ public class LoginActivity extends BaseActivity implements LoginFragment.LoginAc
     }
 
     @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
     public String getScreenName() {
-        return SCREEN_LABEL;
+        return null;
     }
 }
 

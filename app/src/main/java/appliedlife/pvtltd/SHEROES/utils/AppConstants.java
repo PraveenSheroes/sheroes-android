@@ -23,6 +23,8 @@ public class AppConstants {
     public static final int READ_TIME_OUT = 180;
     public static final int CONNECTION_TIME_OUT = 60;
     public static final int FEED_FIRST_TIME = 10;
+    public static final int CREATE_POST = 101;
+    public static final int MENTOR_CREATE_QUESTION = 201;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
@@ -56,11 +58,14 @@ public class AppConstants {
     public static final String USER_YOU_TUBE = "youtube.com/user";
     public static final String CHANNEL_YOU_TUBE = "youtube.com/channel";
     public static final String SHARE_MENU_TYPE = "text/plain";
+    public static final String AVAILABLE = "Available";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
     public static final String SEARCH_SUB_TYPE = "S";
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
+    public static final String MENTOR_SUB_TYPE = "W";
+    public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String TAG_SUB_TYPE = "tags";
     public static final String SKILL_SUB_TYPE = "skill";
@@ -83,6 +88,8 @@ public class AppConstants {
     public static final String USER = "USER";
     public static final String COMMUNITY_OWNER = "COMMUNITY_OWNER";
     public static final String ANONYMOUS = "ANONYMOUS";
+    public static final String ASKING_QUESTION = "asking_question";
+    public static final int ASKING_QUESTION_CALL = 101;
 
     public static final String INTEREST_SUB_TYPE = "INTEREST_SERVICE";
     public static final String WORK_EXPERIENCE_SUB_TYPE = "TOTAL_EXP";
@@ -98,6 +105,7 @@ public class AppConstants {
     public static final String BOOKMARKS = "bookmarks";
     public static final String COMMENT_REACTION_FRAGMENT = "comment_reaction_fragment";
     public static final String HOME_FRAGMENT = "home";
+    public static final String MENTOR_LISTING = "mentor_listing";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
@@ -162,6 +170,7 @@ public class AppConstants {
 
     public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";
+    public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String COVER_IMAGE = "cover_image";
     public static final String TAG_LIST = "tag_list";
@@ -331,6 +340,7 @@ public class AppConstants {
     public static final String GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID = "app_user_contact_id";
     public static final String PUBLIC_PROFILE = "public profile";
     public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
+    public static final long ASKED_QUESTION_TO_MENTOR = 3;
     public static final String orgUserType = "organisations_test_user";
     public static final String WEB_URL = "web_view_url";
     public static final String WEB_TITLE = "web_title";
@@ -341,6 +351,7 @@ public class AppConstants {
     public static final String javascriptcode = "<script type=\"text/javascript\" src=\"jquery.js\"></script> <script type=\"text/javascript\" src=\"jquerylazyload.js\"></script> <script type=\"text/javascript\" language=\"javascript\"> /*source: http://www.appelsiini.net/projects/lazyload*/ function initials() { loadVideo(); convertImages(); loadImages(); } function loadImages() { $(\"img.lazy\").lazyload({ effect: \"fadeIn\" }); $(\"img.lazy\").click(function() { image.openImageActivity($(this).attr(\"data-original\")); }); } function loadVideo() { var n, v = document.getElementsByClassName(\"youtube\"); var l = v.length; for (n = 0; n < l; n++) { var iframe = document.createElement(\"iframe\"); iframe.setAttribute(\"src\", \"https://www.youtube.com/embed/\" + v[n].dataset.id + \"?rel=0&fs=1\"); iframe.setAttribute(\"frameborder\", \"0\"); iframe.setAttribute(\"width\", \"100%\"); iframe.setAttribute(\"id\", \"player\"); iframe.setAttribute(\"height\", \"240\"); iframe.setAttribute(\"allowfullscreen\", \"1\"); while (v[n].firstChild) { v[n].removeChild(v[n].firstChild); } v[n].appendChild(iframe); } } function convertImages() { var n, v = document.getElementsByTagName(\"img\"); var l = v.length; for (n = 0; n < l; n++) { v[n].setAttribute(\"data-original\", v[n].src); v[n].setAttribute(\"src\", \"placeholder.png\"); v[n].setAttribute(\"class\", \"lazy\"); } } </script>";
     public static final String VIEW_MORE_TEXT = "View More";
     public static final String APP_NAME = "Sheroes";
+    public static final String PLUS = "+";
 
     //Tags - for maintaining the Nav selection of current class
     public static final String NAV_PROFILE= "Profile";

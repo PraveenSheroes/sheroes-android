@@ -2,6 +2,9 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -94,11 +97,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLo
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.FollowedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorFollowerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.PublicProfileListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -127,16 +127,13 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
-    @POST("participant/user/get_mentor_list")
-    Observable<PublicProfileListResponse> getPublicProfileListFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    @POST("participant/user/get_mentor_insights")
+    Observable<MentorInsightResponse> getMentorInsightFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
+
     @POST("participation/reaction/follow")
     Observable<MentorFollowUnfollowResponse> getMentorFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
     @POST("/participation/reaction/unfollow")
     Observable<MentorFollowUnfollowResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
-    @POST("/participant/user/get_number_of_followers")
-    Observable<PublicProfileListResponse> getCountOfFollowerFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
-    @POST("/participant/user/get_is_followed")
-    Observable<FollowedResponse> isFollowedCheckFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
     @POST("participant/feed/my_communities")
     Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);
 

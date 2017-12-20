@@ -311,6 +311,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
     @Override

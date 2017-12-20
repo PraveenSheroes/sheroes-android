@@ -16,7 +16,7 @@
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_alignParentStart="true"
         android:layout_gravity="center"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="@dimen/dp_size_16"
         android:gravity="top">
 
         <FrameLayout
@@ -68,7 +68,6 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_8"
         android:layout_height="wrap_content">
 
         <TextView
@@ -95,6 +94,7 @@
             android:id="@+id/rl_org_company_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_8"
             android:orientation="horizontal">
 
             <ImageView

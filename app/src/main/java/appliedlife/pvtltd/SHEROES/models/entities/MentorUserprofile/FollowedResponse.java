@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.models.entities.publicprofile;
+package appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -10,133 +10,158 @@ import java.util.List;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {UserSolrObj.class,FeedDetail.class})
+@Parcel(analyze = {UserSolrObj.class, FeedDetail.class})
 public class UserSolrObj extends FeedDetail {
-    @SerializedName(value="total_exp_i")
-    private Integer totalExperience;
+    public int currentItemPosition;
+    private boolean isSuggested;
+    @SerializedName(value = "total_exp_i")
+    private int totalExperience;
 
-    @SerializedName(value="id_city_l")
-    private Long cityId;
+    @SerializedName(value = "id_city_l")
+    private long cityId;
 
-    @SerializedName(value="city_name_s")
+    @SerializedName(value = "city_name_s")
     private String cityName;
 
-    @SerializedName(value="search_id_skills")
+    @SerializedName(value = "search_id_skills")
     private List<Long> skillIds;
 
-    @SerializedName(value="search_text_skills")
+    @SerializedName(value = "search_text_skills")
     private List<String> skills;
 
-    @SerializedName(value="search_id_opportunities")
+    @SerializedName(value = "search_id_opportunities")
     private List<Long> opportunityTypeIds;
 
-    @SerializedName(value="search_text_opportunities")
+    @SerializedName(value = "search_text_opportunities")
     private List<String> opportunityTypes;
 
-    @SerializedName(value="search_id_can_help_in")
+    @SerializedName(value = "search_id_can_help_in")
     private List<Long> canHelpInIds;
 
-    @SerializedName(value="search_text_can_help_in")
+    @SerializedName(value = "search_text_can_help_in")
     private List<String> canHelpIns;
 
-    @SerializedName(value="search_id_experience")
+    @SerializedName(value = "search_id_experience")
     private List<Long> experienceIds;
 
-    @SerializedName(value="search_text_experience_title")
+    @SerializedName(value = "search_text_experience_title")
     private List<String> experienceTitles;
 
-    @SerializedName(value="search_id_experience_company")
+    @SerializedName(value = "search_id_experience_company")
     private List<Long> experienceCompanyIds;
 
-    @SerializedName(value="search_text_experience_company")
+    @SerializedName(value = "search_text_experience_company")
     private List<String> experienceCompanyNames;
 
-    @SerializedName(value="display_id_curr_experience")
+    @SerializedName(value = "display_id_curr_experience")
     private List<Long> currExperienceIds;
 
-    @SerializedName(value="display_text_curr_experience_title")
+    @SerializedName(value = "display_text_curr_experience_title")
     private List<String> currExperienceTitles;
 
-    @SerializedName(value="display_id_curr_experience_company")
+    @SerializedName(value = "display_id_curr_experience_company")
     private List<Long> currExperienceCompanyIds;
 
-    @SerializedName(value="display_text_curr_experience_company")
+    @SerializedName(value = "display_text_curr_experience_company")
     private List<String> currExperienceCompanyNames;
 
-    @SerializedName(value="search_id_education_id")
+    @SerializedName(value = "search_id_education_id")
     private List<Long> educationIds;
 
-    @SerializedName(value="search_id_education_school")
+    @SerializedName(value = "search_id_education_school")
     private List<Long> educationSchoolIds;
 
-    @SerializedName(value="search_text_education_school_name")
+    @SerializedName(value = "search_text_education_school_name")
     private List<String> educationSchoolNames;
 
-    @SerializedName(value="search_id_education_degree")
+    @SerializedName(value = "search_id_education_degree")
     private List<Long> educationDegreeIds;
 
-    @SerializedName(value="search_text_education_degree_name")
+    @SerializedName(value = "search_text_education_degree_name")
     private List<String> educationDegreeNames;
 
-    @SerializedName(value="search_id_field_of_study_master")
+    @SerializedName(value = "search_id_field_of_study_master")
     private List<Long> fieldOfStudyMasterIds;
 
-    @SerializedName(value="search_text_field_of_study_master_name")
+    @SerializedName(value = "search_text_field_of_study_master_name")
     private List<String> fieldOfStudyMasterNames;
 
-    @SerializedName(value="gender_s")
+    @SerializedName(value = "gender_s")
     private String gender;
 
-    @SerializedName(value="currently_l")
+    @SerializedName(value = "currently_l")
     private Long currently_id;
 
-    @SerializedName(value="profile_id_l")
+    @SerializedName(value = "profile_id_l")
     private long profileId;
 
-    @SerializedName(value="currently_s")
+    @SerializedName(value = "currently_s")
     private String currently;
 
-    @SerializedName(value="no_of_children_i")
+    @SerializedName(value = "no_of_children_i")
     private int noOfChildren;
 
-    @SerializedName(value="interest_ls")
+    @SerializedName(value = "interest_ls")
     private List<Long> interestId;
 
-    @SerializedName(value="ineterest_ss")
+    @SerializedName(value = "ineterest_ss")
     private List<String> interestNames;
 
-    @SerializedName(value="functional_area_ls")
+    @SerializedName(value = "functional_area_ls")
     private List<Long> functionalAreaIds;
 
-    @SerializedName(value="functional_area_ss")
+    @SerializedName(value = "functional_area_ss")
     private List<String> functionalAreaNames;
 
-    @SerializedName(value="search_id_communities")
+    @SerializedName(value = "search_id_communities")
     private List<Long> searchIdCommunities;
 
     @SerializedName(value = "last_activity_date_dt")
     private Date lastActivityDate;
 
-    @SerializedName(value="s_disp_emailid")
+    @SerializedName(value = "s_disp_emailid")
     private String emailId;
 
-    @SerializedName(value="s_disp_mobile")
+    @SerializedName(value = "s_disp_mobile")
     private String mobileNo;
 
-    @SerializedName(value="p_is_company_admin_b")
+    @SerializedName(value = "p_is_company_admin_b")
     private Boolean isCompanyAdmin;
 
-    @SerializedName(value="mars_user_current_salary_i")
-    private Integer marsUserCurrentSalary;
+    @SerializedName(value = "mars_user_current_salary_i")
+    private int marsUserCurrentSalary;
 
-    @SerializedName(value="mars_user_preferred_time_s")
+    @SerializedName(value = "mars_user_preferred_time_s")
     private String marsUserPreferredTime;
 
-    public Integer getTotalExperience() {
+    //New fields for mentor object
+    @SerializedName("solr_ignore_total_no_of_post_created")
+    private int solrIgnoreNoOfMentorPosts;
+
+    @SerializedName("solr_ignore_no_of_mentor_followers")
+    private int solrIgnoreNoOfMentorFollowers;
+
+    @SerializedName("solr_ignore_mentor_status")
+    private String solrIgnoreMentorStatus;
+
+    @SerializedName("solr_ignore_has_user_asked_question")
+    private boolean solrIgnoreHasUserAskedQuestion;
+
+    @SerializedName("solr_ignore_mentor_community_id")
+    private long solrIgnoreMentorCommunityId;
+
+    @SerializedName("solr_ignore_no_of_mentor_answers")
+    private int solrIgnoreNoOfMentorAnswers;
+
+    @SerializedName("solr_ignore_is_mentor_followed")
+    private boolean solrIgnoreIsMentorFollowed;
+
+
+    public int getTotalExperience() {
         return totalExperience;
     }
 
-    public void setTotalExperience(Integer totalExperience) {
+    public void setTotalExperience(int totalExperience) {
         this.totalExperience = totalExperience;
     }
 
@@ -332,11 +357,11 @@ public class UserSolrObj extends FeedDetail {
         this.gender = gender;
     }
 
-    public Long getCurrently_id() {
+    public long getCurrently_id() {
         return currently_id;
     }
 
-    public void setCurrently_id(Long currently_id) {
+    public void setCurrently_id(long currently_id) {
         this.currently_id = currently_id;
     }
 
@@ -438,11 +463,11 @@ public class UserSolrObj extends FeedDetail {
         isCompanyAdmin = companyAdmin;
     }
 
-    public Integer getMarsUserCurrentSalary() {
+    public int getMarsUserCurrentSalary() {
         return marsUserCurrentSalary;
     }
 
-    public void setMarsUserCurrentSalary(Integer marsUserCurrentSalary) {
+    public void setMarsUserCurrentSalary(int marsUserCurrentSalary) {
         this.marsUserCurrentSalary = marsUserCurrentSalary;
     }
 
@@ -452,5 +477,77 @@ public class UserSolrObj extends FeedDetail {
 
     public void setMarsUserPreferredTime(String marsUserPreferredTime) {
         this.marsUserPreferredTime = marsUserPreferredTime;
+    }
+
+    public void setCityId(long cityId) {
+        this.cityId = cityId;
+    }
+
+    public void setCurrently_id(Long currently_id) {
+        this.currently_id = currently_id;
+    }
+
+    public int getSolrIgnoreNoOfMentorFollowers() {
+        return solrIgnoreNoOfMentorFollowers;
+    }
+
+    public void setSolrIgnoreNoOfMentorFollowers(int solrIgnoreNoOfMentorFollowers) {
+        this.solrIgnoreNoOfMentorFollowers = solrIgnoreNoOfMentorFollowers;
+    }
+
+    public String getSolrIgnoreMentorStatus() {
+        return solrIgnoreMentorStatus;
+    }
+
+    public void setSolrIgnoreMentorStatus(String solrIgnoreMentorStatus) {
+        this.solrIgnoreMentorStatus = solrIgnoreMentorStatus;
+    }
+
+    public boolean isSolrIgnoreHasUserAskedQuestion() {
+        return solrIgnoreHasUserAskedQuestion;
+    }
+
+    public void setSolrIgnoreHasUserAskedQuestion(boolean solrIgnoreHasUserAskedQuestion) {
+        this.solrIgnoreHasUserAskedQuestion = solrIgnoreHasUserAskedQuestion;
+    }
+
+    public long getSolrIgnoreMentorCommunityId() {
+        return solrIgnoreMentorCommunityId;
+    }
+
+    public void setSolrIgnoreMentorCommunityId(long solrIgnoreMentorCommunityId) {
+        this.solrIgnoreMentorCommunityId = solrIgnoreMentorCommunityId;
+    }
+
+    public int getSolrIgnoreNoOfMentorAnswers() {
+        return solrIgnoreNoOfMentorAnswers;
+    }
+
+    public void setSolrIgnoreNoOfMentorAnswers(int solrIgnoreNoOfMentorAnswers) {
+        this.solrIgnoreNoOfMentorAnswers = solrIgnoreNoOfMentorAnswers;
+    }
+
+    public boolean isSolrIgnoreIsMentorFollowed() {
+        return solrIgnoreIsMentorFollowed;
+    }
+
+    public void setSolrIgnoreIsMentorFollowed(boolean solrIgnoreIsMentorFollowed) {
+        this.solrIgnoreIsMentorFollowed = solrIgnoreIsMentorFollowed;
+    }
+
+    public boolean isSuggested() {
+        return isSuggested;
+    }
+
+    public void setSuggested(boolean suggested) {
+        isSuggested = suggested;
+    }
+
+    public int getSolrIgnoreNoOfMentorPosts() {
+        return solrIgnoreNoOfMentorPosts;
+    }
+
+    public void setSolrIgnoreNoOfMentorPosts(int solrIgnoreNoOfMentorPosts) {
+        this.solrIgnoreNoOfMentorPosts = solrIgnoreNoOfMentorPosts;
     }
 }

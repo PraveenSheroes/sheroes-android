@@ -12,6 +12,7 @@
     <string name="ID_YYYY">YYYY</string>
     <string name="ID_POST_IN_MODERATION">Posts in Moderation</string>
 
+
     <!--text names in SHEROES-->
 
     <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
@@ -30,6 +31,7 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
+    <string name="ID_ASKED">asked</string>
     <string name="ID_POSTED_AN">posted an</string>
     <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
     <string name="ID_CHALLENGE_COMPLETED">Challenge Completed</string>
@@ -68,6 +70,7 @@
     <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
+    <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
@@ -205,6 +208,7 @@
     <string name="ID_PREFERENCES">PREFERENCES</string>
     <string name="ID_DASH">-</string>
     <string name="ID_FOLLOWERS">Followers</string>
+    <string name="ID_FOLLOWER">Follower</string>
     <string name="ID_GROWTH_BUDDIES_POST">Posts</string>
 
     <string name="ID_ABOUT">ABOUT</string>
@@ -297,11 +301,11 @@
     <string name="ID_CONFIRM">confirm</string>
 
     <!-- String related to setting_feedback page-->
-
+    <string name="ID_ASK_QUESTION">Ask a Question</string>
     <string name="ID_THANK_YOU">THANK YOU</string>
     <string name="ID_FOLLOW_US">FOLLOW US</string>
     <string name="ID_SUBMIT">SUBMIT</string>
-    <string name="ID_GROWTH_BUDDIES_UNFOLLOW">Follow</string>
+    <string name="ID_GROWTH_BUDDIES_FOLLOW">Follow</string>
     <string name="ID_GROWTH_BUDDIES_FOLLOWING">Following</string>
     <!--String Related personal contact details edit page-->
     <string name="ID_FIRST_NAME_HINT">FIRST NAME</string>
@@ -617,7 +621,6 @@
     <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
     <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
     <string name="ID_JOIN_SHEROES_NETWORK">Join The SHEROES Network</string>
-    <string name="ID_MENTOR_FOR">CAN HELP IN</string>
     <string name="ID_GROWTH_BUDDIES">Champions</string>
     <string name="ID_CHALLENGED">My Challenges</string>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
@@ -772,6 +775,31 @@
         <item quantity="one">Comment</item>
         <item quantity="other">Comments</item>
     </plurals>
+    <plurals name="numberOfQuestions">
+        <item quantity="zero">Question</item>
+        <item quantity="one">Question</item>
+        <item quantity="other">Questions</item>
+    </plurals>
+    <plurals name="numberOfAnswers">
+        <item quantity="zero">Answer</item>
+        <item quantity="one">Answer</item>
+        <item quantity="other">Answers</item>
+    </plurals>
+    <plurals name="numberOfPosts">
+        <item quantity="zero">Post</item>
+        <item quantity="one">Post</item>
+        <item quantity="other">Posts</item>
+    </plurals>
+    <plurals name="numberOfFollowers">
+        <item quantity="zero">Follower</item>
+        <item quantity="one">Follower</item>
+        <item quantity="other">Followers</item>
+    </plurals>
+    <plurals name="numberOfImpression">
+        <item quantity="zero">Impression</item>
+        <item quantity="one">Impression</item>
+        <item quantity="other">Impressions</item>
+    </plurals>
 
     <plurals name="numberOfResponses">
         <item quantity="zero">Responses</item>
@@ -804,7 +832,9 @@
     <string name="post_anonymous">Post as Anonymous</string>
     <string name="hint.write_post">What\'s on your mind?</string>
     <string name="action.post">Post</string>
+    <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Write a Post</string>
+    <string name="title.ask_question">Ask a Question</string>
     <string name="anonymous">Anonymous</string>
     <string name="choose_community_option">Choose your community</string>
     <string name="image_count">%1$d/%2$d</string>
@@ -863,5 +893,27 @@
     <string name="empty_challenge_text">No Challenges yet!</string>
     <string name="empty_challenge_sub_text">Come back after sometime</string>
     <string name="logoutUrl">/users/logout</string>
-    <string name="change_address">change address</string>
+    <!--Mentor-->
+    <string name="ID_MENTOR_VIEW_ALL">View All</string>
+    <string name="ID_MENTOR_ONLINE">Online</string>
+    <string name="ID_QUESTION">Question</string>
+    <string name="ID_MENTOR">Mentors</string>
+    <string name="ID_DASHBOARD">Dashboard</string>
+    <string name="empty_mentor_text">No Mentors yet!</string>
+    <string name="ID_MENTOR_POST">Posts</string>
+    <string name="ID_MENTOR_Q_A">Q &amp; A</string>
+    <string name="ID_ASKING">asking</string>
+    <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
+    <string name="ID_ANSWERED_QUESTIONS">answered questions</string>
+    <string name="ID_GET_EXPERT_ADVICE">Get expert advice from mentors</string>
+    <string name="ID_INSIGHT">Insights</string>
+    <string name="ID_SEE_INSIGHT">See Insights</string>
+    <string name="ID_PROFILE_VISITOR">Profile Visitors in last 7 days</string>
+    <string name="ID_FOLLOWER_VISITOR">Followers in last 7 days</string>
+    <string name="ID_POSTS">Posts created in last 7 days</string>
+    <string name="ID_QUESTIONS">Questions in last 7 days</string>
+    <string name="ID_ANSWERS">Answered questions in last 7 days</string>
+    <string name="ID_ANSWER_QUESTION">Answer questions</string>
+    <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
+
 </resources>

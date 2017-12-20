@@ -13,6 +13,7 @@ import java.util.List;
 public class CommunityPost extends Post {
     public static final String COMMUNITY_POST_OBJ = "COMMUNITY_POST_OBJ";
     public ArrayList<Photo> photos = new ArrayList<>();
+    public int createPostRequestFrom;
     public boolean isAnonymous;
     public Community community;
     public boolean isEdit;

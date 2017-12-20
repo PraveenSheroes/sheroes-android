@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/li_name_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -87,6 +88,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/fl_post_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
@@ -102,7 +104,6 @@
                 android:textColor="@color/comment_text"
                 android:textColorLink="@color/view_more"
                 android:textSize="@dimen/sp_size_14" />
-
             <TextView
                 android:id="@+id/tv_feed_community_post_view_more"
                 android:layout_width="wrap_content"
@@ -114,7 +115,6 @@
                 android:textColor="@color/view_more"
                 android:visibility="gone" />
         </FrameLayout>
-
         <LinearLayout
             android:id="@+id/li_post_link_render"
             android:layout_width="match_parent"
@@ -283,7 +283,6 @@
             android:layout_marginTop="@dimen/dp_size_8"
             android:background="@color/feed_card_time"
             android:visibility="gone" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -441,6 +440,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_feed_community_post_user_comment_post_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:layout_gravity="right"
+                    android:paddingRight="@dimen/dp_size_10"
+                    android:textColor="@color/recent_post_comment"
+                    android:textSize="@dimen/sp_size_12" />
             <TextView
                 android:id="@+id/tv_feed_community_post_user_comment_post_menu"
                 android:layout_width="wrap_content"
@@ -452,16 +461,6 @@
                 android:paddingTop="@dimen/dp_size_5"
                 android:paddingBottom="10dp"/>
 
-            <TextView
-                android:id="@+id/tv_feed_community_post_user_comment_post_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_10"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:layout_gravity="right"
-                android:paddingRight="@dimen/dp_size_10"
-                android:textColor="@color/recent_post_comment"
-                android:textSize="@dimen/sp_size_12" />
             </LinearLayout>
         </LinearLayout>
 

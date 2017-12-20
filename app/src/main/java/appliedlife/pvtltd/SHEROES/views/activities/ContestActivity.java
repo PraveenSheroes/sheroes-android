@@ -122,7 +122,6 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
 
     //region private member variable
     private HomeFragment mHomeFragment;
-
     private Contest mContest;
     private String mContestId;
     //endregion

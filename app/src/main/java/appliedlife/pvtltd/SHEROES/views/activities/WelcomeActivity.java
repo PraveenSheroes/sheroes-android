@@ -118,7 +118,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     AppUtils appUtils;
     public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
-
+    private boolean isFirstTimeUser;
     private Handler mHandler;
     private Runnable mRunnable;
 
@@ -157,11 +157,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())) {
+            isFirstTimeUser=false;
             DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
         } else {
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(this);
+            isFirstTimeUser=true;
             initHomeViewPagerAndTabs();
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
@@ -178,7 +180,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
         mLoginPresenter.getMasterDataToPresenter();
-
     }
 
     private void openHomeScreen() {
@@ -473,6 +474,15 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        if(isFirstTimeUser) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }
 

@@ -45,9 +45,9 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-            //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
-            //buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
+          // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
@@ -94,7 +94,7 @@ repositories {
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.28.0'
     compile 'com.google.android.gms:play-services-analytics:11.0.4'
     compile 'com.google.android.gms:play-services-auth:11.0.4'
     compile 'com.google.android.gms:play-services-gcm:11.0.4'

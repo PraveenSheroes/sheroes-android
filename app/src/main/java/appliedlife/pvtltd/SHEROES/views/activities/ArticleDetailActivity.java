@@ -33,7 +33,6 @@ import com.moe.pushlibrary.PayloadBuilder;
 import org.parceler.Parcels;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -46,8 +45,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
-import appliedlife.pvtltd.SHEROES.models.entities.publicprofile.MentorDetailItem;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -536,18 +535,17 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     private void championDetailActivity(Long userId) {
-        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         mFeedDetail = communityFeedSolrObj;
-        MentorDetailItem mentorDetailItem=new MentorDetailItem();
-        mentorDetailItem.setEntityOrParticipantId(userId);
+        UserSolrObj userSolrObj=new UserSolrObj();
+        userSolrObj.setEntityOrParticipantId(userId);
         Parcelable parcelable = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-
-        Parcelable parcelableMentor = Parcels.wrap(mentorDetailItem);
+        Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

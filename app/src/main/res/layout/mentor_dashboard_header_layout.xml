@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/fl_profile_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/iv_mentor_full_view_icon"
+            android:layout_width="@dimen/mentor_profile_icon"
+            android:layout_height="@dimen/mentor_profile_icon"
+            android:layout_marginTop="@dimen/dp_size_48"
+            android:layout_marginLeft="@dimen/sp_size_16" />
+
+        <ImageView
+            android:id="@+id/iv_mentor_verified"
+            android:layout_width="@dimen/dp_size_30"
+            android:layout_height="@dimen/dp_size_30"
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/ic_verified" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_48"
+        android:layout_toRightOf="@+id/fl_profile_icon"
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
+
+        <LinearLayout
+            android:id="@+id/li_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="@integer/int_value_for_line_1">
+
+            <LinearLayout
+                android:id="@+id/li_post"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight=".33">
+
+                <TextView
+                    android:id="@+id/tv_mentor_post_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:textColor="@color/feed_article_label"
+                    android:textSize="@dimen/sp_size_18" />
+
+                <TextView
+                    android:id="@+id/tv_mentor_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:layout_gravity="center"
+                    android:textColor="@color/recent_post_comment"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/li_answer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/dp_size_6"
+                android:layout_weight=".3">
+
+                <TextView
+                    android:id="@+id/tv_mentor_answer_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:layout_gravity="center"
+                    android:textColor="@color/feed_article_label"
+                    android:textSize="@dimen/sp_size_18" />
+
+                <TextView
+                    android:id="@+id/tv_mentor_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/recent_post_comment"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/li_follower"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/dp_size_6"
+                android:layout_weight=".33">
+
+                <TextView
+                    android:id="@+id/tv_mentor_follower_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:layout_gravity="center"
+                    android:textColor="@color/feed_article_label"
+                    android:textSize="@dimen/sp_size_18" />
+
+                <TextView
+                    android:id="@+id/tv_mentor_follower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:layout_gravity="center"
+                    android:textColor="@color/recent_post_comment"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_mentor_dashboard_follow"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_35"
+            android:background="@drawable/rectangle_feed_commnity_join"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_size_7"
+            android:paddingLeft="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:paddingRight="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:paddingTop="@dimen/dp_size_7"
+            android:textAllCaps="true"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_14" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_mentor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_below="@+id/linearLayout"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:textAllCaps="true"
+        android:textColor="@color/feed_article_label"
+        android:textSize="@dimen/sp_size_18" />
+
+    <LinearLayout
+        android:id="@+id/li_loc_profession"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_mentor_name"
+        android:layout_marginTop="@dimen/dp_size_10">
+
+        <TextView
+            android:id="@+id/tv_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:drawablePadding="@dimen/dp_size_6"
+            android:drawableLeft="@drawable/ic_loc"
+            android:textAllCaps="true"
+            android:textColor="@color/grey_600"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:id="@+id/tv_profession"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:drawableLeft="@drawable/ic_mentor_profession"
+            android:drawablePadding="@dimen/dp_size_6"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/mentor_profession"
+            android:textSize="@dimen/sp_size_14" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_mentor_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:maxLines="@integer/int_value_for_line_3"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_below="@+id/li_loc_profession"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:ellipsize="end"
+        android:layout_marginBottom="@dimen/dp_size_24"
+        android:textColor="@color/feed_article_label"
+        android:textSize="@dimen/sp_size_14" />
+</RelativeLayout>

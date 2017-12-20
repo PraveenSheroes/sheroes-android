@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_mentor"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_size_4"
+    android:layout_marginLeft="@dimen/dp_size_8"
+    android:layout_marginRight="@dimen/dp_size_8"
+    android:layout_marginTop="@dimen/dp_size_2"
+    android:elevation="@dimen/dp_size_5"
+    app:cardCornerRadius="@dimen/dp_size_10">
+
+    <LinearLayout
+        android:id="@+id/li_mentor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:baselineAligned="false"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:gravity="top"
+            android:weightSum="1">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_16">
+
+                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                    android:id="@+id/iv_feed_mentor_card_circle_icon"
+                    android:layout_width="@dimen/mentor_icon"
+                    android:layout_height="@dimen/mentor_icon"/>
+
+                <ImageView
+                    android:id="@+id/iv_feed_mentor_card_circle_icon_verified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:background="@drawable/ic_verified"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_12"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginRight="@dimen/dp_size_16"
+                    android:weightSum="@integer/int_value_for_line_1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_feed_mentor_card_title"
+                        android:layout_width="0dp"
+                        android:layout_weight=".7"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_16" />
+
+                    <TextView
+                        android:id="@+id/tv_feed_mentor_status"
+                        android:layout_width="0dp"
+                        android:layout_weight=".3"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:ellipsize="end"
+                        android:layout_marginLeft="@dimen/dp_size_5"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:drawableLeft="@drawable/red_circle"
+                        android:drawablePadding="@dimen/dp_size_4"
+                        android:fontFamily="@string/ID_ROBOTO_BOLD"
+                        android:gravity="top"
+                        android:textAllCaps="true"
+                        android:textSize="@dimen/sp_size_10" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_feed_mentor_follower"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:drawableLeft="@drawable/ic_mentor_follower"
+                    android:drawablePadding="@dimen/dp_size_6"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/grey_600"
+                    android:textSize="@dimen/sp_size_12" />
+
+                <TextView
+                    android:id="@+id/tv_feed_mentor_answered"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:drawableLeft="@drawable/ic_mentor_answered"
+                    android:drawablePadding="@dimen/dp_size_6"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/grey_600"
+                    android:textSize="@dimen/sp_size_12" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li_proffessions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:background="@color/grey8"
+            android:weightSum="@integer/int_value_for_line_1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:layout_weight=".5">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:src="@drawable/ic_mentor_profession" />
+
+                <TextView
+                    android:id="@+id/tv_feed_mentor_first_profession"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:drawablePadding="@dimen/dp_size_6"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:ellipsize="end"
+                    android:textColor="@color/mentor_profession"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center|left"
+                android:layout_weight=".5">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:src="@drawable/ic_mentor_profession" />
+
+                <TextView
+                    android:id="@+id/tv_feed_mentor_second_profession"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:layout_marginRight="@dimen/dp_size_8"
+                    android:drawablePadding="@dimen/dp_size_6"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:ellipsize="end"
+                    android:textColor="@color/mentor_profession"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_weight=".3">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:src="@drawable/ic_mentor_profession" />
+
+                <TextView
+                    android:id="@+id/tv_feed_mentor_third_profession"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:drawablePadding="@dimen/dp_size_6"
+                    android:ellipsize="end"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:maxLines="@integer/int_value_for_line_2"
+                    android:textColor="@color/mentor_profession"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginRight="@dimen/dp_size_8"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_weight="@integer/int_value_for_line_1">
+
+            <TextView
+                android:id="@+id/tv_mentor_follow"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="@dimen/dp_size_40"
+                android:layout_weight=".4"
+                android:background="@drawable/rectangle_feed_commnity_join"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_16"
+                android:paddingRight="@dimen/dp_size_16"
+                android:paddingTop="@dimen/dp_size_10"
+                android:text="@string/ID_GROWTH_BUDDIES_FOLLOW"
+                android:textColor="@color/footer_icon_text"
+                android:textSize="@dimen/sp_size_14"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_mentor_ask_question"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="@dimen/dp_size_40"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_weight=".6"
+                android:background="@drawable/rectangle_feed_commnity_join"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_16"
+                android:paddingRight="@dimen/dp_size_16"
+                android:paddingTop="@dimen/dp_size_10"
+                android:text="@string/ID_ASK_QUESTION"
+                android:textColor="@color/footer_icon_text"
+                android:textSize="@dimen/sp_size_14"
+                android:visibility="visible" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

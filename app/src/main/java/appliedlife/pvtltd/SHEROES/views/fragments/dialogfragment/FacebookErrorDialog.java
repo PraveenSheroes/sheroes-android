@@ -13,7 +13,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.FaceBookOpenActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,7 +60,7 @@ public class FacebookErrorDialog extends BaseDialogFragment {
     @OnClick(R.id.tv_ok)
     public void tryAgainClick() {
         if (callFor == AppConstants.NO_REACTION_CONSTANT) {
-            ((FaceBookOpenActivity) getActivity()).backToWelcome();
+
         } else {
             dismiss();
         }

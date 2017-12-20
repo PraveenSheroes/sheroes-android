@@ -167,7 +167,7 @@
     <dimen name="image_upload_h">130dp</dimen>
 
 
-
+    <dimen name="mentor_icon">64dp</dimen>
     <dimen name="comment_icon">30dp</dimen>
     <dimen name="user_comment_icon">40dp</dimen>
     <dimen name="multiple_image_rectangle">118dp</dimen>
@@ -183,6 +183,7 @@
     <dimen name="authorPicSize">44dp</dimen>
     <dimen name="looking_for_circle">70dp</dimen>
     <dimen name="contest_image_size">80dp</dimen>
+    <dimen name="mentor_profile_icon">87dp</dimen>
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->

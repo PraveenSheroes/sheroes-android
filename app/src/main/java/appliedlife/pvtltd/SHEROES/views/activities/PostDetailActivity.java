@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -66,6 +68,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
 import butterknife.BindDimen;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -80,7 +84,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
     @Inject
-    Preference<LoginResponse> userPreference;
+    Preference<LoginResponse> mUserPreference;
 
     @Inject
     AppUtils mAppUtils;
@@ -110,12 +114,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Bind(R.id.sendButton)
     ImageView mSendButton;
 
+    @Bind(R.id.li_user_comment_post_type_selection)
+    LinearLayout liUserPostTypeSelection;
+
+    @Bind(R.id.tv_user_name_for_post)
+    TextView tvUserNameForPost;
+
+    @Bind(R.id.tv_anonymous_post)
+    TextView tvAnonymousPost;
+
     //endregion
 
     //region presenter region
     private PostDetailAdapter mPostDetailListAdapter;
     private UserPostSolrObj mUserPostObj;
     private String mUserPostId;
+    private boolean mIsAnonymous;
     //endregion
 
     //region activity methods
@@ -145,8 +159,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         mPostDetailPresenter.setUserPost(mUserPostObj, mUserPostId);
         mPostDetailPresenter.fetchUserPost();
-        mUserPic.bindImage(mUserPostObj.getAuthorImageUrl());
-
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
+            tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
+            mUserPic.setCircularImage(true);
+            mUserPic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
+        }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -154,6 +171,19 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setupEditInputText();
     }
 
+    @OnClick(R.id.tv_user_name_for_post)
+    public void userNamePostForComment() {
+        mIsAnonymous = false;
+        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.blue));
+        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
+    }
+
+    @OnClick(R.id.tv_anonymous_post)
+    public void anonymousPostForComment() {
+        mIsAnonymous = true;
+        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
+        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.blue));
+    }
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -338,9 +368,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (mInputText.getText().toString().length() == 0) {
                     mInputText.setMaxLines(SINGLE_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
+                    liUserPostTypeSelection.setVisibility(View.GONE);
                 } else {
                     mInputText.setMaxLines(MAX_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
+                    liUserPostTypeSelection.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -399,10 +431,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, TextView view) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
-            if (null != userPreference.get().getUserSummary().getUserBO()) {
-                adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             if (adminId == AppConstants.TWO_CONSTANT) {
@@ -457,8 +489,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
-
-        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
@@ -467,6 +498,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtra(AppConstants.CHAMPION_ID,userId);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -513,7 +545,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if(userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
             if(null!=userPostObj) {
-                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                     if(StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
                         Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
                         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -546,9 +578,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         String message = mInputText.getText().toString().trim();
-
         if (!TextUtils.isEmpty(message)) {
-            mPostDetailPresenter.addComment(message);
+            mPostDetailPresenter.addComment(message,mIsAnonymous);
             mInputText.setText("");
         }
     }
@@ -556,10 +587,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onCommentMenuClicked(final Comment comment, ImageView userCommentListMenu) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, userCommentListMenu);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
-            if (null != userPreference.get().getUserSummary().getUserBO()) {
-                adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             if (adminId == AppConstants.TWO_CONSTANT) {

@@ -59,7 +59,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -68,17 +67,14 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
-import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityRequestedDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.InviteCommunityMemberDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SpamPostListDialogFragment;
 import butterknife.Bind;
@@ -116,7 +112,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     private Fragment mFragment;
     private CommunityOpenAboutFragment mCommunityOpenAboutFragment;
     private CommunityEnum communityEnum = null;
-    private InviteCommunityMemberDialogFragment mInviteCommunityMemberDialogFragment;
     private AllMembersDialogFragment mAllMembersDialogFragment;
     private boolean isMemberRemoveDialog;
     private CommunityRequestedDialogFragment communityRequestedDialogFragment;
@@ -380,13 +375,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             case R.id.card_community_detail:
                 communityOpenAboutFragment(feedDetail);
                 break;
-            case R.id.tv_add_invite:
-                if (null != feedDetail) {
-                    if (null != mInviteCommunityMemberDialogFragment) {
-                        mInviteCommunityMemberDialogFragment.onAddMemberClick(feedDetail);
-                    }
-                }
-                break;
             case R.id.tv_owner_add:
                 CallCommunityOwnerSearchFragment(feedDetail, feedDetail.getIdOfEntityOrParticipant());
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
@@ -446,7 +434,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     }
 
     private void championDetailActivity(Long userId, int position) {
-        Intent intent = new Intent(this, PublicProfileGrowthBuddiesDetailActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         mCommunityFeedObj = new CommunityFeedSolrObj();
         mCommunityFeedObj.setIdOfEntityOrParticipant(userId);
@@ -455,6 +443,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtra(AppConstants.CHAMPION_ID,userId);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -462,9 +451,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
     public void updateOpenAboutFragment(FeedDetail feedDetail) {
         CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
             mCommunityFeedObj = communityFeedSolrObj;
-        if (null != mInviteCommunityMemberDialogFragment) {
-            mInviteCommunityMemberDialogFragment.dismiss();
-        }
+
         if (null != mAllMembersDialogFragment) {
             mAllMembersDialogFragment.dismiss();
         }

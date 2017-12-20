@@ -54,7 +54,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -65,7 +67,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
@@ -80,6 +86,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -621,10 +628,47 @@ public class HomeFragment extends BaseFragment {
         Long challengeId = challengeDataItem.getChallengeId();
         mHomePresenter.getChallengeAcceptFromPresenter(acceptChallengeRequestBuilder(challengeId, true, false, completionPercent, isAccepted, isUpdated, imageUrl, videoUrl));
     }
-
+    public void followUnFollowRequest(UserSolrObj userSolrObj) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getEntityOrParticipantId());
+        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+            mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
+        } else {
+            mHomePresenter.getFollowFromPresenter(publicProfileListRequest,userSolrObj);
+        }
+    }
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
+        switch (feedParticipationEnum) {
+            case FOLLOW_UNFOLLOW:
+                List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
+                MentorDataObj mentorDataObj=(MentorDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
+                if(((UserSolrObj) baseResponse).isSuggested())
+                {
+                    mentorDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
+                    UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
+                    List<UserSolrObj> mentorDataObjList=new ArrayList<>();
+                    for(UserSolrObj userSolrObjLocal:mentorDataObj.getMentorParticipantModel())
+                    {
+                        if(userPassedObject.getItemPosition()==userSolrObjLocal.getItemPosition())
+                        {
+                            mentorDataObjList.add(userPassedObject);
+                        }else
+                        {
+                            mentorDataObjList.add(userSolrObjLocal);
+                        }
+                    }
+                    mentorDataObj.setMentorParticipantModel(mentorDataObjList);
+                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition,mentorDataObj );
+                }else
+                {
+                    mentorDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
+                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition,mentorDataObj );
+                }
+                break;
+            default:
+                super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
+        }
     }
 
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {

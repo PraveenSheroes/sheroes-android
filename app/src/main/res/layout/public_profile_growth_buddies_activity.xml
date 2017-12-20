@@ -8,7 +8,7 @@
     tools:openDrawer="start">
     <include
         android:id="@+id/public_profile_layout"
-        layout="@layout/public_profile_detail_layout"/>
+      />
     <include
         android:id="@+id/fl_feed_comments"
         layout="@layout/fragment_container"

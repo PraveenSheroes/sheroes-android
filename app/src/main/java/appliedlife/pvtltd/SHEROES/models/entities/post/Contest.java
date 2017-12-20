@@ -85,7 +85,6 @@ public class Contest{
 
     @SerializedName("solr_ignore_winner_address_s")
     public String mWinnerAddress;
-
     public List<FeedDetail> submissions;
     public String thumbImage;
 

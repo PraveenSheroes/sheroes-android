@@ -20,62 +20,114 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#fffafafa"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:id="@+id/user_pic"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_anonomous" />
-
-        <EditText
-            android:id="@+id/input_edit_text"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:background="@color/white"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:inputType="textMultiLine|textShortMessage|textCapSentences"
-            android:maxLines="1"
-            android:minHeight="48dp"
-            android:paddingBottom="12dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="16dp"
-            android:paddingTop="12dp"
-            android:textColor="@color/black"
-            android:textColorHint="#90949c"
-            android:hint="Write an answer"
-            android:textSize="14sp" />
+            android:background="@color/grey_50"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/user_pic"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_anonomous" />
+
+            <EditText
+                android:id="@+id/input_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:ellipsize="end"
+
+                android:gravity="center_vertical"
+                android:hint="Write an answer"
+                android:inputType="textMultiLine|textShortMessage|textCapSentences"
+                android:maxLines="1"
+                android:minHeight="48dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="16dp"
+                android:paddingTop="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="#90949c"
+
+                android:textSize="14sp" />
 
 
-        <ImageView
-            android:id="@+id/sendButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:padding="4dp"
-            android:layout_marginLeft="8dp"
-            android:scaleType="center"
-            android:src="@drawable/vector_message_sent" />
+            <ImageView
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="@dimen/dp_size_10"
+                android:scaleType="center"
+                android:src="@drawable/vector_message_sent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li_user_comment_post_type_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_5"
+            android:layout_marginLeft="@dimen/dp_size_13"
+            android:background="@color/grey_50"
+            android:clickable="false"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_size_5"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_post_as_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:text="@string/ID_POST"
+                android:textColor="@color/detail_page_text"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_user_name_for_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_25"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:text="@string/ID_OWNER"
+                android:textAllCaps="true"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/sp_size_12" />
+
+            <TextView
+                android:id="@+id/tv_anonymous_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:text="@string/ID_ANONYMOUS"
+                android:textAllCaps="true"
+                android:textColor="@color/searchbox_text_color"
+                android:textSize="@dimen/sp_size_12" />
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/user_comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar"
         android:layout_above="@id/bottom_container"
+        android:layout_below="@+id/toolbar"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"/>
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp" />
 
     <View
         android:id="@+id/divider"

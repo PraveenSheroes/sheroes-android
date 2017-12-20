@@ -70,6 +70,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     private long startedTime;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    private boolean isFirstTimeUser;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,7 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
         mFragmentOpen = new FragmentOpen();
         supportPostponeEnterTransition();
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+            isFirstTimeUser=true;
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
                 ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_WELCOME));
                 tellUsAboutFragment();
@@ -102,11 +104,13 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
                 position = 1;
                 setLookingForFragment();
             }*/ else {
+                isFirstTimeUser=false;
                Intent homeIntent = new Intent(this, HomeActivity.class);
                startActivity(homeIntent);
                 finish();
             }
         } else {
+            isFirstTimeUser=false;
             Intent homeIntent = new Intent(this, HomeActivity.class);
             startActivity(homeIntent);
             finish();
@@ -297,5 +301,14 @@ public class OnBoardingActivity extends BaseActivity implements OnBoardingTellUs
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        if(isFirstTimeUser) {
+            return true;
+        }else {
+            return false;
+        }
     }
 }
