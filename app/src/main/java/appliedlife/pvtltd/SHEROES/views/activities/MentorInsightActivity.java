@@ -261,10 +261,10 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         } else {
             liImpression.setVisibility(View.GONE);
         }
-        if (mentorInsightResponse.getTotalNoOfPostCreated() > 0) {
+        if (mUserSolrObj.getSolrIgnoreNoOfMentorPosts() > 0) {
             rlPost.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfPosts, mentorInsightResponse.getTotalNoOfPostCreated());
-            tvMentorInsightPostCount.setText(String.valueOf(numericToThousand(mentorInsightResponse.getTotalNoOfPostCreated())));
+            tvMentorInsightPostCount.setText(String.valueOf(numericToThousand(mUserSolrObj.getSolrIgnoreNoOfMentorPosts())));
             tvMentorInsightPost.setText(plural);
 
             if(mentorInsightResponse.getTotalNoOfPost7Days()>0) {

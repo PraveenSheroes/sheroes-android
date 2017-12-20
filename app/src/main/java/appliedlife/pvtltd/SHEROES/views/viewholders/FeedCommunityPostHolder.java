@@ -1042,7 +1042,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
+                viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostCardTitle);
             }
 
             @Override

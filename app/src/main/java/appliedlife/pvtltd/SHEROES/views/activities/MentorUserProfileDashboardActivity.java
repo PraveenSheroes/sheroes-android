@@ -271,6 +271,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
                 tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
                 tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
                 tvMentorAskQuestion.setText(getString(R.string.ID_ANSWER_QUESTION));
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                 viewFooter.setVisibility(View.VISIBLE);
             } else {
                 followUnFollowMentor();

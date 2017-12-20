@@ -169,7 +169,7 @@
 
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
-    <string name="ID_NO_GROWTH_BUDDIES">No, Mentors found</string>
+    <string name="ID_NO_GROWTH_BUDDIES">No, champions found</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_NO_POST_MODERATION">No post to moderation</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
@@ -897,15 +897,15 @@
     <string name="ID_MENTOR_VIEW_ALL">View All</string>
     <string name="ID_MENTOR_ONLINE">Online</string>
     <string name="ID_QUESTION">Question</string>
-    <string name="ID_MENTOR">Mentors</string>
+    <string name="ID_MENTOR">Champions</string>
     <string name="ID_DASHBOARD">Dashboard</string>
-    <string name="empty_mentor_text">No Mentors yet!</string>
+    <string name="empty_mentor_text">No champions yet!</string>
     <string name="ID_MENTOR_POST">Posts</string>
     <string name="ID_MENTOR_Q_A">Q &amp; A</string>
     <string name="ID_ASKING">asking</string>
     <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
     <string name="ID_ANSWERED_QUESTIONS">answered questions</string>
-    <string name="ID_GET_EXPERT_ADVICE">Get expert advice from mentors</string>
+    <string name="ID_GET_EXPERT_ADVICE">Get expert advice from champions</string>
     <string name="ID_INSIGHT">Insights</string>
     <string name="ID_SEE_INSIGHT">See Insights</string>
     <string name="ID_PROFILE_VISITOR">Profile Visitors in last 7 days</string>

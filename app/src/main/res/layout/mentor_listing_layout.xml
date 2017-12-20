@@ -23,15 +23,15 @@ android:orientation="vertical">
     android:layout_below="@id/toolbar"
     android:gravity="center"
     android:orientation="vertical">
-
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView
+        android:id="@+id/rv_mentor_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_mentor_list"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView
-            android:id="@+id/rv_mentor_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
 </RelativeLayout>

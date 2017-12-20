@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.graphics.Palette;
@@ -22,6 +23,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +113,7 @@ public class SpamPostListDialogFragment extends BaseDialogFragment  {
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             Bundle bundle = getArguments();
-            feedRequestPojo = bundle.getParcelable(AppConstants.SPAM_POST);
+            feedRequestPojo = Parcels.unwrap(bundle.getParcelable(AppConstants.SPAM_POST));
             }
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.SPAM_LIST_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
