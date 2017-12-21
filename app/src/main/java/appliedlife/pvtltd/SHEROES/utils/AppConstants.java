@@ -311,6 +311,7 @@ public class AppConstants {
     public static final String NOTIFICATION_ID = "notification_id";
     public static final String TITLE = "title";
     public static final String DEEP_LINK_URL = "deep_link_url";
+    public static final String OPEN_IN_WEBVIEW = "open_in_webview";
     public static final String SHEROES = "SHEROES";
     public static final String TICKER = "ticker";
     public static final String CHECK_OUT = "Check out ";
