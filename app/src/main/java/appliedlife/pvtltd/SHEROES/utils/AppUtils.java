@@ -10,6 +10,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
@@ -2647,6 +2648,29 @@ public class AppUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
                     Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
+        }
+        customTabsIntent.launchUrl(activity, url);
+    }
+
+    public static void openChromeTabForce(Activity activity, Uri url) {
+        String PACKAGE_NAME = "com.android.chrome";
+        CustomTabsIntent customTabsIntent =
+                new CustomTabsIntent.Builder()
+                        .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+                        .setShowTitle(true)
+                        .enableUrlBarHiding()
+                        .build();
+
+        PackageManager packageManager = activity.getPackageManager();
+        List<ApplicationInfo> resolveInfoList = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+
+
+        for (ApplicationInfo applicationInfo : resolveInfoList) {
+            String packageName = applicationInfo.packageName;
+            if (TextUtils.equals(packageName, PACKAGE_NAME)) {
+                customTabsIntent.intent.setPackage(PACKAGE_NAME);
+                break;
+            }
         }
         customTabsIntent.launchUrl(activity, url);
     }

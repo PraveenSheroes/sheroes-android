@@ -228,6 +228,34 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name=".views.activities.BranchDeepLink"
+            android:screenOrientation="portrait">
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+                android:host="shrs.me"
+                android:scheme="https"
+                android:pathPrefix="/"/>
+            <data
+                android:host="shrs.me"
+                android:scheme="http"
+                android:pathPrefix="/"/>
+            <data
+                android:host="dpjo.test-app.link"
+                android:scheme="https"
+                android:pathPrefix="/"/>
+            <data
+                android:host="dpjo.test-app.link"
+                android:scheme="http"
+                android:pathPrefix="/"/>
+
+            <data android:scheme="appliedlife.pvtltd.sheroes"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity"
             android:screenOrientation="portrait"
@@ -240,24 +268,6 @@
                 <data android:host="sheroes.com"/>
                 <data android:host="sheroes.in"></data>
                 <data android:scheme="https" />
-                <data android:scheme="appliedlife.pvtltd.sheroes"/>
-                <data
-                    android:host="dpjo.test-app.link"
-                    android:scheme="https"
-                    android:pathPrefix="/"/>
-                <data
-                    android:host="dpjo.test-app.link"
-                    android:scheme="http"
-                    android:pathPrefix="/"/>
-                <data
-                    android:host="shrs.me"
-                    android:scheme="https"
-                    android:pathPrefix="/"/>
-                <data
-                    android:host="shrs.me"
-                    android:scheme="http"
-                    android:pathPrefix="/"/>
-
                 <data android:pathPrefix="/jobs"/>
                 <data android:pathPrefix="/articles"/>
                 <data android:pathPrefix="/champions"/>
