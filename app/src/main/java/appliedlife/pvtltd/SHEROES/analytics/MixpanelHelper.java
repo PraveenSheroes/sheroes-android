@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import io.branch.referral.Branch;
 
 @Singleton
 public class MixpanelHelper {
@@ -119,6 +120,8 @@ public class MixpanelHelper {
 
             mixpanel.getPeople().setOnce("$created", userSummary.getUserBO().getCrdt());
         }
+
+        Branch.getInstance().setIdentity(Long.toString(userSummary.getUserId()));
 
     }
 
