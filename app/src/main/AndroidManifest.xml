@@ -69,6 +69,13 @@
             android:name="SENDER_ID"
             android:value="@string/ID_PROJECT_ID" />
 
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="key_live_kdBTwNxOeTMdqEi8nsWj2ogeABiIJMY9" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey.test"
+            android:value="key_test_ahwTwSEImTLdFFn9os4s1hkmAvlQK7ck" />
+
         <!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_ICON"
@@ -233,6 +240,24 @@
                 <data android:host="sheroes.com"/>
                 <data android:host="sheroes.in"></data>
                 <data android:scheme="https" />
+                <data android:scheme="appliedlife.pvtltd.sheroes"/>
+                <data
+                    android:host="dpjo.test-app.link"
+                    android:scheme="https"
+                    android:pathPrefix="/"/>
+                <data
+                    android:host="dpjo.test-app.link"
+                    android:scheme="http"
+                    android:pathPrefix="/"/>
+                <data
+                    android:host="shrs.me"
+                    android:scheme="https"
+                    android:pathPrefix="/"/>
+                <data
+                    android:host="shrs.me"
+                    android:scheme="http"
+                    android:pathPrefix="/"/>
+
                 <data android:pathPrefix="/jobs"/>
                 <data android:pathPrefix="/articles"/>
                 <data android:pathPrefix="/champions"/>
@@ -257,6 +282,14 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name="io.branch.referral.InstallListener"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

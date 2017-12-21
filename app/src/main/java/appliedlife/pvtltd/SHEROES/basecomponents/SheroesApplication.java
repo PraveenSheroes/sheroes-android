@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -67,6 +68,7 @@ public class SheroesApplication extends MultiDexApplication  {
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);
+        Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
         Stetho.initializeWithDefaults(this);
     }
