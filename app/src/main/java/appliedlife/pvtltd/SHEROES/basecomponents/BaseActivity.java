@@ -481,6 +481,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 //mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
+
+            case R.id.tv_join_conversation:
+                if(mFeedDetail instanceof UserPostSolrObj){
+                    PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
+                }else if(mFeedDetail instanceof ArticleSolrObj){
+                    ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                }
+                break;
+
             case R.id.li_feed_article_images:
                 ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intent = new Intent(this, ArticleDetailActivity.class);
@@ -926,7 +935,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
         } else {*/
             if(feedDetail instanceof UserPostSolrObj){
-                PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null);
+                PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
             }else if(feedDetail instanceof ArticleSolrObj){
                 ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
             }

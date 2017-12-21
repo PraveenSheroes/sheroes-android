@@ -84,6 +84,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
 
+    @Bind(R.id.tv_join_conversation)
+    TextView mJoinConveration;
+
 
     @Bind(R.id.li_community_post_main_layout)
     LinearLayout liCommunityPostMainLayout;
@@ -833,7 +836,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_join_conversation)
     public void joinConversationClick() {
         mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
+    }
+
+    @OnClick(R.id.tv_feed_community_post_user_comment)
+    public void userCommentClick() {
+        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
+        viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
     }
 
     @OnClick(R.id.tv_feed_community_post_user_comment_post)
@@ -850,12 +859,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_feed_community_post_user_comments)
     public void openCommentClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment)
-    public void userCommentClick() {
         mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
         viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
     }

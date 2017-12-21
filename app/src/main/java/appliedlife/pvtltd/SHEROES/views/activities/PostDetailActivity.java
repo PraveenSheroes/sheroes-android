@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -80,6 +81,7 @@ import butterknife.OnClick;
 public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack {
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
+    public static final String SHOW_KEYBOARD = "Show Keyboard";
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
@@ -145,6 +147,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
             mPositionInFeed = mUserPostObj.getItemPosition();
+            boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
+            if(showKeyboard){
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+            }
         } else {
             mUserPostId = getIntent().getStringExtra(UserPostSolrObj.USER_POST_ID);
             if (!CommonUtil.isNotEmpty(mUserPostId)) {
@@ -338,11 +344,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //endregion
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, String sourceScreen, UserPostSolrObj userPostSolrObj, int requestCode, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, String sourceScreen, UserPostSolrObj userPostSolrObj, int requestCode, HashMap<String, Object> properties, boolean showKeyboard) {
         Intent intent = new Intent(fromActivity, PostDetailActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         Parcelable parcelable = Parcels.wrap(userPostSolrObj);
         intent.putExtra(UserPostSolrObj.USER_POST_OBJ, parcelable);
+        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
