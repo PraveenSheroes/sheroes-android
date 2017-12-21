@@ -244,11 +244,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         tvFeedCommunityPostUserReaction.setTag(true);
         mUserPostObj.setLastReactionValue(mUserPostObj.getReactionValue());
         //if (!mUserPostObj.isTrending()) {
-        if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
-            tvFeedCommunityPostText.setTextSize((int) mContext.getResources().getDimension(R.dimen.sp_size_11));
-        } else {
-            tvFeedCommunityPostText.setTextSize((int) mContext.getResources().getDimension(R.dimen.sp_size_7));
-        }
         imageOperations(mContext);
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
             liFeedCommunityUserPostImages.removeAllViews();

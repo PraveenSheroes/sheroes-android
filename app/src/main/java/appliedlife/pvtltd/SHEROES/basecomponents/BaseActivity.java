@@ -540,9 +540,20 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
                     }
                 }else {
-                    if (((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == 0) {
-                        ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj)mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
-
+                    if(mFeedDetail instanceof UserPostSolrObj ) {
+                        if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
+                            ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
+                        }else {
+                            Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                            Bundle bundleFromPost = new Bundle();
+                            bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                            intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
+                            Parcelable parcelablesss = Parcels.wrap(mFeedDetail);
+                            bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
+                            bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                            intentFromCommunityPost.putExtras(bundleFromPost);
+                            startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                        }
                     }else {
                         Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                         Bundle bundleFromPost = new Bundle();

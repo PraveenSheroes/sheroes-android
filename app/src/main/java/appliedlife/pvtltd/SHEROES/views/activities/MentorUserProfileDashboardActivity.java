@@ -13,6 +13,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -223,7 +225,8 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             tvProfession.setVisibility(View.GONE);
         }
         if(StringUtil.isNotNullOrEmptyString(mMentorUserItem.getListDescription())) {
-            tvMentorDescription.setText(mMentorUserItem.getListDescription());
+            Spanned description = StringUtil.fromHtml(mMentorUserItem.getListDescription());
+            tvMentorDescription.setText(description);
         }
         if(StringUtil.isNotNullOrEmptyString(mMentorUserItem.getNameOrTitle())) {
             mTvMentorName.setText(mMentorUserItem.getNameOrTitle());

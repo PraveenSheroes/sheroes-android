@@ -193,11 +193,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         this.mUserPostObj = (UserPostSolrObj)item;
         mContext = context;
         mUserPostObj.setItemPosition(position);
-        if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
-            mPostDescription.setTextSize((int) mContext.getResources().getDimension(R.dimen.sp_size_11));
-        } else {
-            mPostDescription.setTextSize((int) mContext.getResources().getDimension(R.dimen.sp_size_7));
-        }
         normalCommunityPostUi(mUserId, mAdminId);
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);

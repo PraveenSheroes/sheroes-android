@@ -66,7 +66,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_A
  * Created by Praveen on 06/12/17.
  */
 
-public class MentorQADetailFragment extends BaseFragment {
+public class  MentorQADetailFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Mentor QA Detail Screen";
     private final String TAG = LogUtils.makeLogTag(MentorQADetailFragment.class);
     @Inject
