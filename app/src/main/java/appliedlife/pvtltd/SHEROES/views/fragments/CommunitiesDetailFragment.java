@@ -148,7 +148,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             {
                 UserSolrObj mUserMentorObj= Parcels.unwrap(parcelable);
                 CommunityFeedSolrObj communityFeedSolrObj=new CommunityFeedSolrObj();
-                communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getEntityOrParticipantId());
+                communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
                // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
                 communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
                 mCommunityFeedObj=communityFeedSolrObj;

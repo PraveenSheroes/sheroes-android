@@ -316,7 +316,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) tvMentorAskQuestion.getLayoutParams();
         secondImageLayout.weight = 1;
     }
-
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();

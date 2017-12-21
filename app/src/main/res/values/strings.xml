@@ -175,7 +175,7 @@
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
     <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
     <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
-    <string name="ID_NO_POST">No community post found</string>
+    <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_SUGGESTED">Suggested communities</string>
     <string name="ID_GROUP">Group</string>
