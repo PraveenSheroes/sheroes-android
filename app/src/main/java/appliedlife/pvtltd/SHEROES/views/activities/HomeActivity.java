@@ -465,7 +465,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean shouldShowSnowFlake() {
         boolean showSnowFlake = false;
-        if(mUserPreferenceMasterData!=null && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION")!=null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))){
+        if(mUserPreferenceMasterData!=null&&mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION")!=null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))){
             String snowFlakeFlag = "";
             snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW").get(0).getLabel();
             if(CommonUtil.isNotEmpty(snowFlakeFlag)){
