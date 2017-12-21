@@ -126,6 +126,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mLoginPresenter.attachView(this);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -216,7 +217,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mViewPagerAdapter.addFragment(new WelcomeScreenFourthFragment(), AppConstants.EMPTY_STRING);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(this);
-        mLoginPresenter.attachView(this);
 
         //fbSignIn();
         mHandler= new Handler();
