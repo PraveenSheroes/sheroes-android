@@ -289,6 +289,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mTitleToolbar.setText(R.string.title_ask_question);
                     break;
                     default:
+                        mTitleToolbar.setText(R.string.title_create_post);
             }
         }
     }
