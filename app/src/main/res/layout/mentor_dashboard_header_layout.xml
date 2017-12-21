@@ -160,11 +160,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_mentor_name"
+        android:weightSum="@integer/int_value_for_line_1"
         android:layout_marginTop="@dimen/dp_size_10">
 
         <TextView
             android:id="@+id/tv_loc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -176,9 +178,9 @@
 
         <TextView
             android:id="@+id/tv_profession"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".5"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_16"
             android:drawableLeft="@drawable/ic_mentor_profession"
             android:drawablePadding="@dimen/dp_size_6"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"

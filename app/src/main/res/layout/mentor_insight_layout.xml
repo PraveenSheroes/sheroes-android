@@ -365,7 +365,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_24"
-                    android:text="222"
                     android:layout_alignParentTop="true"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
                     android:textColor="@color/feed_article_label"
@@ -431,7 +430,6 @@
                     android:layout_marginLeft="@dimen/dp_size_24"
                     android:layout_alignParentTop="true"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
-                    android:text="3333"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_22"/>
 
