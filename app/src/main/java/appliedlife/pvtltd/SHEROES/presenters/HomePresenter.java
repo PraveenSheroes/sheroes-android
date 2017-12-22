@@ -326,7 +326,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-                if (!CommonUtil.isEmpty(feedDetailList)) {
+                if (!CommonUtil.isEmpty(feedDetailList) && feedRequestPojo.getPageNo() == 1) {
                     mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
                 }
                 getMvpView().showHomeFeedList(feedDetailList);

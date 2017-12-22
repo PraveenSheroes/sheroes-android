@@ -174,7 +174,9 @@ public class HomeModel {
                 ArrayList<FeedDetail> feedDetails = new ArrayList<>();
                 if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                     List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
-                    fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostedDate());
+                    if(feedRequestPojo.getPageNo() == 1){
+                        fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostedDate());
+                    }
                     feedDetails.addAll(feedDetailsFromServer);
                 }
 
