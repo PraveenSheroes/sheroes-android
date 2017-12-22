@@ -1,4 +1,7 @@
 <resources>
+    <style name="youTubetheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+    </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -50,6 +53,22 @@
         <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
         <item name="android:background">@color/fully_transparent</item>
     </style>
+    <style name="SheroesActionButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_size_48</item>
+        <item name="android:layout_marginLeft">@dimen/dp_size_10</item>
+        <item name="android:layout_marginRight">@dimen/dp_size_10</item>
+        <item name="android:layout_marginBottom">@dimen/dp_size_10</item>
+        <item name="android:capitalize">sentences</item>
+        <item name="android:background">@color/red</item>
+        <item name="android:textSize">@dimen/dp_size_18</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:clickable">true</item>
+    </style>
     <!--For Ripple effect-->
     <declare-styleable name="RippleView">
         <attr name="rv_alpha" format="integer" />
@@ -69,6 +88,9 @@
 
     </declare-styleable>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="CustomTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/sp_size_11</item>
     </style>
@@ -126,6 +148,15 @@
     </style>
 
 
+
+
+    <style name="subtitle_goodAT">
+        <item name="android:textColor">@color/fully_transparent</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_gravity">right</item><!-- I only change the color -->
+        <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
+    </style>
+
     <style name="subtitle">
         <item name="android:textColor">@color/fully_transparent</item>
         <item name="android:gravity">right</item>
@@ -140,6 +171,10 @@
         <!-- I only change the color -->
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/grey2</item>
+        <item name="colorControlActivated">@color/rating_color</item>
+    </style>
     <style name="Theme.Material.Light.Dialog.NoMinWidth" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:windowMinWidthMinor">0dip</item>
         <item name="android:windowMinWidthMajor">0dip</item>
