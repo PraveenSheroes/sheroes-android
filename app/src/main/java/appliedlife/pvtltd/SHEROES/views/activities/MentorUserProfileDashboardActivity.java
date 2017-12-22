@@ -372,7 +372,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         } else {
             tvMentorDashBoardFollow.setEnabled(false);
             PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-            publicProfileListRequest.setIdOfEntityParticipant(mMentorUserItem.getEntityOrParticipantId());
+            publicProfileListRequest.setIdOfEntityParticipant(mMentorUserItem.getIdOfEntityOrParticipant());
             if (mMentorUserItem.isSolrIgnoreIsMentorFollowed()) {
                 mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,mMentorUserItem);
             } else {

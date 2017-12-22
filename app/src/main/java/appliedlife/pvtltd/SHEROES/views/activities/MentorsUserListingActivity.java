@@ -252,13 +252,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         mProgressBar.setLayoutParams(params );
         List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
-           /* mPageNo = mFragmentListRefreshData.getPageNo();
-            mFragmentListRefreshData.setPageNo(++mPageNo);
-            mPullRefreshList.allListData(feedDetailList);
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-            mAdapter.notifyDataSetChanged();
-            mSwipeView.setRefreshing(false);*/
+            mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             List<FeedDetail> data=null;
@@ -278,8 +272,8 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         }
         else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
         {
-            mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
-            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
             mAdapter.notifyDataSetChanged();
             mSwipeView.setRefreshing(false);
         }else
@@ -289,7 +283,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getEntityOrParticipantId());
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
         } else {

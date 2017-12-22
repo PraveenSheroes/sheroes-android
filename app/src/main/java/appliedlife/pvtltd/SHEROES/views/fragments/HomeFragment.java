@@ -630,7 +630,7 @@ public class HomeFragment extends BaseFragment {
     }
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getEntityOrParticipantId());
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
         } else {
