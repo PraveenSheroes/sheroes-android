@@ -8,7 +8,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -246,15 +248,33 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(0, 0);
+        mProgressBar.setLayoutParams(params );
         List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
-            mPageNo = mFragmentListRefreshData.getPageNo();
+           /* mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
+            mSwipeView.setRefreshing(false);*/
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+            List<FeedDetail> data=null;
+            FeedDetail feedProgressBar=new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data=mPullRefreshList.getFeedResponses();
+            int position=data.size()- feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
+            }
+            data.add(feedProgressBar);
+            mAdapter.setSheroesGenericListData(data);
+            mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+            mAdapter.notifyDataSetChanged();
             mSwipeView.setRefreshing(false);
+
         }
         else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
         {

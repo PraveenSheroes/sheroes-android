@@ -235,6 +235,7 @@ public class  MentorQADetailFragment extends BaseFragment {
 
                 UserSolrObj userSolrObj = (UserSolrObj) this.mUserSolrObj.clone();
                 userSolrObj.setSubType(AppConstants.NO_COMMUNITIES);
+                userSolrObj.setSuggested(true);
                 noDataList.add(userSolrObj);
                 mAdapter.setSheroesGenericListData(noDataList);
                 mAdapter.notifyDataSetChanged();
