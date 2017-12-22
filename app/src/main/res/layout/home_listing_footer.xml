@@ -23,7 +23,6 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_FEED"
-            android:padding="@dimen/dp_size_6"
             android:drawablePadding="@dimen/dp_size_4"
             android:drawableTop="@drawable/ic_home_selected_icon"
             android:textColor="@color/footer_icon_text"
@@ -35,7 +34,7 @@
             android:layout_gravity="center"
             android:layout_weight=".33"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:padding="@dimen/dp_size_6"
+
             android:visibility="gone"
             android:drawablePadding="4dp"
             android:gravity="bottom|center_horizontal"
@@ -43,10 +42,7 @@
             android:drawableTop="@drawable/ic_job_unselected"
             android:textColor="@color/feed_card_time"
             android:textSize="@dimen/sp_size_12" />
-        <View
-            android:layout_width="@dimen/dp_size_0.5"
-            android:layout_height="match_parent"
-            android:background="@color/search_tab_unselected_text"/>
+
         <TextView
             android:id="@+id/tv_communities"
             android:layout_width="0dp"
@@ -54,8 +50,7 @@
             android:layout_gravity="center"
             android:layout_weight=".5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:padding="@dimen/dp_size_6"
-            android:drawablePadding="@dimen/dp_size_4"
+            android:drawablePadding="@dimen/dp_size_3"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_COMMUNITIY"
             android:drawableTop="@drawable/ic_community_unselected_icon"
@@ -64,4 +59,5 @@
 
     </LinearLayout>
 </FrameLayout>
+
 
