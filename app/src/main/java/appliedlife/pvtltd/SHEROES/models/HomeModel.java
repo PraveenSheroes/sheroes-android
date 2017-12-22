@@ -446,6 +446,5 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
-
-
+    
 }
