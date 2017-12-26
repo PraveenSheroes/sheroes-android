@@ -100,7 +100,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileSearchIntrestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileShareYourIntrestFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileTravelClientFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileWorkExperienceFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunitySearchTagsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
@@ -161,7 +160,6 @@ public class ProfileActicity extends BaseActivity implements ProfileGoodAtFragme
     @Bind(R.id.tv_profile_full_view_name)
     TextView tvProfileFullName;
     private Uri mImageCaptureUri;
-    public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     private File localImageSaveForChallenge;
     private SearchProfileLocationDialogFragment searchProfileLocationDialogFragment;
     private FunctionalAreaDialogFragment functionalAreaDialogFragment;

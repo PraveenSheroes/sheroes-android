@@ -85,7 +85,6 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
@@ -134,8 +133,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
@@ -175,7 +172,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public FloatingActionButton mFloatActionBtn;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
-    public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     public List<String> mListOfOpportunity = new ArrayList<>();
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
@@ -646,33 +642,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             feedRelatedOptions(view, baseResponse);
         } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
-        } else if (baseResponse instanceof ChallengeDataItem) {
-            int id = view.getId();
-            switch (id) {
-                case R.id.tv_update_progress:
-                    showUpdateProgressDialog((ChallengeDataItem) baseResponse);
-                    break;
-                case R.id.tv_accept_challenge:
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).acceptChallenge((ChallengeDataItem) baseResponse, 0, true, false, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
-                    }
-                    break;
-                case R.id.tv_timer_count_challenge:
-                    updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
-                    break;
-                case R.id.tv_timer_count_challenge_update_status:
-                    updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
-                    break;
-                case R.id.iv_fb_share:
-                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
-                    break;
-
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-            }
-
-        } else if (baseResponse instanceof Comment) {
+        }else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -940,78 +910,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
         openHelplineFragment();
-    }
-
-    private void renderFeedFragment() {
-        mICSheroes.setVisibility(View.VISIBLE);
-        mTitleText.setVisibility(View.GONE);
-        mTitleText.setText(AppConstants.EMPTY_STRING);
-        homeOnClick();
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mFragmentOpen.setFeedFragment(true);
-    }
-
-    private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(challengeDataItem.getChallengeId()))
-                        .build();
-        trackEvent(Event.CHALLENGE_SHARED, properties);
-        String urlToShare = challengeDataItem.getDeepLinkUrl();
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
-// See if official Facebook app is found
-        boolean facebookAppFound = false;
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.FACEBOOK_SHARE)) {
-                intent.setPackage(info.activityInfo.packageName);
-                facebookAppFound = true;
-                break;
-            }
-        }
-// As fallback, launch sharer.php in a browser
-        if (!facebookAppFound) {
-            String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + urlToShare;
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
-        }
-        startActivity(intent);
-    }
-
-    public void showUpdateProgressDialog(ChallengeDataItem challengeDataItem) {
-        ChallengeUpdateProgressDialogFragment updateProgressDialogFragment = (ChallengeUpdateProgressDialogFragment) getFragmentManager().findFragmentByTag(ChallengeUpdateProgressDialogFragment.class.getName());
-        if (updateProgressDialogFragment == null) {
-            updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
-            Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(challengeDataItem);
-            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, parcelable);
-            updateProgressDialogFragment.setArguments(bundle);
-        }
-        if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            updateProgressDialogFragment.show(getFragmentManager(), ChallengeUpdateProgressDialogFragment.class.getName());
-        }
-    }
-
-    public void updateChallengeDataWithStatus(ChallengeDataItem challengeDataItem, int percentCompleted, String imageUrl, String videoUrl) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((HomeFragment) fragment).acceptChallenge(challengeDataItem, percentCompleted, false, true, imageUrl, videoUrl);
-        }
-    }
-
-    public void challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
-        mChallengeSuccessDialogFragment = (ChallengeSuccessDialogFragment) getFragmentManager().findFragmentByTag(ChallengeSuccessDialogFragment.class.getName());
-        if (mChallengeSuccessDialogFragment == null) {
-            mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
-            Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(challengeDataItem);
-            bundle.putParcelable(AppConstants.SUCCESS, parcelable);
-            mChallengeSuccessDialogFragment.setArguments(bundle);
-        }
-        if (!mChallengeSuccessDialogFragment.isVisible() && !mChallengeSuccessDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            mChallengeSuccessDialogFragment.show(getFragmentManager(), ChallengeSuccessDialogFragment.class.getName());
-        }
     }
 
     public void eventDetailDialog(long eventID) {
@@ -1581,9 +1479,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         try {
                             File file = new File(result.getUri().getPath());
                             Bitmap photo = decodeFile(file);
-                            if (null != mChallengeSuccessDialogFragment) {
-                                mChallengeSuccessDialogFragment.setImageOnHolder(photo);
-                            }
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();

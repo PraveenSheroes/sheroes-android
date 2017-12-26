@@ -8,8 +8,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTags;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -346,11 +344,6 @@ public enum HolderMapping {
             return new WorkExperienceCardHolder(view, viewInterface);
         }
 
-    }, CHALLENGE_HORIZONTAL_VIEW(R.layout.challenge_horizontal_view) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ChallengeHorizontalView(view, viewInterface);
-        }
     }, APP_INTRO_VIEW(R.layout.app_intro_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -361,14 +354,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OnceWelcomeCardHolder(view, viewInterface);
         }
-    }, CHALLENGE_LIST_ITEM_HOLDER(R.layout.challenge_list_item_holder) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ChallengeItemCardHolder(view, viewInterface);
-        }
-
-    },
-    HELPLINE_CHAT_QUESTION_CARD(R.layout.helpline_question_card) {
+    }, HELPLINE_CHAT_QUESTION_CARD(R.layout.helpline_question_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineQuestionCardHolder(view, viewInterface);
@@ -682,8 +668,6 @@ public enum HolderMapping {
                     returnView = BELL_NOTIFICATION.ordinal();
                 } else if (item instanceof ExprienceEntity) {
                     returnView = WORK_EXPERIENCE_DETAIl_CARD.ordinal();
-                } else if (item instanceof ChallengeDataItem) {
-                    returnView = FEED_CHALLENGE.ordinal();
                 } else if (item instanceof HelplineChatDoc) {
                     if (((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
                         HelplineChatDoc helplineChatDoc = (HelplineChatDoc) item;

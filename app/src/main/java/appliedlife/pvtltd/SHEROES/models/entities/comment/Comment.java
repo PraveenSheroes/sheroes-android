@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.article.CommonFeedResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 
 /**
  * Created by Praveen_Singh on 15-02-2017.

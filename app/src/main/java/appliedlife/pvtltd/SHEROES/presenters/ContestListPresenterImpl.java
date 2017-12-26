@@ -12,8 +12,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponseNew;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -164,20 +162,6 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
             }
         });
         registerSubscription(subscription);
-    }
-
-
-    public Observable<ChallengeListResponseNew> getChallengeListFromModel(ChallengeRequest challengeRequest) {
-       // LogUtils.info(TAG, " **********challenge request" + new Gson().toJson(challengeRequest));
-        return sheroesAppServiceApi.getChallengeList(challengeRequest)
-                .map(new Func1<ChallengeListResponseNew, ChallengeListResponseNew>() {
-                    @Override
-                    public ChallengeListResponseNew call(ChallengeListResponseNew challengeListResponse) {
-                        return challengeListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
