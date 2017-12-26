@@ -32,8 +32,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKM
  */
 
 public class ContestPresenterImpl extends BasePresenter<IContestView>{
-    private IContestView mContestView;
-    private long mChallengeId;
     private Contest mContest;
 
     SheroesAppServiceApi sheroesAppServiceApi;

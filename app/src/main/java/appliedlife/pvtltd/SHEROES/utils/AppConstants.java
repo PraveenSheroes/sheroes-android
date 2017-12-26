@@ -30,7 +30,6 @@ public class AppConstants {
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
     public static final String ALL_COMMUNITY_LIST = "all community list";
     public static final String MASTER_DATA = "master_data";
-    public static final String NAVIGATION_DRAWER_ITEMS_DATA = "nav_items_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
@@ -100,8 +99,6 @@ public class AppConstants {
     public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
     public static final String FEATURED_COMMUNITY = "T";
-    public static final String FRAGMENT_FLAG_CHECK = "is_fragment_open";
-    public static final String COMMENTS = "comments";
     public static final String BOOKMARKS = "bookmarks";
     public static final String COMMENT_REACTION_FRAGMENT = "comment_reaction_fragment";
     public static final String HOME_FRAGMENT = "home";
@@ -118,7 +115,6 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_ADDRESS = 50011;
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY = 6001;
-    public static final int REQUEST_CODE_FOR_JOB_FILTER = 7001;
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
@@ -136,14 +132,12 @@ public class AppConstants {
     public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
     public static final String INVITE_MEMBER = "invite_member";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
-    public static final String CHALLENGE_SUB_TYPE = "CHALLENGE_TYPE";
     public static final String APP_INTRO_SUB_TYPE = "APP_INTRO_TYPE";
     public static final String ONCE_WELCOME = "ONCE_WELCOME";
     public static final String FEED_PROGRESS_BAR = "FEED_PROGRESS_BAR";
     public static final String HEADER = "HEADER";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
-    public static final String JOB_FILTER = "job_filter";
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";
     public static final String IMAGE = "Img";
@@ -155,10 +149,7 @@ public class AppConstants {
 
     public static final String EMAIL = "email";
 
-    public static final int WORD_LENGTH = 95;
-    public static final String IMAGE_FULL_VIEW = "image_view";
     public static final String BACK_SLASH = "/";
-    public static final String SLASH_N = "\n";
 
     public static final String EVENT_DETAIL = "event_detail";
     public static final String BELL_NOTIFICATION = "bell_notification";
@@ -168,7 +159,6 @@ public class AppConstants {
     public static final String YOUR_INTEREST = "your_interest";
 
 
-    public static final String JOB_AT = "job_at";
     public static final String JOB_DETAIL = "job_detail";
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
@@ -191,11 +181,6 @@ public class AppConstants {
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
     public static final int FIFTH_CONSTANT = 5;
-    public static final int SEVENTH_CONSTANT = 7;
-    public static final int EIGHTH_CONSTANT = 8;
-    public static final int NINTH_CONSTANT = 9;
-    public static final int TENTH_CONSTANT = 10;
-    public static final int ELEVENTH_CONSTANT = 11;
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
     public static final int MEMBER_PAGE_SIZE = 100;
@@ -228,7 +213,6 @@ public class AppConstants {
 
     /*Get all data keys*/
     public static final String LOCATION_CITY_GET_ALL_DATA_KEY = "city";
-    public static final String INTEREST_GET_ALL_DATA_KEY = "interest";
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
     public static final String BAD_RQUEST = "HTTP 400 Bad Request";
 /**/
@@ -315,11 +299,7 @@ public class AppConstants {
     public static final String SHEROES = "SHEROES";
     public static final String TICKER = "ticker";
     public static final String CHECK_OUT = "Check out ";
-    public static final String GCM_ID = "Gcm Id";
     public static final String THOUSANDS = "K";
-    public static final int HALF_DONE =50;
-    public static final int ALMOST_DONE =90;
-    public static final int COMPLETE =100;
     public static final String TWITTER_SHARE ="com.twitter.android";
     public static final String TWITTER_SHARE_VIA_BROWSER ="https://twitter.com/intent/tweet?text=";
     public static final String FACEBOOK_SHARE ="com.facebook.katana";
@@ -343,8 +323,6 @@ public class AppConstants {
     public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final long ASKED_QUESTION_TO_MENTOR = 3;
     public static final String orgUserType = "organisations_test_user";
-    public static final String WEB_URL = "web_view_url";
-    public static final String WEB_TITLE = "web_title";
     public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";
     public static final String PRIVATE_FOLDER_NAME = "Sheroes";
     //public static final String webstyle = "body { font-family: MyFont !important; background-color: #FFFFFF; font-size: 0.987em; font-weight: 120; color: #4D4D4D; line-height: 160%; } strong { font-family: MyFont !important; font-size: 0.987em; } span { font-family: MyFont !important; font-size: 0.987em !important; } img { display: inline; height: auto; max-width: 100%; } .youtube { position: relative; padding-bottom: 56.23%; height: 0; overflow: hidden; max-width: 100%; background: #000; margin: 5px; } .youtube iframe, .youtube object, .youtube embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; background: transparent; } .youtube img { bottom: 0; display: block; left: 0; margin: auto; max-width: 100%; width: 100%; position: absolute; right: 0; top: 0; border: none; height: auto; cursor: pointer; -webkit-transition: .4s all; -moz-transition: .4s all; transition: .4s all; } .youtube img:hover { -webkit-filter: brightness(75%); } .youtube .play { height: 72px; width: 72px; left: 50%; top: 50%; margin-left: -36px; margin-top: -36px; position: absolute; background: url(\"http://i.imgur.com/TxzC70f.png\") no-repeat; cursor: pointer; }";
@@ -356,7 +334,6 @@ public class AppConstants {
 
     //Tags - for maintaining the Nav selection of current class
     public static final String NAV_PROFILE= "Profile";
-    public static final String NAV_CHAMPIONS= "Champions";
     public static final String NAV_ARTICLES= "Articles";
     public static final String NAV_CHALLENGE= "My Challenges";
     public static final String NAV_ASK_SHEROES= "Ask Sheroes";
