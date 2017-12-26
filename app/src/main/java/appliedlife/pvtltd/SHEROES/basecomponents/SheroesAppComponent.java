@@ -135,7 +135,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.FooterViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GoodAtHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HeaderViewHolder;
@@ -240,8 +239,6 @@ public interface SheroesAppComponent {
     void inject(BlankHolder blankHolder);
 
     void inject(ArticleCardHolder articleCardHolder);
-
-    void inject(FooterViewHolder footerViewHolder);
 
     void inject(DrawerViewHolder drawerViewHolder);
 

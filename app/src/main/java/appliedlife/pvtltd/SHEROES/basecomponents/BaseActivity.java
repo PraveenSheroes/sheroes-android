@@ -462,9 +462,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU);
                 break;
             case R.id.tv_feed_article_total_reactions:
-                mFragmentOpen.setCommentList(false);
-                mFragmentOpen.setReactionList(true);
-                openCommentReactionFragment(mFeedDetail);
+                /*mFragmentOpen.setCommentList(false);
+                mFragmentOpen.setReactionList(true);*/
+               // openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_total_reactions:
                 LikeListBottomSheetFragment.showDialog(this, "", mFeedDetail.getEntityOrParticipantId());
@@ -473,7 +473,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 openCommentReactionFragment(mFeedDetail);*/
                 break;
             case R.id.tv_feed_article_user_comment:
-                mFragmentOpen.setCommentList(true);
+               // mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(mFeedDetail);
                 break;
             case R.id.tv_feed_community_post_user_comment:
@@ -600,17 +600,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
         } else {
-            if (mFragmentOpen.isBookmarkFragment()) {
-                Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                    ((BookmarksFragment) fragmentBookMark).bookMarkForCard(mFeedDetail, mFragmentOpen);
-                }
-            } else if (mFragmentOpen.isJobFragment()) {
                 Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
                     ((JobFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
-                }
-            } else {
+                } else {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
@@ -745,7 +738,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if(null != userPreference.get().getUserSummary().getUserBO()) {
                         adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
                     }
-                    if (mFeedDetail.getAuthorId() == userId|| mFragmentOpen.isOwner()||adminId==AppConstants.TWO_CONSTANT) {
+                    if (mFeedDetail.getAuthorId() == userId|| ((UserPostSolrObj)mFeedDetail).isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
                         if(((UserPostSolrObj)mFeedDetail).isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
                         {
@@ -778,17 +771,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         switch (menuEnum) {
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    if (mFragmentOpen.isBookmarkFragment()) {
-                        Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                            ((BookmarksFragment) fragmentBookMark).markAsSpamCommunityPost(mFeedDetail);
-                        }
-                    } else {
                         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                         if (AppUtils.isFragmentUIActive(fragment)) {
                             ((HomeFragment) fragment).markAsSpamCommunityPost(mFeedDetail);
                         }
-                    }
                 }
                 break;
 
@@ -873,21 +859,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        if (AppUtils.isFragmentUIActive(mFragment)) {
-                clickCommentReactionFragment(feedDetail);
-        } else {
-            if (mFragmentOpen.isBookmarkFragment()) {
-                Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                    clickCommentReactionFragment(feedDetail);
-                }
-            } else {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    clickCommentReactionFragment(feedDetail);
-                }
-            }
-        }
+        clickCommentReactionFragment(feedDetail);
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
@@ -900,18 +872,18 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (mFragmentOpen.isBookmarkFragment()) {
+      /*  if (mFragmentOpen.isBookmarkFragment()) {
             Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
                 ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
         }
-            else {
+            else {*/
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
-        }
+       // }
     }
 
     @Override
