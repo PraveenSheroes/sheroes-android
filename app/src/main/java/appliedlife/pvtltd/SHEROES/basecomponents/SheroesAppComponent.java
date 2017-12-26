@@ -16,7 +16,6 @@ import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -37,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
@@ -124,8 +122,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SpamPostListDia
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.MentorProfileDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleDetailWithInSuggestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
@@ -222,8 +218,6 @@ public interface SheroesAppComponent {
 
     void inject(CommunitiesDetailActivity communitiesDetailActivity);
 
-    void inject(ArticleDetailActivity articleDetailActivity);
-
     void inject(ProfileActicity profileActicity);
 
     void inject(LoginFragment loginFragment);
@@ -242,8 +236,6 @@ public interface SheroesAppComponent {
 
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
 
-    void inject(ArticleDetailFragment articleDetailFragment);
-
     void inject(ProfileFullViewFragment profileFullViewFragment);
 
     void inject(PersonalProfileFragment personalProfileFragment);
@@ -254,8 +246,6 @@ public interface SheroesAppComponent {
     void inject(BookmarksFragment bookmarksFragment);
 
     void inject(BlankHolder blankHolder);
-
-    void inject(ArticleDetailHolder articleDetailHolder);
 
     void inject(ArticleCardHolder articleCardHolder);
 
@@ -279,7 +269,6 @@ public interface SheroesAppComponent {
 
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
 
-    void inject(ArticleDetailWithInSuggestedHolder articleDetailWithInSuggestedHolder);
 
     void inject(ProfileViewHolder profileViewHolder);
 

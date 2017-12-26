@@ -42,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
-import appliedlife.pvtltd.SHEROES.models.entities.searchmodule.ArticleDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -285,16 +284,6 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobDetailHolder(view, viewInterface);
-        }
-    }, ARTICLE_DETAIL_HOLDER(R.layout.article_detail_page_reaction_holder) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ArticleDetailHolder(view, viewInterface);
-        }
-    }, ARTICLE_DETAIL_WITHIN_SUGGESTED_HOLDER(R.layout.article_detail_within_suggested) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ArticleDetailWithInSuggestedHolder(view, viewInterface);
         }
     }, PROFILE_HOLDER(R.layout.invitesearch_item) {
         @Override
@@ -625,8 +614,6 @@ public enum HolderMapping {
                     returnView = DRAWER_ITEMS.ordinal();
                 } else if (item instanceof HomeSpinnerItem) {
                     returnView = HOME_SPINNER_ITEMS.ordinal();
-                } else if (item instanceof ArticleDetailPojo) {
-                    returnView = ARTICLE_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof JobDetailPojo) {
                     returnView = JOB_DETAIL_HOLDER.ordinal();
                 } else if (item instanceof ProfileHorList) {

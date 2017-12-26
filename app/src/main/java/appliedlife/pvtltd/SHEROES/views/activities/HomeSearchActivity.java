@@ -124,11 +124,11 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
         String searchTag = (String) view.getTag();
         switch (searchTag) {
             case AppConstants.FEED_ARTICLE:
-                mFragmentOpen.setImageBlur(true);
+               /* mFragmentOpen.setImageBlur(true);
                 Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
                 Parcelable parcelable = Parcels.wrap(feedDetail);
                 intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, parcelable);
-                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case AppConstants.FEED_COMMUNITY:
                 mFragmentOpen.setImageBlur(true);
