@@ -78,7 +78,6 @@ import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -668,44 +667,32 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
-        final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
+       // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
         popupWindow.showAsDropDown(view, -150, -10);
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editOperationOnMenu(menuEnum, baseResponse, fragmentCommentReaction);
+                editOperationOnMenu(menuEnum, baseResponse, null);
                 popupWindow.dismiss();
             }
         });
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteOperationOnMenu(menuEnum, baseResponse, fragmentCommentReaction);
+                deleteOperationOnMenu(menuEnum, baseResponse, null);
                 popupWindow.dismiss();
             }
         });
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:: reveiw for share
-               /* if (mFragmentOpen.isBookmarkFragment()) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail);
-                    }
-                } else {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail);
-                    }
-                }*/
                 popupWindow.dismiss();
             }
         });
         tvReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                markAsSpam(menuEnum, baseResponse, fragmentCommentReaction);
+                markAsSpam(menuEnum, baseResponse, null);
                 popupWindow.dismiss();
             }
         });
@@ -721,10 +708,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_article_user_menu:
-                // tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_job_user_menu:
-                //  tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_user_comment_list_menu:
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
@@ -782,7 +767,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
                         tvReport.setVisibility(View.GONE);
                     }
-                    //  tvShare.setVisibility(View.VISIBLE);
                 }
                 break;
             default:
@@ -819,7 +803,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
                         comment.setActive(true);
                         comment.setEdit(true);
-                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(comment);
+                      //  ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(comment);
                     }
                 }
                 break;
@@ -847,7 +831,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
                     comment.setActive(false);
                     comment.setEdit(false);
-                    ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
+                  //  ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
                 }
                 break;
             case USER_REACTION_COMMENT_MENU:
@@ -878,18 +862,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
 
                     }
-
-                   /* if (mFragmentOpen.isBookmarkFragment()) {
-                        Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                            ((BookmarksFragment) fragmentBookMark).deleteCommunityPost(mFeedDetail);
-                        }
-                    } else {
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
-                        }
-                    }*/
                     ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
@@ -897,19 +869,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
     public void openImageFullViewFragment(FeedDetail feedDetail) {
-        /*if (StringUtil.isNotEmptyCollection(feedDetail.getImageUrls())) {
-            ImageFullViewDialogFragment imageFullViewDialogFragment = (ImageFullViewDialogFragment) getFragmentManager().findFragmentByTag(ImageFullViewDialogFragment.class.getName());
-            if (imageFullViewDialogFragment == null) {
-                imageFullViewDialogFragment = new ImageFullViewDialogFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, mFragmentOpen);
-                bundle.putParcelable(AppConstants.IMAGE_FULL_VIEW, feedDetail);
-                imageFullViewDialogFragment.setArguments(bundle);
-            }
-            if (!imageFullViewDialogFragment.isVisible() && !imageFullViewDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-                imageFullViewDialogFragment.show(getFragmentManager(), ImageFullViewDialogFragment.class.getName());
-            }
-        }*/
         AlbumActivity.navigateTo(this, feedDetail, "BASE", null);
     }
 
@@ -932,34 +891,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-      /*  if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
-                CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-                Bundle bundleArticle = new Bundle();
-                Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
-                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelable1);
-                Parcelable parcelable = Parcels.wrap(feedDetail);
-                bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
-                commentReactionFragmentForArticle.setArguments(bundleArticle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.about_community_container, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
-            }
-        } else {*/
             if(feedDetail instanceof UserPostSolrObj){
                 PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
             }else if(feedDetail instanceof ArticleSolrObj){
                 ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
             }
-
-            /*CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-            Bundle bundleArticle = new Bundle();
-            Parcelable parcelable1 = Parcels.wrap(mFragmentOpen);
-            bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelable1);
-            Parcelable parcelable = Parcels.wrap(feedDetail);
-            bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
-            commentReactionFragmentForArticle.setArguments(bundleArticle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_feed_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
-       // }
     }
 
     @Override
@@ -968,11 +904,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
                 ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        } else if(mFragmentOpen.isCommentList()){
-            Fragment fragmentCommentList = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentCommentList)) {
-                ((CommentReactionFragment) fragmentCommentList).likeAndUnlikeRequest(baseResponse, reactionValue, position);
             }
         }
             else {
@@ -1046,17 +977,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void invalidateLikeUnlike(Comment comment) {
 
     }
-
- /*   public String screenName(){
-        String sourceScreen = "";
-        if(getSupportFragmentManager() !=null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())){
-            sourceScreen = getSupportFragmentManager().getFragments().get(0).getClass().getSimpleName();
-        }else{
-            getScreenName();
-        }
-        return sourceScreen;
-    }*/
-
     public String screenName(){
         String sourceScreen = "";
         if(getSupportFragmentManager() !=null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())){

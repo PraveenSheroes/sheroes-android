@@ -123,7 +123,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -151,7 +150,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Bind(R.id.home_toolbar)
@@ -1450,13 +1449,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
     }
 
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        onBackPressed();
-    }
-
     @OnClick(R.id.fl_notification)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
@@ -1515,17 +1507,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mHomeSpinnerItemList.addAll(localList);
     }
 
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.openCommentReactionFragment(mFeedDetail);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {

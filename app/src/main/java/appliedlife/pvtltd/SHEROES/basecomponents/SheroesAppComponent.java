@@ -40,7 +40,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOwnerSearchFragment;
@@ -133,7 +132,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CanHelpInHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeItemCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCardDetailHeader;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CurrentStatusHolder;
@@ -191,7 +189,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ProfilePersonalBasicDetailsH
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileProfessionalBasicDetailsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ProfileWorkExperienceHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ReactionHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.RequestedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SearchModuleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SelectDilogHolder;
@@ -239,8 +236,6 @@ public interface SheroesAppComponent {
 
     void inject(AllSearchFragment allSearchFragment);
 
-    void inject(CommentReactionFragment commentReactionFragment);
-
     void inject(FeaturedFragment featuredFragment);
 
     void inject(MyCommunitiesFragment myCommunitiesFragment);
@@ -279,10 +274,6 @@ public interface SheroesAppComponent {
     void inject(FeedJobHolder feedJobHolder);
 
     void inject(FeedArticleHolder feedArticleHolder);
-
-    void inject(CommentHolder commentHolder);
-
-    void inject(ReactionHolder reactionHolder);
 
     void inject(NoCommunityHolder noCommunityHolder);
 

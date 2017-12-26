@@ -18,7 +18,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CommentHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 

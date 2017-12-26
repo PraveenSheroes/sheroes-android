@@ -122,16 +122,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new MyCommunitiesCardHolder(view, viewInterface);
         }
-    }, COMMENT(R.layout.all_comments_list_layout) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CommentHolder(view, viewInterface);
-        }
-    }, REACTION(R.layout.all_reaction_list_layout) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ReactionHolder(view, viewInterface);
-        }
     }, ARTICLE_CARD_HOLDER(R.layout.article_card_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -633,13 +623,6 @@ public enum HolderMapping {
                     returnView = SELECT_DIALOG.ordinal();
                 } else if (item instanceof NavMenuItem) {
                     returnView = DRAWER_ITEMS.ordinal();
-                } else if (item instanceof Comment) {
-                    Comment comment = ((Comment) item);
-                    if (comment.getLikeValue() > AppConstants.NO_REACTION_CONSTANT) {
-                        returnView = REACTION.ordinal();
-                    } else {
-                        returnView = COMMENT.ordinal();
-                    }
                 } else if (item instanceof HomeSpinnerItem) {
                     returnView = HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof ArticleDetailPojo) {

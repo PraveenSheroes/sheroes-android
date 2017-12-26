@@ -57,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,7 +65,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 07-02-2017.
  */
 
-public class ArticleDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
+public class ArticleDetailActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
     private final String TAG = LogUtils.makeLogTag(ArticleDetailActivity.class);
     private final String SCREEN_LABEL = "Article Detail Activity Screen";
     @Bind(R.id.app_bar_article_detail)
@@ -253,7 +252,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        if (null != feedDetail && null != mFragmentOpen) {
+      /*  if (null != feedDetail && null != mFragmentOpen) {
             mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.TWO_CONSTANT);
             CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
             Bundle bundleArticle = new Bundle();
@@ -263,7 +262,7 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
             bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
             commentReactionFragmentForArticle.setArguments(bundleArticle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        }
+        }*/
     }
 
     @Override
@@ -300,31 +299,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
     }
 
     @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        onBackPressed();
-    }
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        if (null != isFragmentOpen && null != feedDetail) {
-            mFragmentOpen = isFragmentOpen;
-            if (mFragmentOpen.isReactionList()) {
-                CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-                Bundle bundleArticle = new Bundle();
-                Parcelable parcelable = Parcels.wrap(feedDetail);
-                Parcelable parcelableFragment = Parcels.wrap(mFragmentOpen);
-                bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelableFragment);
-                bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
-                commentReactionFragmentForArticle.setArguments(bundleArticle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_detail_comments, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-            }
-        }
-
-    }
-
-    @Override
     public void onBackPressed() {
         if (mFragmentOpen.isCommentList()) {
             mFragmentOpen.setCommentList(false);
@@ -358,52 +332,6 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
         final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
         final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
-        final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view, -140, 0);
-        tvEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isCommentReaction) {
-                    Comment comment = (Comment) baseResponse;
-                    if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        comment.setActive(true);
-                        comment.setEdit(true);
-                        ((CommentReactionFragment) fragmentCommentReaction).editCommentInList(comment);
-                    }
-                } else {
-                    if (null != mFeedDetail) {
-                        mFragmentOpen.setOpen(true);
-                        mFragmentOpen.setCommentList(true);
-                        mFeedDetail.setTrending(true);
-                      //  mFeedDetail.setExperienceFromI(AppConstants.ONE_CONSTANT);
-                        openCommentReactionFragment(mFeedDetail);
-                    }
-                }
-                popupWindow.dismiss();
-            }
-        });
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isCommentReaction) {
-                    Comment comment = (Comment) baseResponse;
-                    if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
-                        comment.setActive(false);
-                        comment.setEdit(false);
-                        ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
-                    }
-                } else {
-                    if (null != mFeedDetail) {
-                        mFragmentOpen.setOpen(true);
-                        mFragmentOpen.setCommentList(true);
-                        mFeedDetail.setTrending(true);
-                      //  mFeedDetail.setExperienceFromI(AppConstants.TWO_CONSTANT);
-                        openCommentReactionFragment(mFeedDetail);
-                    }
-                }
-                popupWindow.dismiss();
-            }
-        });
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
