@@ -197,4 +197,9 @@
     <color name="lighter_grey">#E4E4E4</color>
     <color name="mentor_green">#6bba29</color>
     <color name="mentor_profession">#686868</color>
+
+    <color name="google_plus">#df4a32</color>
+    <color name="google_plus_pressed">#bb4131</color>
+    <color name="button_background_color_focused_disabled">#84878c</color>
+    <color name="button_background_color_disabled">#bdc1c9</color>
 </resources>

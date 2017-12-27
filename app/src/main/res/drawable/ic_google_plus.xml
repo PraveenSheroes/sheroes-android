@@ -1,24 +1,40 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="328dp"
-    android:height="48dp"
-    android:viewportWidth="328.0"
-    android:viewportHeight="48.0">
-    <path
-        android:pathData="M4,0L324,0A4,4 0,0 1,328 4L328,44A4,4 0,0 1,324 48L4,48A4,4 0,0 1,0 44L0,4A4,4 0,0 1,4 0z"
-        android:fillColor="#D84737"/>
-    <path
-        android:pathData="M65,11L83,11A3,3 0,0 1,86 14L86,32A3,3 0,0 1,83 35L65,35A3,3 0,0 1,62 32L62,14A3,3 0,0 1,65 11z"
-        android:fillColor="#FFF"/>
-    <path
-        android:pathData="M69.55,24.67l-0.56,2.08 -2.04,0.04A7.96,7.96 0,0 1,66 23a7.96,7.96 0,0 1,0.89 -3.68l1.81,0.33 0.79,1.8a4.76,4.76 0,0 0,0.05 3.21z"
-        android:fillColor="#FBBB00"/>
-    <path
-        android:pathData="M81.86,21.51a8.01,8.01 0,0 1,-0.04 3.16,8 8,0 0,1 -2.82,4.57l-2.28,-0.12 -0.32,-2.02a4.77,4.77 0,0 0,2.05 -2.43h-4.28v-3.16L81.86,21.51z"
-        android:fillColor="#518EF8"/>
-    <path
-        android:pathData="M79.01,29.24A7.97,7.97 0,0 1,74 31a8,8 0,0 1,-7.05 -4.21l2.59,-2.12a4.76,4.76 0,0 0,6.86 2.44l2.61,2.13z"
-        android:fillColor="#28B446"/>
-    <path
-        android:pathData="M79.11,16.84l-2.59,2.12A4.76,4.76 0,0 0,69.5 21.45L66.89,19.32A8,8 0,0 1,74 15c1.94,0 3.72,0.69 5.11,1.84z"
-        android:fillColor="#F14336"/>
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false"
+        android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="2dp" />
+            <solid android:color="@color/button_background_color_focused_disabled" />
+        </shape>
+    </item>
+    <item android:state_enabled="false"
+        android:state_focused="false">
+        <shape android:shape="rectangle">
+            <corners android:radius="2dp" />
+            <solid android:color="@color/button_background_color_disabled" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="2dp" />
+            <solid android:color="@color/white" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/white" >
+            </stroke>
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="2dp" />
+            <solid android:color="@color/google_plus_pressed" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="2dp" />
+            <solid android:color="@color/google_plus" />
+        </shape>
+    </item>
+</selector>

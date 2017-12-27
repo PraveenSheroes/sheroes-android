@@ -56,8 +56,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -92,11 +90,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SearchIAmInterestIn;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchJobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchRecentFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareCommunityFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SignupFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFirstFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenFourthFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenSecondFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.WelcomeScreenThirdFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.AllMembersDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
@@ -446,14 +439,6 @@ public interface SheroesAppComponent {
 
     void inject(WelcomeActivity welcomeActivity);
 
-    void inject(WelcomeScreenFourthFragment welcomeScreenFourthFragment);
-
-    void inject(WelcomeScreenThirdFragment welcomeScreenThirdFragment);
-
-    void inject(WelcomeScreenSecondFragment welcomeScreenSecondFragment);
-
-    void inject(WelcomeScreenFirstFragment welcomeScreenFirstFragment);
-
 
     void inject(CommunityTypeDialogFragment communityTypeFragment);
 
@@ -523,7 +508,6 @@ public interface SheroesAppComponent {
 
     void inject(ChallengeSuccessDialogFragment challengeSuccessDialogFragment);
 
-    void inject(SignupFragment signupFragment);
 
     void inject(ICCMemberViewHolder iccMemberViewHolder);
 

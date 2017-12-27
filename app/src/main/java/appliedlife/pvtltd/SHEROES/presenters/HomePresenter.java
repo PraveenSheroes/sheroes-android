@@ -450,7 +450,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
                 {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
@@ -486,7 +486,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
                 {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);

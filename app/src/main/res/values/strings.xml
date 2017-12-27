@@ -472,6 +472,8 @@
     <string name="IDS_GOOGLE_BUTTON">Login with Google</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">Login Using Email (Only For Existing Users)</string>
+    <string name="ID_INFORMATION_WARNING">We never share your info with anyone</string>
+    <string name="ID_ONLY_FOR_EXISTING_USER">(Only for existing users)</string>
     <string name="ID_WELCOME_FIRST">Grow With Your Circle Of Support</string>
     <string name="ID_WELCOME_SECOND">Find Flexible Work Options</string>
     <string name="ID_WELCOME_THIRD">Learn And Get Skilled For Today\'s Age</string>
@@ -510,8 +512,6 @@
     <string name="ID_DESCRIPTION"> DESCRIPTION</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
     <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
-    <string name="ID_CONTINUE_WITH_GOOGLE">Continue with Google</string>
-    <string name="ID_CONTINUE_WITH_FACEBOOK">Continue with Facebook</string>
     <string name="ID_LOGGIN_FACEBOOK">Logging in...</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>
     <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
@@ -694,7 +694,8 @@
     <string name="ID_VIEW_ARTICLE">view article</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
-    <string name="ID_LOGIN">login</string>
+    <string name="ID_LOGIN_WITH_EMAIL">Login with email</string>
+    <string name="ID_LOGIN_TEXT">login</string>
     <string name="ID_ONBOARDING_WELCOME">onboarding- welcome screen</string>
     <string name="ID_ONBOARDING_LETS_START_TALKING">onboarding- Let’s Start Talking</string>
     <string name="ID_ONBOARDING_CURRENT_STATUS">onboarding- current status</string>
