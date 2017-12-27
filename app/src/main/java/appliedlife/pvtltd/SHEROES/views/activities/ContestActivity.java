@@ -55,7 +55,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
@@ -75,7 +74,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
  * Created by ujjwal on 11/20/17.
  */
 
-public class ContestActivity extends BaseActivity implements IContestView, CommentReactionFragment.HomeActivityIntractionListner {
+public class ContestActivity extends BaseActivity implements IContestView {
     private static final String SCREEN_LABEL = "Challenge Activity";
     public static final String IS_CHALLENGE = "Is Challenge";
     public static final String CHALLENGE_OBJ = "Challenge Obj";
@@ -85,7 +84,7 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
     private int FRAGMENT_WINNER = 2;
 
     private FeedDetail mFeedDetail;
-    private FragmentOpen mFragmentOpen;
+    //private FragmentOpen mFragmentOpen;
     private ContestInfoFragment mContestInfoFragment;
 
     @Inject
@@ -134,8 +133,8 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
         setContentView(R.layout.activity_contest);
         ButterKnife.bind(this);
         mContestPresenter.attachView(this);
-        mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);
+       /* mFragmentOpen = new FragmentOpen();
+        setAllValues(mFragmentOpen);*/
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
             mContest = (Contest) Parcels.unwrap(parcelable);
@@ -198,11 +197,6 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
 
         int currentPage = mViewPager.getCurrentItem();
         if (currentPage == FRAGMENT_WINNER && mContest.isWinnerAnnounced) {
-      /*      if (CareServiceHelper.getUser().contestAddress == null) {
-                mBottomBar.setText(R.string.send_address);
-            } else {
-                mBottomBar.setText(R.string.change_address);
-            }*/
         }
     }
 
@@ -521,7 +515,7 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
             feedRelatedOptions(view, baseResponse);
         }
         if (baseResponse instanceof Comment) {
-            setAllValues(mFragmentOpen);
+           // setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
@@ -543,10 +537,10 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
                 }
                 break;
             case R.id.tv_feed_community_post_user_comment:
-                mFragmentOpen = new FragmentOpen();
+                /*mFragmentOpen = new FragmentOpen();
                 mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
                 mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
-                setAllValues(mFragmentOpen);
+                setAllValues(mFragmentOpen);*/
                 super.feedCardsHandled(view, baseResponse);
                 break;
             default:
@@ -562,49 +556,9 @@ public class ContestActivity extends BaseActivity implements IContestView, Comme
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-       /* mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
-        CommentReactionFragment commentReactionFragmentForArticle = new CommentReactionFragment();
-        Bundle bundleArticle = new Bundle();
-        Parcelable parcelableFragment = Parcels.wrap(mFragmentOpen);
-        bundleArticle.putParcelable(AppConstants.FRAGMENT_FLAG_CHECK, parcelableFragment);
-        Parcelable parcelable = Parcels.wrap(feedDetail);
-        bundleArticle.putParcelable(AppConstants.COMMENTS, parcelable);
-        commentReactionFragmentForArticle.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.comment_from_contest, commentReactionFragmentForArticle, CommentReactionFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();*/
         PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
     }
 
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        onBackPress();
-    }
-
-    public void onBackPress() {
-        if (mFragmentOpen.isCommentList()) {
-            mFragmentOpen.setCommentList(false);
-            getSupportFragmentManager().popBackStackImmediate();
-            if (mViewPager.getCurrentItem() == 1) {
-                mHomeFragment.commentListRefresh(mFeedDetail, COMMENT_REACTION);
-            }
-        }
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setReactionList(false);
-            getSupportFragmentManager().popBackStackImmediate();
-        }
-    }
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FIFTH_CONSTANT);
-            setAllValues(mFragmentOpen);
-            clickCommentReactionFragment(feedDetail);
-        }
-    }
 
     //endregion
 
