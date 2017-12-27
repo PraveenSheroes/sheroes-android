@@ -25,6 +25,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -1331,8 +1332,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         return;
                     }
                     doubleBackToExitPressedOnce = true;
-                    homeOnClick();
-                    //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                    if (flFeedFullView.getVisibility()==View.VISIBLE) {
+                        Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+
+                    }else
+                    {
+                        homeOnClick();
+                    }
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
