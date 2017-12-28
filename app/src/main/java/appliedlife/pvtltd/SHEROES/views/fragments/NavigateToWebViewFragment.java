@@ -39,6 +39,8 @@ import butterknife.ButterKnife;
 public class NavigateToWebViewFragment extends BaseFragment {
 
     private static final String SCREEN_LABEL = "WebUrl Screen";
+    private static final String WEB_HTML = "Web Html";
+    private static final String RELATIVE_PATH_ASSETS = "file:///android_asset/";
     private static final String TAG = NavigateToWebViewFragment.class.getName();
 
     @Bind(R.id.external_url_web_view)
@@ -49,9 +51,10 @@ public class NavigateToWebViewFragment extends BaseFragment {
     Preference<LoginResponse> mUserPreference;
     private String currentSelectedItemName;
 
-    public static NavigateToWebViewFragment newInstance(String webUrl, String menuName) {
+    public static NavigateToWebViewFragment newInstance(String webUrl, String webHtml, String menuName) {
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.WEB_URL_FRAGMENT, webUrl);
+        bundle.putString(WEB_HTML, webHtml);
         bundle.putString(AppConstants.SELECTED_MENU_NAME, menuName);
 
         NavigateToWebViewFragment fragment = new NavigateToWebViewFragment();
@@ -87,6 +90,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
 
         if (null != getArguments()) {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL_FRAGMENT);
+            String mWebHtml = getArguments().getString(WEB_HTML);
             currentSelectedItemName = getArguments().getString(AppConstants.SELECTED_MENU_NAME);
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
@@ -94,6 +98,10 @@ public class NavigateToWebViewFragment extends BaseFragment {
                         String webUrl = getResources().getString(R.string.PLACEHOLDER_WEBPAGE_URL, mWebUrl, token); //append token with url
                         LogUtils.info(TAG, "#######WebPage Url*****" + webUrl);
                         webPagesView.loadUrl(webUrl);
+                    }
+
+                    if (StringUtil.isNotNullOrEmptyString(token) && mWebHtml != null) {
+                        webPagesView.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, mWebHtml, "text/html", "UTF-8", null);
                     }
                 }
         }

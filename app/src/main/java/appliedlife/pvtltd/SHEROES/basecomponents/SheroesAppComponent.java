@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
@@ -568,5 +569,7 @@ public interface SheroesAppComponent {
     void inject(MentorQADetailFragment mentorQADetailFragment);
 
     void inject(MentorInsightActivity mentorInsightActivity);
+
+    void inject(CommunityDetailActivity communityDetailActivity);
 
 }
