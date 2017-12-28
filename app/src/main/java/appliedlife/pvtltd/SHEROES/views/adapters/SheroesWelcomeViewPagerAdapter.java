@@ -1,25 +1,36 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
- * Created by priyanka on 08/03/17.
+ * Created by praveen on 08/03/17.
  */
 
 public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
-    ArrayList<Integer> nameOfScreen;
-    public SheroesWelcomeViewPagerAdapter(ArrayList<Integer> nameOfScreen)
+    private ArrayList<Integer> nameOfScreen;
+    private Context context;
+    public SheroesWelcomeViewPagerAdapter(ArrayList<Integer> nameOfScreen,Context context)
     {
         this.nameOfScreen=nameOfScreen;
+        this.context=context;
     }
     @Override
     public int getCount() {

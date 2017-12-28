@@ -29,6 +29,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
@@ -358,6 +360,16 @@ public class ProfilePersonelHowCanLookingForFragment extends BaseFragment implem
                 break;
             }
         }
+    }
+
+    @Override
+    public void showDataList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
     }
 
     @Override

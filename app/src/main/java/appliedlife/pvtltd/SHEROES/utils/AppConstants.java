@@ -102,6 +102,7 @@ public class AppConstants {
     public static final String BOOKMARKS = "bookmarks";
     public static final String COMMENT_REACTION_FRAGMENT = "comment_reaction_fragment";
     public static final String HOME_FRAGMENT = "home";
+    public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";

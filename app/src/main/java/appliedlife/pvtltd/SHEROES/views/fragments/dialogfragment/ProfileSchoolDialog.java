@@ -27,6 +27,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
@@ -236,6 +238,16 @@ public class ProfileSchoolDialog extends BaseDialogFragment implements OnBoardin
 
     @Override
     public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void showDataList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
 

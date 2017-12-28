@@ -6,8 +6,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
@@ -34,6 +38,19 @@ public class OnBoardingModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
+        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     public Observable<GetAllData> getOnBoardingFromModel(GetAllDataRequest getAllDataRequest){
         return sheroesAppServiceApi.getOnBoardingSearchFromApi(getAllDataRequest)
                 .map(new Func1<GetAllData, GetAllData>() {
@@ -112,6 +129,18 @@ public class OnBoardingModel {
                     @Override
                     public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
                         return boardingDataResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(communityRequest));
+        return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
+                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                    @Override
+                    public CommunityResponse call(CommunityResponse communityResponse) {
+                        return communityResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

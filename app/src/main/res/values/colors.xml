@@ -17,6 +17,7 @@
     <color name="secondary_text_disabled_dark">#36FFFFFF</color>
     <color name="secondary_text_default_dark">#B3FFFFFF</color>
     <color name="white">#ffffff</color>
+    <color name="eror">#59000000</color>
     <color name="red_skip">#d94440</color>
     <color name="growth_followed">#5838ac</color>
     <color name="challenge">#53a0fe</color>

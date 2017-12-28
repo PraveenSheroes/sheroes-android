@@ -15,19 +15,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical">
-
             <android.support.v4.view.ViewPager
                 android:id="@+id/welcome_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_380"
+                android:layout_marginTop="@dimen/dp_size_16"
+                android:layout_height="250dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
+            <TextView
+                android:id="@+id/tv_welcome_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_20"
+                android:layout_marginLeft="@dimen/dp_size_20"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:maxLines="@integer/int_value_for_line_2"
+                android:textAlignment="center"
+                android:textColor="@color/recent_post_comment"
+                android:textSize="@dimen/sp_size_16" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_17"
+                android:layout_marginTop="@dimen/dp_size_46"
                 android:gravity="center">
 
                 <ImageView
@@ -57,16 +70,15 @@
                 android:id="@+id/card_view_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_32"
-                app:cardElevation="@dimen/dp_size_40"
-                android:elevation="@dimen/dp_size_40">
+                android:layout_marginTop="@dimen/dp_size_22"
+                app:cardElevation="@dimen/dp_size_50"
+                android:elevation="@dimen/dp_size_50">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_56"
                     android:layout_marginRight="@dimen/dp_size_56"
-                    android:layout_marginTop="@dimen/dp_size_10"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
@@ -98,7 +110,7 @@
                            android:textStyle="normal"
                            android:textAllCaps="true"
                            android:background="@drawable/com_facebook_button_background"
-                           android:drawableLeft="@drawable/com_facebook_button_icon"
+                           android:drawableLeft="@drawable/ic_facebook"
                            android:paddingLeft="18dp"
                            android:paddingRight="18dp"
                            android:text="@string/ID_LOGIN_TEXT"/>
@@ -110,11 +122,11 @@
                            android:layout_height="wrap_content"
                            android:background="@drawable/ic_google_plus"
                            android:layout_marginLeft="@dimen/dp_size_16"
-                           android:paddingLeft="@dimen/sp_size_14"
+                           android:paddingLeft="@dimen/dp_size_14"
                            android:text="@string/ID_LOGIN_TEXT"
                            android:textAllCaps="true"
                            android:clickable="true"
-                           android:drawableLeft="@drawable/common_google_signin_btn_icon_light"
+                           android:drawableLeft="@drawable/ic_google_plus_icon"
                            android:textColor="@color/white"
                            android:textSize="@dimen/sp_size_16" />
 
@@ -134,7 +146,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_size_10"
                         android:layout_marginRight="@dimen/dp_size_10"
-                        android:layout_marginTop="@dimen/dp_size_10"
                         android:layout_marginBottom="@dimen/dp_size_15"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:gravity="center"

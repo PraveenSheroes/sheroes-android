@@ -515,7 +515,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onNext(LikeResponse likeResponse) {
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                if (likeResponse.getStatus() .equalsIgnoreCase( AppConstants.FAILED)) {
                     comment.isLiked = false;
                     comment.likeCount--;
                 }
@@ -555,7 +555,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if(likeResponse.getStatus() .equalsIgnoreCase( AppConstants.FAILED)){
                     comment.isLiked = true;
                     comment.likeCount++;
                 }

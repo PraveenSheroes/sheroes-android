@@ -23,6 +23,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
@@ -66,7 +68,7 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
         View view = inflater.inflate(R.layout.looking_for_layout, container, false);
         ButterKnife.bind(this, view);
         mOnBoardingPresenter.attachView(this);
-        ((OnBoardingActivity) getActivity()).mAppbarLayout.setVisibility(View.VISIBLE);
+      //  ((OnBoardingActivity) getActivity()).mAppbarLayout.setVisibility(View.VISIBLE);
         if (null != getArguments()) {
             Bundle mBusSeatMapDataInBundle = getArguments();
             mMasterDataResult = (HashMap<String, HashMap<String, ArrayList<LabelValue>>>) mBusSeatMapDataInBundle.getSerializable(AppConstants.HOW_SHEROES_CAN_HELP);
@@ -165,6 +167,16 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
     }
 
     @Override
+    public void showDataList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
@@ -185,7 +197,7 @@ public class OnBoardingLookingForFragment extends BaseFragment implements OnBoar
     public void onDestroyView() {
         super.onDestroyView();
         mOnBoardingPresenter.detachView();
-        ((OnBoardingActivity) getActivity()).mAppbarLayout.setVisibility(View.GONE);
+       // ((OnBoardingActivity) getActivity()).mAppbarLayout.setVisibility(View.GONE);
 
     }
 }

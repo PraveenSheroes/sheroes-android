@@ -4,17 +4,24 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
@@ -119,6 +126,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     ImageView ivWelcomeSecond;
     @Bind(R.id.iv_welcome_third)
     ImageView ivWelcomeThird;
+    @Bind(R.id.tv_welcome_text)
+    TextView tvWelcomeText;
     @Bind(R.id.click_to_join_fb_signup)
     Button fbLogin;
     //@Bind(R.id.pb_login_progress_bar)
@@ -322,11 +331,22 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         ArrayList<Integer> screenNameList = new ArrayList<>();
         screenNameList.add(R.drawable.welcome_first);
         screenNameList.add(R.drawable.welcome_second);
-        screenNameList.add(R.drawable.welcome_three);
-        mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList);
+        screenNameList.add(R.drawable.welcome_third);
+        mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList,this);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(WelcomeActivity.this);
-
+        ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
+        ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
+        ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+        String first = getString(R.string.ID_WELCOME_FIRST);
+        SpannableString spannableString = new SpannableString(first);
+        if (StringUtil.isNotNullOrEmptyString(first)) {
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 32, 61, 0);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 32, 61, 0);
+            tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
+            tvWelcomeText.setText(spannableString, TextView.BufferType.SPANNABLE);
+            tvWelcomeText.setSelected(true);
+        }
         mHandler = new Handler();
         mRunnable = new Runnable() {
             public void run() {
@@ -343,7 +363,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             public void run() {
                 mHandler.post(mRunnable);
             }
-        }, 500, 3000);
+        }, 500, 10000);
 
     }
 
@@ -423,16 +443,43 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+                String first = getString(R.string.ID_WELCOME_FIRST);
+                SpannableString spannableString = new SpannableString(first);
+                if (StringUtil.isNotNullOrEmptyString(first)) {
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 32, 61, 0);
+                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 32, 61, 0);
+                    tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
+                    tvWelcomeText.setText(spannableString, TextView.BufferType.SPANNABLE);
+                    tvWelcomeText.setSelected(true);
+                }
                 break;
             case AppConstants.ONE_CONSTANT:
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+                String second = getString(R.string.ID_WELCOME_SECOND);
+                SpannableString spannableSecond = new SpannableString(second);
+                if (StringUtil.isNotNullOrEmptyString(second)) {
+                    spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 5, 26, 0);
+                    spannableSecond.setSpan(new StyleSpan(Typeface.BOLD), 5, 26, 0);
+                    tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
+                    tvWelcomeText.setText(spannableSecond, TextView.BufferType.SPANNABLE);
+                    tvWelcomeText.setSelected(true);
+                }
                 break;
             case AppConstants.TWO_CONSTANT:
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
+                String third = getString(R.string.ID_WELCOME_THIRD);
+                SpannableString spannableThird = new SpannableString(third);
+                if (StringUtil.isNotNullOrEmptyString(third)) {
+                    spannableThird.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 0, 18, 0);
+                    spannableThird.setSpan(new StyleSpan(Typeface.BOLD), 0, 18, 0);
+                    tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
+                    tvWelcomeText.setText(spannableThird, TextView.BufferType.SPANNABLE);
+                    tvWelcomeText.setSelected(true);
+                }
                 break;
         }
     }

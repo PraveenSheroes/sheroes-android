@@ -33,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
@@ -313,6 +315,17 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
             }
         }
     }
+
+    @Override
+    public void showDataList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
     @OnClick(R.id.tv_selected_skill1)
     void onTag1Click() {
         mSkill1.setText("");

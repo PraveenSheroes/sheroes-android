@@ -22,7 +22,7 @@
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
     <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
     <!-- Strings related to login -->
-    <string name="ID_PROMPT_EMAIL">Email ID</string>
+    <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
     <string name="ID_TODAY">Today</string>
     <string name="ID_CREATE">Create</string>
     <string name="ID_CREATED">Created</string>
@@ -215,7 +215,7 @@
     <string name="ID_LETS_TALK"> Let’s Start Talking</string>
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="PLACEHOLDER_WEBPAGE_URL">%1$s?auth=%2$s&amp;addHeader=false&amp;addFooter=false</string>
-
+    <string name="ID_BOARDING_COMMUNITIES"> To make Sheroes experience special for you please join some communities of your interests</string>
     <string name="ID_WELCOME_HEADER"> Talk About Things That Matter To You</string>
     <string name="ID_UPLOAD_LOGO">Upload load</string>
     <string name="ID_UPLOAD_COVER">Upload cover</string>
@@ -474,10 +474,9 @@
     <string name="ID_WELCOME_TEXT4">Login Using Email (Only For Existing Users)</string>
     <string name="ID_INFORMATION_WARNING">We never share your info with anyone</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(Only for existing users)</string>
-    <string name="ID_WELCOME_FIRST">Grow With Your Circle Of Support</string>
-    <string name="ID_WELCOME_SECOND">Find Flexible Work Options</string>
-    <string name="ID_WELCOME_THIRD">Learn And Get Skilled For Today\'s Age</string>
-    <string name="ID_WELCOME_FOUR">Inspire Others With Your Growth Story</string>
+    <string name="ID_WELCOME_FIRST">Ask questions and discuss about health, career, relationships and more...</string>
+    <string name="ID_WELCOME_SECOND">Join Communities you like and talk to other women even anonymously</string>
+    <string name="ID_WELCOME_THIRD">Get expert advice from champions -  achievers from within the community</string>
     <string name="ID_WELCOME">Welcome</string>
     <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES, a community of over 1 Million women.</string>
     <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand things that you care about and we find want you are looking for, everyday.</string>
@@ -916,5 +915,7 @@
     <string name="ID_ANSWERS">Answered questions in last 7 days</string>
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
+    <string name="ID_WELCOME_SHEROES">Welcome to Sheroes!</string>
+    <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
 
 </resources>

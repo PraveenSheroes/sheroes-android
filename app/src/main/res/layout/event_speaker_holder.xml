@@ -13,7 +13,7 @@
             android:id="@+id/iv_event_speaker_circle_icon"
             android:layout_width="@dimen/feed_profile_icon_size"
             android:layout_height="@dimen/feed_profile_icon_size"
-            android:src="@drawable/ic_anonomous" />
+            android:src="@drawable/ic_anonymous_female_new_44dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +26,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:text="speaker"
                 android:textColor="@color/faq_question_color"
                 android:textSize="@dimen/sp_size_15" />
 
@@ -36,7 +35,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_5"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="sheroes.com"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>

@@ -8,18 +8,6 @@
     <ImageView
         android:id="@+id/iv_welcome_screen"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_337"
-        android:scaleType="fitXY"/>
-
-    <TextView
-        android:id="@+id/tv_welcome_text1"
-        android:layout_width="@dimen/dp_size_320"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:text="@string/ID_WELCOME_FIRST"
-        android:textAlignment="center"
-        android:textColor="@color/event_text"
-        android:textSize="@dimen/sp_size_14" />
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true" />
 </LinearLayout>

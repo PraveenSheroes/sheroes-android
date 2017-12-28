@@ -40,6 +40,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.PopularTag;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -790,6 +792,16 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
                 break;
             }
         }
+    }
+
+    @Override
+    public void showDataList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
     }
 
     @Override

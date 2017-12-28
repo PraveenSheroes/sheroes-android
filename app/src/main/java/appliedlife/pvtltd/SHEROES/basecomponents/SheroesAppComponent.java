@@ -151,6 +151,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorSuggestedCardHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
@@ -564,5 +565,7 @@ public interface SheroesAppComponent {
     void inject(MentorQADetailFragment mentorQADetailFragment);
 
     void inject(MentorInsightActivity mentorInsightActivity);
+
+    void inject(OnBoardingCommunitiesHolder onBoardingCommunitiesHolder);
 
 }

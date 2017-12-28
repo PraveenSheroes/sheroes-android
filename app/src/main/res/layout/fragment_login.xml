@@ -11,134 +11,191 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:background="@color/fully_transparent"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_login"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
-            app:collapsedTitleTextAppearance="@style/title.collapsed"
-            app:contentScrim="@color/colorAccent"
-            app:expandedSubtitleAppearance="@style/subtitle"
-            app:expandedTitleGravity="bottom|center_horizontal"
-            app:expandedTitleTextAppearance="@style/title.expanded"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_login"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="center"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-                <TextView
-                    android:id="@+id/iv_login_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|top"
-                    android:layout_marginLeft="@dimen/dp_size_14"
-                    android:padding="@dimen/dp_size_10"
-                    android:drawableLeft="@drawable/ic_back_black"/>
-
-            </android.support.v7.widget.Toolbar>
-        </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
-
-        <ImageView
-            android:layout_width="@dimen/dp_size_140"
-            android:layout_height="@dimen/dp_size_20"
-            android:layout_gravity="center|bottom"
-            android:background="@drawable/ic_sheroes"
-            android:layout_marginTop="@dimen/dp_size_40" />
-    </android.support.design.widget.AppBarLayout>
-
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:id="@+id/email_login_form"
+        <android.support.design.widget.AppBarLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/app_bar_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_45"
-            android:layout_marginRight="@dimen/dp_size_45"
-            android:orientation="vertical">
-            <android.support.design.widget.TextInputLayout
+            android:background="@color/fully_transparent"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar_login"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_50">
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:collapsedSubtitleAppearance="@style/subtitle_collapsed"
+                app:collapsedTitleTextAppearance="@style/title.collapsed"
+                app:contentScrim="@color/colorAccent"
+                app:expandedSubtitleAppearance="@style/subtitle"
+                app:expandedTitleGravity="bottom|center_horizontal"
+                app:expandedTitleTextAppearance="@style/title.expanded"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <EditText
-                    android:id="@+id/email"
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar_login"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:textColor="@color/pure_black"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:textSize="@dimen/sp_size_14"
-                    android:backgroundTint="@color/blue"
-                    android:hint="@string/ID_PROMPT_EMAIL"/>
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="center"
+                    app:layout_collapseMode="pin"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            </android.support.design.widget.TextInputLayout>
+                    <TextView
+                        android:id="@+id/iv_login_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|top"
+                        android:layout_marginLeft="@dimen/dp_size_14"
+                        android:drawableLeft="@drawable/ic_back_black"
+                        android:padding="@dimen/dp_size_10" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeActionId="@+id/login"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:textSize="@dimen/sp_size_14"
-                    android:textColor="@color/pure_black"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:maxLines="1"
-                    android:backgroundTint="@color/blue"
-                    android:hint="@string/ID_PROMPT_PASSWORD"/>
-
-            </android.support.design.widget.TextInputLayout>
-            <!-- Login progress -->
-
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
-                android:layout_width="@dimen/dp_size_209"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_50"
-                android:background="@drawable/signin_rounded_rectangle"
-                android:backgroundTint="@color/color_signin_button_login"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:text="@string/ID_ACTION_LOG_IN_SHORT"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_15" />
+                </android.support.v7.widget.Toolbar>
+            </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
 
             <TextView
-                android:id="@+id/forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_30"
-                android:padding="@dimen/dp_size_20"
-                android:text="@string/ID_FORGOT_PASSWORD_TEXT"
-                android:clickable="true"
                 android:layout_gravity="center|bottom"
-                android:textColor="@color/chat_incomming_text_color"
-                />
+                android:layout_marginTop="@dimen/dp_size_40"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:text="@string/ID_LOGIN_WITH_EMAIL"
+                android:textAllCaps="true"
+                android:textColor="@color/comment_text"
+                android:textStyle="bold" />
+        </android.support.design.widget.AppBarLayout>
 
-        </LinearLayout>
-    </ScrollView>
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/email_login_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_22">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_16"
+                        android:background="@color/search_shortcut_icon_color"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_email_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/dp_size_16"
+                            android:layout_marginLeft="@dimen/dp_size_16"
+                            android:layout_marginRight="@dimen/dp_size_16"
+                            android:layout_marginTop="@dimen/dp_size_25"
+                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                            android:gravity="center"
+                            android:textColor="@color/recent_post_comment"
+                            android:textSize="@dimen/sp_size_14" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_boarding_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:src="@drawable/ic_login_icon" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginRight="@dimen/dp_size_16"
+                    android:layout_marginTop="@dimen/dp_size_16"
+                    android:background="@drawable/rectangle_pop_border">
+
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_PROMPT_EMAIL"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:textColor="@color/pure_black"
+                        android:textSize="@dimen/sp_size_14" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginRight="@dimen/dp_size_16"
+                    android:layout_marginTop="@dimen/dp_size_8"
+                    android:background="@drawable/rectangle_pop_border"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp_size_8"
+                        android:layout_weight="@integer/int_value_for_line_1"
+                        android:backgroundTint="@color/white"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:hint="@string/ID_PROMPT_PASSWORD"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:textColor="@color/pure_black"
+                        android:textSize="@dimen/sp_size_14" />
+
+                    <ImageView
+                        android:id="@+id/iv_password_eye"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingBottom="@dimen/dp_size_8"
+                        android:paddingLeft="@dimen/dp_size_16"
+                        android:paddingRight="@dimen/dp_size_16"
+                        android:paddingTop="@dimen/dp_size_8"
+                        android:src="@drawable/ic_password_eye" />
+                </LinearLayout>
+                <!-- Login progress -->
+
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="@dimen/dp_size_150"
+                    android:layout_height="@dimen/dp_size_38"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp_size_25"
+                    android:background="@drawable/rectangle_feed_community_joined_active"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:text="@string/ID_ACTION_LOG_IN_SHORT"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_size_15" />
+
+                <TextView
+                    android:id="@+id/forgot_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:clickable="true"
+                    android:padding="@dimen/dp_size_20"
+                    android:text="@string/ID_FORGOT_PASSWORD_TEXT"
+                    android:textColor="@color/view_more" />
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </FrameLayout>
