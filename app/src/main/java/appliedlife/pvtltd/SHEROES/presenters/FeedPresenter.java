@@ -137,7 +137,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(GcmIdResponse gcmIdResponse) {
                 if (null != gcmIdResponse) {
-                    getMvpView().getNotificationReadCountSuccess(gcmIdResponse,GCM_ID);
+                    //getMvpView().getNotificationReadCountSuccess(gcmIdResponse,GCM_ID);
                 }
             }
         });
@@ -196,7 +196,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
-                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                    //getMvpView().getFeedListSuccess(feedResponsePojo);
                 }
             }
         });
@@ -234,7 +234,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-  /*  public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
+    public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
@@ -261,7 +261,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 if (!CommonUtil.isEmpty(feedDetailList) && feedRequestPojo.getPageNo() == 1) {
                     mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
                 }
-                getMvpView().showHomeFeedList(feedDetailList);
+                //getMvpView().showHomeFeedList(feedDetailList);
             }
         });
         registerSubscription(subscription);
@@ -291,7 +291,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
-                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                    //getMvpView().getFeedListSuccess(feedResponsePojo);
                 }
             }
         });
@@ -353,7 +353,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
-                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                    //getMvpView().getFeedListSuccess(feedResponsePojo);
                 }
             }
         });
@@ -390,7 +390,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                 }
-                getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+                //getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
             }
         });
         registerSubscription(subscription);
@@ -426,7 +426,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                 }
-                getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+                //getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
             }
         });
         registerSubscription(subscription);
@@ -454,7 +454,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+                //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -483,7 +483,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+                //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -494,7 +494,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = false;
             comment.likeCount--;
-            getMvpView().invalidateLikeUnlike(comment);
+           // getMvpView().invalidateLikeUnlike(comment);
             return;
         }
         getMvpView().startProgressBar();
@@ -511,7 +511,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
-                getMvpView().invalidateLikeUnlike(comment);
+               // getMvpView().invalidateLikeUnlike(comment);
 
             }
 
@@ -522,8 +522,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     comment.likeCount--;
                 }
                 getMvpView().stopProgressBar();
-                getMvpView().invalidateLikeUnlike(comment);
-               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+                //getMvpView().invalidateLikeUnlike(comment);
+               // //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -534,7 +534,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = true;
             comment.likeCount++;
-            getMvpView().invalidateLikeUnlike(comment);
+            //getMvpView().invalidateLikeUnlike(comment);
             return;
         }
         getMvpView().startProgressBar();
@@ -551,7 +551,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
-                getMvpView().invalidateLikeUnlike(comment);
+                //getMvpView().invalidateLikeUnlike(comment);
             }
 
             @Override
@@ -561,15 +561,15 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     comment.isLiked = true;
                     comment.likeCount++;
                 }
-                getMvpView().invalidateLikeUnlike(comment);
-               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+                ////getMvpView().invalidateLikeUnlike(comment);
+               // //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
     }
 
 
-    public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
+    public void postBookmarked(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
@@ -592,7 +592,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+               // //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
         registerSubscription(subscription);
@@ -621,7 +621,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
+                //getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
             }
         });
         registerSubscription(subscription);
@@ -650,7 +650,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
+                //getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
             }
         });
         registerSubscription(subscription);
@@ -679,7 +679,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo1) {
                 getMvpView().stopProgressBar();
-                getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
+                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
             }
         });
         registerSubscription(subscription);
@@ -709,7 +709,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(BelNotificationListResponse bellNotificationResponse) {
                 getMvpView().stopProgressBar();
                 if (null != bellNotificationResponse) {
-                    getMvpView().getNotificationListSuccess(bellNotificationResponse);
+                   // getMvpView().getNotificationListSuccess(bellNotificationResponse);
                 }
             }
         });
@@ -730,7 +730,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(NotificationReadCountResponse notificationReadCountResponse) {
                 if (null != notificationReadCountResponse) {
-                    getMvpView().getNotificationReadCountSuccess(notificationReadCountResponse,NOTIFICATION_COUNT);
+                    //getMvpView().getNotificationReadCountSuccess(notificationReadCountResponse,NOTIFICATION_COUNT);
                 }
             }
         });
@@ -755,7 +755,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
+                    //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
                 }
             }
         });
@@ -785,7 +785,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(UserPhoneContactsListResponse userPhoneContactsListResponse) {
                 getMvpView().stopProgressBar();
                 if (null != userPhoneContactsListResponse) {
-                    getMvpView().getNotificationReadCountSuccess(userPhoneContactsListResponse,USER_CONTACTS_ACCESS_SUCCESS);
+                    //getMvpView().getNotificationReadCountSuccess(userPhoneContactsListResponse,USER_CONTACTS_ACCESS_SUCCESS);
                 }
             }
         });
@@ -795,5 +795,5 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     public void onStop() {
         detachView();
-    }*/
+    }
 }

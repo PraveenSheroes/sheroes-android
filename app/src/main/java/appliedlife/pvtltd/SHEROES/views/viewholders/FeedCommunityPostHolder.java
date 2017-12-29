@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -822,51 +823,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
 
-    @OnClick(R.id.tv_feed_community_post_total_replies)
+    @OnClick({R.id.tv_feed_community_post_total_replies, R.id.tv_feed_community_post_user_comment_post, R.id.li_feed_community_post_user_comments, R.id.tv_feed_community_post_user_comment_post_view_more})
     public void repliesClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        }
     }
 
-    @OnClick(R.id.tv_join_conversation)
+    @OnClick({R.id.tv_join_conversation,R.id.tv_feed_community_post_user_comment})
     public void joinConversationClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment)
-    public void userCommentClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment_post)
-    public void recentCommentClick() {
-        mUserPostObj.setCallFromName(mContext.getString(R.string.ID_REPLY));
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
+        }
     }
 
     @OnClick(R.id.li_feed_community_user_post_images)
     public void communityPostImageClick() {
-        viewInterface.dataOperationOnClick(mUserPostObj);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+        }else {
+            viewInterface.dataOperationOnClick(mUserPostObj);
+        }
     }
 
-
-    @OnClick(R.id.li_feed_community_post_user_comments)
-    public void openCommentClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment_post_view_more)
-    public void userCommentViewMoreClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
-    }
 
     @OnClick(R.id.tv_feed_community_post_user_menu)
     public void userMenuClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
+        }
     }
 
     @OnClick(R.id.tv_spam_post_menu)
@@ -878,7 +869,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
     public void userCommentMenuClick() {
         mUserPostObj.setNoOfOpenings(mItemPosition);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserCommentPostMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onCommentMenuClicked(mUserPostObj, tvFeedCommunityPostUserCommentPostMenu);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserCommentPostMenu);
+        }
 
     }
 

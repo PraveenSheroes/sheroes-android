@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
 
 public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
-    public static final String TAG = "NewsfeedAdapter";
+    public static final String TAG = "feedAdapter";
     public static final String LIST_FEED = "FEED";
     private final Context mContext;
     private List<FeedDetail> mFeedDetailList;
@@ -59,7 +59,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     }
     //endregion
 
-    //region NewsfeedAdapter methods
+    //region feedAdapter methods
     @Override
     public RecyclerView.ViewHolder customOnCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
@@ -258,9 +258,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     }
     //endregion
 
-    //region feature view
-
-    //region newsfeedheaderview
+    //region feedHeaderview
     public class HeaderViewHolder extends HeaderRecyclerViewAdapter.HeaderViewHolder {
 
         public HeaderViewHolder(View headerView) {
