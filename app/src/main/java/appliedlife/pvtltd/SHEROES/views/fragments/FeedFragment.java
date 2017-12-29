@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -182,12 +183,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onArticleShared(ArticleSolrObj articleSolrObj) {
+    public void onPostShared(FeedDetail feedDetail) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, articleSolrObj.getDeepLinkUrl());
+        intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, articleSolrObj, getScreenName());
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
     }
 
     @Override
@@ -239,7 +240,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onCommentMenuClicked(UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu) {
+    public void onCommentMenuClicked(final UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(getActivity(), tvFeedCommunityPostUserCommentPostMenu);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
@@ -256,10 +257,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.edit:
-                        //    onEditMenuClicked(comment);
+                            onEditMenuClicked(userPostObj);
                             return true;
                         case R.id.delete:
-                        //    onDeleteMenuClicked(comment);
+                            onDeleteMenuClicked(userPostObj);
                             return true;
                         default:
                             return false;
@@ -270,29 +271,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         popup.show();
     }
 
-  /*  private void onDeleteMenuClicked(Comment comment) {
-        HashMap<String, Object> propertiesDelete =
-                new EventProperty.Builder()
-                        .id(Long.toString(comment.getId()))
-                        .postId(Long.toString(comment.getEntityId()))
-                        .postType(AnalyticsEventType.COMMUNITY.toString())
-                        .body(comment.getComment())
-                        .build();
-        trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mFeedPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+    @Override
+    public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
+        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked());
     }
 
-    private void onEditMenuClicked(Comment comment) {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(comment.getId()))
-                        .postId(Long.toString(comment.getEntityId()))
-                        .postType(AnalyticsEventType.COMMUNITY.toString())
-                        .body(comment.getComment())
-                        .build();
-        trackEvent(Event.REPLY_EDITED, properties);
-        mInputText.setText(comment.getComment());
-        mInputText.setSelection(comment.getComment().length());
-        mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
-    }*/
+    @Override
+    public void onLikesCountClicked(UserPostSolrObj userPostObj) {
+        LikeListBottomSheetFragment.showDialog((AppCompatActivity)getActivity(), getScreenName(), userPostObj.getEntityOrParticipantId());
+    }
+
+    private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
+        userPostSolrObj.setIsEditOrDelete(AppConstants.TWO_CONSTANT);
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+    }
+
+    private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
+        userPostSolrObj.setIsEditOrDelete(AppConstants.ONE_CONSTANT);
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+    }
 }

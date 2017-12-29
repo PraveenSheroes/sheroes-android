@@ -792,6 +792,35 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
+    public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+
+            }
+
+            @Override
+            public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                getMvpView().stopProgressBar();
+                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
 
     public void onStop() {
         detachView();

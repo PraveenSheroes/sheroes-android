@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -892,17 +893,29 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         switch (id) {
             case R.id.iv_first: {
                 mUserPostObj.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+                }else {
+                    viewInterface.dataOperationOnClick(mUserPostObj);
+                }
                 break;
             }
             case R.id.iv_second: {
                 mUserPostObj.setItemPosition(AppConstants.ONE_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+                }else {
+                    viewInterface.dataOperationOnClick(mUserPostObj);
+                }
                 break;
             }
             case R.id.iv_third: {
                 mUserPostObj.setItemPosition(AppConstants.TWO_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+                }else {
+                    viewInterface.dataOperationOnClick(mUserPostObj);
+                }
                 break;
             }
 
@@ -917,11 +930,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void isBookMarkClick() {
         // mUserPostObj.setTrending(true);
         tvFeedCommunityPostUserBookmark.setEnabled(false);
-        if (mUserPostObj.isBookmarked()) {
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onPostBookMarkedClicked(mUserPostObj);
+        }else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserBookmark);
+        }
+        if (mUserPostObj.isBookmarked()) {
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserBookmark);
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
         }
         if (!mUserPostObj.isBookmarked()) {
@@ -934,7 +950,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_share)
     public void tvShareClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserShare);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
+        } else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserShare);
+        }
         if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_FEEDBACK_POST, mUserPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + mUserPostObj.getIdOfEntityOrParticipant());
         } else {
@@ -944,7 +964,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_total_reactions)
     public void reactionClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostTotalReactions);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onLikesCountClicked(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostTotalReactions);
+        }
     }
 
     @OnClick(R.id.tv_feed_community_post_reaction1)

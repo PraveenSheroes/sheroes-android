@@ -7,7 +7,6 @@ import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
@@ -225,7 +223,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_article_share)
     public void tvMenuClick() {
         if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback) viewInterface).onArticleShared(dataItem);
+            ((FeedItemCallback) viewInterface).onPostShared(dataItem);
         }else {
             viewInterface.handleOnClick(dataItem, tvArticleShare);
         }

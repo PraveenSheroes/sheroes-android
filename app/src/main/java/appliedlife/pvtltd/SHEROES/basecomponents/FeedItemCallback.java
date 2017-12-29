@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 
 /**
@@ -17,7 +18,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onArticleItemClicked(ArticleSolrObj articleSolrObj);
 
-    void onArticleShared(ArticleSolrObj articleSolrObj);
+    void onPostShared(FeedDetail feedDetail);
 
     void onUserPostClicked(UserPostSolrObj mUserPostObj);
 
@@ -28,4 +29,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onPostMenuClicked(UserPostSolrObj userPostObj, View tvFeedCommunityPostUserMenu);
 
     void onCommentMenuClicked(UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu);
+
+    void onPostBookMarkedClicked(UserPostSolrObj userPostObj);
+
+    void onLikesCountClicked(UserPostSolrObj userPostObj);
 }
