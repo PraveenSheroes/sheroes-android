@@ -560,22 +560,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         {
             case FOLLOW_UNFOLLOW:
                 tvMentorDashBoardFollow.setEnabled(true);
-                UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-               /* if(tvMentorDashBoardFollow.getText().toString().equalsIgnoreCase(getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING)))
-                {
-                    if(!userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                            mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()-1);
-                    }
-                }else
-                {
-                    if(userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                        mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()+1);
-
-                    }
-                }*/
-
                 followUnFollowMentor();
                 break;
             default:

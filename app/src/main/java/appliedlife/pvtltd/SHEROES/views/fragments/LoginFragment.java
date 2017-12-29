@@ -3,15 +3,23 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
@@ -80,6 +88,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
     EditText mPasswordView;
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
+    @Bind(R.id.tv_email_description)
+    TextView tvEmailDescription;
     private ProgressDialog mProgressDialog;
     private MoEHelper mMoEHelper;
     private String mGcmId;
@@ -87,14 +97,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private String password;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-
+    private boolean isEye;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_LOGIN));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_LOGIN_TEXT));
     }
 
     @Override
@@ -104,8 +114,15 @@ public class LoginFragment extends BaseFragment implements LoginView {
         ButterKnife.bind(this, view);
         mLoginPresenter.attachView(this);
         mLoginPresenter.getMasterDataToPresenter();
-        mEmailView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
-        mPasswordView.getBackground().setColorFilter(getResources().getColor(R.color.blue), PorterDuff.Mode.SRC_ATOP);
+        String description = getString(R.string.ID_LOGIN_MSG);
+        SpannableString spannableString = new SpannableString(description);
+        if (StringUtil.isNotNullOrEmptyString(description)) {
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.feed_article_label)), 15, 38, 0);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 15, 38, 0);
+            tvEmailDescription.setMovementMethod(LinkMovementMethod.getInstance());
+            tvEmailDescription.setText(spannableString, TextView.BufferType.SPANNABLE);
+            tvEmailDescription.setSelected(true);
+        }
         return view;
     }
 
@@ -135,7 +152,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         AnalyticsManager.initializeMixpanel(getContext());
                         ((LoginActivity)getActivity()).onLoginAuthToken();
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
-                        trackEvent(Event.APP_LOGIN, properties);
+                        AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         AnalyticsManager.initializeMixpanel(getActivity());
                         break;
                     case AppConstants.FAILED:
@@ -216,6 +233,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
             cancel = true;
         }
         // Check for a valid email address.
+        if (!StringUtil.isNotNullOrEmptyString(email)) {
+            mEmailView.setError(getString(R.string.ID_ERROR_EMAIL));
+            focusView = mEmailView;
+            cancel = true;
+            return;
+        }
         if (!mAppUtils.checkEmail(email)) {
             mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             focusView = mEmailView;
@@ -332,8 +355,22 @@ public class LoginFragment extends BaseFragment implements LoginView {
         }
     }
 
-    @OnClick(R.id.iv_login_back)
-    public void backOnClick() {
-        ((LoginActivity) getActivity()).onBackPressed();
+    @OnClick(R.id.iv_password_eye)
+    public void passwordEyeOnClick() {
+        if(isEye) {
+            isEye=false;
+            mPasswordView.setTransformationMethod(new PasswordTransformationMethod());
+            mPasswordView.setSelection(mPasswordView.length());
+        }else
+        {
+            isEye=true;
+            mPasswordView.setTransformationMethod(null);
+            mPasswordView.setSelection(mPasswordView.length());
+        }
+    }
+    @OnClick(R.id.tv_login_back)
+    public void onBack()
+    {
+        ((LoginActivity)getActivity()).onBackPressed();
     }
 }

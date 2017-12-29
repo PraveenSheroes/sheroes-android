@@ -154,7 +154,6 @@
                     android:id="@+id/pb_search_Skill_progress_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/text1"
                     android:layout_centerInParent="true"
                     android:visibility="gone" />
 

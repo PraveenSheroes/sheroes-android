@@ -1,7 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.app.Dialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +56,15 @@ public class FacebookErrorDialog extends BaseDialogFragment {
                 mIvHeySuccessNext.setVisibility(View.VISIBLE);
                 mIvWomenError.setVisibility(View.GONE);
             }
-            mTvMessage.setText(message);
+            message=message.substring(6,message.length());
+            SpannableString spannableString = new SpannableString(message);
+            if (StringUtil.isNotNullOrEmptyString(message)) {
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 13, 32, 0);
+                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 13, 32, 0);
+                mTvMessage.setMovementMethod(LinkMovementMethod.getInstance());
+                mTvMessage.setText(spannableString, TextView.BufferType.SPANNABLE);
+                mTvMessage.setSelected(true);
+            }
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
@@ -69,12 +83,21 @@ public class FacebookErrorDialog extends BaseDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+        // set the animations to use on showing and hiding the dialog
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth);
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                tryAgainClick();
+            }
+        };
     }
 
 

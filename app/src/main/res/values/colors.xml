@@ -17,6 +17,7 @@
     <color name="secondary_text_disabled_dark">#36FFFFFF</color>
     <color name="secondary_text_default_dark">#B3FFFFFF</color>
     <color name="white">#ffffff</color>
+    <color name="eror">#59000000</color>
     <color name="red_skip">#d94440</color>
     <color name="growth_followed">#5838ac</color>
     <color name="challenge">#53a0fe</color>
@@ -197,4 +198,9 @@
     <color name="lighter_grey">#E4E4E4</color>
     <color name="mentor_green">#6bba29</color>
     <color name="mentor_profession">#686868</color>
+
+    <color name="google_plus">#df4a32</color>
+    <color name="google_plus_pressed">#bb4131</color>
+    <color name="button_background_color_focused_disabled">#84878c</color>
+    <color name="button_background_color_disabled">#bdc1c9</color>
 </resources>

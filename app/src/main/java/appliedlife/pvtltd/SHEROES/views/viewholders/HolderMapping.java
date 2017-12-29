@@ -103,6 +103,11 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new InviteSearchHolder(view, viewInterface);
         }
+    }, ON_BOARDING_COMMUNITIES_CARD(R.layout.on_boarding_communities_holder) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new OnBoardingCommunitiesHolder(view, viewInterface);
+        }
     }, FEATURE_CARD(R.layout.featured_card_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -440,6 +445,9 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.FEED_JOB:
                                 returnView = FEED_JOB.ordinal();
+                                break;
+                            case AppConstants.FEED_COMMUNITY:
+                                returnView = ON_BOARDING_COMMUNITIES_CARD.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
                                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;

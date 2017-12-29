@@ -36,7 +36,9 @@ public enum EventProperty {
     ENTITY_ID("Entity Id"),
     ACTIVITY_NAME("Activity Name"),
     LOOKING_FOR_NAME("Looking For Name"),
-    IS_MOENGAGE("Is Moengage");
+    IS_MOENGAGE("Is Moengage"),
+    POSITION_IN_SEQUENCE("Position In Sequence"),
+    DESCRIPTION("Description");
 
     private final String string;
 
@@ -186,6 +188,16 @@ public enum EventProperty {
 
         public Builder lookingForName(final String lookingForName){
             put(LOOKING_FOR_NAME, lookingForName);
+            return this;
+        }
+
+        public Builder positionInSequence(final String position){
+            put(POSITION_IN_SEQUENCE, position);
+            return this;
+        }
+
+        public Builder description(final String description){
+            put(DESCRIPTION, description);
             return this;
         }
     }
