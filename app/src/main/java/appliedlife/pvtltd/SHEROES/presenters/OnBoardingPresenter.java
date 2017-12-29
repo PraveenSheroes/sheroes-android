@@ -14,6 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -34,8 +36,8 @@ import rx.Subscription;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_ON_ONBOARDING;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 
 /**
  * Created by Praveen_Singh on 19-03-2017.
@@ -321,9 +323,39 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                     communityFeedSolrObj.setMember(false);
                 }
                 getMvpView().stopProgressBar();
-                getMvpView().joinUnJoinResponse(communityFeedSolrObj);
+                getMvpView().joinResponse(communityFeedSolrObj);
             }
         });
         registerSubscription(subscription);
     }
+    public void leaveCommunityAndRemoveMemberToPresenter(RemoveMemberRequest removeMemberRequest,final CommunityFeedSolrObj communityFeedSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = onBoardingModel.removeMember(removeMemberRequest).subscribe(new Subscriber<MemberListResponse>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(MemberListResponse memberListResponse) {
+                if (memberListResponse.getStatus() .equalsIgnoreCase( AppConstants.FAILED)) {
+                    communityFeedSolrObj.setMember(true);
+                }
+                getMvpView().stopProgressBar();
+                getMvpView().unJoinResponse(communityFeedSolrObj);
+            }
+        });
+        registerSubscription(subscription);
+    }
+
 }

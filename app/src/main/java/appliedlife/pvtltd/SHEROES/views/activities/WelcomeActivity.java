@@ -4,24 +4,19 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
@@ -126,12 +121,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     ImageView ivWelcomeSecond;
     @Bind(R.id.iv_welcome_third)
     ImageView ivWelcomeThird;
-    @Bind(R.id.tv_welcome_text)
-    TextView tvWelcomeText;
     @Bind(R.id.click_to_join_fb_signup)
     Button fbLogin;
-    //@Bind(R.id.pb_login_progress_bar)
-    // ProgressBar mProgressBar;
+    @Bind(R.id.cl_welcome)
+    CoordinatorLayout clWelcome;
     @Bind(R.id.scroll_view_welcome)
     ScrollView mScrollView;
     private PayloadBuilder payloadBuilder;
@@ -165,7 +158,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private long currentTime;
     private String mGcmId;
     private String loggedInChannel;
-
+    private boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -332,21 +325,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         screenNameList.add(R.drawable.welcome_first);
         screenNameList.add(R.drawable.welcome_second);
         screenNameList.add(R.drawable.welcome_third);
-        mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList,this);
+        ArrayList<String> screenText = new ArrayList<>();
+        screenText.add(getString(R.string.ID_WELCOME_FIRST));
+        screenText.add(getString(R.string.ID_WELCOME_SECOND));
+        screenText.add(getString(R.string.ID_WELCOME_THIRD));
+
+        mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList,this,screenText);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(WelcomeActivity.this);
         ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
         ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
         ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-        String first = getString(R.string.ID_WELCOME_FIRST);
-        SpannableString spannableString = new SpannableString(first);
-        if (StringUtil.isNotNullOrEmptyString(first)) {
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 32, 61, 0);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 32, 61, 0);
-            tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
-            tvWelcomeText.setText(spannableString, TextView.BufferType.SPANNABLE);
-            tvWelcomeText.setSelected(true);
-        }
         mHandler = new Handler();
         mRunnable = new Runnable() {
             public void run() {
@@ -369,7 +358,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        if (mGooglePlusHelper != null) {
+            mGooglePlusHelper.signOut();
+        }
+        if (null != mGoogleApiClient) {
+            mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
+            mGoogleApiClient.disconnect();
+        }
         if (timer != null) {
             timer.cancel();
             timer = null;
@@ -377,14 +372,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (mHandler != null) {
             mHandler.removeCallbacks(mRunnable);
         }
-        if (null != mGoogleApiClient) {
-            mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
-            mGoogleApiClient.disconnect();
-        }
-        if (mGooglePlusHelper != null) {
-            mGooglePlusHelper.signOut();
-        }
         mLoginPresenter.detachView();
+        super.onDestroy();
     }
 
     @OnClick(R.id.tv_other_login_option)
@@ -443,43 +432,19 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                String first = getString(R.string.ID_WELCOME_FIRST);
-                SpannableString spannableString = new SpannableString(first);
-                if (StringUtil.isNotNullOrEmptyString(first)) {
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 32, 61, 0);
-                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 32, 61, 0);
-                    tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
-                    tvWelcomeText.setText(spannableString, TextView.BufferType.SPANNABLE);
-                    tvWelcomeText.setSelected(true);
-                }
+                currentPage = 0;
                 break;
             case AppConstants.ONE_CONSTANT:
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                String second = getString(R.string.ID_WELCOME_SECOND);
-                SpannableString spannableSecond = new SpannableString(second);
-                if (StringUtil.isNotNullOrEmptyString(second)) {
-                    spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 5, 26, 0);
-                    spannableSecond.setSpan(new StyleSpan(Typeface.BOLD), 5, 26, 0);
-                    tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
-                    tvWelcomeText.setText(spannableSecond, TextView.BufferType.SPANNABLE);
-                    tvWelcomeText.setSelected(true);
-                }
+                currentPage = 0;
                 break;
             case AppConstants.TWO_CONSTANT:
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                String third = getString(R.string.ID_WELCOME_THIRD);
-                SpannableString spannableThird = new SpannableString(third);
-                if (StringUtil.isNotNullOrEmptyString(third)) {
-                    spannableThird.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 0, 18, 0);
-                    spannableThird.setSpan(new StyleSpan(Typeface.BOLD), 0, 18, 0);
-                    tvWelcomeText.setMovementMethod(LinkMovementMethod.getInstance());
-                    tvWelcomeText.setText(spannableThird, TextView.BufferType.SPANNABLE);
-                    tvWelcomeText.setSelected(true);
-                }
+                currentPage = 0;
                 break;
         }
     }
@@ -515,7 +480,19 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        doubleBackToExitPressedOnce = true;
+        Snackbar.make(clWelcome, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 
     @Override
@@ -554,6 +531,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     protected void onResume() {
         super.onResume();
+        if (mProgressDialog != null ) {
+            mProgressDialog.dismiss();
+        }
         Intent intent = getIntent();
         if (intent != null) {
             Bundle extras = intent.getExtras();
@@ -589,11 +569,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public boolean shouldTrackScreen() {
-        if (isFirstTimeUser) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
 
@@ -619,7 +595,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         signOut();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         //Starting intent for result
-        showDialogInWelcome(CustomSocialDialog.LOGGING_IN_DIALOG);
         startActivityForResult(signInIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS);
     }
 
@@ -761,7 +736,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
 
                             final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial == MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
-                            trackEvent(Event.APP_LOGIN, properties);
+                            AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                             if (createdDate < currentTime) {
                                 moEngageUtills.entityMoEngageLoggedIn(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
                                 if (loginViaSocial == MoEngageConstants.FACEBOOK) {
@@ -831,24 +806,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-   /* private void openHomeScreen() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
-            Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
-            loginIntent.putExtras(bundle);
-            loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(loginIntent);
-            finish();
-        } else {
-            Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
-            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(boardingIntent);
-            finish();
-        }
-    }*/
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -856,6 +813,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
                 if (resultCode == Activity.RESULT_OK) {
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                    showDialogInWelcome(CustomSocialDialog.LOGGING_IN_DIALOG);
                     handleSignInResult(result);
                 } else {
                     dismissDialog();

@@ -57,8 +57,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialog
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingLookingForFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingTellUsAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalBasicDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PersonalProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
@@ -96,7 +95,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityTypeDi
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FunctionalAreaDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OnBoardingSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.OwnerRemoveDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileAddEditEducationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileDegreeDialog;
@@ -350,11 +348,7 @@ public interface SheroesAppComponent {
 
     void inject(OnBoardingActivity onBoardingActivity);
 
-    void inject(OnBoardingTellUsAboutFragment onBoardingTellUsAboutFragment);
-
-    void inject(OnBoardingLookingForFragment onBoardingLookingForFragment);
-
-    void inject(OnBoardingSearchDialogFragment onBoardingSearchDialogFragment);
+    void inject(OnBoardingFragment onBoardingFragment);
 
     void inject(GetAllDataBoardingSearchHolder getAllDataBoardingSearchHolder);
 

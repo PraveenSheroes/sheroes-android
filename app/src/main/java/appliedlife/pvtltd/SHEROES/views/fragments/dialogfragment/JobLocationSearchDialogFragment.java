@@ -233,7 +233,12 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
     }
 
     @Override
-    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
 

@@ -52,7 +52,7 @@ import butterknife.OnClick;
  */
 
 public class SearchProfileLocationDialogFragment extends BaseDialogFragment implements OnBoardingView {
-    private final String TAG = LogUtils.makeLogTag(OnBoardingSearchDialogFragment.class);
+    private final String TAG = LogUtils.makeLogTag(SearchProfileLocationDialogFragment.class);
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.rv_onboarding_search_list)
@@ -237,7 +237,12 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     }
 
     @Override
-    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
 

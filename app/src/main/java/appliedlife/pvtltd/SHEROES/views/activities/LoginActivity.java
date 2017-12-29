@@ -2,6 +2,11 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -17,7 +22,9 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -114,17 +121,9 @@ public class LoginActivity extends BaseActivity {
     public void onBackPressed() {
         userPreference.delete();
         Intent intent = new Intent(this, WelcomeActivity.class);
-       // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }
-
- /*   private void openFaceBookLogin() {
-        Intent intentFacebook = new Intent(this, FaceBookOpenActivity.class);
-        startActivityForResult(intentFacebook, AppConstants.REQUEST_CODE_FOR_FACEBOOK);
-        overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
-    }
-*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -143,6 +142,7 @@ public class LoginActivity extends BaseActivity {
         EmailVerificationFragment emailVerificationFragment = new EmailVerificationFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
+
 
     @Override
     public boolean shouldTrackScreen() {

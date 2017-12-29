@@ -90,9 +90,19 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
 
     @OnClick(R.id.tv_boarding_communities_join)
     public void onJoinButtonClick() {
-        viewInterface.handleOnClick(communityFeedObj, tvJoin);
-        communityFeedObj.setMember(true);
-        communityFeedObj.setRequestPending(false);
+        if(tvJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOINED)))
+        {
+            communityFeedObj.isJoinCommunity=true;
+            viewInterface.handleOnClick(communityFeedObj, tvJoin);
+            communityFeedObj.setMember(false);
+            communityFeedObj.setRequestPending(false);
+        }else
+        {
+            communityFeedObj.isJoinCommunity=false;
+            viewInterface.handleOnClick(communityFeedObj, tvJoin);
+            communityFeedObj.setMember(true);
+            communityFeedObj.setRequestPending(false);
+        }
         joinCommunity();
     }
 }

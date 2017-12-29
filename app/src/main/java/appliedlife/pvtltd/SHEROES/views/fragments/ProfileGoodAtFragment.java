@@ -800,7 +800,12 @@ public class ProfileGoodAtFragment extends BaseFragment implements BaseHolderInt
     }
 
     @Override
-    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
 

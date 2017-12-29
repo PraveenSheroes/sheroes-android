@@ -34,7 +34,7 @@
             android:layout_marginLeft="@dimen/dp_size_32"
             android:layout_marginRight="@dimen/dp_size_32"
             android:ellipsize="end"
-            android:layout_marginBottom="@dimen/dp_size_48"
+            android:layout_marginBottom="@dimen/dp_size_18"
             android:lines="@integer/int_value_for_line_2"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="@color/comment_text"

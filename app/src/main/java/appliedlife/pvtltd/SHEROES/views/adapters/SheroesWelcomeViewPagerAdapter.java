@@ -16,9 +16,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 
 /**
  * Created by praveen on 08/03/17.
@@ -26,10 +33,12 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
     private ArrayList<Integer> nameOfScreen;
+    private ArrayList<String> screenText;
     private Context context;
-    public SheroesWelcomeViewPagerAdapter(ArrayList<Integer> nameOfScreen,Context context)
+    public SheroesWelcomeViewPagerAdapter(ArrayList<Integer> nameOfScreen,Context context,ArrayList<String>screenText)
     {
         this.nameOfScreen=nameOfScreen;
+        this.screenText=screenText;
         this.context=context;
     }
     @Override
@@ -41,8 +50,66 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(final ViewGroup container, final int position) {
         View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.welcome_screen_first_fragment, container, false);
         ImageView imageView = (ImageView) itemView.findViewById(R.id.iv_welcome_screen);
+        TextView textView = (TextView) itemView.findViewById(R.id.tv_welcome_text);
         int screen=nameOfScreen.get(position);
+        String text=screenText.get(position);
         imageView.setImageResource(screen);
+        switch (position) {
+            case AppConstants.NO_REACTION_CONSTANT:
+                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_FIRST_WELCOME));
+                SpannableString spannableString = new SpannableString(text);
+                if (StringUtil.isNotNullOrEmptyString(text)) {
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.feed_article_label)), 32, 61, 0);
+                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 32, 61, 0);
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                    textView.setText(spannableString, TextView.BufferType.SPANNABLE);
+                    textView.setSelected(true);
+                }
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .title(context.getString(R.string.ID_FIRST_WELCOME))
+                                .description(text)
+                                .positionInSequence(String.valueOf(position))
+                                .build();
+                AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, properties);
+                break;
+            case AppConstants.ONE_CONSTANT:
+                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_SECOND_WELCOME));
+                SpannableString spannableSecond = new SpannableString(text);
+                if (StringUtil.isNotNullOrEmptyString(text)) {
+                    spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.feed_article_label)), 5, 26, 0);
+                    spannableSecond.setSpan(new StyleSpan(Typeface.BOLD), 5, 26, 0);
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                    textView.setText(spannableSecond, TextView.BufferType.SPANNABLE);
+                    textView.setSelected(true);
+                }
+                HashMap<String, Object> propertiesSecond =
+                        new EventProperty.Builder()
+                                .title(context.getString(R.string.ID_SECOND_WELCOME))
+                                .description(text)
+                                .positionInSequence(String.valueOf(position))
+                                .build();
+                AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, propertiesSecond);
+                break;
+            case AppConstants.TWO_CONSTANT:
+                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_SECOND_WELCOME));
+                SpannableString spannableThird = new SpannableString(text);
+                if (StringUtil.isNotNullOrEmptyString(text)) {
+                    spannableThird.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.feed_article_label)), 0, 18, 0);
+                    spannableThird.setSpan(new StyleSpan(Typeface.BOLD), 0, 18, 0);
+                    textView.setMovementMethod(LinkMovementMethod.getInstance());
+                    textView.setText(spannableThird, TextView.BufferType.SPANNABLE);
+                    textView.setSelected(true);
+                }
+                HashMap<String, Object> propertiesThird =
+                        new EventProperty.Builder()
+                                .title(context.getString(R.string.ID_SECOND_WELCOME))
+                                .description(text)
+                                .positionInSequence(String.valueOf(position))
+                                .build();
+                AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, propertiesThird);
+                break;
+        }
         container.addView(itemView);
         return itemView;
     }

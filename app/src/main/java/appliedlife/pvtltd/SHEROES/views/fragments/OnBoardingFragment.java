@@ -8,33 +8,27 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -47,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -58,22 +53,18 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.CURRENT_STATUS;
-import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.LOCATION;
-import static appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum.TELL_US_ABOUT;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.boardingTellUsFormDataRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by Ajit Kumar on 22-02-2017.
  */
 
-public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoardingView {
-    private static final String SCREEN_LABEL = "OnBoarding Tell Us Screen";
-    private final String TAG = LogUtils.makeLogTag(OnBoardingTellUsAboutFragment.class);
+public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
+    private static final String SCREEN_LABEL = "Onboarding Screen - Join Communities";
+    private final String TAG = LogUtils.makeLogTag(OnBoardingFragment.class);
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Inject
@@ -98,10 +89,12 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     private int mPageNo = AppConstants.ONE_CONSTANT;
     @Inject
     AppUtils mAppUtils;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,27 +110,27 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
         ButterKnife.bind(this, view);
         mOnBoardingPresenter.attachView(this);
         initializeAllOnBoarding();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ONBOARDING_CURRENT_STATUS));
         return view;
     }
+
     private void initializeAllOnBoarding() {
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ON_BOARDING_COMMUNITIES, AppConstants.NO_REACTION_CONSTANT, true);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mGridManager = new GridLayoutManager(getActivity(), 2);
         mRecyclerView.setLayoutManager(mGridManager);
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (OnBoardingActivity)getActivity());
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (OnBoardingActivity) getActivity());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mOnBoardingPresenter, mRecyclerView, mGridManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                ((OnBoardingActivity)getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
+                ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
 
             }
 
             @Override
             public void onShow() {
-                ((OnBoardingActivity)getActivity()). tvOnBoardingFinish.setVisibility(View.VISIBLE);
+                ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
 
             }
 
@@ -195,7 +188,7 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
     @Override
     public void showDataList(List<FeedDetail> feedDetailList) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(0, 0);
-        mProgressBar.setLayoutParams(params );
+        mProgressBar.setLayoutParams(params);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
@@ -228,13 +221,29 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
 
 
     @Override
-    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
-        if(communityFeedSolrObj.isMember())
-        {
-            ((OnBoardingActivity)getActivity()).isJoin=true;
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+        if (communityFeedSolrObj.isMember()) {
+            ((OnBoardingActivity) getActivity()).isJoinCount++;
+            ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
+            HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
+            AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
         }
         mAdapter.notifyItemChanged(communityFeedSolrObj.getItemPosition(), communityFeedSolrObj);
     }
+
+
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+        if (!communityFeedSolrObj.isMember()) {
+            if(((OnBoardingActivity) getActivity()).isJoinCount>0) {
+                ((OnBoardingActivity) getActivity()).isJoinCount--;
+            }
+            ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.LEAVE_COMMUNITY, AppConstants.EMPTY_STRING);
+            HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
+            AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
+        }
+        mAdapter.notifyItemChanged(communityFeedSolrObj.getItemPosition(), communityFeedSolrObj);
+    }
+
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
@@ -242,6 +251,13 @@ public class OnBoardingTellUsAboutFragment extends BaseFragment implements OnBoa
             mOnBoardingPresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj);
         }
     }
+
+    public void unJoinCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            mOnBoardingPresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj);
+        }
+    }
+
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;

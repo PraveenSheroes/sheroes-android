@@ -18,6 +18,7 @@ public interface OnBoardingView extends BaseMvpView {
     void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse);
     void getBoardingJobResponse(BoardingDataResponse boardingDataResponse);
     void showDataList(List<FeedDetail> feedDetailList);
-    void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj);
+    void joinResponse(CommunityFeedSolrObj communityFeedSolrObj);
+    void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj);
 }
 

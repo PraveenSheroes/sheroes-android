@@ -29,6 +29,7 @@
     <string name="ID_PROMPT_PASSWORD">Password</string>
     <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
+    <string name="ID_ERROR_EMAIL">Enter email address</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
     <string name="ID_ASKED">asked</string>
@@ -917,5 +918,7 @@
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
     <string name="ID_WELCOME_SHEROES">Welcome to Sheroes!</string>
     <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
-
+    <string name="ID_FIRST_WELCOME">Health Career Love</string>
+    <string name="ID_SECOND_WELCOME">Join Communities</string>
+    <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
 </resources>

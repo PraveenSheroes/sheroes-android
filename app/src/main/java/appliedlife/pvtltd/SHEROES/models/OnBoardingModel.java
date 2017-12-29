@@ -10,6 +10,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -146,5 +148,18 @@ public class OnBoardingModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+    public Observable<MemberListResponse> removeMember(RemoveMemberRequest removeMemberRequest){
+        LogUtils.error("Community Member list req: ",gson.toJson(removeMemberRequest));
 
+        return sheroesAppServiceApi.removeMember(removeMemberRequest)
+                .map(new Func1<MemberListResponse, MemberListResponse>() {
+                    @Override
+                    public MemberListResponse call(MemberListResponse memberListResponse) {
+                        LogUtils.error("Community Member list res: ",gson.toJson(memberListResponse));
+                        return memberListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

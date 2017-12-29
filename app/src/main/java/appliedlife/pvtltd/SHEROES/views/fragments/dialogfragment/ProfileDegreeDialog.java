@@ -52,7 +52,7 @@ import butterknife.OnClick;
  */
 
 public class ProfileDegreeDialog extends BaseDialogFragment implements OnBoardingView {
-    private final String TAG = LogUtils.makeLogTag(OnBoardingSearchDialogFragment.class);
+
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.rv_onboarding_search_list)
@@ -219,7 +219,6 @@ public class ProfileDegreeDialog extends BaseDialogFragment implements OnBoardin
                         mAdapter.setSheroesGenericListData(getAllDataDocuments);
                         break;
                     default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
 
                 }
                 mAdapter.notifyDataSetChanged();
@@ -239,7 +238,12 @@ public class ProfileDegreeDialog extends BaseDialogFragment implements OnBoardin
     }
 
     @Override
-    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
 

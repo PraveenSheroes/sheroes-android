@@ -322,9 +322,15 @@ public class ProfileOpportunityTypeFragment extends BaseFragment implements Base
     }
 
     @Override
-    public void joinUnJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
+
+    @Override
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
 
     @OnClick(R.id.tv_selected_skill1)
     void onTag1Click() {

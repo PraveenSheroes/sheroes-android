@@ -152,7 +152,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         AnalyticsManager.initializeMixpanel(getContext());
                         ((LoginActivity)getActivity()).onLoginAuthToken();
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
-                        trackEvent(Event.APP_LOGIN, properties);
+                        AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         AnalyticsManager.initializeMixpanel(getActivity());
                         break;
                     case AppConstants.FAILED:
@@ -233,6 +233,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
             cancel = true;
         }
         // Check for a valid email address.
+        if (!StringUtil.isNotNullOrEmptyString(email)) {
+            mEmailView.setError(getString(R.string.ID_ERROR_EMAIL));
+            focusView = mEmailView;
+            cancel = true;
+            return;
+        }
         if (!mAppUtils.checkEmail(email)) {
             mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             focusView = mEmailView;
@@ -362,8 +368,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
             mPasswordView.setSelection(mPasswordView.length());
         }
     }
-    @OnClick(R.id.iv_login_back)
-    public void backOnClick() {
-        ((LoginActivity) getActivity()).onBackPressed();
+    @OnClick(R.id.tv_login_back)
+    public void onBack()
+    {
+        ((LoginActivity)getActivity()).onBackPressed();
     }
 }

@@ -253,7 +253,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private boolean isSheUser = false;
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
-
+    private String mOnBoarding;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -422,9 +422,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
-            if (getIntent().getExtras().get(AppConstants.EVENT_ID) != null) {
-                mEventId = getIntent().getExtras().getLong(AppConstants.EVENT_ID);
+            if (getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES) != null) {
+                mOnBoarding = getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES);
             }
+
         }
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         if (!isSheUser) {
@@ -601,7 +602,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
         ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
