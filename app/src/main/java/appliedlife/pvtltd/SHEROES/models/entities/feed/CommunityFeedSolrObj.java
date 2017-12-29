@@ -9,7 +9,6 @@ import org.parceler.Parcel;
  */
 @Parcel(analyze = {CommunityFeedSolrObj.class,FeedDetail.class})
 public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
-    public  boolean isJoinCommunity;
     @SerializedName("community_type_s")
     public String communityType;
 
@@ -102,11 +101,4 @@ public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
         return super.clone();
     }
 
-    public boolean isJoinCommunity() {
-        return isJoinCommunity;
-    }
-
-    public void setJoinCommunity(boolean joinCommunity) {
-        isJoinCommunity = joinCommunity;
-    }
 }

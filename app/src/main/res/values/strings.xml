@@ -679,7 +679,7 @@
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">Please enter the email ID associated with your SHEROES account</string>
 
     <string name="ID_RESET_PASSWORD_SUCCESS_LINK_TEXT">Click here to login</string>
-    <string name="ID_FORGOT_PASSWORD_TEXT">Forgot Password?</string>
+    <string name="ID_FORGOT_PASSWORD_TEXT">Forgot Password ?</string>
     <string name="ID_ERROR_NO_EMAIL">Please enter any email ID.</string>
 
 
@@ -694,7 +694,7 @@
     <string name="ID_VIEW_ARTICLE">view article</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
-    <string name="ID_LOGIN_WITH_EMAIL">Login with email</string>
+    <string name="ID_LOGIN_WITH_EMAIL">Login with Email</string>
     <string name="ID_LOGIN_TEXT">login</string>
     <string name="ID_ONBOARDING_WELCOME">onboarding- welcome screen</string>
     <string name="ID_ONBOARDING_LETS_START_TALKING">onboarding- Let’s Start Talking</string>
@@ -916,7 +916,7 @@
     <string name="ID_ANSWERS">Answered questions in last 7 days</string>
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
-    <string name="ID_WELCOME_SHEROES">Welcome to Sheroes!</string>
+    <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
     <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
     <string name="ID_SECOND_WELCOME">Join Communities</string>

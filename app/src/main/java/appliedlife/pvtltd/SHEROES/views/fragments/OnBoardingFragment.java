@@ -124,13 +124,13 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mOnBoardingPresenter, mRecyclerView, mGridManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
+               // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
 
             }
 
             @Override
             public void onShow() {
-                ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
+               // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
 
             }
 
