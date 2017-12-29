@@ -6,8 +6,8 @@
     android:layout_marginTop="@dimen/dp_size_8"
     android:layout_marginLeft="@dimen/dp_size_4"
     android:layout_marginRight="@dimen/dp_size_4"
-    android:elevation="@dimen/dp_size_10"
-    app:cardElevation="@dimen/dp_size_10"
+    android:elevation="@dimen/dp_size_5"
+    app:cardElevation="@dimen/dp_size_5"
     app:cardCornerRadius="@dimen/dp_size_6"
     app:layout_anchorGravity="bottom|center">
 

@@ -85,7 +85,7 @@ public class OnBoardingActivity extends BaseActivity {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
-       setPagerAndLayouts();
+        setPagerAndLayouts();
         DrawerViewHolder.selectedOptionName = null;
     }
 
@@ -137,7 +137,7 @@ public class OnBoardingActivity extends BaseActivity {
                 case R.id.tv_boarding_communities_join:
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingFragment.class.getName());
                     if (AppUtils.isFragmentUIActive(fragment)) {
-                        if(communityFeedSolrObj.isJoinCommunity)
+                        if(communityFeedSolrObj.isMember())
                         {
                             ((OnBoardingFragment) fragment).unJoinCommunity(communityFeedSolrObj);
                         }else

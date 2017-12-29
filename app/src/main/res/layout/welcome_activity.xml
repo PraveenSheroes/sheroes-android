@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_30"
+                android:layout_marginTop="@dimen/dp_size_32"
                 android:gravity="center">
 
                 <ImageView
@@ -44,14 +44,14 @@
                     android:layout_width="@dimen/dp_size_10"
                     android:layout_height="@dimen/dp_size_10"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginLeft="@dimen/dp_size_16"
                     android:src="@drawable/ic_circle_w" />
 
                 <ImageView
                     android:id="@+id/iv_welcome_third"
                     android:layout_width="@dimen/dp_size_10"
                     android:layout_height="@dimen/dp_size_10"
-                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginLeft="@dimen/dp_size_16"
                     android:src="@drawable/ic_circle_w" />
             </LinearLayout>
 
@@ -59,15 +59,15 @@
                 android:id="@+id/card_view_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_22"
-                android:elevation="@dimen/dp_size_50"
-                app:cardElevation="@dimen/dp_size_50">
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_size_24"
+                android:elevation="@dimen/dp_size_5"
+                android:gravity="center"
+                app:cardElevation="@dimen/dp_size_5">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_50"
-                    android:layout_marginRight="@dimen/dp_size_50"
                     android:orientation="vertical">
 
                     <TextView
@@ -77,6 +77,8 @@
                         android:layout_marginRight="@dimen/dp_size_10"
                         android:layout_marginTop="@dimen/dp_size_10"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:text="@string/ID_INFORMATION_WARNING"
                         android:textColor="@color/recent_post_comment"
                         android:textSize="@dimen/sp_size_14" />
@@ -85,12 +87,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_size_16"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <Button
                             android:id="@+id/click_to_join_fb_signup"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="124dp"
+                            android:layout_height="36dp"
                             android:background="@drawable/ic_facebook"
                             android:fontFamily="@string/ID_ROBOTO_REGULAR"
                             android:paddingLeft="@dimen/dp_size_48"
@@ -102,8 +106,8 @@
 
                         <Button
                             android:id="@+id/btn_login_google"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="124dp"
+                            android:layout_height="36dp"
                             android:layout_marginLeft="@dimen/dp_size_16"
                             android:background="@drawable/ic_google_plus"
                             android:clickable="true"
@@ -119,10 +123,10 @@
                         android:id="@+id/tv_other_login_option"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_16"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:gravity="center"
                         android:padding="@dimen/dp_size_10"
-                        android:layout_marginTop="@dimen/dp_size_16"
                         android:text="@string/ID_LOGIN_WITH_EMAIL"
                         android:textColor="@color/email"
                         android:textSize="@dimen/sp_size_14" />

@@ -432,19 +432,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                currentPage = 0;
                 break;
             case AppConstants.ONE_CONSTANT:
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
-                currentPage = 0;
                 break;
             case AppConstants.TWO_CONSTANT:
                 ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
                 ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                currentPage = 0;
                 break;
         }
     }
