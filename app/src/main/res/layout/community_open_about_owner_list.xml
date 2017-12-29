@@ -8,7 +8,7 @@
         android:layout_height="40dp"
         android:layout_marginLeft="@dimen/dp_size_15"
         android:layout_marginTop="10dp"
-        android:src="@drawable/ic_anonomous"
+        android:src="@drawable/ic_anonymous_female_new_44dp"
         />
 
     <TextView

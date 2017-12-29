@@ -11,15 +11,12 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -51,6 +48,8 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
     LinearLayout liMentor;
     @Bind(R.id.card_view_mentor)
     CardView cvMentor;
+    @Bind(R.id.li_can_help)
+    LinearLayout liCanHelpSecond;
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
     @Bind(R.id.tv_mentor_follow)
@@ -105,6 +104,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserId() == dataItem.getEntityOrParticipantId()) {
                 tvMentorFollow.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                tvMentorFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                 tvMentorFollow.setText(mContext.getString(R.string.ID_EDIT_PROFILE));
                 tvMentorAskQuestion.setText(mContext.getString(R.string.ID_SEE_INSIGHT));
             } else {
@@ -158,16 +158,10 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
             tvFeedMentorFirstProfession.setText(dataItem.getCanHelpIns().get(0));
             if (dataItem.getCanHelpIns().size() > 1) {
                 tvFeedMentorSecondProfession.setText(dataItem.getCanHelpIns().get(1));
-                tvFeedMentorSecondProfession.setVisibility(View.VISIBLE);
+                liCanHelpSecond.setVisibility(View.VISIBLE);
             } else {
-                tvFeedMentorSecondProfession.setVisibility(View.INVISIBLE);
+                liCanHelpSecond.setVisibility(View.GONE);
             }
-           /* if(dataItem.getCanHelpIns().size()>2) {
-                tvFeedMentorThirdProfession.setText(dataItem.getCanHelpIns().get(2));
-                tvFeedMentorThirdProfession.setVisibility(View.VISIBLE);
-            }else {
-                tvFeedMentorThirdProfession.setVisibility(View.GONE);
-            }*/
         } else {
             liProffessions.setVisibility(View.INVISIBLE);
         }

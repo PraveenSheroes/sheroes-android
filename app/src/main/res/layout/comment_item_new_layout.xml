@@ -90,10 +90,9 @@
         android:id="@+id/tv_user_comment_list_menu"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignBottom="@id/comment_like_count"
+        android:layout_alignBottom="@id/like"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_list_user_comment"
-        android:layout_toRightOf="@id/comment_like"
         android:paddingRight="16dp"
         android:src="@drawable/vector_menu_horizontal" />
 

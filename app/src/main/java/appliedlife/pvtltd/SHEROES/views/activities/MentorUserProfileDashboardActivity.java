@@ -66,7 +66,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
@@ -85,7 +84,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class MentorUserProfileDashboardActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class MentorUserProfileDashboardActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
     private final String TAG = LogUtils.makeLogTag(MentorUserProfileDashboardActivity.class);
     private static final String SCREEN_LABEL = "Public Profile Growth Screen";
     @Bind(R.id.iv_mentor_full_view_icon)
@@ -464,41 +463,12 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         super.feedCardsHandled(view, baseResponse);
     }
 
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mUserPostForCommunity = (UserPostSolrObj) feedDetail;
-        onBackPressed();
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (mFragmentOpen.isCommentList()) {
-            CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-            if (commentReactionFragment != null) {
-                commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            } else {
-                mFragmentOpen.setCommentList(false);
-                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                if (fragment != null && fragment instanceof CommunitiesDetailFragment)
-                    ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        } else {
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
             if (fragment instanceof CommunitiesDetailFragment)
                 ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-        }
-    }
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mUserPostForCommunity = (UserPostSolrObj) feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.openCommentReactionFragment(mUserPostForCommunity);
-        }
     }
 
     @Override
@@ -590,22 +560,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         {
             case FOLLOW_UNFOLLOW:
                 tvMentorDashBoardFollow.setEnabled(true);
-                UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-               /* if(tvMentorDashBoardFollow.getText().toString().equalsIgnoreCase(getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING)))
-                {
-                    if(!userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                            mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()-1);
-                    }
-                }else
-                {
-                    if(userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                        mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()+1);
-
-                    }
-                }*/
-
                 followUnFollowMentor();
                 break;
             default:

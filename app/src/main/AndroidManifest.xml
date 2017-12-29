@@ -220,10 +220,6 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
