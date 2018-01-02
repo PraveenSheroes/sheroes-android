@@ -34,6 +34,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
@@ -46,5 +54,32 @@
         android:layout_gravity="bottom|end"
         app:srcCompat="@drawable/ic_pencil"
         android:tint="@color/white"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
 
+        <FrameLayout
+            android:id="@+id/bottom_bar"
+            style="?android:buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:clickable="true">
+
+            <Button
+                android:id="@+id/btn_bottom_bar"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:text="@string/ID_JOIN"
+                android:textColor="@color/white"
+                android:visibility="visible" />
+        </FrameLayout>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

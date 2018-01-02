@@ -258,6 +258,8 @@ public class AppConstants {
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
     public static final String JOB_URL = "https://sheroes.in/jobs";
     public static final String JOB_URL_COM = "https://sheroes.com/jobs";
+    public static final String COMMUNITY_POST_URL_COM = "https://sheroes.com/community-post";
+    public static final String COMMUNITY_POST_URL = "https://sheroes.in/community-post";
     public static final String CHAMPION_URL = "https://sheroes.in/champions";
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
