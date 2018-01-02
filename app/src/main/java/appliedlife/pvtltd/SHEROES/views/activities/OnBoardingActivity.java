@@ -104,7 +104,7 @@ public class OnBoardingActivity extends BaseActivity {
     public void onBoardingFragment() {
         tvNameUser.setText(userPreference.get().getUserSummary().getFirstName());
         String description = getString(R.string.ID_BOARDING_COMMUNITIES);
-
+        isJoinCount=0;
         SpannableString spannableString = new SpannableString(description);
         if (StringUtil.isNotNullOrEmptyString(description)) {
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 27, 42, 0);
