@@ -76,7 +76,6 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-            ((OnBoardingActivity)mContext).isJoinCount=1;
         }
     }
 
