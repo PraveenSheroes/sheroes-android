@@ -7,11 +7,11 @@
 
     <ImageView
         android:id="@+id/iv_welcome_screen"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_above="@+id/tv_welcome_text"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_32"
-        android:adjustViewBounds="true" />
+         />
     <TextView
         android:id="@+id/tv_welcome_text"
         android:layout_width="match_parent"

@@ -151,7 +151,7 @@ public class OnBoardingActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
+            finish();
             return;
         }
         doubleBackToExitPressedOnce = true;

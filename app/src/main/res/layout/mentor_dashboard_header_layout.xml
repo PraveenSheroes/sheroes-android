@@ -163,6 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_mentor_name"
         android:weightSum="@integer/int_value_for_line_1"
+        android:layout_marginLeft="@dimen/dp_size_10"
         android:layout_marginTop="@dimen/dp_size_10">
 
         <TextView

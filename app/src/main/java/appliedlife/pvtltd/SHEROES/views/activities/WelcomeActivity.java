@@ -139,7 +139,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     AppUtils appUtils;
     public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
-    private boolean isFirstTimeUser;
+    private boolean isFirstTimeUser=false;
     private Handler mHandler;
     private Runnable mRunnable;
     private CallbackManager callbackManager;
@@ -557,7 +557,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public boolean shouldTrackScreen() {
-        return true;
+        if(isFirstTimeUser)
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
     }
 
 
