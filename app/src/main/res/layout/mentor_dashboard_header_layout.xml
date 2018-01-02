@@ -54,7 +54,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:textStyle="bold"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_18" />
 
@@ -80,7 +81,8 @@
                     android:id="@+id/tv_mentor_answer_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:textStyle="bold"
                     android:layout_gravity="center"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_18" />
@@ -107,7 +109,8 @@
                     android:id="@+id/tv_mentor_follower_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_BOLD"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:textStyle="bold"
                     android:layout_gravity="center"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_18" />
@@ -151,7 +154,6 @@
         android:layout_marginTop="@dimen/dp_size_16"
         android:layout_below="@+id/linearLayout"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:textAllCaps="true"
         android:textColor="@color/feed_article_label"
         android:textSize="@dimen/sp_size_18" />
 

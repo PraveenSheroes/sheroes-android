@@ -71,7 +71,7 @@ public class AppConstants {
     public static final String OWNER_SUB_TYPE = "O";
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
     public static final String FEED_SCREEN = "feed";
-    public static final String CURRENT_STATUS_SCREEN = "current_status";
+    public static final String COMMUNITIES_ONBOARDING_SCREEN = "community_onboarding";
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
     public static final String CITY_NAME_DEFAULT = "Delhi";

@@ -16,20 +16,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:layout_gravity="bottom"
             android:orientation="vertical">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/welcome_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginTop="@dimen/dp_size_16"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dp_size_32"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_32"
+                android:layout_marginBottom="@dimen/dp_size_24"
                 android:gravity="center">
 
                 <ImageView
@@ -59,8 +61,7 @@
                 android:id="@+id/card_view_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_size_24"
+                android:layout_gravity="bottom"
                 android:elevation="@dimen/dp_size_5"
                 android:gravity="center"
                 app:cardElevation="@dimen/dp_size_5">
@@ -134,11 +135,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp_size_15"
                         android:layout_marginLeft="@dimen/dp_size_10"
                         android:layout_marginRight="@dimen/dp_size_10"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:gravity="center"
+                        android:layout_marginBottom="@dimen/dp_size_16"
                         android:text="@string/ID_ONLY_FOR_EXISTING_USER"
                         android:textColor="@color/recent_post_comment"
                         android:textSize="@dimen/sp_size_14" />

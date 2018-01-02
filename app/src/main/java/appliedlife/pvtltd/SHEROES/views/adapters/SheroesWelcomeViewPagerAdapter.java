@@ -92,7 +92,7 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                 AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, propertiesSecond);
                 break;
             case AppConstants.TWO_CONSTANT:
-                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_SECOND_WELCOME));
+                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_THIRD_WELCOME));
                 SpannableString spannableThird = new SpannableString(text);
                 if (StringUtil.isNotNullOrEmptyString(text)) {
                     spannableThird.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.feed_article_label)), 0, 18, 0);

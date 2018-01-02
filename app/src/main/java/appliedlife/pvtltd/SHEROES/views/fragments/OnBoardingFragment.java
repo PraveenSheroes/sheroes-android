@@ -223,7 +223,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     @Override
     public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (communityFeedSolrObj.isMember()) {
-            ((OnBoardingActivity) getActivity()).isJoinCount++;
+                ((OnBoardingActivity)getActivity()).isJoinCount++;
             ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
             AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
@@ -234,8 +234,9 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (!communityFeedSolrObj.isMember()) {
-            if(((OnBoardingActivity) getActivity()).isJoinCount>0) {
-                ((OnBoardingActivity) getActivity()).isJoinCount--;
+            if(((OnBoardingActivity)getActivity()).isJoinCount>0)
+            {
+                ((OnBoardingActivity)getActivity()).isJoinCount--;
             }
             ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.LEAVE_COMMUNITY, AppConstants.EMPTY_STRING);
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();

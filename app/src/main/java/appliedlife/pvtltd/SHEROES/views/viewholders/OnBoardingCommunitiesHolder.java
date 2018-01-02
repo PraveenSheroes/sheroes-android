@@ -15,8 +15,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -74,6 +76,7 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            ((OnBoardingActivity)mContext).isJoinCount=1;
         }
     }
 
