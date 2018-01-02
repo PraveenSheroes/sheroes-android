@@ -105,7 +105,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  */
 
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
-    private static final String SCREEN_LABEL = "Intro Screen";
+    public static final String SCREEN_LABEL = "Intro Screen";
     private final String TAG = LogUtils.makeLogTag(WelcomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
