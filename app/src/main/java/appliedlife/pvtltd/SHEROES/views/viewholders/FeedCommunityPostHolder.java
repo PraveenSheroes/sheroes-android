@@ -978,8 +978,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_reaction)
     public void userReactionClick() {
-        if ((Boolean) tvFeedCommunityPostUserReaction.getTag()) {
-            userReactionWithouLongPress();
+        if(viewInterface instanceof FeedItemCallback){
+            if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                ((FeedItemCallback)viewInterface).onUserPostUnLiked(mUserPostObj);
+            }else {
+                mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                ((FeedItemCallback)viewInterface).onUserPostLiked(mUserPostObj);
+            }
+            likeCommentOps();
+        }else {
+            if ((Boolean) tvFeedCommunityPostUserReaction.getTag()) {
+                userReactionWithouLongPress();
+            }
         }
     }
 
@@ -1021,7 +1036,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.iv_feed_community_post_circle_icon)
     public void onFeedCommunityPostCircleIconClick() {
         if (mUserPostObj.isAuthorMentor()) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }else {
+                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }
         }
     }
 
@@ -1034,8 +1053,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             public void onClick(View textView) {
 
                 if (mUserPostObj.isAuthorMentor()) {
-                    viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                }
+                    if(viewInterface instanceof FeedItemCallback){
+                        ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }
+                    if(viewInterface instanceof FeedItemCallback){
+                        ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }else {
+                        viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+                    }}
             }
 
             @Override
@@ -1059,7 +1085,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostCardTitle);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onCommunityTitleClicked(mUserPostObj);
+                }else {
+                    viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostCardTitle);
+                }
             }
 
             @Override
@@ -1101,7 +1131,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
                 if (mUserPostObj.isAuthorMentor()) {
-                    viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    if(viewInterface instanceof FeedItemCallback){
+                        ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }else {
+                        viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }
                 }
             }
 
@@ -1202,10 +1236,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 lastComment.likeCount++;
             }
             invalidateCommentLike(lastComment);
-            if (!lastComment.isLiked) {
-                viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            } else {
-                viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            if(viewInterface instanceof FeedItemCallback){
+                if (lastComment.isLiked) {
+                    ((FeedItemCallback)viewInterface).userCommentLikeRequest(mUserPostObj, true, getAdapterPosition());
+                } else {
+                    ((FeedItemCallback)viewInterface).userCommentLikeRequest(mUserPostObj, false, getAdapterPosition());
+                }
+            }else {
+                if (!lastComment.isLiked) {
+                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+                } else {
+                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+                }
             }
 
         }

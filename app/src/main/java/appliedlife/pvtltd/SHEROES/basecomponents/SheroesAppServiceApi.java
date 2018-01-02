@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -103,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -346,4 +348,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/add/winner/address")
     Observable<BaseResponse> updateAddress(@Body Address address);
+
+    @POST()
+    Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 }

@@ -1,7 +1,11 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -17,13 +21,14 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -31,22 +36,36 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -57,6 +76,7 @@ import butterknife.ButterKnife;
 
 public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
     public static final String SCREEN_LABEL = "Feed Fragment";
+    public static final String ENDPOINT = "ENDPOINT";
 
     @Inject
     AppUtils mAppUtils;
@@ -76,6 +96,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     // endregion
 
     private FeedAdapter mAdapter;
+    EventDetailDialogFragment eventDetailDialogFragment;
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,6 +109,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         mFeedPresenter.attachView(this);
 
+        String endpointUrl = "";
+        if (null != getArguments()) {
+            endpointUrl = getArguments().getString(ENDPOINT);
+        }
+        if(CommonUtil.isNotEmpty(endpointUrl)){
+            mFeedPresenter.setEndpointUrl(endpointUrl);
+        }else {
+
+        }
         // Initialize recycler view
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
@@ -99,12 +130,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-               // mNewsfeedPresenter.fetchFeed(NewsfeedPresenterImpl.NORMAL_REQUEST);
+                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.accent);
 
-        fetchFeed();
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if(mFeedPresenter.isFeedLoading()){
+                    return;
+                }
+                mAdapter.feedStartedLoading();
+                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST);
+            }
+        };
+        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
         return view;
     }
 
@@ -120,6 +162,28 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setData(int position, FeedDetail feedDetail) {
+        mAdapter.setData(position, feedDetail);
+    }
+
+    @Override
+    public void invalidateItem(FeedDetail feedDetail) {
+        if(getActivity() instanceof CommunityDetailActivity){
+            ((CommunityDetailActivity)getActivity()).invalidateItem(feedDetail);
+        }
+    }
+
+    @Override
+    public void notifyAllItemRemoved(FeedDetail feedDetail) {
+        ((CommunityDetailActivity)getActivity()).notifyAllItemRemoved(feedDetail);
+    }
+
+    @Override
+    public void addAllFeed(List<FeedDetail> feedList) {
+        mAdapter.addAll(feedList);
     }
 
     @Override
@@ -228,7 +292,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
-                            mFeedPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()));
+                            mFeedPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
                             return true;
                         default:
                             return false;
@@ -281,6 +345,178 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         LikeListBottomSheetFragment.showDialog((AppCompatActivity)getActivity(), getScreenName(), userPostObj.getEntityOrParticipantId());
     }
 
+    @Override
+    public void onUserPostLiked(UserPostSolrObj userPostObj) {
+        mFeedPresenter.getPostLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), userPostObj);
+    }
+
+    @Override
+    public void onUserPostUnLiked(UserPostSolrObj userPostObj) {
+        mFeedPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), userPostObj);
+    }
+
+    @Override
+    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
+        long userId = userPostObj.getCreatedBy();
+        int position = userPostObj.getItemPosition();
+        Intent intent = new Intent(getActivity(), MentorUserProfileDashboardActivity.class);
+        Bundle bundle = new Bundle();
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    @Override
+    public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
+        if(userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
+            if(null!=userPostObj) {
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                    if(StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
+                        Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(url);
+                        startActivity(intent);
+                    }
+                }
+            }
+        }else {
+            if (userPostObj.getCommunityTypeId() == 0) {
+                ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
+
+            }else {
+                Intent intentFromCommunityPost = new Intent(getActivity(), CommunitiesDetailActivity.class);
+                Bundle bundleFromPost = new Bundle();
+                bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
+                Parcelable parcelablesss = Parcels.wrap(userPostObj);
+                bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
+                bundleFromPost.putLong(AppConstants.COMMUNITY_ID, userPostObj.getCommunityId());
+                bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+                intentFromCommunityPost.putExtras(bundleFromPost);
+                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+            }
+        }
+    }
+
+    @Override
+    public void userCommentLikeRequest(UserPostSolrObj userPostSolrObj, boolean isLikedAction, int adapterPosition) {
+        if(CommonUtil.isEmpty(userPostSolrObj.getLastComments())){
+            return;
+        }
+        Comment comment = userPostSolrObj.getLastComments().get(0);
+        if(isLikedAction){
+            mFeedPresenter.getCommentLikesFromPresenter(mAppUtils.likeRequestBuilder(comment.getEntityId(), AppConstants.HEART_REACTION_CONSTANT, comment.getCommentsId()), comment, userPostSolrObj);
+        }else {
+            mFeedPresenter.getCommentUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(comment.getEntityId(), comment.getCommentsId()), comment, userPostSolrObj);
+        }
+    }
+
+    @Override
+    public void onJobPostClicked(JobFeedSolrObj jobFeedObj) {
+        Intent intentJob = new Intent(getActivity(), JobDetailActivity.class);
+        Parcelable parcelable = Parcels.wrap(jobFeedObj);
+        intentJob.putExtra(AppConstants.JOB_DETAIL, parcelable);
+        startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
+    }
+
+    @Override
+    public void onChallengeClicked(Contest contest) {
+        ContestActivity.navigateTo(getActivity(), contest, SCREEN_LABEL, null, 0, 0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
+    }
+
+    @Override
+    public void onChallengePostShared(BaseResponse baseResponse) {
+        String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
+        String sourceId = "";
+        if (baseResponse instanceof UserPostSolrObj) {
+            sourceId = Long.toString(((UserPostSolrObj) baseResponse).getUserPostSourceEntityId());
+        } else if (baseResponse instanceof ChallengeSolrObj) {
+            sourceId = Long.toString(((ChallengeSolrObj) baseResponse).getIdOfEntityOrParticipant());
+        }
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(sourceId)
+                        .build();
+        trackEvent(Event.CHALLENGE_SHARED, properties);
+        ShareBottomSheetFragment.showDialog((AppCompatActivity)getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), getScreenName(), true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @Override
+    public void onEventPostClicked(UserPostSolrObj userPostSolrObj) {
+        eventDetailDialogFragment = (EventDetailDialogFragment) getActivity().getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
+        if (eventDetailDialogFragment == null) {
+            eventDetailDialogFragment = new EventDetailDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong(AppConstants.EVENT_ID, 0);
+            Parcelable parcelable = Parcels.wrap(userPostSolrObj);
+            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
+            eventDetailDialogFragment.setArguments(bundle);
+        }
+        if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !getActivity().isFinishing() && !getActivity().isDestroyed()) {
+            eventDetailDialogFragment.show(getActivity().getFragmentManager(), EventDetailDialogFragment.class.getName());
+        }
+    }
+
+    @Override
+    public void onEventIntrestedClicked(UserPostSolrObj userPostSolrObj) {
+            mFeedPresenter.getEventIntrestedFromPresenter(mAppUtils.likeRequestBuilder(userPostSolrObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT), userPostSolrObj);
+    }
+
+    @Override
+    public void onEventNotIntrestedClicked(UserPostSolrObj userPostSolrObj) {
+        mFeedPresenter.getEventNotIntresetedFromPresenter(mAppUtils.unLikeRequestBuilder(userPostSolrObj.getEntityOrParticipantId()), userPostSolrObj);
+    }
+
+    @Override
+    public void onEventGoingClicked(UserPostSolrObj userPostSolrObj) {
+        mFeedPresenter.postBookmarked(mAppUtils.bookMarkRequestBuilder(userPostSolrObj.getEntityOrParticipantId()), userPostSolrObj.isBookmarked());
+    }
+
+    @Override
+    public void onOrgTitleClicked(UserPostSolrObj userPostObj) {
+        if(null!=userPostObj) {
+                if(StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
+                    Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(url);
+                    startActivity(intent);
+                }
+            }
+    }
+
+    @Override
+    public void startProgressBar() {
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mSwipeRefresh != null) {
+                    mSwipeRefresh.setRefreshing(true);
+                    mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mEndlessRecyclerViewScrollListener.finishLoading();
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.setRefreshing(false);
+        mAdapter.feedFinishedLoading();
+    }
+
     private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
         userPostSolrObj.setIsEditOrDelete(AppConstants.TWO_CONSTANT);
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
@@ -289,5 +525,35 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
         userPostSolrObj.setIsEditOrDelete(AppConstants.ONE_CONSTANT);
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+    }
+
+    public void updateItem(FeedDetail feedDetail) {
+        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
+        mAdapter.setData(position, feedDetail);
+    }
+
+    public void removeItem(FeedDetail feedDetail) {
+        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
+        mAdapter.removeItem(position);
+    }
+
+    public int findPositionById(long id) {
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return -1;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void refreshAllList() {
+
     }
 }

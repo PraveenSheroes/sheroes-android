@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -186,12 +187,20 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.card_challenge)
     public void onChallengeClicked(){
-        viewInterface.contestOnClick(mContest, mCardChallenge);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onChallengeClicked(mContest);
+        }else {
+            viewInterface.contestOnClick(mContest, mCardChallenge);
+        }
     }
 
     @OnClick(R.id.share)
     public void onShareClick(){
-        viewInterface.handleOnClick(mFeedDetail, mShare);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onChallengePostShared(mFeedDetail);
+        }else {
+            viewInterface.handleOnClick(mFeedDetail, mShare);
+        }
     }
 
     @Override

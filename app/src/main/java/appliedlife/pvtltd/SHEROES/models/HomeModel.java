@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesRespon
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -88,6 +89,19 @@ public class HomeModel {
                     @Override
                     public MentorFollowUnfollowResponse call(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<FeedResponsePojo> getCommunityFeedFromModel(CommunityFeedRequestPojo communityFeedRequestPojo, String endpoint) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(communityFeedRequestPojo));
+        return sheroesAppServiceApi.getCommunityFeed(endpoint, communityFeedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())

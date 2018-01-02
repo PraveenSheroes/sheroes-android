@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -32,14 +34,23 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityDetailPresenterImpl;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -47,6 +58,7 @@ import butterknife.ButterKnife;
 
 public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView{
     public static final String SCREEN_LABEL = "Community Detail Activity";
+
     public enum TabType {
         NAVTIVE("native"),
         WEB("web"),
@@ -83,6 +95,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private CommunityFeedSolrObj mCommunityFeedSolrObj;
     private List<Fragment> mTabFragments = new ArrayList<>();
+    private Adapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,8 +122,68 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         setupTabLayout();
         }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode){
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
+                            .show();
+                   refreshAllFragment();
+                    break;
+
+                case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
+                    if (null != data && null != data.getExtras()) {
+                        JobFeedSolrObj jobFeedSolrObj = null;
+                        jobFeedSolrObj = (JobFeedSolrObj) Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+                        invalidateItem(jobFeedSolrObj);
+                    }
+                    break;
+
+                case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                    if (resultCode == Activity.RESULT_OK) {
+                       refreshAllFragment();
+                    }
+                    break;
+/*
+                case AppConstants.REQUEST_CODE_FOR_ADDRESS:
+                    Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
+                            .show();
+                    mContest.mWinnerAddress = "not empty";
+                    mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
+                    mContestInfoFragment.setContest(mContest);
+                    mHomeFragment.onRefreshClick();
+                    invalidateBottomBar(FRAGMENT_WINNER);
+                    Intent intentContest = new Intent();
+                    Parcelable parcelableContest = Parcels.wrap(mContest);
+                    intentContest.putExtra(Contest.CONTEST_OBJ, parcelableContest);
+                    setResult(RESULT_OK, intentContest);
+                    break;*/
+
+                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    UserPostSolrObj userPostSolrObj = null;
+                        Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        if (parcelableUserPost != null) {
+                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                            isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                        }
+                        if(userPostSolrObj == null) {
+                            break;
+                        }
+                        if(isPostDeleted){
+                         notifyAllItemRemoved(userPostSolrObj);
+                        }else {
+                            invalidateItem(userPostSolrObj);
+                        }
+                    }
+            }
+    }
+
     private void setupTabLayout() {
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -151,27 +224,28 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
+        mAdapter = new Adapter(getSupportFragmentManager());
         if(!CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)){
             List<CommunityTab> communityTabs = new ArrayList<>();
             communityTabs = mCommunityFeedSolrObj.communityTabs;
             for (CommunityTab communityTab : communityTabs){
                 if(communityTab.type.equalsIgnoreCase(TabType.NAVTIVE.getName())){
                     FeedFragment feedFragment = new FeedFragment();
-                    adapter.addFragment(feedFragment, communityTab.title);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FeedFragment.ENDPOINT, communityTab.dataUrl);
+                    feedFragment.setArguments(bundle);
+                    mAdapter.addFragment(feedFragment, communityTab.title);
                     mTabFragments.add(feedFragment);
                 }
                 if(communityTab.type.equalsIgnoreCase(TabType.HTML.getName())){
-                    communityTab.dataUrl = "https://sheroes.com/articles";
                     NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(null, communityTab.dataHtml, "");
-                    adapter.addFragment(webViewFragment, communityTab.title);
+                    mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }
 
                 if(communityTab.type.equalsIgnoreCase(TabType.WEB.getName())){
-                    communityTab.dataUrl = "https://sheroes.com/articles";
-                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(null, communityTab.dataUrl, "");
-                    adapter.addFragment(webViewFragment, communityTab.title);
+                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "");
+                    mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }
             }
@@ -210,7 +284,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         }*/
 
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(4);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -275,6 +349,33 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     }
 
+    public void invalidateItem(FeedDetail feedDetail) {
+        for(int i = 0 ; i < mAdapter.getCount(); i++){
+            Fragment fragment = mAdapter.getItem(i);
+            if(fragment instanceof FeedFragment){
+                ((FeedFragment)fragment).updateItem(feedDetail);
+            }
+        }
+    }
+
+    public void notifyAllItemRemoved(FeedDetail feedDetail) {
+        for(int i = 0 ; i < mAdapter.getCount(); i++){
+            Fragment fragment = mAdapter.getItem(i);
+            if(fragment instanceof FeedFragment){
+                ((FeedFragment)fragment).removeItem(feedDetail);
+            }
+        }
+    }
+
+    private void refreshAllFragment() {
+        for(int i = 0 ; i < mAdapter.getCount(); i++){
+            Fragment fragment = mAdapter.getItem(i);
+            if(fragment instanceof FeedFragment){
+                ((FeedFragment)fragment).refreshAllList();
+            }
+        }
+    }
+
     public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj communityFeedSolrObj, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, CommunityDetailActivity.class);
         Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
@@ -313,5 +414,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
         }
+    }
+
+    @OnClick(R.id.fab)
+    public void onFabClicked() {
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
     }
 }

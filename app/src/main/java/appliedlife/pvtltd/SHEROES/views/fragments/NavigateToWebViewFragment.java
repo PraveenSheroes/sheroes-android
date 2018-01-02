@@ -95,7 +95,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
                     if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
-                        String webUrl = getResources().getString(R.string.PLACEHOLDER_WEBPAGE_URL, mWebUrl, token); //append token with url
+                        String webUrl = mWebUrl;
                         LogUtils.info(TAG, "#######WebPage Url*****" + webUrl);
                         webPagesView.loadUrl(webUrl);
                     }

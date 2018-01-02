@@ -17,9 +17,13 @@ public class FeedResponsePojo extends BaseResponse {
     @SerializedName("solr_ignore_featured_docs")
     @Expose
     private List<FeedDetail> featuredDocs;
+
     @SerializedName("docs")
     @Expose
     private List<FeedDetail> feedDetails = null;
+
+    @SerializedName("next_token")
+    private String nextToken;
 
     public List<FeedDetail> getFeaturedDocs() {
         return featuredDocs;
@@ -35,5 +39,13 @@ public class FeedResponsePojo extends BaseResponse {
 
     public void setFeedDetails(List<FeedDetail> feedDetails) {
         this.feedDetails = feedDetails;
+    }
+
+    public String getNextToken() {
+        return nextToken;
+    }
+
+    public void setNextToken(String nextToken) {
+        this.nextToken = nextToken;
     }
 }

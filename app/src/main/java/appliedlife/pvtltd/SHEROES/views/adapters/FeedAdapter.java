@@ -13,6 +13,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
@@ -255,6 +256,26 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     //region Public methods
     public void showToolTip() {
         notifyDataSetChanged();
+    }
+
+    public void setData(int position, FeedDetail feedDetail) {
+        mFeedDetailList.set(position, feedDetail);
+        notifyItemChanged(position);
+    }
+
+    public void removeItem(int position) {
+        mFeedDetailList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public List<FeedDetail> getDataList(){
+        return mFeedDetailList;
+    }
+
+    public void addAll(List<FeedDetail> feedList) {
+        int startPosition = mFeedDetailList.size() - 1;
+        mFeedDetailList.addAll(startPosition, feedList);
+        notifyItemRangeInserted(startPosition, mFeedDetailList.size() -1);
     }
     //endregion
 
