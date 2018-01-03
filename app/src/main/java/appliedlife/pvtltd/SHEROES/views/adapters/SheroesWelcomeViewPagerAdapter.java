@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                                 .description(text)
                                 .positionInSequence(String.valueOf(position))
                                 .build();
-                AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, properties);
+                AnalyticsManager.trackScreenView(WelcomeActivity.SCREEN_LABEL, null, properties);
                 break;
             case AppConstants.ONE_CONSTANT:
                 ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_SECOND_WELCOME));
@@ -89,10 +90,10 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                                 .description(text)
                                 .positionInSequence(String.valueOf(position))
                                 .build();
-                AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, propertiesSecond);
+                AnalyticsManager.trackScreenView(WelcomeActivity.SCREEN_LABEL, null, propertiesSecond);
                 break;
             case AppConstants.TWO_CONSTANT:
-                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_SECOND_WELCOME));
+                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_THIRD_WELCOME));
                 SpannableString spannableThird = new SpannableString(text);
                 if (StringUtil.isNotNullOrEmptyString(text)) {
                     spannableThird.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.feed_article_label)), 0, 18, 0);
@@ -107,7 +108,7 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                                 .description(text)
                                 .positionInSequence(String.valueOf(position))
                                 .build();
-                AnalyticsManager.trackScreenView(WelcomeActivity.SOURCE_SCREEN, null, propertiesThird);
+                AnalyticsManager.trackScreenView(WelcomeActivity.SCREEN_LABEL, null, propertiesThird);
                 break;
         }
         container.addView(itemView);
@@ -116,7 +117,7 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((LinearLayout) object);
+        container.removeView((RelativeLayout) object);
     }
 
     @Override

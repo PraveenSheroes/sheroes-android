@@ -62,6 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|bottom"
+                        android:layout_marginTop="@dimen/dp_size_10"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_size_20" />

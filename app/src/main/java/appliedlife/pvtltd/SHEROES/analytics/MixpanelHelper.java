@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.analytics;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -76,6 +77,7 @@ public class MixpanelHelper {
                     .dateOfBirth(userSummary.getUserBO().getDob())
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
+                    .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
                     .emailId(userSummary.getEmailId());
 
         /*int year = YearClass.get(CareApplication.getAppContext());

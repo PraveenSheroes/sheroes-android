@@ -124,13 +124,13 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mOnBoardingPresenter, mRecyclerView, mGridManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-               // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
+                // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
 
             }
 
             @Override
             public void onShow() {
-               // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
+                // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
 
             }
 
@@ -209,6 +209,15 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
             } else {
                 mAdapter.notifyItemRangeChanged(position + 1, feedDetailList.size());
             }
+
+            for (FeedDetail feedDetail : feedDetailList) {
+                if (feedDetail instanceof CommunityFeedSolrObj) {
+                    CommunityFeedSolrObj communityFeedObj = (CommunityFeedSolrObj) feedDetail;
+                    if (communityFeedObj.isOwner() || communityFeedObj.isMember()) {
+                        ((OnBoardingActivity) getActivity()).isJoinCount++;
+                    }
+                }
+            }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
 
         } else {
@@ -234,7 +243,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (!communityFeedSolrObj.isMember()) {
-            if(((OnBoardingActivity) getActivity()).isJoinCount>0) {
+            if (((OnBoardingActivity) getActivity()).isJoinCount >= 0) {
                 ((OnBoardingActivity) getActivity()).isJoinCount--;
             }
             ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.LEAVE_COMMUNITY, AppConstants.EMPTY_STRING);

@@ -161,6 +161,7 @@
                     android:background="@drawable/red_oval_shap"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_12" />
 
@@ -173,6 +174,7 @@
                     android:background="@drawable/invite_color_btn_shap"
                     android:gravity="center"
                     android:visibility="gone"
+                    android:textAllCaps="true"
                     android:text="@string/ID_INVITE"
                     android:textColor="@color/white" />
             </FrameLayout>

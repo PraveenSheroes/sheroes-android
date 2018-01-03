@@ -59,11 +59,13 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             message=message.substring(6,message.length());
             SpannableString spannableString = new SpannableString(message);
             if (StringUtil.isNotNullOrEmptyString(message)) {
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 13, 32, 0);
-                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 13, 32, 0);
-                mTvMessage.setMovementMethod(LinkMovementMethod.getInstance());
-                mTvMessage.setText(spannableString, TextView.BufferType.SPANNABLE);
-                mTvMessage.setSelected(true);
+                if(message.length()>32) {
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 13, 32, 0);
+                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 13, 32, 0);
+                }
+                    mTvMessage.setMovementMethod(LinkMovementMethod.getInstance());
+                    mTvMessage.setText(spannableString, TextView.BufferType.SPANNABLE);
+                    mTvMessage.setSelected(true);
             }
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);

@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -104,7 +105,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  */
 
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
-    private static final String SCREEN_LABEL = "Intro Screen";
+    public static final String SCREEN_LABEL = "Intro Screen";
     private final String TAG = LogUtils.makeLogTag(WelcomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -124,9 +125,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Bind(R.id.click_to_join_fb_signup)
     Button fbLogin;
     @Bind(R.id.cl_welcome)
-    CoordinatorLayout clWelcome;
-    @Bind(R.id.scroll_view_welcome)
-    ScrollView mScrollView;
+    RelativeLayout clWelcome;
     private PayloadBuilder payloadBuilder;
     private int currentPage = 0;
     private Timer timer;
@@ -140,7 +139,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     AppUtils appUtils;
     public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
-    private boolean isFirstTimeUser;
+    private boolean isFirstTimeUser=false;
     private Handler mHandler;
     private Runnable mRunnable;
     private CallbackManager callbackManager;
@@ -206,14 +205,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 return;
-            } else {
-                mScrollView.post(new Runnable() {
-                    public void run() {
-                        mScrollView.fullScroll(mScrollView.FOCUS_DOWN);
-                    }
-                });
-                mScrollView.scrollTo(0, mScrollView.getBottom() + 1);
-
             }
 
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
@@ -566,7 +557,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public boolean shouldTrackScreen() {
-        return false;
+        if(isFirstTimeUser)
+        {
+            return true;
+        }else
+        {
+            return false;
+        }
     }
 
 

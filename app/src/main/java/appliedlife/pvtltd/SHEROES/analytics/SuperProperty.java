@@ -17,7 +17,8 @@ public enum SuperProperty {
     CREATED_DATE("Created Date"),
     MOBILE_NUMBER("Mobile Number"),
     USER_NAME("User Name"),
-    EMAIL_ID("Email Id");
+    EMAIL_ID("Email Id"),
+    APPSFLYER_ID("Appsflyer_id");
 
     private final String string;
 
@@ -82,6 +83,11 @@ public enum SuperProperty {
 
         public Builder emailId(String value){
             put(EMAIL_ID, value);
+            return this;
+        }
+
+        public Builder appsflyerID(String value){
+            put(APPSFLYER_ID, value);
             return this;
         }
 

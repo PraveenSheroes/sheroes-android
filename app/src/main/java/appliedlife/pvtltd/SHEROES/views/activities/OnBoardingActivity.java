@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -22,8 +19,6 @@ import android.widget.Toast;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,8 +66,8 @@ public class OnBoardingActivity extends BaseActivity {
     public TextView tvNameUser;
     @Bind(R.id.tv_on_boarding_description)
     public TextView tvDescription;
-    public int isJoinCount=0;
     private boolean doubleBackToExitPressedOnce = false;
+    public static int isJoinCount=0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,11 +84,10 @@ public class OnBoardingActivity extends BaseActivity {
         DrawerViewHolder.selectedOptionName = null;
     }
 
-
     public void setPagerAndLayouts() {
         supportPostponeEnterTransition();
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
-            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.CURRENT_STATUS_SCREEN)) {
+            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.COMMUNITIES_ONBOARDING_SCREEN)) {
                 onBoardingFragment();
             } else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
@@ -110,7 +104,7 @@ public class OnBoardingActivity extends BaseActivity {
     public void onBoardingFragment() {
         tvNameUser.setText(userPreference.get().getUserSummary().getFirstName());
         String description = getString(R.string.ID_BOARDING_COMMUNITIES);
-
+        isJoinCount=0;
         SpannableString spannableString = new SpannableString(description);
         if (StringUtil.isNotNullOrEmptyString(description)) {
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 27, 42, 0);
@@ -157,11 +151,11 @@ public class OnBoardingActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
+            finish();
             return;
         }
         doubleBackToExitPressedOnce = true;
-        Snackbar.make(card, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+      //  Snackbar.make(card, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
