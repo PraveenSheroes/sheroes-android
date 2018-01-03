@@ -11,6 +11,7 @@ import java.util.Date;
  */
 @Parcel(analyze = {CommunityTab.class})
 public class CommunityTab {
+    public static final String COMMUNITY_TAB_OBJ = "Community Tab Obj";
     @SerializedName("id")
     public int id;
 

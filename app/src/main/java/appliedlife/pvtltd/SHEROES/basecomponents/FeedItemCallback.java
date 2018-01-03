@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 
 /**
@@ -63,4 +64,10 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onEventGoingClicked(UserPostSolrObj userPostSolrObj);
 
     void onOrgTitleClicked(UserPostSolrObj userPostObj);
+
+    void onMentorFollowClicked(UserSolrObj userSolrObj);
+
+    void onMentorAskQuestionClicked(UserSolrObj userSolrObj);
+
+    void onMentorProfileClicked(UserSolrObj userSolrObj);
 }

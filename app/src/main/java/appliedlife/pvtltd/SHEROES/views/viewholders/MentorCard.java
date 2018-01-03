@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -203,7 +204,11 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
             }
         } else {
             tvMentorFollow.setEnabled(false);
-            viewInterface.handleOnClick(dataItem, tvMentorFollow);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onMentorFollowClicked(dataItem);
+            }else {
+                viewInterface.handleOnClick(dataItem, tvMentorFollow);
+            }
             if (dataItem.isSolrIgnoreIsMentorFollowed()) {
                 dataItem.setSolrIgnoreIsMentorFollowed(false);
             } else {
@@ -220,13 +225,21 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
             Intent intent = new Intent(mContext, MentorInsightActivity.class);
             mContext.startActivity(intent);
         } else {
-            viewInterface.handleOnClick(dataItem, tvMentorAskQuestion);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onMentorAskQuestionClicked(dataItem);
+            }else {
+                viewInterface.handleOnClick(dataItem, tvMentorAskQuestion);
+            }
         }
     }
 
     @OnClick(R.id.li_mentor)
     public void mentorCardClick() {
-        viewInterface.handleOnClick(dataItem, liMentor);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onMentorProfileClicked(dataItem);
+        }else {
+            viewInterface.handleOnClick(dataItem, liMentor);
+        }
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -45,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -57,19 +61,21 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
  */
 
-public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView{
+public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView {
     public static final String SCREEN_LABEL = "Community Detail Activity";
 
     public enum TabType {
@@ -119,6 +125,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private List<Fragment> mTabFragments = new ArrayList<>();
     private Adapter mAdapter;
 
+    private String mCommunityTitleTextColor;
+    private String mCommunityPrimaryColor;
+    private String mCommunitySecondaryColor;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,10 +137,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         ButterKnife.bind(this);
         mCommunityDetailPresenter.attachView(this);
 
-        if(getIntent()!=null && getIntent().getExtras()!=null){
+        if (getIntent() != null && getIntent().getExtras() != null) {
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
-            if(parcelable!=null){
+            if (parcelable != null) {
                 mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
+                setAllColor();
             }
         }
 
@@ -139,21 +150,56 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTitleToolbar.setText(mCommunityFeedSolrObj.getNameOrTitle());
 
+        setupToolbarItemsColor();
         setupColorTheme();
         setupViewPager(mViewPager);
         setupTabLayout();
         invalidateBottomBar();
-        if(CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communitySecondaryColor)){
-            mBottomBar.setBackgroundColor(Color.parseColor(mCommunityFeedSolrObj.communitySecondaryColor));
-        }else {
-            mBottomBar.setBackgroundColor(getResources().getColor(R.color.email));
+        mBottomBar.setBackgroundColor(Color.parseColor(mCommunitySecondaryColor));
+    }
+
+    private void setAllColor() {
+        if (mCommunityFeedSolrObj == null) {
+            mCommunityPrimaryColor = "#6e2f95";
+            mCommunitySecondaryColor = "#dc4541";
+            mCommunityTitleTextColor = "#ffffff";
+            return;
         }
+        if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communityPrimaryColor)) {
+            mCommunityPrimaryColor = mCommunityFeedSolrObj.communityPrimaryColor;
+        } else {
+            mCommunityPrimaryColor = "#6e2f95";
         }
 
+        if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communitySecondaryColor)) {
+            mCommunitySecondaryColor = mCommunityFeedSolrObj.communitySecondaryColor;
+        } else {
+            mCommunitySecondaryColor = "#dc4541";
+        }
+
+        if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.titleTextColor)) {
+            mCommunityTitleTextColor = mCommunityFeedSolrObj.titleTextColor;
+        } else {
+            mCommunityTitleTextColor = "#ffffff";
+        }
+    }
+
+    private void setupToolbarItemsColor() {
+        Drawable drawable = mToolbar.getOverflowIcon();
+        if (drawable != null) {
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable.mutate(), Color.parseColor(mCommunityTitleTextColor));
+            mToolbar.setOverflowIcon(drawable);
+        }
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+    }
+
     private void invalidateBottomBar() {
-        if(mCommunityFeedSolrObj.isMember()){
+        if (mCommunityFeedSolrObj.isMember()) {
             mBottomBar.setVisibility(View.GONE);
-        }else {
+        } else {
             mBottomBar.setVisibility(View.VISIBLE);
         }
     }
@@ -162,11 +208,23 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode){
+            switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
                             .show();
-                   refreshAllFragment();
+                    refreshAllFragment();
+                    break;
+
+                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                    if (null != data.getExtras()) {
+                        UserSolrObj userSolrObj = (UserSolrObj) Parcels.unwrap(data.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        if (null != userSolrObj) {
+                            Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                            if (AppUtils.isFragmentUIActive(fragmentMentor)) {
+                                invalidateItem(userSolrObj);
+                            }
+                        }
+                    }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
@@ -179,28 +237,28 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
                     if (resultCode == Activity.RESULT_OK) {
-                       refreshAllFragment();
+                        refreshAllFragment();
                     }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
                     UserPostSolrObj userPostSolrObj = null;
-                        Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelableUserPost != null) {
-                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
-                            isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                        }
-                        if(userPostSolrObj == null) {
-                            break;
-                        }
-                        if(isPostDeleted){
-                         notifyAllItemRemoved(userPostSolrObj);
-                        }else {
-                            invalidateItem(userPostSolrObj);
-                        }
+                    Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                    if (parcelableUserPost != null) {
+                        userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                        isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                    }
+                    if (userPostSolrObj == null) {
+                        break;
+                    }
+                    if (isPostDeleted) {
+                        notifyAllItemRemoved(userPostSolrObj);
+                    } else {
+                        invalidateItem(userPostSolrObj);
                     }
             }
+        }
     }
 
     @Override
@@ -212,6 +270,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.leave_join).setTitle(mCommunityFeedSolrObj.isMember() ? R.string.ID_LEAVE : R.string.ID_JOIN);
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -221,9 +280,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
         switch (id) {
             case R.id.leave_join:
-                if(mCommunityFeedSolrObj.isMember()){
+                if (mCommunityFeedSolrObj.isMember()) {
                     onLeaveClicked();
-                }else {
+                } else {
                     onJoinClicked();
                 }
                 break;
@@ -259,44 +318,39 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     private void setupColorTheme() {
-        mCommunityFeedSolrObj.titleTextColor = "#ffffff";
-        if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.titleTextColor)) {
-            mTitleToolbar.setTextColor(Color.parseColor(mCommunityFeedSolrObj.titleTextColor));
-        } else {
-            mTitleToolbar.setTextColor(getResources().getColor(R.color.white));
-        }
+        mTitleToolbar.setTextColor(Color.parseColor(mCommunityTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mCommunityFeedSolrObj.communityPrimaryColor)));
+            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mCommunityPrimaryColor)));
         }
-        mToolbar.setBackgroundColor(Color.parseColor(mCommunityFeedSolrObj.communityPrimaryColor));
-        String alphaColor = mCommunityFeedSolrObj.titleTextColor;
+        mToolbar.setBackgroundColor(Color.parseColor(mCommunityPrimaryColor));
+        String alphaColor = mCommunityTitleTextColor;
         alphaColor = alphaColor.replace("#", "#" + "BF");
-        mTabLayout.setTabTextColors(Color.parseColor(alphaColor), Color.parseColor(mCommunityFeedSolrObj.titleTextColor));
-        mFabButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(mCommunityFeedSolrObj.communitySecondaryColor)));
-        mTabLayout.setBackgroundColor(Color.parseColor(mCommunityFeedSolrObj.communityPrimaryColor));
+        mTabLayout.setTabTextColors(Color.parseColor(alphaColor), Color.parseColor(mCommunityTitleTextColor));
+        mFabButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(mCommunitySecondaryColor)));
+        mTabLayout.setBackgroundColor(Color.parseColor(mCommunityPrimaryColor));
     }
 
     private void setupViewPager(ViewPager viewPager) {
         mAdapter = new Adapter(getSupportFragmentManager());
-        if(!CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)){
+        if (!CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)) {
             List<CommunityTab> communityTabs = new ArrayList<>();
             communityTabs = mCommunityFeedSolrObj.communityTabs;
-            for (CommunityTab communityTab : communityTabs){
-                if(communityTab.type.equalsIgnoreCase(TabType.NAVTIVE.getName())){
+            for (CommunityTab communityTab : communityTabs) {
+                if (communityTab.type.equalsIgnoreCase(TabType.NAVTIVE.getName())) {
                     FeedFragment feedFragment = new FeedFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(FeedFragment.ENDPOINT, communityTab.dataUrl);
+                    bundle.putParcelable(CommunityTab.COMMUNITY_TAB_OBJ, Parcels.wrap(communityTab));
                     feedFragment.setArguments(bundle);
                     mAdapter.addFragment(feedFragment, communityTab.title);
                     mTabFragments.add(feedFragment);
                 }
-                if(communityTab.type.equalsIgnoreCase(TabType.HTML.getName())){
+                if (communityTab.type.equalsIgnoreCase(TabType.HTML.getName())) {
                     NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(null, communityTab.dataHtml, "");
                     mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }
 
-                if(communityTab.type.equalsIgnoreCase(TabType.WEB.getName())){
+                if (communityTab.type.equalsIgnoreCase(TabType.WEB.getName())) {
                     NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "");
                     mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
@@ -315,10 +369,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             @Override
             public void onPageSelected(int position) {
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
-                if(communityTab.showFabButton){
+                if (communityTab.showFabButton) {
                     mFabButton.setVisibility(View.VISIBLE);
                     mFabButton.setImageURI(Uri.parse(communityTab.fabIconUrl));
-                }else {
+                } else {
                     mFabButton.setVisibility(View.GONE);
                 }
             }
@@ -374,28 +428,28 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     public void invalidateItem(FeedDetail feedDetail) {
-        for(int i = 0 ; i < mAdapter.getCount(); i++){
+        for (int i = 0; i < mAdapter.getCount(); i++) {
             Fragment fragment = mAdapter.getItem(i);
-            if(fragment instanceof FeedFragment){
-                ((FeedFragment)fragment).updateItem(feedDetail);
+            if (fragment instanceof FeedFragment) {
+                ((FeedFragment) fragment).updateItem(feedDetail);
             }
         }
     }
 
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
-        for(int i = 0 ; i < mAdapter.getCount(); i++){
+        for (int i = 0; i < mAdapter.getCount(); i++) {
             Fragment fragment = mAdapter.getItem(i);
-            if(fragment instanceof FeedFragment){
-                ((FeedFragment)fragment).removeItem(feedDetail);
+            if (fragment instanceof FeedFragment) {
+                ((FeedFragment) fragment).removeItem(feedDetail);
             }
         }
     }
 
     private void refreshAllFragment() {
-        for(int i = 0 ; i < mAdapter.getCount(); i++){
+        for (int i = 0; i < mAdapter.getCount(); i++) {
             Fragment fragment = mAdapter.getItem(i);
-            if(fragment instanceof FeedFragment){
-                ((FeedFragment)fragment).refreshAllList();
+            if (fragment instanceof FeedFragment) {
+                ((FeedFragment) fragment).refreshAllList();
             }
         }
     }
@@ -441,12 +495,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     @OnClick({R.id.bottom_bar, R.id.btn_bottom_bar})
-    public void onJoinClicked(){
+    public void onJoinClicked() {
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
             showCommunityJoinReason(mCommunityFeedSolrObj);
-            ((SheroesApplication)((BaseActivity)this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-        }else {
+            ((SheroesApplication) ((BaseActivity) this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
+        } else {
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
                 userIdList.add((long) userPreference.get().getUserSummary().getUserId());
@@ -458,7 +512,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @OnClick(R.id.fab)
     public void onFabClicked() {
         CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(mTabLayout.getSelectedTabPosition());
-        String url =  communityTab.fabUrl;
+        String url = communityTab.fabUrl;
         if (url.equalsIgnoreCase(AppConstants.COMMUNITY_POST_URL) || url.equalsIgnoreCase(AppConstants.COMMUNITY_POST_URL_COM)) {
             if (mCommunityFeedSolrObj == null) {
                 return;
@@ -468,7 +522,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             communityPost.community.id = mCommunityFeedSolrObj.getIdOfEntityOrParticipant();
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
             CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
-        }else{
+        } else {
             if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
