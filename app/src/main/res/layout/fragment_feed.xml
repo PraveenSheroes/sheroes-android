@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView
         android:id="@+id/feed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <include layout="@layout/empty_list_view" />
 </android.support.v4.widget.SwipeRefreshLayout>

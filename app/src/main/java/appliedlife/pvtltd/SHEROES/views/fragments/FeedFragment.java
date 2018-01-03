@@ -119,15 +119,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         mFeedPresenter.attachView(this);
 
-        String endpointUrl = "";
         if (null != getArguments()) {
             Parcelable parcelable = getArguments().getParcelable(CommunityTab.COMMUNITY_TAB_OBJ);
             if(parcelable!=null){
                 mCommunityTab = Parcels.unwrap(parcelable);
             }
         }
-        if (CommonUtil.isNotEmpty(endpointUrl)) {
-            mFeedPresenter.setEndpointUrl(endpointUrl);
+        if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
+            mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
         } else {
 
         }
