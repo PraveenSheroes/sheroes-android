@@ -32,4 +32,6 @@ public interface PostDetailCallBack {
     void onCommentButtonClicked();
 
     void onCommunityTitleClicked(UserPostSolrObj userPostObj);
+
+    void onLikeCountClicked(UserPostSolrObj userPostObj);
 }

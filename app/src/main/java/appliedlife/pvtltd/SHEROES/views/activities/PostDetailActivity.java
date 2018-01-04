@@ -65,6 +65,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
@@ -577,6 +578,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         }
+    }
+
+    @Override
+    public void onLikeCountClicked(UserPostSolrObj userPostObj) {
+        LikeListBottomSheetFragment.showDialog(this, "", userPostObj.getEntityOrParticipantId());
     }
 
     //endregion

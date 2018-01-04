@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -306,7 +307,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             try {
-                Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
                 String communityDetail = urlSharedViaSocial.substring(indexOfFourthBackSlace, urlSharedViaSocial.length());
                 int countBackSlash = countBackSlash(communityDetail);
                 if (countBackSlash > 2) {
@@ -321,22 +321,27 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             dataIdString = new String(communityPostBytes, AppConstants.UTF_8);
                             byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                             String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
-                            into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
-                            into.putExtra(AppConstants.COMMUNITY_POST_ID, Long.parseLong(dataIdString));
-                            into.putExtra(AppConstants.FROM_DEEPLINK, true);
+                            Intent postIntent = new Intent(SheroesDeepLinkingActivity.this, PostDetailActivity.class);
+                            postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                            postIntent.putExtra(UserPostSolrObj.USER_POST_ID, Long.parseLong(dataIdString));
+                            postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
+                            postIntent.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                            postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                            startActivity(postIntent);
                         }
                     }
                 } else {
+                    Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
                     int indexOfSecondBackSlace = AppUtils.findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
                     String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                     into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                    into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                    into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    startActivity(into);
                 }
               //  into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
-                into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                startActivity(into);
                 finish();
                 if (mFromNotification > 0) {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_COMMUNITY, AppConstants.EMPTY_STRING);
