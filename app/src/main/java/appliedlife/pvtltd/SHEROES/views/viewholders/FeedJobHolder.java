@@ -214,7 +214,11 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     }
     @OnClick(R.id.tv_feed_job_user_share)
     public void tvFeedJobShare() {
-        viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserShare);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostShared(jobFeedObj);
+        }else {
+            viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserShare);
+        }
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackScreenView(mContext.getString(R.string.ID_REFER_SHARE_JOB));
     }

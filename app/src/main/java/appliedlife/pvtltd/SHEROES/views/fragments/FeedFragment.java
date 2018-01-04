@@ -54,6 +54,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -121,7 +122,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         if (null != getArguments()) {
             Parcelable parcelable = getArguments().getParcelable(CommunityTab.COMMUNITY_TAB_OBJ);
-            if(parcelable!=null){
+            if (parcelable != null) {
                 mCommunityTab = Parcels.unwrap(parcelable);
             }
         }
@@ -264,6 +265,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .title(feedDetail.getNameOrTitle())
+                            .companyId(Long.toString(((JobFeedSolrObj)feedDetail).getCompanyMasterId()))
+                            .location(feedDetail.getAuthorCityName())
+                            .build();
+            trackEvent(Event.JOBS_SHARED, properties);
+        }else {
+            AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
+        }
         AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
     }
 
@@ -589,6 +602,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public int findPositionById(long id) {
+        if (mAdapter == null) {
+            return -1;
+        }
         List<FeedDetail> feedDetails = mAdapter.getDataList();
 
         if (CommonUtil.isEmpty(feedDetails)) {

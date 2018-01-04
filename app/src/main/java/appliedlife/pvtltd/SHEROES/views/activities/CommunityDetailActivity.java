@@ -28,6 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences.Preference;
 
 import org.parceler.Parcels;
@@ -317,6 +318,25 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         });
     }
 
+    private int getDefaultTabPosition() {
+        int position = 0;
+        for (CommunityTab communityTab : mCommunityFeedSolrObj.communityTabs) {
+            if (mCommunityFeedSolrObj.isMember()) {
+                if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabJoinedKey)) {
+                    return position;
+                }
+            }
+            if (!mCommunityFeedSolrObj.isMember()) {
+                if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabKey)) {
+                    return position;
+                }
+
+            }
+            position++;
+        }
+        return 0;
+    }
+
     private void setupColorTheme() {
         mTitleToolbar.setTextColor(Color.parseColor(mCommunityTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -330,7 +350,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mTabLayout.setBackgroundColor(Color.parseColor(mCommunityPrimaryColor));
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(final ViewPager viewPager) {
         mAdapter = new Adapter(getSupportFragmentManager());
         if (!CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)) {
             List<CommunityTab> communityTabs = new ArrayList<>();
@@ -360,8 +380,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
         viewPager.setAdapter(mAdapter);
         viewPager.setOffscreenPageLimit(3);
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.setCurrentItem(getDefaultTabPosition());
+        final ViewPager.OnPageChangeListener pageChangeListener;
+        viewPager.addOnPageChangeListener(pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
@@ -371,7 +392,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
                 if (communityTab.showFabButton) {
                     mFabButton.setVisibility(View.VISIBLE);
-                    mFabButton.setImageURI(Uri.parse(communityTab.fabIconUrl));
+                    mFabButton.setImageResource(R.drawable.challenge_placeholder);
+                    Glide.with(CommunityDetailActivity.this)
+                            .load(communityTab.fabIconUrl)
+                            .into(mFabButton);
                 } else {
                     mFabButton.setVisibility(View.GONE);
                 }
@@ -380,6 +404,14 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+
+        viewPager.post(new Runnable()
+        {
+            @Override
+            public void run() {
+                pageChangeListener.onPageSelected(viewPager.getCurrentItem());
             }
         });
     }
