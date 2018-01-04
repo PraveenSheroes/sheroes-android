@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -154,7 +155,8 @@ public class SheroesAppModule {
                 .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)
                 .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
-                .registerSubtype(MentorDataObj.class, AppConstants.MENTOR_SUB_TYPE);
+                .registerSubtype(MentorDataObj.class, AppConstants.MENTOR_SUB_TYPE)
+                .registerSubtype(LeaderObj.class, AppConstants.LEADER_SUB_TYPE);
 
         return new GsonBuilder()
                 .setDateFormat(DATE_FORMATS[0])

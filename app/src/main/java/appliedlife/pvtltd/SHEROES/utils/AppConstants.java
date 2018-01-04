@@ -64,6 +64,7 @@ public class AppConstants {
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
     public static final String MENTOR_SUB_TYPE = "W";
+    public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String TAG_SUB_TYPE = "tags";

@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -33,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorSuggestedCardHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
@@ -86,6 +88,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new MentorSuggestedCardHorizontalView(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_MENTOR_COMPACT:
                 return new MentorCard(mInflater.inflate(R.layout.feed_mentor_card, parent, false), mBaseHolderInterface);
+            case TYPE_LEADER:
+                return new LeaderViewHolder(mInflater.inflate(R.layout.list_leader_item, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -143,6 +147,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 UserSolrObj userSolrObj = (UserSolrObj) mFeedDetailList.get(position);
                 mentorCard.bindData(userSolrObj, mContext, position);
                 break;
+            case TYPE_LEADER:
+                LeaderViewHolder leaderViewHolder = (LeaderViewHolder) holder;
+                LeaderObj leaderObj = (LeaderObj) mFeedDetailList.get(position);
+                leaderViewHolder.bindData(leaderObj, mContext, position);
+                break;
         }
     }
 
@@ -156,6 +165,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_INRO = 8;
     private static final int TYPE_MENTOR_SUGGESTION_CAROSEL = 9;
     private static final int TYPE_MENTOR_COMPACT = 10;
+    private static final int TYPE_LEADER = 11;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -189,6 +199,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
             if(feedDetail instanceof UserSolrObj){
                 return TYPE_MENTOR_COMPACT;
+            }
+
+            if(feedDetail instanceof LeaderObj){
+                return TYPE_LEADER;
             }
         }
         return TYPE_LOADER;
