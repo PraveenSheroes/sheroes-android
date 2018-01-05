@@ -323,7 +323,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                             Intent postIntent = new Intent(SheroesDeepLinkingActivity.this, PostDetailActivity.class);
                             postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
-                            postIntent.putExtra(UserPostSolrObj.USER_POST_ID, Long.parseLong(dataIdString));
+                            postIntent.putExtra(UserPostSolrObj.USER_POST_ID, dataIdString);
                             postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
                             postIntent.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                             postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);

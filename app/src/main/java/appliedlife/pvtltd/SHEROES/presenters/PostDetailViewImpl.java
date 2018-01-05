@@ -4,6 +4,7 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.support.v7.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +26,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
@@ -32,7 +35,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
@@ -66,6 +71,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     private Comment lastComment;
 
     @Inject
+    AppUtils mAppUtils;
+
+    @Inject
     public PostDetailViewImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.mBaseResponseList = new ArrayList<>();
@@ -80,22 +88,24 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     public void fetchUserPost() {
-        if(mUserPostObj == null){
+        if (mUserPostObj == null) {
             fetchUserPostFromServer();
-        }else {
+        } else {
             mBaseResponseList.add(mUserPostObj);
-            getMvpView().addData(0,mUserPostObj);
+            getMvpView().addData(0, mUserPostObj);
             headerCount++;
+            getMvpView().startProgressBar();
+            getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
         }
-        getMvpView().startProgressBar();
-        getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
     }
 
     private void fetchUserPostFromServer() {
-        getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
+        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, 1, Long.valueOf(mUserPostId));
+        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+        getFeedFromPresenter(feedRequestPojo);
     }
 
-    public void fetchMoreComments(){
+    public void fetchMoreComments() {
         getMvpView().commentStartedLoading();
         getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
     }
@@ -111,11 +121,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_COMMENT_REACTION);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM), ERROR_COMMENT_REACTION);
             }
 
             @Override
@@ -140,20 +151,20 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         getMvpView().setHasMoreComments(false);
                     }
                     smoothScrollToBottom = false;
-                }else {
+                } else {
                     smoothScrollToBottom = true;
-                    if(mUserPostObj.getIsEditOrDelete() == 1){
+                    if (mUserPostObj.getIsEditOrDelete() == 1) {
                         mUserPostObj.setIsEditOrDelete(0);
                         mBaseResponseList.set(0, mUserPostObj);
                         getMvpView().editLastComment();
                     }
-                    if(mUserPostObj.getIsEditOrDelete() == 2){
+                    if (mUserPostObj.getIsEditOrDelete() == 2) {
                         mUserPostObj.setIsEditOrDelete(0);
                         mBaseResponseList.set(0, mUserPostObj);
                         getMvpView().deleteLastComment();
                     }
                 }
-                if(smoothScrollToBottom){
+                if (smoothScrollToBottom) {
                     getMvpView().smoothScrollToBottom();
                 }
                 pageNumber++;
@@ -161,6 +172,55 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         });
         registerSubscription(subscription);
     }
+
+    public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                if (null != feedResponsePojo) {
+                    mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
+                    mBaseResponseList.add(mUserPostObj);
+                    getMvpView().addData(0, mUserPostObj);
+                    headerCount++;
+                    getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
+        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     private Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
@@ -174,9 +234,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void addComment(String commentText,boolean isAnonymous) {
+    public void addComment(String commentText, boolean isAnonymous) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
         CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
@@ -185,15 +245,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_COMMENT),ERROR_COMMENT_REACTION);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_COMMENT), ERROR_COMMENT_REACTION);
             }
 
             @Override
             public void onNext(CommentAddDelete commentResponsePojo) {
                 getMvpView().stopProgressBar();
-                if(null!=commentResponsePojo) {
+                if (null != commentResponsePojo) {
                     Comment comment = commentResponsePojo.getCommentReactionModel();
                     mBaseResponseList.add(comment);
                     mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() + 1);
@@ -215,7 +276,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         registerSubscription(subscription);
     }
 
-    public Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+    public Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
                 .map(new Func1<CommentAddDelete, CommentAddDelete>() {
                     @Override
@@ -229,7 +290,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public void editCommentListFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMENT_REACTION);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
         //  getMvpView().startProgressBar();
@@ -238,18 +299,20 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onCompleted() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_EDIT_DELETE),ERROR_COMMENT_REACTION);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
             }
+
             @Override
             public void onNext(CommentAddDelete commentResponsePojo) {
                 getMvpView().stopProgressBar();
                 if (commentResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
 
                     int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
-                    if(pos!= RecyclerView.NO_POSITION){
+                    if (pos != RecyclerView.NO_POSITION) {
                         mBaseResponseList.remove(pos);
                         getMvpView().removeData(pos);
 
@@ -263,7 +326,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         registerSubscription(subscription);
     }
 
-    public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo){
+    public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
                 .map(new Func1<CommentAddDelete, CommentAddDelete>() {
                     @Override
@@ -276,15 +339,15 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     public static int findCommentPositionById(List<BaseResponse> baseResponses, long id) {
-        if(CommonUtil.isEmpty(baseResponses)){
+        if (CommonUtil.isEmpty(baseResponses)) {
             return -1;
         }
 
         for (int i = 0; i < baseResponses.size(); ++i) {
             BaseResponse baseResponse = baseResponses.get(i);
-            if(baseResponse instanceof Comment){
+            if (baseResponse instanceof Comment) {
                 Comment comment = (Comment) baseResponse;
-                if(comment!=null && comment.getId()==id){
+                if (comment != null && comment.getId() == id) {
                     return i;
                 }
             }
@@ -321,7 +384,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     comment.isLiked = true;
                     comment.likeCount++;
                 }
@@ -368,7 +431,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     comment.isLiked = false;
                     comment.likeCount--;
                 }
@@ -459,7 +522,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                     userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                     mBaseResponseList.set(0, userPostSolrObj);
@@ -503,7 +566,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                     userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                     mBaseResponseList.set(0, userPostSolrObj);
@@ -540,6 +603,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     public UserPostSolrObj getUserPostObj() {
+        if (mUserPostObj == null) {
+            return null;
+        }
         UserPostSolrObj userPostSolrObj = mUserPostObj;
         List<Comment> comments = new ArrayList<>();
         if (!mBaseResponseList.isEmpty()) {
@@ -558,11 +624,11 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     public Comment getLastComment() {
-        if(!CommonUtil.isEmpty(mBaseResponseList)){
+        if (!CommonUtil.isEmpty(mBaseResponseList)) {
             BaseResponse baseResponse = mBaseResponseList.get(mBaseResponseList.size() - 1);
-            if(baseResponse instanceof Comment){
+            if (baseResponse instanceof Comment) {
                 return (Comment) baseResponse;
-            }else {
+            } else {
                 return null;
             }
         }
