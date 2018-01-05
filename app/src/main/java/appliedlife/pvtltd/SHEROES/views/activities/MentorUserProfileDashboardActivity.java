@@ -62,7 +62,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment;
@@ -82,7 +81,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 //TODO- rename to UserProfileDashboardActivity
-public class MentorUserProfileDashboardActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class MentorUserProfileDashboardActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
     private final String TAG = LogUtils.makeLogTag(MentorUserProfileDashboardActivity.class);
     private static final String SCREEN_LABEL = "Public Profile Growth Screen";
 
@@ -288,9 +287,10 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             tvMentorPost.setText(pluralAnswer);
             liPost.setVisibility(View.VISIBLE);
         } else {
-            liPost.setVisibility(View.GONE);
+          //  liPost.setVisibility(View.GONE);
         }
-        if (mMentorUserItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
+       // if (mMentorUserItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
+        if (isMentor) {
             String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
             tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorAnswers())));
             tvMentorAnswer.setText(pluralAnswer);
@@ -302,9 +302,9 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
             userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
             userFollower.setText(pluralFollower);
-            liFollower.setVisibility(View.VISIBLE);
+          //  liFollower.setVisibility(View.VISIBLE);
         } else {
-            liFollower.setVisibility(View.GONE);
+            //liFollower.setVisibility(View.GONE);
         }
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -513,41 +513,12 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         super.feedCardsHandled(view, baseResponse);
     }
 
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mUserPostForCommunity = (UserPostSolrObj) feedDetail;
-        onBackPressed();
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (mFragmentOpen.isCommentList()) {
-            CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-            if (commentReactionFragment != null) {
-                commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            } else {
-                mFragmentOpen.setCommentList(false);
-                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                if (fragment != null && fragment instanceof CommunitiesDetailFragment)
-                    ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        } else {
             Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
             if (fragment instanceof CommunitiesDetailFragment)
                 ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-        }
-    }
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mUserPostForCommunity = (UserPostSolrObj) feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.openCommentReactionFragment(mUserPostForCommunity);
-        }
     }
 
     @Override
@@ -641,22 +612,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         {
             case FOLLOW_UNFOLLOW:
                 tvMentorDashBoardFollow.setEnabled(true);
-                UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-               /* if(tvMentorDashBoardFollow.getText().toString().equalsIgnoreCase(getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING)))
-                {
-                    if(!userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                            mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()-1);
-                    }
-                }else
-                {
-                    if(userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                        mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()+1);
-
-                    }
-                }*/
-
                 followUnFollowMentor();
                 break;
             default:

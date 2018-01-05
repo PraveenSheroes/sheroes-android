@@ -177,7 +177,7 @@
     <dimen name="tell_us_image_height">207dp</dimen>
     <dimen name="challenge_card">320dp</dimen>
     <dimen name="dp_size_minus_7">-7dp</dimen>
-
+    <dimen name="communities_icon">66dp</dimen>
     <dimen name="toolbar_title_size">20dp</dimen>
     <dimen name="article_image_height">260dp</dimen>
     <dimen name="article_image_height_tmp">200dp</dimen>

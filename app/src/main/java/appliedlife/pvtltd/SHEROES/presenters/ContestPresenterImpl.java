@@ -1,10 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.inject.Inject;
 
@@ -14,19 +10,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
-import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
 import rx.Observable;
@@ -36,59 +25,19 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.CHALLENGE_ACCEPT;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.acceptChallengeRequestBuilder;
 
 /**
  * Created by ujjwal on 11/05/17.
  */
 
 public class ContestPresenterImpl extends BasePresenter<IContestView>{
-    private IContestView mContestView;
-    private long mChallengeId;
     private Contest mContest;
 
     SheroesAppServiceApi sheroesAppServiceApi;
     @Inject
     public ContestPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
-    }
-
-    public void getChallengeAcceptFromPresenter() {
-        ChallengeAcceptRequest challengeAcceptRequest = acceptChallengeRequestBuilder(mChallengeId, true, false, 100, false, true, "", "");
-        Subscription subscription = getChallengeAcceptFromModel(challengeAcceptRequest).subscribe(new Subscriber<ChallengeListResponse>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-
-            @Override
-            public void onNext(ChallengeListResponse challengeListResponse) {
-                if (null != challengeListResponse) {
-                  //  getMvpView().getNotificationReadCountSuccess(challengeListResponse,CHALLENGE_ACCEPT);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
-
-    public Observable<ChallengeListResponse> getChallengeAcceptFromModel(ChallengeAcceptRequest challengeAcceptRequest) {
-       // LogUtils.info(TAG, " **********challenge request" + new Gson().toJson(challengeAcceptRequest));
-        return sheroesAppServiceApi.challengeAccept(challengeAcceptRequest)
-                .map(new Func1<ChallengeListResponse, ChallengeListResponse>() {
-                    @Override
-                    public ChallengeListResponse call(ChallengeListResponse challengeListResponse) {
-                        return challengeListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void fetchContest(FeedRequestPojo feedRequestPojo) {

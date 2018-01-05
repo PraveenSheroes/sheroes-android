@@ -29,6 +29,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
@@ -53,14 +55,13 @@ import butterknife.OnClick;
 
 public class SearchProfileLocationDialogFragment extends BaseDialogFragment implements OnBoardingView {
 
-    private final String TAG = LogUtils.makeLogTag(OnBoardingSearchDialogFragment.class);
+    private final String TAG = LogUtils.makeLogTag(SearchProfileLocationDialogFragment.class);
 
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
     OnBoardingEnum SEARCH_TYPE = null;
-
     @Inject
     AppUtils mAppUtils;
 
@@ -240,6 +241,21 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
 
     @Override
     public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void showDataList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
 
     }
 

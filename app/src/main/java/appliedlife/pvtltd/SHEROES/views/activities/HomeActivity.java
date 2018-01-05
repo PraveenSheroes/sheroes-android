@@ -25,6 +25,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -85,7 +86,6 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
@@ -123,7 +123,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -135,8 +134,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeSuccessDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeUpdateProgressDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
@@ -151,7 +148,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, CommentReactionFragment.HomeActivityIntractionListner, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Bind(R.id.home_toolbar)
@@ -176,7 +173,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public FloatingActionButton mFloatActionBtn;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
-    public ChallengeSuccessDialogFragment mChallengeSuccessDialogFragment;
     public List<String> mListOfOpportunity = new ArrayList<>();
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
@@ -260,6 +256,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     long userId =-1L;
 
+    private String mOnBoarding;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -434,9 +431,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
-            if (getIntent().getExtras().get(AppConstants.EVENT_ID) != null) {
-                mEventId = getIntent().getExtras().getLong(AppConstants.EVENT_ID);
+            if (getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES) != null) {
+                mOnBoarding = getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES);
             }
+
         }
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         if (!isSheUser) {
@@ -613,7 +611,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
         ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
@@ -655,33 +653,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             feedRelatedOptions(view, baseResponse);
         } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
-        } else if (baseResponse instanceof ChallengeDataItem) {
-            int id = view.getId();
-            switch (id) {
-                case R.id.tv_update_progress:
-                    showUpdateProgressDialog((ChallengeDataItem) baseResponse);
-                    break;
-                case R.id.tv_accept_challenge:
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).acceptChallenge((ChallengeDataItem) baseResponse, 0, true, false, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
-                    }
-                    break;
-                case R.id.tv_timer_count_challenge:
-                    updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
-                    break;
-                case R.id.tv_timer_count_challenge_update_status:
-                    updateChallengeDataWithStatus((ChallengeDataItem) baseResponse, AppConstants.COMPLETE, AppConstants.EMPTY_STRING, AppConstants.EMPTY_STRING);
-                    break;
-                case R.id.iv_fb_share:
-                    sharePostOnFacebook((ChallengeDataItem) baseResponse);
-                    break;
-
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-            }
-
-        } else if (baseResponse instanceof Comment) {
+        }else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -962,69 +934,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         homeOnClick();
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
-    }
-
-    private void sharePostOnFacebook(ChallengeDataItem challengeDataItem) {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(challengeDataItem.getChallengeId()))
-                        .build();
-        trackEvent(Event.CHALLENGE_SHARED, properties);
-        String urlToShare = challengeDataItem.getDeepLinkUrl();
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
-// See if official Facebook app is found
-        boolean facebookAppFound = false;
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.FACEBOOK_SHARE)) {
-                intent.setPackage(info.activityInfo.packageName);
-                facebookAppFound = true;
-                break;
-            }
-        }
-// As fallback, launch sharer.php in a browser
-        if (!facebookAppFound) {
-            String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + urlToShare;
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
-        }
-        startActivity(intent);
-    }
-
-    public void showUpdateProgressDialog(ChallengeDataItem challengeDataItem) {
-        ChallengeUpdateProgressDialogFragment updateProgressDialogFragment = (ChallengeUpdateProgressDialogFragment) getFragmentManager().findFragmentByTag(ChallengeUpdateProgressDialogFragment.class.getName());
-        if (updateProgressDialogFragment == null) {
-            updateProgressDialogFragment = new ChallengeUpdateProgressDialogFragment();
-            Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(challengeDataItem);
-            bundle.putParcelable(AppConstants.CHALLENGE_SUB_TYPE, parcelable);
-            updateProgressDialogFragment.setArguments(bundle);
-        }
-        if (!updateProgressDialogFragment.isVisible() && !updateProgressDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            updateProgressDialogFragment.show(getFragmentManager(), ChallengeUpdateProgressDialogFragment.class.getName());
-        }
-    }
-
-    public void updateChallengeDataWithStatus(ChallengeDataItem challengeDataItem, int percentCompleted, String imageUrl, String videoUrl) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((HomeFragment) fragment).acceptChallenge(challengeDataItem, percentCompleted, false, true, imageUrl, videoUrl);
-        }
-    }
-
-    public void challengeSuccessDialog(ChallengeDataItem challengeDataItem) {
-        mChallengeSuccessDialogFragment = (ChallengeSuccessDialogFragment) getFragmentManager().findFragmentByTag(ChallengeSuccessDialogFragment.class.getName());
-        if (mChallengeSuccessDialogFragment == null) {
-            mChallengeSuccessDialogFragment = new ChallengeSuccessDialogFragment();
-            Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(challengeDataItem);
-            bundle.putParcelable(AppConstants.SUCCESS, parcelable);
-            mChallengeSuccessDialogFragment.setArguments(bundle);
-        }
-        if (!mChallengeSuccessDialogFragment.isVisible() && !mChallengeSuccessDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            mChallengeSuccessDialogFragment.show(getFragmentManager(), ChallengeSuccessDialogFragment.class.getName());
-        }
     }
 
     public void eventDetailDialog(long eventID) {
@@ -1446,8 +1355,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         return;
                     }
                     doubleBackToExitPressedOnce = true;
-                    homeOnClick();
-                    //  Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+                    if (flFeedFullView.getVisibility()==View.VISIBLE) {
+                        Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+
+                    }else
+                    {
+                        homeOnClick();
+                    }
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -1460,13 +1374,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         resetHamburgerSelectedItems();
-    }
-
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        onBackPressed();
     }
 
     @OnClick(R.id.fl_notification)
@@ -1527,17 +1434,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mHomeSpinnerItemList.addAll(localList);
     }
 
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mFeedDetail = feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.openCommentReactionFragment(mFeedDetail);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -1612,9 +1508,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         try {
                             File file = new File(result.getUri().getPath());
                             Bitmap photo = decodeFile(file);
-                            if (null != mChallengeSuccessDialogFragment) {
-                                mChallengeSuccessDialogFragment.setImageOnHolder(photo);
-                            }
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();

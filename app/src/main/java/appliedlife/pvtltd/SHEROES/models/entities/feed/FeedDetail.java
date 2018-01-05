@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeDataItem;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 
@@ -215,7 +214,6 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     private boolean isFromHome;
     private AppIntroData appIntroDataItems = null;
     private int lastReactionValue;
-    private List<ChallengeDataItem> challengeDataItems = null;
 
     public String getId() {
         return id;
@@ -635,14 +633,6 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    public List<ChallengeDataItem> getChallengeDataItems() {
-        return challengeDataItems;
-    }
-
-    public void setChallengeDataItems(List<ChallengeDataItem> challengeDataItems) {
-        this.challengeDataItems = challengeDataItems;
     }
 
     public String getPostingDate() {

@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/fully_transparent"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:background="@color/white">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_337"
-        android:src="@drawable/welcome_first"
-        android:scaleType="fitXY"/>
-
-    <TextView
-        android:id="@+id/tv_welcome_text1"
-        android:layout_width="@dimen/dp_size_320"
+        android:id="@+id/iv_welcome_screen"
+        android:layout_width="wrap_content"
+        android:layout_above="@+id/tv_welcome_text"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:text="@string/ID_WELCOME_FIRST"
+        android:layout_marginBottom="@dimen/dp_size_32"
+         />
+    <TextView
+        android:id="@+id/tv_welcome_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/dp_size_20"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:maxLines="@integer/int_value_for_line_2"
+        android:layout_alignParentBottom="true"
         android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_14" />
-</LinearLayout>
+        android:textColor="@color/recent_post_comment"
+        android:textSize="@dimen/sp_size_16" />
+</RelativeLayout>

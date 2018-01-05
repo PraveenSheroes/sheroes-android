@@ -43,6 +43,7 @@ public enum  MoEngageEvent {
     EVENT_VIEWED_FAQS("viewed SHE FAQS"),
     EVENT_VIEWED_ICC_MEMBERS("viewed ICC Members"),
     EVENT_VERIFY_EMAIL("verify email"),
+    EVENT_APPS_FLYER("deep link"),
     EVENT_FORGET_PWD("forgot password");
     public final String value;
     MoEngageEvent(String pValue) {

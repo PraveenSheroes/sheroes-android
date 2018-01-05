@@ -377,14 +377,14 @@ public class JobDetailActivity extends BaseActivity implements AppBarLayout.OnOf
     }
 
     private void jobDetailHandled(View view, FeedDetail feedDetail) {
-        int id = view.getId();
+      /*  int id = view.getId();
         switch (id) {
             case R.id.tv_article_detail_user_comment:
                 break;
 
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
-        }
+        }*/
     }
 
     private void bookmarkCall() {

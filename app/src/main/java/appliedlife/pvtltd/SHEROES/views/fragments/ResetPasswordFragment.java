@@ -46,8 +46,6 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     @Bind(R.id.pb_reset_pwd)
     ProgressBar pbResetPwd;
 
-    @Bind(R.id.app_bar_login)
-    AppBarLayout ablLogin;
 
     @Inject
     AppUtils mAppUtils;
@@ -116,7 +114,6 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
 
             } else {
                 tvPwdStatus.setText(getString(R.string.ID_RESET_PASSWORD_FAILURE_TEXT));
-                ablLogin.setBackgroundResource(R.color.communities_post_button_color);
             }
         }
     }

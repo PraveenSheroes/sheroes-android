@@ -35,7 +35,7 @@
     <uses-permission android:name="appliedlife.pvtltd.SHEROES.permission.MAPS_RECEIVE" />
 
     <application
-        android:name=".basecomponents.SheroesApplication"
+        android:name="appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_sheroes_launcher"
         android:label="@string/ID_APP_NAME"
@@ -64,9 +64,11 @@
         <meta-data
             android:name="APP_ID"
             android:value="6W7EV1LPHLO5LM7CM9IJ8IUP" />
+
         <meta-data
             android:name="SENDER_ID"
             android:value="@string/ID_PROJECT_ID" />
+
         <meta-data
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_kdBTwNxOeTMdqEi8nsWj2ogeABiIJMY9" />
@@ -100,26 +102,26 @@
 
         <activity
             android:name="com.moe.pushlibrary.activities.MoEActivity"
-            android:parentActivityName=".views.activities.HomeActivity">
 
+            android:parentActivityName="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity" />
         </activity>
         <activity
-            android:name=".views.activities.OnBoardingActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".views.activities.ArticleActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".views.activities.WelcomeActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -127,126 +129,131 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.activities.MentorUserProfileDashboardActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".views.activities.MentorsUserListingActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".views.activities.MentorInsightActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".views.activities.AddressActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.AddressActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+
         <activity
-            android:name=".views.activities.PostDetailActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ContestActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateHidden" />
+
         <activity
-            android:name=".views.activities.AlbumActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".views.activities.ContestListActivity"
-            android:parentActivityName=".views.activities.HomeActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".views.activities.ContestActivity"
-            android:parentActivityName=".views.activities.HomeActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".views.activities.VideoPlayActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".views.activities.LoginActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".views.activities.ProfessionalWorkExperienceActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
+            tools:replace="android:theme"
             android:name="com.facebook.FacebookActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            tools:replace="android:theme" />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
         <activity
-            android:name=".views.activities.HomeActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".views.activities.CommunityPostActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+
         <activity
-            android:name=".views.activities.JobDetailActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+
+        </activity>
         <activity
-            android:name=".views.activities.HomeSearchActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".views.activities.CommunitiesDetailActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".views.activities.ProfileActicity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".views.activities.ArticleDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".views.activities.ProfessionalAddEducationActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".views.activities.BranchDeepLink"
+
+        <activity android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+            <data
+                android:host="shrs.me"
+                android:scheme="https"
+                android:pathPrefix="/"/>
+            <data
+                android:host="shrs.me"
+                android:scheme="http"
+                android:pathPrefix="/"/>
+            <data
+                android:host="dpjo.test-app.link"
+                android:scheme="https"
+                android:pathPrefix="/"/>
+            <data
+                android:host="dpjo.test-app.link"
+                android:scheme="http"
+                android:pathPrefix="/"/>
 
-                <data
-                    android:host="shrs.me"
-                    android:pathPrefix="/"
-                    android:scheme="https" />
-                <data
-                    android:host="shrs.me"
-                    android:pathPrefix="/"
-                    android:scheme="http" />
-                <data
-                    android:host="dpjo.test-app.link"
-                    android:pathPrefix="/"
-                    android:scheme="https" />
-                <data
-                    android:host="dpjo.test-app.link"
-                    android:pathPrefix="/"
-                    android:scheme="http" />
-                <data android:scheme="appliedlife.pvtltd.sheroes" />
+            <data android:scheme="appliedlife.pvtltd.sheroes"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.activities.SheroesDeepLinkingActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -254,30 +261,28 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:host="sheroes.com" />
-                <data android:host="sheroes.in" />
+                <data android:host="sheroes.com"/>
+                <data android:host="sheroes.in"></data>
                 <data android:scheme="https" />
-                <data android:pathPrefix="/jobs" />
-                <data android:pathPrefix="/articles" />
-                <data android:pathPrefix="/champions" />
-                <data android:pathPrefix="/communities" />
-                <data android:pathPrefix="/event" />
-                <data android:pathPrefix="/helpline" />
-                <data android:pathPrefix="/feed" />
-                <data android:pathPrefix="/users/" />
-                <data android:pathPrefix="/users/edit_profile" />
-                <data android:pathPrefix="/sheroes-challenge" />
-                <data android:pathPrefix="/my-challenges" />
-                <data android:pathPrefix="/faq" />
+                <data android:pathPrefix="/jobs"/>
+                <data android:pathPrefix="/articles"/>
+                <data android:pathPrefix="/champions"/>
+                <data android:pathPrefix="/communities"/>
+                <data android:pathPrefix="/event"/>
+                <data android:pathPrefix="/helpline"/>
+                <data android:pathPrefix="/feed"/>
+                <data android:pathPrefix="/users/edit_profile"/>
+                <data android:pathPrefix="/sheroes-challenge"/>
+                <data android:pathPrefix="/my-challenges"/>
+                <data android:pathPrefix="/faq"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".imageops.CropImageActivity"
+            android:name="appliedlife.pvtltd.SHEROES.imageops.CropImageActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".service.PushNotificationService"
+            android:name="appliedlife.pvtltd.SHEROES.service.PushNotificationService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -291,13 +296,13 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
@@ -312,7 +317,7 @@
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <receiver
-            android:name=".service.CustomInstallTrackersReceiver"
+            android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
@@ -331,9 +336,11 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".views.activities.EditUserProfileActivity" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity" android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".views.activities.ProfileCommunitiesActivity"/>
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity"/>
+
+
     </application>
 
 </manifest>

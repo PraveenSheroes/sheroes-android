@@ -46,21 +46,6 @@ public class UserLikedListPresenterImpl extends BasePresenter<IUserLikedListView
 
     //region presenter methods
 
-    public void fetchPrizes(String contest_id) {
-    /*    ICareAPIService careApiService = CareServiceHelper.getCareServiceInstance();
-        careApiService.getPrizes(contest_id)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<List<Prize>>bindToLifecycle())
-                .subscribe(new RxUtil.OnNextSubscriber<List<Prize>>() {
-                    @Override
-                    public void onNext(List<Prize> prizeList) {
-                        mContestWinnerView.showPrizes(prizeList);
-                    }
-
-                });*/
-    }
-
     public void getUserLikedList(CommentReactionRequestPojo commentReactionRequestPojo, boolean isReaction, int noReactionConstant) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);

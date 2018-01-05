@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -7,10 +8,12 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -20,6 +23,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getBookMarks;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
@@ -46,8 +50,14 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
     private CommentReactionPresenter mCommentReactionPresenter;
+    private OnBoardingPresenter mOnBoardingPresenter;
     RequestedPresenter requestedPresenter;
-
+    public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        mOnBoardingPresenter = onBoardingPresenter;
+        mRecyclerView = recyclerView;
+        mManager = manager;
+        this.mFragmentListRefreshData = fragmentListRefreshData;
+    }
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter = homePresenter;
         mRecyclerView = recyclerView;
@@ -229,6 +239,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     case AppConstants.MENTOR_LISTING:
                         FeedRequestPojo feedMentor=mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         mHomePresenter.getFeedFromPresenter(feedMentor);
+                        break;
+                    case AppConstants.ON_BOARDING_COMMUNITIES:
+                        FeedRequestPojo feedRequestPojo = makeFeedRequest(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo());
+                        feedRequestPojo.setOnBoardingCommunities(true);
+                        mOnBoardingPresenter.getFeedFromPresenter(feedRequestPojo);
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());

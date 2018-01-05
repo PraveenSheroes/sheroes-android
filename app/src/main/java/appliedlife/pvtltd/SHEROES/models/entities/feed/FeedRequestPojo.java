@@ -18,6 +18,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityRes
 @Parcel(analyze = {FeedRequestPojo.class,BaseRequest.class})
 public class FeedRequestPojo extends BaseRequest{
 
+    @SerializedName("is_onboarding_communities")
+    @Expose
+    private boolean isOnBoardingCommunities;
     @SerializedName("posting_date_dt")
     @Expose
     private String postingDate;
@@ -242,5 +245,13 @@ public class FeedRequestPojo extends BaseRequest{
 
     public void setAnonymousPostHide(boolean anonymousPostHide) {
         isAnonymousPostHide = anonymousPostHide;
+    }
+
+    public boolean isOnBoardingCommunities() {
+        return isOnBoardingCommunities;
+    }
+
+    public void setOnBoardingCommunities(boolean onBoardingCommunities) {
+        isOnBoardingCommunities = onBoardingCommunities;
     }
 }

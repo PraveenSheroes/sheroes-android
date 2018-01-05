@@ -35,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 
 /**
@@ -151,7 +150,7 @@ public class PushNotificationService extends GcmListenerService {
         notificationIntent.setData(url);
         notificationIntent.putExtra(FROM_PUSH_NOTIFICATION, true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
-        stackBuilder.addParentStack(ArticleDetailActivity.class);
+        //stackBuilder.addParentStack(ArticleDetailActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
         notificationIntent.setAction(AppConstants.SHEROES + mCount);
 

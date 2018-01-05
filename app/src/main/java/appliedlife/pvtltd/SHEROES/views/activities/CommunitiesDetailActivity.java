@@ -68,7 +68,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommentReactionFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.InviteCommunityOwner;
@@ -87,7 +86,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 
-public class CommunitiesDetailActivity extends BaseActivity implements CommentReactionFragment.HomeActivityIntractionListner, AppBarLayout.OnOffsetChangedListener {
+public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLayout.OnOffsetChangedListener {
     private static final String SCREEN_LABEL = "Community Screen Activity";
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailActivity.class);
     @Bind(R.id.app_bar_coomunities_detail)
@@ -184,24 +183,14 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             if (null != mCommunityFeedObj) {
                 communityFeedObjForHomeFeed = mCommunityFeedObj;
             }
-        long timeSpent = System.currentTimeMillis() - startedTime;
         if (null != mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getNameOrTitle())) {
-            // TODO : ujjwal
-            // /moEngageUtills.entityMoEngageCommunityDetail(this, mMoEHelper, payloadBuilder, timeSpent, mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG);
         }
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_VIEW_COMMUNITY));
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if(mFragmentOpen.isCommentList()){
-            CommentReactionFragment commentReactionFragment = (CommentReactionFragment) getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-            if(commentReactionFragment!=null){
-                commentReactionFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        }else {
             mCommunitiesDetailFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-        }
     }
 
     private void setPagerAndLayouts() {
@@ -515,22 +504,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
 
     public void inviteJoinEventClick(String pressedEventName, FeedDetail feedDetail) {
         if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
-            // TODO : ujjwal
-           /* if (feedDetail.isClosedCommunity()) {
-                feedDetail.setScreenName(AppConstants.COMMUNITY_DETAIL);
-                showCommunityJoinReason(feedDetail);
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-            } else {
-                Fragment fragmentCommunityDetail = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                if (AppUtils.isFragmentUIActive(fragmentCommunityDetail)) {
-                    ((CommunitiesDetailFragment) fragmentCommunityDetail).joinRequestForOpenCommunity(mCommunityFeedObj, pressedEventName);
-                }
-                if (mCommunityFeedObj.isRequestPending()) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
-                }
-            }*/
         } else if (pressedEventName.equalsIgnoreCase(getString(R.string.ID_INVITE))) {
             inviteCommunityMemberDialog();
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(feedDetail.getEntityOrParticipantId())).name(feedDetail.getNameOrTitle()).build();
@@ -557,17 +530,6 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
             AppInviteDialog.show(this, content);
         }
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
-      /*  mInviteCommunityMemberDialogFragment = (InviteCommunityMemberDialogFragment) getFragmentManager().findFragmentByTag(InviteCommunityMemberDialogFragment.class.getName());
-        if (mInviteCommunityMemberDialogFragment == null) {
-            mInviteCommunityMemberDialogFragment = new InviteCommunityMemberDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, mCommunityFeedObj);
-            mInviteCommunityMemberDialogFragment.setArguments(bundle);
-        }
-        if (!mInviteCommunityMemberDialogFragment.isVisible() && !mInviteCommunityMemberDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            mInviteCommunityMemberDialogFragment.show(getFragmentManager(), InviteCommunityMemberDialogFragment.class.getName());
-        }
-        return mInviteCommunityMemberDialogFragment;*/
     }
 
     public void addOwnerOnClick() {
@@ -640,28 +602,8 @@ public class CommunitiesDetailActivity extends BaseActivity implements CommentRe
         final Fragment fragmentCommunityOwnerSearch = getSupportFragmentManager().findFragmentByTag(CommunityOpenAboutFragment.class.getName());
         if (AppUtils.isFragmentUIActive(fragmentCommunityOwnerSearch)) {
             if (!isMemberRemoveDialog) {
-                // TODO : ujjwal
-                //  mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
             }
             ((CommunityOpenAboutFragment) fragmentCommunityOwnerSearch).callRemoveOwner(mCommunityFeedObj);
-        }
-    }
-
-    @Override
-    public void onDialogDissmiss(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mMyCommunityPostFeedDetail = feedDetail;
-        onBackPressed();
-    }
-
-    @Override
-    public void onClickReactionList(FragmentOpen isFragmentOpen, FeedDetail feedDetail) {
-        mFragmentOpen = isFragmentOpen;
-        mMyCommunityPostFeedDetail = feedDetail;
-        if (mFragmentOpen.isReactionList()) {
-            mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.THREE_CONSTANT);
-            setAllValues(mFragmentOpen);
-            super.openCommentReactionFragment(mMyCommunityPostFeedDetail);
         }
     }
 

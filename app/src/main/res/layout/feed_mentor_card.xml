@@ -8,7 +8,7 @@
     android:layout_marginLeft="@dimen/dp_size_8"
     android:layout_marginRight="@dimen/dp_size_8"
     android:layout_marginTop="@dimen/dp_size_2"
-    android:elevation="@dimen/dp_size_5"
+    android:elevation="@dimen/dp_size_10"
     app:cardCornerRadius="@dimen/dp_size_10">
 
     <LinearLayout
@@ -156,6 +156,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/li_can_help"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center|left"
@@ -238,6 +239,7 @@
                 android:paddingRight="@dimen/dp_size_16"
                 android:paddingTop="@dimen/dp_size_10"
                 android:text="@string/ID_GROWTH_BUDDIES_FOLLOW"
+                android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_14"
                 android:visibility="visible" />
@@ -252,6 +254,7 @@
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp_size_10"
+                android:textAllCaps="true"
                 android:paddingLeft="@dimen/dp_size_16"
                 android:paddingRight="@dimen/dp_size_16"
                 android:paddingTop="@dimen/dp_size_10"
