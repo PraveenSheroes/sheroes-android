@@ -413,10 +413,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         switch (mCommunityPost.createPostRequestFrom)
         {
             case AppConstants.CREATE_POST:
-                menuItem.setTitle(R.string.action_post);
+                SpannableString actionPost = new SpannableString(getResources().getString(R.string.action_post));
+                actionPost.setSpan(new ForegroundColorSpan(Color.parseColor(mTitleTextColor)), 0, actionPost.length(), 0);
+                menuItem.setTitle(actionPost);
                 break;
             case AppConstants.MENTOR_CREATE_QUESTION:
-                menuItem.setTitle(R.string.action_mentor_post);
+                SpannableString actionMentor = new SpannableString(getResources().getString(R.string.action_mentor_post));
+                actionMentor.setSpan(new ForegroundColorSpan(Color.parseColor(mTitleTextColor)), 0, actionMentor.length(), 0);
+                menuItem.setTitle(actionMentor);
                 break;
             default:
         }
