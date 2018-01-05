@@ -419,12 +419,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
-                {
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
+                    userSolrObj.setSolrIgnoreIsUserFollowed(true);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                }else
-                {
+                }else {
+                    userSolrObj.setSolrIgnoreIsUserFollowed(false);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                 }
                 getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
@@ -449,18 +449,17 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
-                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
             }
 
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
-                {
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                }else
-                {
+                    userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                }else  {
+                    userSolrObj.setSolrIgnoreIsUserFollowed(true);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                 }
                 getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);

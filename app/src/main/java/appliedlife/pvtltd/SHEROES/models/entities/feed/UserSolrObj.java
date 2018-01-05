@@ -156,6 +156,9 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_is_mentor_followed")
     private boolean solrIgnoreIsMentorFollowed;
 
+    @SerializedName("solr_ignore_is_user_followed")
+    private boolean solrIgnoreIsUserFollowed;
+
 
     public int getTotalExperience() {
         return totalExperience;
@@ -549,5 +552,13 @@ public class UserSolrObj extends FeedDetail {
 
     public void setSolrIgnoreNoOfMentorPosts(int solrIgnoreNoOfMentorPosts) {
         this.solrIgnoreNoOfMentorPosts = solrIgnoreNoOfMentorPosts;
+    }
+
+    public boolean isSolrIgnoreIsUserFollowed() {
+        return solrIgnoreIsUserFollowed;
+    }
+
+    public void setSolrIgnoreIsUserFollowed(boolean solrIgnoreIsUserFollowed) {
+        this.solrIgnoreIsUserFollowed = solrIgnoreIsUserFollowed;
     }
 }

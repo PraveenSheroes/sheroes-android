@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -17,6 +18,7 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,7 +45,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -160,6 +161,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     @Inject
     Preference<LoginResponse> mUserPreference;
     ViewPagerAdapter mViewPagerAdapter;
+    private Dialog dialog = null;
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
     private FragmentOpen mFragmentOpen;
@@ -185,7 +187,8 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     private MoEngageUtills moEngageUtills;
     private int askingQuestionCode;
     boolean isUserVisitingOwnProfile = false;
-    int userPost =-1;
+    int userPost = -1;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -207,11 +210,11 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             mMentorUserItem = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
             mFeedDetail = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.MENTOR_DETAIL));
             mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
-            askingQuestionCode= getIntent().getExtras().getInt(AppConstants.ASKING_QUESTION);
+            askingQuestionCode = getIntent().getExtras().getInt(AppConstants.ASKING_QUESTION);
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isMentor = getIntent().getExtras().getBoolean(AppConstants.IS_MENTOR_ID);
 
-            if(null!=mMentorUserItem) {
+            if (null != mMentorUserItem) {
                 itemPosition = mMentorUserItem.getItemPosition();
             }
 
@@ -230,38 +233,47 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             if (mUserPreference.get().getUserSummary().getUserId() == mMentorUserItem.getEntityOrParticipantId()) {
                 Log.i(TAG, "its self profile");
                 isUserVisitingOwnProfile = true;
+                if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                    isMentor = true;
+                }
             }
         }
         //Chk if mentor of normal user and get its post
-        String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE  : AppConstants.USER_SUB_TYPE;
+        String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
 
         //if(isMentor) {
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant()));
-       // } else{
-       //     boolean hideAnnonymousPost = !isUserVisitingOwnProfile;
-       //     mHomePresenter.getFeedFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant(), hideAnnonymousPost));
-       // }
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant()));
+        // } else{
+        //     boolean hideAnnonymousPost = !isUserVisitingOwnProfile;
+        //     mHomePresenter.getFeedFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant(), hideAnnonymousPost));
+        // }
         setPagerAndLayouts();
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
+    @Override
+    protected void onStop() {
+        if(dialog!=null) {
+            dialog.dismiss();
+        }
+        super.onStop();
+    }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void setProfileNameData() {
-        if(StringUtil.isNotNullOrEmptyString(mMentorUserItem.getCityName())) {
+        if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getCityName())) {
             tvLoc.setText(mMentorUserItem.getCityName());
             tvLoc.setVisibility(View.VISIBLE);
-        }else
-        {
+        } else {
             tvLoc.setVisibility(View.GONE);
         }
-        if(StringUtil.isNotEmptyCollection(mMentorUserItem.getCanHelpIns())) {
+        if (StringUtil.isNotEmptyCollection(mMentorUserItem.getCanHelpIns())) {
             tvProfession.setText(mMentorUserItem.getCanHelpIns().get(0)); //skills
             tvProfession.setVisibility(View.VISIBLE);
-        }else
-        {
+        } else {
             tvProfession.setVisibility(View.GONE);
         }
-        if(StringUtil.isNotNullOrEmptyString(mMentorUserItem.getListDescription())) {
+        if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getListDescription())) {
             Spanned description = StringUtil.fromHtml(mMentorUserItem.getListDescription());
             userDescription.setText(description);
         }
@@ -281,31 +293,37 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
         //int totalPost = mMentorUserItem.
 
-        if (mMentorUserItem.getSolrIgnoreNoOfMentorPosts() > 0) {
-            String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
-            userTotalPostCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorPosts())));
-            tvMentorPost.setText(pluralAnswer);
-            liPost.setVisibility(View.VISIBLE);
-        } else {
-          //  liPost.setVisibility(View.GONE);
-        }
-       // if (mMentorUserItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
+        //if (mMentorUserItem.getSolrIgnoreNoOfMentorPosts() > 0) {
+        String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
+        userTotalPostCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorPosts())));
+        tvMentorPost.setText(pluralAnswer);
+        liPost.setVisibility(View.VISIBLE);
+        // } else {
+        //  liPost.setVisibility(View.GONE);
+        // }
+        // if (mMentorUserItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
         if (isMentor) {
-            String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
+            pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
             tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorAnswers())));
             tvMentorAnswer.setText(pluralAnswer);
             liAnswer.setVisibility(View.VISIBLE);
         } else {
             liAnswer.setVisibility(View.GONE);
         }
-        if (mMentorUserItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
-            String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
-            userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
-            userFollower.setText(pluralFollower);
-          //  liFollower.setVisibility(View.VISIBLE);
-        } else {
-            //liFollower.setVisibility(View.GONE);
-        }
+
+        //if (mMentorUserItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
+        String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
+        userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
+        userFollower.setText(pluralFollower);
+        //  liFollower.setVisibility(View.VISIBLE);
+        // } else {
+        //liFollower.setVisibility(View.GONE);
+        //}
+
+        //String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
+        //userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
+        //userFollower.setText(pluralFollower);
+        //liFollower.setVisibility(View.VISIBLE);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mMentorUserItem.getEntityOrParticipantId()) { //todo -profile - ask praveen if he hv issue with it
@@ -325,15 +343,12 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     }
 
     private void followUnFollowMentor() {
-        if (mMentorUserItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
-            String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
-            userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
-            userFollower.setText(pluralFollower);
-            liFollower.setVisibility(View.VISIBLE);
-        } else {
-            liFollower.setVisibility(View.GONE);
-        }
-        if (mMentorUserItem.isSolrIgnoreIsMentorFollowed()) {
+        // if (mMentorUserItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
+
+        //} else {
+        // liFollower.setVisibility(View.GONE);
+        //}
+        if (mMentorUserItem.isSolrIgnoreIsMentorFollowed() || mMentorUserItem.isSolrIgnoreIsUserFollowed()) {
             tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
             tvMentorDashBoardFollow.setText(this.getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
             tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
@@ -361,22 +376,21 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        if(isMentor) {
+        if (isMentor) {
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
-        } else{
+        } else {
             mViewPagerAdapter.addFragment(UserProfileTabFragment.createInstance(mChampionId), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
-          //  mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
+            //  mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         }
 
-       // mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
-       // mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
+        // mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
+        // mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(this);
-        if(askingQuestionCode==AppConstants.ASKING_QUESTION_CALL)
-        {
+        if (askingQuestionCode == AppConstants.ASKING_QUESTION_CALL) {
             mViewPager.setCurrentItem(AppConstants.ONE_CONSTANT);
             mAppBarLayout.setExpanded(false);
         }
@@ -384,15 +398,16 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
     @OnClick(R.id.tv_mentor_see_insight)
     public void mentorSeeInsightClick() {
-         Intent intent = new Intent(this, MentorInsightActivity.class);
-         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        Intent intent = new Intent(this, MentorInsightActivity.class);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
+
     @OnClick(R.id.tv_mentor_ask_question)
     public void mentorAskQuestionClick() {
-        if(tvMentorAskQuestion.getText().toString().equalsIgnoreCase(getString(R.string.ID_ANSWER_QUESTION))) {
+        if (tvMentorAskQuestion.getText().toString().equalsIgnoreCase(getString(R.string.ID_ANSWER_QUESTION))) {
             mViewPager.setCurrentItem(AppConstants.ONE_CONSTANT);
             mAppBarLayout.setExpanded(false);
-        }else {
+        } else {
             if (null != mMentorUserItem) {
                 CommunityPost mentorPost = new CommunityPost();
                 mentorPost.community = new Community();
@@ -404,6 +419,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             }
         }
     }
+
     @OnClick(R.id.iv_mentor_share)
     public void mentorShareClick() {
         shareCardViaSocial();
@@ -422,17 +438,17 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             tvMentorDashBoardFollow.setEnabled(false);
             PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
             publicProfileListRequest.setIdOfEntityParticipant(mMentorUserItem.getIdOfEntityOrParticipant());
-            if (mMentorUserItem.isSolrIgnoreIsMentorFollowed()) { //todo - what does it tell
-                mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,mMentorUserItem);
+            if (mMentorUserItem.isSolrIgnoreIsMentorFollowed() || mMentorUserItem.isSolrIgnoreIsUserFollowed()) { //todo - what does it tell
+                unFollowConfirmation(publicProfileListRequest);
             } else {
-                mHomePresenter.getFollowFromPresenter(publicProfileListRequest,mMentorUserItem);
+                mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mMentorUserItem);
             }
-            if (mMentorUserItem.isSolrIgnoreIsMentorFollowed()) {
-                mMentorUserItem.setSolrIgnoreIsMentorFollowed(false);
-            } else {
-                mMentorUserItem.setSolrIgnoreIsMentorFollowed(true);
-            }
-            followUnFollowMentor();
+            //if (mMentorUserItem.isSolrIgnoreIsMentorFollowed() || mMentorUserItem.isSolrIgnoreIsUserFollowed()) {
+            //    mMentorUserItem.setSolrIgnoreIsMentorFollowed(false);
+            //} else {
+            //    mMentorUserItem.setSolrIgnoreIsMentorFollowed(true);
+            // }
+            // followUnFollowMentor();
         }
     }
 
@@ -478,7 +494,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     private void deepLinkPressHandle() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        mMentorUserItem.currentItemPosition=itemPosition;
+        mMentorUserItem.currentItemPosition = itemPosition;
         Parcelable parcelableMentorDetail = Parcels.wrap(mMentorUserItem);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
         Parcelable parcelable = Parcels.wrap(mMentorUserItem);
@@ -505,7 +521,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
         mUserPostForCommunity = userPostSolrObj;
         int id = view.getId();
-        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager,mViewPager.getCurrentItem());
+        mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
@@ -516,9 +532,9 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-            if (fragment instanceof CommunitiesDetailFragment)
-                ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+        if (fragment instanceof CommunitiesDetailFragment)
+            ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
     @Override
@@ -593,9 +609,9 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-                mMentorUserItem = (UserSolrObj) feedDetailList.get(0);  //todo -profile -setting user details over here
-                mMentorUserItem.setCallFromName(screenName);
-                //  clHomeFooterList.setVisibility(View.VISIBLE); //todo -ptofile - i commented it
+            mMentorUserItem = (UserSolrObj) feedDetailList.get(0);  //todo -profile -setting user details over here
+            mMentorUserItem.setCallFromName(screenName);
+            //  clHomeFooterList.setVisibility(View.VISIBLE); //todo -ptofile - i commented it
 
             setProfileNameData();
         }
@@ -608,11 +624,10 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum)
-        {
+        switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
                 tvMentorDashBoardFollow.setEnabled(true);
-                followUnFollowMentor();
+                setProfileNameData();
                 break;
             default:
         }
@@ -657,6 +672,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
         }
     }
+
     private void shareCardViaSocial() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
@@ -696,18 +712,16 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
                             mFeedDetail = userPostSolrObj;
                         }
                         if (isPostDeleted) {
-                            if(mFragment instanceof CommunitiesDetailFragment) {
+                            if (mFragment instanceof CommunitiesDetailFragment) {
                                 ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                            }else
-                            {
+                            } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
                             }
                         } else {
-                            if(mFragment instanceof CommunitiesDetailFragment) {
+                            if (mFragment instanceof CommunitiesDetailFragment) {
                                 ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                            }else
-                            {
+                            } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                             }
                         }
@@ -746,16 +760,17 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     }
 
     public void setUsersFollowingCount(int numFound) {
-            followingTitle.setText(getResources().getString(R.string.following));
-            followingCount.setText(String.valueOf(numFound));
-            liFollowing.setVisibility(View.VISIBLE);
+        followingTitle.setText(getResources().getString(R.string.following));
+        followingCount.setText(String.valueOf(numFound));
+        liFollowing.setVisibility(View.VISIBLE);
     }
 
     public void setUsersFollowerCount(int numFound) {
-            String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
-            userFollowerCount.setText(String.valueOf(numericToThousand(numFound)));
-            userFollower.setText(pluralFollower);
-            liFollower.setVisibility(View.VISIBLE);
+        String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
+        mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(numFound);
+        userFollowerCount.setText(String.valueOf(numericToThousand(numFound)));
+        userFollower.setText(pluralFollower);
+        liFollower.setVisibility(View.VISIBLE);
 
     }
 
@@ -765,4 +780,53 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         tvMentorPost.setText(pluralAnswer);
         liPost.setVisibility(View.VISIBLE);
     }
+
+
+    protected final void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest) {
+
+        if(mMentorUserItem!=null) {
+            if(dialog!=null) {
+                dialog.dismiss();
+            }
+
+            dialog = new Dialog(MentorUserProfileDashboardActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.unfollow_confirmation_dialog);
+
+            CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_img_icon);
+            if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getImageUrl())) {
+                mProfileIcon.setCircularImage(true);
+                mProfileIcon.bindImage(mMentorUserItem.getImageUrl());
+                Glide.with(this)
+                        .load(mMentorUserItem.getImageUrl())
+                        .into(circleImageView);
+
+            }
+
+            TextView text = (TextView) dialog.findViewById(R.id.title);
+            text.setText("Unfollow "+mMentorUserItem.getNameOrTitle());
+
+            TextView dialogButton = (TextView) dialog.findViewById(R.id.cancel);
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvMentorDashBoardFollow.setEnabled(true);
+                    dialog.dismiss();
+                }
+            });
+
+            TextView unFollowButton = (TextView) dialog.findViewById(R.id.unfollow);
+            unFollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvMentorDashBoardFollow.setEnabled(true);
+                    mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest, mMentorUserItem);
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }
+        }
 }

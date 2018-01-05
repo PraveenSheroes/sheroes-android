@@ -125,16 +125,16 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
-    @POST("http://34.234.43.47/participant/feed/")
+    @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApiTest(@Body FeedRequestPojo feedRequestPojo);
 
-    @POST("http://34.234.43.47/participant/feed/followed_mentor_list")
+    @POST("participant/feed/followed_mentor_list")
     Observable<UserFollowedMentorsResponse> getFollowedMentorFromApiTest(@Body ProfileFollowedMentor profileFollowedMentor);
 
-    @POST("http://34.234.43.47/participant/user/get_number_of_followers")
+    @POST("participant/user/get_number_of_followers")
     Observable<BaseResponse> getUsersFollowerOrFollowing(@Body UserFollowerOrFollowingRequest userFollowerOrFollowingRequest);
 
-    @POST("http://34.234.43.47/participant/feed/mutual_communities")
+    @POST("participant/feed/mutual_communities")
     Observable<FeedResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
 
     @POST("participant/feed/")
@@ -273,7 +273,7 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);
 
-    @POST("http://34.234.43.47/participant/user/add_or_edit")
+    @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
     //remove
     @POST("participant/user/add_or_edit")

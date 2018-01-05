@@ -82,7 +82,7 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileN
         mCommunityRecycler.setHasFixedSize(true);
         mCommunityRecycler.setAdapter(mAdapter);
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
     }
 
     @Override

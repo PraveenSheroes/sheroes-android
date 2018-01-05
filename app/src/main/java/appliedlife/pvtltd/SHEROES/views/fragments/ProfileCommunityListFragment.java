@@ -78,7 +78,8 @@ public class ProfileCommunityListFragment extends BaseFragment implements Profil
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(mAdapter);
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1));
+        //todo -enable it
+        //profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, ));
     }
 
     @Override

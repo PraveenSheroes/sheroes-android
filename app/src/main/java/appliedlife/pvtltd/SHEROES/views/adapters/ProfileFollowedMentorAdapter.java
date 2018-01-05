@@ -24,6 +24,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by ravi on 01/01/18.
+ *
  */
 
 public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -86,8 +87,6 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
 
         @Bind(R.id.follower)
         TextView follower;
-
-
 
         // endregion
 

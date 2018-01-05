@@ -926,4 +926,9 @@
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
     <string name="ID_SECOND_WELCOME">Join Communities</string>
     <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
+    <string name="followed_communities">Followed Communities</string>
+    <string name="view_more">View More</string>
+    <string name="followed_mentors">Followed Mentors</string>
+    <string name="cancel">CANCEL</string>
+    <string name="unfollow">UNFOLLOW</string>
 </resources>

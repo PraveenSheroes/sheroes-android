@@ -197,6 +197,7 @@ public class AppConstants {
     public static final int NOT_TIME = 50000;
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
+    public static final int MENTOR_TYPE_ID = 7;
 
 
     /*Master data keys for pages*/

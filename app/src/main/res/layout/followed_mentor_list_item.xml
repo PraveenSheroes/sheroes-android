@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_size_98"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -46,12 +46,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_16"
             android:ellipsize="end"
-            android:fontFamily="sans-serif"
             android:maxLines="@integer/int_value_for_line_1"
-            android:text="@string/ID_LOCATION"
-            android:textColor="#3c3c3c"
             android:textSize="14sp"
-            android:textStyle="normal"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:textColor="#3c3c3c"
+            android:text="@string/ID_LOCATION"
             tools:text="@string/ID_USER_NAME" />
 
         <TextView
@@ -78,10 +78,7 @@
             android:gravity="center"
             android:drawableLeft="@drawable/ic_avatar1"
             android:drawableStart="@drawable/ic_avatar1"
-            android:paddingStart="@dimen/dp_size_4"
-            android:paddingLeft="@dimen/dp_size_4"
-            android:paddingRight="@dimen/dp_size_4"
-            android:paddingEnd="@dimen/dp_size_4"
+            android:drawablePadding="@dimen/dp_size_5"
             android:textColor="#878787"
             android:textSize="14sp"
             android:textStyle="normal"
@@ -91,9 +88,8 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/border"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="@color/black" />
+        android:layout_height="@dimen/dp_size_1"
+        android:background="@color/on_board_work" />
 
 </LinearLayout>

@@ -138,7 +138,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     private void pupulateUserProfileDetails() {
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
         profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
 

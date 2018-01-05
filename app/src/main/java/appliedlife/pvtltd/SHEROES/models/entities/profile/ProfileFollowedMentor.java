@@ -11,17 +11,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 public class ProfileFollowedMentor extends BaseRequest {
 
-    @SerializedName("id_of_entity_or_participant")
+    @SerializedName("user_id")
     @Expose
-    protected Long idOfEntityParticipant;
-
+    protected Long userId;
 
     public Long getIdOfEntityParticipant() {
-        return idOfEntityParticipant;
+        return userId;
     }
 
     public void setIdOfEntityParticipant(Long idOfEntityParticipant) {
-        this.idOfEntityParticipant = idOfEntityParticipant;
+        this.userId = idOfEntityParticipant;
     }
 }
 
