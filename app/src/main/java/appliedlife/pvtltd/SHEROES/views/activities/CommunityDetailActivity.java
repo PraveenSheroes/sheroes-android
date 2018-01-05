@@ -597,7 +597,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             communityPost.community = new Community();
             communityPost.community.id = mCommunityFeedSolrObj.getIdOfEntityOrParticipant();
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
-            CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
+            CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true, mCommunityFeedSolrObj.communityPrimaryColor, mCommunityFeedSolrObj.titleTextColor);
         } else {
             if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
                 Uri uri = Uri.parse(url);

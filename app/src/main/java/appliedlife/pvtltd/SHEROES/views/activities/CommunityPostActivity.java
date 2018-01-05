@@ -212,8 +212,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         if (null != getIntent() && getIntent().getExtras()!=null) {
-            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR);
-            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR);
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, "#6e2f95");
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, "#ffffff");
         }
 
         Parcelable parcelable = getIntent().getParcelableExtra(CommunityPost.COMMUNITY_POST_OBJ);

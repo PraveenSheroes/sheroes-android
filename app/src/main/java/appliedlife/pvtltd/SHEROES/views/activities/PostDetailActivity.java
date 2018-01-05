@@ -169,8 +169,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
 
         if (null != getIntent() && getIntent().getExtras()!=null) {
-            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR);
-            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR);
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, "#6e2f95");
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, "#ffffff");
         }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
