@@ -50,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -83,7 +84,8 @@ import butterknife.ButterKnife;
 
 public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
     public static final String SCREEN_LABEL = "Feed Fragment";
-    public static final String ENDPOINT = "ENDPOINT";
+    public static final String PRIMARY_COLOR = "Primary Color";
+    public static final String TITLE_TEXT_COLOR = "Title Text Color";
 
     @Inject
     AppUtils mAppUtils;
@@ -109,6 +111,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     EventDetailDialogFragment eventDetailDialogFragment;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
+    private boolean hasFeedEnded;
+    private String mPrimaryColor = "#6e2f95";
+    private String mTitleTextColor = "#ffffff";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -125,6 +130,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (parcelable != null) {
                 mCommunityTab = Parcels.unwrap(parcelable);
             }
+            mPrimaryColor = getArguments().getString(PRIMARY_COLOR);
+            mTitleTextColor = getArguments().getString(TITLE_TEXT_COLOR);
         }
         if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
             mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
@@ -151,7 +158,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (mFeedPresenter.isFeedLoading()) {
+                if (mFeedPresenter.isFeedLoading() || hasFeedEnded) {
                     return;
                 }
                 mAdapter.feedStartedLoading();
@@ -161,13 +168,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
         return view;
-    }
-
-    public void fetchFeed() {
-        FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, 1);
-        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-        FragmentListRefreshData mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT, false);
-        mFeedPresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO), mFragmentListRefreshData);
     }
 
     @Override
@@ -197,6 +197,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void addAllFeed(List<FeedDetail> feedList) {
         mAdapter.addAll(feedList);
+    }
+
+    @Override
+    public void setFeedEnded(boolean feedEnded) {
+        this.hasFeedEnded = feedEnded;
     }
 
     @Override
@@ -282,12 +287,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onUserPostClicked(UserPostSolrObj userPostSolrObj) {
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false, mPrimaryColor, mTitleTextColor);
     }
 
     @Override
     public void onUserPostCommentClicked(UserPostSolrObj userPostSolrObj) {
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true, mPrimaryColor, mTitleTextColor);
     }
 
     @Override
@@ -313,7 +318,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.edit:
-                            CommunityPostActivity.navigateTo(getActivity(), userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                            CommunityPostActivity.navigateTo(getActivity(), userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, mPrimaryColor, mTitleTextColor);
                             return true;
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
@@ -378,6 +383,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onUserPostUnLiked(UserPostSolrObj userPostObj) {
         mFeedPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), userPostObj);
+    }
+
+    @Override
+    public void onArticlePostLiked(ArticleSolrObj articleSolrObj) {
+        mFeedPresenter.getPostLikesFromPresenter(mAppUtils.likeRequestBuilder(articleSolrObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), articleSolrObj);
+    }
+
+    @Override
+    public void onArticlePostUnLiked(ArticleSolrObj articleSolrObj) {
+        mFeedPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(articleSolrObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), articleSolrObj);
     }
 
     @Override
@@ -535,7 +550,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         communityPost.community.name = userSolrObj.getNameOrTitle();
         communityPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+        CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, mPrimaryColor, mTitleTextColor);
     }
 
     @Override
@@ -550,6 +565,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    @Override
+    public void onArticleCommentClicked(ArticleSolrObj articleObj) {
+        ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
     }
 
     @Override
@@ -580,12 +600,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
         userPostSolrObj.setIsEditOrDelete(AppConstants.TWO_CONSTANT);
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false, mPrimaryColor, mTitleTextColor);
     }
 
     private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
         userPostSolrObj.setIsEditOrDelete(AppConstants.ONE_CONSTANT);
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false, mPrimaryColor, mTitleTextColor);
     }
 
     public void updateItem(FeedDetail feedDetail) {
@@ -620,7 +640,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return -1;
     }
 
-    public void refreshAllList() {
-
+    public void refreshList() {
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
     }
 }

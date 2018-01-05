@@ -6,6 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
@@ -79,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
 import butterknife.Bind;
@@ -184,6 +189,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mPostAsCommunitySelected;
     private boolean mIsProgressBarVisible;
     private boolean mIsChallengePost;
+    private String mPrimaryColor = "#6e2f95";
+    private String mTitleTextColor = "#ffffff";
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
@@ -203,6 +210,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
         }
+
+        if (null != getIntent() && getIntent().getExtras()!=null) {
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR);
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR);
+        }
+
         Parcelable parcelable = getIntent().getParcelableExtra(CommunityPost.COMMUNITY_POST_OBJ);
         if (parcelable != null) {
             mCommunityPost = Parcels.unwrap(parcelable);
@@ -275,6 +288,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupCommunityNameListener();
         setupAnonymousSlelectListener();
         setViewByCreatePostCall();
+        setupToolbarItemsColor();
     }
     private void setViewByCreatePostCall()
     {
@@ -688,11 +702,61 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     }
 
+
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, String primaryColor, String titleTextColor) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
+        if (feedDetail != null) {
+            CommunityPost communityPost = new CommunityPost();
+            communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
+            communityPost.community = new Community();
+            communityPost.community.id = userPostObj.getCommunityTypeId();
+            communityPost.body = userPostObj.getListDescription();
+            communityPost.community.name = userPostObj.getPostCommunityName();
+            communityPost.community.isOwner = userPostObj.isCommunityOwner();
+            communityPost.isMyPost =userPostObj.isCommunityOwner();
+
+            communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
+            communityPost.isAnonymous = userPostObj.isAnonymous();
+            communityPost.isEdit = true;
+            communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+            if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
+                for (String imageUrl : userPostObj.getImageUrls()) {
+                    Photo photo = new Photo();
+                    photo.url = imageUrl;
+                    communityPost.photos.add(photo);
+                }
+                int i = 0;
+                for (Long imageId : userPostObj.getImagesIds()) {
+                    communityPost.photos.get(i).remote_id = imageId.intValue();
+                    i++;
+                }
+            }
+            Parcelable parcelable = Parcels.wrap(communityPost);
+            intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+            intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
+            intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+            intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
+
+    }
+
     public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
         Parcelable parcelable = Parcels.wrap(communityPost);
         intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
         intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity,  String primaryColor, String titleTextColor) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        Parcelable parcelable = Parcels.wrap(communityPost);
+        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+        intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
+        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
@@ -914,4 +978,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         popup.show();
     }
     //endregion
+
+    private void setupToolbarItemsColor() {
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+        }
+        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
+    }
 }

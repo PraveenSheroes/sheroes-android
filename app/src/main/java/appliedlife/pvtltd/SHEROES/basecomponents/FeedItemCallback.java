@@ -70,4 +70,10 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onMentorAskQuestionClicked(UserSolrObj userSolrObj);
 
     void onMentorProfileClicked(UserSolrObj userSolrObj);
+
+    void onArticleCommentClicked(ArticleSolrObj articleObj);
+
+    void onArticlePostLiked(ArticleSolrObj articleSolrObj);
+
+    void onArticlePostUnLiked(ArticleSolrObj articleSolrObj);
 }

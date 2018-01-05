@@ -69,7 +69,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
         switch (viewType) {
             case TYPE_ARTICLE:
-                return new ArticleCardHolder(mInflater.inflate(R.layout.article_card_list_item, parent, false), mBaseHolderInterface);
+                return new FeedArticleHolder(mInflater.inflate(R.layout.feed_article_card_normal, parent, false), mBaseHolderInterface);
             case TYPE_USER_POST:
                 return new FeedCommunityPostHolder(mInflater.inflate(R.layout.feed_comunity_user_post_normal, parent, false), mBaseHolderInterface);
             case TYPE_LOADER:
@@ -124,13 +124,13 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 break;
             case TYPE_EVENT:
                 EventCardHolder eventCardHolder = (EventCardHolder) holder;
-                EventSolrObj eventSolrObj = (EventSolrObj) mFeedDetailList.get(position);
-                eventCardHolder.bindData(eventSolrObj, mContext, position);
+                UserPostSolrObj userPostSolrObj1 = (UserPostSolrObj) mFeedDetailList.get(position);
+                eventCardHolder.bindData(userPostSolrObj1, mContext, position);
                 break;
             case TYPE_ORGANIZATION:
                 OrgReviewCardHolder orgReviewCardHolder = (OrgReviewCardHolder) holder;
-                OrganizationFeedObj organizationFeedObj = (OrganizationFeedObj) mFeedDetailList.get(position);
-                orgReviewCardHolder.bindData(organizationFeedObj, mContext, position);
+                UserPostSolrObj userPostSolrObj2 = (UserPostSolrObj) mFeedDetailList.get(position);
+                orgReviewCardHolder.bindData(userPostSolrObj2, mContext, position);
                 break;
             case TYPE_INRO:
                 AppIntroCardHolder appIntroCardHolder = (AppIntroCardHolder) holder;
@@ -176,32 +176,40 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return TYPE_ARTICLE;
             }
             if (feedDetail instanceof UserPostSolrObj) {
-                return TYPE_USER_POST;
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                    return TYPE_EVENT;
+
+                } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
+                    return TYPE_ORGANIZATION;
+                }else {
+                    return TYPE_USER_POST;
+                }
             }
-            if(feedDetail instanceof JobFeedSolrObj){
+            if (feedDetail instanceof JobFeedSolrObj) {
                 return TYPE_JOB;
             }
-            if(feedDetail instanceof ChallengeSolrObj){
+            if (feedDetail instanceof ChallengeSolrObj) {
                 return TYPE_CHALLENGE;
             }
-            if(feedDetail instanceof EventSolrObj){
+            if (feedDetail instanceof EventSolrObj) {
                 return TYPE_EVENT;
             }
-            if(feedDetail instanceof OrganizationFeedObj){
+            if (feedDetail instanceof OrganizationFeedObj) {
                 return TYPE_ORGANIZATION;
             }
-            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.APP_INTRO_SUB_TYPE)){
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.APP_INTRO_SUB_TYPE)) {
                 return TYPE_INRO;
             }
-            if(feedDetail instanceof MentorDataObj){
+            if (feedDetail instanceof MentorDataObj) {
                 return TYPE_MENTOR_SUGGESTION_CAROSEL;
             }
 
-            if(feedDetail instanceof UserSolrObj){
+            if (feedDetail instanceof UserSolrObj) {
                 return TYPE_MENTOR_COMPACT;
             }
 
-            if(feedDetail instanceof LeaderObj){
+            if (feedDetail instanceof LeaderObj) {
                 return TYPE_LEADER;
             }
         }
@@ -282,14 +290,14 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
         notifyItemRemoved(position);
     }
 
-    public List<FeedDetail> getDataList(){
+    public List<FeedDetail> getDataList() {
         return mFeedDetailList;
     }
 
     public void addAll(List<FeedDetail> feedList) {
         int startPosition = mFeedDetailList.size() - 1;
         mFeedDetailList.addAll(startPosition, feedList);
-        notifyItemRangeInserted(startPosition, mFeedDetailList.size() -1);
+        notifyItemRangeInserted(startPosition, mFeedDetailList.size() - 1);
     }
     //endregion
 

@@ -53,6 +53,7 @@
         style="@style/FabStyle"
         android:layout_gravity="bottom|end"
         app:srcCompat="@drawable/ic_pencil"
+        android:visibility="gone"
         android:tint="@color/white"/>
     <LinearLayout
         android:layout_width="match_parent"

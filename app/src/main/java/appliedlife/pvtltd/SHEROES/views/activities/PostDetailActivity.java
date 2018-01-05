@@ -2,7 +2,11 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -12,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -65,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
@@ -133,6 +140,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private UserPostSolrObj mUserPostObj;
     private String mUserPostId;
     private boolean mIsAnonymous;
+    private String mPrimaryColor = "#6e2f95";
+    private String mTitleTextColor = "#ffffff";
     //endregion
 
     //region activity methods
@@ -158,6 +167,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 return;
             }
         }
+
+        if (null != getIntent() && getIntent().getExtras()!=null) {
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR);
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR);
+        }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -176,6 +190,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTitleToolbar.setText(R.string.ID_COMMENTS);
         setupEditInputText();
+        setupToolbarItemsColor();
     }
 
     @OnClick(R.id.tv_user_name_for_post)
@@ -355,6 +370,20 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
        // ActivityCompat.startActivity(fromActivity, intent, null);
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, String sourceScreen, UserPostSolrObj userPostSolrObj, int requestCode, HashMap<String, Object> properties, boolean showKeyboard, String primaryColor, String titleTextColor) {
+        Intent intent = new Intent(fromActivity, PostDetailActivity.class);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        Parcelable parcelable = Parcels.wrap(userPostSolrObj);
+        intent.putExtra(UserPostSolrObj.USER_POST_OBJ, parcelable);
+        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
     //endregion
@@ -664,4 +693,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
     //endregion
+
+    private void setupToolbarItemsColor() {
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+        }
+        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
+    }
 }

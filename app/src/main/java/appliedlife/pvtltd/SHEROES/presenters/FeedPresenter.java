@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import android.support.design.widget.Snackbar;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
@@ -23,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.article.CommonFeedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -31,8 +28,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesRespon
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -75,7 +70,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
@@ -177,8 +171,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 public void onError(Throwable e) {
                     mIsFeedLoading = false;
                     getMvpView().stopProgressBar();
-                    //mCollectionView.showMessage(R.string.error_feed, Snackbar.LENGTH_SHORT, feedState);
-                    // even if something goes wrong, we still need to stop fetching and show existing feed
                     Crashlytics.getInstance().core.logException(e);
                     getMvpView().showFeedList(mFeedDetailList);
 
@@ -186,28 +178,28 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
                 @Override
                 public void onNext(FeedResponsePojo feedResponsePojo) {
-                    List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
-                    mNextToken = feedResponsePojo.getNextToken();
-                    mIsFeedLoading = false;
-                    switch (mFeedState) {
-                        case NORMAL_REQUEST:
-                            getMvpView().stopProgressBar();
-                            mFeedDetailList = feedList;
-                            getMvpView().showFeedList(mFeedDetailList);
-                            break;
-                        case LOAD_MORE_REQUEST:
-                            // append in case of load more
-                            if (!CommonUtil.isEmpty(feedList)) {
-                                mFeedDetailList.addAll(mFeedDetailList.size() - 1, feedList);
-                                getMvpView().addAllFeed(feedList);
-                            }
-                            break;
+                    if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
+                        List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+                        mNextToken = feedResponsePojo.getNextToken();
+                        mIsFeedLoading = false;
+                        switch (mFeedState) {
+                            case NORMAL_REQUEST:
+                                getMvpView().stopProgressBar();
+                                mFeedDetailList = feedList;
+                                getMvpView().setFeedEnded(false);
+                                getMvpView().showFeedList(mFeedDetailList);
+                                break;
+                            case LOAD_MORE_REQUEST:
+                                // append in case of load more
+                                if (!CommonUtil.isEmpty(feedList)) {
+                                    mFeedDetailList.addAll(mFeedDetailList.size() - 1, feedList);
+                                    getMvpView().addAllFeed(feedList);
+                                }else {
+                                    getMvpView().setFeedEnded(true);
+                                }
+                                break;
+                        }
                     }
-
-                    // check if feed ended
-                /*    if (feedList.size() < configLimit || !CommonUtil.isNotEmpty(mNextToken)) {
-                        mFeedState = END_REQUEST;
-                    }*/
                 }
             });
             registerSubscription(subscription);
@@ -216,87 +208,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     public boolean isFeedLoading() {
         return mIsFeedLoading;
     }
-   /* public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
-        Subscription subscription = mHomeModel.getNewGCMidFromModel(loginRequest).subscribe(new Subscriber<GcmIdResponse>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-            //    getMvpView().showError(e.getMessage(),ERROR_AUTH_TOKEN);
-
-            }
-
-            @Override
-            public void onNext(GcmIdResponse gcmIdResponse) {
-                if (null != gcmIdResponse) {
-                    //getMvpView().getNotificationReadCountSuccess(gcmIdResponse,GCM_ID);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
-    public void getAuthTokenRefreshPresenter() {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getAuthTokenRefreshFromModel().subscribe(new Subscriber<LoginResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-
-            }
-
-            @Override
-            public void onNext(LoginResponse loginResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getLogInResponse(loginResponse);
-            }
-        });
-        registerSubscription(subscription);
-    }
-
-    public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-
-            }
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                LogUtils.info(TAG, "********response***********");
-                getMvpView().stopProgressBar();
-                if (null != feedResponsePojo) {
-                    //getMvpView().getFeedListSuccess(feedResponsePojo);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }*/
 
     public void getNewHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -356,7 +267,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 if (!CommonUtil.isEmpty(feedDetailList) && feedRequestPojo.getPageNo() == 1) {
                     mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
                 }
-                //getMvpView().showHomeFeedList(feedDetailList);
             }
         });
         registerSubscription(subscription);
@@ -448,7 +358,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
-                    //getMvpView().getFeedListSuccess(feedResponsePojo);
                 }
             }
         });
@@ -485,7 +394,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                 }
-                //getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
             }
         });
         registerSubscription(subscription);
@@ -521,7 +429,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                 }
-                //getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
             }
         });
         registerSubscription(subscription);
@@ -579,7 +486,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().invalidateItem(userPostSolrObj);
-                //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -590,7 +496,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = false;
             comment.likeCount--;
-           // getMvpView().invalidateLikeUnlike(comment);
             return;
         }
         getMvpView().startProgressBar();
@@ -607,7 +512,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
-               // getMvpView().invalidateLikeUnlike(comment);
 
             }
 
@@ -618,8 +522,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     comment.likeCount--;
                 }
                 getMvpView().stopProgressBar();
-                //getMvpView().invalidateLikeUnlike(comment);
-               // //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -647,7 +549,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
-                //getMvpView().invalidateLikeUnlike(comment);
             }
 
             @Override
@@ -657,8 +558,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     comment.isLiked = true;
                     comment.likeCount++;
                 }
-                ////getMvpView().invalidateLikeUnlike(comment);
-               // //getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
             }
         });
         registerSubscription(subscription);
@@ -918,12 +817,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-    public void getPostLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getPostLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-            userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-            getMvpView().invalidateItem(userPostSolrObj);
+            feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            getMvpView().invalidateItem(feedDetail);
             return;
         }
         getMvpView().startProgressBar();
@@ -938,9 +837,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-                userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                getMvpView().invalidateItem(userPostSolrObj);
+                feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                getMvpView().invalidateItem(feedDetail);
 
             }
 
@@ -948,12 +847,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 if(likeResponse.getStatus() == AppConstants.FAILED){
-                    userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                    userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                    getMvpView().invalidateItem(userPostSolrObj);
+                    feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                    feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                    getMvpView().invalidateItem(feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
-                getMvpView().invalidateItem(userPostSolrObj);
+                AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                getMvpView().invalidateItem(feedDetail);
             }
         });
         registerSubscription(subscription);
@@ -971,13 +870,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void getPostUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getPostUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-            userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
             //mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().invalidateItem(userPostSolrObj);
+            getMvpView().invalidateItem(feedDetail);
             return;
         }
         getMvpView().startProgressBar();
@@ -992,10 +891,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-                userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                // mBaseResponseList.set(0, userPostSolrObj);
-                getMvpView().invalidateItem(userPostSolrObj);
+                getMvpView().invalidateItem(feedDetail);
 
             }
 
@@ -1003,12 +902,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 if(likeResponse.getStatus() == AppConstants.FAILED){
-                    userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                    userPostSolrObj.setNoOfLikes(userPostSolrObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                    feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                    feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                   //  mBaseResponseList.set(0, userPostSolrObj);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
-                getMvpView().invalidateItem(userPostSolrObj);
+                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                getMvpView().invalidateItem(feedDetail);
             }
         });
         registerSubscription(subscription);

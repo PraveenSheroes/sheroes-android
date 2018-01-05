@@ -331,12 +331,12 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
+                    Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunityDetailActivity.class);
                     int indexOfSecondBackSlace = AppUtils.findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
                     String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
-                    into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                    into.putExtra(AppConstants.COMMUNITY_ID, newCommunityId);
                     into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                     into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     startActivity(into);

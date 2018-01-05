@@ -14,11 +14,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
@@ -29,9 +32,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -41,6 +46,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
 
     SheroesAppServiceApi sheroesAppServiceApi;
     SheroesApplication mSheroesApplication;
+
+    @Inject
+    AppUtils mAppUtils;
     @Inject
     public CommunityDetailPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
@@ -185,8 +193,44 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
         registerSubscription(subscription);*/
     }
 
+    public void fetchCommunity(String communityId) {
+        FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, 1, Long.valueOf(communityId));
+        getFeedFromPresenter(feedRequestPojo);
+    }
+
+    public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                if (null != feedResponsePojo && feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                    getMvpView().setCommunity((CommunityFeedSolrObj)feedResponsePojo.getFeedDetails().get(0));
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        //  LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
                 .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
                     @Override

@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -445,11 +446,19 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         articleObj .setTrending(true);
         tvFeedArticleUserBookmark.setEnabled(false);
         if (articleObj .isBookmarked()) {
-            viewInterface.handleOnClick(articleObj , tvFeedArticleUserBookmark);
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback) viewInterface).onArticleUnBookMarkClicked(articleObj);
+            }else {
+                viewInterface.handleOnClick(articleObj, tvFeedArticleUserBookmark);
+
+            }((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.handleOnClick(articleObj , tvFeedArticleUserBookmark);
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback) viewInterface).onArticleBookMarkClicked(articleObj);
+            }else {
+                viewInterface.handleOnClick(articleObj, tvFeedArticleUserBookmark);
+
+            }((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (!articleObj .isBookmarked()) {
             articleObj .setBookmarked(true);
@@ -461,19 +470,42 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_share)
     public void tvShareClick() {
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserShare);
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostShared(articleObj);
+        }else {
+            viewInterface.handleOnClick(articleObj , tvFeedArticleUserShare);
+            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+        }
     }
 
-    @OnClick(R.id.li_feed_article_images)
+    @OnClick({R.id.li_feed_article_images, R.id.tv_feed_article_header_lebel})
     public void articleImageClick() {
-        viewInterface.handleOnClick(articleObj , liFeedArticleImages);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onArticleItemClicked(articleObj);
+        }else {
+            viewInterface.handleOnClick(articleObj , liFeedArticleImages);
+        }
     }
 
     @OnClick(R.id.tv_feed_article_user_reaction)
     public void userReactionClick() {
-        if ((Boolean) tvFeedArticleUserReaction.getTag()) {
-            userReactionWithOutLongPress();
+        if(viewInterface instanceof FeedItemCallback){
+            if (articleObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                articleObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                articleObj.setNoOfLikes(articleObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                ((FeedItemCallback)viewInterface).onArticlePostUnLiked(articleObj);
+            }else {
+                articleObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                articleObj.setNoOfLikes(articleObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                ((FeedItemCallback)viewInterface).onArticlePostLiked(articleObj);
+            }
+            allTextViewStringOperations(mContext);
+        }else {
+            if ((Boolean) tvFeedArticleUserReaction.getTag()) {
+                userReactionWithOutLongPress();
+            }
         }
     }
 
@@ -501,44 +533,20 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    @OnClick(R.id.tv_feed_article_header_lebel)
-    public void viewMoreClick() {
-        viewInterface.handleOnClick(articleObj , liFeedArticleImages);
-    }
 
     @Override
     public void onClick(View view) {
 
     }
 
-    @OnClick(R.id.tv_feed_article_total_replies)
+    @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_article_join_conversation, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
     public void openCommentClick() {
         articleObj .setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
-    }
-
-    @OnClick(R.id.tv_feed_article_user_comment_post)
-    public void recentCommentClick() {
-        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
-    }
-
-    @OnClick(R.id.tv_article_join_conversation)
-    public void joinConversationClick() {
-        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
-    }
-
-    @OnClick(R.id.tv_feed_article_user_comment)
-    public void articleUserCommentClick() {
-        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
-    }
-
-    @OnClick(R.id.li_feed_article_user_comments)
-    public void articleUserRecentCommentClick() {
-        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onArticleCommentClicked(articleObj);
+        }else {
+            viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
+        }
     }
 
 }
