@@ -163,8 +163,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         fromDateEtxt.setInputType(InputType.TYPE_NULL);
         fromDateEtxt.requestFocus();
-        fromDateEtxt.setInputType(InputType.TYPE_NULL);
-        fromDateEtxt.requestFocus();
         setDateTimeField();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PERSONAL_EDIT_BASIC_DETAIL));
         return view;
@@ -207,6 +205,8 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
 
     @OnClick(R.id.btn_personal_basic_details_save)
     public void Save_Basic_Details() {
+
+
         if (!StringUtil.isNotNullOrEmptyString(mEtFirstName.getText().toString()) || !StringUtil.isNotNullOrEmptyString(mEtLastName.getText().toString())) {
             Toast.makeText(getActivity(), "Please enter First and Last Name", Toast.LENGTH_SHORT).show();
             return;
@@ -260,7 +260,6 @@ public class PersonalBasicDetailsFragment extends BaseFragment implements Profil
     }
 
     @OnClick(R.id.iv_back_profile)
-
     public void OnbackClick() {
         AppUtils.hideKeyboard(mEtChildNumber, TAG);
         mProfileBasicDetailsCallBack.onBackPressed(R.id.iv_back_profile);

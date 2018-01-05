@@ -209,13 +209,37 @@ public class PersonalProfileFragment extends BaseFragment implements ProfileView
             mAdapter.notifyDataSetChanged();
             LoginResponse loginResponse = mUserPreference.get();
             UserDetails userDetails=userProfileResponse.getUserDetails();
-            if(null!=loginResponse.getUserSummary()&&null!=userDetails) {
+            if(null!=loginResponse && null!=loginResponse.getUserSummary()&&null!=userDetails) {
+
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
                     loginResponse.getUserSummary().setFirstName(userDetails.getFirstName());
                 }
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
                     loginResponse.getUserSummary().setLastName(userDetails.getLastName());
                 }
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
+                    loginResponse.getUserSummary().getUserBO().setCityMaster(userDetails.getCityMaster());
+                }
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
+                    loginResponse.getUserSummary().getUserBO().setEmailid(userDetails.getEmailid());
+                }
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getMaritalStatus())) {
+                    loginResponse.getUserSummary().getUserBO().setMaritalStatus(userDetails.getMaritalStatus());
+                }
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getMobile())) {
+                    loginResponse.getUserSummary().getUserBO().setMobile(userDetails.getMobile());
+                }
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getPersonalBios())) {
+                    loginResponse.getUserSummary().getUserBO().setPersonalBios(userDetails.getPersonalBios());
+                }
+
+                loginResponse.getUserSummary().getUserBO().setNoOfChildren(userDetails.getNoOfChildren());
+                loginResponse.getUserSummary().getUserBO().setDob(String.valueOf(userDetails.getDob()));
+
             }
             mUserPreference.set(loginResponse);
         }

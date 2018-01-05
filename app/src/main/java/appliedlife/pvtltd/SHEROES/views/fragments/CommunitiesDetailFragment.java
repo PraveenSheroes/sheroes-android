@@ -15,6 +15,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -75,6 +76,8 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
  * Created by Praveen_Singh on 01-02-2017.
  */
 
+
+//todo - for post
 public class CommunitiesDetailFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Community Screen";
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
@@ -115,6 +118,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private boolean mIsSpam;
     private long mUserId;
     private Comment mComment;
+    private boolean hideAnonymousPost = true;
+
     public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
@@ -144,11 +149,24 @@ public class CommunitiesDetailFragment extends BaseFragment {
         if (null != getArguments()) {
             mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
             Parcelable parcelable=getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
+            if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&&null != mUserPreference.get().getUserSummary()) {
+                mUserId = mUserPreference.get().getUserSummary().getUserId();
+            }
+
             if(null!=parcelable)
             {
                 UserSolrObj mUserMentorObj= Parcels.unwrap(parcelable);
                 CommunityFeedSolrObj communityFeedSolrObj=new CommunityFeedSolrObj();
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
+
+                //if not mine / not mentor/
+                //if(!mUserMentorObj.isAuthorMentor() || mUserMentorObj.getIdOfEntityOrParticipant() != mUserId) { //check if its required for public profile
+                if(mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) { //for public profile //todo - profile - check is mentor need to adde to show annonmus post
+                    hideAnonymousPost = false;
+                    Toast.makeText(getActivity(), "User's self profile", Toast.LENGTH_SHORT).show();
+                }
+
+
                // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
                 communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
                 mCommunityFeedObj=communityFeedSolrObj;
@@ -211,7 +229,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                             }
                         }
                         if(getActivity() instanceof MentorUserProfileDashboardActivity) {
-                            ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                          //  ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                         }
                     } catch (ClassCastException ex) {
                         LogUtils.error(TAG, ex.getMessage());
@@ -225,16 +243,19 @@ public class CommunitiesDetailFragment extends BaseFragment {
             });
             ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mCommunityFeedObj, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
+
             if (mCommunityPostId > 0) {
-                if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) { //todo - profile - goes here
                     mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
                     FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
                     feedRequestPojo.setIdForFeedDetail(null);
                     Integer autherId = (int) mCommunityFeedObj.getIdOfEntityOrParticipant();
                     feedRequestPojo.setAutherId(autherId);
+                    feedRequestPojo.setAnonymousPostHide(hideAnonymousPost);  //todo - public profile
+
                     feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-                    mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                    mHomePresenter.getFeedForProfileFromPresenter(feedRequestPojo);
                 } else {
                     mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
@@ -247,9 +268,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
                         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
             }
-            if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&&null != mUserPreference.get().getUserSummary()) {
-                mUserId = mUserPreference.get().getUserSummary().getUserId();
-            }
+
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {

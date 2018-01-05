@@ -136,6 +136,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -1925,11 +1928,26 @@ public class AppUtils {
         feedRequestPojo.setCommunityId(communityId);
         return feedRequestPojo;
     }
+
     public  FeedRequestPojo userCommunityDetailRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(communityId);
         return feedRequestPojo;
     }
+
+    public  ProfileUsersCommunityRequest userCommunitiesRequestBuilder(int pageNo, long userId) {
+        ProfileUsersCommunityRequest profileUsersCommunityRequest = new ProfileUsersCommunityRequest();
+
+        profileUsersCommunityRequest.setAppVersion(getAppVersionName());
+        profileUsersCommunityRequest.setDeviceUniqueId(getDeviceId());
+        profileUsersCommunityRequest.setCloudMessagingId(getCloudMessaging());
+        profileUsersCommunityRequest.setPageNo(pageNo);
+        profileUsersCommunityRequest.setPageSize(AppConstants.INVITE_PAGE_SIZE);
+        profileUsersCommunityRequest.setUserId(userId);
+
+        return profileUsersCommunityRequest;
+    }
+
     public static ShareViaMail shareRequestBuilder(String deepLinkUrl, Long communityId,String emailIds,String subject) {
         AppUtils appUtils = AppUtils.getInstance();
         ShareViaMail shareViaMail = new ShareViaMail();
@@ -2012,12 +2030,21 @@ public class AppUtils {
         myCommunityRequest.setSubType(typeOfFeed);
         return myCommunityRequest;
     }
+
     public PublicProfileListRequest pubicProfileRequestBuilder( int pageNo) {
         PublicProfileListRequest publicProfileListRequest = new PublicProfileListRequest();
         publicProfileListRequest.setPageNo(pageNo);
         publicProfileListRequest.setPageSize(AppConstants.PAGE_SIZE);
         return publicProfileListRequest;
     }
+
+    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo) {
+        ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
+        profileFollowedMentor.setPageNo(pageNo);
+        profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
+        return profileFollowedMentor;
+    }
+
     public  FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
@@ -2045,6 +2072,17 @@ public class AppUtils {
         return jobApplyRequest;
     }
 
+    public UserFollowerOrFollowingRequest countUserFollowersOrFollowing(Long mentorId, boolean isAFollower) {
+        AppUtils appUtils = AppUtils.getInstance();
+        UserFollowerOrFollowingRequest userFollowerOrFollowingRequest =new UserFollowerOrFollowingRequest();
+        userFollowerOrFollowingRequest.setAppVersion(appUtils.getAppVersionName());
+        userFollowerOrFollowingRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        userFollowerOrFollowingRequest.setMentorId(mentorId);
+        userFollowerOrFollowingRequest.setIsUserAFollower(isAFollower);
+        userFollowerOrFollowingRequest.setPageSize(AppConstants.PAGE_SIZE);
+        return userFollowerOrFollowingRequest;
+    }
+
     public  MentorFollowerRequest countFollowerRequestBuilder(Long mentorId) {
         AppUtils appUtils = AppUtils.getInstance();
         MentorFollowerRequest mentorFollowerRequest =new MentorFollowerRequest();
@@ -2053,9 +2091,17 @@ public class AppUtils {
         mentorFollowerRequest.setMentorId(mentorId);
         return mentorFollowerRequest;
     }
+
+    public  FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
+        feedRequestPojo.setAutherId((int) idForDetail);  //todo- profile - id set for users &bchampion
+        feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
+        return feedRequestPojo;
+    }
+
     public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
-        feedRequestPojo.setIdForFeedDetail(idForDetail);
+        feedRequestPojo.setIdForFeedDetail(idForDetail);  //todo- profile - id set for users &bchampion
         return feedRequestPojo;
     }
     public WinnerRequest winnerRequestBuilder(String contestId) {

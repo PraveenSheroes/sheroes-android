@@ -5,8 +5,13 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardRequest;
@@ -14,8 +19,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRe
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -38,6 +46,67 @@ public class ProfileModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson = gson;
       }
+
+    public Observable<BaseResponse> getFollowerOrFollowing(UserFollowerOrFollowingRequest userFollowerOrFollowingRequest) { //todo -profile
+
+        //LogUtils.error("user_get_preference_request req: ",gson.toJson(profileAddEditEducationRequest));
+        return sheroesAppServiceApi.getUsersFollowerOrFollowing(userFollowerOrFollowingRequest)
+
+                .map(new Func1<BaseResponse, BaseResponse>() {
+                    @Override
+                    public BaseResponse call(BaseResponse followerOrFollowingCount) {
+                        return followerOrFollowingCount;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<UserFollowedMentorsResponse> getFollowedMentor(ProfileFollowedMentor profileFollowedMentor) { //todo -profile
+
+        //LogUtils.error("user_get_preference_request req: ",gson.toJson(profileAddEditEducationRequest));
+        return sheroesAppServiceApi.getFollowedMentorFromApiTest(profileFollowedMentor)
+
+                .map(new Func1<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
+                    @Override
+                    public UserFollowedMentorsResponse call(UserFollowedMentorsResponse feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+/*
+    public Observable<UserFollowedMentorsResponse> getUserCommunity(ProfileUsersCommunityRequest usersCommunityRequest) { //todo -profile
+
+        //LogUtils.error("user_get_preference_request req: ",gson.toJson(profileAddEditEducationRequest));
+        return sheroesAppServiceApi.getFollowedMentorFromApiTest(usersCommunityRequest)
+
+                .map(new Func1<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
+                    @Override
+                    public UserFollowedMentorsResponse call(UserFollowedMentorsResponse feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+*/
+
+    public Observable<FeedResponsePojo> getFeedFromModelForTestProfile(FeedRequestPojo feedRequestPojo) { //todo - profile
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
+        return sheroesAppServiceApi.getFeedFromApiTest(feedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
 
     /*for  user profile education details */
@@ -265,5 +334,32 @@ public class ProfileModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
+        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<FeedResponsePojo> getUserCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(profileUsersCommunityRequest));
+        return sheroesAppServiceApi.getUsersCommunity(profileUsersCommunityRequest)
+                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
 }

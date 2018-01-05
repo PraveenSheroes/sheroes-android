@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view_communities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_4"
+            android:elevation="@dimen/dp_size_5"
+            app:cardCornerRadius="@dimen/dp_size_2">
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:background="@color/white"
+                android:id="@+id/empty_community_view"
+                android:textSize="16sp"
+                android:minHeight="@dimen/dp_size_150"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:padding="@dimen/dp_size_36"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/community_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#3c3c3c"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    android:text="Followed Communities" />
+
+              <LinearLayout
+                  android:id="@+id/mutual_community_container"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/mutual_community_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    android:text="Anupriya and you share 8 mutual communities" />
+
+                <GridLayout
+                    android:id="@+id/user_communities"
+                    android:verticalSpacing="4dp"
+                    android:horizontalSpacing="4dp"
+                    android:columnCount="2"
+                    android:rowCount="@integer/int_value_for_line_2"
+                    android:layout_marginStart="@dimen/dp_size_12"
+                    android:layout_marginLeft="@dimen/dp_size_12"
+                    android:layout_marginRight="@dimen/dp_size_12"
+                    android:layout_marginEnd="@dimen/dp_size_12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:drawableRight="@drawable/ic_keyboard_arrow_down_red_14dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center_horizontal"
+                    android:text="View  More"
+                    android:textColor="#dc4541"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="View  More" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="false"
+            android:id="@+id/card_view_mentor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_4"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:elevation="@dimen/dp_size_8"
+            app:cardCornerRadius="@dimen/dp_size_2">
+
+            <TextView
+                android:gravity="center_horizontal"
+                android:background="@color/white"
+                android:id="@+id/empty_mentor_view"
+                android:textSize="16sp"
+                android:minHeight="@dimen/dp_size_150"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:padding="@dimen/dp_size_36"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!-- add empty view -->
+            <LinearLayout
+                android:id="@+id/followed_mentors"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/toolbar"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#3c3c3c"
+                    android:text="Followed Mentors"
+                    />
+
+            <LinearLayout
+                android:id="@+id/followed_mentor_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+                <TextView
+                    android:id="@+id/followed_view_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:drawableRight="@drawable/ic_keyboard_arrow_down_red_14dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center_horizontal"
+                    android:text="View  More"
+                    android:textColor="#dc4541"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="View  More" />
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

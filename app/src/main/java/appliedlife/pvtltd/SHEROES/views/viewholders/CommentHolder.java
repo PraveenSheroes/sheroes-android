@@ -166,9 +166,11 @@ public class CommentHolder extends BaseViewHolder<Comment> {
         dataItem.setItemPosition(getAdapterPosition());
         viewInterface.handleOnClick(dataItem, tvUserCommentListMenu);
     }
+
     @OnClick(R.id.tv_list_user_comment)
     public void onCommentWithNameClick() {
-        if (dataItem.isVerifiedMentor()) {
+       // if (dataItem.isVerifiedMentor())
+         {
             viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }

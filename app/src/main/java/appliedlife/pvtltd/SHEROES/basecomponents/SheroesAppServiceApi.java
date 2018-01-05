@@ -1,10 +1,12 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.challenge.ChallengeAcceptRequest;
@@ -31,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
-import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
@@ -42,9 +43,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
@@ -93,12 +96,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRe
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTravelFLexibilityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -123,6 +127,18 @@ public interface SheroesAppServiceApi {
     /*Participant*/
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
+
+    @POST("http://34.234.43.47/participant/feed/")
+    Observable<FeedResponsePojo> getFeedFromApiTest(@Body FeedRequestPojo feedRequestPojo);
+
+    @POST("http://34.234.43.47/participant/feed/followed_mentor_list")
+    Observable<UserFollowedMentorsResponse> getFollowedMentorFromApiTest(@Body ProfileFollowedMentor profileFollowedMentor);
+
+    @POST("http://34.234.43.47/participant/user/get_number_of_followers")
+    Observable<BaseResponse> getUsersFollowerOrFollowing(@Body UserFollowerOrFollowingRequest userFollowerOrFollowingRequest);
+
+    @POST("http://34.234.43.47/participant/feed/mutual_communities")
+    Observable<FeedResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
 
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
@@ -244,39 +260,41 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/gcmIdChange")
     Observable<GcmIdResponse> getNewGCMidFromApi(@Body LoginRequest loginRequest);
 
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getLookingForHowCanFromApi(@Body BoardingLookingForHowCanRequest boardingLookingForHowCanRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getJobAtFromApi(@Body BoardingJobAtRequest boardingJobAtRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getWorkExpFromApi(@Body BoardingWorkExpRequest boardingJobAtRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getInterestFromApi(@Body BoardingInterestRequest boardingInterestRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getEducationAuthToken(@Body ProfileAddEditEducationRequest profileAddEditEducationRequest);
 
-    @POST("participant/user/add_or_edit")
+    @POST("http://34.234.43.47/participant/user/add_or_edit")
     Observable<BoardingDataResponse> getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getProfessionalTravelDetailsAuthToken(@Body ProfileTravelFLexibilityRequest profileTravelFLexibilityRequest);
 
+    //user bio and mobile
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getPersonalUserSummaryDetailsAuthToken(@Body UserSummaryRequest userSummaryRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getProfessionalDetailsAuthToken(@Body ProfessionalBasicDetailsRequest professionalBasicDetailsRequest);
-
+    //remove
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getWorkLocationDetailsAuthToken(@Body ProfilePreferredWorkLocationRequest profilePreferredWorkLocationRequest);
-
+    //remove
     @POST("participant/user/get_visiting_card_details")
     Observable<ProfileEditVisitingCardResponse> getEditVisitingCardDetailsAuthToken();
-
+    //remove
     @POST("participant/user/participant/user/get_visiting_card")
     Observable<ProfileEditVisitingCardResponse> getSaveVisitingCardDetailsAuthToken(@Body GetUserVisitingCardRequest getUserVisitingCardRequest);
 

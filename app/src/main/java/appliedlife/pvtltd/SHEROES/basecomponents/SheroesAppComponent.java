@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
@@ -33,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActiv
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
@@ -56,8 +58,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.JobDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileCommunityListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileUsersCommunityListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -249,12 +252,17 @@ public interface SheroesAppComponent {
 
     void inject(ArticleDetailFragment articleDetailFragment);
 
+    void inject(ProfileCommunitiesActivity profileCommunitiesActivity);
+
+    void inject(ProfileUsersCommunityListFragment profileUsersCommunityListFragment);
+
     void inject(ProfileFullViewFragment profileFullViewFragment);
 
     void inject(PersonalProfileFragment personalProfileFragment);
 
     void inject(ProffestionalProfileFragment proffestionalProfileFragment);
 
+    void inject(ProfileCommunityListFragment profile_communityListFragment);
 
     void inject(BookmarksFragment bookmarksFragment);
 
@@ -414,6 +422,8 @@ public interface SheroesAppComponent {
 
     void inject(ProfileAddOtherFragment profileAddOtherFragment);
 
+    void inject(EditUserProfileActivity editUserProfileActivity);
+
     void inject(ProfessionalEditBasicDetailsFragment professionalEditBasicDetailsFragment);
 
     void inject(ProfileAboutMeFragment profileAboutMeFragment);
@@ -555,6 +565,8 @@ public interface SheroesAppComponent {
 
 
     void inject(MentorUserProfileDashboardActivity mentorUserProfileDashboardActivity);
+
+    void inject(UserProfileTabFragment userProfileTabFragment);
 
     void inject(SpamPostListDialogFragment spamPostListDialogFragment);
 

@@ -496,6 +496,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
+        boolean isMentor = userPostObj.isAuthorMentor();
         Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
@@ -506,6 +507,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }

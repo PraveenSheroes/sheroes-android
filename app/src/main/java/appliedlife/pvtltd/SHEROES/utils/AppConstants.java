@@ -282,8 +282,9 @@ public class AppConstants {
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String EVENT_URL = "https://sheroes.in/event";
     public static final String EVENT_URL_COM = "https://sheroes.com/event";
-    public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
-    public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
+    public static final String USER_PROFILE_URL = "https://sheroes.in/users/";
+    public static final String SELF_USER_PROFILE_URL = "https://sheroes.com/users/edit_profile";
+    public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/";
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
@@ -300,6 +301,7 @@ public class AppConstants {
     public static final String EVENT_ID = "event_id";
     public static final String ARTICLE_ID = "article_id";
     public static final String CHAMPION_ID = "champion_id";
+    public static final String IS_MENTOR_ID = "is_";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";

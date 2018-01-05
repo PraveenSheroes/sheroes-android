@@ -347,6 +347,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(mUserSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
         intent.putExtra(AppConstants.ASKING_QUESTION,AppConstants.ASKING_QUESTION_CALL);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

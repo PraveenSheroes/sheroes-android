@@ -490,6 +490,18 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 }
                 break;
 
+            //todo -ravi -profile - change here for article
+            case R.id.iv_feed_article_card_circle_icon :
+            case R.id.tv_feed_article_card_title:
+                Intent mentorUserProfile = new Intent(this, MentorUserProfileDashboardActivity.class); //todo - profile - mentor
+                mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getAuthorId());
+                mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
+                // articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this
+                // articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                mentorUserProfile.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                startActivity(mentorUserProfile);
+             break;
+
             case R.id.li_feed_article_images:
                 ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 /*Intent intent = new Intent(this, ArticleDetailActivity.class);

@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +39,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
@@ -50,22 +52,35 @@ import butterknife.OnClick;
  */
 
 public class SearchProfileLocationDialogFragment extends BaseDialogFragment implements OnBoardingView {
+
     private final String TAG = LogUtils.makeLogTag(OnBoardingSearchDialogFragment.class);
-    @Inject
-    AppUtils mAppUtils;
-    @Bind(R.id.rv_onboarding_search_list)
-    RecyclerView mRecyclerView;
-    @Bind(R.id.et_search_edit_text)
-    public EditText mSearchEditText;
-    @Inject
-    OnBoardingPresenter mOnBoardingPresenter;
-    @Bind(R.id.pb_onboarding_search_progress_bar)
-    ProgressBar mProgressBar;
+
     private String mSearchDataName = AppConstants.EMPTY_STRING;
     private GenericRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
     OnBoardingEnum SEARCH_TYPE = null;
+
+    @Inject
+    AppUtils mAppUtils;
+
+    @Bind(R.id.tv_profile_tittle)
+    TextView toolbarTitle;
+
+    @Inject
+    OnBoardingPresenter mOnBoardingPresenter;
+
+    @Bind(R.id.rv_onboarding_search_list)
+    RecyclerView mRecyclerView;
+
+    @Bind(R.id.et_search_edit_text)
+    public EditText mSearchEditText;
+
+    @Bind(R.id.pb_onboarding_search_progress_bar)
+    ProgressBar mProgressBar;
+
+    @Bind(R.id.iv_back_profile)
+    ImageView backArrow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,9 +92,10 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
             SEARCH_TYPE = (OnBoardingEnum) getArguments().getSerializable(AppConstants.BOARDING_SEARCH);
         }
+        toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
-        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (ProfileActicity) getActivity());
+        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (EditUserProfileActivity) getActivity());
 
                 mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
                 mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
@@ -107,7 +123,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         return view;
     }
 
-    @OnClick(R.id.iv_search_back)
+    @OnClick(R.id.iv_back_profile)
     public void onSearchBack() {
         dismiss();
     }
@@ -176,8 +192,6 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
                 mMasterDataSkill = "city";
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
                 mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
-
-
 
             }
         }

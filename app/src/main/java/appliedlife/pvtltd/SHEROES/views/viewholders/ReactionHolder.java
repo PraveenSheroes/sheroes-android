@@ -91,7 +91,8 @@ public class ReactionHolder extends BaseViewHolder<Comment> {
 
     @OnClick(R.id.li_user_reaction_with_name)
     public void onReactionWithNameClick() {
-        if (dataItem.isVerifiedMentor()) {
+       // if (dataItem.isVerifiedMentor())  //todo - naviagte to profile
+        {
             viewInterface.championProfile(dataItem, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }

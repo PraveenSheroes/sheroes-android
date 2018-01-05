@@ -8,6 +8,7 @@
   <integer name="int_value_for_line_2">2</integer>
   <integer name="int_value_for_line_3">3</integer>
   <integer name="int_value_for_line_4">4</integer>
+  <integer name="int_value_for_line_160">160</integer>
 
   <integer name="anim_speed_slow">800</integer>
 

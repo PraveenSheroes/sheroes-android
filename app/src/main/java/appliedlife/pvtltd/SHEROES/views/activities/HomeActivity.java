@@ -258,6 +258,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
 
+    long userId =-1L;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -272,6 +274,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
             isSheUser = true;
         }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            userId = mUserPreference.get().getUserSummary().getUserId();
+        }
+
+
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
         //For navigation drawer items
@@ -833,7 +841,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 eventDetailDialog(0);
                 break;
             case R.id.li_mentor:
-                openMentorProfileDetail(baseResponse);
+                openMentorProfileDetail(baseResponse); //todo - check its mentor click only
                 break;
             case R.id.share:
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
@@ -896,6 +904,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        bundle.putLong(AppConstants.CHAMPION_ID, mFeedDetail.getAuthorId());  //todo - profile - newly added
+        bundle.putBoolean(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());  ////todo - profile - newly added
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -927,8 +937,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openProfileActivity() {
-        Intent intent = new Intent(this, ProfileActicity.class);
-        intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        //intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+        intent.putExtra(AppConstants.CHAMPION_ID,userId);
+
         startActivity(intent);
     }
 
@@ -1870,21 +1882,24 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.profile_link)
     public void onClickProfile() {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        }
         openProfileActivity();
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void championProfile(BaseResponse baseResponse, int championValue) {  //todo - profile - check this its only for mentor
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition());
+            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor());
         } else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId(), comment.getItemPosition());
+            championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor());
         }
     }
 
-    private void championDetailActivity(Long userId, int position) {
+    private void championDetailActivity(Long userId, int position, boolean isMentor) {
         Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
@@ -1896,6 +1911,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID,isMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }

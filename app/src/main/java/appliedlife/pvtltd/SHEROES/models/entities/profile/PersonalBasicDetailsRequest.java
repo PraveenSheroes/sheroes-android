@@ -38,6 +38,11 @@ public class PersonalBasicDetailsRequest {
     @SerializedName("no_Of_children")
     @Expose
     private int noOfChildren;
+
+    @SerializedName("name")
+    @Expose(deserialize = false)
+    private String fullName;
+
     @SerializedName("first_name")
     @Expose
     private String firstName;
@@ -55,6 +60,10 @@ public class PersonalBasicDetailsRequest {
     @SerializedName("dob")
     @Expose
     private String dateOfBirth;
+
+    @SerializedName("mobile")
+    @Expose
+    private String mobileNumber;
 
     public String getSubType() {
         return subType;
@@ -166,5 +175,21 @@ public class PersonalBasicDetailsRequest {
 
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 }

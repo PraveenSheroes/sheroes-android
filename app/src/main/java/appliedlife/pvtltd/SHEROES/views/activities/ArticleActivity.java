@@ -302,6 +302,20 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         applyPalette();
     }
 
+
+   @OnClick({R.id.author})
+    public void onClick(View view) {
+        if (null != mArticle) {
+            Intent mentorUserProfile = new Intent(ArticleActivity.this, MentorUserProfileDashboardActivity.class); //todo - profile - mentor
+            mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mArticle.createrId);
+            mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mArticle.isCreaterMentor);
+           // articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this
+            // articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            mentorUserProfile.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            startActivity(mentorUserProfile);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article, menu);
@@ -626,6 +640,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
     }
 
+
     private void loadUserViews(Article article) {
         if (article.author != null) {
             author.setText(article.author.name);
@@ -823,6 +838,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         article.commentsCount = articleSolrObj.getNoOfComments();
         article.likesCount = articleSolrObj.getNoOfLikes();
         article.author = new UserProfile();
+        article.createrId = articleSolrObj.getAuthorId();
+        article.isCreaterMentor = articleSolrObj.isAuthorMentor();
         article.author.name = articleSolrObj.getAuthorName();
         article.author.shortDescription = articleSolrObj.getAuthorShortDescription();
         article.author.thumbUrl = articleSolrObj.getAuthorImageUrl();

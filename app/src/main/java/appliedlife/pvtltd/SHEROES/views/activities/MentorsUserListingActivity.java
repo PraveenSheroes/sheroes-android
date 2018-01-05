@@ -171,10 +171,12 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor); //todo - profile - mentor
+        intent.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

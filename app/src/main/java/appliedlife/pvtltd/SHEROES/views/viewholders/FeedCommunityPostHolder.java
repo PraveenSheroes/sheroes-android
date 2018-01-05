@@ -1001,7 +1001,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.iv_feed_community_post_circle_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if (mUserPostObj.isAuthorMentor()) {
+        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) { //todo - profile - chnage - ravi
             viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
@@ -1014,7 +1014,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (mUserPostObj.isAuthorMentor()) {
+                if (mUserPostObj.isAuthorMentor()) { //todo - naviagte to profile
                     viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
@@ -1081,7 +1081,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (mUserPostObj.isAuthorMentor()) {
+           //     if (mUserPostObj.isAuthorMentor())   //todo - click on user
+                 {
                     viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }

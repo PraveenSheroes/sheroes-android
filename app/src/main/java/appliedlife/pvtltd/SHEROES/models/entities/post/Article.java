@@ -36,6 +36,8 @@ public class Article extends Post {
     public int thumbImageHeight;
     public int featureImageWidth;
     public int featureImageHeight;
+    public long createrId;
+    public boolean isCreaterMentor;
     public ArrayList<Comment> comments = new ArrayList<>();
 
     public

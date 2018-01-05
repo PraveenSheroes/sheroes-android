@@ -524,17 +524,17 @@ public class ArticleDetailActivity extends BaseActivity implements CommentReacti
 
     }
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void championProfile(BaseResponse baseResponse, int championValue) {  //todo- ask praveen
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy());
+            championDetailActivity(feedDetail.getCreatedBy()); //todo- profile
         } else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId());
+            championDetailActivity(comment.getParticipantId());  //todo- profile
         }
     }
 
-    private void championDetailActivity(Long userId) {
+    private void championDetailActivity(Long userId) { //todo -profile
         Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();

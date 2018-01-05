@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
@@ -8,10 +10,12 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -108,9 +112,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
     // for profile_basic_details
     public void getPersonalBasicDetailsAuthTokeInPresenter(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
-
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-
             return;
         }
 
@@ -331,9 +333,7 @@ public class ProfilePersenter extends BasePresenter<ProfileView> {
     }
 
 
-//for showing all data of profile listing
-
-
+   //for showing all data of profile listing
     public void getALLUserDetails() {
         if (!NetworkUtil.isConnected(sheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);

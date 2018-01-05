@@ -758,8 +758,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if (mUserPostObj.isAuthorMentor()) {
-            mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        if (!mUserPostObj.isAnonymous()) { //todo - ravi - all non anonymous user click shold go
+            mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL); //todo -profile -rename it , so every user
         }
     }
 
@@ -771,8 +771,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (mUserPostObj.isAuthorMentor()) {
-                    mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                if (!mUserPostObj.isAnonymous()) { //todo - ravi - all non anonymous user click shold go
+                    mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL); //todo -profile -rename it , so every user
                 }
             }
 
@@ -805,6 +805,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 textPaint.setUnderlineText(false);
             }
         };
+
         if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
             if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -837,7 +838,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (mUserPostObj.isAuthorMentor()) {
+                if (!mUserPostObj.isAnonymous()) { //todo - ravi - all non anonymous user click shold go
                     mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
