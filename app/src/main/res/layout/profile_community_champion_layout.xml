@@ -28,7 +28,7 @@
             app:cardCornerRadius="@dimen/dp_size_2">
 
             <TextView
-                android:id="@+id/empty_community_view"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -38,6 +38,25 @@
                 android:padding="@dimen/dp_size_36"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/empty_community_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_191">
+
+                <TextView
+                    android:id="@+id/empty_community_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/ic_communities_ic"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <LinearLayout
                 android:visibility="gone"
@@ -133,16 +152,25 @@
             android:paddingTop="@dimen/dp_size_10"
             app:cardCornerRadius="@dimen/dp_size_2">
             <!-- add empty view -->
-            <TextView
-                android:id="@+id/empty_mentor_view"
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/empty_mentor_view_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:minHeight="@dimen/dp_size_150"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="@dimen/dp_size_191">
+
+                <TextView
+                    android:id="@+id/empty_mentor_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    android:drawableTop="@drawable/ic_business_woman"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/followed_mentors"

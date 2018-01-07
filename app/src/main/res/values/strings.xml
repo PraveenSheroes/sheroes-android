@@ -771,6 +771,8 @@
     <string name="img_saved_info">Image saved</string>
 
     <string name="more_text_info">There are %1$s more comments."</string>
+    <string name="empty_followed_mentor">%1$s is not following any champion yet"</string>
+    <string name="empty_followed_community">%1$s has not joined any community yet"</string>
     <string name="load_more">Load More</string>
     <string name="following">Following</string>
 

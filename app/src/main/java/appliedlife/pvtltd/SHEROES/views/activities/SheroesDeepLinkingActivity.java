@@ -379,10 +379,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(champId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, MentorUserProfileDashboardActivity.class); //todo - profile - mentor
+                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, MentorUserProfileDashboardActivity.class);
                 articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
-                articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this
+                articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true);
                // articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 articleDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(articleDetail);
@@ -399,7 +399,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 homeActivityCall("");
             }
         }
-        //todo - add for self profile existing
         else if((AppConstants.SELF_USER_PROFILE_URL).equalsIgnoreCase(baseUrl)) {
             try {
                 if (null != mUserPreference) {
@@ -433,7 +432,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(userId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent into = new Intent(this, MentorUserProfileDashboardActivity.class); //todo - change here for profile edit
+                Intent into = new Intent(this, MentorUserProfileDashboardActivity.class);
                 into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 into.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
                 //   into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);

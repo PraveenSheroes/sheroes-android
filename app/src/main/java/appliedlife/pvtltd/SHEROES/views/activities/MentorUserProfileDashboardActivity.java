@@ -391,7 +391,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
-            mViewPagerAdapter.addFragment(UserProfileTabFragment.createInstance(mChampionId), getString(R.string.ID_PROFILE));
+            mViewPagerAdapter.addFragment(UserProfileTabFragment.createInstance(mChampionId, mMentorUserItem.getNameOrTitle()), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
         }
 
