@@ -426,7 +426,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
 
         //In case of profile
-        else if ((AppConstants.USER_PROFILE_URL).equalsIgnoreCase(baseUrl) || AppConstants.USER_PROFILE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
+        else if (baseUrl.contains(AppConstants.USER_PROFILE_URL) || baseUrl.contains(AppConstants.USER_PROFILE_URL_COM) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
             try {
                 indexOfFourthBackSlace = AppUtils.findNthIndexOf(baseUrl, AppConstants.BACK_SLASH, 5);
                 int userId = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);

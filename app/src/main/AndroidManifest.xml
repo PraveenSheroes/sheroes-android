@@ -252,7 +252,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="sheroes.com"/>
-                <data android:host="sheroes.in"></data>
+                <data android:host="sheroes.in"/>
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs"/>
                 <data android:pathPrefix="/articles"/>
@@ -262,6 +262,7 @@
                 <data android:pathPrefix="/helpline"/>
                 <data android:pathPrefix="/feed"/>
                 <data android:pathPrefix="/users/edit_profile"/>
+                <data android:pathPrefix="/users/"/>
                 <data android:pathPrefix="/sheroes-challenge"/>
                 <data android:pathPrefix="/my-challenges"/>
                 <data android:pathPrefix="/faq"/>

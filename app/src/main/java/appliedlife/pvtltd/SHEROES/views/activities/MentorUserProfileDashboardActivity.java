@@ -37,6 +37,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -54,9 +56,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
+import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -266,6 +270,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         }
         //Chk if mentor of normal user and get its post
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
+
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant()));
         setPagerAndLayouts();
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
@@ -341,6 +346,15 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         }
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
+    }
+
+    @OnClick(R.id.iv_mentor_share)
+    public void onJobDetailShare() {
+        //AnalyticsManager.trackPostAction(Event.POST_SHARED, mMentorUserItem, getScreenName());
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, mMentorUserItem.getDeepLinkUrl());
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
     private void followUnFollowMentor() {
@@ -650,7 +664,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         Parcelable parcelable = Parcels.wrap(mMentorUserItem);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        bundle.putLong(AppConstants.CHAMPION_ID, userId);  
+        bundle.putLong(AppConstants.CHAMPION_ID, userId);
         bundle.putBoolean(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
