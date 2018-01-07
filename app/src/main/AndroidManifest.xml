@@ -214,16 +214,6 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
@@ -339,6 +329,8 @@
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity" android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity"/>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileFollowedChampionActivity"/>
 
 
     </application>

@@ -1,12 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,40 +17,42 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.views.adapters.ProfileFollowedMentorAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ravi on 03/01/18.
+ * Listing of Profile - User's Communities
  */
 
-public class ProfileCommunitiesActivity extends BaseActivity implements ProfileNewView {
+public class ProfileCommunitiesActivity extends BaseActivity implements ProfileCommunityAdapter.OnItemClicked{
 
     private static final String SCREEN_LABEL = "ProfileCommunitiesActivity Screen";
 
-    @Inject
-    ProfilePresenterImpl profilePresenter;
+    @Bind(R.id.tv_profile_tittle)
+    TextView toolbarTitle;
 
-     @Bind(R.id.communities)
-     RecyclerView mCommunityRecycler;
+    @Bind(R.id.communities)
+    RecyclerView mCommunityRecycler;
 
     @Inject
     AppUtils mAppUtils;
 
-    long userId;
+    @Inject
+    ProfilePresenterImpl profilePresenter;
 
-    LinearLayoutManager mLayoutManager;
-    ProfileFollowedMentorAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+
+    private ProfileCommunityAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,59 +60,32 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileN
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_communities_list);
         ButterKnife.bind(this);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        long userId = getIntent().getLongExtra("USERID", -1);
+        toolbarTitle.setText(R.string.ID_COMMUNITIES);
 
-        profilePresenter.attachView(this);
-
-        setupCommunityListAdapter();
+        Parcelable parcelable = getIntent().getParcelableExtra(AppConstants.COMMUNITY_ID);
+        if (parcelable != null) {
+            List<ProfileCommunity> profileCommunities = Parcels.unwrap(parcelable);
+            if (StringUtil.isNotEmptyCollection(profileCommunities)) {
+                setupCommunityListAdapter(profileCommunities);
+            }
+        }
     }
 
-
-    @Override
-    public void getFollowedMentors(UserFollowedMentorsResponse feedResponsePojo) {
-        List<UserSolrObj> feedDetailList = feedResponsePojo.getFeedDetails();
-
-        mAdapter.setData(feedDetailList);
-        mAdapter.notifyDataSetChanged();
-
+    @OnClick(R.id.iv_back_profile)
+    public void backOnclick() {
+        finish();
     }
 
-    private void setupCommunityListAdapter() {
-         mLayoutManager = new LinearLayoutManager(this);
-         mCommunityRecycler.setLayoutManager(mLayoutManager);
+    private void setupCommunityListAdapter(List<ProfileCommunity> profileCommunities) {
+        mLayoutManager = new LinearLayoutManager(this);
+        mCommunityRecycler.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ProfileFollowedMentorAdapter(this, profilePresenter, this);
+        mAdapter = new ProfileCommunityAdapter(this, profilePresenter, this);
         mCommunityRecycler.setHasFixedSize(true);
+
+        mAdapter.setData(profileCommunities);
         mCommunityRecycler.setAdapter(mAdapter);
-
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
-    }
-
-    @Override
-    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
-    }
-
-    @Override
-    public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
-
-    }
-
-    @Override
-    public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
-
-    }
-
-    @Override
-    public void getUsersPostCount(int totalPost) {
-
-    }
-
-    @Override
-    public void getUsersCommunities(FeedResponsePojo userCommunities) {
-
     }
 
     @Override
@@ -116,29 +94,16 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileN
     }
 
     @Override
-    public void startProgressBar() {
+    public void onItemClick( ProfileCommunity profileCommunity) {
+        Intent intent = new Intent(ProfileCommunitiesActivity.this, CommunitiesDetailActivity.class);
+        Bundle bundle = new Bundle();
+        Parcelable parcelables = Parcels.wrap(profileCommunity);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
+        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+        intent.putExtras(bundle);
 
+        intent.putExtra(AppConstants.COMMUNITY_ID, profileCommunity.getEntityOrParticipantId());
+        intent.putExtra(AppConstants.FROM_DEEPLINK, true);
+        startActivity(intent);
     }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
-
 }

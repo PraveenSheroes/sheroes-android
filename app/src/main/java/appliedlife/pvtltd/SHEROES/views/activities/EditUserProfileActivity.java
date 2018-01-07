@@ -559,7 +559,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @OnClick(R.id.iv_back_profile)
     public void backOnclick() {
-        //overridePendingTransition(R.anim.top_to_bottom_exit,R.anim.top_bottom_exit_anim);
         finish();
     }
 

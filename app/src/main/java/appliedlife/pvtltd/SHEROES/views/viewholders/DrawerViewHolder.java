@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +33,9 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     @Bind(R.id.tv_drawer_image)
     AppCompatImageView tvDrawerImage;
     @Bind(R.id.ll_drawer_item)
-    LinearLayout llDrawerItem;
+    RelativeLayout llDrawerItem;
+    @Bind(R.id.new_feature)
+    TextView newFeature;
     public static String selectedOptionName;
 
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -51,6 +53,12 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
 
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
+
+        if(itemName.equalsIgnoreCase("Profile")) {
+            newFeature.setVisibility(View.VISIBLE);
+        } else {
+            newFeature.setVisibility(View.GONE);
+        }
 
         String iconUrl = dataItem.getMenuItemIconUrl();   //default icon
         if(StringUtil.isNotNullOrEmptyString(iconUrl)) {

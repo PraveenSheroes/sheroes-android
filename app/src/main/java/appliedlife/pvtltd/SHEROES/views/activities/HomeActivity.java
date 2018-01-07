@@ -648,6 +648,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
+
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
@@ -801,7 +802,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     createCommunityPostOnClick(mentorPost);
                 }
                 break;
-            case R.id.card_header_view:
+
+            case R.id.iv_header_circle_icon:
+                mFeedDetail = (FeedDetail) baseResponse;
+                championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor());
+                break;
+            case R.id.user_name:
+                mFeedDetail = (FeedDetail) baseResponse;
+                championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor());
+                break;
+
+            case R.id.tv_header_name:
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
                 createCommunityPostOnClick(communityPost);

@@ -7,7 +7,6 @@
     android:minWidth="@dimen/dp_size_220"
     android:layout_height="wrap_content">
 
-
     <TextView
         android:layout_margin="@dimen/dp_size_24"
         android:id="@+id/title"
@@ -54,7 +53,7 @@
             android:id="@+id/view_footer"
             android:layout_width="@dimen/dp_size_1"
             android:layout_height="match_parent"
-            android:background="@color/footer_icon_text"/>
+            android:background="@color/profile_text"/>
         <TextView
             android:id="@+id/unfollow"
             android:layout_width="0dp"

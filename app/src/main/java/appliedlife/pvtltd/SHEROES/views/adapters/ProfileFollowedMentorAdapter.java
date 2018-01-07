@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -29,19 +29,19 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<UserSolrObj> followedMentors;
+    private List<UserSolrObj> communities;
     private final Context mContext;
-    private final View.OnClickListener mOnDeleteClickListener;
+    private final OnItemClicked onItemClick;
     private ProfilePresenterImpl profilePresenter;
     private boolean showMoreItem = false;
     public static final int INITIAL_ITEM_COUNT = 1;
     public int commentAdded = 0;
 
     //region Constructor
-    public ProfileFollowedMentorAdapter(Context context, ProfilePresenterImpl profilePresenter, View.OnClickListener onDeleteClickListener) {
+    public ProfileFollowedMentorAdapter(Context context, ProfilePresenterImpl profilePresenter, OnItemClicked onItemClick) {
         mContext = context;
         this.profilePresenter = profilePresenter;
-        mOnDeleteClickListener = onDeleteClickListener;
+        this.onItemClick = onItemClick;
     }
 
     //endregion
@@ -54,21 +54,21 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ProfileFollowedMentorAdapter.FollowedUserListItemViewHolder commentListItemViewHolder = (ProfileFollowedMentorAdapter.FollowedUserListItemViewHolder) holder;
-        UserSolrObj mentorDetails = followedMentors.get(position);
+        UserSolrObj mentorDetails = communities.get(position);
         commentListItemViewHolder.bindData(mentorDetails, position);
     }
 
     @Override
     public int getItemCount() {
-        if (CommonUtil.isEmpty(followedMentors)) {
+        if (CommonUtil.isEmpty(communities)) {
             return 0;
         }
-        return followedMentors.size();
+        return communities.size();
     }
 
 
-    public void setData(List<UserSolrObj>  followedMentors) {
-        this.followedMentors = followedMentors;
+    public void setData(List<UserSolrObj>  communities) {
+        this.communities = communities;
         notifyDataSetChanged();
     }
 
@@ -95,22 +95,29 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(final UserSolrObj mentorDetails, final int position) {
+        public void bindData(final UserSolrObj mentor, final int position) {
 
-            if(null!= mentorDetails) {
+            if (null != mentor) {
 
-                if(mentorDetails.getThumbnailImageUrl()!=null) {  //mentor image icon
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onItemClick.onItemClick(mentor);
+                    }
+                });
+
+                if (mentor.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
                     mentorIcon.setPlaceHolderId(R.drawable.default_img);
                     mentorIcon.setErrorPlaceHolderId(R.drawable.default_img);
-                    mentorIcon.bindImage(mentorDetails.getThumbnailImageUrl());
+                    mentorIcon.bindImage(mentor.getThumbnailImageUrl());
                 }
 
-                if(mentorDetails.getNameOrTitle()!=null) {
-                    mentorName.setText(mentorDetails.getNameOrTitle());
+                if (mentor.getNameOrTitle() != null) {
+                    mentorName.setText(mentor.getNameOrTitle());
                 }
 
-                List<String> canHelpInArea = mentorDetails.getCanHelpIns();
+                List<String> canHelpInArea = mentor.getCanHelpIns();
                 if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
                     StringBuilder expertFields = new StringBuilder();
                     for (int i = 0; i < canHelpInArea.size(); i++) {
@@ -123,11 +130,16 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
                 }
 
                 if(follower !=null) {
-                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentorDetails.getSolrIgnoreNoOfMentorFollowers());
-                    follower.setText(String.valueOf(numericToThousand(mentorDetails.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
+                    follower.setText(String.valueOf(numericToThousand(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
                 }
             }
+            }
         }
-    }
     //endregion
+
+    public interface OnItemClicked {
+        void onItemClick(UserSolrObj mentor);
+    }
 }
+

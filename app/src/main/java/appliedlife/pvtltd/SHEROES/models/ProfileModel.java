@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
@@ -18,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.GetUserVisitingCardReq
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfessionalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfilePreferredWorkLocationRequest;
@@ -348,13 +348,13 @@ public class ProfileModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<FeedResponsePojo> getUserCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
+    public Observable<ProfileCommunitiesResponsePojo> getUserCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(profileUsersCommunityRequest));
         return sheroesAppServiceApi.getUsersCommunity(profileUsersCommunityRequest)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Func1<ProfileCommunitiesResponsePojo, ProfileCommunitiesResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
+                    public ProfileCommunitiesResponsePojo call(ProfileCommunitiesResponsePojo profileCommunitiesResponsePojo) {
+                        return profileCommunitiesResponsePojo;
                     }
                 })
                 .subscribeOn(Schedulers.io())

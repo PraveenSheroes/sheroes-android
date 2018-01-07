@@ -204,7 +204,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         mAppBarLayout.addOnOffsetChangedListener(this);
-        clHomeFooterList.setVisibility(View.GONE); //todo -profile - i only added it, modify code
+        clHomeFooterList.setVisibility(View.GONE);
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mMentorUserItem = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
@@ -281,9 +281,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getImageUrl())) {
             mProfileIcon.setCircularImage(true);
             mProfileIcon.bindImage(mMentorUserItem.getImageUrl());
-            Glide.with(this)
-                    .load(mMentorUserItem.getImageUrl())
-                    .into(ivPublicProfileImage);
 
         }
         if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getNameOrTitle())) {
@@ -609,10 +606,11 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mMentorUserItem = (UserSolrObj) feedDetailList.get(0);  //todo -profile -setting user details over here
+            mMentorUserItem = (UserSolrObj) feedDetailList.get(0);
             mMentorUserItem.setCallFromName(screenName);
-            //  clHomeFooterList.setVisibility(View.VISIBLE); //todo -ptofile - i commented it
-
+            if(isMentor) {
+                  clHomeFooterList.setVisibility(View.VISIBLE);
+            }
             setProfileNameData();
         }
     }
@@ -650,7 +648,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         super.dataOperationOnClick(baseResponse);
     }
 
-    private void championDetailActivity(Long userId, boolean isMentor) {
+    public void championDetailActivity(Long userId, boolean isMentor) {
         Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         mMentorUserItem = new UserSolrObj();
@@ -796,12 +794,8 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
             CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_img_icon);
             if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getImageUrl())) {
-                mProfileIcon.setCircularImage(true);
-                mProfileIcon.bindImage(mMentorUserItem.getImageUrl());
-                Glide.with(this)
-                        .load(mMentorUserItem.getImageUrl())
-                        .into(circleImageView);
-
+                circleImageView.setCircularImage(true);
+                circleImageView.bindImage(mMentorUserItem.getImageUrl());
             }
 
             TextView text = (TextView) dialog.findViewById(R.id.title);

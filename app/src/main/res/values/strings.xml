@@ -71,6 +71,7 @@
     <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
+    <string name="ID_CHAMPION">Champion</string>
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
@@ -793,6 +794,13 @@
         <item quantity="one">Post</item>
         <item quantity="other">Posts</item>
     </plurals>
+
+    <plurals name="numberOfMembers">
+        <item quantity="zero">Member</item>
+        <item quantity="one">Member</item>
+        <item quantity="other">Members</item>
+    </plurals>
+
     <plurals name="numberOfFollowers">
         <item quantity="zero">Follower</item>
         <item quantity="one">Follower</item>
@@ -847,7 +855,7 @@
     <string name="menu.post_as_community">Post as Community</string>
     <string name="menu.post_as_user">Post as %1$s</string>
 
-    <string name="ID_HEADER_TEXT">what\'s on your mind?</string>
+    <string name="ID_HEADER_TEXT">What\'s on your mind?</string>
     <string name="ID_WHAT_LOOKING_FOR">What are you looking for?</string>
 
     <string name="ID_FINISH">Finish</string>
@@ -931,4 +939,5 @@
     <string name="followed_mentors">Followed Mentors</string>
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
+    <string name="new_feature">New</string>
 </resources>

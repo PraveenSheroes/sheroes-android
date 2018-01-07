@@ -11,9 +11,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -21,15 +19,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -178,7 +174,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         }
         getMvpView().startProgressBar();
 
-        Subscription subscription = profileModel.getUserCommunity(profileUsersCommunityRequest).subscribe(new Subscriber<FeedResponsePojo>() {
+        Subscription subscription = profileModel.getUserCommunity(profileUsersCommunityRequest).subscribe(new Subscriber<ProfileCommunitiesResponsePojo>() {
             @Override
             public void onCompleted() {
 
@@ -192,7 +188,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
             }
 
             @Override
-            public void onNext(FeedResponsePojo userCommunities) {
+            public void onNext(ProfileCommunitiesResponsePojo userCommunities) {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != userCommunities) {
