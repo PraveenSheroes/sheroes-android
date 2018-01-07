@@ -106,41 +106,55 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
     @Bind(R.id.tv_mentor_name)
     TextView userName;
+
     @Bind(R.id.iv_public_profile_image)
     ImageView ivPublicProfileImage;
+
     @Bind(R.id.tv_profession)
     TextView tvProfession;
+
     @Bind(R.id.tv_loc)
     TextView tvLoc;
+
     @Bind(R.id.tv_mentor_description)
     TextView userDescription;
+
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
+
     @Bind(R.id.li_post)
     LinearLayout liPost;
+
     @Bind(R.id.tv_mentor_post_count)
     TextView userTotalPostCount;
+
     @Bind(R.id.tv_mentor_post)
     TextView tvMentorPost;
 
     @Bind(R.id.li_follower)
     LinearLayout liFollower;
+
     @Bind(R.id.li_following)
     LinearLayout liFollowing;
 
     @Bind(R.id.tv_mentor_following_title)
     TextView followingTitle;
+
     @Bind(R.id.tv_mentor_following_count)
     TextView followingCount;
+
     @Bind(R.id.tv_mentor_follower_count)
     TextView userFollowerCount;
+
     @Bind(R.id.tv_mentor_follower)
     TextView userFollower;
 
     @Bind(R.id.li_answer)
     LinearLayout liAnswer;
+
     @Bind(R.id.tv_mentor_answer_count)
     TextView tvMentorAnswerCount;
+
     @Bind(R.id.tv_mentor_answer)
     TextView tvMentorAnswer;
 
@@ -153,14 +167,20 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     @Bind(R.id.tv_mentor_see_insight)
     TextView tvMentorSeeInsight;
 
+    @Bind(R.id.iv_mentor_verified)
+    ImageView verifiedIcon;
+
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
 
     @Bind(R.id.view_footer)
     View viewFooter;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
+
     ViewPagerAdapter mViewPagerAdapter;
+
     private Dialog dialog = null;
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
@@ -169,8 +189,10 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     private UserPostSolrObj mUserPostForCommunity;
     private UserSolrObj mMentorUserItem;
     private int itemPosition;
+
     @Inject
     AppUtils mAppUtils;
+
     @Inject
     HomePresenter mHomePresenter;
 
@@ -187,8 +209,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     private MoEngageUtills moEngageUtills;
     private int askingQuestionCode;
     boolean isUserVisitingOwnProfile = false;
-    int userPost = -1;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -238,15 +258,15 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
                 }
             }
         }
+
+        if(isMentor) {
+            verifiedIcon.setVisibility(View.VISIBLE);
+        } else{
+            verifiedIcon.setVisibility(View.INVISIBLE);
+        }
         //Chk if mentor of normal user and get its post
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
-
-        //if(isMentor) {
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant()));
-        // } else{
-        //     boolean hideAnnonymousPost = !isUserVisitingOwnProfile;
-        //     mHomePresenter.getFeedFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant(), hideAnnonymousPost));
-        // }
         setPagerAndLayouts();
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
@@ -288,17 +308,11 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             tvMentorToolbarName.setText(mMentorUserItem.getNameOrTitle());
         }
 
-        //int totalPost = mMentorUserItem.
-
-        //if (mMentorUserItem.getSolrIgnoreNoOfMentorPosts() > 0) {
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
         userTotalPostCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorPosts())));
         tvMentorPost.setText(pluralAnswer);
         liPost.setVisibility(View.VISIBLE);
-        // } else {
-        //  liPost.setVisibility(View.GONE);
-        // }
-        // if (mMentorUserItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
+
         if (isMentor) {
             pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
             tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorAnswers())));
@@ -308,19 +322,9 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             liAnswer.setVisibility(View.GONE);
         }
 
-        //if (mMentorUserItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
         userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
         userFollower.setText(pluralFollower);
-        //  liFollower.setVisibility(View.VISIBLE);
-        // } else {
-        //liFollower.setVisibility(View.GONE);
-        //}
-
-        //String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
-        //userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
-        //userFollower.setText(pluralFollower);
-        //liFollower.setVisibility(View.VISIBLE);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mMentorUserItem.getEntityOrParticipantId()) { //todo -profile - ask praveen if he hv issue with it
@@ -340,11 +344,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     }
 
     private void followUnFollowMentor() {
-        // if (mMentorUserItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
 
-        //} else {
-        // liFollower.setVisibility(View.GONE);
-        //}
         if (mMentorUserItem.isSolrIgnoreIsMentorFollowed() || mMentorUserItem.isSolrIgnoreIsUserFollowed()) {
             tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
             tvMentorDashBoardFollow.setText(this.getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
@@ -373,17 +373,14 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        if (isMentor) {
+         if (isMentor) {
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
             mViewPagerAdapter.addFragment(UserProfileTabFragment.createInstance(mChampionId), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
-            //  mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         }
 
-        // mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
-        // mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(this);
@@ -426,9 +423,8 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     public void mentorFollowClick() {
         if (tvMentorDashBoardFollow.getText().toString().equalsIgnoreCase(getString(R.string.ID_EDIT_PROFILE))) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
                 Intent intent = new Intent(this, EditUserProfileActivity.class);
-                intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
+                intent.putExtra(AppConstants.EXTRA_IMAGE, mMentorUserItem.getImageUrl());
                 startActivity(intent);
             }
         } else {
@@ -440,12 +436,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             } else {
                 mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mMentorUserItem);
             }
-            //if (mMentorUserItem.isSolrIgnoreIsMentorFollowed() || mMentorUserItem.isSolrIgnoreIsUserFollowed()) {
-            //    mMentorUserItem.setSolrIgnoreIsMentorFollowed(false);
-            //} else {
-            //    mMentorUserItem.setSolrIgnoreIsMentorFollowed(true);
-            // }
-            // followUnFollowMentor();
         }
     }
 
@@ -559,7 +549,10 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
-        } else {
+        } /*else if() {
+
+        } */
+        else {
             onBackClick();
         }
     }
@@ -657,7 +650,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         Parcelable parcelable = Parcels.wrap(mMentorUserItem);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        bundle.putLong(AppConstants.CHAMPION_ID, userId);   //todo -profile - have modified here
+        bundle.putLong(AppConstants.CHAMPION_ID, userId);  
         bundle.putBoolean(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

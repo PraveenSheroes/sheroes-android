@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,10 +29,8 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     @Bind(R.id.iv_header_circle_icon)
     CircleImageView ivLoginUserPic;
-    @Bind(R.id.card_header_view)
-    CardView cardHeaderView;
-    @Bind(R.id.tv_header_name)
-    TextView tvHeaderName;
+    @Bind(R.id.header_msg)
+    TextView headerMsg;
     @Bind(R.id.user_name)
     TextView userName;
 
@@ -68,11 +65,9 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         ivLoginUserPic.bindImage(mPhotoUrl);
         if(StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
-            tvHeaderName.setText(context.getString(R.string.ID_HEADER_TEXT));
             userName.setText(name);
-        }else {
-            tvHeaderName.setText(context.getString(R.string.ID_HEADER_TEXT));
         }
+            headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
     }
 
     @OnClick(R.id.user_name)
@@ -86,9 +81,9 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setEntityOrParticipantId(userId);
         viewInterface.handleOnClick(dataItem, ivLoginUserPic);
     }
-    @OnClick(R.id.tv_header_name)
+    @OnClick(R.id.header_msg)
     public void textClickForCreatePost() {
-        viewInterface.handleOnClick(dataItem, cardHeaderView);
+        viewInterface.handleOnClick(dataItem, headerMsg);
     }
 
     @Override

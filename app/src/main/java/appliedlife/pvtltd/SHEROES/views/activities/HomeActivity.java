@@ -807,12 +807,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mFeedDetail = (FeedDetail) baseResponse;
                 championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor());
                 break;
+
             case R.id.user_name:
                 mFeedDetail = (FeedDetail) baseResponse;
                 championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor());
                 break;
 
-            case R.id.tv_header_name:
+            case R.id.header_msg:
+                mFeedDetail = (FeedDetail) baseResponse;
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
                 createCommunityPostOnClick(communityPost);

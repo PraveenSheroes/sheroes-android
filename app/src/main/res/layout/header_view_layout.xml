@@ -14,6 +14,7 @@
         android:layout_marginTop="@dimen/dp_size_12">
 
         <FrameLayout
+            android:layout_gravity="center_vertical"
             android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -39,6 +40,7 @@
 
             <TextView
                 android:id="@+id/user_name"
+                android:padding="@dimen/dp_size_2"
                 android:layout_marginLeft="@dimen/dp_size_8"
                 android:layout_marginStart="@dimen/dp_size_8"
                 android:layout_width="wrap_content"
@@ -50,14 +52,15 @@
                 tools:text="Garima Sharma" />
 
             <TextView
-                android:id="@+id/tv_header_name"
-                android:layout_width="wrap_content"
+                android:padding="@dimen/dp_size_2"
+                android:id="@+id/header_msg"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/dp_size_8"
                 android:layout_marginStart="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:textColor="@color/posted_in"
                 android:textSize="@dimen/sp_size_16" />
 

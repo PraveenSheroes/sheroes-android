@@ -46,6 +46,7 @@ public class FragmentOpen{
     private boolean isFeedFragment;
     private int championViaCommentReaction;
     private boolean isGenericWebViewFragment;
+    private boolean isFollowedMentors;
 
     public FragmentOpen() {
     }
@@ -324,4 +325,11 @@ public class FragmentOpen{
         isGenericWebViewFragment = genericWebViewFragment;
     }
 
+    public boolean isFollowedMentors() {
+        return isFollowedMentors;
+    }
+
+    public void setFollowedMentors(boolean followedMentors) {
+        isFollowedMentors = followedMentors;
+    }
 }

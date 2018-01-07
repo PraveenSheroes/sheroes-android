@@ -138,9 +138,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Bind(R.id.et_location)
     EditText location;
 
-    @Bind(R.id.scrim_view)
-    View scrimView;
-
     @Bind(R.id.iv_profile_image)
     CircleImageView userImage;
 
@@ -153,20 +150,24 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         editProfilePresenter.attachView(this);
         toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
 
+        String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);
+        setProfileNameData(imageUrl);
+
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             UserSummary userSummary = mUserPreference.get().getUserSummary();
+            LoginResponse loginResponse = mUserPreference.get();
+            userSummary.setPhotoUrl(imageUrl);
+            loginResponse.setUserSummary(userSummary);
+            mUserPreference.set(loginResponse);
             setUserDetails(userSummary);
         }
 
-        editProfilePresenter.getALLUserDetails();
+       // editProfilePresenter.getALLUserDetails();
 
-        scrimView.setBackgroundColor(Color.BLACK);
-        scrimView.setAlpha(0.5f);
-
-        setProfileNameData();
         relationshipStatus.setOnItemSelectedListener(this);
         location.setOnClickListener(this);
         userImage.setOnClickListener(this);
+
         aboutMe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(BIO_MAX_LIMIT)});
 
         aboutMe.addTextChangedListener(new TextWatcher() {
@@ -209,10 +210,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     }
 
+    //remove it
     @Override
     public void getUserData(UserProfileResponse userProfileResponse) {
 
-        if (null != userProfileResponse ) {
+       /* if (null != userProfileResponse ) {
             LoginResponse loginResponse = mUserPreference.get();
             UserDetails userDetails=userProfileResponse.getUserDetails();
             if(null!=loginResponse && null!=loginResponse.getUserSummary()&&null!=userDetails) {
@@ -250,7 +252,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
             }
             mUserPreference.set(loginResponse);
-        }
+        }*/
     }
 
     @Override
@@ -351,17 +353,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
 
-    public void setProfileNameData() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-            String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-            if (null != profile) {
+    public void setProfileNameData(String imageUrl) {
+             if (null != imageUrl) {
                 userImage.setCircularImage(true);
-                userImage.setPlaceHolderId(R.drawable.default_img);
-                userImage.setErrorPlaceHolderId(R.drawable.default_img);
-                userImage.bindImage(profile);
+                userImage.bindImage(imageUrl);
             }
-
-        }
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         setLocalImageSaveForChallenge(localImageSaveForChallenge);
     }
@@ -627,7 +623,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     private boolean validateDOB() {
         if (!StringUtil.isNotNullOrEmptyString(dateOfBirth.getText().toString())) {
-            dateOfBirth.setError("Please enter Current location");
+            dateOfBirth.setError("Please enter date of birth");
             requestFocus(dateOfBirth);
             return false;
         } else {
