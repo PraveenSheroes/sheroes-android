@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -27,7 +28,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<ProfileCommunity> communities;
+    private List<CommunityFeedSolrObj> communities;
     private final Context mContext;
     private final OnItemClicked onCommunityClickListener;
     private ProfilePresenterImpl profilePresenter;
@@ -52,8 +53,8 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ProfileCommunityAdapter.FollowedUserListItemViewHolder commentListItemViewHolder = (ProfileCommunityAdapter.FollowedUserListItemViewHolder) holder;
-        ProfileCommunity mentorDetails = communities.get(position);
-        commentListItemViewHolder.bindData(mentorDetails, position);
+        CommunityFeedSolrObj communityFeedSolrObj = communities.get(position);
+        commentListItemViewHolder.bindData(communityFeedSolrObj, position);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
 
-    public void setData(List<ProfileCommunity> communities) {
+    public void setData(List<CommunityFeedSolrObj> communities) {
         this.communities = communities;
         notifyDataSetChanged();
     }
@@ -99,7 +100,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(final ProfileCommunity profileCommunity, final int position) {
+        public void bindData(final CommunityFeedSolrObj profileCommunity, final int position) {
 
             if (null != profileCommunity) {
                 itemView.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +161,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     //endregion
 
     public interface OnItemClicked {
-        void onItemClick(ProfileCommunity profileCommunity);
+        void onItemClick(CommunityFeedSolrObj profileCommunity);
     }
 
 }

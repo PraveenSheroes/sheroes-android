@@ -270,9 +270,10 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         }
         //Chk if mentor of normal user and get its post
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
-
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant()));
+
         setPagerAndLayouts();
+
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
@@ -349,7 +350,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     }
 
     @OnClick(R.id.iv_mentor_share)
-    public void onJobDetailShare() {
+    public void onProfileShare() {
         //AnalyticsManager.trackPostAction(Event.POST_SHARED, mMentorUserItem, getScreenName());
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);

@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
@@ -65,7 +66,7 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
 
         Parcelable parcelable = getIntent().getParcelableExtra(AppConstants.COMMUNITY_ID);
         if (parcelable != null) {
-            List<ProfileCommunity> profileCommunities = Parcels.unwrap(parcelable);
+            List<CommunityFeedSolrObj> profileCommunities = Parcels.unwrap(parcelable);
             if (StringUtil.isNotEmptyCollection(profileCommunities)) {
                 setupCommunityListAdapter(profileCommunities);
             }
@@ -77,7 +78,7 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
         finish();
     }
 
-    private void setupCommunityListAdapter(List<ProfileCommunity> profileCommunities) {
+    private void setupCommunityListAdapter(List<CommunityFeedSolrObj> profileCommunities) {
         mLayoutManager = new LinearLayoutManager(this);
         mCommunityRecycler.setLayoutManager(mLayoutManager);
 
@@ -94,16 +95,16 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
     }
 
     @Override
-    public void onItemClick( ProfileCommunity profileCommunity) {
+    public void onItemClick( CommunityFeedSolrObj communityFeedSolrObj) {
         Intent intent = new Intent(ProfileCommunitiesActivity.this, CommunitiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        Parcelable parcelables = Parcels.wrap(profileCommunity);
+        Parcelable parcelables = Parcels.wrap(communityFeedSolrObj);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
-        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+        //bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
         intent.putExtras(bundle);
-
-        intent.putExtra(AppConstants.COMMUNITY_ID, profileCommunity.getEntityOrParticipantId());
-        intent.putExtra(AppConstants.FROM_DEEPLINK, true);
+        intent.putExtra(AppConstants.COMMUNITY_ID, communityFeedSolrObj.getId());
+        intent.putExtra(AppConstants.FROM_DEEPLINK, false);
         startActivity(intent);
+
     }
 }

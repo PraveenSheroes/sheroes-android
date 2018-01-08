@@ -109,6 +109,10 @@ public class ProfileCommunity extends FeedDetail implements Cloneable {
         isRequestPending = requestPending;
     }
 
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     public boolean isMutualCommunityFirstItem() {
         return isMutualCommunityFirstItem;
     }

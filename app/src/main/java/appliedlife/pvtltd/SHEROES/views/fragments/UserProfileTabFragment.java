@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -64,7 +65,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     private long userId;
     private String userName = "User";
     private boolean isSelfProfile;
-    private List<ProfileCommunity> profileCommunities;
+    private List<CommunityFeedSolrObj> profileCommunities;
     private List<UserSolrObj> followedChampions;
 
     @Bind(R.id.user_communities)
@@ -193,14 +194,15 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
         }
     }
 
-    private void populateMutualCommunities(List<ProfileCommunity> communities) {
+    private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
         mutualCommunityLabel.setText(communities.get(0).getNameOrTitle() + " & you share "+ mutualCommunitySize +" mutual communities");
 
         int counter = 0;
-        for (final FeedDetail community : communities) {
+        for (final CommunityFeedSolrObj community : communities) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_mutual_community, null);
+
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
@@ -208,6 +210,12 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 mutualCommunityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 mutualCommunityImage.bindImage(community.getThumbnailImageUrl());
             }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openCommunityDetails(community);
+                }
+            });
 
             mutualCommunityContainer.addView(view);
             counter++;
@@ -232,14 +240,14 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     }
 
-    private void populateUserCommunity(List<ProfileCommunity> communities) { //other communities
+    private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
         int screenWidth = CommonUtil.getWindowWidth(getContext());
         float aspectRatio = (float) 124 / 160;
         int columnSize = screenWidth / 2 - mImageMargin;
 
         int counter = 0;
-        for (final ProfileCommunity community : communities) {
+        for (final CommunityFeedSolrObj community : communities) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_communities_items, null);
             LinearLayout container = ButterKnife.findById(view, R.id.profile_community_container);
             CircleImageView communityImage = ButterKnife.findById(view, R.id.community_icon);
@@ -317,11 +325,11 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
         LogUtils.info(TAG, "Community count:" + userCommunities.getStatus());
 
-        List<ProfileCommunity> mutualCommunity = userCommunities.getMutualCommunities();
-        List<ProfileCommunity> otherCommunity = userCommunities.getOtherCommunities();
+        List<CommunityFeedSolrObj> mutualCommunity = userCommunities.getMutualCommunities();
+        List<CommunityFeedSolrObj> otherCommunity = userCommunities.getOtherCommunities();
         if (!isSelfProfile) {
             if (StringUtil.isNotEmptyCollection(mutualCommunity)) {
-                ProfileCommunity profileCommunity = mutualCommunity.get(0);
+                CommunityFeedSolrObj profileCommunity = mutualCommunity.get(0);
                 profileCommunity.setMutualCommunityCount(mutualCommunity.size());
                 profileCommunity.setMutualCommunityFirstItem(true);
                 profileCommunity.setShowHeader(true);
@@ -337,7 +345,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
         if (StringUtil.isNotEmptyCollection(otherCommunity)) {
             emptyViewCommunitiesContainer.setVisibility(View.GONE);
             communityListContainer.setVisibility(View.VISIBLE);
-            ProfileCommunity profileCommunity = otherCommunity.get(0);
+            CommunityFeedSolrObj profileCommunity = otherCommunity.get(0);
             profileCommunity.setShowHeader(true);
 
             if(isSelfProfile) {
@@ -420,16 +428,15 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     }
 
-    public void openCommunityDetails( ProfileCommunity profileCommunity) {
+    public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
         Intent intent = new Intent(getActivity(), CommunitiesDetailActivity.class);
         Bundle bundle = new Bundle();
-        Parcelable parcelables = Parcels.wrap(profileCommunity);
+        Parcelable parcelables = Parcels.wrap(communityFeedSolrObj);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
-        bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
+        //bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
         intent.putExtras(bundle);
-
-        intent.putExtra(AppConstants.COMMUNITY_ID, profileCommunity.getEntityOrParticipantId());
-        intent.putExtra(AppConstants.FROM_DEEPLINK, true);
+        intent.putExtra(AppConstants.COMMUNITY_ID, communityFeedSolrObj.getId());
+        intent.putExtra(AppConstants.FROM_DEEPLINK, false);
         startActivity(intent);
     }
 
