@@ -91,28 +91,12 @@ public class ProfileFollowedChampionActivity extends BaseActivity implements Pro
     @Override
     public void onItemClick(UserSolrObj mentor) {
 
-       /* Intent intent = new Intent(ProfileFollowedChampionActivity.this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(ProfileFollowedChampionActivity.this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
-        //Parcelable parcelableFeedDetail = Parcels.wrap(mentor);
-        //bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
         bundle.putBoolean(AppConstants.IS_MENTOR_ID, true);
         intent.putExtras(bundle);
-        startActivity(intent);*/
-
-
-        /*Intent intent = new Intent(this, ProfileDashboardActivity.class);
-        Bundle bundle = new Bundle();
-        FeedDetail mFeedDetail = mentor;
-        Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(mentor);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
-        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
-        intent.putExtras(bundle);
-        startActivity(intent);*/
-
+        startActivity(intent);
     }
 
 
