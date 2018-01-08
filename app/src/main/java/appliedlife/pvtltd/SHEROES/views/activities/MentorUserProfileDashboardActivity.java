@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -37,8 +36,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -56,11 +53,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -87,14 +82,39 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 //TODO- rename to UserProfileDashboardActivity
 public class MentorUserProfileDashboardActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+
     private final String TAG = LogUtils.makeLogTag(MentorUserProfileDashboardActivity.class);
     private static final String SCREEN_LABEL = "Public Profile Growth Screen";
+
+    private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
+    private Long mChampionId;
+    private boolean isMentor;
+    private int mFromNotification;
+    private FeedDetail mFeedDetail;
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
+    private int askingQuestionCode;
+    boolean isUserVisitingOwnProfile = false;
+    ViewPagerAdapter mViewPagerAdapter;
+
+    private Dialog dialog = null;
+    private CommunityEnum communityEnum = MY_COMMUNITY;
+    private long mCommunityPostId = 1;
+    private FragmentOpen mFragmentOpen;
+    private Fragment mFragment;
+    private UserPostSolrObj mUserPostForCommunity;
+    private UserSolrObj mMentorUserItem;
+    private int itemPosition;
 
     @Bind(R.id.iv_mentor_full_view_icon)
     CircleImageView mProfileIcon;
 
     @Bind(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
+
+    @Bind(R.id.iv_mentor_share)
+    ImageView shareProfile;
 
     @Bind(R.id.view_pager_mentor)
     ViewPager mViewPager;
@@ -183,17 +203,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     @Inject
     Preference<LoginResponse> mUserPreference;
 
-    ViewPagerAdapter mViewPagerAdapter;
-
-    private Dialog dialog = null;
-    private CommunityEnum communityEnum = MY_COMMUNITY;
-    private long mCommunityPostId = 1;
-    private FragmentOpen mFragmentOpen;
-    private Fragment mFragment;
-    private UserPostSolrObj mUserPostForCommunity;
-    private UserSolrObj mMentorUserItem;
-    private int itemPosition;
-
     @Inject
     AppUtils mAppUtils;
 
@@ -202,17 +211,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
     @Inject
     ProfilePresenterImpl profilePresenter;
-
-    private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
-    private Long mChampionId;
-    private boolean isMentor; //todo - profile - change this
-    private int mFromNotification;
-    private FeedDetail mFeedDetail;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
-    private int askingQuestionCode;
-    boolean isUserVisitingOwnProfile = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -257,6 +255,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             if (mUserPreference.get().getUserSummary().getUserId() == mMentorUserItem.getEntityOrParticipantId()) {
                 Log.i(TAG, "its self profile");
                 isUserVisitingOwnProfile = true;
+
                 if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
                     isMentor = true;
                 }
@@ -267,6 +266,12 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             verifiedIcon.setVisibility(View.VISIBLE);
         } else{
             verifiedIcon.setVisibility(View.INVISIBLE);
+        }
+
+        if(isUserVisitingOwnProfile) {
+            shareProfile.setVisibility(View.VISIBLE);
+        } else{
+            shareProfile.setVisibility(View.GONE);
         }
         //Chk if mentor of normal user and get its post
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
@@ -319,18 +324,23 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         tvMentorPost.setText(pluralAnswer);
         liPost.setVisibility(View.VISIBLE);
 
+        String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
+        userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
+        userFollower.setText(pluralFollower);
+
         if (isMentor) {
+            liFollowing.setVisibility(View.GONE);
             pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mMentorUserItem.getSolrIgnoreNoOfMentorAnswers());
             tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorAnswers())));
             tvMentorAnswer.setText(pluralAnswer);
             liAnswer.setVisibility(View.VISIBLE);
         } else {
             liAnswer.setVisibility(View.GONE);
+            followingTitle.setText(getResources().getString(R.string.following));
+            followingCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getUserFollowing())));
+            liFollowing.setVisibility(View.VISIBLE);
         }
 
-        String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mMentorUserItem.getSolrIgnoreNoOfMentorFollowers());
-        userFollowerCount.setText(String.valueOf(numericToThousand(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers())));
-        userFollower.setText(pluralFollower);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mMentorUserItem.getEntityOrParticipantId()) { //todo -profile - ask praveen if he hv issue with it
@@ -347,15 +357,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         }
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
-    }
-
-    @OnClick(R.id.iv_mentor_share)
-    public void onProfileShare() {
-        //AnalyticsManager.trackPostAction(Event.POST_SHARED, mMentorUserItem, getScreenName());
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, mMentorUserItem.getDeepLinkUrl());
-        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
     private void followUnFollowMentor() {
@@ -403,6 +404,16 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             mViewPager.setCurrentItem(AppConstants.ONE_CONSTANT);
             mAppBarLayout.setExpanded(false);
         }
+    }
+
+    @OnClick(R.id.li_post)
+    public void selectScrollPstTab() {
+        if(isMentor) {
+            mViewPager.setCurrentItem(0);
+        } else {
+            mViewPager.setCurrentItem(1);
+        }
+
     }
 
     @OnClick(R.id.tv_mentor_see_insight)
@@ -480,17 +491,21 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     }
 
     public void onBackClick() {
-        if (mChampionId > 0) {
-            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-            } else {
-                deepLinkPressHandle();
-            }
-        } else {
-            deepLinkPressHandle();
-        }
-        finish();
+       if(isMentor) {
+           if (mChampionId > 0) {
+               if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
+                   Intent intent = new Intent(this, HomeActivity.class);
+                   startActivity(intent);
+               } else {
+                   deepLinkPressHandle();
+               }
+           } else {
+               deepLinkPressHandle();
+           }
+           finish();
+       } else {
+           super.onBackPressed();
+       }
     }
 
     private void deepLinkPressHandle() {
@@ -564,10 +579,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         } else if (mFragmentOpen.isOpenImageViewer()) {
             mFragmentOpen.setOpenImageViewer(false);
             getSupportFragmentManager().popBackStackImmediate();
-        } /*else if() {
-
-        } */
-        else {
+        } else {
             onBackClick();
         }
     }
@@ -767,6 +779,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
     public void setUsersFollowingCount(int numFound) {
         followingTitle.setText(getResources().getString(R.string.following));
+        mMentorUserItem.setUserFollowing(numFound);
         followingCount.setText(String.valueOf(numFound));
         liFollowing.setVisibility(View.VISIBLE);
     }

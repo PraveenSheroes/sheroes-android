@@ -141,6 +141,8 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_no_of_mentor_followers")
     private int solrIgnoreNoOfMentorFollowers;
 
+    private int userFollowing;
+
     @SerializedName("solr_ignore_mentor_status")
     private String solrIgnoreMentorStatus;
 
@@ -560,5 +562,13 @@ public class UserSolrObj extends FeedDetail {
 
     public void setSolrIgnoreIsUserFollowed(boolean solrIgnoreIsUserFollowed) {
         this.solrIgnoreIsUserFollowed = solrIgnoreIsUserFollowed;
+    }
+
+    public int getUserFollowing() {
+        return userFollowing;
+    }
+
+    public void setUserFollowing(int userFollowing) {
+        this.userFollowing = userFollowing;
     }
 }

@@ -159,6 +159,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_191">
 
+                <FrameLayout
+                    android:id="@+id/dotted_border_container"
+                    android:layout_margin="@dimen/dp_size_15"
+                    android:background="@drawable/dotted_line_border"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/empty_mentor_view"
                     android:layout_width="match_parent"
@@ -170,6 +177,8 @@
                     android:gravity="center"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout

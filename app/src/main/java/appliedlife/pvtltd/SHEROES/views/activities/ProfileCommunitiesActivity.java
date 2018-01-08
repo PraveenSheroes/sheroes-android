@@ -102,7 +102,6 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
         //bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
         intent.putExtras(bundle);
-        intent.putExtra(AppConstants.COMMUNITY_ID, communityFeedSolrObj.getId());
         intent.putExtra(AppConstants.FROM_DEEPLINK, false);
         startActivity(intent);
 

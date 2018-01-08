@@ -2073,14 +2073,15 @@ public class AppUtils {
 
     public  FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
-        feedRequestPojo.setAutherId((int) idForDetail);  //todo- profile - id set for users &bchampion
+        feedRequestPojo.setAutherId((int) idForDetail);
+        feedRequestPojo.setIdForFeedDetail(idForDetail);
         feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
         return feedRequestPojo;
     }
 
     public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
-        feedRequestPojo.setIdForFeedDetail(idForDetail);  //todo- profile - id set for users &bchampion
+        feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
     }
     public WinnerRequest winnerRequestBuilder(String contestId) {

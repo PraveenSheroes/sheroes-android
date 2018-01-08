@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
@@ -88,16 +89,30 @@ public class ProfileFollowedChampionActivity extends BaseActivity implements Pro
     }
 
     @Override
-    public void onItemClick( UserSolrObj mentor) {
+    public void onItemClick(UserSolrObj mentor) {
 
-        Intent intent = new Intent(ProfileFollowedChampionActivity.this, MentorUserProfileDashboardActivity.class);
+       /* Intent intent = new Intent(ProfileFollowedChampionActivity.this, MentorUserProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(mentor);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        bundle.putLong(AppConstants.CHAMPION_ID, mentor.getEntityOrParticipantId());
+        //Parcelable parcelableFeedDetail = Parcels.wrap(mentor);
+        //bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
         bundle.putBoolean(AppConstants.IS_MENTOR_ID, true);
         intent.putExtras(bundle);
-        startActivity(intent);
+        startActivity(intent);*/
+
+
+        /*Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Bundle bundle = new Bundle();
+        FeedDetail mFeedDetail = mentor;
+        Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(mentor);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
+        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
+        intent.putExtras(bundle);
+        startActivity(intent);*/
+
     }
 
 

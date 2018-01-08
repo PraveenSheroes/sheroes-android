@@ -826,7 +826,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 eventDetailDialog(0);
                 break;
             case R.id.li_mentor:
-                openMentorProfileDetail(baseResponse); //todo - check its mentor click only
+                openMentorProfileDetail(baseResponse);
                 break;
             case R.id.share:
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
@@ -889,8 +889,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        bundle.putLong(AppConstants.CHAMPION_ID, mFeedDetail.getAuthorId());  //todo - profile - newly added
-        bundle.putBoolean(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());  ////todo - profile - newly added
+        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
+        //bundle.putLong(AppConstants.CHAMPION_ID, mFeedDetail.getEntityOrParticipantId());
+        //boolean isMentor = mFeedDetail.isAuthorMentor() || mFeedDetail.getEntityOrParticipantTypeId() == 7 ? true :false;
+        //bundle.putBoolean(AppConstants.IS_MENTOR_ID, isMentor);  ////todo - profile - newly added
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }

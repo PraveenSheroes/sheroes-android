@@ -85,7 +85,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private static final String SCREEN_LABEL = "Edit Profile Screen";
     private static final String TAG = EditUserProfileActivity.class.getName();
 
-    private static final int BIO_MAX_LIMIT = 160;
+    private static final int BIO_MAX_LIMIT = 140;
     private SearchProfileLocationDialogFragment searchProfileLocationDialogFragment;
     private ProfileImageDialogFragment profileImageDialogFragment;
     private String mEncodeImageUrl;

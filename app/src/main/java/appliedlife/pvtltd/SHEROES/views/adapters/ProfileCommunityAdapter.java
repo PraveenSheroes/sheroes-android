@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -103,7 +104,10 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
         public void bindData(final CommunityFeedSolrObj profileCommunity, final int position) {
 
             if (null != profileCommunity) {
-                itemView.setOnClickListener(new View.OnClickListener() {
+
+                LinearLayout linearLayout = ButterKnife.findById(itemView, R.id.community_row_item);
+
+                linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onCommunityClickListener.onItemClick(profileCommunity);

@@ -47,6 +47,7 @@
         android:background="@color/on_board_work" />
 
     <LinearLayout
+        android:id="@+id/community_row_item"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_98"

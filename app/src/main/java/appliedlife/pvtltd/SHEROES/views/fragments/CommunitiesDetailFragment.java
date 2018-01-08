@@ -77,7 +77,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
  */
 
 
-//todo - for post
 public class CommunitiesDetailFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Community Screen";
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
@@ -252,7 +251,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     feedRequestPojo.setIdForFeedDetail(null);
                     Integer autherId = (int) mCommunityFeedObj.getIdOfEntityOrParticipant();
                     feedRequestPojo.setAutherId(autherId);
-                    feedRequestPojo.setAnonymousPostHide(hideAnonymousPost);  //todo - public profile
+                    feedRequestPojo.setAnonymousPostHide(hideAnonymousPost);
 
                     feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                     mHomePresenter.getFeedForProfileFromPresenter(feedRequestPojo);
@@ -382,10 +381,13 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        int totalPostCount = feedResponsePojo.getNumFound();
+
         if (StringUtil.isNotEmptyCollection(feedDetailList) && null != mFragmentListRefreshData) {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
+                ((MentorUserProfileDashboardActivity) getActivity()).setUsersPostCount(totalPostCount); //set post count
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mProgressBar.setVisibility(View.GONE);
                 mPullRefreshList.allListData(feedDetailList);
