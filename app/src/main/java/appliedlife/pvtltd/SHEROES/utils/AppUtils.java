@@ -2404,6 +2404,35 @@ public class AppUtils {
         }
         return communityPostCreateRequest;
     }
+
+    public static CommunityPostCreateRequest topCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost,List<Long> deletedImageId,LinkRenderResponse linkRenderResponse, boolean topPost) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
+        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityPostCreateRequest.setCommunityId(communityId);
+        communityPostCreateRequest.setCreatorType(createType);
+        communityPostCreateRequest.setDescription(description);
+        communityPostCreateRequest.setImages(imag);
+        communityPostCreateRequest.setId(mIdForEditPost);
+        communityPostCreateRequest.setDeleteImagesIds(deletedImageId);
+        if (null!=linkRenderResponse) {
+            communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
+            communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
+            communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
+            communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
+            communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
+        }else
+        {
+            communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
+            communityPostCreateRequest.setOgVideoLinkB(false);
+            communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
+        }
+        return communityPostCreateRequest;
+    }
     public ApproveSpamPostRequest spamPostApprovedRequestBuilder(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
         AppUtils appUtils = AppUtils.getInstance();
         ApproveSpamPostRequest approveSpamPostRequest=new ApproveSpamPostRequest();

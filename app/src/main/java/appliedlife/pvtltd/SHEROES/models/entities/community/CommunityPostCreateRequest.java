@@ -72,6 +72,10 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @Expose
     private boolean isSpam;
 
+    @SerializedName("is_top_post_b")
+    @Expose
+    private boolean isTopPost;
+
     public String getmSourceType() {
         return mSourceType;
     }
@@ -214,6 +218,14 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         isSpam = spam;
     }
 
+    public boolean isTopPost() {
+        return isTopPost;
+    }
+
+    public void setTopPost(boolean topPost) {
+        isTopPost = topPost;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -238,6 +250,7 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         dest.writeList(this.deleteImagesIds);
         dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isSpam ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isTopPost ? (byte) 1 : (byte) 0);
     }
 
     protected CommunityPostCreateRequest(Parcel in) {
@@ -259,6 +272,7 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         in.readList(this.deleteImagesIds, Long.class.getClassLoader());
         this.isActive = in.readByte() != 0;
         this.isSpam = in.readByte() != 0;
+        this.isTopPost = in.readByte() != 0;
     }
 
     public static final Creator<CommunityPostCreateRequest> CREATOR = new Creator<CommunityPostCreateRequest>() {

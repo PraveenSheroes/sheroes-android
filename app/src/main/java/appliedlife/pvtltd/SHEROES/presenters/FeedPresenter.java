@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +27,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
@@ -55,6 +58,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import rx.Observable;
@@ -67,6 +71,8 @@ import rx.schedulers.Schedulers;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
@@ -1023,6 +1029,49 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             }
         });
         registerSubscription(subscription);
+    }
+
+    public void editTopPost(final CommunityPostCreateRequest communityPostCreateRequest) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = editPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().invalidateItem(communityPostCreateResponse.getFeedDetail());
+            }
+
+        });
+        registerSubscription(subscription);
+    }
+
+    public Observable<CreateCommunityResponse> editPostCommunity(CommunityPostCreateRequest communityPostCreateRequest){
+        LogUtils.info(TAG,"***************edit community Post****"+new Gson().toJson(communityPostCreateRequest));
+        return sheroesAppServiceApi.editCommunityPost(communityPostCreateRequest)
+                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
+                    @Override
+                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
+                        return communityTagsListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void onStop() {

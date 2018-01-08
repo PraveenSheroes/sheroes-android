@@ -75,6 +75,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     //spam handling
+
+    @Bind(R.id.top_post_view)
+    RelativeLayout topPostView;
+
     @Bind(R.id.fl_spam_post_ui)
     FrameLayout flSpamPostUi;
     @Bind(R.id.tv_review_description)
@@ -222,6 +226,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mUserPostObj = (UserPostSolrObj) item;
         mContext = context;
+        if(mUserPostObj.isTopPost()){
+            topPostView.setVisibility(View.VISIBLE);
+        }else {
+            topPostView.setVisibility(View.GONE);
+        }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
         if (mUserPostObj.isSpamPost()) {

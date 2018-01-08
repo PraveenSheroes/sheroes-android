@@ -81,6 +81,9 @@ public class UserPostSolrObj extends FeedDetail {
     @SerializedName("challenge_accept_post_text_s")
     private String challengeAcceptPostText;
 
+    @SerializedName("is_top_post_b")
+    private boolean isTopPost;
+
     //this field are added by own
     private int noOfOpenings;
     private int isEditOrDelete;
@@ -299,5 +302,13 @@ public class UserPostSolrObj extends FeedDetail {
 
     public void setIsEditOrDelete(int isEditOrDelete) {
         this.isEditOrDelete = isEditOrDelete;
+    }
+
+    public boolean isTopPost() {
+        return isTopPost;
+    }
+
+    public void setTopPost(boolean topPost) {
+        isTopPost = topPost;
     }
 }

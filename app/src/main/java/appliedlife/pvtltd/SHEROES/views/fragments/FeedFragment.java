@@ -78,6 +78,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
+
 /**
  * Created by ujjwal on 27/12/17.
  */
@@ -311,8 +313,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             if (adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
+                popup.getMenu().findItem(R.id.top_post).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
+                popup.getMenu().findItem(R.id.top_post).setEnabled(true);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -323,6 +327,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
                             mFeedPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
+                            return true;
+                        case R.id.top_post:
+                            AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
+                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, null, userPostObj.getDescription(), null, userPostObj.getIdOfEntityOrParticipant(), null, null, true));
                             return true;
                         default:
                             return false;
