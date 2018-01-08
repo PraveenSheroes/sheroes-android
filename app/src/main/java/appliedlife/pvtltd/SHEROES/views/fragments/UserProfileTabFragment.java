@@ -14,7 +14,6 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -28,14 +27,11 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -43,7 +39,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileFollowedChampionActivity;
@@ -326,21 +322,21 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Override
     public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Follower count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((MentorUserProfileDashboardActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((ProfileDashboardActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
     @Override
     public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Following count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((MentorUserProfileDashboardActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((ProfileDashboardActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
     @Override
     public void getUsersPostCount(int totalPost) {
         LogUtils.info(TAG, "Following count:" + totalPost);
-        ((MentorUserProfileDashboardActivity) getActivity()).setUsersPostCount(totalPost);
+        ((ProfileDashboardActivity) getActivity()).setUsersPostCount(totalPost);
     }
 
     @Override
@@ -423,7 +419,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MentorUserProfileDashboardActivity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    ((ProfileDashboardActivity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                 }
             });
 

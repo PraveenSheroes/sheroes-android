@@ -119,6 +119,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
+    public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;

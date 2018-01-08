@@ -42,25 +42,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 
 /**
  * Created by Praveen on 06/12/17.
@@ -145,7 +137,7 @@ public class  MentorQADetailFragment extends BaseFragment {
             mHomePresenter.attachView(this);
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileDashboardActivity) getActivity());
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileDashboardActivity) getActivity());
             mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
@@ -153,13 +145,13 @@ public class  MentorQADetailFragment extends BaseFragment {
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
-                    ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                    ((ProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
 
                 }
 
                 @Override
                 public void onShow() {
-                    ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                    ((ProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                 }
 
                 @Override

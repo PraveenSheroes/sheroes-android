@@ -11,7 +11,6 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -882,7 +881,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         UserSolrObj userSolrObj=(UserSolrObj) baseResponse;
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
@@ -924,7 +923,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openProfileActivity() {
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         //intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
         intent.putExtra(AppConstants.CHAMPION_ID,userId);
 
@@ -1808,7 +1807,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor) {
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);

@@ -30,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileFollowedChampionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
@@ -343,7 +343,7 @@ public interface SheroesAppComponent {
 
     void inject(AppIntroCardHolder appIntroCardHolder);
 
-    void inject(MentorUserProfileDashboardActivity mentorUserProfileDashboardActivity);
+    void inject(ProfileDashboardActivity profileDashboardActivity);
 
     void inject(UserProfileTabFragment userProfileTabFragment);
 

@@ -21,7 +21,7 @@ public interface IEditProfileView extends BaseMvpView {
 
     void showError(@StringRes int error);
 
-    void getUserData(UserProfileResponse userProfileResponse);
+    void errorMessage(String message);
 
     void getUserSummaryResponse(BoardingDataResponse boardingDataResponse);
 

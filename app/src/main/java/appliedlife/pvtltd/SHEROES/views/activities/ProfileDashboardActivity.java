@@ -22,6 +22,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -80,10 +81,9 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-//TODO- rename to UserProfileDashboardActivity
-public class MentorUserProfileDashboardActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class ProfileDashboardActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
 
-    private final String TAG = LogUtils.makeLogTag(MentorUserProfileDashboardActivity.class);
+    private final String TAG = LogUtils.makeLogTag(ProfileDashboardActivity.class);
     private static final String SCREEN_LABEL = "Public Profile Growth Screen";
 
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
@@ -253,7 +253,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
             if (mUserPreference.get().getUserSummary().getUserId() == mMentorUserItem.getEntityOrParticipantId()) {
-                Log.i(TAG, "its self profile");
                 isUserVisitingOwnProfile = true;
 
                 if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
@@ -273,6 +272,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         } else{
             shareProfile.setVisibility(View.GONE);
         }
+
         //Chk if mentor of normal user and get its post
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mMentorUserItem.getIdOfEntityOrParticipant()));
@@ -281,6 +281,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
 
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
+
 
     @Override
     protected void onStop() {
@@ -304,8 +305,8 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         } else {
             tvProfession.setVisibility(View.GONE);
         }
-        if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getListDescription())) {
-            Spanned description = StringUtil.fromHtml(mMentorUserItem.getListDescription());
+        if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getDescription())) {
+            Spanned description = StringUtil.fromHtml(mMentorUserItem.getDescription());
             userDescription.setText(description);
         }
 
@@ -314,6 +315,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             mProfileIcon.bindImage(mMentorUserItem.getImageUrl());
 
         }
+
         if (StringUtil.isNotNullOrEmptyString(mMentorUserItem.getNameOrTitle())) {
             userName.setText(mMentorUserItem.getNameOrTitle());
             tvMentorToolbarName.setText(mMentorUserItem.getNameOrTitle());
@@ -413,7 +415,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         } else {
             mViewPager.setCurrentItem(1);
         }
-
+        mAppBarLayout.setExpanded(false);
     }
 
     @OnClick(R.id.tv_mentor_see_insight)
@@ -451,7 +453,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 Intent intent = new Intent(this, EditUserProfileActivity.class);
                 intent.putExtra(AppConstants.EXTRA_IMAGE, mMentorUserItem.getImageUrl());
-                startActivity(intent);
+                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE);
             }
         } else {
             tvMentorDashBoardFollow.setEnabled(false);
@@ -669,7 +671,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     }
 
     public void championDetailActivity(Long userId, boolean isMentor) {
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         mMentorUserItem = new UserSolrObj();
         mMentorUserItem.setIdOfEntityOrParticipant(userId);
@@ -694,7 +696,8 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     private void shareCardViaSocial() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, mMentorUserItem.getMentorDeepLinkUrl());
+        String deepLink = isMentor ? mMentorUserItem.getMentorDeepLinkUrl() : mMentorUserItem.getDeepLinkUrl();
+        intent.putExtra(Intent.EXTRA_TEXT, deepLink);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
@@ -704,6 +707,13 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
+
+                case AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE:
+                    Bundle bundle = intent.getExtras();
+                    if(bundle!=null) {
+                        refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"),  bundle.getString("BIO"));
+                    }
+                   break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
@@ -744,6 +754,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
                             }
                         }
                     }
+
                     break;
                 default:
 
@@ -751,6 +762,13 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
             }
         }
 
+    }
+
+    private void refreshUserDetails(String name, String location , String userBio) {
+        userName.setText(name);
+        tvMentorToolbarName.setText(name);
+        tvLoc.setText(location);
+        userDescription.setText(userBio);
     }
 
     @Override
@@ -808,7 +826,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
                 dialog.dismiss();
             }
 
-            dialog = new Dialog(MentorUserProfileDashboardActivity.this);
+            dialog = new Dialog(ProfileDashboardActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.unfollow_confirmation_dialog);

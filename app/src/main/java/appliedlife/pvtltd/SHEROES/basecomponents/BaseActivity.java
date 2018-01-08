@@ -50,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -70,14 +69,13 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -492,7 +490,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             //todo -ravi -profile - change here for article
             case R.id.iv_feed_article_card_circle_icon :
             case R.id.tv_feed_article_card_title:
-                Intent mentorUserProfile = new Intent(this, MentorUserProfileDashboardActivity.class); //todo - profile - mentor
+                Intent mentorUserProfile = new Intent(this, ProfileDashboardActivity.class); //todo - profile - mentor
                 mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getAuthorId());
                 mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
                 // articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this

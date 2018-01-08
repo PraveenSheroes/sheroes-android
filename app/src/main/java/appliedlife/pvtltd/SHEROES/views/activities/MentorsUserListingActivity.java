@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -165,7 +164,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);

@@ -28,8 +28,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsigh
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
-import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.presenters.MentorPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -340,7 +338,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
     @OnClick(R.id.tv_mentor_answering_question)
     public void mentorAnsweringQuestionClick() {
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         FeedDetail mFeedDetail = mUserSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);

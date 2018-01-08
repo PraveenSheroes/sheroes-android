@@ -427,7 +427,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor) {
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, ProfileDashboardActivity.class);
         Bundle bundle = new Bundle();
         mCommunityFeedObj = new CommunityFeedSolrObj();
         mCommunityFeedObj.setIdOfEntityOrParticipant(userId);

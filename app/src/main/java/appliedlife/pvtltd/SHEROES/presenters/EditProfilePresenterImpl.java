@@ -86,7 +86,14 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onNext(BoardingDataResponse boardingDataResponse) {
                 getMvpView().stopProgressBar();
                 if (null != boardingDataResponse) {
-                    getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
+                    if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED))  {
+                        if(boardingDataResponse.getFieldErrorMessageMap().containsKey(AppConstants.INAVLID_DATA)) {
+                            String errorMessage = boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
+                            getMvpView().errorMessage(errorMessage);
+                        }
+                    } else if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
+                    }
                 }
             }
         });
@@ -165,36 +172,4 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
         return stream.toByteArray();
     }
-
-    //for showing all data of profile listing
-    public void getALLUserDetails() {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = profileModel.getAllUserDetailsromModel().subscribe(new Subscriber<UserProfileResponse>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
-            }
-
-            @Override
-            public void onNext(UserProfileResponse userProfileResponse) {
-                getMvpView().stopProgressBar();
-                if (null != userProfileResponse) {
-                    getMvpView().getUserData(userProfileResponse);
-                }
-            }
-        });
-        registerSubscription(subscription);
-    }
-
 }

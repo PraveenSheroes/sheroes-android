@@ -7,16 +7,17 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,7 +32,10 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import java.io.File;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,13 +56,12 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -90,11 +93,13 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private ProfileImageDialogFragment profileImageDialogFragment;
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
-    private SimpleDateFormat dateFormatter;
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private DatePickerDialog fromDatePickerDialog;
-    String mCityId, mcityNm;
+    String locationName;
+    int cityId;
     private File localImageSaveForChallenge;
     private String aboutMeValue = "";
+    private LoginResponse userDetailsResponse ;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -107,6 +112,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Bind(R.id.et_full_name_container)
     TextInputLayout fullNameContainer;
+
+    @Bind(R.id.et_mobile_container)
+    TextInputLayout mobileContainer;
 
     @Bind(R.id.tv_profile_tittle)
     TextView toolbarTitle;
@@ -153,16 +161,13 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);
         setProfileNameData(imageUrl);
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            UserSummary userSummary = mUserPreference.get().getUserSummary();
-            LoginResponse loginResponse = mUserPreference.get();
-            userSummary.setPhotoUrl(imageUrl);
-            loginResponse.setUserSummary(userSummary);
-            mUserPreference.set(loginResponse);
-            setUserDetails(userSummary);
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
+            userDetailsResponse = mUserPreference.get();
+            UserSummary userDetails= userDetailsResponse.getUserSummary();
+            if(null != userDetails) {
+                setUserDetails(userDetails);
+            }
         }
-
-       // editProfilePresenter.getALLUserDetails();
 
         relationshipStatus.setOnItemSelectedListener(this);
         location.setOnClickListener(this);
@@ -185,7 +190,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             }
         });
 
-        dateFormatter = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
         setDateTimeField();
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PERSONAL_EDIT_BASIC_DETAIL));
     }
@@ -210,49 +214,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     }
 
-    //remove it
     @Override
-    public void getUserData(UserProfileResponse userProfileResponse) {
-
-       /* if (null != userProfileResponse ) {
-            LoginResponse loginResponse = mUserPreference.get();
-            UserDetails userDetails=userProfileResponse.getUserDetails();
-            if(null!=loginResponse && null!=loginResponse.getUserSummary()&&null!=userDetails) {
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
-                    loginResponse.getUserSummary().setFirstName(userDetails.getFirstName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
-                    loginResponse.getUserSummary().setLastName(userDetails.getLastName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
-                    loginResponse.getUserSummary().getUserBO().setCityMaster(userDetails.getCityMaster());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
-                    loginResponse.getUserSummary().getUserBO().setEmailid(userDetails.getEmailid());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getMaritalStatus())) {
-                    loginResponse.getUserSummary().getUserBO().setMaritalStatus(userDetails.getMaritalStatus());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getMobile())) {
-                    loginResponse.getUserSummary().setMobile(userDetails.getMobile());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getUserSummary())) {
-                    loginResponse.getUserSummary().getUserBO().setUserSummary(userDetails.getUserSummary());
-                }
-
-                loginResponse.getUserSummary().getUserBO().setNoOfChildren(userDetails.getNoOfChildren());
-                loginResponse.getUserSummary().getUserBO().setDob(String.valueOf(userDetails.getDob()));
-
-                loginResponse.getUserSummary().getUserBO().setCityMasterId(userDetails.getCityMasterId());
-
-            }
-            mUserPreference.set(loginResponse);
-        }*/
+    public void errorMessage(String message) {
+        if(StringUtil.isNotNullOrEmptyString(message) && message.contains("mobile number already registered with us")) {
+            mobileContainer.setError(message.toUpperCase());
+            requestFocus(mobileNumber);
+        }
     }
 
     @Override
@@ -316,16 +283,26 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 aboutMe.setText(Html.fromHtml(aboutMeValue));
             }
             int length = aboutMeValue.length();
-            bioMaxCharLimit.setText(length + "/160");
+            bioMaxCharLimit.setText(length +"/"+ BIO_MAX_LIMIT);
         } else {
-            bioMaxCharLimit.setText(0 + "/160");
+            bioMaxCharLimit.setText(0 + "/"+ BIO_MAX_LIMIT);
         }
 
         String dob = userSummary.getUserBO().getDob();
         if (CommonUtil.isNotEmpty(dob) && !dob.equalsIgnoreCase("null")) {
+
             Calendar cal = new GregorianCalendar();
             cal.setTime(new Date(Long.valueOf(dob)));
-            dateOfBirth.setText(cal.get(Calendar.DAY_OF_MONTH) + " " + new SimpleDateFormat("MMM").format(cal.getTime()) + " " + cal.get(Calendar.YEAR));
+            String formattedDate = dateFormatter.format(cal.getTime());
+            //Calendar calendar = Calendar.getInstance();
+            //calendar.setTimeInMillis(Long.parseLong(dob));
+             //String formattedDate = dateFormatter.format(calendar.getTime());
+
+            if(formattedDate!=null) {
+                dateOfBirth.setText( new SimpleDateFormat("dd").format(cal.get(Calendar.DAY_OF_MONTH))+ "-" + new SimpleDateFormat("MM").format(cal.getTime()) + "-" + cal.get(Calendar.YEAR));
+               // dateOfBirth.setText(formattedDate);
+                //dateOfBirth.setText(dateFormatter.format(formattedDate));
+            }
         }
 
 
@@ -342,8 +319,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             emailAddress.setText(email);
         }
 
-        mcityNm = locationValue;  //initially set value from preferenece
-        mCityId = String.valueOf(userSummary.getUserBO().getCityMasterId());
+        locationName = locationValue;  //initially set value from preferenece
+        cityId = (int) userSummary.getUserBO().getCityMasterId();
 
         String mobile = userSummary.getMobile();
         if (StringUtil.isNotNullOrEmptyString(mobile)) {
@@ -352,6 +329,25 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult();
+        super.onBackPressed();
+
+    }
+
+    private void setResult() {
+        if(userDetailsResponse!=null) {
+            Intent intent = new Intent();
+            UserSummary summary = userDetailsResponse.getUserSummary();
+            Bundle bundle = new Bundle();
+            bundle.putString("NAME", summary.getFirstName() + AppConstants.SPACE + summary.getLastName());
+            bundle.putString("BIO", summary.getUserBO().getUserSummary());
+            bundle.putString("LOCATION", summary.getUserBO().getCityMaster());
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+        }
+    }
 
     public void setProfileNameData(String imageUrl) {
              if (null != imageUrl) {
@@ -394,8 +390,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void submitLocation(String cityId, String city) {
-        mcityNm = city;
-        mCityId = cityId;
+        locationName = city;
+        this.cityId = Integer.valueOf(cityId);
         location.setText(city);
         if (null != city) {
             int length = city.length();
@@ -555,7 +551,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @OnClick(R.id.iv_back_profile)
     public void backOnclick() {
-        finish();
+        onBackPressed();
     }
 
     @Override
@@ -605,7 +601,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             requestFocus(name);
             return false;
         } else {
-            fullNameContainer.setErrorEnabled(false);
+            fullNameContainer.setError(null);
         }
         return true;
     }
@@ -653,6 +649,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
+            //USer Bio region
             if (aboutMeValue!=null && !aboutMeValue.equalsIgnoreCase(aboutMe.getText().toString())) {
                 UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
                 userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
@@ -667,6 +664,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                 editProfilePresenter.getUserSummaryDetailsAuthTokeInPresenter(userSummaryRequest);
             }
+            //end region
 
             String userFullName = name.getText().toString();
 
@@ -691,13 +689,22 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 personalBasicDetailsRequest.setMobileNumber(mobileNumber.getText().toString());
             }
 
-            if (StringUtil.isNotNullOrEmptyString(mCityId)) {
-                personalBasicDetailsRequest.setCityMasterId(Integer.parseInt(mCityId));
-            }
+            personalBasicDetailsRequest.setCityMasterId(cityId);
             try {
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy");
-                Date convertedDate = (Date) dateFormatter.parse(dateOfBirth.getText().toString());
-                personalBasicDetailsRequest.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(convertedDate));
+            DateFormat outputFormatter1 = new SimpleDateFormat("dd-MM-yyyy");
+            Date date1 = outputFormatter1.parse(dateOfBirth.getText().toString());
+
+            DateFormat inputFormatter1 = new SimpleDateFormat("yyyy-MM-dd");
+            String output1 = inputFormatter1.format(date1);
+
+           // try {
+               // SimpleDateFormat format1 = new SimpleDateFormat("dd-MMM-yyyy");
+               // String formatted = format1.format();
+
+               // Date javaDate = format1.parse(formatted);
+                //Date date = dateFormatter.parse();
+                //dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+                personalBasicDetailsRequest.setDateOfBirth(output1);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -708,26 +715,64 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
             editProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
             ((SheroesApplication) getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_BASIC_DETAIl_PERSONAL, AppConstants.EMPTY_STRING);
-            finish();
         }
 
     }
 
     @Override
     public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
-        int toastDuration;
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
-            toastDuration = Toast.LENGTH_SHORT;
-        } else {
-            toastDuration = Toast.LENGTH_LONG;
+
+            if(userDetailsResponse!=null) {
+
+                try {
+                    UserSummary userSummary = userDetailsResponse.getUserSummary(); //mobile
+                    String mobile = mobileNumber.getText() != null ? mobileNumber.getText().toString() : "";
+                    userSummary.setMobile(mobile);
+
+                    String userName = name.getText() != null ? name.getText().toString() : ""; //name
+                    userSummary.setFirstName(userName);
+                    userSummary.setLastName("");
+
+                    userSummary.getUserBO().setMaritalStatus(relationshipStatus.getSelectedItem().toString());
+
+                    String totalChildren = noOfChildren.getText() != null && noOfChildren.getText().toString().trim() != null ? noOfChildren.getText().toString() : "0";
+                    userSummary.getUserBO().setNoOfChildren(Integer.valueOf(totalChildren));
+
+                    String city = location.getText() != null ? location.getText().toString() : ""; //name
+                    userSummary.getUserBO().setCityMasterId(Integer.valueOf(cityId));
+                    userSummary.getUserBO().setCityMaster(city);
+
+                    Date date;
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+                    if (dateOfBirth.getText() != null) {
+                        date = (Date) formatter.parse(dateOfBirth.getText().toString());
+                        long longDate = date.getTime();
+                        userSummary.getUserBO().setDob(String.valueOf(longDate));
+                    }
+
+                    userDetailsResponse.setUserSummary(userSummary);
+                    mUserPreference.set(userDetailsResponse);
+
+                } catch (Exception e) {
+                    LogUtils.info(TAG, "Error while saving details to preference");
+                }
+            }
+
+            onBackPressed();
         }
-        Toast.makeText(EditUserProfileActivity.this, boardingDataResponse.getStatus(),
-                toastDuration).show();
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-        getPersonalBasicDetailsResponse(boardingDataResponse);
+        if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
+            //About me save in pref
+           if(userDetailsResponse!=null){
+                String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
+                userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
+                mUserPreference.set(userDetailsResponse);
+            }
+        }
     }
 
 }

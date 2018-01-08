@@ -2,17 +2,22 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.f2prateek.rx.preferences.Preference;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -25,18 +30,28 @@ import butterknife.ButterKnife;
  */
 
 public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
+
     private final String TAG = LogUtils.makeLogTag(DrawerViewHolder.class);
+
     BaseHolderInterface viewInterface;
     private NavMenuItem dataItem;
+    public static String selectedOptionName;
+    private boolean isUserProfile;
+
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
+
     @Bind(R.id.tv_drawer_image)
     AppCompatImageView tvDrawerImage;
+
     @Bind(R.id.ll_drawer_item)
     RelativeLayout llDrawerItem;
+
     @Bind(R.id.new_feature)
     TextView newFeature;
-    public static String selectedOptionName;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     public DrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -54,7 +69,13 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
 
-        if(itemName.equalsIgnoreCase("Profile")) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
+                if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() != AppConstants.MENTOR_TYPE_ID) {
+                    isUserProfile = true;
+                }
+        }
+
+        if(itemName.equalsIgnoreCase("Profile") && isUserProfile) { //Show new feature only to users
             newFeature.setVisibility(View.VISIBLE);
         } else {
             newFeature.setVisibility(View.GONE);

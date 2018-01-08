@@ -50,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -59,7 +58,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
@@ -154,18 +153,14 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
             if(null!=parcelable)
             {
-                UserSolrObj mUserMentorObj= Parcels.unwrap(parcelable);
-                CommunityFeedSolrObj communityFeedSolrObj=new CommunityFeedSolrObj();
+                UserSolrObj mUserMentorObj = Parcels.unwrap(parcelable);
+                CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
 
-                //if not mine / not mentor/
-                //if(!mUserMentorObj.isAuthorMentor() || mUserMentorObj.getIdOfEntityOrParticipant() != mUserId) { //check if its required for public profile
-                if(mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) { //for public profile //todo - profile - check is mentor need to adde to show annonmus post
+                if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
                     hideAnonymousPost = false;
-                    Toast.makeText(getActivity(), "User's self profile", Toast.LENGTH_SHORT).show();
                 }
-
-
+                
                // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
                 communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
                 mCommunityFeedObj=communityFeedSolrObj;
@@ -190,7 +185,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileDashboardActivity) getActivity());
+                mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileDashboardActivity) getActivity());
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             } else {
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
@@ -208,8 +203,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                                 mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                             }
                         }
-                        if(getActivity() instanceof MentorUserProfileDashboardActivity) {
-                            ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                        if(getActivity() instanceof ProfileDashboardActivity) {
+                            ((ProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
                         }
 
                     } catch (ClassCastException ex) {
@@ -227,8 +222,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                                 mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                             }
                         }
-                        if(getActivity() instanceof MentorUserProfileDashboardActivity) {
-                          //  ((MentorUserProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                        if(getActivity() instanceof ProfileDashboardActivity) {
+                          //  ((ProfileDashboardActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                         }
                     } catch (ClassCastException ex) {
                         LogUtils.error(TAG, ex.getMessage());
@@ -284,7 +279,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         if (null!= mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                 FeedDetail feedDetail = (FeedDetail) mCommunityFeedObj;
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
-                ((MentorUserProfileDashboardActivity) getActivity()).createCommunityPostClick(feedDetail);
+                ((ProfileDashboardActivity) getActivity()).createCommunityPostClick(feedDetail);
         } else {
             FeedDetail feedDetail = mCommunityFeedObj;
             feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
@@ -387,7 +382,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                ((MentorUserProfileDashboardActivity) getActivity()).setUsersPostCount(totalPostCount); //set post count
+                ((ProfileDashboardActivity) getActivity()).setUsersPostCount(totalPostCount); //set post count
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mProgressBar.setVisibility(View.GONE);
                 mPullRefreshList.allListData(feedDetailList);

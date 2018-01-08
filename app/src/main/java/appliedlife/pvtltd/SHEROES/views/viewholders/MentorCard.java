@@ -29,7 +29,7 @@ import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -195,7 +195,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         if (tvMentorFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT_PROFILE))) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-                Intent intent = new Intent(mContext, MentorUserProfileDashboardActivity.class);
+                Intent intent = new Intent(mContext, ProfileDashboardActivity.class);
                 Bundle bundle = new Bundle();
                 Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
                 bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);

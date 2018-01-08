@@ -306,7 +306,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
    @OnClick({R.id.author})
     public void onClick(View view) {
         if (null != mArticle) {
-            Intent mentorUserProfile = new Intent(ArticleActivity.this, MentorUserProfileDashboardActivity.class); //todo - profile - mentor
+            Intent mentorUserProfile = new Intent(ArticleActivity.this, ProfileDashboardActivity.class); //todo - profile - mentor
             mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mArticle.createrId);
             mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mArticle.isCreaterMentor);
            // articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this
