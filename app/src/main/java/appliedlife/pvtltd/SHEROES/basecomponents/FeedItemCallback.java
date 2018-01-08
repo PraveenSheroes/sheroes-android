@@ -37,7 +37,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPostBookMarkedClicked(UserPostSolrObj userPostObj);
 
-    void onLikesCountClicked(UserPostSolrObj userPostObj);
+    void onLikesCountClicked(long postId);
 
     void onUserPostLiked(UserPostSolrObj userPostObj);
 

@@ -37,6 +37,7 @@ public class Article extends Post {
     public int featureImageWidth;
     public int featureImageHeight;
     public ArrayList<Comment> comments = new ArrayList<>();
+    public long entityId;
 
     public
     @DrawableRes

@@ -347,6 +347,16 @@ public class CommonUtil {
         return false;
     }
 
+    public static boolean isSheroesValidLink(Uri url) {
+        if (url==null || url.getScheme() == null) {
+            return false;
+        }
+        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in") ))) {
+          return true;
+        }
+        return false;
+    }
+
     public static boolean isValidEmail(CharSequence target) {
         if (TextUtils.isEmpty(target)) {
             return false;

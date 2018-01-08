@@ -371,8 +371,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onLikesCountClicked(UserPostSolrObj userPostObj) {
-        LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), userPostObj.getEntityOrParticipantId());
+    public void onLikesCountClicked(long postId) {
+        LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
     }
 
     @Override

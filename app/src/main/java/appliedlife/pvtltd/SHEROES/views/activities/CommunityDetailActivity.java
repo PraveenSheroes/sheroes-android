@@ -401,13 +401,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     mTabFragments.add(feedFragment);
                 }
                 if (communityTab.type.equalsIgnoreCase(TabType.HTML.getName())) {
-                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(null, communityTab.dataHtml, "");
+                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(null, communityTab.dataHtml, "", false);
                     mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }
 
                 if (communityTab.type.equalsIgnoreCase(TabType.WEB.getName())) {
-                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "");
+                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "", false);
                     mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }

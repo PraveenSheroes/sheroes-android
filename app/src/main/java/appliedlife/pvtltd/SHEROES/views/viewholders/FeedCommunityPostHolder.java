@@ -965,7 +965,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_total_reactions)
     public void reactionClick() {
         if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback)viewInterface).onLikesCountClicked(mUserPostObj);
+            ((FeedItemCallback)viewInterface).onLikesCountClicked(mUserPostObj.getEntityOrParticipantId());
         }else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostTotalReactions);
         }

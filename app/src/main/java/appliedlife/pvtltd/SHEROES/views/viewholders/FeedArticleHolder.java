@@ -433,7 +433,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_total_reactions)
     public void reactionClick() {
-        viewInterface.handleOnClick(articleObj , tvFeedArticleTotalReactions);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onLikesCountClicked(articleObj.getEntityOrParticipantId());
+        }else {
+            viewInterface.handleOnClick(articleObj , tvFeedArticleTotalReactions);
+        }
     }
 
     @OnClick(R.id.tv_feed_article_reaction1)

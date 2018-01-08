@@ -466,6 +466,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 /*mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);*/
                // openCommentReactionFragment(mFeedDetail);
+                LikeListBottomSheetFragment.showDialog(this, "", mFeedDetail.getEntityOrParticipantId());
                 break;
             case R.id.tv_feed_community_post_total_reactions:
                 LikeListBottomSheetFragment.showDialog(this, "", mFeedDetail.getEntityOrParticipantId());
