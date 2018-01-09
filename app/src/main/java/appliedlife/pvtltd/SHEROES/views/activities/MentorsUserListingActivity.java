@@ -164,7 +164,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);

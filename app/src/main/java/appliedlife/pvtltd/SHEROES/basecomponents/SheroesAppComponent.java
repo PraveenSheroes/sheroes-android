@@ -10,7 +10,6 @@ import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.ProfilePersenter;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
@@ -21,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
@@ -30,9 +30,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileFollowedChampionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.AllSearchFragment;
@@ -271,7 +270,7 @@ public interface SheroesAppComponent {
 
     void inject(CurrentStatusHolder currentStatusHolder);
 
-    void inject(ProfileFollowedChampionActivity profileFollowedChampionActivity);
+    void inject(FollowingActivity followingActivity);
 
     void inject(EditUserProfileActivity editUserProfileActivity);
 
@@ -288,8 +287,6 @@ public interface SheroesAppComponent {
     void inject(TagSearchHolder tagSearchHolder);
 
     void inject(CommunitySearchTagsDialogFragment communitySearchTagsDialogFragment);
-
-    void inject(ProfilePersenter profilePersenter);
 
     void inject(WelcomeActivity welcomeActivity);
 
@@ -343,7 +340,7 @@ public interface SheroesAppComponent {
 
     void inject(AppIntroCardHolder appIntroCardHolder);
 
-    void inject(ProfileDashboardActivity profileDashboardActivity);
+    void inject(MentorUserProfileActvity mentorUserProfileActvity);
 
     void inject(UserProfileTabFragment userProfileTabFragment);
 

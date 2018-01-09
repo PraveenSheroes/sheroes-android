@@ -377,7 +377,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(champId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ProfileDashboardActivity.class);
+                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, MentorUserProfileActvity.class);
                 articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
                 articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true);
@@ -402,7 +402,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 if (null != mUserPreference) {
 
                    long userId = mUserPreference.get().getUserSummary().getUserId();
-                    Intent into = new Intent(this, ProfileDashboardActivity.class);
+                    Intent into = new Intent(this, MentorUserProfileActvity.class);
                     into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                     into.putExtra(AppConstants.CHAMPION_ID, userId);
                     into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -430,7 +430,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(userId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent into = new Intent(this, ProfileDashboardActivity.class);
+                Intent into = new Intent(this, MentorUserProfileActvity.class);
                 into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
                 into.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
                 //   into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);

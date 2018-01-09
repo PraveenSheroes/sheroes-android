@@ -492,7 +492,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
         boolean isMentor = userPostObj.isAuthorMentor();
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);

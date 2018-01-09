@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
@@ -331,7 +331,7 @@
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity"/>
 
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileFollowedChampionActivity"/>
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity"/>
 
 
     </application>

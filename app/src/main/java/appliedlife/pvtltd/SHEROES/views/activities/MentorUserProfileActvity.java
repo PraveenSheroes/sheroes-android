@@ -15,14 +15,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -81,9 +79,9 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileDashboardActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class MentorUserProfileActvity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
 
-    private final String TAG = LogUtils.makeLogTag(ProfileDashboardActivity.class);
+    private final String TAG = LogUtils.makeLogTag(MentorUserProfileActvity.class);
     private static final String SCREEN_LABEL = "Public Profile Growth Screen";
 
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
@@ -671,7 +669,7 @@ public class ProfileDashboardActivity extends BaseActivity implements HomeView, 
     }
 
     public void championDetailActivity(Long userId, boolean isMentor) {
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         mMentorUserItem = new UserSolrObj();
         mMentorUserItem.setIdOfEntityOrParticipant(userId);
@@ -813,6 +811,7 @@ public class ProfileDashboardActivity extends BaseActivity implements HomeView, 
 
     public void setUsersPostCount(int postCount) {
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, postCount);
+        mMentorUserItem.setSolrIgnoreNoOfMentorPosts(postCount);
         userTotalPostCount.setText(String.valueOf(numericToThousand(postCount)));
         tvMentorPost.setText(pluralAnswer);
         liPost.setVisibility(View.VISIBLE);
@@ -826,7 +825,7 @@ public class ProfileDashboardActivity extends BaseActivity implements HomeView, 
                 dialog.dismiss();
             }
 
-            dialog = new Dialog(ProfileDashboardActivity.this);
+            dialog = new Dialog(MentorUserProfileActvity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.unfollow_confirmation_dialog);

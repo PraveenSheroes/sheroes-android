@@ -1935,7 +1935,6 @@ public class AppUtils {
 
     public  ProfileUsersCommunityRequest userCommunitiesRequestBuilder(int pageNo, long userId) {
         ProfileUsersCommunityRequest profileUsersCommunityRequest = new ProfileUsersCommunityRequest();
-
         profileUsersCommunityRequest.setAppVersion(getAppVersionName());
         profileUsersCommunityRequest.setDeviceUniqueId(getDeviceId());
         profileUsersCommunityRequest.setCloudMessagingId(getCloudMessaging());

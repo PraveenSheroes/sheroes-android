@@ -11,13 +11,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
@@ -31,8 +29,6 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
-
-import org.parceler.Parcels;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -56,7 +52,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -68,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -454,10 +450,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     if (resultCode == RESULT_OK) {
                         try {
                             File file=new File(result.getUri().getPath());
-                            Bitmap photo = editProfilePresenter.decodeFile(file);
+                            Bitmap photo = CompressImageUtil.decodeFile(file);
                             if(null!=profileImageDialogFragment) {
                                 profileImageDialogFragment.setUserProfileData(true, photo);
-                                mEncodeImageUrl = editProfilePresenter.setImageOnHolder(photo);
+                                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
                             }
 
 
@@ -508,8 +504,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private void imageCropping(Intent intent) {
         try {
             if (localImageSaveForChallenge.exists()) {
-                Bitmap photo = editProfilePresenter.decodeFile(localImageSaveForChallenge);
-                mEncodeImageUrl = editProfilePresenter.setImageOnHolder(photo);
+                Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
+                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
                 if (null != profileImageDialogFragment) {
                     profileImageDialogFragment.setUserProfileData(true,photo);
                 }
@@ -539,7 +535,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void updateProfileData(String imageUrl) {
-        editProfilePresenter.getUserSummaryDetailsAuthTokeInPresenter(appUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, imageUrl));
+        editProfilePresenter.getUserSummaryDetails(appUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, imageUrl));
     }
 
     public void selectImageFrmCamera() {
@@ -662,7 +658,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 userSummaryRequest.setSummary(aboutMe.getText().toString());
                 userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
 
-                editProfilePresenter.getUserSummaryDetailsAuthTokeInPresenter(userSummaryRequest);
+                editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
             }
             //end region
 
@@ -713,7 +709,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(noOfChildren.getText().toString()));
             }
 
-            editProfilePresenter.getPersonalBasicDetailsAuthTokeInPresenter(personalBasicDetailsRequest);
+            editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
             ((SheroesApplication) getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_BASIC_DETAIl_PERSONAL, AppConstants.EMPTY_STRING);
         }
 

@@ -69,7 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
@@ -407,6 +407,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                 }
                 break;
+
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall();
                 break;
@@ -487,16 +488,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 }
                 break;
 
-            //todo -ravi -profile - change here for article
-            case R.id.iv_feed_article_card_circle_icon :
-            case R.id.tv_feed_article_card_title:
-                Intent mentorUserProfile = new Intent(this, ProfileDashboardActivity.class); //todo - profile - mentor
-                mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getAuthorId());
+            case R.id.tv_article_card_title :
+            case R.id.iv_article_circle_icon:
+                /*Intent mentorUserProfile = new Intent(this, MentorUserProfileActvity.class);
+                mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getProfileId());
                 mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
-                // articleDetail.putExtra(AppConstants.IS_MENTOR_ID, true); //todo - profile - chk this
-                // articleDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 mentorUserProfile.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                startActivity(mentorUserProfile);
+                startActivity(mentorUserProfile);*/
              break;
 
             case R.id.li_feed_article_images:

@@ -11,7 +11,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
  */
 
 @Parcel(analyze = {ProfileCommunity.class,FeedDetail.class})
-public class ProfileCommunity extends FeedDetail implements Cloneable {
+public class ProfileCommunity extends FeedDetail {
 
     private boolean isMutualCommunityFirstItem ;
 
@@ -30,19 +30,19 @@ public class ProfileCommunity extends FeedDetail implements Cloneable {
     @SerializedName("is_closed_b")
     public boolean isClosedCommunity;
 
-    @SerializedName(value = "solr_ignore_no_of_members")
+    @SerializedName("solr_ignore_no_of_members")
     private int noOfMembers = 0;
 
-    @SerializedName(value = "solr_ignore_no_of_pending_requests")
+    @SerializedName("solr_ignore_no_of_pending_requests")
     private int noOfPendingRequest = 0;
 
-    @SerializedName(value = "solr_ignore_is_owner")
+    @SerializedName("solr_ignore_is_owner")
     private boolean isOwner;
 
-    @SerializedName(value = "solr_ignore_is_member")
+    @SerializedName("solr_ignore_is_member")
     private boolean isMember;
 
-    @SerializedName(value = "solr_ignore_is_request_pending")
+    @SerializedName("solr_ignore_is_request_pending")
     private boolean isRequestPending;
 
     public String getCommunityType() {

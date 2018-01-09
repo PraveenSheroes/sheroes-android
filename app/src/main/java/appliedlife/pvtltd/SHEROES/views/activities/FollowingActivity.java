@@ -16,10 +16,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -34,7 +31,7 @@ import butterknife.OnClick;
  * Listing of Profile - User's champion
  */
 
-public class ProfileFollowedChampionActivity extends BaseActivity implements ProfileFollowedMentorAdapter.OnItemClicked{
+public class FollowingActivity extends BaseActivity implements ProfileFollowedMentorAdapter.OnItemClicked{
 
     private static final String SCREEN_LABEL = "ProfileCommunitiesActivity Screen";
 
@@ -90,8 +87,7 @@ public class ProfileFollowedChampionActivity extends BaseActivity implements Pro
 
     @Override
     public void onItemClick(UserSolrObj mentor) {
-
-        Intent intent = new Intent(ProfileFollowedChampionActivity.this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(FollowingActivity.this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
         bundle.putBoolean(AppConstants.IS_MENTOR_ID, true);

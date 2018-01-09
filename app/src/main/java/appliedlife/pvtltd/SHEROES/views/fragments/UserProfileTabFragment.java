@@ -39,10 +39,10 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileFollowedChampionActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
 import butterknife.Bind;
@@ -161,9 +161,9 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
        // boolean hideAnnonymousPost = !isSelfProfile;
        // profilePresenter.getUserPostCountFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, userId, hideAnnonymousPost));
 
-        profilePresenter.getUsersFollowerOrFollowing(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
+        profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
 
-        profilePresenter.getUsersFollowerOrFollowing(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
+        profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
 
         profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
@@ -181,7 +181,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     public void navigateToFollowedMentors() {
 
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
-            Intent intent = new Intent(getContext(), ProfileFollowedChampionActivity.class);
+            Intent intent = new Intent(getContext(), FollowingActivity.class);
             Parcelable parcelableContest = Parcels.wrap(followedChampions);
             intent.putExtra(AppConstants.CHAMPION_ID, parcelableContest);
             intent.putExtra("USERID", userId);
@@ -322,21 +322,21 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Override
     public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Follower count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((ProfileDashboardActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((MentorUserProfileActvity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
     @Override
     public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Following count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((ProfileDashboardActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((MentorUserProfileActvity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
     @Override
     public void getUsersPostCount(int totalPost) {
         LogUtils.info(TAG, "Following count:" + totalPost);
-        ((ProfileDashboardActivity) getActivity()).setUsersPostCount(totalPost);
+        ((MentorUserProfileActvity) getActivity()).setUsersPostCount(totalPost);
     }
 
     @Override
@@ -419,7 +419,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ProfileDashboardActivity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    ((MentorUserProfileActvity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                 }
             });
 

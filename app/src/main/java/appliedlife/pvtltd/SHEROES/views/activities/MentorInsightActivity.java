@@ -338,7 +338,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
     @OnClick(R.id.tv_mentor_answering_question)
     public void mentorAnsweringQuestionClick() {
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         FeedDetail mFeedDetail = mUserSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);

@@ -252,8 +252,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private boolean isSheUser = false;
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
-
-    long userId =-1L;
+    private long mUserId =-1L;
 
     private String mOnBoarding;
     @Override
@@ -272,9 +271,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
-            userId = mUserPreference.get().getUserSummary().getUserId();
+            mUserId = mUserPreference.get().getUserSummary().getUserId();
         }
-
 
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
@@ -647,7 +645,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
@@ -881,7 +878,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         UserSolrObj userSolrObj=(UserSolrObj) baseResponse;
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
@@ -889,9 +886,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtra(AppConstants.IS_MENTOR_ID, true);
-        //bundle.putLong(AppConstants.CHAMPION_ID, mFeedDetail.getEntityOrParticipantId());
-        //boolean isMentor = mFeedDetail.isAuthorMentor() || mFeedDetail.getEntityOrParticipantTypeId() == 7 ? true :false;
-        //bundle.putBoolean(AppConstants.IS_MENTOR_ID, isMentor);  ////todo - profile - newly added
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -923,10 +917,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openProfileActivity() {
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
-        //intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
-        intent.putExtra(AppConstants.CHAMPION_ID,userId);
-
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mUserId);
         startActivity(intent);
     }
 
@@ -1807,7 +1799,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor) {
-        Intent intent = new Intent(this, ProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
