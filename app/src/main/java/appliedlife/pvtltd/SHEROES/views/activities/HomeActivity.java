@@ -11,7 +11,6 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +26,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -43,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -57,6 +58,8 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -97,6 +100,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
@@ -151,6 +155,8 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
+    @Inject
+    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Bind(R.id.home_toolbar)
     public Toolbar mToolbar;
     @Bind(R.id.fl_home_footer_list)
@@ -253,7 +259,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private boolean isSheUser = false;
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
-    private String mOnBoarding;
+    private String mDefferedDeepLink;
+    private ShowcaseView showcaseView;
+    private int counter = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -296,6 +305,55 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
         }
+    }
+
+    private void showCaseDesign() {
+        if (null!=mInstallUpdatePreference&&mInstallUpdatePreference.get().isFirstOpen()) {
+            Button customButton = (Button) getLayoutInflater().inflate(R.layout.showcase_btn_layout, null);
+            showcaseView = new ShowcaseView.Builder(this)
+                    .setTarget(new ViewTarget(mFloatActionBtn))
+                    .setStyle(R.style.CustomShowcaseTheme3)
+                    .replaceEndButton(customButton)
+                    .build();
+            showcaseView.setButtonText(getString(R.string.ID_GOT));
+            showcaseView.setContentTitle(getString(R.string.ID_SHOW_CASE_CREATE_POST_TITLE));
+            showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_CREATE_POST_DESC));
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+            params.leftMargin = 50;
+            params.bottomMargin = 100;
+            showcaseView.setButtonPosition(params);
+            showcaseView.overrideButtonClick(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onShowCaseGotItClick();
+                }
+            });
+        }
+    }
+
+    public void onShowCaseGotItClick() {
+        switch (counter) {
+          /*  case 0:
+                showcaseView.setShowcase(new ViewTarget(mFloatActionBtn), true);
+                showcaseView.setContentTitle("Ask a Question or Share Something");
+                showcaseView.setContentText("Start a conversation in any community that you are a member of by tapping here");
+                break;*/
+            case 0:
+                showcaseView.setShowcase(new ViewTarget(mTvCommunities), true);
+                showcaseView.setContentTitle(getString(R.string.ID_SHOW_CASE_COMMUNITIES_TITLE));
+                showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_COMMUNITIES_DEC));
+                break;
+            case 1:
+                showcaseView.setShowcase(new ViewTarget(mTvHome), true);
+                showcaseView.setContentTitle(getString(R.string.ID_SHOW_CASE_FEED_TITLE));
+                showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_FEED_DEC));
+                break;
+            case 2:
+                showcaseView.hide();
+                break;
+        }
+        counter++;
     }
 
     @Override
@@ -401,6 +459,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        showCaseDesign();
         if (shouldShowSnowFlake()) {
             mSantaView.setVisibility(View.GONE);
             animateSnowFlake();
@@ -422,8 +481,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
-            if (getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES) != null) {
-                mOnBoarding = getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES);
+            Bundle bundle = getIntent().getExtras();
+            if (bundle.getString(AppConstants.DEFFERED_DEEP_LINK) != null) {
+                mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
+                if (StringUtil.isNotNullOrEmptyString(mDefferedDeepLink)) {
+                     openNativeViews(mDefferedDeepLink);
+//                    Intent intent = new Intent(HomeActivity.this, BranchDeepLink.class);
+//                    intent.putExtra(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
+//                    ActivityCompat.startActivity(HomeActivity.this, intent, null);
+                }
             }
 
         }
@@ -462,11 +528,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean shouldShowSnowFlake() {
         boolean showSnowFlake = false;
-        if(mUserPreferenceMasterData!=null&&mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION")!=null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))){
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))) {
             String snowFlakeFlag = "";
             snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW").get(0).getLabel();
-            if(CommonUtil.isNotEmpty(snowFlakeFlag)){
-                if(snowFlakeFlag.equalsIgnoreCase("true")){
+            if (CommonUtil.isNotEmpty(snowFlakeFlag)) {
+                if (snowFlakeFlag.equalsIgnoreCase("true")) {
                     showSnowFlake = true;
                 }
             }
@@ -644,7 +710,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             feedRelatedOptions(view, baseResponse);
         } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
-        }else if (baseResponse instanceof Comment) {
+        } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -857,7 +923,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openMentorProfileDetail(BaseResponse baseResponse) {
-        UserSolrObj userSolrObj=(UserSolrObj) baseResponse;
+        UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
         Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
@@ -1333,11 +1399,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         return;
                     }
                     doubleBackToExitPressedOnce = true;
-                    if (flFeedFullView.getVisibility()==View.VISIBLE) {
+                    if (flFeedFullView.getVisibility() == View.VISIBLE) {
                         Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
 
-                    }else
-                    {
+                    } else {
                         homeOnClick();
                     }
                     new Handler().postDelayed(new Runnable() {
@@ -1778,7 +1843,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Parcelable parcelable = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.CHAMPION_ID, userId);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -1857,4 +1922,5 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
+
 }

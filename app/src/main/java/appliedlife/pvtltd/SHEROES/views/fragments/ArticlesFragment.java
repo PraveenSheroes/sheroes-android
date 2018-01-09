@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import pl.droidsonroids.gif.GifTextView;
 
 /**
  * Created by Praveen_Singh on 09-01-2017.
@@ -73,6 +74,8 @@ public class ArticlesFragment extends BaseFragment {
     private boolean mIsEdit = false;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
+    @Bind(R.id.loader_gif)
+    LinearLayout loaderGif;
     private List<Long> categoryIdList = new ArrayList<>();
     private View view;
     private MoEHelper mMoEHelper;
@@ -92,6 +95,7 @@ public class ArticlesFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHomePresenter.attachView(this);
+        loaderGif.setVisibility(View.VISIBLE);
         if (getArguments() != null) {
             categoryIdList = (ArrayList<Long>) getArguments().getSerializable(AppConstants.ARTICLE_FRAGMENT);
         }
@@ -176,6 +180,7 @@ public class ArticlesFragment extends BaseFragment {
             feedDetailList = feedResponsePojo.getFeedDetails();
         }
         mProgressBarFirstLoad.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             newFeedDetailList.addAll(feedDetailList);
             mLiNoResult.setVisibility(View.GONE);

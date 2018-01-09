@@ -182,6 +182,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         mAppBarLayout.addOnOffsetChangedListener(this);
+        clHomeFooterList.setVisibility(View.GONE);
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mMentorUserItem = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));

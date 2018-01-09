@@ -79,6 +79,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.droidsonroids.gif.GifTextView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -130,6 +131,8 @@ public class HomeFragment extends BaseFragment {
     private int mPageNo = AppConstants.ONE_CONSTANT;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
+    @Bind(R.id.loader_gif)
+    LinearLayout loaderGif;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     @Bind(R.id.empty_view)
@@ -157,6 +160,7 @@ public class HomeFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        loaderGif.setVisibility(View.VISIBLE);
         Bundle bundle = getArguments();
         if (bundle != null) {
             isChallenge = bundle.getBoolean(ContestActivity.IS_CHALLENGE, false);
@@ -466,7 +470,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-        mProgressBarFirstLoad.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();

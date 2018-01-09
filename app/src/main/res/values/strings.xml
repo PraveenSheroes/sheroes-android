@@ -921,4 +921,13 @@
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
     <string name="ID_SECOND_WELCOME">Join Communities</string>
     <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
+    <string name="ID_GOT"> Got it!</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Ask a Question or Share Something</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_DESC">Start a conversation in any community that you are a member of by tapping here</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities You Can Join To Talk </string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Here all the communities are listed. Join the ones you like and start talking</string>
+    <string name="ID_SHOW_CASE_FEED_TITLE">Your Personalized SHEROES Feed</string>
+    <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with stories you may like</string>
+    <string name="ID_LOADER">Think like a Queen.\n A Queen is not afraid to fail</string>
+
 </resources>

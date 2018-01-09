@@ -163,6 +163,7 @@
         <item name="android:layout_gravity">right</item><!-- I only change the color -->
         <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
     </style>
+
     <style name="subtitle_collapsed">
         <item  name="android:textColor">@color/white</item>
         <item name="android:gravity">right</item>
@@ -181,5 +182,30 @@
     </style>
     <style name="MyTextInputLayout" parent="AppTheme">
         <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="CustomShowcaseTheme3" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#99000000</item>
+        <item name="sv_showcaseColor">@color/feed_article_label</item>
+        <item name="android:alpha">.7</item>
+        <item name="sv_buttonText">Hide</item>
+        <item name="sv_tintButtonColor">false</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle2</item>
+        <item name="sv_detailTextAppearance">@style/CustomText2</item>
+    </style>
+
+
+
+    <style name="CustomTitle2" parent="TextAppearance.ShowcaseView.Title.Light">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/sp_size_20</item>
+    </style>
+
+    <style name="CustomText2" parent="TextAppearance.ShowcaseView.Detail.Light">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
+        <item name="android:textSize">@dimen/sp_size_16</item>
     </style>
 </resources>

@@ -177,7 +177,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-
+        super.showError(errorMsg, feedParticipationEnum);
     }
 
     @Override

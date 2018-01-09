@@ -68,12 +68,17 @@ public class OnBoardingActivity extends BaseActivity {
     public TextView tvDescription;
     private boolean doubleBackToExitPressedOnce = false;
     public static int isJoinCount=0;
+    String mDefferedDeepLink;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
+        if(null!=getIntent()&&null!=getIntent().getExtras()) {
+            Bundle bundle = getIntent().getExtras();
+            mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
+        }
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -91,11 +96,17 @@ public class OnBoardingActivity extends BaseActivity {
                 onBoardingFragment();
             } else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
+                homeIntent.putExtras(bundle);
                 startActivity(homeIntent);
                 finish();
             }
         } else {
             Intent homeIntent = new Intent(this, HomeActivity.class);
+            Bundle bundle=new Bundle();
+            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
+            homeIntent.putExtras(bundle);
             startActivity(homeIntent);
             finish();
         }
@@ -197,8 +208,8 @@ public class OnBoardingActivity extends BaseActivity {
             loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
             userPreference.set(loginResponse);
             Intent homeIntent = new Intent(this, HomeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.ON_BOARDING_COMMUNITIES, AppConstants.ON_BOARDING_COMMUNITIES);
+            Bundle bundle=new Bundle();
+            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
         }else
