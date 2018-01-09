@@ -669,7 +669,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost) {
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
         UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
         if (feedDetail != null) {
@@ -707,7 +707,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, String primaryColor, String titleTextColor) {
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
         UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
         if (feedDetail != null) {
@@ -741,26 +741,35 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
             intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
             intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+            if (!CommonUtil.isEmpty(properties)) {
+                intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+            }
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
 
     }
 
-    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity) {
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
         Parcelable parcelable = Parcels.wrap(communityPost);
         intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
         intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity,  String primaryColor, String titleTextColor) {
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity,  String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
         Parcelable parcelable = Parcels.wrap(communityPost);
         intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
         intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
         intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
         intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 

@@ -61,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import rx.Observable;
 import rx.Subscriber;
@@ -859,7 +860,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                     getMvpView().invalidateItem(feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, FeedFragment.SCREEN_LABEL);
                 getMvpView().invalidateItem(feedDetail);
             }
         });
@@ -914,7 +915,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                   //  mBaseResponseList.set(0, userPostSolrObj);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, FeedFragment.SCREEN_LABEL);
                 getMvpView().invalidateItem(feedDetail);
             }
         });

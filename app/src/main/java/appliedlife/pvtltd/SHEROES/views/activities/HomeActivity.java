@@ -1194,7 +1194,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void createCommunityPostOnClick(CommunityPost communityPost) {
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
         //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
     }
 

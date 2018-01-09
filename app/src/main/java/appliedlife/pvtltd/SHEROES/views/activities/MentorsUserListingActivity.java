@@ -152,7 +152,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                         mentorPost.community.name = userSolrObj.getNameOrTitle();
                         mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                         mentorPost.isEdit = false;
-                        CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+                        CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
 
                     }
                     break;

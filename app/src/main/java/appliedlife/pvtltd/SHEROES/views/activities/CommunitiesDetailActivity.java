@@ -579,7 +579,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
         // communityPost.community.isOwner = communityFeedSolrObj.isCommunityOwner();
         // TODO : ujjwal
         // communityPost.community.thumbImageUrl = feedDetail.getSolrIgnorePostCommunityLogo();
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true, null);
     }
 
     @OnClick(R.id.tv_communities_detail_share)

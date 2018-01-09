@@ -351,7 +351,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
                 mentorPost.community.name = mMentorUserItem.getNameOrTitle();
                 mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                 mentorPost.isEdit = false;
-                CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+                CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         }
     }
@@ -697,7 +697,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
     public void createCommunityPostClick(FeedDetail feedDetail) {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false, null);
     }
 
 

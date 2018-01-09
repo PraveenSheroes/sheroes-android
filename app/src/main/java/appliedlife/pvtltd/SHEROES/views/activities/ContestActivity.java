@@ -625,7 +625,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                                 .title(mContest.title)
                                 .build();
                 trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
-                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         } else {
             if (!(mContest.hasMyPost || mContest.getContestStatus() == ContestStatus.COMPLETED)) {
@@ -640,7 +640,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                                 .title(mContest.title)
                                 .build();
                 trackEvent(Event.CHALLENGE_SUBMIT_CLICKED, properties);
-                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         }
     }

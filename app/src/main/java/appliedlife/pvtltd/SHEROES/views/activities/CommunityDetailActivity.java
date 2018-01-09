@@ -38,6 +38,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -93,6 +94,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         HTML("html");
 
         public String tabType;
+        private String mCommS;
 
         TabType(String tabType) {
             this.tabType = tabType;
@@ -460,6 +462,14 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             @Override
             public void onPageSelected(int position) {
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                                .title(mCommunityFeedSolrObj.getNameOrTitle())
+                                .tabTitle(communityTab.title)
+                                .tabKey(communityTab.key)
+                                .build();
+                AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
                 if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
                     mFabButton.setVisibility(View.VISIBLE);
                     mFabButton.setImageResource(R.drawable.challenge_placeholder);
@@ -489,7 +499,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public String getScreenName() {
-        return null;
+        return SCREEN_LABEL;
     }
 
     @Override
@@ -527,6 +537,28 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     public void onCommunityLeft() {
         mCommunityFeedSolrObj.setMember(false);
         invalidateBottomBar();
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        final EventProperty.Builder builder = new EventProperty.Builder();
+        if (mCommunityFeedSolrObj != null) {
+            builder.title(mCommunityFeedSolrObj.getNameOrTitle())
+                    .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()));
+        }
+
+        HashMap<String, Object> properties = builder.build();
+        return properties;
     }
 
     @Override
@@ -641,7 +673,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             communityPost.community = new Community();
             communityPost.community.id = mCommunityFeedSolrObj.getIdOfEntityOrParticipant();
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
-            CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true, mCommunityFeedSolrObj.communityPrimaryColor, mCommunityFeedSolrObj.titleTextColor);
+            HashMap<String, Object> screenProperties = new EventProperty.Builder()
+                    .sourceScreenId(getCommunityId())
+                    .sourceTabKey(communityTab.key)
+                    .sourceTabTitle(communityTab.title)
+                    .build();
+            CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true, mCommunityFeedSolrObj.communityPrimaryColor, mCommunityFeedSolrObj.titleTextColor, screenProperties);
         } else {
             if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
                 Uri uri = Uri.parse(url);
@@ -650,5 +687,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 startActivity(intent);
             }
         }
+    }
+    public String getCommunityId() {
+        return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
     }
 }

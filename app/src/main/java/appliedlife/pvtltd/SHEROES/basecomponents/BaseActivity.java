@@ -136,13 +136,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
+            mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
         }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
-          /*  if (!AppUtils.isEmpty(mPreviousScreenProperties)) {
+            if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
                 properties.putAll(mPreviousScreenProperties);
-            }*/
+            }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
     }
@@ -284,9 +285,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         // appropriate."
         if (trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
-            /*if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
+            if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
                 properties.putAll(mPreviousScreenProperties);
-            }*/
+            }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
         super.onPause();
@@ -809,7 +810,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
                 }
                 break;
 
