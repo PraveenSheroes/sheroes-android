@@ -448,7 +448,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
         } else {
-            if (userPostObj.getCommunityTypeId() == 0) {
+            if (userPostObj.getCommunityId() == 0) {
                 ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
 
             } else {

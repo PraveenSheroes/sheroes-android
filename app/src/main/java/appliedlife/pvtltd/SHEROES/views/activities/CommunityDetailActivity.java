@@ -85,7 +85,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  */
 
 public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView {
-    public static final String SCREEN_LABEL = "Community Detail Activity";
+    public static final String SCREEN_LABEL = "Community Screen Activity";
 
     public enum TabType {
         NAVTIVE("native"),
@@ -134,9 +134,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private List<Fragment> mTabFragments = new ArrayList<>();
     private Adapter mAdapter;
 
-    private String mCommunityTitleTextColor;
-    private String mCommunityPrimaryColor;
-    private String mCommunitySecondaryColor;
+    private String mCommunityPrimaryColor = "#6e2f95";
+    private String mCommunitySecondaryColor = "#dc4541";
+    private String mCommunityTitleTextColor = "#ffffff";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -190,6 +190,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         setupTabLayout();
         invalidateBottomBar();
         setupToolBar();
+        invalidateOptionsMenu();
     }
 
     private void setupToolBar() {
@@ -576,7 +577,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     public static void navigateTo(Activity fromActivity, long communityId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, CommunityDetailActivity.class);
-        intent.putExtra(Long.toString(communityId), AppConstants.COMMUNITY_ID);
+        intent.putExtra(AppConstants.COMMUNITY_ID, Long.toString(communityId));
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
