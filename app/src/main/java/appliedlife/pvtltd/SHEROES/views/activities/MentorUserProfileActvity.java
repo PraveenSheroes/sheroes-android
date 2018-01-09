@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
@@ -210,6 +211,9 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     @Inject
     ProfilePresenterImpl profilePresenter;
 
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,6 +229,10 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         getSupportActionBar().setTitle("");
         mAppBarLayout.addOnOffsetChangedListener(this);
         clHomeFooterList.setVisibility(View.GONE);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.bringToFront();
+
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mMentorUserItem = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
@@ -608,7 +616,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -633,6 +641,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             }
             setProfileNameData();
         }
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override

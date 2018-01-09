@@ -158,9 +158,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     private void pupulateUserProfileDetails() {
 
-       // boolean hideAnnonymousPost = !isSelfProfile;
-       // profilePresenter.getUserPostCountFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, userId, hideAnnonymousPost));
-
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
 
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
@@ -290,19 +287,22 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @Override
     public void getFollowedMentors(UserFollowedMentorsResponse feedResponsePojo) {
+
         if(feedResponsePojo.getNumFound() ==0) {
             //empty view
 
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
+            userName = userName ==null ? "User" : userName;
             String message = getString(R.string.empty_followed_mentor, userName);
             emptyViewFollowedMentor.setText(message);
             followedMentorsListContainer.setVisibility(View.GONE);
 
             if(isSelfProfile) {
+                emptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
                 emptyViewFollowedMentor.setText("Follow Champions");
                 emptyViewDottedBorder.setVisibility(View.VISIBLE);
             } else{
-                emptyViewDottedBorder.setVisibility(View.GONE);
+                emptyViewDottedBorder.setBackgroundResource(0);
             }
 
         } else {
