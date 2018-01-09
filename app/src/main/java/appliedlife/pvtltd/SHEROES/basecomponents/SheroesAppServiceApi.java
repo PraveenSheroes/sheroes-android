@@ -125,6 +125,9 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/mutual_communities")
     Observable<ProfileCommunitiesResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
 
+    @POST("participant/feed/my_communities")
+    Observable<ProfileCommunitiesResponsePojo> getPublicProfileUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
+
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 

@@ -21,7 +21,5 @@ public interface ProfileNewView extends BaseMvpView {
 
     void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse);
 
-    void getUsersPostCount(int totalPost);
-
     void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities);
 }

@@ -143,5 +143,18 @@ public class ProfileModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<ProfileCommunitiesResponsePojo> getPublicProfileUserCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
+        LogUtils.info(TAG, "*******************" + new Gson().toJson(profileUsersCommunityRequest));
+        return sheroesAppServiceApi.getPublicProfileUsersCommunity(profileUsersCommunityRequest)
+                .map(new Func1<ProfileCommunitiesResponsePojo, ProfileCommunitiesResponsePojo>() {
+                    @Override
+                    public ProfileCommunitiesResponsePojo call(ProfileCommunitiesResponsePojo profileCommunitiesResponsePojo) {
+                        return profileCommunitiesResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
 }

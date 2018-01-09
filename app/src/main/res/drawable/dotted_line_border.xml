@@ -4,7 +4,7 @@
     <stroke
         android:width="2dp"
         android:color="#cccccc"
-        android:dashWidth="10dp"
+        android:dashWidth="3dp"
         android:dashGap="6dp"/>
     <padding android:left="7dp" android:top="7dp"
         android:right="7dp" android:bottom="7dp" />

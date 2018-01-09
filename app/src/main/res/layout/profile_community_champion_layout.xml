@@ -45,17 +45,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_191">
 
-                <TextView
-                    android:id="@+id/empty_community_view"
+                <FrameLayout
+                    android:id="@+id/dotted_border_container_community"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/ic_communities_ic"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp_size_15">
+
+                    <TextView
+                        android:id="@+id/empty_community_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/ic_communities_ic"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
             </LinearLayout>
 
             <LinearLayout

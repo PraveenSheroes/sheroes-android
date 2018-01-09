@@ -40,9 +40,11 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
 import butterknife.Bind;
@@ -102,6 +104,9 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Bind(R.id.empty_community_view)
     TextView emptyViewCommunities;
 
+    @Bind(R.id.dotted_border_container_community)
+    FrameLayout dottedCommunityEmptyView;
+
     @Bind(R.id.empty_community_view_container)
     LinearLayout emptyViewCommunitiesContainer;
 
@@ -150,13 +155,13 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             }
         }
 
-        pupulateUserProfileDetails();
+        populateUserProfileDetails();
 
         return view;
     }
 
 
-    private void pupulateUserProfileDetails() {
+    private void populateUserProfileDetails() {
 
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
 
@@ -164,14 +169,30 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
-        profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
+        if(isSelfProfile) {
+            profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
+        } else {
+            profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
 
+        }
+
+    }
+
+    @OnClick(R.id.dotted_border_container_community)
+    public void openCommunityList() {
+        if(isSelfProfile) {
+            Intent intent = new Intent(getActivity(), HomeActivity.class);
+            intent.putExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT, "Community List");
+            startActivity(intent);
+        }
     }
 
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
-        Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
-        startActivity(intent);
+        if(isSelfProfile) {
+            Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
+            startActivity(intent);
+        }
     }
 
     @OnClick(R.id.followed_view_more)
@@ -241,6 +262,13 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             remainingMutualCount.setTypeface(remainingMutualCount.getTypeface(), Typeface.BOLD);
             int finalLeft = mutualCommunitySize - 3;
             remainingMutualCount.setText("+" + finalLeft);
+
+            remainingMutualCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToCommunityListing();
+                }
+            });
             mutualCommunityContainer.addView(remainingMutualCount);
         }
 
@@ -334,12 +362,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     @Override
-    public void getUsersPostCount(int totalPost) {
-        LogUtils.info(TAG, "Following count:" + totalPost);
-        ((MentorUserProfileActvity) getActivity()).setUsersPostCount(totalPost);
-    }
-
-    @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
         LogUtils.info(TAG, "Community count:" + userCommunities.getStatus());
 
@@ -387,16 +409,18 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             //current scenrio - other hv all so change if future other don't hv mutual - empty view
             emptyViewCommunitiesContainer.setVisibility(View.VISIBLE);
             communityListContainer.setVisibility(View.GONE);
-            String message = getString(R.string.empty_followed_community, userName);
+            String name = userName!=null ? userName : "User";
+            String message = getString(R.string.empty_followed_community, name);
             emptyViewCommunities.setText(message);
+
             if(isSelfProfile) {
-                //join community
+                dottedCommunityEmptyView.setBackgroundResource(R.drawable.dotted_line_border);
+                emptyViewCommunities.setText("Join Communities & Connect");
+            } else{
+                dottedCommunityEmptyView.setBackgroundResource(0);
             }
         }
-
-
     }
-
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
 

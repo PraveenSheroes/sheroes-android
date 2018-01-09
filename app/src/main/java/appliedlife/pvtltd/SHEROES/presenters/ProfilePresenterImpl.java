@@ -169,4 +169,38 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         registerSubscription(subscription);
     }
 
+    //Community For public profile
+    public void getPublicProfileCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        Subscription subscription = profileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest).subscribe(new Subscriber<ProfileCommunitiesResponsePojo>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Crashlytics.getInstance().core.logException(throwable);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+            }
+
+            @Override
+            public void onNext(ProfileCommunitiesResponsePojo userCommunities) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (null != userCommunities) {
+                    Log.i(TAG, userCommunities.getStatus());
+                    getMvpView().getUsersCommunities(userCommunities);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
 }
