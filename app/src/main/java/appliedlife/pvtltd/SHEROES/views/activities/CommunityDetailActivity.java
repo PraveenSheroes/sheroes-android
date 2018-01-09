@@ -18,6 +18,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -40,6 +42,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -56,6 +61,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityDetailPresenterImpl;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -65,6 +72,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -161,6 +169,17 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mCommunityFeedSolrObj != null) {
             initializeLayout();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        }
+            finish();
     }
 
     private void initializeLayout() {
@@ -303,6 +322,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if(mCommunityFeedSolrObj!=null){
             menu.findItem(R.id.leave_join).setTitle(mCommunityFeedSolrObj.isMember() ? R.string.ID_LEAVE : R.string.ID_JOIN);
         }
+        MenuItem menuItem = menu.findItem(R.id.share);
+        menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -317,6 +338,18 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 } else {
                     onJoinClicked();
                 }
+                break;
+            case R.id.share:
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType(AppConstants.SHARE_MENU_TYPE);
+                intent.putExtra(Intent.EXTRA_TEXT, mCommunityFeedSolrObj.getDeepLinkUrl());
+                startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, getScreenName(), properties);
+                break;
+            case android.R.id.home:
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -534,6 +567,16 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         Intent intent = new Intent(fromActivity, CommunityDetailActivity.class);
         Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
         intent.putExtra(CommunityFeedSolrObj.COMMUNITY_OBJ, parcelable);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long communityId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, CommunityDetailActivity.class);
+        intent.putExtra(Long.toString(communityId), AppConstants.COMMUNITY_ID);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);

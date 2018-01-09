@@ -596,15 +596,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
 
             }else {
-                Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
-                Bundle bundleFromPost = new Bundle();
-                bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                Parcelable parcelablesss = Parcels.wrap(userPostObj);
-                bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
-                bundleFromPost.putLong(AppConstants.COMMUNITY_ID, userPostObj.getCommunityId());
-                bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                intentFromCommunityPost.putExtras(bundleFromPost);
-                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) userPostObj).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         }
     }

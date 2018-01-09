@@ -431,7 +431,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID, userId);
         intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        getActivity().startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override
@@ -452,7 +452,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
 
             } else {
-                Intent intentFromCommunityPost = new Intent(getActivity(), CommunitiesDetailActivity.class);
+                CommunityDetailActivity.navigateTo(getActivity(),  userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+               /* Intent intentFromCommunityPost = new Intent(getActivity(), CommunitiesDetailActivity.class);
                 Bundle bundleFromPost = new Bundle();
                 bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
                 Parcelable parcelablesss = Parcels.wrap(userPostObj);
@@ -460,7 +461,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 bundleFromPost.putLong(AppConstants.COMMUNITY_ID, userPostObj.getCommunityId());
                 bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                 intentFromCommunityPost.putExtras(bundleFromPost);
-                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
             }
         }
     }
@@ -483,7 +484,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Intent intentJob = new Intent(getActivity(), JobDetailActivity.class);
         Parcelable parcelable = Parcels.wrap(jobFeedObj);
         intentJob.putExtra(AppConstants.JOB_DETAIL, parcelable);
-        startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
+        getActivity().startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
     }
 
     @Override
@@ -585,7 +586,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        getActivity().startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

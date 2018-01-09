@@ -185,10 +185,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
                 @Override
                 public void onNext(FeedResponsePojo feedResponsePojo) {
+                    mIsFeedLoading = false;
+                    getMvpView().stopProgressBar();
                     if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
                         List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
                         mNextToken = feedResponsePojo.getNextToken();
-                        mIsFeedLoading = false;
                         switch (mFeedState) {
                             case NORMAL_REQUEST:
                                 getMvpView().stopProgressBar();

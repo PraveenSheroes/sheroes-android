@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -26,7 +27,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -132,13 +135,14 @@ public class HomeSearchActivity extends BaseActivity implements ViewPager.OnPage
                 break;
             case AppConstants.FEED_COMMUNITY:
                 mFragmentOpen.setImageBlur(true);
-                Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
+                CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj)feedDetail, getScreenName(),null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+               /* Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFeature = new Bundle();
                 Parcelable parcelableFeed = Parcels.wrap(feedDetail);
                 bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelableFeed);
                 bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.SEARCH_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
-                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                 break;
             case AppConstants.FEED_COMMUNITY_POST:
                 fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.THREE_CONSTANT);

@@ -547,7 +547,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
                             ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
                         }else {
-                            Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                            CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                            /*Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                             Bundle bundleFromPost = new Bundle();
                             bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
                             intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
@@ -555,10 +556,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                             bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                             intentFromCommunityPost.putExtras(bundleFromPost);
-                            startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                            startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                         }
                     }else {
-                        Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                        CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                       /* Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                         Bundle bundleFromPost = new Bundle();
                         bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
                         intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
@@ -566,7 +568,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                         bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                         intentFromCommunityPost.putExtras(bundleFromPost);
-                        startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                        startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                     }
                 }
                 break;
