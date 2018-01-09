@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequ
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -1031,13 +1032,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-    public void editTopPost(final CommunityPostCreateRequest communityPostCreateRequest) {
+    public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = editPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+        Subscription subscription = editPostCommunity(communityTopPostRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
 
             @Override
             public void onCompleted() {
@@ -1061,9 +1062,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-    public Observable<CreateCommunityResponse> editPostCommunity(CommunityPostCreateRequest communityPostCreateRequest){
+    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest){
         LogUtils.info(TAG,"***************edit community Post****"+new Gson().toJson(communityPostCreateRequest));
-        return sheroesAppServiceApi.editCommunityPost(communityPostCreateRequest)
+        return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
                     public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {

@@ -311,12 +311,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            if(userPostObj.isTopPost()){
+                popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
+            }else {
+                popup.getMenu().findItem(R.id.top_post).setTitle(R.string.FEATURE_POST);
+            }
             if (adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
-                popup.getMenu().findItem(R.id.top_post).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
-                popup.getMenu().findItem(R.id.top_post).setEnabled(true);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -330,7 +333,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
-                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, null, userPostObj.getDescription(), null, userPostObj.getIdOfEntityOrParticipant(), null, null, true));
+                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(),!userPostObj.isTopPost()));
                             return true;
                         default:
                             return false;
@@ -339,6 +342,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             });
         }
         popup.show();
+    }
+
+    private String getCreatorType(UserPostSolrObj userPostSolrObj) {
+        if (userPostSolrObj.isCommunityOwner()) {
+            return AppConstants.COMMUNITY_OWNER;
+        } else if (userPostSolrObj.isAnonymous()) {
+            return AppConstants.ANONYMOUS;
+        } else {
+            return AppConstants.USER;
+        }
     }
 
     @Override

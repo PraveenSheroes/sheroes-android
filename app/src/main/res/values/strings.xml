@@ -439,6 +439,8 @@
     <string name="ID_MORE">MORE</string>
     <string name="ID_LEAVE">Leave</string>
     <string name="ID_TOP_POST">Top Post</string>
+    <string name="FEATURE_POST">Feature This Post</string>
+    <string name="UNFEATURE_POST">UnFeature This Post</string>
 
     <!--String related of professional_add_education page-->
     <string name="ID_FILED_OF_STUDY_HINT">FIELD OF STUDY</string>

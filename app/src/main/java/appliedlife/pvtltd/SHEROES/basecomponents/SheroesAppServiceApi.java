@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
@@ -204,6 +205,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/post/edit")
     Observable<CreateCommunityResponse> editCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
+    @POST("participation/post/edit")
+    Observable<CreateCommunityResponse> topPostCommunityPost(@Body CommunityTopPostRequest communityPostCreateRequest);
 
     @POST("participant/community/create_owner")
     Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
