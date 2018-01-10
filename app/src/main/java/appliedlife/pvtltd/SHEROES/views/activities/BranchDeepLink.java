@@ -37,28 +37,12 @@ public class BranchDeepLink extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getBoolean(AppConstants.DEFFERED_DEEP_LINK)) {
-                routeDeepLink();
-                return;
-            }
-        }
         if (getIntent() == null || getIntent().getData() == null) {
             startMainActivity();
         } else {
             routeDeepLink();
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (Branch.isAutoDeepLinkLaunch(this)) {
-            LogUtils.info(TAG,"##################### isAutoDeepLinkLaunch########");
-        } else {
-        }
-    }
-
     //region Private Helper methods
     private void routeDeepLink() {
         Branch branch = Branch.getInstance();
@@ -66,13 +50,6 @@ public class BranchDeepLink extends BaseActivity {
         branch.initSession(new Branch.BranchReferralInitListener() {
                                @Override
                                public void onInitFinished(JSONObject referringParams, BranchError error) {
-                                   if (getIntent().getExtras().getBoolean(AppConstants.DEFFERED_DEEP_LINK)) {
-                                       deepLinkingRedirection();
-                                   }else {
-                                       if (getIntent() == null || getIntent().getData() == null) {
-                                           return;
-                                       }
-                                   }
                                    if (error == null) {
                                        deepLinkingRedirection();
                                    } else {
@@ -83,14 +60,12 @@ public class BranchDeepLink extends BaseActivity {
                            }
                 , this.getIntent().getData(), this);
     }
-    private void deepLinkingRedirection()
+    private  void deepLinkingRedirection()
     {
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
         Intent intent = new Intent();
-
         JSONObject sessionParams = Branch.getInstance().getLatestReferringParams();
-        LogUtils.info(TAG,"##################### Branch session params########"+new Gson().toJson(sessionParams));
         try {
             String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
             String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);

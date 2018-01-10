@@ -54,23 +54,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     }
 
     private void logout() {
-        String sharedLink="";
-        if (null != getIntent()) {
-            Intent intent = getIntent();
-            if (null != intent.getData()) {
-                mData = intent.getData();
-                sharedLink = mData.toString();
-            } else {
-                if (null != intent.getExtras()) {
-                    sharedLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
-                }
-            }
-
-        }
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
         Intent intent = new Intent(this, WelcomeActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.DEFFERED_DEEP_LINK,sharedLink);
         intent.putExtras(bundle);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);

@@ -11,6 +11,8 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,7 +28,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -41,10 +42,8 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -60,10 +59,11 @@ import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
@@ -74,7 +74,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -147,6 +150,8 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
@@ -261,10 +266,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private boolean isSheUser = false;
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
-    private String mDefferedDeepLink;
     private ShowcaseView showcaseView;
     private int counter = 0;
     private ShowcaseManager showcaseManager;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -307,35 +312,25 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
         }
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
+            Branch branch = Branch.getInstance();
+            branch.resetUserSession();
+            branch.initSession(new Branch.BranchReferralInitListener() {
+                                   @Override
+                                   public void onInitFinished(JSONObject referringParams, BranchError error) {
+                                       deepLinkingRedirection();
+                                   }
+                               }
+                    , this.getIntent().getData(), this);
+            showCaseDesign();
+        }
     }
 
     private void showCaseDesign() {
-        if (null!=mInstallUpdatePreference&&mInstallUpdatePreference.get().isFirstOpen()) {
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn,mTvHome,mTvCommunities);
-            showcaseManager.showFirstMainActivityShowcase();
-          }
-            /*Button customButton = (Button) getLayoutInflater().inflate(R.layout.showcase_btn_layout, null);
-            showcaseView = new ShowcaseView.Builder(this)
-                    .setTarget(new ViewTarget(mFloatActionBtn))
-                    .setStyle(R.style.CustomShowcaseTheme3)
-                    .replaceEndButton(customButton)
-                    .build();
-            showcaseView.setButtonText(getString(R.string.ID_GOT));
-            showcaseView.setContentTitle(getString(R.string.ID_SHOW_CASE_CREATE_POST_TITLE));
-            showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_CREATE_POST_DESC));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            params.leftMargin = 100;
-            params.bottomMargin = 200;
-            showcaseView.setButtonPosition(params);
-            showcaseView.overrideButtonClick(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onShowCaseGotItClick();
-                }
-            });*/
-
+        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities);
+        showcaseManager.showFirstMainActivityShowcase();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -439,7 +434,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        showCaseDesign();
         if (shouldShowSnowFlake()) {
             mSantaView.setVisibility(View.GONE);
             animateSnowFlake();
@@ -461,25 +455,75 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
-            Bundle bundle = getIntent().getExtras();
-            if (bundle.getString(AppConstants.DEFFERED_DEEP_LINK) != null) {
-                mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
-                if (StringUtil.isNotNullOrEmptyString(mDefferedDeepLink)) {
-                     openNativeViews(mDefferedDeepLink);
-//                    Intent intent = new Intent(HomeActivity.this, BranchDeepLink.class);
-//                    intent.putExtra(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
-//                    ActivityCompat.startActivity(HomeActivity.this, intent, null);
+            mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
+            if (!isSheUser) {
+                initHomeViewPagerAndTabs();
+            }
+            if (mEventId > 0) {
+                eventDetailDialog(mEventId);
+            }
+        }
+    }
+
+    private void deepLinkingRedirection() {
+        // params are the deep linked params associated with the link that the user clicked before showing up
+        // params will be empty if no data found
+        Intent intent = new Intent();
+        Branch branch = Branch.getInstance(getApplicationContext());
+        JSONObject sessionParams = branch.getFirstReferringParams();
+        try {
+            String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
+            String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
+            if (StringUtil.isNotNullOrEmptyString(url)) {
+                if (openWebViewFlag.equalsIgnoreCase("true")) {
+                    Uri urlWebSite = Uri.parse(url);
+                    AppUtils.openChromeTabForce(this, urlWebSite);
+                    return;
+                }
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
+                    // Do not let others grab our call
+                    intent.setPackage(SheroesApplication.mContext.getPackageName());
+                } else {
+                    startActivity(intent);
+                    return;
+                }
+                Iterator<String> iterator = sessionParams.keys();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    try {
+                        Object value = sessionParams.get(key);
+                        if (value instanceof String) {
+                            intent.putExtra(key, (String) value);
+                        }
+                        if (value instanceof Boolean) {
+                            intent.putExtra(key, (boolean) value);
+                        }
+                        if (value instanceof Integer) {
+                            intent.putExtra(key, (int) value);
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+                if (isIntentAvailable(this, intent)) {
+                    intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
+                    if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
+                        intent.setClass(this, SheroesDeepLinkingActivity.class);
+                    }
+                    startActivity(intent);
                 }
             }
+        } catch (JSONException e) {
+            // Crashlytics.getInstance().core.logException(e);
+        }
+    }
 
-        }
-        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        if (!isSheUser) {
-            initHomeViewPagerAndTabs();
-        }
-        if (mEventId > 0) {
-            eventDetailDialog(mEventId);
-        }
+    private boolean isIntentAvailable(Context ctx, Intent intent) {
+        final PackageManager mgr = ctx.getPackageManager();
+        List<ResolveInfo> list =
+                mgr.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     private void animateSnowFlake() {
