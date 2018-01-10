@@ -72,7 +72,7 @@ public class AppConstants {
     public static final String OWNER_SUB_TYPE = "O";
     public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
     public static final String FEED_SCREEN = "feed";
-    public static final String CURRENT_STATUS_SCREEN = "current_status";
+    public static final String COMMUNITIES_ONBOARDING_SCREEN = "community_onboarding";
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
     public static final String CITY_NAME_DEFAULT = "Delhi";
@@ -103,6 +103,7 @@ public class AppConstants {
     public static final String BOOKMARKS = "bookmarks";
     public static final String COMMENT_REACTION_FRAGMENT = "comment_reaction_fragment";
     public static final String HOME_FRAGMENT = "home";
+    public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
@@ -343,4 +344,5 @@ public class AppConstants {
     public static final String NAV_ICC_MEMBERS= "ICC Members";
     public static final String NAV_FAQ= "FAQ";
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
+    public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
 }

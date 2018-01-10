@@ -29,7 +29,7 @@ public class CustomInstallTrackersReceiver extends BroadcastReceiver {
                 if (intent.getStringExtra(AppConstants.GOOGLE_PLAY_URL_REFERRAL) != null) {
                     String url = intent.getStringExtra(AppConstants.GOOGLE_PLAY_URL_REFERRAL);
                     String referrers[] = url.split(AppConstants.AND_SIGN);
-                    if (referrers != null && referrers.length >= 3) {
+                    if (referrers.length >= 3) {
                         LogUtils.info(TAG, "********Size refral User Id tracker***********"+ referrers.length);
                         if (StringUtil.isNotNullOrEmptyString(referrers[3])) {
                             String appContactTableidArray[] = referrers[3].split(AppConstants.EQUAL_SIGN);
@@ -45,6 +45,15 @@ public class CustomInstallTrackersReceiver extends BroadcastReceiver {
                                 context.startActivity(i);
                             }
                         }
+                    }else
+                    {
+                        Intent i = new Intent(context, WelcomeActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(AppConstants.DEFFERED_DEEP_LINK, url);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //  i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        i.putExtras(bundle);
+                        context.startActivity(i);
                     }
                 }
             }

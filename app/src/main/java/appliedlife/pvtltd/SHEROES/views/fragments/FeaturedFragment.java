@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import pl.droidsonroids.gif.GifTextView;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 
@@ -70,6 +71,8 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     private SwipPullRefreshList mPullRefreshList;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
+    @Bind(R.id.loader_gif)
+    LinearLayout loaderGif;
     @Inject
     AppUtils mAppUtils;
     private int mPageNo = AppConstants.ONE_CONSTANT;
@@ -88,6 +91,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         ButterKnife.bind(this, view);
+        loaderGif.setVisibility(View.VISIBLE);
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -150,6 +154,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         mProgressBarFirstLoad.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
         mTvNoResult.setText(getString(R.string.ID_FEATURE_COMMUNITY));
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mPageNo = mFragmentListRefreshData.getPageNo();

@@ -41,7 +41,9 @@ public enum EventProperty {
     SOURCE_SCREEN_ID("Source Screen Id"),
     SOURCE_TAB_KEY("Source Tab Key"),
     SOURCE_TAB_TITLE("Source Tab Title"),
-    IS_MOENGAGE("Is Moengage");
+    IS_MOENGAGE("Is Moengage"),
+    POSITION_IN_SEQUENCE("Position In Sequence"),
+    DESCRIPTION("Description");
 
     private final String string;
 
@@ -211,6 +213,16 @@ public enum EventProperty {
         }
         public Builder sourceTabTitle(final String sourceTabTitle){
             put(SOURCE_TAB_TITLE, sourceTabTitle);
+            return this;
+        }
+
+        public Builder positionInSequence(final String position){
+            put(POSITION_IN_SEQUENCE, position);
+            return this;
+        }
+
+        public Builder description(final String description){
+            put(DESCRIPTION, description);
             return this;
         }
     }

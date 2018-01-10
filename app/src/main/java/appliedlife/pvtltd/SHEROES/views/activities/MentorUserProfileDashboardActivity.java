@@ -182,6 +182,7 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         mAppBarLayout.addOnOffsetChangedListener(this);
+        clHomeFooterList.setVisibility(View.GONE);
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
             mMentorUserItem = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
@@ -560,22 +561,6 @@ public class MentorUserProfileDashboardActivity extends BaseActivity implements 
         {
             case FOLLOW_UNFOLLOW:
                 tvMentorDashBoardFollow.setEnabled(true);
-                UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-               /* if(tvMentorDashBoardFollow.getText().toString().equalsIgnoreCase(getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING)))
-                {
-                    if(!userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                            mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()-1);
-                    }
-                }else
-                {
-                    if(userSolrObj.isSolrIgnoreIsMentorFollowed())
-                    {
-                        mMentorUserItem.setSolrIgnoreNoOfMentorFollowers(mMentorUserItem.getSolrIgnoreNoOfMentorFollowers()+1);
-
-                    }
-                }*/
-
                 followUnFollowMentor();
                 break;
             default:

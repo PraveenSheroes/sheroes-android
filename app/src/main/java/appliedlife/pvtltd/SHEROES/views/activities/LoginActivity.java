@@ -2,6 +2,11 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.f2prateek.rx.preferences.Preference;
 
@@ -17,7 +22,11 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.DEFFERED_DEEP_LINK;
 
 
 /**
@@ -32,7 +41,7 @@ public class LoginActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
-
+    String mDefferedDeepLink;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +65,10 @@ public class LoginActivity extends BaseActivity {
     public void renderLoginFragmentView() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Bundle bundle =getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
+        if(null!=getIntent()&&null!=getIntent().getExtras()) {
+            mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
+        }
         LoginFragment frag = new LoginFragment();
         frag.setArguments(bundle);
         callFirstFragment(R.id.fragment_login, frag);
@@ -81,6 +93,9 @@ public class LoginActivity extends BaseActivity {
             renderEmailVerifyFragmentView();
         } else {
             Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
+            Bundle bundle=new Bundle();
+            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
+            boardingIntent.putExtras(bundle);
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);
         }
@@ -114,17 +129,9 @@ public class LoginActivity extends BaseActivity {
     public void onBackPressed() {
         userPreference.delete();
         Intent intent = new Intent(this, WelcomeActivity.class);
-       // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }
-
- /*   private void openFaceBookLogin() {
-        Intent intentFacebook = new Intent(this, FaceBookOpenActivity.class);
-        startActivityForResult(intentFacebook, AppConstants.REQUEST_CODE_FOR_FACEBOOK);
-        overridePendingTransition(R.anim.right_to_left_anim_enter, R.anim.right_to_left_anim_exit);
-    }
-*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -143,6 +150,7 @@ public class LoginActivity extends BaseActivity {
         EmailVerificationFragment emailVerificationFragment = new EmailVerificationFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
+
 
     @Override
     public boolean shouldTrackScreen() {

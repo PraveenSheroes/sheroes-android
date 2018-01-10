@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -103,36 +104,38 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mCommentAuthorName.setText(mComment.getParticipantName());
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(item);
-        if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
-            mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
-            StringBuilder stringBuilder = new StringBuilder();
-           // stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
-            //Spannable getCommentString = new SpannableString(stringBuilder.toString());
-            //int size = mComment.getParticipantName().length() + 1;
-            //getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            mUserComment.setText(hashTagColorInString(mComment.getComment()));
-            linkifyURLs(mUserComment);
-            mProfileVerfied.setVisibility(View.GONE);
-        } else {
-            if (StringUtil.isNotNullOrEmptyString(mComment.getComment())&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
+        if(!((Activity)mContext).isFinishing() && !((Activity)mContext).isDestroyed()){
+            if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                 mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
+                StringBuilder stringBuilder = new StringBuilder();
+                // stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
+                //Spannable getCommentString = new SpannableString(stringBuilder.toString());
+                //int size = mComment.getParticipantName().length() + 1;
+                //getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                mUserComment.setText(hashTagColorInString(mComment.getComment()));
+                linkifyURLs(mUserComment);
+                mProfileVerfied.setVisibility(View.GONE);
+            } else {
+                if (StringUtil.isNotNullOrEmptyString(mComment.getComment())&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
+                    mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
                 /*StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
                 Spannable getCommentString = new SpannableString(stringBuilder.toString());
                 int size = mComment.getParticipantName().length() + 1;
                 getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
-                mUserComment.setText(hashTagColorInString(mComment.getComment()));
-                linkifyURLs(mUserComment);
-                if (!mComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                    if (mComment.isVerifiedMentor()) {
-                        mProfileVerfied.setVisibility(View.VISIBLE);
-                    } else {
+                    mUserComment.setText(hashTagColorInString(mComment.getComment()));
+                    linkifyURLs(mUserComment);
+                    if (!mComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                        if (mComment.isVerifiedMentor()) {
+                            mProfileVerfied.setVisibility(View.VISIBLE);
+                        } else {
+                            mProfileVerfied.setVisibility(View.GONE);
+                        }
+                    }else {
                         mProfileVerfied.setVisibility(View.GONE);
                     }
-                }else {
-                    mProfileVerfied.setVisibility(View.GONE);
                 }
             }
         }

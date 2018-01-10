@@ -84,6 +84,7 @@
             android:layout_marginLeft="@dimen/dp_size_50"
             android:layout_marginRight="@dimen/dp_size_50"
             android:layout_marginTop="@dimen/dp_size_10"
+            android:textAllCaps="true"
             android:background="@drawable/rectangle_feed_commnity_join"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"

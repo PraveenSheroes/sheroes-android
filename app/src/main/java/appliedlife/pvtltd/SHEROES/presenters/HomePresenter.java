@@ -380,7 +380,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
                 {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
@@ -416,7 +416,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
                 {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -515,7 +515,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
             @Override
             public void onNext(LikeResponse likeResponse) {
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                if (likeResponse.getStatus() .equalsIgnoreCase( AppConstants.FAILED)) {
                     comment.isLiked = false;
                     comment.likeCount--;
                 }
@@ -555,7 +555,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if(likeResponse.getStatus() .equalsIgnoreCase( AppConstants.FAILED)){
                     comment.isLiked = true;
                     comment.likeCount++;
                 }

@@ -22,13 +22,14 @@
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
     <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
     <!-- Strings related to login -->
-    <string name="ID_PROMPT_EMAIL">Email ID</string>
+    <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
     <string name="ID_TODAY">Today</string>
     <string name="ID_CREATE">Create</string>
     <string name="ID_CREATED">Created</string>
     <string name="ID_PROMPT_PASSWORD">Password</string>
     <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
+    <string name="ID_ERROR_EMAIL">Enter email address</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">posted in</string>
     <string name="ID_ASKED">asked</string>
@@ -215,7 +216,7 @@
     <string name="ID_LETS_TALK"> Let’s Start Talking</string>
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="PLACEHOLDER_WEBPAGE_URL">%1$s?auth=%2$s&amp;addHeader=false&amp;addFooter=false</string>
-
+    <string name="ID_BOARDING_COMMUNITIES"> To make Sheroes experience special for you please join some communities of your interests</string>
     <string name="ID_WELCOME_HEADER"> Talk About Things That Matter To You</string>
     <string name="ID_UPLOAD_LOGO">Upload load</string>
     <string name="ID_UPLOAD_COVER">Upload cover</string>
@@ -475,10 +476,11 @@
     <string name="IDS_GOOGLE_BUTTON">Login with Google</string>
     <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
     <string name="ID_WELCOME_TEXT4">Login Using Email (Only For Existing Users)</string>
-    <string name="ID_WELCOME_FIRST">Grow With Your Circle Of Support</string>
-    <string name="ID_WELCOME_SECOND">Find Flexible Work Options</string>
-    <string name="ID_WELCOME_THIRD">Learn And Get Skilled For Today\'s Age</string>
-    <string name="ID_WELCOME_FOUR">Inspire Others With Your Growth Story</string>
+    <string name="ID_INFORMATION_WARNING">We never share your info with anyone</string>
+    <string name="ID_ONLY_FOR_EXISTING_USER">(Only for existing users)</string>
+    <string name="ID_WELCOME_FIRST">Ask questions and discuss about health, career, relationships and more...</string>
+    <string name="ID_WELCOME_SECOND">Join Communities you like and talk to other women even anonymously</string>
+    <string name="ID_WELCOME_THIRD">Get expert advice from champions -  achievers from within the community</string>
     <string name="ID_WELCOME">Welcome</string>
     <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES, a community of over 1 Million women.</string>
     <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand things that you care about and we find want you are looking for, everyday.</string>
@@ -513,8 +515,6 @@
     <string name="ID_DESCRIPTION"> DESCRIPTION</string>
     <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
     <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
-    <string name="ID_CONTINUE_WITH_GOOGLE">Continue with Google</string>
-    <string name="ID_CONTINUE_WITH_FACEBOOK">Continue with Facebook</string>
     <string name="ID_LOGGIN_FACEBOOK">Logging in...</string>
     <string name="ID_SAHRE_TEXT">SHARE</string>
     <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
@@ -682,7 +682,7 @@
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">Please enter the email ID associated with your SHEROES account</string>
 
     <string name="ID_RESET_PASSWORD_SUCCESS_LINK_TEXT">Click here to login</string>
-    <string name="ID_FORGOT_PASSWORD_TEXT">Forgot Password?</string>
+    <string name="ID_FORGOT_PASSWORD_TEXT">Forgot Password ?</string>
     <string name="ID_ERROR_NO_EMAIL">Please enter any email ID.</string>
 
 
@@ -697,7 +697,8 @@
     <string name="ID_VIEW_ARTICLE">view article</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
-    <string name="ID_LOGIN">login</string>
+    <string name="ID_LOGIN_WITH_EMAIL">Login with Email</string>
+    <string name="ID_LOGIN_TEXT">login</string>
     <string name="ID_ONBOARDING_WELCOME">onboarding- welcome screen</string>
     <string name="ID_ONBOARDING_LETS_START_TALKING">onboarding- Let’s Start Talking</string>
     <string name="ID_ONBOARDING_CURRENT_STATUS">onboarding- current status</string>
@@ -918,5 +919,18 @@
     <string name="ID_ANSWERS">Answered questions in last 7 days</string>
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
+    <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
+    <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
+    <string name="ID_FIRST_WELCOME">Health Career Love</string>
+    <string name="ID_SECOND_WELCOME">Join Communities</string>
+    <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
+    <string name="ID_GOT"> Got it!</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Ask a Question or Share Something</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_DESC">Start a conversation in any community that you are a member of by tapping here</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities You Can Join To Talk </string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Here all the communities are listed. Join the ones you like and start talking</string>
+    <string name="ID_SHOW_CASE_FEED_TITLE">Your Personalized SHEROES Feed</string>
+    <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with stories you may like</string>
+    <string name="ID_LOADER">Think like a Queen.\n A Queen is not afraid to fail</string>
 
 </resources>
