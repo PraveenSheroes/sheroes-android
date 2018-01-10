@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -40,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import rx.Observable;
@@ -143,6 +145,13 @@ public class HomeModel {
             @Override
             public List<FeedDetail> call(FeedResponsePojo feedResponsePojo, AppIntroScreenResponse appIntroScreenResponse) {
                 ArrayList<FeedDetail> feedDetails = new ArrayList<>();
+                if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
+                    FeedDetail appIntroFeedCard = new FeedDetail();
+                    appIntroFeedCard.setSubType(AppConstants.APP_INTRO_SUB_TYPE);
+                    AppIntroData appIntroData = appIntroScreenResponse.getData().get(0);
+                    appIntroFeedCard.setAppIntroDataItems(appIntroData);
+                    feedDetails.add(appIntroFeedCard);
+                }
                 if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                     List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
                     if(feedRequestPojo.getPageNo() == 1){
