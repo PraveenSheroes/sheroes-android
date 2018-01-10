@@ -141,12 +141,12 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             if (null != intent.getData()) {
                 mData = intent.getData();
                 deepLink = mData.toString();
-                getDeeplinkUrlFromNotification(mData.toString());
+                getDeeplinkUrlFromNotification(mData.toString(), intent);
             } else {
                 if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
                     notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
-                    getDeeplinkUrlFromNotification(deepLink);
+                    getDeeplinkUrlFromNotification(deepLink, intent);
                 }
             }
 
@@ -155,7 +155,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    private void getDeeplinkUrlFromNotification(String urlOfSharedCard) {
+    private void getDeeplinkUrlFromNotification(String urlOfSharedCard, Intent sourceIntent) {
         String baseUrl = "";
         int fullLength = 0;
         if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
@@ -281,7 +281,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             fullLength = urlOfSharedCard.length();
 
             if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
-                callActivities(urlOfSharedCard, baseUrl, fullLength);
+                callActivities(urlOfSharedCard, baseUrl, fullLength, sourceIntent);
             }
 
         } else {
@@ -289,7 +289,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength) {
+    private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength, Intent sourceIntent) {
         String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
         if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) || AppConstants.ARTICLE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.ARTICLE_URL.length() < fullLength) {
@@ -373,6 +373,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     }
                 } else {
                     Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunityDetailActivity.class);
+                    String tabKey = "";
+                    if (sourceIntent != null && sourceIntent.getExtras() != null) {
+                        tabKey = sourceIntent.getStringExtra(CommunityDetailActivity.TAB_KEY);
+                    }
+                    into.putExtra(CommunityDetailActivity.TAB_KEY, tabKey);
                     int indexOfSecondBackSlace = AppUtils.findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
                     String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);

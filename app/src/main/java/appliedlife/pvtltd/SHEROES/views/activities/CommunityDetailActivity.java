@@ -87,6 +87,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
 
 public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView {
     public static final String SCREEN_LABEL = "Community Screen Activity";
+    public static final String TAB_KEY = "tab_key";
 
     public enum TabType {
         NAVTIVE("native"),
@@ -135,6 +136,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private CommunityFeedSolrObj mCommunityFeedSolrObj;
     private List<Fragment> mTabFragments = new ArrayList<>();
     private Adapter mAdapter;
+    private String mDefaultTabKey = "";
 
     private String mCommunityPrimaryColor = "#6e2f95";
     private String mCommunitySecondaryColor = "#dc4541";
@@ -154,6 +156,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
             }else {
                 String communityId = getIntent().getExtras().getString(AppConstants.COMMUNITY_ID);
+                mDefaultTabKey =  getIntent().getExtras().getString(TAB_KEY, "");
                 if(CommonUtil.isNotEmpty(communityId)){
                     mCommunityDetailPresenter.fetchCommunity(communityId);
                 }else {
@@ -325,7 +328,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if(mCommunityFeedSolrObj!=null){
             menu.findItem(R.id.leave_join).setTitle(mCommunityFeedSolrObj.isMember() ? R.string.ID_LEAVE : R.string.ID_JOIN);
         }
-        if(mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID){
+        if(mCommunityFeedSolrObj!=null && mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID){
             menu.findItem(R.id.leave_join).setVisible(false);
         }
         MenuItem menuItem = menu.findItem(R.id.share);
@@ -393,19 +396,29 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if(mCommunityFeedSolrObj==null){
             return position;
         }
-        for (CommunityTab communityTab : mCommunityFeedSolrObj.communityTabs) {
-            if (mCommunityFeedSolrObj.isMember()) {
-                if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabJoinedKey)) {
-                    return position;
-                }
+        if(CommonUtil.isNotEmpty(mDefaultTabKey)){
+            for (CommunityTab communityTab : mCommunityFeedSolrObj.communityTabs) {
+                    if (communityTab.key.equalsIgnoreCase(mDefaultTabKey)) {
+                        return position;
+                    }
+                position++;
             }
-            if (!mCommunityFeedSolrObj.isMember()) {
-                if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabKey)) {
-                    return position;
-                }
 
+        }else {
+            for (CommunityTab communityTab : mCommunityFeedSolrObj.communityTabs) {
+                if (mCommunityFeedSolrObj.isMember()) {
+                    if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabJoinedKey)) {
+                        return position;
+                    }
+                }
+                if (!mCommunityFeedSolrObj.isMember()) {
+                    if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabKey)) {
+                        return position;
+                    }
+
+                }
+                position++;
             }
-            position++;
         }
         return 0;
     }

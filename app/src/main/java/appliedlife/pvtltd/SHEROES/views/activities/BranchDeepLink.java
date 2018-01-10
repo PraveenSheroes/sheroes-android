@@ -97,7 +97,7 @@ public class BranchDeepLink extends BaseActivity {
             if (TextUtils.isEmpty(url)) {
                 startMainActivity();
             } else {
-                if (openWebViewFlag.equalsIgnoreCase("true")) {
+                if (openWebViewFlag!=null && openWebViewFlag.equalsIgnoreCase("true")) {
                     Uri urlWebSite = Uri.parse(url);
                     AppUtils.openChromeTabForce(BranchDeepLink.this, urlWebSite);
                     finish();
