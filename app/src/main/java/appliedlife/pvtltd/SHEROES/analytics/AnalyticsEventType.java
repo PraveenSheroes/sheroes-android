@@ -15,6 +15,8 @@ public enum AnalyticsEventType {
     HELPLINE_MESSAGE("Helpline Message "),
     CHALLENGE("Challenge"),
     COMMUNITY("Community"),
+    ON_BOARDING("Onboarding"),
+    WALKTHROUGH("walkthrough"),
     ORGANIZATION("Organization"),
     ARTICLE("Article"),
     CHAT("Chat"),

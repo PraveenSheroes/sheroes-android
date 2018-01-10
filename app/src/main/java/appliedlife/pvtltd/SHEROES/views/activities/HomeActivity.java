@@ -41,6 +41,7 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.Button;
@@ -124,6 +125,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -262,7 +264,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private String mDefferedDeepLink;
     private ShowcaseView showcaseView;
     private int counter = 0;
-
+    private ShowcaseManager showcaseManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -309,7 +311,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void showCaseDesign() {
         if (null!=mInstallUpdatePreference&&mInstallUpdatePreference.get().isFirstOpen()) {
-            Button customButton = (Button) getLayoutInflater().inflate(R.layout.showcase_btn_layout, null);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn,mTvHome,mTvCommunities);
+            showcaseManager.showFirstMainActivityShowcase();
+          }
+            /*Button customButton = (Button) getLayoutInflater().inflate(R.layout.showcase_btn_layout, null);
             showcaseView = new ShowcaseView.Builder(this)
                     .setTarget(new ViewTarget(mFloatActionBtn))
                     .setStyle(R.style.CustomShowcaseTheme3)
@@ -320,42 +325,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_CREATE_POST_DESC));
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-            params.leftMargin = 50;
-            params.bottomMargin = 100;
+            params.leftMargin = 100;
+            params.bottomMargin = 200;
             showcaseView.setButtonPosition(params);
             showcaseView.overrideButtonClick(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onShowCaseGotItClick();
                 }
-            });
-        }
-    }
+            });*/
 
-    public void onShowCaseGotItClick() {
-        switch (counter) {
-          /*  case 0:
-                showcaseView.setShowcase(new ViewTarget(mFloatActionBtn), true);
-                showcaseView.setContentTitle("Ask a Question or Share Something");
-                showcaseView.setContentText("Start a conversation in any community that you are a member of by tapping here");
-                break;*/
-            case 0:
-                showcaseView.setShowcase(new ViewTarget(mTvCommunities), true);
-                showcaseView.setContentTitle(getString(R.string.ID_SHOW_CASE_COMMUNITIES_TITLE));
-                showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_COMMUNITIES_DEC));
-                break;
-            case 1:
-                showcaseView.setShowcase(new ViewTarget(mTvHome), true);
-                showcaseView.setContentTitle(getString(R.string.ID_SHOW_CASE_FEED_TITLE));
-                showcaseView.setContentText(getString(R.string.ID_SHOW_CASE_FEED_DEC));
-                break;
-            case 2:
-                showcaseView.hide();
-                break;
-        }
-        counter++;
     }
-
     @Override
     protected void onResume() {
         super.onResume();

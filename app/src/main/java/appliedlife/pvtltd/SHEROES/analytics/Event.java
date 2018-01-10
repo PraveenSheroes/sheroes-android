@@ -96,8 +96,14 @@ public enum Event {
     IMAGE_SHARED(AnalyticsEventType.IMAGE, "Shared"),
     IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link"),
     LOOKING_FOR(AnalyticsEventType.LOOKING_FOR, "Clicked"),
-    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked");
+    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked"),
+    // endregion
 
+    //region Image related events
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, "Onboarding completed"),
+    USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, "Walkthrough started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, "Walkthrough completed");
     // endregion
 
     public final AnalyticsEventType type;

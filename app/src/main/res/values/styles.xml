@@ -185,27 +185,30 @@
     </style>
 
 
-    <style name="CustomShowcaseTheme3" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#99000000</item>
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#E6000000</item>
         <item name="sv_showcaseColor">@color/feed_article_label</item>
-        <item name="android:alpha">.7</item>
-        <item name="sv_buttonText">Hide</item>
         <item name="sv_tintButtonColor">false</item>
-        <item name="sv_titleTextAppearance">@style/CustomTitle2</item>
-        <item name="sv_detailTextAppearance">@style/CustomText2</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomText</item>
     </style>
 
-
-
-    <style name="CustomTitle2" parent="TextAppearance.ShowcaseView.Title.Light">
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textSize">@dimen/sp_size_20</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/sp_size_20</item>
+        <item name="android:background">#000000</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 
-    <style name="CustomText2" parent="TextAppearance.ShowcaseView.Detail.Light">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
+    <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail">
         <item name="android:textSize">@dimen/sp_size_16</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">#000000</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 </resources>
