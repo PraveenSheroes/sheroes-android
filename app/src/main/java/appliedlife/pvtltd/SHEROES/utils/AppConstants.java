@@ -25,6 +25,7 @@ public class AppConstants {
     public static final int FEED_FIRST_TIME = 10;
     public static final int CREATE_POST = 101;
     public static final int MENTOR_CREATE_QUESTION = 201;
+    public static final int SHEROES_COMMUNITY_ID = 273;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
@@ -286,6 +287,7 @@ public class AppConstants {
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
+    public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String CHAMPION_ID = "champion_id";
     public static final String COMMUNITY_ID = "community_id";

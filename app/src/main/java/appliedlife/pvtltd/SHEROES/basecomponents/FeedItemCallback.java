@@ -57,9 +57,9 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onEventPostClicked(UserPostSolrObj userPostSolrObj);
 
-    void onEventIntrestedClicked(UserPostSolrObj userPostSolrObj);
+    void onEventInterestedClicked(UserPostSolrObj userPostSolrObj);
 
-    void onEventNotIntrestedClicked(UserPostSolrObj userPostSolrObj);
+    void onEventNotInterestedClicked(UserPostSolrObj userPostSolrObj);
 
     void onEventGoingClicked(UserPostSolrObj userPostSolrObj);
 

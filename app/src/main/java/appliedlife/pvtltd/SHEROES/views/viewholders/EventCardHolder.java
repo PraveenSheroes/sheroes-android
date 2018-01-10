@@ -20,13 +20,10 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -213,16 +210,16 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         tvEventInterestedBtn.setEnabled(false);
         userPostSolrObj.setTrending(true);
         userPostSolrObj.setLongPress(false);
-        if (userPostSolrObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+        if (userPostSolrObj.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
             if (viewInterface instanceof FeedItemCallback) {
-                ((FeedItemCallback)viewInterface).onEventIntrestedClicked(userPostSolrObj);
+                ((FeedItemCallback)viewInterface).onEventInterestedClicked(userPostSolrObj);
             } else {
                 viewInterface.userCommentLikeRequest(userPostSolrObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
             }
 
         } else {
             if (viewInterface instanceof FeedItemCallback) {
-                ((FeedItemCallback)viewInterface).onEventNotIntrestedClicked(userPostSolrObj);
+                ((FeedItemCallback)viewInterface).onEventNotInterestedClicked(userPostSolrObj);
             } else {
                 viewInterface.userCommentLikeRequest(userPostSolrObj, AppConstants.EVENT_CONSTANT, getAdapterPosition());
             }

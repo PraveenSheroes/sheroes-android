@@ -12,6 +12,35 @@
         android:baselineAligned="false"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:id="@+id/top_post_view"
+            android:layout_width="93dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
+            android:background="@drawable/triangle_style">
+            <ImageView
+                android:id="@+id/star"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/vector_star"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/star"
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="#878787"
+                android:text="Top Post" />
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

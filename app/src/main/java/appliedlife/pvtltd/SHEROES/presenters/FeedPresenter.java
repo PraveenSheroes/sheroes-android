@@ -399,6 +399,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                    getMvpView().invalidateItem(userSolrObj);
                 }else
                 {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -434,6 +435,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                    getMvpView().invalidateItem(userSolrObj);
                 }else
                 {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
@@ -442,7 +444,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         });
         registerSubscription(subscription);
     }
-    public void getEventIntrestedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             return;
@@ -471,7 +473,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-    public void getEventNotIntresetedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getEventNotInteresetedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             return;
@@ -500,7 +502,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-    public void getEventIntrestedFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
+    public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = false;
@@ -536,7 +538,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         registerSubscription(subscription);
     }
 
-    public void getEventNotIntresetedFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
+    public void getEventNotInteresetedFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = true;

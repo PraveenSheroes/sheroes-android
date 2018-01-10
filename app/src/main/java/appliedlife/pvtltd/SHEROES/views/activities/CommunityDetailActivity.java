@@ -325,6 +325,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if(mCommunityFeedSolrObj!=null){
             menu.findItem(R.id.leave_join).setTitle(mCommunityFeedSolrObj.isMember() ? R.string.ID_LEAVE : R.string.ID_JOIN);
         }
+        if(mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID){
+            menu.findItem(R.id.leave_join).setVisible(false);
+        }
         MenuItem menuItem = menu.findItem(R.id.share);
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);

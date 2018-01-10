@@ -193,13 +193,16 @@ public class NavigateToWebViewFragment extends BaseFragment {
         return SCREEN_LABEL;
     }
 
-    private Map<String, String> getCustomHeaders(String url)
-    {
-        if(CommonUtil.isNotEmpty(url) && CommonUtil.isSheroesValidLink(Uri.parse(url))){
+    private Map<String, String> getCustomHeaders(String url) {
+        String token = "";
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
+            token = mUserPreference.get().getToken();
+        }
+        if (CommonUtil.isNotEmpty(url) && CommonUtil.isSheroesValidLink(Uri.parse(url))) {
             Map<String, String> headers = new HashMap<>();
-            headers.put("Authorization", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkaW1waTI5MTk5MkBnbWFpbC5jb20iLCJhdWRpZW5jZSI6IndlYiIsImNyZWF0ZWQiOjE1MTQ0NjI2Mjg3OTMsImV4cCI6MTUxNjg4MTgyOCwianRpIjoiOTkwOTQ5In0.kKZ-8HAvfDx1S-2kqwfSrsJD5EC7CiCnmDGLtCEnMt2E48ngQttGqDiJBYNulz55Ow5H9L0cUxIOVMUnoHQpEg");
+            headers.put("Authorization", token);
             return headers;
-        }else {
+        } else {
             return null;
         }
     }

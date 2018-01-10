@@ -479,6 +479,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
             }
+            if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
+                popup.getMenu().findItem(R.id.top_post).setVisible(true);
+                if(userPostObj.isTopPost()){
+                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
+                }else {
+                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.FEATURE_POST);
+                }
+            } else {
+                popup.getMenu().findItem(R.id.top_post).setVisible(false);
+            }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -489,6 +499,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
                             mPostDetailPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()));
                             return true;
+                        case R.id.top_post:
+                            AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
+                            mPostDetailPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(),!userPostObj.isTopPost()));
                         default:
                             return false;
                     }
@@ -496,6 +509,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             });
         }
         popup.show();
+    }
+
+    private String getCreatorType(UserPostSolrObj userPostSolrObj) {
+        if (userPostSolrObj.isCommunityOwner()) {
+            return AppConstants.COMMUNITY_OWNER;
+        } else if (userPostSolrObj.isAnonymous()) {
+            return AppConstants.ANONYMOUS;
+        } else {
+            return AppConstants.USER;
+        }
     }
 
     @Override
@@ -626,7 +649,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
             if (adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {

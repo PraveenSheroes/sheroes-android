@@ -26,6 +26,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -50,6 +52,8 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
@@ -171,6 +175,48 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             }
         });
         registerSubscription(subscription);
+    }
+
+    public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = editPostCommunity(communityTopPostRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().setData(0, communityPostCreateResponse.getFeedDetail());
+            }
+
+        });
+        registerSubscription(subscription);
+    }
+
+    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest){
+        return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
+                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
+                    @Override
+                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
+                        return communityTagsListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {

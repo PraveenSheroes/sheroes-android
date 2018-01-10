@@ -36,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -44,18 +43,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -64,7 +59,6 @@ import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -77,8 +71,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDial
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -328,10 +320,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 popup.getMenu().findItem(R.id.top_post).setVisible(true);
                 if(userPostObj.isTopPost()){
                     popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
+                }else {
+                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.FEATURE_POST);
                 }
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
-                popup.getMenu().findItem(R.id.edit).setEnabled(true);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -379,7 +372,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
             if (adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
@@ -535,6 +528,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             eventDetailDialogFragment = new EventDetailDialogFragment();
             Bundle bundle = new Bundle();
             bundle.putLong(AppConstants.EVENT_ID, 0);
+            bundle.putBoolean(AppConstants.IS_FROM_COMMUNITY_SCREEN, true);
             Parcelable parcelable = Parcels.wrap(userPostSolrObj);
             bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
             eventDetailDialogFragment.setArguments(bundle);
@@ -545,13 +539,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onEventIntrestedClicked(UserPostSolrObj userPostSolrObj) {
-        mFeedPresenter.getEventIntrestedFromPresenter(mAppUtils.likeRequestBuilder(userPostSolrObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT), userPostSolrObj);
+    public void onEventInterestedClicked(UserPostSolrObj userPostSolrObj) {
+        mFeedPresenter.getEventInterestedFromPresenter(mAppUtils.likeRequestBuilder(userPostSolrObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT), userPostSolrObj);
     }
 
     @Override
-    public void onEventNotIntrestedClicked(UserPostSolrObj userPostSolrObj) {
-        mFeedPresenter.getEventNotIntresetedFromPresenter(mAppUtils.unLikeRequestBuilder(userPostSolrObj.getEntityOrParticipantId()), userPostSolrObj);
+    public void onEventNotInterestedClicked(UserPostSolrObj userPostSolrObj) {
+        mFeedPresenter.getEventNotInteresetedFromPresenter(mAppUtils.unLikeRequestBuilder(userPostSolrObj.getEntityOrParticipantId()), userPostSolrObj);
     }
 
     @Override

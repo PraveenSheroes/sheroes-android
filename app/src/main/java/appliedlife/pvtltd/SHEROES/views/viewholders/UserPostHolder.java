@@ -72,6 +72,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.view_container)
     LinearLayout viewContainer;
 
+    @Bind(R.id.top_post_view)
+    RelativeLayout topPostView;
+
     @Bind(R.id.author_pic_icon)
     CircleImageView mAuthorIcon;
 
@@ -190,9 +193,13 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-
         this.mUserPostObj = (UserPostSolrObj)item;
         mContext = context;
+        if(mUserPostObj.isTopPost()){
+            topPostView.setVisibility(View.VISIBLE);
+        }else {
+            topPostView.setVisibility(View.GONE);
+        }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
         if (mUserPostObj.isSpamPost()) {
@@ -916,7 +923,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         mPostDetailCallback.onCommentButtonClicked();
     }
 
-    @OnClick(R.id.like_comment_count_view)
+    @OnClick(R.id.likes_count)
     public void onLikeCountClicked(){
         mPostDetailCallback.onLikeCountClicked(mUserPostObj);
     }
