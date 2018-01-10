@@ -319,14 +319,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            if(userPostObj.isTopPost()){
-                popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
-            }else {
-                popup.getMenu().findItem(R.id.top_post).setTitle(R.string.FEATURE_POST);
-            }
             if (adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
+                popup.getMenu().findItem(R.id.edit).setEnabled(true);
+            }
+            if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
+                popup.getMenu().findItem(R.id.top_post).setVisible(true);
+                if(userPostObj.isTopPost()){
+                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
+                }
+            } else {
+                popup.getMenu().findItem(R.id.top_post).setVisible(false);
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
