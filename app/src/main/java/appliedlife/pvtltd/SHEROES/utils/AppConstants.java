@@ -285,6 +285,8 @@ public class AppConstants {
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
+    public static final String JOBS_SEARCH_URL_COM = "https://sheroes.com/jobs/search";
+    public static final String JOBS_SEARCH_URL = "https://sheroes.in/jobs/search";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";

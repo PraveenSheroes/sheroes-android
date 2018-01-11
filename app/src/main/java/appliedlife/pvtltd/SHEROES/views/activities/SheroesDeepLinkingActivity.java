@@ -1,8 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -11,11 +13,14 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -236,6 +241,30 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HELP_LINE, AppConstants.EMPTY_STRING);
                         }
                     }
+                    else if (AppConstants.JOBS_SEARCH_URL.equalsIgnoreCase(urlOfSharedCard) || AppConstants.JOBS_SEARCH_URL_COM.equalsIgnoreCase(urlOfSharedCard)) {
+                        try {
+                            Intent intent = new Intent(this, HomeSearchActivity.class);
+                            Bundle bundle = new Bundle();
+                            FragmentOpen fragmentOpen = new FragmentOpen();
+                            fragmentOpen.setJobFragment(true);
+                            Parcelable parcelable = Parcels.wrap(fragmentOpen);
+                            bundle.putParcelable(AppConstants.ALL_SEARCH, parcelable);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
+                            if (mFromNotification > 0) {
+                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_JOB, AppConstants.EMPTY_STRING);
+
+                            } else {
+                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_JOB, AppConstants.EMPTY_STRING);
+                            }
+                        } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
+                            homeActivityCall("");
+                        }
+
+
+                    }
                     else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/")){
                         homeActivityCall(ArticlesFragment.SCREEN_LABEL);
                     } else if (urlOfSharedCard.equals(AppConstants.JOB_URL) || urlOfSharedCard.equals(AppConstants.JOB_URL_COM) || urlOfSharedCard.equals(AppConstants.JOB_URL + "/") || urlOfSharedCard.equals(AppConstants.JOB_URL_COM + "/")){
@@ -338,6 +367,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
             }
+
 
         }
         /*

@@ -327,8 +327,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
         if(mCommunityFeedSolrObj!=null){
-            menu.findItem(R.id.leave_join).setTitle(mCommunityFeedSolrObj.isMember() ? R.string.ID_LEAVE : R.string.ID_JOIN);
+            menu.findItem(R.id.leave_join).setTitle(isOwnerOrMember ? R.string.ID_LEAVE : R.string.ID_JOIN);
         }
         if(mCommunityFeedSolrObj!=null && mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID){
             menu.findItem(R.id.leave_join).setVisible(false);
@@ -344,7 +345,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
         switch (id) {
             case R.id.leave_join:
-                if (mCommunityFeedSolrObj.isMember()) {
+                boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
+                if (isOwnerOrMember) {
                     onLeaveClicked();
                 } else {
                     onJoinClicked();
