@@ -30,6 +30,7 @@ public enum Event {
     POST_APPROVED(AnalyticsEventType.POST, "Approved"),
     POST_REJECTED(AnalyticsEventType.POST, "Rejected"),
     POST_CREATED(AnalyticsEventType.POST, "Created"),
+    POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
     //endregion
 
     //region reply related events

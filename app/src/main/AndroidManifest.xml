@@ -200,6 +200,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".views.activities.CommunityDetailActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">

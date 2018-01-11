@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -70,6 +71,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.view_container)
     LinearLayout viewContainer;
+
+    @Bind(R.id.top_post_view)
+    RelativeLayout topPostView;
 
     @Bind(R.id.author_pic_icon)
     CircleImageView mAuthorIcon;
@@ -189,9 +193,13 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-
         this.mUserPostObj = (UserPostSolrObj)item;
         mContext = context;
+        if(mUserPostObj.isTopPost()){
+            topPostView.setVisibility(View.VISIBLE);
+        }else {
+            topPostView.setVisibility(View.GONE);
+        }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
         if (mUserPostObj.isSpamPost()) {
@@ -299,29 +307,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-       /* if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
-            mPostDescription.setVisibility(View.GONE);
-            userPostImages.removeAllViews();
-            userPostImages.removeAllViewsInLayout();
-            userPostImages.setVisibility(View.VISIBLE);
-            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.challenge_image, null);
-            ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-            TextView tvChallengePost = (TextView) child.findViewById(R.id.tv_challenge_name_post);
-            if (StringUtil.isNotEmptyCollection(mUserPostObj.getImageUrls())) {
-                tvChallengePost.setText(AppConstants.EMPTY_STRING);
-                Glide.with(mContext)
-                        .load(mUserPostObj.getImageUrls().get(0))
-                        .into(ivChallenge);
-            } else {
-                mUserPostObj.setListDescription(AppConstants.EMPTY_STRING);
-                if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getNameOrTitle())) {
-                    tvChallengePost.setText(mUserPostObj.getNameOrTitle());
-                }
-                ivChallenge.setBackgroundResource(R.drawable.challenge_post);
-            }
-            userPostImages.addView(child);
-        } else {*/
             mPostDescription.setVisibility(View.VISIBLE);
             if (StringUtil.isNotEmptyCollection(mUserPostObj.getImageUrls())) {
                 userPostImages.setVisibility(View.VISIBLE);
@@ -379,16 +364,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-           /* if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
-                tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                String feedTitle = mUserPostObj.getAuthorName();
-                posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_HAS_ACCEPTED)).append(RIGHT_POSTED).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_HAS_ACCEPTED_CHALLENGE));
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString(), 0)); // for 24 api and more
-                } else {
-                    tvFeedCommunityPostCardTitle.setText(Html.fromHtml(posted.toString()));// or for older api
-                }
-            } else {*/
                 String feedTitle = mUserPostObj.getAuthorName();
                 String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS()==null ? "" :mUserPostObj.getChallengeAcceptPostTextS();
                 String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" :mUserPostObj.getPostCommunityName();
@@ -517,38 +492,15 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void populatePostText() {
         final String listDescription = mUserPostObj.getListDescription();
+        linkifyURLs(mPostDescription);
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
+            mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);
             return;
-        }else
-        {
+        } else {
+            mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
         }
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mPostDescription.setMaxLines(Integer.MAX_VALUE);
-                mPostDescription.setText(hashTagColorInString(listDescription));
-                linkifyURLs(mPostDescription);
-
-                if (mPostDescription.getLineCount() > 4) {
-                    collapseFeedPostText();
-                } else {
-                    mPostDescription.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-    }
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void collapseFeedPostText() {
-        mPostDescription.setMaxLines(4);
-        mPostDescription.setVisibility(View.VISIBLE);
-        String dots = LEFT_HTML_TAG + AppConstants.DOTS + RIGHT_HTML_TAG;
-    }
-
-    private void expandFeedPostText() {
-        mPostDescription.setMaxLines(Integer.MAX_VALUE);
-        mPostDescription.setVisibility(View.VISIBLE);
     }
 
     private void userLike() {
@@ -970,6 +922,11 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.comment_button)
     public void onCommentButtonClicked(){
         mPostDetailCallback.onCommentButtonClicked();
+    }
+
+    @OnClick(R.id.likes_count)
+    public void onLikeCountClicked(){
+        mPostDetailCallback.onLikeCountClicked(mUserPostObj);
     }
 
 }

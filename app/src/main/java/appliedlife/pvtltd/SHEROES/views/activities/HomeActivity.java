@@ -631,7 +631,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
         setAllValues(mFragmentOpen);
-        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, menuItemName);
+        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url,null, menuItemName, true);
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
@@ -1319,7 +1319,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void createCommunityPostOnClick(CommunityPost communityPost) {
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
         //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
     }
 

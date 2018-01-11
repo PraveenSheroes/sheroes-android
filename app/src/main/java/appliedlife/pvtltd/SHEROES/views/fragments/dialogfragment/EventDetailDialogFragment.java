@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -76,6 +77,7 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     private EventDetailPojo eventDetailPojo;
     private boolean isOperationPerformed;
     private FeedDetail feedDetailCard;
+    private boolean isFromCommunityScreen;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             Bundle bundle = getArguments();
+            isFromCommunityScreen = getArguments().getBoolean(AppConstants.IS_FROM_COMMUNITY_SCREEN, false);
             mUserPostObj = Parcels.unwrap(bundle.getParcelable(AppConstants.EVENT_DETAIL));
             if (null != bundle.get(AppConstants.EVENT_ID)) {
                 mEventId = bundle.getLong(AppConstants.EVENT_ID);
@@ -97,7 +100,11 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mHomePresenter.attachView(this);
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
+                if(isFromCommunityScreen){
+                    mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunityDetailActivity) getActivity());
+                }else {
+                    mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
+                }
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
                 if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getDispThirdPartyUniqueId())) {
@@ -126,7 +133,11 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                             ivEventDetail.setImageBitmap(resource);
                             Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette palette) {
-                                    ((HomeActivity) getActivity()).supportStartPostponedEnterTransition();
+                                    if(isFromCommunityScreen){
+                                        ((CommunityDetailActivity) getActivity()).supportStartPostponedEnterTransition();
+                                    }else {
+                                        ((HomeActivity) getActivity()).supportStartPostponedEnterTransition();
+                                    }
                                 }
                             });
                         }
@@ -259,7 +270,9 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
             @Override
             public void onBackPressed() {
                 if (isOperationPerformed) {
-                    ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
+                    if(!isFromCommunityScreen){
+                        ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
+                    }
                 } else {
                     dismissAllowingStateLoss();//dismiss dialog on back button press
                 }
@@ -271,7 +284,9 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     @OnClick(R.id.tv_event_detail_back)
     public void onEventDetailBack() {
         if (isOperationPerformed) {
-            ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
+            if(!isFromCommunityScreen){
+                ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
+            }
         }
         dismiss();
     }

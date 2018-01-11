@@ -1,8 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -11,10 +13,14 @@ import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.parceler.Parcels;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -124,12 +130,12 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             if (null != intent.getData()) {
                 mData = intent.getData();
                 deepLink = mData.toString();
-                getDeeplinkUrlFromNotification(mData.toString());
+                getDeeplinkUrlFromNotification(mData.toString(), intent);
             } else {
                 if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
                     notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
-                    getDeeplinkUrlFromNotification(deepLink);
+                    getDeeplinkUrlFromNotification(deepLink, intent);
                 }
             }
 
@@ -138,7 +144,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    private void getDeeplinkUrlFromNotification(String urlOfSharedCard) {
+    private void getDeeplinkUrlFromNotification(String urlOfSharedCard, Intent sourceIntent) {
         String baseUrl = "";
         int fullLength = 0;
         if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
@@ -219,6 +225,30 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HELP_LINE, AppConstants.EMPTY_STRING);
                         }
                     }
+                    else if (AppConstants.JOBS_SEARCH_URL.equalsIgnoreCase(urlOfSharedCard) || AppConstants.JOBS_SEARCH_URL_COM.equalsIgnoreCase(urlOfSharedCard)) {
+                        try {
+                            Intent intent = new Intent(this, HomeSearchActivity.class);
+                            Bundle bundle = new Bundle();
+                            FragmentOpen fragmentOpen = new FragmentOpen();
+                            fragmentOpen.setJobFragment(true);
+                            Parcelable parcelable = Parcels.wrap(fragmentOpen);
+                            bundle.putParcelable(AppConstants.ALL_SEARCH, parcelable);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
+                            if (mFromNotification > 0) {
+                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_JOB, AppConstants.EMPTY_STRING);
+
+                            } else {
+                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_JOB, AppConstants.EMPTY_STRING);
+                            }
+                        } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
+                            homeActivityCall("");
+                        }
+
+
+                    }
                     else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/")){
                         homeActivityCall(ArticlesFragment.SCREEN_LABEL);
                     } else if (urlOfSharedCard.equals(AppConstants.JOB_URL) || urlOfSharedCard.equals(AppConstants.JOB_URL_COM) || urlOfSharedCard.equals(AppConstants.JOB_URL + "/") || urlOfSharedCard.equals(AppConstants.JOB_URL_COM + "/")){
@@ -264,7 +294,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             fullLength = urlOfSharedCard.length();
 
             if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
-                callActivities(urlOfSharedCard, baseUrl, fullLength);
+                callActivities(urlOfSharedCard, baseUrl, fullLength, sourceIntent);
             }
 
         } else {
@@ -272,7 +302,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength) {
+    private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength, Intent sourceIntent) {
         String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
         if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) || AppConstants.ARTICLE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.ARTICLE_URL.length() < fullLength) {
@@ -322,6 +352,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 homeActivityCall("");
             }
 
+
         }
         /*
         "solr_ignore_deep_link_url": "https://sheroes.in/communities/test/Mjcz/MTE0NjI=",
@@ -331,7 +362,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             try {
-                Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunitiesDetailActivity.class);
                 String communityDetail = urlSharedViaSocial.substring(indexOfFourthBackSlace, urlSharedViaSocial.length());
                 int countBackSlash = countBackSlash(communityDetail);
                 if (countBackSlash > 2) {
@@ -346,22 +376,32 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             dataIdString = new String(communityPostBytes, AppConstants.UTF_8);
                             byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                             String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
-                            into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
-                            into.putExtra(AppConstants.COMMUNITY_POST_ID, Long.parseLong(dataIdString));
-                            into.putExtra(AppConstants.FROM_DEEPLINK, true);
+                            Intent postIntent = new Intent(SheroesDeepLinkingActivity.this, PostDetailActivity.class);
+                            postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                            postIntent.putExtra(UserPostSolrObj.USER_POST_ID, dataIdString);
+                            postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
+                            postIntent.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                            postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                            startActivity(postIntent);
                         }
                     }
                 } else {
+                    Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunityDetailActivity.class);
+                    String tabKey = "";
+                    if (sourceIntent != null && sourceIntent.getExtras() != null) {
+                        tabKey = sourceIntent.getStringExtra(CommunityDetailActivity.TAB_KEY);
+                    }
+                    into.putExtra(CommunityDetailActivity.TAB_KEY, tabKey);
                     int indexOfSecondBackSlace = AppUtils.findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
                     String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
-                    into.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
+                    into.putExtra(AppConstants.COMMUNITY_ID, newCommunityId);
+                    into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                    into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    startActivity(into);
                 }
               //  into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
-                into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                startActivity(into);
                 finish();
                 if (mFromNotification > 0) {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_COMMUNITY, AppConstants.EMPTY_STRING);

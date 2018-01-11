@@ -76,6 +76,7 @@ import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -838,6 +839,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         article.createdAt = articleSolrObj.getPostedDate();
         article.totalViews = articleSolrObj.getNoOfViews();
         article.readingTime = articleSolrObj.getCharCount();
+        article.entityId = articleSolrObj.getEntityOrParticipantId();
         Parcelable parcelable = Parcels.wrap(article);
         intent.putExtra(Article.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -891,6 +893,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
+    }
+
+    @OnClick(R.id.like_count)
+    public void onLikeCountClicked(){
+        LikeListBottomSheetFragment.showDialog(this, "", mArticle.entityId);
     }
     //endregion
 }

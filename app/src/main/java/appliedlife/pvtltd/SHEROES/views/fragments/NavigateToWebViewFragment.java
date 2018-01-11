@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -9,12 +10,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences.Preference;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -22,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -39,21 +48,30 @@ import butterknife.ButterKnife;
 public class NavigateToWebViewFragment extends BaseFragment {
 
     private static final String SCREEN_LABEL = "WebUrl Screen";
+    private static final String WEB_HTML = "Web Html";
+    private static final String RELATIVE_PATH_ASSETS = "file:///android_asset/";
     private static final String TAG = NavigateToWebViewFragment.class.getName();
+    public static final String HAS_FOOTER = "Has Footer";
+
+    @Bind(R.id.main_container)
+    RelativeLayout mMainContainer;
 
     @Bind(R.id.external_url_web_view)
     WebView webPagesView;
+
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar pbWebView;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
     private String currentSelectedItemName;
 
-    public static NavigateToWebViewFragment newInstance(String webUrl, String menuName) {
+    public static NavigateToWebViewFragment newInstance(String webUrl, String webHtml, String menuName, boolean hasFooter) {
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.WEB_URL_FRAGMENT, webUrl);
+        bundle.putString(WEB_HTML, webHtml);
         bundle.putString(AppConstants.SELECTED_MENU_NAME, menuName);
-
+        bundle.putBoolean(HAS_FOOTER, hasFooter);
         NavigateToWebViewFragment fragment = new NavigateToWebViewFragment();
         fragment.setArguments(bundle);
 
@@ -87,13 +105,20 @@ public class NavigateToWebViewFragment extends BaseFragment {
 
         if (null != getArguments()) {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL_FRAGMENT);
+            String mWebHtml = getArguments().getString(WEB_HTML);
+            boolean hasFooter = getArguments().getBoolean(HAS_FOOTER, false);
+            if(!hasFooter){
+                mMainContainer.setPadding(0, 0,0 ,0);
+            }
             currentSelectedItemName = getArguments().getString(AppConstants.SELECTED_MENU_NAME);
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
                     String token = mUserPreference.get().getToken();
                     if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
-                        String webUrl = getResources().getString(R.string.PLACEHOLDER_WEBPAGE_URL, mWebUrl, token); //append token with url
-                        LogUtils.info(TAG, "#######WebPage Url*****" + webUrl);
-                        webPagesView.loadUrl(webUrl);
+                        webPagesView.loadUrl(mWebUrl, getCustomHeaders(mWebUrl));
+                    }
+
+                    if (StringUtil.isNotNullOrEmptyString(token) && mWebHtml != null) {
+                        webPagesView.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, mWebHtml, "text/html", "UTF-8", null);
                     }
                 }
         }
@@ -119,7 +144,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
                     } else if(url.startsWith("http://twitter.com")) { //share on twitter
                         CommonUtil.shareLinkToTwitter(getContext(), url);
                     } else {
-                        webPagesView.loadUrl(url);
+                        webPagesView.loadUrl(url, getCustomHeaders(url));
                     }
                     return true;
                 } else {
@@ -166,6 +191,20 @@ public class NavigateToWebViewFragment extends BaseFragment {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    private Map<String, String> getCustomHeaders(String url) {
+        String token = "";
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
+            token = mUserPreference.get().getToken();
+        }
+        if (CommonUtil.isNotEmpty(url) && CommonUtil.isSheroesValidLink(Uri.parse(url))) {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Authorization", token);
+            return headers;
+        } else {
+            return null;
+        }
     }
 
 }

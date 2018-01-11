@@ -36,6 +36,11 @@ public enum EventProperty {
     ENTITY_ID("Entity Id"),
     ACTIVITY_NAME("Activity Name"),
     LOOKING_FOR_NAME("Looking For Name"),
+    TAB_TITLE("Tab Title"),
+    TAB_KEY("Tab Key"),
+    SOURCE_SCREEN_ID("Source Screen Id"),
+    SOURCE_TAB_KEY("Source Tab Key"),
+    SOURCE_TAB_TITLE("Source Tab Title"),
     IS_MOENGAGE("Is Moengage"),
     POSITION_IN_SEQUENCE("Position In Sequence"),
     IS_MENTOR("Is Mentor"),
@@ -190,6 +195,26 @@ public enum EventProperty {
 
         public Builder lookingForName(final String lookingForName){
             put(LOOKING_FOR_NAME, lookingForName);
+            return this;
+        }
+        public Builder tabTitle(final String tabTitle){
+            put(TAB_TITLE, tabTitle);
+            return this;
+        }
+        public Builder tabKey(final String tabKey){
+            put(TAB_KEY, tabKey);
+            return this;
+        }
+        public Builder sourceScreenId(final String sourceScreenId){
+            put(SOURCE_SCREEN_ID, sourceScreenId);
+            return this;
+        }
+        public Builder sourceTabKey(final String sourceTabKey){
+            put(SOURCE_TAB_KEY, sourceTabKey);
+            return this;
+        }
+        public Builder sourceTabTitle(final String sourceTabTitle){
+            put(SOURCE_TAB_TITLE, sourceTabTitle);
             return this;
         }
 

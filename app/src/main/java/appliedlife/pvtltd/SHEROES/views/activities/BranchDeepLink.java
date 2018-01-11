@@ -67,12 +67,12 @@ public class BranchDeepLink extends BaseActivity {
         Intent intent = new Intent();
         JSONObject sessionParams = Branch.getInstance().getLatestReferringParams();
         try {
-            String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
-            String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
+            String url = sessionParams.has(AppConstants.DEEP_LINK_URL) ? sessionParams.getString(AppConstants.DEEP_LINK_URL) : "";
+            String openWebViewFlag = sessionParams.has(AppConstants.OPEN_IN_WEBVIEW) ? sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW) : "";
             if (TextUtils.isEmpty(url)) {
                 startMainActivity();
             } else {
-                if (openWebViewFlag.equalsIgnoreCase("true")) {
+                if (openWebViewFlag!=null && openWebViewFlag.equalsIgnoreCase("true")) {
                     Uri urlWebSite = Uri.parse(url);
                     AppUtils.openChromeTabForce(BranchDeepLink.this, urlWebSite);
                     finish();
@@ -119,7 +119,7 @@ public class BranchDeepLink extends BaseActivity {
         }
     }
     private void startMainActivity() {
-        Intent intent = new Intent(BranchDeepLink.this, AlbumActivity.class);
+        Intent intent = new Intent(BranchDeepLink.this, HomeActivity.class);
         ActivityCompat.startActivity(BranchDeepLink.this, intent, null);
         finish();
     }

@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
@@ -39,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RequestedListRespons
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -101,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -218,6 +221,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/post/edit")
     Observable<CreateCommunityResponse> editCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
+    @POST("participation/post/edit")
+    Observable<CreateCommunityResponse> topPostCommunityPost(@Body CommunityTopPostRequest communityPostCreateRequest);
 
     @POST("participant/community/create_owner")
     Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
@@ -340,4 +346,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/add/winner/address")
     Observable<BaseResponse> updateAddress(@Body Address address);
+
+    @POST()
+    Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 }

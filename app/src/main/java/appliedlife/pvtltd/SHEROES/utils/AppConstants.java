@@ -25,6 +25,7 @@ public class AppConstants {
     public static final int FEED_FIRST_TIME = 10;
     public static final int CREATE_POST = 101;
     public static final int MENTOR_CREATE_QUESTION = 201;
+    public static final int SHEROES_COMMUNITY_ID = 273;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
@@ -64,6 +65,7 @@ public class AppConstants {
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
     public static final String MENTOR_SUB_TYPE = "W";
+    public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String TAG_SUB_TYPE = "tags";
@@ -264,6 +266,8 @@ public class AppConstants {
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
     public static final String JOB_URL = "https://sheroes.in/jobs";
     public static final String JOB_URL_COM = "https://sheroes.com/jobs";
+    public static final String COMMUNITY_POST_URL_COM = "https://sheroes.com/community-post";
+    public static final String COMMUNITY_POST_URL = "https://sheroes.in/community-post";
     public static final String CHAMPION_URL = "https://sheroes.in/champions";
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
@@ -287,8 +291,11 @@ public class AppConstants {
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
+    public static final String JOBS_SEARCH_URL_COM = "https://sheroes.com/jobs/search";
+    public static final String JOBS_SEARCH_URL = "https://sheroes.in/jobs/search";
     public static final String JOB_ID = "job_id";
     public static final String EVENT_ID = "event_id";
+    public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String CHAMPION_ID = "champion_id";
     public static final String IS_MENTOR_ID = "is_";

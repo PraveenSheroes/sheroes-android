@@ -17,7 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
+import appliedlife.pvtltd.SHEROES.viewholder.CommentLoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 
@@ -58,7 +58,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 View viewAlbum = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_new_layout, parent, false);
                 return new CommentNewViewHolder(viewAlbum, mCommentCallback);
             case TYPE_LOADER:
-                return new LoaderViewHolder(mInflater.inflate(R.layout.comment_loader_view, parent, false));
+                return new CommentLoaderViewHolder(mInflater.inflate(R.layout.comment_loader_view, parent, false));
         }
         return null;
     }
@@ -80,8 +80,8 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 commentNewViewHolder.bindData((Comment) baseResponse, mContext, position);
                 break;
             case TYPE_LOADER:
-                LoaderViewHolder loaderViewHolder = ((LoaderViewHolder) holder);
-                loaderViewHolder.bindData(holder.getAdapterPosition(), showLoader, mPostDetailCallback);
+                CommentLoaderViewHolder commentLoaderViewHolder = ((CommentLoaderViewHolder) holder);
+                commentLoaderViewHolder.bindData(holder.getAdapterPosition(), showLoader, mPostDetailCallback);
         }
     }
 

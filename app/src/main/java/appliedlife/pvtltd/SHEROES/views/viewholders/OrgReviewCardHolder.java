@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -265,9 +266,13 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-               // if (userPostObj.isAuthorMentor()) { //todo - naviagte to profile
+                // if (userPostObj.isAuthorMentor()) {//todo - naviagte to profile
+                if (viewInterface instanceof FeedItemCallback) {
+                    ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                } else {
                     viewInterface.championProfile(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-              //  }
+                    //  }}
+                }
             }
 
             @Override
@@ -291,7 +296,11 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                viewInterface.handleOnClick(userPostObj, tvReviewPostTitle);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onOrgTitleClicked(userPostObj);
+                }else {
+                    viewInterface.handleOnClick(userPostObj, tvReviewPostTitle);
+                }
 
             }
 

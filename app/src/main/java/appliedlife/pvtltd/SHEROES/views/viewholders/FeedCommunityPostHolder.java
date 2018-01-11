@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -52,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -73,6 +75,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     //spam handling
+
+    @Bind(R.id.top_post_view)
+    RelativeLayout topPostView;
+
     @Bind(R.id.fl_spam_post_ui)
     FrameLayout flSpamPostUi;
     @Bind(R.id.tv_review_description)
@@ -220,6 +226,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mUserPostObj = (UserPostSolrObj) item;
         mContext = context;
+        if(mUserPostObj.isTopPost()){
+            topPostView.setVisibility(View.VISIBLE);
+        }else {
+            topPostView.setVisibility(View.GONE);
+        }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
         if (mUserPostObj.isSpamPost()) {
@@ -822,51 +833,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
 
-    @OnClick(R.id.tv_feed_community_post_total_replies)
+    @OnClick({R.id.tv_feed_community_post_total_replies, R.id.tv_feed_community_post_user_comment_post, R.id.li_feed_community_post_user_comments, R.id.tv_feed_community_post_user_comment_post_view_more})
     public void repliesClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        }
     }
 
-    @OnClick(R.id.tv_join_conversation)
+    @OnClick({R.id.tv_join_conversation,R.id.tv_feed_community_post_user_comment})
     public void joinConversationClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment)
-    public void userCommentClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment_post)
-    public void recentCommentClick() {
-        mUserPostObj.setCallFromName(mContext.getString(R.string.ID_REPLY));
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
+        }
     }
 
     @OnClick(R.id.li_feed_community_user_post_images)
     public void communityPostImageClick() {
-        viewInterface.dataOperationOnClick(mUserPostObj);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+        }else {
+            viewInterface.dataOperationOnClick(mUserPostObj);
+        }
     }
 
-
-    @OnClick(R.id.li_feed_community_post_user_comments)
-    public void openCommentClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_comment_post_view_more)
-    public void userCommentViewMoreClick() {
-        mUserPostObj.setCallFromName(AppConstants.EMPTY_STRING);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
-    }
 
     @OnClick(R.id.tv_feed_community_post_user_menu)
     public void userMenuClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
+        }
     }
 
     @OnClick(R.id.tv_spam_post_menu)
@@ -878,7 +879,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
     public void userCommentMenuClick() {
         mUserPostObj.setNoOfOpenings(mItemPosition);
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserCommentPostMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onCommentMenuClicked(mUserPostObj, tvFeedCommunityPostUserCommentPostMenu);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserCommentPostMenu);
+        }
 
     }
 
@@ -897,17 +902,29 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         switch (id) {
             case R.id.iv_first: {
                 mUserPostObj.setItemPosition(AppConstants.NO_REACTION_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+                }else {
+                    viewInterface.dataOperationOnClick(mUserPostObj);
+                }
                 break;
             }
             case R.id.iv_second: {
                 mUserPostObj.setItemPosition(AppConstants.ONE_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+                }else {
+                    viewInterface.dataOperationOnClick(mUserPostObj);
+                }
                 break;
             }
             case R.id.iv_third: {
                 mUserPostObj.setItemPosition(AppConstants.TWO_CONSTANT);
-                viewInterface.dataOperationOnClick(mUserPostObj);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onUserPostImageClicked(mUserPostObj);
+                }else {
+                    viewInterface.dataOperationOnClick(mUserPostObj);
+                }
                 break;
             }
 
@@ -922,11 +939,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void isBookMarkClick() {
         // mUserPostObj.setTrending(true);
         tvFeedCommunityPostUserBookmark.setEnabled(false);
-        if (mUserPostObj.isBookmarked()) {
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onPostBookMarkedClicked(mUserPostObj);
+        }else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserBookmark);
+        }
+        if (mUserPostObj.isBookmarked()) {
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserBookmark);
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
         }
         if (!mUserPostObj.isBookmarked()) {
@@ -939,7 +959,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_share)
     public void tvShareClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserShare);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
+        } else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserShare);
+        }
         if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_FEEDBACK_POST, mUserPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + mUserPostObj.getIdOfEntityOrParticipant());
         } else {
@@ -949,7 +973,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_total_reactions)
     public void reactionClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostTotalReactions);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onLikesCountClicked(mUserPostObj.getEntityOrParticipantId());
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostTotalReactions);
+        }
     }
 
     @OnClick(R.id.tv_feed_community_post_reaction1)
@@ -959,8 +987,23 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_reaction)
     public void userReactionClick() {
-        if ((Boolean) tvFeedCommunityPostUserReaction.getTag()) {
-            userReactionWithouLongPress();
+        if(viewInterface instanceof FeedItemCallback){
+            if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                ((FeedItemCallback)viewInterface).onUserPostUnLiked(mUserPostObj);
+            }else {
+                mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                ((FeedItemCallback)viewInterface).onUserPostLiked(mUserPostObj);
+            }
+            likeCommentOps();
+        }else {
+            if ((Boolean) tvFeedCommunityPostUserReaction.getTag()) {
+                userReactionWithouLongPress();
+            }
         }
     }
 
@@ -1023,7 +1066,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_card_title)
     public void onAuthorName() { //Open profile from feed
         if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }else {
+                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }
         }
     }
 
@@ -1036,8 +1083,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             public void onClick(View textView) {
 
                 if (mUserPostObj.isAuthorMentor()) { //todo - naviagte to profile
-                    viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                }
+                    if(viewInterface instanceof FeedItemCallback){
+                        ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }
+                    if(viewInterface instanceof FeedItemCallback){
+                        ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }else {
+                        viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+                    }}
             }
 
             @Override
@@ -1061,7 +1115,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostCardTitle);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onCommunityTitleClicked(mUserPostObj);
+                }else {
+                    viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostCardTitle);
+                }
             }
 
             @Override
@@ -1104,7 +1162,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             public void onClick(View textView) {
            //     if (mUserPostObj.isAuthorMentor())   //todo - click on user
                  {
-                    viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    if(viewInterface instanceof FeedItemCallback){
+                        ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }else {
+                        viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    }
                 }
             }
 
@@ -1205,10 +1267,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 lastComment.likeCount++;
             }
             invalidateCommentLike(lastComment);
-            if (!lastComment.isLiked) {
-                viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            } else {
-                viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+            if(viewInterface instanceof FeedItemCallback){
+                if (lastComment.isLiked) {
+                    ((FeedItemCallback)viewInterface).userCommentLikeRequest(mUserPostObj, true, getAdapterPosition());
+                } else {
+                    ((FeedItemCallback)viewInterface).userCommentLikeRequest(mUserPostObj, false, getAdapterPosition());
+                }
+            }else {
+                if (!lastComment.isLiked) {
+                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+                } else {
+                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+                }
             }
 
         }

@@ -115,6 +115,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     article.featureImageHeight = articleObj.getHighresImageHeight();
                     article.featureImageWidth = articleObj.getHighresImageWidth();
                     article.readingTime = articleObj.getCharCount();
+                    article.entityId = articleObj.getEntityOrParticipantId();
                     if (!CommonUtil.isEmpty(feedDetail.getLastComments())) {
                         article.comments = new ArrayList<>(feedDetail.getLastComments());
                     }

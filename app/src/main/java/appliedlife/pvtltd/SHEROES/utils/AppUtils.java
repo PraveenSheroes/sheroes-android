@@ -100,6 +100,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequ
 import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -2450,6 +2451,20 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         return communityPostCreateRequest;
+    }
+
+    public static CommunityTopPostRequest topCommunityPostRequestBuilder(Long  communityId, String createType, String description,long id, boolean topPost) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityTopPostRequest communityTopPostRequest=new CommunityTopPostRequest();
+        communityTopPostRequest.setAppVersion(appUtils.getAppVersionName());
+        communityTopPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityTopPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityTopPostRequest.setCommunityId(communityId);
+        communityTopPostRequest.setCreatorType(createType);
+        communityTopPostRequest.setDescription(description);
+        communityTopPostRequest.setTopPost(topPost);
+        communityTopPostRequest.setId(id);
+        return communityTopPostRequest;
     }
     public ApproveSpamPostRequest spamPostApprovedRequestBuilder(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
         AppUtils appUtils = AppUtils.getInstance();

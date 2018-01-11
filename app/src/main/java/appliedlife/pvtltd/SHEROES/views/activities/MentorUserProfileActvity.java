@@ -487,7 +487,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 mentorPost.community.name = mUserSolarObject.getNameOrTitle();
                 mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                 mentorPost.isEdit = false;
-                CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+                CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         }
     }
@@ -886,7 +886,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     public void createCommunityPostClick(FeedDetail feedDetail) {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false);
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false, null);
     }
 
     @Override
