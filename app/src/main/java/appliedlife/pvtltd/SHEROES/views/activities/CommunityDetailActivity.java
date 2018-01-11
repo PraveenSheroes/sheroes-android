@@ -23,9 +23,11 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -373,7 +375,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private void setupTabLayout() {
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -508,6 +509,30 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             @Override
             public void run() {
                 pageChangeListener.onPageSelected(viewPager.getCurrentItem());
+            }
+        });
+
+        mTabLayout.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                int tabLayoutWidth = mTabLayout.getWidth();
+
+                DisplayMetrics metrics = new DisplayMetrics();
+                CommunityDetailActivity.this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                int deviceWidth = metrics.widthPixels;
+
+                if (tabLayoutWidth < deviceWidth)
+                {
+                    mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+                    ViewGroup.LayoutParams mParams = mTabLayout.getLayoutParams();
+                    mParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mTabLayout.setLayoutParams(mParams);
+                } else
+                {
+                    mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                }
             }
         });
     }
