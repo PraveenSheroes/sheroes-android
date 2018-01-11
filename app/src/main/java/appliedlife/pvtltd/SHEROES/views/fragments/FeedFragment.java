@@ -355,7 +355,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
-        if (userPostSolrObj.isCommunityOwner()) {
+        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
             return AppConstants.COMMUNITY_OWNER;
         } else if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
