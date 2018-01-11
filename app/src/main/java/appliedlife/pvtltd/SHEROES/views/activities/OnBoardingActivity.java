@@ -200,8 +200,6 @@ public class OnBoardingActivity extends BaseActivity {
     @OnClick(R.id.tv_on_boarding_finish)
     public void onFinishButtonClick() {
         if(isJoinCount>0) {
-            HashMap<String, Object> properties = new EventProperty.Builder().build();
-            AnalyticsManager.trackEvent(Event.ONBOARDING_COMPLETED, getScreenName(), properties);
             LoginResponse loginResponse = userPreference.get();
             loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
             userPreference.set(loginResponse);
@@ -209,6 +207,8 @@ public class OnBoardingActivity extends BaseActivity {
             Bundle bundle=new Bundle();
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
+            HashMap<String, Object> properties = new EventProperty.Builder().build();
+            AnalyticsManager.trackEvent(Event.ONBOARDING_COMPLETED, getScreenName(), properties);
         }else
         {
             Toast.makeText(this,"Please JOIN at least one community",Toast.LENGTH_SHORT).show();

@@ -61,7 +61,6 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-
                                 HashMap<String, Object> properties = new EventProperty.Builder().build();
                                 AnalyticsManager.trackEvent(Event.WALKTHROUGH_STARTED, "", properties);
                                 showSecondMainActivityShowcase();
@@ -91,7 +90,6 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-
                                 showThirdMainActivityShowCase();
                             }
                         }

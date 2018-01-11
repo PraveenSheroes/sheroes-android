@@ -82,7 +82,6 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
@@ -268,7 +267,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
     private ShowcaseView showcaseView;
-    private boolean isShowCase = false;
+    private int counter = 0;
     private ShowcaseManager showcaseManager;
 
     @Override
@@ -282,7 +281,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         long timeSpentFeed = System.currentTimeMillis();
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && mUserPreference.get().isSheUser()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
             isSheUser = true;
         }
         renderHomeFragmentView();
@@ -313,10 +312,21 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
         }
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
+            Branch branch = Branch.getInstance();
+            branch.resetUserSession();
+            branch.initSession(new Branch.BranchReferralInitListener() {
+                                   @Override
+                                   public void onInitFinished(JSONObject referringParams, BranchError error) {
+                                       deepLinkingRedirection();
+                                   }
+                               }
+                    , this.getIntent().getData(), this);
+            showCaseDesign();
+        }
     }
 
     private void showCaseDesign() {
-        isShowCase=false;
         showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities);
         showcaseManager.showFirstMainActivityShowcase();
     }
@@ -324,10 +334,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     protected void onResume() {
         super.onResume();
-        if(isShowCase)
-        {
-            showCaseDesign();
-        }
         if (isInviteReferral) {
             if (null != mProgressDialog) {
                 mProgressDialog.dismiss();
@@ -428,17 +434,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
-        Branch branch = Branch.getInstance();
-        branch.resetUserSession();
-        branch.initSession(new Branch.BranchReferralInitListener() {
-                               @Override
-                               public void onInitFinished(JSONObject referringParams, BranchError error) {
-                                   deepLinkingRedirection();
-                               }
-                           }
-                , this.getIntent().getData(), this);
-         }
         if (shouldShowSnowFlake()) {
             mSantaView.setVisibility(View.GONE);
             animateSnowFlake();
@@ -477,69 +472,57 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Branch branch = Branch.getInstance(getApplicationContext());
         JSONObject sessionParams = branch.getFirstReferringParams();
         try {
-            if (sessionParams.length() > 0) {
-                String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
-                String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
-                if (StringUtil.isNotNullOrEmptyString(url)) {
-                    if (openWebViewFlag.equalsIgnoreCase("true")) {
-                        Uri urlWebSite = Uri.parse(url);
-                        AppUtils.openChromeTabForce(this, urlWebSite);
-                        return;
-                    }
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
-                        // Do not let others grab our call
-                        intent.setPackage(SheroesApplication.mContext.getPackageName());
-                    } else {
-                        startActivity(intent);
-                        return;
-                    }
-                    Iterator<String> iterator = sessionParams.keys();
-                    while (iterator.hasNext()) {
-                        String key = iterator.next();
-                        try {
-                            Object value = sessionParams.get(key);
-                            if (value instanceof String) {
-                                intent.putExtra(key, (String) value);
-                            }
-                            if (value instanceof Boolean) {
-                                intent.putExtra(key, (boolean) value);
-                            }
-                            if (value instanceof Integer) {
-                                intent.putExtra(key, (int) value);
-                            }
-                        } catch (JSONException e) {
+            String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
+            String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
+            if (StringUtil.isNotNullOrEmptyString(url)) {
+                if (openWebViewFlag.equalsIgnoreCase("true")) {
+                    Uri urlWebSite = Uri.parse(url);
+                    AppUtils.openChromeTabForce(this, urlWebSite);
+                    return;
+                }
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
+                    // Do not let others grab our call
+                    intent.setPackage(SheroesApplication.mContext.getPackageName());
+                } else {
+                    startActivity(intent);
+                    return;
+                }
+                Iterator<String> iterator = sessionParams.keys();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    try {
+                        Object value = sessionParams.get(key);
+                        if (value instanceof String) {
+                            intent.putExtra(key, (String) value);
                         }
-                    }
-                    if (isIntentAvailable(this, intent)) {
-                        intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
-                        if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
-                            intent.setClass(this, SheroesDeepLinkingActivity.class);
+                        if (value instanceof Boolean) {
+                            intent.putExtra(key, (boolean) value);
                         }
-                        startActivity(intent);
-
+                        if (value instanceof Integer) {
+                            intent.putExtra(key, (int) value);
+                        }
+                    } catch (JSONException e) {
                     }
-                    isShowCase = true;
+                }
+                if (isIntentAvailable(this, intent)) {
+                    intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
+                    if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
+                        intent.setClass(this, SheroesDeepLinkingActivity.class);
+                    }
+                    startActivity(intent);
                 }
             }
         } catch (JSONException e) {
-            Crashlytics.getInstance().core.logException(e);
+            // Crashlytics.getInstance().core.logException(e);
         }
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 4000ms
-                if(!isShowCase) {
-                    showCaseDesign();
-                }
-            }
-        }, 500);
     }
 
     private boolean isIntentAvailable(Context ctx, Intent intent) {
         final PackageManager mgr = ctx.getPackageManager();
-        List<ResolveInfo> list =mgr.queryIntentActivities(intent,PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> list =
+                mgr.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
 
@@ -705,9 +688,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void logOut() {
-        AnalyticsManager.initializeMixpanel(HomeActivity.this);
-        HashMap<String, Object> properties = new EventProperty.Builder().build();
-        AnalyticsManager.trackEvent(Event.LOGOUT, getScreenName(), properties);
         mUserPreference.delete();
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);

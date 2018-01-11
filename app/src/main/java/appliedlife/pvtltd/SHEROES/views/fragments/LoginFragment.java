@@ -150,9 +150,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
+                        ((LoginActivity)getActivity()).onLoginAuthToken();
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-                        ((LoginActivity)getActivity()).onLoginAuthToken();
+                        AnalyticsManager.initializeMixpanel(getActivity());
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
@@ -169,10 +170,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
-                    AnalyticsManager.initializeMixpanel(getContext());
-                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
-                    AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     ((LoginActivity)getActivity()).onLoginAuthToken();
+                    AnalyticsManager.initializeMixpanel(getActivity());
                 } else {
                     LoginManager.getInstance().logOut();
                     ((LoginActivity)getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
