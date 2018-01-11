@@ -42,6 +42,9 @@ public class ShowcaseManager {
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;
         this.tvCommunities = tvCommunities;
+        floatActionBtn.setEnabled(false);
+        tvHome.setEnabled(false);
+        tvCommunities.setEnabled(false);
 
     }
 
@@ -58,6 +61,7 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+
                                 HashMap<String, Object> properties = new EventProperty.Builder().build();
                                 AnalyticsManager.trackEvent(Event.WALKTHROUGH_STARTED, "", properties);
                                 showSecondMainActivityShowcase();
@@ -87,6 +91,7 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+
                                 showThirdMainActivityShowCase();
                             }
                         }
@@ -112,6 +117,9 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                                floatActionBtn.setEnabled(true);
+                                tvHome.setEnabled(true);
+                                tvCommunities.setEnabled(true);
                                 HashMap<String, Object> properties = new EventProperty.Builder().build();
                                 AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, "", properties);
                             }
