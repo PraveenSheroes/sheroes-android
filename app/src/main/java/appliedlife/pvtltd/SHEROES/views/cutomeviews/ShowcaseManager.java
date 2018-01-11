@@ -28,7 +28,6 @@ public class ShowcaseManager {
     private final Activity activity;
     private ShowcaseView showcaseView;
     private ViewTarget target;
-    public static final String SCREEN_LABEL = "Home Screen - Walkthrough";
     private HashMap<String, Tutorial> tutorial = new HashMap<>();
     private FloatingActionButton floatActionBtn;
     private TextView tvHome;
@@ -59,6 +58,8 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                                HashMap<String, Object> properties = new EventProperty.Builder().build();
+                                AnalyticsManager.trackEvent(Event.WALKTHROUGH_STARTED, "", properties);
                                 showSecondMainActivityShowcase();
                             }
                         }
@@ -66,11 +67,9 @@ public class ShowcaseManager {
                 .build();
         showcaseView.setButtonText(activity.getString(R.string.ID_NEXT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
-        showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
-        showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
+       // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
+       // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
        // showcaseView.forceTextPosition(ShowcaseView.ABOVE);
-        HashMap<String, Object> properties = new EventProperty.Builder().build();
-        AnalyticsManager.trackEvent(Event.WALKTHROUGH_STARTED, getScreenName(), properties);
     }
     //endregion
 
@@ -114,7 +113,7 @@ public class ShowcaseManager {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
                                 HashMap<String, Object> properties = new EventProperty.Builder().build();
-                                AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, getScreenName(), properties);
+                                AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, "", properties);
                             }
                         }
                 )
@@ -140,11 +139,6 @@ public class ShowcaseManager {
     //endregion
 
     //region public helper methods
-
-
-    private String getScreenName() {
-        return SCREEN_LABEL;
-    }
 
     //endregion
 }

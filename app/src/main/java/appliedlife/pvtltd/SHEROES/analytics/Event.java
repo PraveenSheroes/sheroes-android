@@ -100,10 +100,11 @@ public enum Event {
     // endregion
 
     //region Image related events
-    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, "Onboarding completed"),
+    LOGOUT(AnalyticsEventType.ON_LOGOUT, " home"),
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " completed"),
     USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
-    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, "Walkthrough started"),
-    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, "Walkthrough completed");
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " completed");
     // endregion
 
     public final AnalyticsEventType type;

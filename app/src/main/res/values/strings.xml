@@ -928,7 +928,8 @@
     <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Explore new communities to join and start talking</string>
     <string name="ID_SHOW_CASE_FEED_TITLE">Welcome To Your SHEROES Feed</string>
     <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
-    <string name="ID_LOADER">Think like a Queen.\n A Queen is not afraid to fail</string>
+    <string name="ID_LOADER">Think like a Queen.\n A Queen is not afraid to fail.</string>
     <string name="ID_NEXT">Next</string>
+    <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
 
 </resources>
