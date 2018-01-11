@@ -65,18 +65,6 @@
       "menu_type": 1
     },
     {
-      "menu_id": 14,
-      "display_order": 140,
-      "menu_name": "Invite Friends",
-      "menu_desc": "Invite your women friends",
-      "menu_url": "#",
-      "menu_item_icon_url": "http://img.sheroes.in/app/navicons/email_invite.png",
-      "menu_item_icon_selected_url": "http://img.sheroes.in/app/navicons/email_invite_clicked.png",
-      "is_native": true,
-      "is_active": true,
-      "menu_type": 1
-    },
-    {
       "menu_id": 16,
       "display_order": 160,
       "menu_name": "Feed",

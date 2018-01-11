@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -100,6 +99,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
         mentorSearchInListPagination(mFragmentListRefreshData);
     }
+
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -163,18 +163,21 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             }
         }
     }
+
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
         Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

@@ -541,6 +541,10 @@ public class HomeFragment extends BaseFragment {
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
+
+                if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
+                    return;
+
                 List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
                 MentorDataObj mentorDataObj=(MentorDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
                 if(((UserSolrObj) baseResponse).isSuggested())

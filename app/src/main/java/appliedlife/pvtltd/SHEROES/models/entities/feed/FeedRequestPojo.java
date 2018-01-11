@@ -87,6 +87,10 @@ public class FeedRequestPojo extends BaseRequest{
     @Expose
     private Integer sourceEntityId;
 
+    @SerializedName("is_anonymous_post_hide")
+    @Expose
+    private boolean isAnonymousPostHide;
+
 
     public Integer getSourceEntityId() {
         return sourceEntityId;
@@ -233,6 +237,14 @@ public class FeedRequestPojo extends BaseRequest{
 
     public void setPostingDate(String postingDate) {
         this.postingDate = postingDate;
+    }
+
+    public boolean isAnonymousPostHide() {
+        return isAnonymousPostHide;
+    }
+
+    public void setAnonymousPostHide(boolean anonymousPostHide) {
+        isAnonymousPostHide = anonymousPostHide;
     }
 
     public boolean isOnBoardingCommunities() {

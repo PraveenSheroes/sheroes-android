@@ -38,6 +38,8 @@ public enum EventProperty {
     LOOKING_FOR_NAME("Looking For Name"),
     IS_MOENGAGE("Is Moengage"),
     POSITION_IN_SEQUENCE("Position In Sequence"),
+    IS_MENTOR("Is Mentor"),
+    IS_OWN_PROFILE("Is Own Profile"),
     DESCRIPTION("Description");
 
     private final String string;
@@ -198,6 +200,15 @@ public enum EventProperty {
 
         public Builder description(final String description){
             put(DESCRIPTION, description);
+            return this;
+        }
+
+        public Builder isMentor(final boolean isMentor){
+            put(IS_MENTOR, isMentor);
+            return this;
+        }
+        public Builder isOwnProfile(final boolean isOwnProfile){
+            put(IS_OWN_PROFILE, isOwnProfile);
             return this;
         }
     }

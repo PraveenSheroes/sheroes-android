@@ -9,6 +9,7 @@ import org.parceler.Parcel;
  */
 @Parcel(analyze = {CommunityFeedSolrObj.class,FeedDetail.class})
 public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
+
     @SerializedName("community_type_s")
     public String communityType;
 
@@ -32,6 +33,46 @@ public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
 
     @SerializedName(value = "solr_ignore_is_request_pending")
     private boolean isRequestPending;
+
+    private boolean isMutualCommunityFirstItem ;
+
+    private boolean isOtherCommunityFirstItem;
+
+    private int mutualCommunityCount;
+
+    private boolean showHeader;
+
+    public boolean isMutualCommunityFirstItem() {
+        return isMutualCommunityFirstItem;
+    }
+
+    public void setMutualCommunityFirstItem(boolean mutualCommunityFirstItem) {
+        isMutualCommunityFirstItem = mutualCommunityFirstItem;
+    }
+
+    public boolean isOtherCommunityFirstItem() {
+        return isOtherCommunityFirstItem;
+    }
+
+    public void setOtherCommunityFirstItem(boolean otherCommunityFirstItem) {
+        isOtherCommunityFirstItem = otherCommunityFirstItem;
+    }
+
+    public int getMutualCommunityCount() {
+        return mutualCommunityCount;
+    }
+
+    public void setMutualCommunityCount(int mutualCommunityCount) {
+        this.mutualCommunityCount = mutualCommunityCount;
+    }
+
+    public boolean isShowHeader() {
+        return showHeader;
+    }
+
+    public void setShowHeader(boolean showHeader) {
+        this.showHeader = showHeader;
+    }
 
     public String getCommunityType() {
         return communityType;

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_size_3"
+    android:layout_marginBottom="@dimen/dp_size_5"
+    app:cardElevation="@dimen/dp_size_2"
+    app:layout_anchorGravity="bottom|center">
+
+    <LinearLayout
+        android:id="@+id/li_no_community"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_150"
+        android:gravity="center"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_no_community"
+            android:layout_width="@dimen/dp_size_350"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/black"
+            android:padding="@dimen/dp_size_20"
+            android:maxLines="@integer/int_value_for_line_2"
+            android:textAlignment="center"
+            android:textSize="@dimen/sp_size_14"
+            android:layout_gravity="center"
+            android:text="@string/ID_NO_POST"/>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

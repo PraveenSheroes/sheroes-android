@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -415,15 +416,18 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
     public void championProfile(BaseResponse baseResponse, int championValue) {
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition());
+            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor());
         } else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId(), comment.getItemPosition());
+            if(!comment.isAnonymous()) {
+                Log.i("Profile: is verified", ":" + comment.isVerifiedMentor());
+                championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor());
+            }
         }
     }
 
-    private void championDetailActivity(Long userId, int position) {
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+    private void championDetailActivity(Long userId, int position, boolean isMentor) {
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         mCommunityFeedObj = new CommunityFeedSolrObj();
         mCommunityFeedObj.setIdOfEntityOrParticipant(userId);
@@ -433,6 +437,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);//todo - check if mentor
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }

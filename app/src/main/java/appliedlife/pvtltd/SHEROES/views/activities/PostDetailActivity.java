@@ -57,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -65,10 +64,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
-import butterknife.Bind;
-import butterknife.BindDimen;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -496,7 +491,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
+        boolean isMentor = userPostObj.isAuthorMentor();
+        Intent intent = new Intent(this, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
@@ -506,6 +502,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -656,6 +653,29 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }else {
             mPostDetailPresenter.getCommentUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(comment.getEntityId(), comment.getCommentsId()), comment);
         }
+    }
+
+    @Override
+    public void userProfileNameClick(Comment comment, View view) {
+        if(comment.getParticipationTypeId() == 7 || comment.getParticipationTypeId() ==1) {
+            Intent intent = new Intent(this, MentorUserProfileActvity.class);
+            Bundle bundle = new Bundle();
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getEntityAuthorUserId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+            bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+            intent.putExtra(AppConstants.CHAMPION_ID, comment.getEntityAuthorUserId());
+            intent.putExtra(AppConstants.IS_MENTOR_ID, comment.isVerifiedMentor());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
+
+    @Override
+    public void userProfilePicClick(Comment comment, View view) {
+        userProfileNameClick(comment, view);
     }
     //endregion
 }

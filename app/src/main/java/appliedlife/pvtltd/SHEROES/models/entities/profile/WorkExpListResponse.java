@@ -16,10 +16,12 @@ public class WorkExpListResponse extends BaseResponse{
     @Expose
     private ExperienceBOdetail experienceBOdetail;
 
+    @SuppressWarnings("unused")
     public ExperienceBOdetail getExperienceBOdetail() {
         return experienceBOdetail;
     }
 
+    @SuppressWarnings("unused")
     public void setExperienceBOdetail(ExperienceBOdetail experienceBOdetail) {
         this.experienceBOdetail = experienceBOdetail;
     }

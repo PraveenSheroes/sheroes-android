@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
@@ -214,16 +214,6 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
@@ -262,7 +252,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="sheroes.com"/>
-                <data android:host="sheroes.in"></data>
+                <data android:host="sheroes.in"/>
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs"/>
                 <data android:pathPrefix="/articles"/>
@@ -272,6 +262,7 @@
                 <data android:pathPrefix="/helpline"/>
                 <data android:pathPrefix="/feed"/>
                 <data android:pathPrefix="/users/edit_profile"/>
+                <data android:pathPrefix="/users/"/>
                 <data android:pathPrefix="/sheroes-challenge"/>
                 <data android:pathPrefix="/my-challenges"/>
                 <data android:pathPrefix="/faq"/>
@@ -340,6 +331,13 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity" android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity"/>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity"/>
+
 
     </application>
 

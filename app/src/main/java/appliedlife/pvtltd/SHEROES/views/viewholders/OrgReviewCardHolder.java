@@ -265,9 +265,9 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (userPostObj.isAuthorMentor()) {
+               // if (userPostObj.isAuthorMentor()) { //todo - naviagte to profile
                     viewInterface.championProfile(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                }
+              //  }
             }
 
             @Override

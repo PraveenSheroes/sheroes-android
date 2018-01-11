@@ -121,4 +121,5 @@ public class UserSummaryRequest {
     public void setImageString(String imageString) {
         this.imageString = imageString;
     }
+
 }
