@@ -627,6 +627,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
     }
 
+
     private void loadUserViews(Article article) {
         if (article.author != null) {
             author.setText(article.author.name);
@@ -824,6 +825,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         article.commentsCount = articleSolrObj.getNoOfComments();
         article.likesCount = articleSolrObj.getNoOfLikes();
         article.author = new UserProfile();
+        article.creatorId = articleSolrObj.getAuthorId();
+        article.isCreatorMentor = articleSolrObj.isAuthorMentor();
         article.author.name = articleSolrObj.getAuthorName();
         article.author.shortDescription = articleSolrObj.getAuthorShortDescription();
         article.author.thumbUrl = articleSolrObj.getAuthorImageUrl();

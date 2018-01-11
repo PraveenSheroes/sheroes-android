@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -75,7 +76,7 @@ public class ArticlesFragment extends BaseFragment {
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.loader_gif)
-    LinearLayout loaderGif;
+    CardView loaderGif;
     private List<Long> categoryIdList = new ArrayList<>();
     private View view;
     private MoEHelper mMoEHelper;

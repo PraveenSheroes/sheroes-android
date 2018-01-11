@@ -15,35 +15,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/search_toolbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/r1_personal_basicdetails"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <ImageView
-                android:id="@+id/iv_search_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:layout_marginLeft="@dimen/dp_size_40"
-                android:layout_marginRight="@dimen/dp_size_12"
-                android:background="@drawable/ic_back_black"
-                android:padding="@dimen/dp_size_10" />
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <include
+                layout="@layout/profile_header_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|top" />
+        </android.support.design.widget.AppBarLayout>
+
+            <include
+                android:layout_margin="@dimen/dp_size_5"
                 layout="@layout/search_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
-        </android.support.v7.widget.Toolbar>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_0.5"
-            android:layout_marginLeft="@dimen/dp_size_65"
-            android:layout_marginRight="@dimen/dp_size_30"
+            android:layout_marginLeft="@dimen/dp_size_3"
+            android:layout_marginRight="@dimen/dp_size_3"
             android:background="@color/search_tab_unselected_text" />
 
         <FrameLayout

@@ -12,6 +12,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -132,7 +133,7 @@ public class HomeFragment extends BaseFragment {
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.loader_gif)
-    LinearLayout loaderGif;
+    CardView loaderGif;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     @Bind(R.id.empty_view)
@@ -540,6 +541,10 @@ public class HomeFragment extends BaseFragment {
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
+
+                if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
+                    return;
+
                 List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
                 MentorDataObj mentorDataObj=(MentorDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
                 if(((UserSolrObj) baseResponse).isSuggested())

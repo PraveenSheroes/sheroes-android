@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
+
+import org.parceler.Parcels;
 
 import javax.inject.Inject;
 
@@ -26,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -192,7 +196,14 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         if (tvMentorFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT_PROFILE))) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-                Intent intent = new Intent(mContext, ProfileActicity.class);
+                Intent intent = new Intent(mContext, MentorUserProfileActvity.class);
+                Bundle bundle = new Bundle();
+                Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+                bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+                Parcelable parcelableMentor = Parcels.wrap(dataItem);
+                bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+                intent.putExtra(AppConstants.IS_MENTOR_ID, true); 
+                intent.putExtras(bundle);
                 intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
                 mContext.startActivity(intent);
             }

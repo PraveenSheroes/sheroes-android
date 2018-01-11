@@ -106,6 +106,7 @@ public class AppConstants {
     public static final String HOME_FRAGMENT = "home";
     public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
+    public static final String PROFILE_COMMUNITY_LISTING = "profile_community_listing";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
@@ -121,6 +122,8 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
+    public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
+    public static final int REQUEST_CODE_FOR_COMMUNITY_LISTING = 1003;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
@@ -149,6 +152,7 @@ public class AppConstants {
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
+    public static final String PROFILE_FOLLOWING = "Following";
 
     public static final String EMAIL = "email";
 
@@ -199,6 +203,7 @@ public class AppConstants {
     public static final int NOT_TIME = 50000;
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
+    public static final int MENTOR_TYPE_ID = 7;
 
 
     /*Master data keys for pages*/
@@ -271,8 +276,9 @@ public class AppConstants {
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String EVENT_URL = "https://sheroes.in/event";
     public static final String EVENT_URL_COM = "https://sheroes.com/event";
-    public static final String USER_PROFILE_URL = "https://sheroes.in/users/edit_profile";
-    public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/edit_profile";
+    public static final String USER_PROFILE_URL = "https://sheroes.in/users/";
+    public static final String SELF_USER_PROFILE_URL = "https://sheroes.com/users/edit_profile";
+    public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/";
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
@@ -292,6 +298,7 @@ public class AppConstants {
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String CHAMPION_ID = "champion_id";
+    public static final String IS_MENTOR_ID = "is_";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";

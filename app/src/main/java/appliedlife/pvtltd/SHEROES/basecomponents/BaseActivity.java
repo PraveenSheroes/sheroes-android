@@ -50,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -71,14 +70,13 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -411,6 +409,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                 }
                 break;
+
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall();
                 break;
@@ -491,6 +490,26 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
+            case R.id.tv_article_card_title :
+            case R.id.iv_article_circle_icon:
+                Intent mentorUserProfiles = new Intent(this, MentorUserProfileActvity.class);
+                mentorUserProfiles.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getCreatedBy());
+                mentorUserProfiles.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
+                mentorUserProfiles.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                startActivity(mentorUserProfiles);
+               break;
+
+            case R.id.iv_feed_community_post_login_user_pic:
+            case R.id.fl_login_user:
+            case R.id.tv_feed_community_post_login_user_name:
+            case R.id.feed_img:
+            case R.id.tv_feed_community_post_user_name:
+                Intent mentorUserProfile = new Intent(this, MentorUserProfileActvity.class);
+                mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getProfileId());
+                mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
+                mentorUserProfile.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                startActivity(mentorUserProfile);
+             break;
 
             case R.id.li_feed_article_images:
                 ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);

@@ -30,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -111,49 +111,49 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.iv_profile_image_from_camera)
     public void onCameraClick() {
-        ((ProfileActicity) getActivity()).selectImageFrmCamera();
+        ((EditUserProfileActivity) getActivity()).selectImageFrmCamera();
        // checkCameraPermission();
     }
 
     @OnClick(R.id.iv_profile_image_from_gall)
     public void onGalleryClick() {
-        ((ProfileActicity) getActivity()).selectImageFrmGallery();
+        ((EditUserProfileActivity) getActivity()).selectImageFrmGallery();
         //checkGalleryPermission();
     }
     @OnClick(R.id.tv_gallery)
     public void onGalleryIconClick() {
-        ((ProfileActicity) getActivity()).selectImageFrmGallery();
+        ((EditUserProfileActivity) getActivity()).selectImageFrmGallery();
     }
 
 
     private void checkGalleryPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                ((ProfileActicity) getActivity()).selectImageFrmGallery();
+                ((EditUserProfileActivity) getActivity()).selectImageFrmGallery();
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            ((ProfileActicity) getActivity()).selectImageFrmGallery();
+            ((EditUserProfileActivity) getActivity()).selectImageFrmGallery();
         }
     }
 
     private void checkCameraPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (getActivity().checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                ((ProfileActicity) getActivity()).selectImageFrmCamera();
+                ((EditUserProfileActivity) getActivity()).selectImageFrmCamera();
             } else {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             }
         } else { //permission is automatically granted on sdk<23 upon installation
-            ((ProfileActicity) getActivity()).selectImageFrmCamera();
+            ((EditUserProfileActivity) getActivity()).selectImageFrmCamera();
         }
     }
 
     @OnClick(R.id.tv_profile_image_save)
     public void onProfileImageSaveClick() {
         mTvProfileImageSave.setEnabled(false);
-        ((ProfileActicity) getActivity()).requestForUpdateProfileImage();
+        ((EditUserProfileActivity) getActivity()).requestForUpdateProfileImage();
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.UPDATED_PROFILE_PICTURE, AppConstants.EMPTY_STRING);
     }
 

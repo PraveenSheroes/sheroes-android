@@ -9,6 +9,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 public interface FragmentIntractionWithActivityListner {
     void onShowErrorDialog(String errorReason,FeedParticipationEnum feedParticipationEnum);
-    
+
      void onSuccessResult(String result, FeedDetail feedDetail) ;
 }

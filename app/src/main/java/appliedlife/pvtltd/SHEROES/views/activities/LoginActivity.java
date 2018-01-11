@@ -41,7 +41,6 @@ public class LoginActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
-    String mDefferedDeepLink;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +65,6 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         Bundle bundle = getIntent().getExtras();
-        if(null!=getIntent()&&null!=getIntent().getExtras()) {
-            mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
-        }
         LoginFragment frag = new LoginFragment();
         frag.setArguments(bundle);
         callFirstFragment(R.id.fragment_login, frag);
@@ -94,7 +90,6 @@ public class LoginActivity extends BaseActivity {
         } else {
             Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
             Bundle bundle=new Bundle();
-            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
             boardingIntent.putExtras(bundle);
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);

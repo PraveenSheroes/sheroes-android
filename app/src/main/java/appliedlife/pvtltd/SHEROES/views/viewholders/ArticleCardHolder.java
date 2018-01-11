@@ -176,7 +176,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             String feedCircleIconUrl = dataItem.getAuthorImageUrl();
             ivArticleCircleIcon.setCircularImage(true);
             ivArticleCircleIcon.bindImage(feedCircleIconUrl);
-
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getImageUrl())) {
             String backgrndImageUrl = dataItem.getImageUrl();
@@ -211,6 +210,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                         }
                     });
             liArticleCoverImage.addView(backgroundImage);
+
         }
 
     }
@@ -218,6 +218,19 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void viewRecycled() {
 
+    }
+
+
+    @OnClick(R.id.iv_article_circle_icon)
+    public void articleAuthorImageClick() {
+        viewInterface.handleOnClick(dataItem, ivArticleCircleIcon);
+     //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+    }
+
+    @OnClick(R.id.tv_article_card_title)
+    public void articleAuthorNameClick() {
+        viewInterface.handleOnClick(dataItem, tvArticleCardTitle);
+     //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_article_share)

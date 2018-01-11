@@ -27,7 +27,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSponsorData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.home.ProfileItems;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobLocationList;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
@@ -35,11 +34,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJob
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LookingForLabelValues;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.EducationEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.GoodAt;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.MyProfileView;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileHorList;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -195,84 +189,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new PandingRequestHolder(view, viewInterface);
         }
-    },
-    PROFILE_GOOD_AT(R.layout.profile_goodat_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileGoodAtHolder(view, viewInterface);
-        }
-    },
-    PROFILE_EDUCATION(R.layout.professional_education_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileEducationHolder(view, viewInterface);
-        }
-    },
-    PROFILE_WORK_EXPERIENCE(R.layout.professtional_work_exp_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileWorkExperienceHolder(view, viewInterface);
-        }
-    },
-    EDUCATION_LIST(R.layout.education_list_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new EducationListHolder(view, viewInterface);
-        }
-    },
-    PROFILE_HORIZONTAL_LIST(R.layout.profile_hor_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileHorizantalListHolder(view, viewInterface);
-        }
-    },
-    PROFILE_HORIZONTAL_RECYCLER_LIST(R.layout.profile_horizontal_recycler) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileHorizontalViewHolder(view, viewInterface);
-        }
-    },
-    PROFILE_BASIC_DETAILS(R.layout.professional_basic_details_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileProfessionalBasicDetailsHolder(view, viewInterface);
-        }
-    },
-
-    PROFILE_LOOK_IN_FOR(R.layout.personal_lookingfor_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileLookingForHolder(view, viewInterface);
-        }
-    },
-    PROFILE_ABOUT_ME(R.layout.profile_about_me_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileAboutMeHolder(view, viewInterface);
-        }
-    }, PROFILE_PERSONAL_BASIC_DETAILS(R.layout.profile_basicdetails_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfilePersonalBasicDetailsHolder(view, viewInterface);
-        }
-    }, PROFILE_PERSONAL_INTERESTING(R.layout.profile_interesting_in_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileIAmInterestingInHolder(view, viewInterface);
-        }
-    }, CAN_HELP_IN(R.layout.profile_can_help_in) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CanHelpInHolder(view, viewInterface);
-        }
-    },
-    GOOD_AT(R.layout.ggodat_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new GoodAtHolder(view, viewInterface);
-        }
-    },
-    JOB_LOCATION_LIST(R.layout.joblocationlist) {
+    }, JOB_LOCATION_LIST(R.layout.joblocationlist) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobLocationHolder(view, viewInterface);
@@ -281,11 +198,6 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new JobDetailHolder(view, viewInterface);
-        }
-    }, PROFILE_HOLDER(R.layout.invitesearch_item) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new ProfileViewHolder(view, viewInterface);
         }
     },
     FEED_PROGRESS_BAR_HOLDER(R.layout.feed_progress_bar_holder) {
@@ -337,12 +249,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new BellNotificationHolder(view, viewInterface);
         }
-    }, WORK_EXPERIENCE_DETAIl_CARD(R.layout.professional_work_experience_viewcard) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new WorkExperienceCardHolder(view, viewInterface);
-        }
-
     }, APP_INTRO_VIEW(R.layout.app_intro_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -394,8 +300,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new MentorCard(view, viewInterface);
         }
-    }
-    , MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
+    }, MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new MentorSuggestedCardHorizontalView(view, viewInterface);
@@ -451,33 +356,26 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
                                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-                                if(feedDetail.isSpamPost())
-                                {
-                                    if(userId==feedDetail.getAuthorId()||userPostSolrObj.isCommunityOwner())
-                                    {
+                                if (feedDetail.isSpamPost()) {
+                                    if (userId == feedDetail.getAuthorId() || userPostSolrObj.isCommunityOwner()) {
                                         if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                             returnView = EVENT_CARD_HOLDER.ordinal();
 
-                                        }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())){
+                                        } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
                                             returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             returnView = FEED_COMMUNITY_POST.ordinal();
                                         }
-                                    }else {
+                                    } else {
                                         returnView = BLANK_LIST.ordinal();
                                     }
-                                }else
-                                {
+                                } else {
                                     if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                         returnView = EVENT_CARD_HOLDER.ordinal();
 
-                                    }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())){
+                                    } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
                                         returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
                                     }
                                 }
@@ -498,7 +396,7 @@ public enum HolderMapping {
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
                             case AppConstants.MENTOR_SUB_TYPE:
-                                returnView=MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
+                                returnView = MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.USER_SUB_TYPE:
                                 returnView = FEED_MENTOR_CARD_HOLDER.ordinal();
@@ -552,31 +450,24 @@ public enum HolderMapping {
                             case AppConstants.FEED_COMMUNITY_POST:
                                 UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
                                 userPostSolrObj = (UserPostSolrObj) feedDetail;
-                                if(feedDetail.isSpamPost())
-                                {
-                                    if(userId==feedDetail.getAuthorId()||userPostSolrObj.isCommunityOwner())
-                                    {
-                                        if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID  && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                                if (feedDetail.isSpamPost()) {
+                                    if (userId == feedDetail.getAuthorId() || userPostSolrObj.isCommunityOwner()) {
+                                        if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                             returnView = EVENT_CARD_HOLDER.ordinal();
-                                        }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())){
+                                        } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
                                             returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             returnView = FEED_COMMUNITY_POST.ordinal();
                                         }
-                                    }else {
+                                    } else {
                                         returnView = BLANK_LIST.ordinal();
                                     }
-                                }else
-                                {
+                                } else {
                                     if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                                         returnView = EVENT_CARD_HOLDER.ordinal();
-                                    }else if(userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
+                                    } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
                                         returnView = ORG_REVIEW_CARD_HOLDER.ordinal();
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
                                     }
                                 }
@@ -604,47 +495,13 @@ public enum HolderMapping {
                     returnView = HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof JobDetailPojo) {
                     returnView = JOB_DETAIL_HOLDER.ordinal();
-                } else if (item instanceof ProfileHorList) {
-                    returnView = PROFILE_HORIZONTAL_LIST.ordinal();
-                } else if (item instanceof MyProfileView) {
-                    String tagType = ((MyProfileView) item).getType();
-                    if (tagType.equalsIgnoreCase(AppConstants.GOOD_AT_SKILL_PROFILE)) {
-                        returnView = PROFILE_GOOD_AT.ordinal();
-                    } else if (tagType.equalsIgnoreCase(AppConstants.ABOUT_ME_PROFILE)) {
-                        returnView = PROFILE_ABOUT_ME.ordinal();
-                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE)) {
-                        returnView = PROFILE_PERSONAL_BASIC_DETAILS.ordinal();
-
-                    } else if (tagType.equalsIgnoreCase(AppConstants.USER_PROFILE1)) {
-
-                        returnView = PROFILE_BASIC_DETAILS.ordinal();
-
-                    } else if (tagType.equalsIgnoreCase(AppConstants.INTEREST_PROFILE)) {
-                        returnView = PROFILE_PERSONAL_INTERESTING.ordinal();
-                    } else if (tagType.equalsIgnoreCase(AppConstants.CANHELP_IN)) {
-                        returnView = CAN_HELP_IN.ordinal();
-                    } else if (tagType.equalsIgnoreCase(AppConstants.OPPORTUNITY_PROFILE)) {
-                        returnView = PROFILE_LOOK_IN_FOR.ordinal();
-                    } else if (tagType.equalsIgnoreCase(AppConstants.EDUCATION_PROFILE)) {
-                        returnView = PROFILE_EDUCATION.ordinal();
-                    } else if (tagType.equalsIgnoreCase(AppConstants.EXPERIENCE_PROFILE)) {
-                        returnView = PROFILE_WORK_EXPERIENCE.ordinal();
-
-                    } else if (tagType.equalsIgnoreCase(AppConstants.CLIENTSIDE)) {
-                        returnView = PROFILE_HORIZONTAL_RECYCLER_LIST.ordinal();
-
-                    }
-                } else if (item instanceof EducationEntity) {
-                    returnView = EDUCATION_LIST.ordinal();
-                } else if (item instanceof GoodAt) {
-                    returnView = GOOD_AT.ordinal();
                 } else if (item instanceof ListOfInviteSearch) {
                     returnView = INVITE_SEARCH_MODULE.ordinal();
                 } else if (item instanceof Member) {
                     returnView = MEMBER_MODULE.ordinal();
                 } else if (item instanceof OnBoardingData) {
                     returnView = ON_BOARDING_HOLDER.ordinal();
-                }else if (item instanceof LookingForLabelValues) {
+                } else if (item instanceof LookingForLabelValues) {
                     returnView = ON_LOOKING_FOR_HOLDER.ordinal();
                 } else if (item instanceof PopularTag) {
                     returnView = POPULAR_TAG_HOLDER.ordinal();
@@ -664,12 +521,8 @@ public enum HolderMapping {
                     returnView = SEARCHTAGS.ordinal();
                 } else if (item instanceof JobLocationList) {
                     returnView = JOB_LOCATION_LIST.ordinal();
-                } else if (item instanceof ProfileItems) {
-                    returnView = PROFILE_HOLDER.ordinal();
                 } else if (item instanceof BellNotificationResponse) {
                     returnView = BELL_NOTIFICATION.ordinal();
-                } else if (item instanceof ExprienceEntity) {
-                    returnView = WORK_EXPERIENCE_DETAIl_CARD.ordinal();
                 } else if (item instanceof HelplineChatDoc) {
                     if (((HelplineChatDoc) item).getSubType().equalsIgnoreCase(AppConstants.HELPLINE_SUB_TYPE_QUESTION)) {
                         HelplineChatDoc helplineChatDoc = (HelplineChatDoc) item;

@@ -21,6 +21,7 @@ public enum Event {
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
     POST_SHARED(AnalyticsEventType.POST, "Shared"),
+    PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
     POST_BOOKMARKED(AnalyticsEventType.POST, "Bookmarked"),
     POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
     POST_EDITED(AnalyticsEventType.POST, "Edited"),
@@ -97,8 +98,19 @@ public enum Event {
     IMAGE_SHARED(AnalyticsEventType.IMAGE, "Shared"),
     IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link"),
     LOOKING_FOR(AnalyticsEventType.LOOKING_FOR, "Clicked"),
-    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked");
+    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked"),
+    // endregion
 
+    PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),
+    PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
+    PROFILE_POST_COUNT(AnalyticsEventType.PROFILE, "Profile Post Count Click"),
+    PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Profile Followers Count Click"),
+    PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Profile Following Count Click"),
+    //region Image related events
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, "Onboarding completed"),
+    USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, "Walkthrough started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, "Walkthrough completed");
     // endregion
 
     public final AnalyticsEventType type;

@@ -38,8 +38,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
@@ -88,7 +88,7 @@ public class JobLocationSearchDialogFragment extends BaseDialogFragment implemen
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
         if (StringUtil.isNotNullOrEmptyString(sourceName) && AppConstants.PROFILE_FRAGMENT.equalsIgnoreCase(sourceName)) {
-            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (ProfileActicity) getActivity());
+            mAdapter = new GenericRecyclerViewAdapter(getActivity(), (EditUserProfileActivity) getActivity());
             tvSaveJobLocation.setVisibility(View.GONE);
         } else {
             mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());

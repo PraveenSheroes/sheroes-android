@@ -63,7 +63,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
@@ -431,7 +432,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
-        Intent intent = new Intent(getActivity(), MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(getActivity(), MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
@@ -591,7 +592,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onMentorProfileClicked(UserSolrObj userSolrObj) {
         /*mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();*/
-        Intent intent = new Intent(getActivity(), MentorUserProfileDashboardActivity.class);
+        Intent intent = new Intent(getActivity(), MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         Parcelable parcelableFeedDetail = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);

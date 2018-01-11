@@ -159,7 +159,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String mGcmId;
     private String loggedInChannel;
     private boolean doubleBackToExitPressedOnce = false;
-    private String mDefferedDeepLink;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,10 +200,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } else {
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(WelcomeActivity.this);
-            if(null!=getIntent()&&null!=getIntent().getExtras()) {
+            /*if(null!=getIntent()&&null!=getIntent().getExtras()) {
                 Bundle bundle = getIntent().getExtras();
                 mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
-            }
+            }*/
             isFirstTimeUser = true;
             initHomeViewPagerAndTabs();
             loginSetUp();
@@ -299,7 +298,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } else {
             Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
             Bundle bundle=new Bundle();
-            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
             boardingIntent.putExtras(bundle);
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);
@@ -384,7 +382,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void openLoginActivity() {
         Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
         Bundle bundle=new Bundle();
-        bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
         loginIntent.putExtras(bundle);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
@@ -535,7 +532,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (intent != null&&null!=intent.getExtras()) {
             Bundle extras = intent.getExtras();
             if (extras != null ) {
-                mDefferedDeepLink = extras.getString(AppConstants.DEFFERED_DEEP_LINK);
                 if(null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
                     if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
                         String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);

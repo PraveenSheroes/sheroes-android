@@ -26,6 +26,9 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -68,17 +71,12 @@ public class OnBoardingActivity extends BaseActivity {
     public TextView tvDescription;
     private boolean doubleBackToExitPressedOnce = false;
     public static int isJoinCount=0;
-    String mDefferedDeepLink;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
-        if(null!=getIntent()&&null!=getIntent().getExtras()) {
-            Bundle bundle = getIntent().getExtras();
-            mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
-        }
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
@@ -97,7 +95,6 @@ public class OnBoardingActivity extends BaseActivity {
             } else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 Bundle bundle=new Bundle();
-                bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
                 homeIntent.putExtras(bundle);
                 startActivity(homeIntent);
                 finish();
@@ -105,7 +102,6 @@ public class OnBoardingActivity extends BaseActivity {
         } else {
             Intent homeIntent = new Intent(this, HomeActivity.class);
             Bundle bundle=new Bundle();
-            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
             finish();
@@ -209,9 +205,10 @@ public class OnBoardingActivity extends BaseActivity {
             userPreference.set(loginResponse);
             Intent homeIntent = new Intent(this, HomeActivity.class);
             Bundle bundle=new Bundle();
-            bundle.putString(AppConstants.DEFFERED_DEEP_LINK,mDefferedDeepLink);
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
+            HashMap<String, Object> properties = new EventProperty.Builder().build();
+            AnalyticsManager.trackEvent(Event.ONBOARDING_COMPLETED, getScreenName(), properties);
         }else
         {
             Toast.makeText(this,"Please JOIN at least one community",Toast.LENGTH_SHORT).show();

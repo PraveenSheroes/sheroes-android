@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -72,7 +73,7 @@ public class FeaturedFragment extends BaseFragment implements HomeView {
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.loader_gif)
-    LinearLayout loaderGif;
+    CardView loaderGif;
     @Inject
     AppUtils mAppUtils;
     private int mPageNo = AppConstants.ONE_CONSTANT;

@@ -37,9 +37,12 @@
         android:layout_gravity="center"
         android:background="@drawable/progress_dailog_shape"
         android:indeterminateTint="@color/colorAccent" />
-
+<android.support.v7.widget.CardView
+    android:id="@+id/loader_gif"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/dp_size_8"
+    android:layout_height="match_parent">
     <LinearLayout
-        android:id="@+id/loader_gif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -64,7 +67,7 @@
             android:textColor="@color/feed_article_label"
             android:textSize="@dimen/sp_size_16" />
     </LinearLayout>
-
+</android.support.v7.widget.CardView>
     <ProgressBar
         android:id="@+id/pb_home_progress_bar"
         android:layout_width="0dp"

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
     <include
         android:id="@+id/lnr_profile"
         layout="@layout/activity_profile_layout"/>

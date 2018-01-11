@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
@@ -219,16 +219,6 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalAddEducationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
 
         <activity android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
@@ -267,7 +257,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="sheroes.com"/>
-                <data android:host="sheroes.in"></data>
+                <data android:host="sheroes.in"/>
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs"/>
                 <data android:pathPrefix="/articles"/>
@@ -277,6 +267,7 @@
                 <data android:pathPrefix="/helpline"/>
                 <data android:pathPrefix="/feed"/>
                 <data android:pathPrefix="/users/edit_profile"/>
+                <data android:pathPrefix="/users/"/>
                 <data android:pathPrefix="/sheroes-challenge"/>
                 <data android:pathPrefix="/my-challenges"/>
                 <data android:pathPrefix="/faq"/>
@@ -294,6 +285,15 @@
             </intent-filter>
         </service>
 
+       <!-- Install referrer: Always put new install receiver below referrer-->
+        <receiver
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name="io.branch.referral.InstallListener"
             android:exported="true">
@@ -303,6 +303,16 @@
         </receiver>
 
         <receiver
+            android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+
+       <!-- GCM receiver-->
+        <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -311,23 +321,9 @@
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
-        <receiver
-            android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">
@@ -340,6 +336,13 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity" android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity"/>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity"/>
+
 
     </application>
 

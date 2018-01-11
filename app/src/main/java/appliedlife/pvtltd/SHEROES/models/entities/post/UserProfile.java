@@ -13,5 +13,4 @@ public class UserProfile extends Post {
     public String bio;
     public String shortDescription;
     public String thumbUrl;
-
 }

@@ -12,13 +12,4 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 public class AboutMe{
     private String description;
 
-    public String getDescription() {
-        return description;
-
-    }
-
-    public void setDescription(String description) {
-
-        this.description = description;
-    }
 }
