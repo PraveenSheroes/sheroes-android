@@ -487,14 +487,25 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
-
             case R.id.tv_article_card_title :
             case R.id.iv_article_circle_icon:
-                /*Intent mentorUserProfile = new Intent(this, MentorUserProfileActvity.class);
+                Intent mentorUserProfiles = new Intent(this, MentorUserProfileActvity.class);
+                mentorUserProfiles.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getCreatedBy());
+                mentorUserProfiles.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
+                mentorUserProfiles.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                startActivity(mentorUserProfiles);
+               break;
+
+            case R.id.iv_feed_community_post_login_user_pic:
+            case R.id.fl_login_user:
+            case R.id.tv_feed_community_post_login_user_name:
+            case R.id.feed_img:
+            case R.id.tv_feed_community_post_user_name:
+                Intent mentorUserProfile = new Intent(this, MentorUserProfileActvity.class);
                 mentorUserProfile.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getProfileId());
                 mentorUserProfile.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
                 mentorUserProfile.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                startActivity(mentorUserProfile);*/
+                startActivity(mentorUserProfile);
              break;
 
             case R.id.li_feed_article_images:

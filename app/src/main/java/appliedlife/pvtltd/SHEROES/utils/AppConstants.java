@@ -104,6 +104,7 @@ public class AppConstants {
     public static final String HOME_FRAGMENT = "home";
     public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
+    public static final String PROFILE_COMMUNITY_LISTING = "profile_community_listing";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
@@ -120,6 +121,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
     public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
+    public static final int REQUEST_CODE_FOR_COMMUNITY_LISTING = 1003;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
@@ -148,6 +150,7 @@ public class AppConstants {
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
+    public static final String PROFILE_FOLLOWING = "Following";
 
     public static final String EMAIL = "email";
 

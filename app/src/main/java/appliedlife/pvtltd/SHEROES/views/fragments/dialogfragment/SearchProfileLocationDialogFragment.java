@@ -93,13 +93,16 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
             SEARCH_TYPE = (OnBoardingEnum) getArguments().getSerializable(AppConstants.BOARDING_SEARCH);
         }
+
+        if(mMasterDataSkill ==null) {
+            mMasterDataSkill = "city";
+        }
         toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (EditUserProfileActivity) getActivity());
 
                 mSearchEditText.setHint(getString(R.string.ID_SEARCH_LOCATION));
-                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(manager);
                 mRecyclerView.setAdapter(mAdapter);
@@ -152,6 +155,11 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         mSearchEditText.addTextChangedListener(dataSearchTextWatcher());
         mSearchEditText.setFocusableInTouchMode(true);
         mSearchEditText.requestFocus();
+    }
+
+    @OnClick(R.id.et_search_edit_text)
+    public void searchLocation() {
+        mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
     }
 
     /**

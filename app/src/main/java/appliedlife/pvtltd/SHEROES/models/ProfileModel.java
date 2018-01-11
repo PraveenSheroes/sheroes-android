@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResp
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
@@ -156,5 +157,20 @@ public class ProfileModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<UserProfileResponse> getAllUserDetailsromModel() {
+
+        return sheroesAppServiceApi.getUserDetails()
+                .map(new Func1<UserProfileResponse, UserProfileResponse>() {
+
+                    @Override
+                    public UserProfileResponse call(UserProfileResponse userProfileResponse) {
+                        return userProfileResponse;
+
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
 
 }

@@ -23,6 +23,8 @@ public interface IEditProfileView extends BaseMvpView {
 
     void errorMessage(String message);
 
+    void getUserData(UserProfileResponse userProfileResponse);
+
     void getUserSummaryResponse(BoardingDataResponse boardingDataResponse);
 
     void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse);

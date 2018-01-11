@@ -1,8 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,6 +15,7 @@ import android.widget.TextView;
 
 import org.parceler.Parcels;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,26 +30,27 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.USER_MENTOR_ID;
 
 /**
  * Created by ravi on 03/01/18.
  * Listing of Profile - User's Communities
  */
 
-public class ProfileCommunitiesActivity extends BaseActivity implements ProfileCommunityAdapter.OnItemClicked{
+public class ProfileCommunitiesActivity extends BaseActivity {
 
     private static final String SCREEN_LABEL = "ProfileCommunitiesActivity Screen";
-
-    @Bind(R.id.tv_profile_tittle)
-    TextView toolbarTitle;
-
-    @Bind(R.id.communities)
-    RecyclerView mCommunityRecycler;
 
     @Inject
     AppUtils mAppUtils;
@@ -51,9 +58,9 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    private LinearLayoutManager mLayoutManager;
+    private long userMentorId;
 
-    private ProfileCommunityAdapter mAdapter;
+    private boolean isSelfProfile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,31 +69,18 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
         setContentView(R.layout.activity_communities_list);
         ButterKnife.bind(this);
 
-        toolbarTitle.setText(R.string.ID_COMMUNITIES);
-
-        Parcelable parcelable = getIntent().getParcelableExtra(AppConstants.COMMUNITY_ID);
-        if (parcelable != null) {
-            List<CommunityFeedSolrObj> profileCommunities = Parcels.unwrap(parcelable);
-            if (StringUtil.isNotEmptyCollection(profileCommunities)) {
-                setupCommunityListAdapter(profileCommunities);
-            }
+        if (getIntent().getExtras() != null) {
+            userMentorId = getIntent().getExtras().getLong(UserProfileTabFragment.USER_MENTOR_ID);
+            isSelfProfile = getIntent().getExtras().getBoolean(UserProfileTabFragment.SELF_PROFILE);
         }
-    }
 
-    @OnClick(R.id.iv_back_profile)
-    public void backOnclick() {
-        finish();
-    }
 
-    private void setupCommunityListAdapter(List<CommunityFeedSolrObj> profileCommunities) {
-        mLayoutManager = new LinearLayoutManager(this);
-        mCommunityRecycler.setLayoutManager(mLayoutManager);
-
-        mAdapter = new ProfileCommunityAdapter(this, profilePresenter, this);
-        mCommunityRecycler.setHasFixedSize(true);
-
-        mAdapter.setData(profileCommunities);
-        mCommunityRecycler.setAdapter(mAdapter);
+        Fragment followingFragment = UserMentorCommunity.createInstance(userMentorId, "", isSelfProfile);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction =
+                fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.followed_mentor_container, followingFragment);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -94,16 +88,15 @@ public class ProfileCommunitiesActivity extends BaseActivity implements ProfileC
         return SCREEN_LABEL;
     }
 
-    @Override
-    public void onItemClick( CommunityFeedSolrObj communityFeedSolrObj) {
-        Intent intent = new Intent(ProfileCommunitiesActivity.this, CommunitiesDetailActivity.class);
-        Bundle bundle = new Bundle();
-        Parcelable parcelables = Parcels.wrap(communityFeedSolrObj);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
-        //bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-        intent.putExtras(bundle);
-        intent.putExtra(AppConstants.FROM_DEEPLINK, false);
-        startActivity(intent);
-
+    //region static methods
+    public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile,  String sourceScreen, HashMap<String, Object> properties) {
+        Intent intent = new Intent(fromActivity, ProfileCommunitiesActivity.class);
+        intent.putExtra(UserProfileTabFragment.USER_MENTOR_ID, mentorID);
+        intent.putExtra(SELF_PROFILE, isSelfProfile);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, 1, null);
     }
 }

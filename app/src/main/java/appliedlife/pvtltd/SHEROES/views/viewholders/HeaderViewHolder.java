@@ -40,6 +40,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private String loggedInUser;
     private long userId;
     private FeedDetail dataItem;
+
     public HeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);

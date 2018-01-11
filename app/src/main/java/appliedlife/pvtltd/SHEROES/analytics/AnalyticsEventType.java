@@ -10,6 +10,7 @@ public enum AnalyticsEventType {
     // region Types
     APP("App"),
     POST("Post"),
+    PROFILE("Profile"),
     REPLY("Reply"),
     JOB("Job"),
     HELPLINE_MESSAGE("Helpline Message "),

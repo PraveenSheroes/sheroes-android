@@ -654,5 +654,28 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mPostDetailPresenter.getCommentUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(comment.getEntityId(), comment.getCommentsId()), comment);
         }
     }
+
+    @Override
+    public void userProfileNameClick(Comment comment, View view) {
+        if(comment.getParticipationTypeId() == 7 || comment.getParticipationTypeId() ==1) {
+            Intent intent = new Intent(this, MentorUserProfileActvity.class);
+            Bundle bundle = new Bundle();
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getEntityAuthorUserId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
+            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+            bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+            intent.putExtra(AppConstants.CHAMPION_ID, comment.getEntityAuthorUserId());
+            intent.putExtra(AppConstants.IS_MENTOR_ID, comment.isVerifiedMentor());
+            intent.putExtras(bundle);
+            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
+
+    @Override
+    public void userProfilePicClick(Comment comment, View view) {
+        userProfileNameClick(comment, view);
+    }
     //endregion
 }

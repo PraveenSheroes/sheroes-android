@@ -57,6 +57,13 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_14"
                     android:textStyle="normal" />
+
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/pb_image_loader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
             </RelativeLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -283,6 +290,5 @@
         android:id="@+id/pb_profile_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:layout_centerInParent="true" />
 </RelativeLayout>

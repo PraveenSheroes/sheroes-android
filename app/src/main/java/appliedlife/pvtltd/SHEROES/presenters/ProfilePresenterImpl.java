@@ -62,6 +62,39 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
 
     }
 
+    //post count
+
+    public void getUserPostCountFromPresenter(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = profileModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (null != feedResponsePojo) {
+                    getMvpView().getUsersPostCount(feedResponsePojo.getNumFound());
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
     //followed mentor
     public void getFollowedMentors(ProfileFollowedMentor profileFollowedMentor) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -194,8 +227,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
             public void onNext(ProfileCommunitiesResponsePojo userCommunities) {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
-                if (null != userCommunities) {
-                    Log.i(TAG, userCommunities.getStatus());
+                if(userCommunities.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().getUsersCommunities(userCommunities);
                 }
             }

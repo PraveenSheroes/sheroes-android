@@ -758,8 +758,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if (!mUserPostObj.isAnonymous()) { //todo - ravi - all non anonymous user click shold go
-            mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL); //todo -profile -rename it , so every user
+        if (!mUserPostObj.isAnonymous()) {
+            mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 
@@ -771,8 +771,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (!mUserPostObj.isAnonymous()) { //todo - ravi - all non anonymous user click shold go
-                    mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL); //todo -profile -rename it , so every user
+                if (!mUserPostObj.isAnonymous()) {
+                    mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
 
@@ -838,7 +838,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (!mUserPostObj.isAnonymous()) { //todo - ravi - all non anonymous user click shold go
+                if (!mUserPostObj.isAnonymous()) {
                     mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }

@@ -12,7 +12,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -25,6 +24,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by ravi on 01/01/18.
+ * Adapter for community listing on user or mentor profile
  */
 
 public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,9 +33,6 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final Context mContext;
     private final OnItemClicked onCommunityClickListener;
     private ProfilePresenterImpl profilePresenter;
-    private boolean showMoreItem = false;
-    public static final int INITIAL_ITEM_COUNT = 1;
-    public int commentAdded = 0;
 
     //region Constructor
     public ProfileCommunityAdapter(Context context, ProfilePresenterImpl profilePresenter, OnItemClicked onClickListener) {
@@ -114,7 +111,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 });
 
-                if (headderTitle.getVisibility() != View.VISIBLE && (profileCommunity.isShowHeader() || position == 0)) {
+                if (headderTitle.getVisibility() != View.VISIBLE && (profileCommunity.isShowHeader())) {
                     headderTitle.setVisibility(View.VISIBLE);
                 } else{
                     headderTitle.setVisibility(View.GONE);

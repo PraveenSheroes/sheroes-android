@@ -29,10 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_8"
-        android:layout_marginLeft="@dimen/dp_size_3"
-        android:layout_marginStart="@dimen/dp_size_3"
-        android:layout_marginEnd="@dimen/dp_size_3"
-        android:layout_marginRight="@dimen/dp_size_3"
+        android:layout_marginLeft="@dimen/dp_size_8"
+        android:layout_marginStart="@dimen/dp_size_8"
+        android:layout_marginEnd="@dimen/dp_size_8"
+        android:layout_marginRight="@dimen/dp_size_8"
         android:gravity="center"
         tools:text="Name" />
     </LinearLayout>

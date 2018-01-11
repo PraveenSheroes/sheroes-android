@@ -66,7 +66,6 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
         return communities.size();
     }
 
-
     public void setData(List<UserSolrObj>  communities) {
         this.communities = communities;
         notifyDataSetChanged();
@@ -95,9 +94,14 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
             ButterKnife.bind(this, itemView);
         }
 
+
         public void bindData(final UserSolrObj mentor, final int position) {
 
             if (null != mentor) {
+
+                if(mentor.getSubType().equalsIgnoreCase(AppConstants.FEED_PROGRESS_BAR)) {
+
+                }
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

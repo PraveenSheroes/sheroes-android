@@ -253,6 +253,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
     private long mUserId =-1L;
+    boolean isMentor;
 
     private String mOnBoarding;
     @Override
@@ -272,6 +273,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
+
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
+            }
         }
 
         renderHomeFragmentView();
@@ -919,6 +924,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void openProfileActivity() {
         Intent intent = new Intent(this, MentorUserProfileActvity.class);
         intent.putExtra(AppConstants.CHAMPION_ID, mUserId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         startActivity(intent);
     }
 

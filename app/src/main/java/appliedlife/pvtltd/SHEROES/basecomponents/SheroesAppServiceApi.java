@@ -90,6 +90,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResp
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
@@ -130,6 +131,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
+
+    @POST("participant/user/get_all_details")
+    Observable<UserProfileResponse> getUserDetails();
 
     @POST("participant/user/get_mentor_insights")
     Observable<MentorInsightResponse> getMentorInsightFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
@@ -330,6 +334,7 @@ public interface SheroesAppServiceApi {
 
     @POST("/participant/appmenu/")
     Observable<NavigationItems> getNavigationDrawerItems(@Body NavigationDrawerRequest navItems);
+
     @POST("participation/challenge/get/winners")
     Observable<WinnerResponse> getWinners(@Body WinnerRequest winnerRequest);
 

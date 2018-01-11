@@ -59,9 +59,12 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 public class UserProfileTabFragment extends BaseFragment implements ProfileNewView {
-    private static final String SCREEN_LABEL = "Mentor Profile Detail Screen";
+    private static final String SCREEN_LABEL = "Profile Screen - Profile Tab";
     private final String TAG = LogUtils.makeLogTag(UserProfileTabFragment.class);
 
+    public static final String USER_MENTOR_ID ="USERID";
+    public static final String USER_MENTOR_NAME ="USER_NAME";
+    public static final String SELF_PROFILE ="SELF_PROFILE";
     private long userId;
     private String userName = "User";
     private boolean isSelfProfile;
@@ -131,8 +134,8 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     public static UserProfileTabFragment createInstance(long userId, String name) {
         UserProfileTabFragment userProfileTabFragment = new UserProfileTabFragment();
         Bundle bundle = new Bundle();
-        bundle.putLong("USERID", userId);
-        bundle.putString("USER_NAME", name);
+        bundle.putLong(USER_MENTOR_ID, userId);
+        bundle.putString(USER_MENTOR_NAME, name);
         userProfileTabFragment.setArguments(bundle);
         return userProfileTabFragment;
     }
@@ -145,8 +148,8 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
         ButterKnife.bind(this, view);
 
         Bundle bundle = getArguments();
-        userId = bundle.getLong("USERID");
-        userName = bundle.getString("USER_NAME");
+        userId = bundle.getLong(USER_MENTOR_ID);
+        userName = bundle.getString(USER_MENTOR_NAME);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
             if (mUserPreference.get().getUserSummary().getUserId() == userId) {
@@ -155,13 +158,18 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             }
         }
 
-        populateUserProfileDetails();
-
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        populateUserProfileDetails();
+    }
 
     private void populateUserProfileDetails() {
+        boolean hideAnnonymousPost = !isSelfProfile;
+        profilePresenter.getUserPostCountFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, userId, hideAnnonymousPost));
 
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
 
@@ -175,7 +183,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
 
         }
-
     }
 
     @OnClick(R.id.dotted_border_container_community)
@@ -199,24 +206,14 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     public void navigateToFollowedMentors() {
 
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
-            Intent intent = new Intent(getContext(), FollowingActivity.class);
-            Parcelable parcelableContest = Parcels.wrap(followedChampions);
-            intent.putExtra(AppConstants.CHAMPION_ID, parcelableContest);
-            intent.putExtra("USERID", userId);
-            intent.putExtra("isSelfProfile", isSelfProfile);
-            startActivity(intent);
+            FollowingActivity.navigateTo(getActivity(), userId,  SCREEN_LABEL, null );
         }
     }
 
     @OnClick(R.id.community_view_more)
     public void navigateToCommunityListing() {
         if(StringUtil.isNotEmptyCollection(profileCommunities)) {
-            Intent intent = new Intent(getContext(), ProfileCommunitiesActivity.class);
-            Parcelable parcelableContest = Parcels.wrap(profileCommunities);
-            intent.putExtra(AppConstants.COMMUNITY_ID, parcelableContest);
-            intent.putExtra("USERID", userId);
-            intent.putExtra("isSelfProfile", isSelfProfile);
-            startActivity(intent);
+            ProfileCommunitiesActivity.navigateTo(getActivity(), userId, isSelfProfile, SCREEN_LABEL, null);
         }
     }
 
@@ -420,6 +417,12 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 dottedCommunityEmptyView.setBackgroundResource(0);
             }
         }
+    }
+
+    @Override
+    public void getUsersPostCount(int totalPost) {
+        LogUtils.info(TAG, "Post count:" + totalPost);
+        ((MentorUserProfileActvity) getActivity()).setUsersPostCount(totalPost);
     }
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {

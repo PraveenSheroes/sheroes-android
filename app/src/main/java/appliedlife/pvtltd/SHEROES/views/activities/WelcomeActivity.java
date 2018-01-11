@@ -928,7 +928,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         //super.showError(errorMsg, feedParticipationEnum);
         dismissDialog();
-        fbLogin.setEnabled(true);
+        if(fbLogin!= null) { //fix for NPE crash
+            fbLogin.setEnabled(true);
+        }
         mUserPreference.delete();
 
     }

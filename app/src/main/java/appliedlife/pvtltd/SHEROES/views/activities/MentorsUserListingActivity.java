@@ -99,6 +99,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
         mentorSearchInListPagination(mFragmentListRefreshData);
     }
+
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -162,6 +163,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             }
         }
     }
+
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
         Intent intent = new Intent(this, MentorUserProfileActvity.class);

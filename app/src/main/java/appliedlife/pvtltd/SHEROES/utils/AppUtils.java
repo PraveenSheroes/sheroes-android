@@ -1939,7 +1939,7 @@ public class AppUtils {
         profileUsersCommunityRequest.setDeviceUniqueId(getDeviceId());
         profileUsersCommunityRequest.setCloudMessagingId(getCloudMessaging());
         profileUsersCommunityRequest.setPageNo(pageNo);
-        profileUsersCommunityRequest.setPageSize(AppConstants.INVITE_PAGE_SIZE);
+        profileUsersCommunityRequest.setPageSize(AppConstants.PAGE_SIZE);
         profileUsersCommunityRequest.setUserId(userId);
 
         return profileUsersCommunityRequest;
