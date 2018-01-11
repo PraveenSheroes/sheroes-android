@@ -244,7 +244,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     private void invalidateBottomBar() {
-        if (mCommunityFeedSolrObj.isMember()) {
+        if (mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner()) {
             mBottomBar.setVisibility(View.GONE);
         } else {
             mBottomBar.setVisibility(View.VISIBLE);
