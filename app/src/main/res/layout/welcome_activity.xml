@@ -107,7 +107,6 @@
                     android:textSize="@dimen/sp_size_14" />
 
             </LinearLayout>
-
             <TextView
                 android:id="@+id/tv_other_login_option"
                 android:layout_width="match_parent"

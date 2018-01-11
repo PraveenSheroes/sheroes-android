@@ -11,6 +11,8 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -56,9 +58,12 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
@@ -69,7 +74,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -96,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
@@ -119,6 +128,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -140,6 +150,8 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
@@ -150,6 +162,8 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
+    @Inject
+    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Bind(R.id.home_toolbar)
     public Toolbar mToolbar;
     @Bind(R.id.fl_home_footer_list)
@@ -255,7 +269,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private long mUserId =-1L;
     boolean isMentor;
 
-    private String mOnBoarding;
+    private ShowcaseView showcaseView;
+    private int counter = 0;
+    private ShowcaseManager showcaseManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -307,6 +323,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
         }
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
+            Branch branch = Branch.getInstance();
+            branch.resetUserSession();
+            branch.initSession(new Branch.BranchReferralInitListener() {
+                                   @Override
+                                   public void onInitFinished(JSONObject referringParams, BranchError error) {
+                                       deepLinkingRedirection();
+                                   }
+                               }
+                    , this.getIntent().getData(), this);
+            showCaseDesign();
+        }
+    }
+
+    private void showCaseDesign() {
+        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities);
+        showcaseManager.showFirstMainActivityShowcase();
     }
 
     @Override
@@ -433,18 +466,75 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
-            if (getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES) != null) {
-                mOnBoarding = getIntent().getExtras().getString(AppConstants.ON_BOARDING_COMMUNITIES);
+            mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
+            if (!isSheUser) {
+                initHomeViewPagerAndTabs();
             }
+            if (mEventId > 0) {
+                eventDetailDialog(mEventId);
+            }
+        }
+    }
 
+    private void deepLinkingRedirection() {
+        // params are the deep linked params associated with the link that the user clicked before showing up
+        // params will be empty if no data found
+        Intent intent = new Intent();
+        Branch branch = Branch.getInstance(getApplicationContext());
+        JSONObject sessionParams = branch.getFirstReferringParams();
+        try {
+            String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
+            String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
+            if (StringUtil.isNotNullOrEmptyString(url)) {
+                if (openWebViewFlag.equalsIgnoreCase("true")) {
+                    Uri urlWebSite = Uri.parse(url);
+                    AppUtils.openChromeTabForce(this, urlWebSite);
+                    return;
+                }
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
+                    // Do not let others grab our call
+                    intent.setPackage(SheroesApplication.mContext.getPackageName());
+                } else {
+                    startActivity(intent);
+                    return;
+                }
+                Iterator<String> iterator = sessionParams.keys();
+                while (iterator.hasNext()) {
+                    String key = iterator.next();
+                    try {
+                        Object value = sessionParams.get(key);
+                        if (value instanceof String) {
+                            intent.putExtra(key, (String) value);
+                        }
+                        if (value instanceof Boolean) {
+                            intent.putExtra(key, (boolean) value);
+                        }
+                        if (value instanceof Integer) {
+                            intent.putExtra(key, (int) value);
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+                if (isIntentAvailable(this, intent)) {
+                    intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
+                    if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
+                        intent.setClass(this, SheroesDeepLinkingActivity.class);
+                    }
+                    startActivity(intent);
+                }
+            }
+        } catch (JSONException e) {
+            // Crashlytics.getInstance().core.logException(e);
         }
-        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        if (!isSheUser) {
-            initHomeViewPagerAndTabs();
-        }
-        if (mEventId > 0) {
-            eventDetailDialog(mEventId);
-        }
+    }
+
+    private boolean isIntentAvailable(Context ctx, Intent intent) {
+        final PackageManager mgr = ctx.getPackageManager();
+        List<ResolveInfo> list =
+                mgr.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        return list.size() > 0;
     }
 
     private void animateSnowFlake() {
@@ -473,11 +563,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean shouldShowSnowFlake() {
         boolean showSnowFlake = false;
-        if(mUserPreferenceMasterData!=null&&mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData()!=null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION")!=null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))){
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))) {
             String snowFlakeFlag = "";
             snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW").get(0).getLabel();
-            if(CommonUtil.isNotEmpty(snowFlakeFlag)){
-                if(snowFlakeFlag.equalsIgnoreCase("true")){
+            if (CommonUtil.isNotEmpty(snowFlakeFlag)) {
+                if (snowFlakeFlag.equalsIgnoreCase("true")) {
                     showSnowFlake = true;
                 }
             }
@@ -655,7 +745,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             feedRelatedOptions(view, baseResponse);
         } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
-        }else if (baseResponse instanceof Comment) {
+        } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -880,7 +970,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openMentorProfileDetail(BaseResponse baseResponse) {
-        UserSolrObj userSolrObj=(UserSolrObj) baseResponse;
+        UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
         Intent intent = new Intent(this, MentorUserProfileActvity.class);
@@ -1367,11 +1457,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         return;
                     }
                     doubleBackToExitPressedOnce = true;
-                    if (flFeedFullView.getVisibility()==View.VISIBLE) {
+                    if (flFeedFullView.getVisibility() == View.VISIBLE) {
                         Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
 
-                    }else
-                    {
+                    } else {
                         homeOnClick();
                     }
                     new Handler().postDelayed(new Runnable() {
@@ -1815,7 +1904,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Parcelable parcelable = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.CHAMPION_ID, userId);
         intent.putExtra(AppConstants.IS_MENTOR_ID,isMentor);
         intent.putExtras(bundle);
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -1895,4 +1984,5 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
+
 }

@@ -348,4 +348,5 @@ public class AppConstants {
     public static final String NAV_ICC_MEMBERS= "ICC Members";
     public static final String NAV_FAQ= "FAQ";
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
+    public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
 }

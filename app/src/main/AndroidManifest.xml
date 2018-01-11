@@ -280,6 +280,15 @@
             </intent-filter>
         </service>
 
+       <!-- Install referrer: Always put new install receiver below referrer-->
+        <receiver
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name="io.branch.referral.InstallListener"
             android:exported="true">
@@ -289,6 +298,16 @@
         </receiver>
 
         <receiver
+            android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
+
+       <!-- GCM receiver-->
+        <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -297,23 +316,9 @@
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
-        <receiver
-            android:name="appliedlife.pvtltd.SHEROES.service.CustomInstallTrackersReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
         <receiver
             android:name="com.google.android.gms.analytics.AnalyticsReceiver"
             android:enabled="true">

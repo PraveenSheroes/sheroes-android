@@ -26,6 +26,9 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -91,11 +94,15 @@ public class OnBoardingActivity extends BaseActivity {
                 onBoardingFragment();
             } else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
+                Bundle bundle=new Bundle();
+                homeIntent.putExtras(bundle);
                 startActivity(homeIntent);
                 finish();
             }
         } else {
             Intent homeIntent = new Intent(this, HomeActivity.class);
+            Bundle bundle=new Bundle();
+            homeIntent.putExtras(bundle);
             startActivity(homeIntent);
             finish();
         }
@@ -197,10 +204,11 @@ public class OnBoardingActivity extends BaseActivity {
             loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
             userPreference.set(loginResponse);
             Intent homeIntent = new Intent(this, HomeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.ON_BOARDING_COMMUNITIES, AppConstants.ON_BOARDING_COMMUNITIES);
+            Bundle bundle=new Bundle();
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
+            HashMap<String, Object> properties = new EventProperty.Builder().build();
+            AnalyticsManager.trackEvent(Event.ONBOARDING_COMPLETED, getScreenName(), properties);
         }else
         {
             Toast.makeText(this,"Please JOIN at least one community",Toast.LENGTH_SHORT).show();

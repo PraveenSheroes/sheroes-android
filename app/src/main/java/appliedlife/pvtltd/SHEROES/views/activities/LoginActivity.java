@@ -26,6 +26,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.DEFFERED_DEEP_LINK;
+
 
 /**
  * Created by Praveen Singh on 04/01/2017.
@@ -39,7 +41,6 @@ public class LoginActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     @Inject
     Preference<LoginResponse> userPreference;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,7 @@ public class LoginActivity extends BaseActivity {
     public void renderLoginFragmentView() {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Bundle bundle =getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
         LoginFragment frag = new LoginFragment();
         frag.setArguments(bundle);
         callFirstFragment(R.id.fragment_login, frag);
@@ -88,6 +89,8 @@ public class LoginActivity extends BaseActivity {
             renderEmailVerifyFragmentView();
         } else {
             Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
+            Bundle bundle=new Bundle();
+            boardingIntent.putExtras(bundle);
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);
         }

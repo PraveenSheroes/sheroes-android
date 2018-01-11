@@ -936,6 +936,17 @@
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
     <string name="ID_SECOND_WELCOME">Join Communities</string>
     <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
+    <string name="ID_GOT"> Got it!</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Ask a question or share something</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_DESC">Start a conversation in any community by tapping here</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities To Talk And Share</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Explore new communities to join and start talking</string>
+    <string name="ID_SHOW_CASE_FEED_TITLE">Welcome To Your SHEROES Feed</string>
+    <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
+    <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
+    <string name="ID_NEXT">Next</string>
+    <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
+
     <string name="followed_communities">Followed Communities</string>
     <string name="view_more">View More</string>
     <string name="followed_mentors">Followed Champions</string>
