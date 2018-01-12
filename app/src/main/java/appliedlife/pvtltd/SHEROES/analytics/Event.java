@@ -107,10 +107,10 @@ public enum Event {
     PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Profile Followers Count Click"),
     PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Profile Following Count Click"),
     //region Image related events
-    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, "Onboarding completed"),
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " completed"),
     USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
-    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, "Walkthrough started"),
-    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, "Walkthrough completed");
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " completed");
     // endregion
 
     public final AnalyticsEventType type;

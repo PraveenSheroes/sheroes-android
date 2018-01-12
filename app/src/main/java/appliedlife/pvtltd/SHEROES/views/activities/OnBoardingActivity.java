@@ -70,7 +70,8 @@ public class OnBoardingActivity extends BaseActivity {
     @Bind(R.id.tv_on_boarding_description)
     public TextView tvDescription;
     private boolean doubleBackToExitPressedOnce = false;
-    public static int isJoinCount=0;
+    public static int isJoinCount = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,14 +95,14 @@ public class OnBoardingActivity extends BaseActivity {
                 onBoardingFragment();
             } else {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 homeIntent.putExtras(bundle);
                 startActivity(homeIntent);
                 finish();
             }
         } else {
             Intent homeIntent = new Intent(this, HomeActivity.class);
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
             finish();
@@ -111,13 +112,13 @@ public class OnBoardingActivity extends BaseActivity {
     public void onBoardingFragment() {
         tvNameUser.setText(userPreference.get().getUserSummary().getFirstName());
         String description = getString(R.string.ID_BOARDING_COMMUNITIES);
-        isJoinCount=0;
+        isJoinCount = 0;
         SpannableString spannableString = new SpannableString(description);
         if (StringUtil.isNotNullOrEmptyString(description)) {
             spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 27, 42, 0);
             spannableString.setSpan(new StyleSpan(Typeface.BOLD), 27, 42, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length()-14, description.length(), 0);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length()-14, description.length(), 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length() - 14, description.length(), 0);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length() - 14, description.length(), 0);
             tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
             tvDescription.setText(spannableString, TextView.BufferType.SPANNABLE);
             tvDescription.setSelected(true);
@@ -138,11 +139,9 @@ public class OnBoardingActivity extends BaseActivity {
                 case R.id.tv_boarding_communities_join:
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingFragment.class.getName());
                     if (AppUtils.isFragmentUIActive(fragment)) {
-                        if(communityFeedSolrObj.isMember())
-                        {
+                        if (communityFeedSolrObj.isMember()) {
                             ((OnBoardingFragment) fragment).unJoinCommunity(communityFeedSolrObj);
-                        }else
-                        {
+                        } else {
                             ((OnBoardingFragment) fragment).joinRequestForOpenCommunity(communityFeedSolrObj);
                         }
 
@@ -162,7 +161,7 @@ public class OnBoardingActivity extends BaseActivity {
             return;
         }
         doubleBackToExitPressedOnce = true;
-      //  Snackbar.make(card, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+        //  Snackbar.make(card, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -199,19 +198,18 @@ public class OnBoardingActivity extends BaseActivity {
 
     @OnClick(R.id.tv_on_boarding_finish)
     public void onFinishButtonClick() {
-        if(isJoinCount>0) {
+        if (isJoinCount > 0) {
+            HashMap<String, Object> properties = new EventProperty.Builder().build();
+            AnalyticsManager.trackEvent(Event.ONBOARDING_COMPLETED, getScreenName(), properties);
             LoginResponse loginResponse = userPreference.get();
             loginResponse.setNextScreen(AppConstants.FEED_SCREEN);
             userPreference.set(loginResponse);
             Intent homeIntent = new Intent(this, HomeActivity.class);
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
-            HashMap<String, Object> properties = new EventProperty.Builder().build();
-            AnalyticsManager.trackEvent(Event.ONBOARDING_COMPLETED, getScreenName(), properties);
-        }else
-        {
-            Toast.makeText(this,"Please JOIN at least one community",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Please JOIN at least one community", Toast.LENGTH_SHORT).show();
         }
     }
 
