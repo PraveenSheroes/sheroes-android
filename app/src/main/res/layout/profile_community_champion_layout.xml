@@ -60,8 +60,7 @@
                         android:drawableTop="@drawable/ic_communities_ic"
                         android:fontFamily="sans-serif"
                         android:gravity="center"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp" />
                 </FrameLayout>
             </LinearLayout>
 
@@ -77,9 +76,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_size_16"
-                    android:drawableLeft="@drawable/ic_communities_ic"
+                    android:drawableLeft="@drawable/ic_community_icon_dark_grey"
                     android:drawablePadding="@dimen/dp_size_16"
-                    android:drawableStart="@drawable/ic_communities_ic"
+                    android:drawableStart="@drawable/ic_community_icon_dark_grey"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:text="@string/followed_communities"
@@ -113,6 +112,12 @@
                     android:fontFamily="sans-serif"
                     android:textSize="14sp"
                     android:textStyle="normal" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/extra_space"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_size_12" />
 
                 <GridLayout
                     android:id="@+id/user_communities"
@@ -178,11 +183,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@color/white"
-                    android:drawableTop="@drawable/ic_business_woman"
-                    android:fontFamily="sans-serif"
+                    android:drawableTop="@drawable/mentor_empty_icon"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    />
 
                 </FrameLayout>
             </LinearLayout>

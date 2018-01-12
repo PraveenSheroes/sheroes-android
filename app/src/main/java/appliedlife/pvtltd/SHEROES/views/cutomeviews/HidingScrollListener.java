@@ -259,7 +259,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
 
                     case AppConstants.PROFILE_FOLLOWING:
-                        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
+                        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
                         break;
 
                     case AppConstants.ON_BOARDING_COMMUNITIES:

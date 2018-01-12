@@ -130,7 +130,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
             public void dismissReactions() {
             }
     });
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -146,7 +146,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
     }
 
     @Override

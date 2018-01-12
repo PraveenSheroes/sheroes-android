@@ -244,11 +244,9 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
 
         if (StringUtil.isNotEmptyCollection(otherCommunity)) {
             CommunityFeedSolrObj profileCommunity = otherCommunity.get(0);
-           if(mPageNo == AppConstants.ONE_CONSTANT) {
+           if(mutualCommunity!=null && mutualCommunity.size() ==0) {
                profileCommunity.setShowHeader(true);
-           } else {
-               profileCommunity.setShowHeader(false);
-           }
+           } 
 
             if (isSelfProfile) {
                 profileCommunity.setMutualCommunityCount(0);

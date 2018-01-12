@@ -122,8 +122,8 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                     community_subtitle.setText(profileCommunity.getMutualCommunityCount() + " Mutual Communities");
                 } else if (profileCommunity.isOtherCommunityFirstItem()) {
                     community_subtitle.setVisibility(View.VISIBLE);
-                    String label = profileCommunity.getMutualCommunityCount() == 0 ? "Communities" : "Other Communities";
-                    if(label.equalsIgnoreCase("Other Communities")) {
+                    String label = "My Communities";
+                    if(label.equalsIgnoreCase("My Communities")) { //TODO - recheck here
                         headderTitle.setVisibility(View.GONE);
                     }
                     community_subtitle.setText(label);

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
@@ -73,6 +75,9 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @Bind(R.id.user_communities)
     GridLayout userCommunityLayout;
+
+    @Bind(R.id.extra_space)
+    TextView spacing;
 
     @Bind(R.id.mutual_community_container)
     LinearLayout mutualCommunityContainer;
@@ -175,7 +180,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
         if(isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
@@ -305,7 +310,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             view.setLayoutParams(layoutParams);
 
             userCommunityLayout.addView(view);
-
             counter++;
             if (counter == 4) break;
         }
@@ -374,11 +378,14 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 populateMutualCommunities(mutualCommunity); // for mutual community
                 mutualCommunityContainer.setVisibility(View.VISIBLE);
                 mutualCommunityLabel.setVisibility(View.VISIBLE);
+                spacing.setVisibility(View.GONE);
             } else {
+                spacing.setVisibility(View.GONE);
                 mutualCommunityContainer.setVisibility(View.GONE);
                 mutualCommunityLabel.setVisibility(View.GONE);
             }
         } else {
+            spacing.setVisibility(View.VISIBLE);
             mutualCommunityContainer.setVisibility(View.GONE);
             mutualCommunityLabel.setVisibility(View.GONE);
         }
@@ -480,7 +487,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
-        Intent intent = new Intent(getActivity(), CommunitiesDetailActivity.class);
+        Intent intent = new Intent(getActivity(), CommunitiesDetailActivity.class); //todo - chk with ujjwal
         Bundle bundle = new Bundle();
         Parcelable parcelables = Parcels.wrap(communityFeedSolrObj);
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);

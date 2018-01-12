@@ -43,12 +43,21 @@
 
     <TextView
         android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/on_board_work" />
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_1"
         android:background="@color/on_board_work" />
 
     <LinearLayout
         android:id="@+id/community_row_item"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_98"
         android:layout_marginLeft="@dimen/dp_size_16"
@@ -72,7 +81,7 @@
                 android:id="@+id/community_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_5"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:maxLines="@integer/int_value_for_line_1"
@@ -100,9 +109,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_4"
-                android:drawableLeft="@drawable/ic_avatar1"
+                android:drawableLeft="@drawable/ic_mentor_follower"
                 android:drawablePadding="@dimen/dp_size_5"
-                android:drawableStart="@drawable/ic_avatar1"
+                android:drawableStart="@drawable/ic_mentor_follower"
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
@@ -112,12 +121,7 @@
                 android:textStyle="normal"
                 tools:text="@string/ID_FOLLOWER" />
         </LinearLayout>
-
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_1"
-        android:background="@color/on_board_work" />
+    </RelativeLayout>
 
 </LinearLayout>

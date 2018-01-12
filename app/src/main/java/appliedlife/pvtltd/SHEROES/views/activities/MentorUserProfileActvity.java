@@ -95,14 +95,11 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     private final String TAG = LogUtils.makeLogTag(MentorUserProfileActvity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
 
-    private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
+    //private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
     private Long mChampionId;
     private boolean isMentor;
     private int mFromNotification;
     private FeedDetail mFeedDetail;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
     private int askingQuestionCode;
     boolean isOwnProfile = false;
     ViewPagerAdapter mViewPagerAdapter;
@@ -234,9 +231,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.mentor_user_dashboard_layout);
         mHomePresenter.attachView(this);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -714,7 +708,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mUserSolarObject = (UserSolrObj) feedDetailList.get(0);
-            mUserSolarObject.setCallFromName(screenName);
+            mUserSolarObject.setCallFromName(SCREEN_LABEL);
             if(isMentor) {
                   clHomeFooterList.setVisibility(View.VISIBLE);
             }
