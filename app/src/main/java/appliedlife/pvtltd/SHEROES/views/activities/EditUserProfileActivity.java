@@ -286,7 +286,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             location.setText(locationValue);
         }
 
-        aboutMeValue = userSummary.getUserBO().getUserSummary();
+        aboutMeValue = userSummary.getUserBO().getUserSummary() ;
         if (StringUtil.isNotNullOrEmptyString(aboutMeValue)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 aboutMe.setText(Html.fromHtml(aboutMeValue)); // for 24 api and more
@@ -401,7 +401,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             bundle.putString("LOCATION", summary.getUserBO().getCityMaster());
             bundle.putString("IMAGE_URL", summary.getPhotoUrl());
             intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
+            setResult(AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE, intent);
         }
     }
 
@@ -733,7 +733,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
             //USer Bio region
-            if(!aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
+            //if(!aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
                 UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
                 userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
                 userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
@@ -747,7 +747,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
 
                 editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
-            }
+            //}
             //end region
 
             String userFullName = name.getText().toString().trim();

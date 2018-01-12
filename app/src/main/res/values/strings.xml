@@ -71,6 +71,7 @@
     <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
+    <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
     <string name="ID_CHAMPION">Champion</string>
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>

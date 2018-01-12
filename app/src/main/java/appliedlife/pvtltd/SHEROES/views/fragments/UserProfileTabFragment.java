@@ -175,7 +175,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1));
 
         if(isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
@@ -223,10 +223,11 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
         String name = communities.get(0).getAuthorFirstName()== null ? "User" : communities.get(0).getAuthorFirstName();
         mutualCommunityLabel.setText(name + " & you share "+ mutualCommunitySize +" mutual communities");
 
+        mutualCommunityContainer.removeAllViews();
+
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_mutual_community, null);
-
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
@@ -276,7 +277,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
         int screenWidth = CommonUtil.getWindowWidth(getContext());
         float aspectRatio = (float) 124 / 160;
         int columnSize = screenWidth / 2 - mImageMargin;
-
+        userCommunityLayout.removeAllViews();
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_communities_items, null);
@@ -428,6 +429,8 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
 
         int counter = 0;
+        followedMentor.removeAllViewsInLayout();
+
         for (final UserSolrObj userSolrObj : followedMentors) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.followed_mentor_list_item, null);
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.iv_mentor_full_view_icon);
@@ -492,9 +495,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
-
-
 
 }
 

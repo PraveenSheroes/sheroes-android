@@ -82,6 +82,7 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
 
 /**
@@ -336,13 +337,17 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
 
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
-        //userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
-        //tvMentorPost.setText(pluralAnswer);
+        tvMentorPost.setText(pluralAnswer);
+        if(isMentor) {
+            userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
+        }
         liPost.setVisibility(View.VISIBLE);
 
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mUserSolarObject.getSolrIgnoreNoOfMentorFollowers());
-        //userFollowerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
         userFollower.setText(pluralFollower);
+        if(isMentor) {
+            userFollowerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
+        }
 
         if (isMentor) {
             liFollowing.setVisibility(View.GONE);
@@ -575,7 +580,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     }
 
     public void onBackClick() {
-       if(isMentor) {
            if (mChampionId > 0) {
                if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
                    Intent intent = new Intent(this, HomeActivity.class);
@@ -587,9 +591,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                deepLinkPressHandle();
            }
            finish();
-       } else {
-           super.onBackPressed();
-       }
     }
 
     private void deepLinkPressHandle() {
@@ -800,16 +801,18 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
+
+            if(resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
+                Bundle bundle = intent.getExtras();
+                if(bundle!=null) {
+                    refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"),  bundle.getString("BIO"), bundle.getString("IMAGE_URL"));
+                }
+            }
+
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING:
                   //  refetchCommunity()
                  break;
-                case AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE:
-                    Bundle bundle = intent.getExtras();
-                    if(bundle!=null) {
-                        refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"),  bundle.getString("BIO"), bundle.getString("IMAGE_URL"));
-                    }
-                   break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
@@ -865,6 +868,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         tvMentorToolbarName.setText(name);
         tvLoc.setText(location);
         userDescription.setText(userBio);
+
         if (StringUtil.isNotNullOrEmptyString(imageUrl)){
             mProfileIcon.setCircularImage(true);
             mProfileIcon.bindImage(imageUrl);
