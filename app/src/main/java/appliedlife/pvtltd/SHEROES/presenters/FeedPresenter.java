@@ -5,6 +5,7 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     private String mNextToken = "";
     private boolean mIsFeedLoading;
     private int mFeedState;
-    private List<FeedDetail> mFeedDetailList;
+    private List<FeedDetail> mFeedDetailList = new ArrayList<>();
 
     @Inject
     public FeedPresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi) {
@@ -208,6 +209,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 }
                                 break;
                         }
+                    }else {
+                        getMvpView().showFeedList(mFeedDetailList);
                     }
                 }
             });

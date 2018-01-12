@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
@@ -480,15 +481,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
-        Intent intent = new Intent(getActivity(), CommunitiesDetailActivity.class);
-        Bundle bundle = new Bundle();
-        Parcelable parcelables = Parcels.wrap(communityFeedSolrObj);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
-        //bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-        intent.putExtras(bundle);
-       // intent.putExtra(AppConstants.COMMUNITY_ID, communityFeedSolrObj.getEntityOrParticipantId());
-        intent.putExtra(AppConstants.FROM_DEEPLINK, false);
-        startActivity(intent);
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 
     @Override

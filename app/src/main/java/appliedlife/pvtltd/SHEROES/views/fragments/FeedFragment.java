@@ -305,13 +305,17 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, View view) {
         PopupMenu popup = new PopupMenu(getActivity(), view);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId!=userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
@@ -367,13 +371,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onCommentMenuClicked(final UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(getActivity(), tvFeedCommunityPostUserCommentPostMenu);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            Comment comment = userPostObj.getLastComments().get(0);
+            if (currentUserId !=comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
