@@ -549,19 +549,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
         boolean isMentor = userPostObj.isAuthorMentor();
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
-        Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID,userId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+        MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override
@@ -712,18 +705,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void userProfileNameClick(Comment comment, View view) {
         if(comment.getParticipationTypeId() == 7 || comment.getParticipationTypeId() ==1) {
-            Intent intent = new Intent(this, MentorUserProfileActvity.class);
-            Bundle bundle = new Bundle();
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getEntityAuthorUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
             Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
-            bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-            bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-            intent.putExtra(AppConstants.CHAMPION_ID, comment.getEntityAuthorUserId());
-            intent.putExtra(AppConstants.IS_MENTOR_ID, comment.isVerifiedMentor());
-            intent.putExtras(bundle);
-            startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, comment.getEntityAuthorUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 

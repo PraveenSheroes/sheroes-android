@@ -166,16 +166,8 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
 
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
-        Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this, userSolrObj, true, AppConstants.CHAMPION_LISTING, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

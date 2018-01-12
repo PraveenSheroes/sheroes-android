@@ -103,7 +103,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         }
         getMvpView().startProgressBar();
 
-        Subscription subscription = profileModel.getFollowedMentor(profileFollowedMentor ).subscribe(new Subscriber<UserFollowedMentorsResponse>() {
+        Subscription subscription = profileModel.getFollowedMentor(profileFollowedMentor).subscribe(new Subscriber<UserFollowedMentorsResponse>() {
             @Override
             public void onCompleted() {
 
@@ -113,7 +113,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
             public void onError(Throwable throwable) {
                 Crashlytics.getInstance().core.logException(throwable);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+               // getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
             }
 
             @Override

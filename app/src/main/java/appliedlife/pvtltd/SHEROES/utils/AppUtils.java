@@ -2016,10 +2016,9 @@ public class AppUtils {
         return publicProfileListRequest;
     }
 
-    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId) {
+    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo) {
         ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
         profileFollowedMentor.setPageNo(pageNo);
-        profileFollowedMentor.setIdOfEntityParticipant(userId);
         profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
         return profileFollowedMentor;
     }
@@ -2074,7 +2073,6 @@ public class AppUtils {
     public  FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setAutherId((int) idForDetail);
-        feedRequestPojo.setIdForFeedDetail(idForDetail);
         feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
         return feedRequestPojo;
     }

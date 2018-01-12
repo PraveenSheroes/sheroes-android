@@ -107,6 +107,7 @@ public class AppConstants {
     public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
     public static final String PROFILE_COMMUNITY_LISTING = "profile_community_listing";
+    public static final String PROFILE_CHAMPION = "profile_champion";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
@@ -114,6 +115,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CHALLENGE_DETAIL = 1901;
     public static final int REQUEST_CODE_FOR_POST_DETAIL = 1902;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
+    public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
     public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
@@ -131,6 +133,7 @@ public class AppConstants {
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT ="helpline";
     public static final String PROFILE_FRAGMENT = "profile";
+    public static final String CHAMPION_LISTING = "CHAMPION_LISTING";
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";
@@ -168,6 +171,7 @@ public class AppConstants {
 
     public static final String JOB_DETAIL = "job_detail";
     public static final String MENTOR_DETAIL = "mentor_detail";
+    public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String COVER_IMAGE = "cover_image";
     public static final String TAG_LIST = "tag_list";
@@ -356,4 +360,6 @@ public class AppConstants {
     public static final String NAV_FAQ= "FAQ";
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
+
+    public static final String PROFILE_FOLLOWED_CHAMPION= "Profile Followed Champion";
 }

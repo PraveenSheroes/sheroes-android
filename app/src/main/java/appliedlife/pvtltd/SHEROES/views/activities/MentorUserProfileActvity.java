@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -82,6 +83,7 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
 
 /**
@@ -336,13 +338,17 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
 
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
-        //userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
-        //tvMentorPost.setText(pluralAnswer);
+        tvMentorPost.setText(pluralAnswer);
+        if(isMentor) {
+            userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
+        }
         liPost.setVisibility(View.VISIBLE);
 
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mUserSolarObject.getSolrIgnoreNoOfMentorFollowers());
-        //userFollowerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
         userFollower.setText(pluralFollower);
+        if(isMentor) {
+            userFollowerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
+        }
 
         if (isMentor) {
             liFollowing.setVisibility(View.GONE);
@@ -575,7 +581,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     }
 
     public void onBackClick() {
-       if(isMentor) {
            if (mChampionId > 0) {
                if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
                    Intent intent = new Intent(this, HomeActivity.class);
@@ -587,9 +592,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                deepLinkPressHandle();
            }
            finish();
-       } else {
-           super.onBackPressed();
-       }
     }
 
     private void deepLinkPressHandle() {
@@ -757,18 +759,10 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     }
 
     public void championDetailActivity(Long userId, boolean isMentor) {
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
         mUserSolarObject = new UserSolrObj();
         mUserSolarObject.setIdOfEntityOrParticipant(userId);
         mUserSolarObject.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        Parcelable parcelable = Parcels.wrap(mUserSolarObject);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        bundle.putLong(AppConstants.CHAMPION_ID, userId);
-        bundle.putBoolean(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this, mUserSolarObject, userId, true, AppConstants.PROFILE_CHAMPION, null,  AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     @Override
@@ -800,16 +794,18 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
+
+            if(resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
+                Bundle bundle = intent.getExtras();
+                if(bundle!=null) {
+                    refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"),  bundle.getString("BIO"), bundle.getString("IMAGE_URL"));
+                }
+            }
+
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING:
                   //  refetchCommunity()
                  break;
-                case AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE:
-                    Bundle bundle = intent.getExtras();
-                    if(bundle!=null) {
-                        refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"),  bundle.getString("BIO"), bundle.getString("IMAGE_URL"));
-                    }
-                   break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
@@ -865,6 +861,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         tvMentorToolbarName.setText(name);
         tvLoc.setText(location);
         userDescription.setText(userBio);
+
         if (StringUtil.isNotNullOrEmptyString(imageUrl)){
             mProfileIcon.setCircularImage(true);
             mProfileIcon.bindImage(imageUrl);
@@ -986,12 +983,149 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
         }
 
-    public static void navigateTo(Activity fromActivity, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
+
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, String extraImage, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(AppConstants.EXTRA_IMAGE, extraImage);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.CHAMPION_ID,userId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, boolean isMentor, int bellNotificationCall, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.ASKING_QUESTION, bellNotificationCall);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        dataItem.setIdOfEntityOrParticipant(mChampionId);
+        dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        dataItem.setItemPosition(position);
+        Parcelable parcelable = Parcels.wrap(dataItem);
+
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtra(AppConstants.CHAMPION_ID,mChampionId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        dataItem.setIdOfEntityOrParticipant(mChampionId);
+        dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        Parcelable parcelable = Parcels.wrap(dataItem);
+
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtra(AppConstants.CHAMPION_ID,mChampionId);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(AppConstants.BELL_NOTIFICATION, notificationId);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(AppConstants.BELL_NOTIFICATION, notificationId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
 }

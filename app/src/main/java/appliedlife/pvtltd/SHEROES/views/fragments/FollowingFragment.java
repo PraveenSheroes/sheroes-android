@@ -100,7 +100,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
             isSelfProfile = getArguments().getBoolean(SELF_PROFILE);
         }
         toolbarTitle.setText(R.string.ID_CHAMPION);
-        
+
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FOLLOWING, AppConstants.NO_REACTION_CONSTANT);
         mFragmentListRefreshData.setSelfProfile(isSelfProfile);
         mFragmentListRefreshData.setMentorUserId(userMentorId);
@@ -130,7 +130,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
             public void dismissReactions() {
             }
     });
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), userMentorId));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -138,7 +138,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
                 refreshFeedMethod();
             }
         });
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_CHAMPION_LISTING));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWED_CHAMPION_LISTING));
 
     }
 
@@ -146,7 +146,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), userMentorId));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
     }
 
     @Override
@@ -214,11 +214,6 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
 
     @Override
     public void onItemClick(UserSolrObj mentor) {
-        Intent intent = new Intent(getContext(), MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
-        bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
-        bundle.putBoolean(AppConstants.IS_MENTOR_ID, true);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        MentorUserProfileActvity.navigateTo(getActivity(), mentor.getIdOfEntityOrParticipant(), true, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 }
