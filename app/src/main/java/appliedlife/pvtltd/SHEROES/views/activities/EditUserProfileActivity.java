@@ -273,6 +273,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
     }
 
     private void setUserDetails(UserSummary userSummary) {

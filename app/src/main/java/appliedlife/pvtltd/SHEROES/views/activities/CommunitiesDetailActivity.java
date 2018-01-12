@@ -427,19 +427,12 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor) {
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
         mCommunityFeedObj = new CommunityFeedSolrObj();
         mCommunityFeedObj.setIdOfEntityOrParticipant(userId);
         mCommunityFeedObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         mCommunityFeedObj.setItemPosition(position);
-        Parcelable parcelable = Parcels.wrap(mCommunityFeedObj);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID,userId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);//todo - check if mentor
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+        MentorUserProfileActvity.navigateTo(this, mCommunityFeedObj, userId, isMentor, position, AppConstants.COMMUNITIES_DETAIL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     public void updateOpenAboutFragment(FeedDetail feedDetail) {

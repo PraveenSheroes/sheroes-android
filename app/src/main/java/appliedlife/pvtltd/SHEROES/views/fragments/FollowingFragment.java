@@ -214,11 +214,6 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
 
     @Override
     public void onItemClick(UserSolrObj mentor) {
-        Intent intent = new Intent(getContext(), MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
-        bundle.putLong(AppConstants.CHAMPION_ID, mentor.getIdOfEntityOrParticipant());
-        bundle.putBoolean(AppConstants.IS_MENTOR_ID, true);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        MentorUserProfileActvity.navigateTo(getActivity(), mentor.getIdOfEntityOrParticipant(), true, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 }

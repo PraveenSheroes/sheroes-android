@@ -896,12 +896,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             case R.id.iv_header_circle_icon:
                 mFeedDetail = (FeedDetail) baseResponse;
-                championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor());
+                championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor(), getString(R.string.feed_header));
                 break;
 
             case R.id.user_name:
                 mFeedDetail = (FeedDetail) baseResponse;
-                championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor());
+                championDetailActivity(mFeedDetail.getEntityOrParticipantId(),0,  mFeedDetail.isAuthorMentor(), getString(R.string.feed_header));
                 break;
 
             case R.id.header_msg:
@@ -973,16 +973,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
-        Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, true);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+        MentorUserProfileActvity.navigateTo(this, userSolrObj, true, AppConstants.HOME_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
     }
 
     public void referralUserAttribute(Context context, LoginResponse loginResponse) {
@@ -1012,10 +1006,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openProfileActivity() {
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mUserId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        startActivity(intent);
+        MentorUserProfileActvity.navigateTo(this, mUserId, isMentor, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     public void refreshHomeFragment(FeedDetail feedDetail) {
@@ -1886,28 +1877,20 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void championProfile(BaseResponse baseResponse, int championValue) {
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor());
+            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
         } else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor());
+            championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
         }
     }
 
-    private void championDetailActivity(Long userId, int position, boolean isMentor) {
-        Intent intent = new Intent(this, MentorUserProfileActvity.class);
-        Bundle bundle = new Bundle();
+    private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-        Parcelable parcelable = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID, userId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID,isMentor);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

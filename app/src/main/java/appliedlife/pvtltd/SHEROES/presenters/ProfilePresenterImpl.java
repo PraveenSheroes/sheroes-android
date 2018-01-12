@@ -120,7 +120,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
             public void onNext(UserFollowedMentorsResponse profileFeedResponsePojo) {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
-                if (null != profileFeedResponsePojo && profileFeedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                if (null != profileFeedResponsePojo) {
                     Log.i(TAG, profileFeedResponsePojo.getStatus());
                     getMvpView().getFollowedMentors(profileFeedResponsePojo);
                 }

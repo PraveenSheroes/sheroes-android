@@ -957,4 +957,5 @@
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="new_feature">New</string>
+    <string name="feed_header">FEED_HEADER</string>
 </resources>
