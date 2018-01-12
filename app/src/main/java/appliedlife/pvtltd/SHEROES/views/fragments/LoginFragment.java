@@ -94,6 +94,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     private boolean isEye;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,18 +147,18 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
-                        ((LoginActivity)getActivity()).onLoginAuthToken();
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-                        AnalyticsManager.initializeMixpanel(getActivity());
+                        ((LoginActivity) getActivity()).onLoginAuthToken();
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
-                        ((LoginActivity)getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
                         break;
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
+                    AnalyticsManager.initializeMixpanel(getContext());
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
@@ -166,11 +167,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
-                    ((LoginActivity)getActivity()).onLoginAuthToken();
-                    AnalyticsManager.initializeMixpanel(getActivity());
+                    AnalyticsManager.initializeMixpanel(getContext());
+                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
+                    AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
+                    ((LoginActivity) getActivity()).onLoginAuthToken();
+
                 } else {
                     LoginManager.getInstance().logOut();
-                    ((LoginActivity)getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
                 }
             }
         }
@@ -353,20 +357,19 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @OnClick(R.id.iv_password_eye)
     public void passwordEyeOnClick() {
-        if(isEye) {
-            isEye=false;
+        if (isEye) {
+            isEye = false;
             mPasswordView.setTransformationMethod(new PasswordTransformationMethod());
             mPasswordView.setSelection(mPasswordView.length());
-        }else
-        {
-            isEye=true;
+        } else {
+            isEye = true;
             mPasswordView.setTransformationMethod(null);
             mPasswordView.setSelection(mPasswordView.length());
         }
     }
+
     @OnClick(R.id.tv_login_back)
-    public void onBack()
-    {
-        ((LoginActivity)getActivity()).onBackPressed();
+    public void onBack() {
+        ((LoginActivity) getActivity()).onBackPressed();
     }
 }

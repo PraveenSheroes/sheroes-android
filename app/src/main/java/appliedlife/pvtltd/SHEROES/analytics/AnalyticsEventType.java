@@ -17,7 +17,7 @@ public enum AnalyticsEventType {
     CHALLENGE("Challenge"),
     COMMUNITY("Community"),
     ON_BOARDING("Onboarding"),
-    WALKTHROUGH("walkthrough"),
+    WALKTHROUGH("Walkthrough"),
     ORGANIZATION("Organization"),
     ARTICLE("Article"),
     CHAT("Chat"),
