@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +49,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -86,7 +85,7 @@ import butterknife.OnClick;
  * User Profile Edit Screen
  */
 
-public class EditUserProfileActivity extends BaseActivity implements IEditProfileView ,AdapterView.OnItemSelectedListener{
+public class EditUserProfileActivity extends BaseActivity implements IEditProfileView, AdapterView.OnItemSelectedListener {
 
     private static final String SCREEN_LABEL = "Edit Profile Screen";
     private static final String TAG = EditUserProfileActivity.class.getName();
@@ -102,7 +101,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private int cityId;
     private File localImageSaveForChallenge;
     private String aboutMeValue = "";
-    private LoginResponse userDetailsResponse ;
+    private LoginResponse userDetailsResponse;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -112,6 +111,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Inject
     AppUtils appUtils;
+
+    @Bind(R.id.scroll_fragment_edit)
+    ScrollView scrollFragmentEdit;
 
     @Bind(R.id.et_full_name_container)
     TextInputLayout fullNameContainer;
@@ -226,7 +228,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void errorMessage(String message) {
-        if(StringUtil.isNotNullOrEmptyString(message) && message.contains("mobile number already registered with us")) {
+        if (StringUtil.isNotNullOrEmptyString(message) && message.contains("mobile number already registered with us")) {
             mobileContainer.setError(message.toUpperCase());
             requestFocus(mobileNumber);
             mProgressBar.setVisibility(View.GONE);
@@ -287,7 +289,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             location.setText(locationValue);
         }
 
-        aboutMeValue = userSummary.getUserBO().getUserSummary() ;
+        aboutMeValue = userSummary.getUserBO().getUserSummary();
         if (StringUtil.isNotNullOrEmptyString(aboutMeValue)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 aboutMe.setText(Html.fromHtml(aboutMeValue)); // for 24 api and more
@@ -295,9 +297,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 aboutMe.setText(Html.fromHtml(aboutMeValue));
             }
             int length = aboutMeValue.length();
-            bioMaxCharLimit.setText(length +"/"+ BIO_MAX_LIMIT);
+            bioMaxCharLimit.setText(length + "/" + BIO_MAX_LIMIT);
         } else {
-            bioMaxCharLimit.setText(0 + "/"+ BIO_MAX_LIMIT);
+            bioMaxCharLimit.setText(0 + "/" + BIO_MAX_LIMIT);
         }
 
         String dob = userSummary.getUserBO().getDob();
@@ -307,7 +309,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             cal.setTime(new Date(Long.valueOf(dob)));
             String formattedDate = dateFormatter.format(cal.getTime());
 
-            if(formattedDate!=null) {
+            if (formattedDate != null) {
                 dateOfBirth.setText(formattedDate);
             }
         }
@@ -338,10 +340,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Override
     public void getUserData(UserProfileResponse userProfileResponse) {
 
-        if (null != userProfileResponse ) {
+        if (null != userProfileResponse) {
             LoginResponse loginResponse = mUserPreference.get();
-            UserDetails userDetails=userProfileResponse.getUserDetails();
-            if(null!=userDetails) {
+            UserDetails userDetails = userProfileResponse.getUserDetails();
+            if (null != userDetails) {
 
                 UserSummary userSummary = loginResponse.getUserSummary();
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
@@ -393,7 +395,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     private void setResult() {
         imageLoader.setVisibility(View.GONE);
-        if(userDetailsResponse!=null) {
+        if (userDetailsResponse != null) {
             Intent intent = new Intent();
             UserSummary summary = userDetailsResponse.getUserSummary();
             Bundle bundle = new Bundle();
@@ -407,10 +409,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void setProfileNameData(String imageUrl) {
-             if (null != imageUrl) {
-                userImage.setCircularImage(true);
-                userImage.bindImage(imageUrl);
-            }
+        if (null != imageUrl) {
+            userImage.setCircularImage(true);
+            userImage.bindImage(imageUrl);
+        }
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         setLocalImageSaveForChallenge(localImageSaveForChallenge);
     }
@@ -458,6 +460,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     /**
      * Search user location
+     *
      * @return
      */
     public DialogFragment searchUserLocation() {
@@ -466,7 +469,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             searchProfileLocationDialogFragment = new SearchProfileLocationDialogFragment();
         }
 
-        if (!searchProfileLocationDialogFragment.isVisible() && !searchProfileLocationDialogFragment.isAdded()&& !isFinishing() && !mIsDestroyed) {
+        if (!searchProfileLocationDialogFragment.isVisible() && !searchProfileLocationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             searchProfileLocationDialogFragment.show(getFragmentManager(), SearchProfileLocationDialogFragment.class.getName());
         }
         return searchProfileLocationDialogFragment;
@@ -520,9 +523,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                     if (resultCode == RESULT_OK) {
                         try {
-                            File file=new File(result.getUri().getPath());
+                            File file = new File(result.getUri().getPath());
                             Bitmap photo = CompressImageUtil.decodeFile(file);
-                            if(null!=profileImageDialogFragment) {
+                            if (null != profileImageDialogFragment) {
                                 profileImageDialogFragment.setUserProfileData(true, photo);
                                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
                             }
@@ -578,7 +581,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
                 if (null != profileImageDialogFragment) {
-                    profileImageDialogFragment.setUserProfileData(true,photo);
+                    profileImageDialogFragment.setUserProfileData(true, photo);
                 }
             } else {
                 Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
@@ -591,7 +594,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
 
     public void selectImageFrmGallery() {
-        CropImage.activity(null,AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
                 .start(this);
     }
@@ -612,7 +615,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     public void selectImageFrmCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null,AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
                 .start(this);
     }
@@ -661,10 +664,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
+        scrollFragmentEdit.scrollTo(0, view.getBottom());
     }
 
     private boolean validateName() {
@@ -675,6 +680,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         } else {
             fullNameContainer.setError(null);
         }
+        scrollFragmentEdit.scrollTo(0, fullNameContainer.getBottom());
         return true;
     }
 
@@ -686,6 +692,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         } else {
             location.setError(null);
         }
+        scrollFragmentEdit.scrollTo(0, location.getBottom());
         return true;
     }
 
@@ -697,18 +704,20 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         } else {
             dateOfBirth.setError(null);
         }
+        scrollFragmentEdit.scrollTo(0, dateOfBirth.getBottom());
         return true;
     }
 
     private boolean validateMobile() {
 
-        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) || mobileNumber.getText().length()<10) {
-             mobileContainer.setError("Please enter valid mobile number");
+        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) || mobileNumber.getText().length() < 10) {
+            mobileContainer.setError("Please enter valid mobile number");
             requestFocus(mobileNumber);
             return false;
         } else {
             mobileContainer.setError(null);
         }
+        scrollFragmentEdit.scrollTo(0, mobileContainer.getBottom());
         return true;
     }
 
@@ -735,19 +744,19 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
             //USer Bio region
             //if(!aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
-                UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
-                userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
-                userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-                userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                userSummaryRequest.setLastScreenName(AppConstants.STRING);
-                userSummaryRequest.setScreenName(AppConstants.STRING);
-                userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
-                userSummaryRequest.setType(AppConstants.SUMMARY);
-                String aboutMeValue = StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) ? aboutMe.getText().toString() : "";
-                userSummaryRequest.setSummary(aboutMeValue);
-                userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
+            UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
+            userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
+            userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+            userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
+            userSummaryRequest.setLastScreenName(AppConstants.STRING);
+            userSummaryRequest.setScreenName(AppConstants.STRING);
+            userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
+            userSummaryRequest.setType(AppConstants.SUMMARY);
+            String aboutMeValue = StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) ? aboutMe.getText().toString() : "";
+            userSummaryRequest.setSummary(aboutMeValue);
+            userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
 
-                editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
+            editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
             //}
             //end region
 
@@ -798,7 +807,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
 
-            if(userDetailsResponse!=null) {
+            if (userDetailsResponse != null) {
 
                 try {
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
@@ -811,26 +820,27 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         userSummary.setFirstName(firstName);
                         userSummary.setLastName(lastName);
                         userSummary.getUserBO().setName(userName);
-                    } else{
+                    } else {
                         userSummary.getUserBO().setName(userName);
                         userSummary.setFirstName(userName);
                         userSummary.setLastName("");
                     }
 
                     try {
+                        String city = location.getText() != null ? location.getText().toString() : ""; //name
+                        userSummary.getUserBO().setCityMasterId(cityId);
+                        userSummary.getUserBO().setCityMaster(city);
+
+                        String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
+                        userSummary.getUserBO().setUserSummary(userBio);
+
+                        userDetailsResponse.setUserSummary(userSummary);
                         mUserPreference.get().getUserSummary().setFirstName(userSummary.getFirstName());
                         mUserPreference.get().getUserSummary().setLastName(userSummary.getLastName());
                         mUserPreference.set(userDetailsResponse);
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
 
-                    String city = location.getText() != null ? location.getText().toString() : ""; //name
-                    userSummary.getUserBO().setCityMasterId(cityId);
-                    userSummary.getUserBO().setCityMaster(city);
-
-                    String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
-                    userSummary.getUserBO().setUserSummary(userBio);
-
-                    userDetailsResponse.setUserSummary(userSummary);
                 } catch (Exception e) {
                     LogUtils.info(TAG, "Error while saving details to preference");
                 }
@@ -843,26 +853,26 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
-           if(userDetailsResponse!=null) {
-               try {
-                   if (boardingDataResponse.getResponse()!=null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
-                       setProfileNameData(boardingDataResponse.getResponse());
-                       //Save image
-                       userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
-                       userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
-                       mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
-                       mUserPreference.set(userDetailsResponse);
-                   } else {
-                       String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
-                       userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
-                       mUserPreference.get().getUserSummary().getUserBO().setUserSummary(userBio);
-                       mUserPreference.set(userDetailsResponse);
-                   }
-               } catch (Exception e) {
-                   LogUtils.info(TAG, e.getMessage());
-               }
-               setResult();
-           }
+            if (userDetailsResponse != null) {
+                try {
+                    if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
+                        setProfileNameData(boardingDataResponse.getResponse());
+                        //Save image
+                        userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
+                        userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
+                        mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
+                        mUserPreference.set(userDetailsResponse);
+                    } else {
+                        String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
+                        userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
+                        mUserPreference.get().getUserSummary().getUserBO().setUserSummary(userBio);
+                        mUserPreference.set(userDetailsResponse);
+                    }
+                } catch (Exception e) {
+                    LogUtils.info(TAG, e.getMessage());
+                }
+                setResult();
+            }
         }
     }
 
