@@ -17,8 +17,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences.Preference;
 
 import org.parceler.Parcels;
@@ -95,10 +98,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     SwipeRefreshLayout mSwipeRefresh;
 
     @Bind(R.id.feed)
-    EmptyRecyclerView mFeedRecyclerView;
+    RecyclerView mFeedRecyclerView;
 
     @Bind(R.id.empty_view)
-    View emptyView;
+    LinearLayout emptyView;
+
+    @Bind(R.id.empty_image)
+    ImageView emptyImage;
+
+    @Bind(R.id.empty_text)
+    TextView emptyText;
+
+    @Bind(R.id.empty_subtext)
+    TextView emptySubText;
     // endregion
 
     private FeedAdapter mAdapter;
@@ -142,7 +154,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mFeedRecyclerView.setEmptyViewWithImage(emptyView, mCommunityTab.emptyTitle, mCommunityTab.emptyImageUrl, mCommunityTab.emptyDescription);
         mAdapter = new FeedAdapter(getContext(), this);
         mFeedRecyclerView.setAdapter(mAdapter);
 
@@ -172,9 +183,42 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void showFeedList(List<FeedDetail> feedDetailList) {
+        if(CommonUtil.isEmpty(feedDetailList)){
+            mFeedRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+            loadEmptyView();
+        }else {
+            mFeedRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
+    }
+
+    private void loadEmptyView() {
+        if(mCommunityTab!=null){
+            if(CommonUtil.isNotEmpty(mCommunityTab.emptyTitle)){
+                emptyText.setVisibility(View.VISIBLE);
+                emptyText.setText(mCommunityTab.emptyTitle);
+            }else {
+                emptyText.setVisibility(View.GONE);
+            }
+            if(CommonUtil.isNotEmpty(mCommunityTab.emptyDescription)){
+                emptySubText.setVisibility(View.VISIBLE);
+                emptySubText.setText(mCommunityTab.emptyDescription);
+            }else {
+                emptySubText.setVisibility(View.GONE);
+            }
+            if(CommonUtil.isNotEmpty(mCommunityTab.emptyImageUrl)){
+                emptyImage.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(mCommunityTab.emptyImageUrl)
+                        .into(emptyImage);
+            }else {
+                emptyImage.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
@@ -305,13 +349,17 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, View view) {
         PopupMenu popup = new PopupMenu(getActivity(), view);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId!=userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
@@ -367,13 +415,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onCommentMenuClicked(final UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(getActivity(), tvFeedCommunityPostUserCommentPostMenu);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            Comment comment = userPostObj.getLastComments().get(0);
+            if (currentUserId !=comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);

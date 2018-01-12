@@ -130,8 +130,8 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
     private void refreshFeedMethod() {
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-        mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
     @Override
@@ -263,14 +263,12 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
             mSwipeView.setRefreshing(false);
-
         }
         else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
         {
             List<FeedDetail> data=mPullRefreshList.getFeedResponses();
             data.remove(data.size()-1);
             mAdapter.notifyDataSetChanged();
-            mSwipeView.setRefreshing(false);
         }else
         {
             mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);

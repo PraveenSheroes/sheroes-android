@@ -723,7 +723,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     .sourceTabKey(communityTab.key)
                     .sourceTabTitle(communityTab.title)
                     .build();
-            CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, true, mCommunityFeedSolrObj.communityPrimaryColor, mCommunityFeedSolrObj.titleTextColor, screenProperties);
+            CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, true, mCommunityFeedSolrObj.communityPrimaryColor, mCommunityFeedSolrObj.titleTextColor, screenProperties);
         } else {
             if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
                 Uri uri = Uri.parse(url);

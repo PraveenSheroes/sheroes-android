@@ -467,13 +467,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, TextView view) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId!=userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
@@ -638,13 +642,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onCommentMenuClicked(final Comment comment, ImageView userCommentListMenu) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, userCommentListMenu);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId !=comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);

@@ -246,8 +246,10 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(feedRequestSpamListPojo);
                         break;
                     case AppConstants.MENTOR_LISTING:
-                        FeedRequestPojo feedMentor=mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
-                        mHomePresenter.getFeedFromPresenter(feedMentor);
+                        if( mFragmentListRefreshData.getPageNo()!=AppConstants.ONE_CONSTANT) {
+                            FeedRequestPojo feedMentor = mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                            mHomePresenter.getFeedFromPresenter(feedMentor);
+                        }
                         break;
 
                     case AppConstants.PROFILE_COMMUNITY_LISTING:

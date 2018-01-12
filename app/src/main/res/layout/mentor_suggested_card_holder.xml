@@ -41,6 +41,7 @@
                 android:gravity="center"
                 android:paddingLeft="@dimen/dp_size_16"
                 android:paddingRight="@dimen/dp_size_16"
+                android:textAllCaps="true"
                 android:paddingTop="@dimen/dp_size_8"
                 android:paddingBottom="@dimen/dp_size_8"
                 android:layout_marginLeft="@dimen/dp_size_16"

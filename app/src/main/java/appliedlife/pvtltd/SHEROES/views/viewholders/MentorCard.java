@@ -101,7 +101,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         if (item.isSuggested()) {
             int width = AppUtils.getWindowWidth(mContext);
             FrameLayout.LayoutParams liHolderLayout = (FrameLayout.LayoutParams) liMentor.getLayoutParams();
-            liHolderLayout.width = (width - 120);
+            liHolderLayout.width = (width - 100);
         } else {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 0, 2);
@@ -111,7 +111,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         }
         setAllData();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            if (mUserPreference.get().getUserSummary().getUserId() == dataItem.getEntityOrParticipantId()) {
+            if (mUserPreference.get().getUserSummary().getUserId() == dataItem.getIdOfEntityOrParticipant()) {
                 tvMentorFollow.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                 tvMentorFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                 tvMentorFollow.setText(mContext.getString(R.string.ID_EDIT_PROFILE));

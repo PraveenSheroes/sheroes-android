@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -487,15 +486,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
-        Intent intent = new Intent(getActivity(), CommunitiesDetailActivity.class); //todo - chk with ujjwal
-        Bundle bundle = new Bundle();
-        Parcelable parcelables = Parcels.wrap(communityFeedSolrObj);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
-        //bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-        intent.putExtras(bundle);
-       // intent.putExtra(AppConstants.COMMUNITY_ID, communityFeedSolrObj.getEntityOrParticipantId());
-        intent.putExtra(AppConstants.FROM_DEEPLINK, false);
-        startActivity(intent);
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 
     @Override
