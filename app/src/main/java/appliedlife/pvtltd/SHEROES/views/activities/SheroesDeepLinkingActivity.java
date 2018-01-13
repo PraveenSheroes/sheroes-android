@@ -424,8 +424,13 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         } else if ((AppConstants.SELF_USER_PROFILE_URL).equalsIgnoreCase(baseUrl)) {
             try {
                 if (null != mUserPreference) {
-                   long userId = mUserPreference.get().getUserSummary().getUserId();
-                    MentorUserProfileActvity.navigateTo(this, userId, mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    long userId = mUserPreference.get().getUserSummary().getUserId();
+                    int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                    boolean isMentor=false;
+                    if (userType == AppConstants.MENTOR_TYPE_ID) {
+                        isMentor = true;
+                    }
+                    MentorUserProfileActvity.navigateTo(this, userId, isMentor, mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     finish();
                     if (mFromNotification > 0) {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
@@ -449,7 +454,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(userId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                MentorUserProfileActvity.navigateTo(this, Long.parseLong(dataIdString), mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                boolean isChampion = false;
+                MentorUserProfileActvity.navigateTo(this, Long.parseLong(dataIdString), isChampion, mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 finish();
                 if (mFromNotification > 0) {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);

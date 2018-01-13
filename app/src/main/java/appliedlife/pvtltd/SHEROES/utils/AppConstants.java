@@ -133,7 +133,7 @@ public class AppConstants {
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT ="helpline";
     public static final String PROFILE_FRAGMENT = "profile";
-    public static final String CHAMPION_LISTING = "CHAMPION_LISTING";
+    public static final String CHAMPION_LISTING = "Profile-CHAMPION_LISTING";
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";

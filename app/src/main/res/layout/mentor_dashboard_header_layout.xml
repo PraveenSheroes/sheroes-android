@@ -229,6 +229,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:maxLines="@integer/int_value_for_line_3"
+        android:maxLength="@integer/int_value_for_line_140"
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
         android:layout_below="@+id/li_loc_profession"

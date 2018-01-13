@@ -2,11 +2,14 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -23,13 +26,19 @@ import butterknife.OnClick;
 
 /**
  * Created by ravi on 03/01/18.
- * Listing of Profile - User's champion
+ * Listing of Profile - User's Community
  */
 
 public class FollowingActivity extends BaseActivity {
 
-    private static final String SCREEN_LABEL = "Followed Communities";
+    private static final String SCREEN_LABEL = "Profile screen - Followed Communities";
     private long userMentorId;
+
+    @Bind(R.id.tv_mentor_toolbar_name)
+    TextView titleName;
+
+    @Bind(R.id.community_toolbar)
+    Toolbar mToolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,13 @@ public class FollowingActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             userMentorId = getIntent().getExtras().getLong(UserProfileTabFragment.USER_MENTOR_ID);
         }
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
+        getSupportActionBar().setHomeAsUpIndicator(backArrow);
+        titleName.setText(R.string.ID_CHAMPION);
 
         Fragment followingFragment = FollowingFragment.createInstance(userMentorId, "");
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -54,6 +70,16 @@ public class FollowingActivity extends BaseActivity {
     public void onBackPressed() {
         setResult();
         super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
     }
 
     private void setResult() {

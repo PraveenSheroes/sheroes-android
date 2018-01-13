@@ -995,7 +995,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mMentorCardPosition = userSolrObj.getItemPosition();
         mFeedDetail = userSolrObj;
 
-        MentorUserProfileActvity.navigateTo(this, userSolrObj, true, AppConstants.HOME_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(),true, AppConstants.HOME_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
     }
 

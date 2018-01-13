@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,8 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -38,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -192,6 +188,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container_community)
     public void openCommunityList() {
         if(isSelfProfile) {
+            //todo -add analytics for tab
             Intent intent = new Intent(getActivity(), HomeActivity.class);
             intent.putExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT, "Community List");
             startActivity(intent);
@@ -201,6 +198,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
         if(isSelfProfile) {
+            //todo -add analytics for tab
             Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
             startActivity(intent);
         }
@@ -208,7 +206,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @OnClick(R.id.followed_view_more)
     public void navigateToFollowedMentors() {
-
+        //todo -add analytics for tab
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
             FollowingActivity.navigateTo(getActivity(), userId,  SCREEN_LABEL, null );
         }
@@ -216,6 +214,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @OnClick(R.id.community_view_more)
     public void navigateToCommunityListing() {
+        //todo -add analytics for tab
         if(StringUtil.isNotEmptyCollection(profileCommunities)) {
             ProfileCommunitiesActivity.navigateTo(getActivity(), userId, isSelfProfile, SCREEN_LABEL, null);
         }
@@ -224,7 +223,8 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
-        String name = communities.get(0).getAuthorFirstName()== null ? "User" : communities.get(0).getAuthorFirstName();
+        String name = communities.get(0).getAuthorName() == null ? "User" : communities.get(0).getAuthorName();
+        name = ((MentorUserProfileActvity)getActivity()).getUserNameTitle();
         mutualCommunityLabel.setText(name + " & you share "+ mutualCommunitySize +" mutual communities");
 
         mutualCommunityContainer.removeAllViews();
@@ -486,6 +486,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
+        //todo -add analytics for tab
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 
