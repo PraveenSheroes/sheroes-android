@@ -457,6 +457,31 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         trackEvent(Event.PROFILE_FOLLOWING_COUNT, properties);
     }
 
+    public void addAnalyticsEvents( Event event, String eventName) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(isMentor)
+                        .name(eventName)
+                        .isOwnProfile(isOwnProfile)
+                        .build();
+        trackEvent(event, properties);
+    }
+
+
+    public void CommunityViewMoreClick() {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(isMentor)
+                        .name("Profile Screen - Community View More Click")
+                        .isOwnProfile(isOwnProfile)
+                        .build();
+        trackEvent(Event.PROFILE_FOLLOWING_COUNT, properties);
+    }
+
     @OnClick(R.id.li_post)
     public void selectScrollPstTab() {
         if (isMentor) {
@@ -501,7 +526,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
     }
 
-    @OnClick(R.id.iv_mentor_full_view_icon)
+    @OnClick({R.id.iv_mentor_full_view_icon, R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description})
     public void navigateToProfileEditing() {
         if(isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {

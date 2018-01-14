@@ -108,7 +108,7 @@
                     android:layout_marginTop="@dimen/dp_size_4"
                     android:ellipsize="end"
                     android:fontFamily="sans-serif"
-                    android:maxLines="@integer/int_value_for_line_3"
+                    android:maxLines="@integer/int_value_for_line_2"
                     android:textColor="#878787"
                     android:textSize="14sp"
                     android:textStyle="normal"

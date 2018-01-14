@@ -101,11 +101,15 @@ public enum Event {
     PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked"),
     // endregion
 
-    PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),
-    PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
-    PROFILE_POST_COUNT(AnalyticsEventType.PROFILE, "Profile Post Count Click"),
-    PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Profile Followers Count Click"),
-    PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Profile Following Count Click"),
+    PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Profile Screen- Followed"),
+    PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "Profile Screen- UnFollowed"),
+    PROFILE_POST_COUNT(AnalyticsEventType.PROFILE, "Profile Screen- Post Count Click"),
+    PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Profile Screen -Followers Count Click"),
+    PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Profile Screen -Following Count Click"),
+    PROFILE_EMPTY_VIEW_JOIN_COMMUNITY(AnalyticsEventType.PROFILE, "Profile Screen -Join Community"),
+    PROFILE_EMPTY_VIEW_FOLLOW_CHAMPION(AnalyticsEventType.PROFILE, "Profile Screen - Champion Listing"),
+    PROFILE_COMMUNITY_VIEW_MORE(AnalyticsEventType.PROFILE, "Profile Screen - Community View More click"),
+    PROFILE_CHAMPION_VIEW_MORE(AnalyticsEventType.PROFILE, "Profile Screen - Champion View More click"),
     //region Image related events
     ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " completed"),
     USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),

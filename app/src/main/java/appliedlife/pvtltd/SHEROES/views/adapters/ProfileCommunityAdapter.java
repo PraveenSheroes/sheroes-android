@@ -123,11 +123,11 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                     titleHeaderContainer.setVisibility(View.GONE);
                 }
 
-                if (profileCommunity.isMutualCommunityFirstItem()) {
+                if (profileCommunity.isMutualCommunityFirstItem() && getAdapterPosition() ==0) {
                     subTitleHeaderContainer.setVisibility(View.VISIBLE);
                     community_subtitle.setText(String.format(Locale.US, "%d Mutual Communities", profileCommunity.getMutualCommunityCount()));
                 } else if (profileCommunity.isOtherCommunityFirstItem()) {
-                    String label = isOwnProfile ? "My Communities" : "Other Communities";
+                    String label = isOwnProfile ? "My Communities" : "Communities";
                     community_subtitle.setText(label);
                     subTitleHeaderContainer.setVisibility(View.VISIBLE);
                 } else {
