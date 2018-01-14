@@ -440,7 +440,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .sourceScreenId(mSourceName)
                         .isOwnProfile(isOwnProfile)
                         .build();
-        trackEvent(Event.PROFILE_FOLLOWER_COUNT, properties);
+        AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
     }
 
     @OnClick(R.id.li_follower)
@@ -450,24 +450,20 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .sourceScreenId(mSourceName)
-                        .name("Following Count Click")
                         .isOwnProfile(isOwnProfile)
                         .build();
-        trackEvent(Event.PROFILE_FOLLOWING_COUNT, properties);
+        AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
     }
 
-    public void addAnalyticsEvents( Event event, String eventName) {
+    public void addAnalyticsEvents( Event event) {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .sourceScreenId(mSourceName)
-                        .name(eventName)
                         .isOwnProfile(isOwnProfile)
                         .build();
-        trackEvent(event, properties);
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
 
     @OnClick(R.id.li_post)
@@ -485,10 +481,9 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
                         .sourceScreenId(SCREEN_LABEL)
-                        .name("Post Count Click")
                         .isOwnProfile(isOwnProfile)
                         .build();
-        trackEvent(Event.PROFILE_POST_COUNT, properties);
+        AnalyticsManager.trackEvent(Event.PROFILE_POST_COUNT, getScreenName(), properties);
     }
 
     @OnClick(R.id.tv_mentor_see_insight)
@@ -520,7 +515,15 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         if(isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 EditUserProfileActivity.navigateTo(MentorUserProfileActvity.this, SOURCE_SCREEN, mUserSolarObject.getImageUrl(), null, 1);
-                addAnalyticsEvents(Event.PROFILE_EDIT, "Edit Profile");
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                                .name(mUserSolarObject.getNameOrTitle())
+                                .isMentor(isMentor)
+                                .sourceScreenId(mSourceName)
+                                .isOwnProfile(isOwnProfile)
+                                .build();
+                AnalyticsManager.trackEvent(Event.PROFILE_EDIT_CLICKED, getScreenName(), properties);
             }
         }
     }
@@ -548,9 +551,8 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
             }
 
-            String eventName = isFollowEvent ? "User Followed" : "User Unfollowed";
             Event event = isFollowEvent ? Event.PROFILE_FOLLOWED : Event.PROFILE_UNFOLLOWED;
-            addAnalyticsEvents(event, eventName);
+            addAnalyticsEvents(event);
         }
     }
 
@@ -576,9 +578,10 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                 .isMentor(isMentor)
                 .title(tabName)
+                .tabTitle(tabName)
                 .isOwnProfile(isOwnProfile)
                 .build();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, tabName, properties);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof MentorProfileDetailFragment) {
             if (AppUtils.isFragmentUIActive(fragment)) {
@@ -983,17 +986,14 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             unFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    String eventName = "User Unfollowed";
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                                     .name(mUserSolarObject.getNameOrTitle())
                                     .isMentor(isMentor)
-                                    .name(eventName)
                                     .isOwnProfile(isOwnProfile)
                                     .build();
-                    trackEvent(Event.PROFILE_UNFOLLOWED, properties);
+                    AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
                     tvMentorDashBoardFollow.setEnabled(true);
                     mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
