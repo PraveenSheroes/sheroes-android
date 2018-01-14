@@ -374,6 +374,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         LoginResponse loginResponse = userPreference.get();
         UserSummary userSummary = loginResponse.getUserSummary();
         RemoveMemberRequest removeMemberRequest = removeMemberRequestBuilder(mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), userSummary.getUserId());
+        HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+        AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
         mCommunityDetailPresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequest);
     }
 
@@ -701,6 +703,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
                 userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                 mCommunityDetailPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
             }
         }
