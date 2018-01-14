@@ -1,9 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -36,16 +30,13 @@ import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RecyclerRowDivider;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.SELF_PROFILE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.USER_MENTOR_ID;
@@ -57,7 +48,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.
 
 public class UserMentorCommunity extends BaseFragment implements ProfileNewView, ProfileCommunityAdapter.OnItemClicked {
 
-    public static final String SCREEN_LABEL = "Profile -Champion/User Community";
+    public static final String SCREEN_LABEL = "Followed Communities";
 
     private long userMentorId;
     private boolean isSelfProfile;

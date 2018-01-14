@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -92,7 +91,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
     private final String TAG = LogUtils.makeLogTag(MentorUserProfileActvity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
-
     private Long mChampionId;
     private boolean isMentor;
     private int mFromNotification;
@@ -438,7 +436,8 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .name("Profile Followers Count Click")
+                        .name("Followers Count Click")
+                        .sourceScreenId(mSourceName)
                         .isOwnProfile(isOwnProfile)
                         .build();
         trackEvent(Event.PROFILE_FOLLOWER_COUNT, properties);
@@ -451,7 +450,8 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .name("Profile Following Count Click")
+                        .sourceScreenId(mSourceName)
+                        .name("Following Count Click")
                         .isOwnProfile(isOwnProfile)
                         .build();
         trackEvent(Event.PROFILE_FOLLOWING_COUNT, properties);
@@ -463,23 +463,11 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
+                        .sourceScreenId(mSourceName)
                         .name(eventName)
                         .isOwnProfile(isOwnProfile)
                         .build();
         trackEvent(event, properties);
-    }
-
-
-    public void CommunityViewMoreClick() {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isMentor)
-                        .name("Profile Screen - Community View More Click")
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        trackEvent(Event.PROFILE_FOLLOWING_COUNT, properties);
     }
 
     @OnClick(R.id.li_post)
@@ -496,7 +484,8 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .name("Profile Post Count Click")
+                        .sourceScreenId(SCREEN_LABEL)
+                        .name("Post Count Click")
                         .isOwnProfile(isOwnProfile)
                         .build();
         trackEvent(Event.PROFILE_POST_COUNT, properties);
@@ -531,6 +520,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         if(isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 EditUserProfileActivity.navigateTo(MentorUserProfileActvity.this, SOURCE_SCREEN, mUserSolarObject.getImageUrl(), null, 1);
+                addAnalyticsEvents(Event.PROFILE_EDIT, "Edit Profile");
             }
         }
     }
@@ -560,15 +550,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
             String eventName = isFollowEvent ? "User Followed" : "User Unfollowed";
             Event event = isFollowEvent ? Event.PROFILE_FOLLOWED : Event.PROFILE_UNFOLLOWED;
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                            .name(mUserSolarObject.getNameOrTitle())
-                            .isMentor(isMentor)
-                            .name(eventName)
-                            .isOwnProfile(isOwnProfile)
-                            .build();
-            trackEvent(event, properties);
+            addAnalyticsEvents(event, eventName);
         }
     }
 
@@ -817,9 +799,11 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
+                        .sourceScreenId(SCREEN_LABEL)
                         .isOwnProfile(isOwnProfile)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
+
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         String deepLink = isMentor ? mUserSolarObject.getMentorDeepLinkUrl() : mUserSolarObject.getDeepLinkUrl();
@@ -930,6 +914,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 EventProperty.Builder()
                 .id(String.valueOf(mChampionId))
                 .isMentor(isMentor)
+                .sourceScreenId(mSourceName)
                 .isOwnProfile(isOwnProfile)
                 .build();
         return properties;
@@ -963,7 +948,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         tvMentorPost.setText(pluralAnswer);
         liPost.setVisibility(View.VISIBLE);
     }
-
 
     protected final void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest) {
 
@@ -1020,23 +1004,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             dialog.show();
         }
     }
-
-    /*public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
-
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }*/
 
     public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, String extraImage, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
@@ -1143,18 +1110,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
-
-    /*public static void navigateTo(Activity fromActivity, long mChampionId, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        intent.putExtra(AppConstants.BELL_NOTIFICATION, notificationId);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }*/
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);

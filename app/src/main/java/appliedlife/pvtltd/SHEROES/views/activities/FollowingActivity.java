@@ -31,7 +31,7 @@ import butterknife.OnClick;
 
 public class FollowingActivity extends BaseActivity {
 
-    private static final String SCREEN_LABEL = "Profile screen - Followed Communities";
+    private static final String SCREEN_LABEL = "Followed Mentors";
     private long userMentorId;
 
     @Bind(R.id.tv_mentor_toolbar_name)

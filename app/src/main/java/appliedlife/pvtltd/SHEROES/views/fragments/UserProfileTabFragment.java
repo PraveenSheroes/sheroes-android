@@ -57,7 +57,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 public class UserProfileTabFragment extends BaseFragment implements ProfileNewView {
-    private static final String SCREEN_LABEL = "Profile Screen - Profile Tab";
+    private static final String SCREEN_LABEL = "Profile - Details";
     private final String TAG = LogUtils.makeLogTag(UserProfileTabFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
@@ -158,7 +158,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 userName = mUserPreference.get().getUserSummary().getFirstName()!=null ? mUserPreference.get().getUserSummary().getFirstName() : "User";
             }
         }
-
+        
         return view;
     }
 
@@ -199,7 +199,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
         if(isSelfProfile) {
-            ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_EMPTY_VIEW_FOLLOW_CHAMPION, "Follow Champion from List");
+            ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_EMPTY_VIEW_FOLLOW_CHAMPION, "Champion Listing");
             Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
             startActivity(intent);
         }

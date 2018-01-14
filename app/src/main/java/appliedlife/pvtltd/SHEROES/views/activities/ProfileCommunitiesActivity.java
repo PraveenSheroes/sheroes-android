@@ -37,7 +37,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.
 
 public class ProfileCommunitiesActivity extends BaseActivity {
 
-    private static final String SCREEN_LABEL = "Profile Screen -Communities Listing Screen";
+    private static final String SCREEN_LABEL = "Followed Communities";
 
     private long userMentorId;
     private boolean isSelfProfile;

@@ -52,6 +52,8 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -90,7 +92,7 @@ import butterknife.OnClick;
 
 public class EditUserProfileActivity extends BaseActivity implements IEditProfileView, AdapterView.OnItemSelectedListener {
 
-    private static final String SCREEN_LABEL = "Profile Screen- Edit Profile";
+    private static final String SCREEN_LABEL = "Edit Profile";
     private static final String TAG = EditUserProfileActivity.class.getName();
 
     private static final int BIO_MAX_LIMIT = 140;
@@ -405,6 +407,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     }
 
+
     private void setResult() {
         imageLoader.setVisibility(View.GONE);
         if (userDetailsResponse != null) {
@@ -488,15 +491,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public DialogFragment profileImageDialog() {
-
-       /* HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isMentor)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        trackEvent(appliedlife.pvtltd.SHEROES.analytics.Event.PROFILE_SHARED, properties);*/
 
         profileImageDialogFragment = (ProfileImageDialogFragment) getFragmentManager().findFragmentByTag(ProfileImageDialogFragment.class.getName());
         if (profileImageDialogFragment == null) {
@@ -652,6 +646,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             searchUserLocation();
         } else if (view == userImage) {
             profileImageDialog();
+
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .sourceScreenId(SCREEN_LABEL)
+                            .build();
+            trackEvent(Event.PROFILE_PIC_EDIT, properties);
         }
     }
 
