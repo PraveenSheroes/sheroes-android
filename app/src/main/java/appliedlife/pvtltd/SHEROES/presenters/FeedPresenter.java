@@ -210,6 +210,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 break;
                         }
                     }else {
+                        if(!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size()<5){
+                            getMvpView().setFeedEnded(true);
+                        }
                         getMvpView().showFeedList(mFeedDetailList);
                     }
                 }
