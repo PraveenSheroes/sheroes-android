@@ -114,10 +114,10 @@ public enum Event {
     PROFILE_COMMUNITY_VIEW_MORE(AnalyticsEventType.PROFILE, "Community View More clicked"),
     PROFILE_CHAMPION_VIEW_MORE(AnalyticsEventType.PROFILE, "Champion View More clicked"),
     //region Image related events
-    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " completed"),
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
     USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
-    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " started"),
-    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " completed");
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " Started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed");
     // endregion
 
     public final AnalyticsEventType type;
