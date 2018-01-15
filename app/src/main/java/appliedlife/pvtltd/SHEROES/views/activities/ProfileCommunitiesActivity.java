@@ -69,8 +69,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
-        getSupportActionBar().setHomeAsUpIndicator(backArrow);
+
         titleName.setText(R.string.ID_COMMUNITIES);
 
         Fragment followingFragment = UserMentorCommunity.createInstance(userMentorId, "", isSelfProfile);

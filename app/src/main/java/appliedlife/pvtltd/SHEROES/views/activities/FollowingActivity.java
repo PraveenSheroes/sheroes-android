@@ -54,8 +54,7 @@ public class FollowingActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
-        getSupportActionBar().setHomeAsUpIndicator(backArrow);
+
         titleName.setText(R.string.ID_CHAMPION);
 
         Fragment followingFragment = FollowingFragment.createInstance(userMentorId, "");
