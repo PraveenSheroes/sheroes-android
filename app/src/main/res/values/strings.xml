@@ -146,6 +146,7 @@
     <string name="ID_MORE_FROM_LIFE">More From Life</string>
     <string name="ID_FORGOT_PASSWORD">Forgot Password?</string>
     <string name="ID_PROFILE">Profile</string>
+    <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_BOOKMARK">Bookmarks</string>
     <string name="ID_ARE_FEMALE">Please check for female</string>

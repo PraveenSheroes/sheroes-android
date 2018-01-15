@@ -48,7 +48,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.
 
 public class UserMentorCommunity extends BaseFragment implements ProfileNewView, ProfileCommunityAdapter.OnItemClicked {
 
-    public static final String SCREEN_LABEL = "Followed Communities";
+    public static final String SCREEN_LABEL = "Followed Communities Screen";
 
     private long userMentorId;
     private boolean isSelfProfile;

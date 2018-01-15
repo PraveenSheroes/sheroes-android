@@ -94,7 +94,7 @@ import butterknife.OnClick;
 
 public class EditUserProfileActivity extends BaseActivity implements IEditProfileView, AdapterView.OnItemSelectedListener {
 
-    private static final String SCREEN_LABEL = "Edit Profile";
+    private static final String SCREEN_LABEL = "Edit Profile Screen";
     private static final String TAG = EditUserProfileActivity.class.getName();
 
     private static final int BIO_MAX_LIMIT = 140;
