@@ -236,6 +236,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     SnowFlakeView mSnowFlakView;
     @Bind(R.id.santa_view)
     ImageView mSantaView;
+    @Bind(R.id.tv_drawer_navigation)
+    TextView tvDrawerNavigation;
     GenericRecyclerViewAdapter mAdapter;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -328,7 +330,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void showCaseDesign() {
         isShowCase = false;
-        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities);
+        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities,tvDrawerNavigation);
         showcaseManager.showFirstMainActivityShowcase();
     }
 

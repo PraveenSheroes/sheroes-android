@@ -238,8 +238,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                                 LoginRequest loginRequest = loginRequestBuilder();
                                                 loginRequest.setAccessToken(accessToken.getToken());
                                                 AppUtils appUtils = AppUtils.getInstance();
-                                                loginRequest.setAppVersion(appUtils.getAppVersionName());
-                                                //TODO:: NEED to Change
                                                 loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
                                                 loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
                                                 loginRequest.setGcmorapnsid(mGcmId);
@@ -796,8 +794,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             LoginRequest loginRequest = loginRequestBuilder();
             loginRequest.setAccessToken(mToken);
             AppUtils appUtils = AppUtils.getInstance();
-            loginRequest.setAppVersion(appUtils.getAppVersionName());
-            //TODO:: NEED to Change
             loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
             loginRequest.setGcmorapnsid(mGcmId);

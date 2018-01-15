@@ -32,16 +32,19 @@ public class ShowcaseManager {
     private FloatingActionButton floatActionBtn;
     private TextView tvHome;
     private TextView tvCommunities;
+    private TextView tvDrawerNavigation;
 
     public ShowcaseManager(Activity activity) {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities,TextView tvDrawerNavigation) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;
         this.tvCommunities = tvCommunities;
+        this.tvDrawerNavigation=tvDrawerNavigation;
+        tvDrawerNavigation.setEnabled(false);
         floatActionBtn.setEnabled(false);
         tvHome.setEnabled(false);
         tvCommunities.setEnabled(false);
@@ -118,6 +121,7 @@ public class ShowcaseManager {
                                 floatActionBtn.setEnabled(true);
                                 tvHome.setEnabled(true);
                                 tvCommunities.setEnabled(true);
+                                tvDrawerNavigation.setEnabled(true);
                                 HashMap<String, Object> properties = new EventProperty.Builder().build();
                                 AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, "", properties);
                             }
