@@ -1022,7 +1022,26 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, String extraImage, long userId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtra(AppConstants.CHAMPION_ID, userId);
+        intent.putExtras(bundle);
+        intent.putExtra(AppConstants.EXTRA_IMAGE, extraImage);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String source, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
 
         Bundle bundle = new Bundle();
@@ -1031,6 +1050,25 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         Parcelable parcelableMentor = Parcels.wrap(dataItem);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtra(AppConstants.CHAMPION_ID, userId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, source);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long id, boolean isMentor, int bellNotificationCall, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        intent.putExtra(AppConstants.CHAMPION_ID, id);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.ASKING_QUESTION, bellNotificationCall);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);

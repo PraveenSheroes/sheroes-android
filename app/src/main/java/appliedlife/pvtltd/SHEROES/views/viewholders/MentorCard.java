@@ -198,11 +198,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
     @OnClick(R.id.tv_mentor_follow)
     public void mentorFollowClick() {
         if (tvMentorFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT_PROFILE))) {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-                Activity activity = (Activity) mContext;
-                MentorUserProfileActvity.navigateTo(activity, dataItem, profile, true, TAG, null,  AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-            }
+            viewInterface.handleOnClick(dataItem, liMentor);
         } else {
             tvMentorFollow.setEnabled(false);
             if(viewInterface instanceof FeedItemCallback){

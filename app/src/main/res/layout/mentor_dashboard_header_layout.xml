@@ -206,7 +206,7 @@
             android:drawablePadding="@dimen/dp_size_6"
             android:drawableLeft="@drawable/ic_loc"
             android:textAllCaps="true"
-            android:textColor="@color/recent_post_comment"
+            android:textColor="@color/mentor_profession"
             android:textSize="@dimen/sp_size_14" />
 
         <TextView
