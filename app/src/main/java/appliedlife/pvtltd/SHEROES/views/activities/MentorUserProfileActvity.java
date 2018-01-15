@@ -250,6 +250,12 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
 
         }
+        if (null != mUserSolarObject) {
+            itemPosition = mUserSolarObject.getItemPosition();
+        }else if(null!=mFeedDetail)
+        {
+            itemPosition = mFeedDetail.getItemPosition();
+        }
         if (mChampionId > 0) {
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
@@ -257,7 +263,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             mUserSolarObject.setIdOfEntityOrParticipant(mChampionId);
         }
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
-       // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
+        // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
@@ -292,7 +298,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             followUnFollowMentor();
         }
 
-        if(userSolrObj.isAuthorMentor()) isMentor = true;
+        if (userSolrObj.isAuthorMentor()) isMentor = true;
 
         if (isMentor) {
             verifiedIcon.setVisibility(View.VISIBLE);
@@ -305,22 +311,13 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         } else {
             shareProfile.setVisibility(View.GONE);
         }
-
-        if (StringUtil.isNotNullOrEmptyString(mSourceName) && mSourceName.equalsIgnoreCase(AppConstants.NAV_PROFILE)) {
-            //Chk if mentor of normal user and get its post
-
-        } else {
-            if (null != mUserSolarObject) {
-                itemPosition = mUserSolarObject.getItemPosition();
-            }
-        }
         setPagerAndLayouts();
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
             tvLoc.setText(mUserSolarObject.getCityName());
             tvLoc.setVisibility(View.VISIBLE);
         } else {
-            if(isOwnProfile) {
+            if (isOwnProfile) {
                 tvLoc.setText(R.string.add_location);
             } else {
                 tvLoc.setVisibility(View.GONE);
@@ -330,7 +327,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             tvProfession.setText(mUserSolarObject.getCanHelpIns().get(0)); //skills
             tvProfession.setVisibility(View.VISIBLE);
         } else {
-            if(isOwnProfile && isMentor) {
+            if (isOwnProfile && isMentor) {
                 tvProfession.setText(R.string.add_skills);
             } else {
                 tvProfession.setVisibility(View.GONE);
@@ -339,8 +336,8 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
             Spanned description = StringUtil.fromHtml(mUserSolarObject.getDescription());
             userDescription.setText(description);
-        } else{
-            if(isOwnProfile) {
+        } else {
+            if (isOwnProfile) {
                 userDescription.setText(R.string.add_desc);
             }
         }
@@ -456,7 +453,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
     }
 
-    public void addAnalyticsEvents( Event event) {
+    public void addAnalyticsEvents(Event event) {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
@@ -513,7 +510,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @OnClick({R.id.iv_mentor_full_view_icon, R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description})
     public void navigateToProfileEditing() {
-        if(isOwnProfile) {
+        if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 EditUserProfileActivity.navigateTo(MentorUserProfileActvity.this, SOURCE_SCREEN, mUserSolarObject.getImageUrl(), null, 1);
                 HashMap<String, Object> properties =
@@ -674,24 +671,24 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @Override
     public void onBackPressed() {
-        if(mFragmentOpen != null) {
-        if (mFragmentOpen.isCommentList()) {
-            getSupportFragmentManager().popBackStackImmediate();
-            if (AppUtils.isFragmentUIActive(mFragment)) {
-                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mUserPostForCommunity, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+        if (mFragmentOpen != null) {
+            if (mFragmentOpen.isCommentList()) {
+                getSupportFragmentManager().popBackStackImmediate();
+                if (AppUtils.isFragmentUIActive(mFragment)) {
+                    ((CommunitiesDetailFragment) mFragment).commentListRefresh(mUserPostForCommunity, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                }
+                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mUserSolarObject.getIdOfEntityOrParticipant()));
+                mFragmentOpen.setCommentList(false);
+            } else if (mFragmentOpen.isReactionList()) {
+                getSupportFragmentManager().popBackStack();
+                mFragmentOpen.setReactionList(false);
+            } else if (mFragmentOpen.isOpenImageViewer()) {
+                mFragmentOpen.setOpenImageViewer(false);
+                getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                onBackClick();
             }
-            mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mUserSolarObject.getIdOfEntityOrParticipant()));
-            mFragmentOpen.setCommentList(false);
-        } else if (mFragmentOpen.isReactionList()) {
-            getSupportFragmentManager().popBackStack();
-            mFragmentOpen.setReactionList(false);
-        } else if (mFragmentOpen.isOpenImageViewer()) {
-            mFragmentOpen.setOpenImageViewer(false);
-            getSupportFragmentManager().popBackStackImmediate();
         } else {
-            onBackClick();
-        } }
-        else {
             onBackClick();
         }
     }
@@ -1154,12 +1151,27 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity,long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.BELL_NOTIFICATION, notificationId);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+    public static void navigateTo(Activity fromActivity,long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode,UserSolrObj userSolrObj) {
+        Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(AppConstants.BELL_NOTIFICATION, notificationId);
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        intent.putExtras(bundle);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }

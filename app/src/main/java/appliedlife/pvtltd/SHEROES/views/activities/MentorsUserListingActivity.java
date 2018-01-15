@@ -168,7 +168,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     private void openMentorProfileDetail(BaseResponse baseResponse) { //form mentor card in feed only for mentor
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
         mFeedDetail = userSolrObj;
-        MentorUserProfileActvity.navigateTo(this, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
     }
 
     @Override

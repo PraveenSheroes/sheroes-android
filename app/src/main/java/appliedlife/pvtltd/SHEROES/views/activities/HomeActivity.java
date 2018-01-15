@@ -236,6 +236,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     SnowFlakeView mSnowFlakView;
     @Bind(R.id.santa_view)
     ImageView mSantaView;
+    @Bind(R.id.tv_drawer_navigation)
+    TextView tvDrawerNavigation;
     GenericRecyclerViewAdapter mAdapter;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -328,7 +330,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void showCaseDesign() {
         isShowCase = false;
-        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities);
+        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities,tvDrawerNavigation);
         showcaseManager.showFirstMainActivityShowcase();
     }
 
@@ -781,8 +783,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
                     challengeIdHandle(urlStr);
                 } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
+                    mTitleText.setText("");
                     communityOnClick();
                 } else {
+                    mTitleText.setText("");
                     homeOnClick();
                 }
             }
@@ -1001,32 +1005,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     }
 
-    public void referralUserAttribute(Context context, LoginResponse loginResponse) {
-        if (null != loginResponse.getUserSummary() && loginResponse.getUserSummary().getUserId() > 0) {
-            StringBuilder fullName = new StringBuilder();
-            StringBuilder emailId = new StringBuilder();
-            StringBuilder mobile = new StringBuilder();
-            StringBuilder subscriptionID = new StringBuilder();
-            StringBuilder customValues = new StringBuilder();
-            // If you have first and last name separately
-            if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getFirstName())) {
-                fullName.append(loginResponse.getUserSummary().getFirstName()).append(AppConstants.SPACE);
-            }
-            if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getLastName())) {
-                fullName.append(loginResponse.getUserSummary().getLastName());
-            }
-            if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getEmailId())) {
-                emailId.append(loginResponse.getUserSummary().getEmailId());
-            }
-            if (null != loginResponse.getUserSummary().getUserBO()) {
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getMobile())) {
-                    mobile.append(loginResponse.getUserSummary().getUserBO().getMobile());
-                }
-            }
-            //InviteReferralsApi.getInstance(context).userDetails(fullName.toString(), emailId.toString(), mobile.toString(), AppConstants.CAMPAIGN_ID, subscriptionID.toString(), customValues.toString());
-        }
-    }
-
     private void openProfileActivity() {
         MentorUserProfileActvity.navigateTo(this, mUserId, isMentor, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
@@ -1040,15 +1018,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
         openHelplineFragment();
-    }
-
-    private void renderFeedFragment() {
-        mICSheroes.setVisibility(View.VISIBLE);
-        mTitleText.setVisibility(View.GONE);
-        mTitleText.setText(AppConstants.EMPTY_STRING);
-        homeOnClick();
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mFragmentOpen.setFeedFragment(true);
     }
 
     public void eventDetailDialog(long eventID) {
@@ -1098,9 +1067,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void renderFAQSView() {
-
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
+        mTitleText.setText(getString(R.string.ID_APP_NAME));
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
         FAQSFragment faqsFragment = new FAQSFragment();
@@ -1112,9 +1081,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
     private void renderICCMemberListView() {
-
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
+        mTitleText.setText(getString(R.string.ID_APP_NAME));
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
         ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
@@ -1384,6 +1353,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void openHelplineFragment() {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
+        mTitleText.setText(getString(R.string.ID_APP_NAME));
         mTitleText.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.GONE);
         HelplineFragment helplineFragment = new HelplineFragment();
@@ -1405,32 +1375,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
 
     }
-
-    private void openBookMarkFragment() {
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
-        mICSheroes.setVisibility(View.GONE);
-        mFragmentOpen.setBookmarkFragment(true);
-        mViewPager.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
-        mTvSearchBox.setVisibility(View.GONE);
-        mTvSetting.setVisibility(View.VISIBLE);
-        mTvSetting.setText(R.string.ID_BOOKMARKS);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        setAllValues(mFragmentOpen);
-        BookmarksFragment bookmarksFragment = new BookmarksFragment();
-        Bundle bundleBookMarks = new Bundle();
-        Parcelable parcelable = Parcels.wrap(mFeedDetail);
-        bundleBookMarks.putParcelable(AppConstants.BOOKMARKS, parcelable);
-        bookmarksFragment.setArguments(bundleBookMarks);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, bookmarksFragment, BookmarksFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-    }
-
 
     @Override
     public void onBackPressed() {
