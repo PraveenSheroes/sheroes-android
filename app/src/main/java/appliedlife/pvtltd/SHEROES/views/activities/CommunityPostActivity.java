@@ -882,7 +882,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
                     .into(mUserPicView);
         } else {
-            mUserPicView.setImageResource(R.drawable.vector_anonymous_female_44dp);
+            mUserPicView.setImageResource(R.drawable.ic_anonomous);
         }
     }
 

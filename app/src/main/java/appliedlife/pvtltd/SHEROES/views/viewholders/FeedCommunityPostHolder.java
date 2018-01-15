@@ -1063,7 +1063,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if(viewInterface instanceof FeedItemCallback){
                 ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }else {
-                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
+               // viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
             }
         }
     }
@@ -1076,7 +1076,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (mUserPostObj.isAuthorMentor()) { //todo - naviagte to profile
+                if (!mUserPostObj.isAnonymous()) { //todo - naviagte to profile
                     if(viewInterface instanceof FeedItemCallback){
                         ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }

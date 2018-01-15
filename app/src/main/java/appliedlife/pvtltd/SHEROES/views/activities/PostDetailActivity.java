@@ -613,7 +613,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         }else {
-            if (userPostObj.getCommunityTypeId() == 0) {
+            if (userPostObj.getCommunityId() == 0) {
                 ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
 
             }else {
