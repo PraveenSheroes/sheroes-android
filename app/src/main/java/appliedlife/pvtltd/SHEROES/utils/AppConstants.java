@@ -129,11 +129,13 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
+    public static final int REQUEST_CODE_FOR_SELF_PROFILE_DETAIL = 1502;
+    public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT ="helpline";
     public static final String PROFILE_FRAGMENT = "profile";
-    public static final String CHAMPION_LISTING = "CHAMPION_LISTING";
+    public static final String CHAMPION_LISTING = "Profile-CHAMPION_LISTING";
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";

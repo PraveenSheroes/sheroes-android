@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,10 +16,12 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -45,10 +48,14 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -87,7 +94,7 @@ import butterknife.OnClick;
 
 public class EditUserProfileActivity extends BaseActivity implements IEditProfileView, AdapterView.OnItemSelectedListener {
 
-    private static final String SCREEN_LABEL = "Edit Profile Screen";
+    private static final String SCREEN_LABEL = "Edit Profile";
     private static final String TAG = EditUserProfileActivity.class.getName();
 
     private static final int BIO_MAX_LIMIT = 140;
@@ -103,6 +110,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private String aboutMeValue = "";
     private LoginResponse userDetailsResponse;
 
+    @Bind(R.id.tv_mentor_toolbar_name)
+    TextView tvMentorToolbarName;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -112,6 +122,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Inject
     AppUtils appUtils;
 
+    @Bind(R.id.edit_toolbar)
+    Toolbar mToolbar;
+
     @Bind(R.id.scroll_fragment_edit)
     ScrollView scrollFragmentEdit;
 
@@ -120,9 +133,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Bind(R.id.et_mobile_container)
     TextInputLayout mobileContainer;
-
-    @Bind(R.id.tv_profile_tittle)
-    TextView toolbarTitle;
 
     @Bind(R.id.et_about_me)
     public EditText aboutMe;
@@ -164,10 +174,16 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        setContentView(R.layout.fragment_edit_profile);
+        setContentView(R.layout.activity_edit_profile);
         ButterKnife.bind(this);
         editProfilePresenter.attachView(this);
-        toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
+        getSupportActionBar().setHomeAsUpIndicator(backArrow);
+        tvMentorToolbarName.setText(R.string.ID_EDIT_PROFILE);
 
         String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);
         setProfileNameData(imageUrl);
@@ -203,7 +219,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         });
 
         setDateTimeField();
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_MY_PROFILE_PERSONAL_EDIT_BASIC_DETAIL));
     }
 
     @Override
@@ -393,6 +408,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     }
 
+
     private void setResult() {
         imageLoader.setVisibility(View.GONE);
         if (userDetailsResponse != null) {
@@ -476,15 +492,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public DialogFragment profileImageDialog() {
-
-       /* HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isMentor)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        trackEvent(appliedlife.pvtltd.SHEROES.analytics.Event.PROFILE_SHARED, properties);*/
 
         profileImageDialogFragment = (ProfileImageDialogFragment) getFragmentManager().findFragmentByTag(ProfileImageDialogFragment.class.getName());
         if (profileImageDialogFragment == null) {
@@ -600,6 +607,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void requestForUpdateProfileImage() {
+        imageLoader.setVisibility(View.VISIBLE);
+        imageLoader.bringToFront();
         if (StringUtil.isNotNullOrEmptyString(mEncodeImageUrl)) {
             updateProfileData(mEncodeImageUrl);
             if (null != profileImageDialogFragment) {
@@ -620,10 +629,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 .start(this);
     }
 
-
-    @OnClick(R.id.iv_back_profile)
-    public void backOnclick() {
-        onBackPressed();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -633,10 +646,30 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         } else if (view == location) {
             searchUserLocation();
         } else if (view == userImage) {
-            imageLoader.setVisibility(View.VISIBLE);
-            imageLoader.bringToFront();
             profileImageDialog();
+
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
+                            .name(mUserPreference.get().getUserSummary().getFirstName())
+                            .build();
+            trackEvent(Event.PROFILE_PIC_EDIT_CLICKED, properties);
         }
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
+                        .name(mUserPreference.get().getUserSummary().getFirstName())
+                        .build();
+        return properties;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
     }
 
     @Override
@@ -728,9 +761,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @OnClick(R.id.btn_personal_basic_details_save)
     public void Save_Basic_Details() {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
+                        .isOwnProfile(true)
+                        .build();
+        AnalyticsManager.trackEvent(Event.PROFILE_EDITED, getScreenName(), properties);
 
         if (validateUserDetails()) {
-
             PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
             AppUtils appUtils = AppUtils.getInstance();
             personalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());

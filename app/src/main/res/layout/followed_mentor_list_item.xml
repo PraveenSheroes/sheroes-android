@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_size_98"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginStart="@dimen/dp_size_16"
         android:orientation="horizontal">
@@ -34,6 +34,8 @@
         </FrameLayout>
 
         <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
@@ -62,10 +64,11 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:maxLines="@integer/int_value_for_line_2"
+            android:lineSpacingExtra="2sp"
             android:textColor="#878787"
             android:textSize="14sp"
             android:textStyle="normal"
-            tools:text="@string/ID_POPULAR_SKILL" />
+            tools:text="@string/ID_POPULAR"/>
 
         <TextView
             android:id="@+id/follower"
@@ -76,9 +79,10 @@
             android:fontFamily="sans-serif"
             android:maxLines="@integer/int_value_for_line_1"
             android:gravity="center"
-            android:drawableLeft="@drawable/ic_avatar1"
-            android:drawableStart="@drawable/ic_avatar1"
+            android:drawableLeft="@drawable/ic_mentor_follower"
+            android:drawableStart="@drawable/ic_mentor_follower"
             android:drawablePadding="@dimen/dp_size_5"
+            android:layout_marginBottom="@dimen/dp_size_12"
             android:textColor="#878787"
             android:textSize="14sp"
             android:textStyle="normal"

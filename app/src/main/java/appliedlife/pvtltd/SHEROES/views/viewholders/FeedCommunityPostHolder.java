@@ -1042,17 +1042,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         likeCommentOps();
     }
 
-    @OnClick(R.id.tv_feed_community_post_login_user_name)
-    public void onCommentAuthorNameClick() { //Open profile from feed
-        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
-    }
-
-    @OnClick(R.id.iv_feed_community_post_login_user_pic)
+    //Redirect to logged in user
+    @OnClick({R.id.iv_feed_community_post_login_user_pic , R.id.tv_feed_community_post_login_user_name})
     public void onCommentAuthorClick() { //Open profile from feed
         if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
         }
     }
 
@@ -1069,7 +1063,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if(viewInterface instanceof FeedItemCallback){
                 ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }else {
-                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
             }
         }
     }

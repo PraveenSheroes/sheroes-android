@@ -490,14 +490,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
-           /* case R.id.tv_article_card_title :
+           case R.id.tv_article_card_title :
             case R.id.iv_article_circle_icon:
-                Intent mentorUserProfiles = new Intent(this, MentorUserProfileActvity.class);
-                mentorUserProfiles.putExtra(AppConstants.CHAMPION_ID, mFeedDetail.getCreatedBy());
-                mentorUserProfiles.putExtra(AppConstants.IS_MENTOR_ID, mFeedDetail.isAuthorMentor());
-                mentorUserProfiles.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                startActivity(mentorUserProfiles);
-               break;*/
+                //Todo - article hv id issue
+               // MentorUserProfileActvity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+
+                break;
 
             case R.id.iv_feed_community_post_login_user_pic:
             case R.id.fl_login_user:

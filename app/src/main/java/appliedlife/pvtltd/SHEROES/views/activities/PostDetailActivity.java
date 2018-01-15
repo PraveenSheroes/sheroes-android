@@ -712,13 +712,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void userProfileNameClick(Comment comment, View view) {
-        if(comment.getParticipationTypeId() == 7 || comment.getParticipationTypeId() ==1) {
+        //if(!comment.isAnonymous() && (comment.getParticipationTypeId() == 1 || comment.getParticipationTypeId() == 7)) { //participant_type_id_l
+        /*if(!comment.isAnonymous()) { //TODO - ID of user who have commented have issue , need to fix with backed
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getEntityAuthorUserId());
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
-            MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, comment.getEntityAuthorUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
+            MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, comment.getParticipantId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }*/
     }
 
     @Override

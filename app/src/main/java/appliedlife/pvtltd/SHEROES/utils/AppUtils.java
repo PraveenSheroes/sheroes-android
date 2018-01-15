@@ -2016,9 +2016,10 @@ public class AppUtils {
         return publicProfileListRequest;
     }
 
-    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo) {
+    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId) {
         ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
         profileFollowedMentor.setPageNo(pageNo);
+        profileFollowedMentor.setIdOfEntityParticipant(userId);
         profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
         return profileFollowedMentor;
     }

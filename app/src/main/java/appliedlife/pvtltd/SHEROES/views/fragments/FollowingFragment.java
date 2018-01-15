@@ -45,6 +45,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.
 
 /**
  * Created by ravi on 10/01/18.
+ * Followed mentoring listing
  */
 
 public class FollowingFragment extends BaseFragment implements ProfileNewView, ProfileFollowedMentorAdapter.OnItemClicked {
@@ -77,9 +78,6 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    @Bind(R.id.tv_profile_tittle)
-    TextView toolbarTitle;
-
     public static FollowingFragment createInstance(long userId, String name) {
         FollowingFragment followingFragment = new FollowingFragment();
         Bundle bundle = new Bundle();
@@ -99,7 +97,6 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
             userMentorId = getArguments().getLong(USER_MENTOR_ID);
             isSelfProfile = getArguments().getBoolean(SELF_PROFILE);
         }
-        toolbarTitle.setText(R.string.ID_CHAMPION);
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FOLLOWING, AppConstants.NO_REACTION_CONSTANT);
         mFragmentListRefreshData.setSelfProfile(isSelfProfile);
@@ -130,7 +127,7 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
             public void dismissReactions() {
             }
     });
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -146,17 +143,12 @@ public class FollowingFragment extends BaseFragment implements ProfileNewView, P
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo()));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
     }
 
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
-    }
-
-    @OnClick(R.id.iv_back_profile)
-    public void backOnclick() {
-        getActivity().finish();
     }
 
     @Override

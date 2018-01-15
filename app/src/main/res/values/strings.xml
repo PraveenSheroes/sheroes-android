@@ -958,4 +958,7 @@
     <string name="unfollow">UNFOLLOW</string>
     <string name="new_feature">New</string>
     <string name="feed_header">FEED_HEADER</string>
+    <string name="add_location">Add Location</string>
+    <string name="add_skills">Add Skills</string>
+    <string name="add_desc">Add Description</string>
 </resources>

@@ -638,7 +638,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onMentorProfileClicked(UserSolrObj userSolrObj) {
         /*mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();*/
-        MentorUserProfileActvity.navigateTo(getActivity(), userSolrObj, userSolrObj.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        long id = userSolrObj.isAuthorMentor() ? userSolrObj.getIdOfEntityOrParticipant() : userSolrObj.getEntityOrParticipantId();
+        MentorUserProfileActvity.navigateTo(getActivity(), userSolrObj, id, userSolrObj.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

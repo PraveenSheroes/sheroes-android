@@ -1,9 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +12,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -34,14 +30,13 @@ import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RecyclerRowDivider;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.SELF_PROFILE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.USER_MENTOR_ID;
@@ -53,7 +48,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.
 
 public class UserMentorCommunity extends BaseFragment implements ProfileNewView, ProfileCommunityAdapter.OnItemClicked {
 
-    public static final String SCREEN_LABEL = "Mentor_User Community";
+    public static final String SCREEN_LABEL = "Followed Communities";
 
     private long userMentorId;
     private boolean isSelfProfile;
@@ -63,9 +58,6 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
     private FragmentListRefreshData mFragmentListRefreshData;
     private ProfileCommunityAdapter mAdapter;
     private SwipPullRefreshList mPullRefreshList;
-
-    @Bind(R.id.tv_profile_tittle)
-    TextView toolbarTitle;
 
     @Bind(R.id.communities)
     RecyclerView mRecyclerView;
@@ -106,7 +98,6 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
             userMentorId = getArguments().getLong(USER_MENTOR_ID);
             isSelfProfile = getArguments().getBoolean(SELF_PROFILE);
         }
-        toolbarTitle.setText(R.string.ID_COMMUNITIES);
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_COMMUNITY_LISTING, AppConstants.NO_REACTION_CONSTANT);
         mFragmentListRefreshData.setSelfProfile(isSelfProfile);
@@ -119,11 +110,13 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ProfileCommunityAdapter(getContext(), profilePresenter, this);
+        RecyclerRowDivider decoration = new RecyclerRowDivider(getContext(), ContextCompat.getColor(getContext(), R.color.on_board_work), 1);
+        mRecyclerView.addItemDecoration(decoration);
+        mAdapter = new ProfileCommunityAdapter(getContext(), isSelfProfile, this);
         mRecyclerView.setAdapter(mAdapter);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(profilePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(profilePresenter, mRecyclerView, mLayoutManager, fragmentListRefreshData) {
             @Override
             public void onHide() {
             }
@@ -149,7 +142,7 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
                 refreshFeedMethod();
             }
         });
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITIES));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     private void refreshFeedMethod() {
@@ -164,11 +157,6 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
         }
 
     }
-
-    @OnClick(R.id.iv_back_profile)
-   public void backOnclick() {
-        getActivity().finish();
-   }
 
     @Override
     public String getScreenName() {
@@ -233,34 +221,31 @@ public class UserMentorCommunity extends BaseFragment implements ProfileNewView,
 
         List<CommunityFeedSolrObj> mutualCommunity = userCommunities.getMutualCommunities();
         List<CommunityFeedSolrObj> otherCommunity = userCommunities.getOtherCommunities();
-        if (!isSelfProfile && mPageNo == AppConstants.ONE_CONSTANT) {
-            if (StringUtil.isNotEmptyCollection(mutualCommunity)) {
-                CommunityFeedSolrObj profileCommunity = mutualCommunity.get(0);
-                profileCommunity.setMutualCommunityCount(mutualCommunity.size());
-                profileCommunity.setMutualCommunityFirstItem(true);
-                profileCommunity.setShowHeader(true);
-                mutualCommunity.set(0 ,profileCommunity);
-            }
+        boolean isTopHeaderAvailable = false;
+        if (!isSelfProfile && StringUtil.isNotEmptyCollection(mutualCommunity)) {
+            CommunityFeedSolrObj mutualCommunityFirstItem = mutualCommunity.get(0);
+            mutualCommunityFirstItem.setMutualCommunityCount(mutualCommunity.size());
+            mutualCommunityFirstItem.setMutualCommunityFirstItem(true);
+            mutualCommunityFirstItem.setShowHeader(true);
+            mutualCommunity.set(0, mutualCommunityFirstItem);
+            isTopHeaderAvailable = true;
         }
 
         if (StringUtil.isNotEmptyCollection(otherCommunity)) {
-            CommunityFeedSolrObj profileCommunity = otherCommunity.get(0);
-           if(mPageNo == AppConstants.ONE_CONSTANT) {
-               profileCommunity.setShowHeader(true);
-           } else {
-               profileCommunity.setShowHeader(false);
-           }
-
-            if (isSelfProfile) {
-                profileCommunity.setMutualCommunityCount(0);
-            } else if (mutualCommunity != null && mutualCommunity.size() > 0) {
-                profileCommunity.setMutualCommunityCount(mutualCommunity.size());
+            CommunityFeedSolrObj myCommunity = otherCommunity.get(0);
+            myCommunity.setShowHeader(true);
+            if (!isTopHeaderAvailable) {
+                myCommunity.setMutualCommunityCount(0);
+                if (mPageNo == 1) {
+                    myCommunity.setShowHeader(true);
+                }
+            } else {
+                myCommunity.setMutualCommunityCount(mutualCommunity.size());
             }
-
-            if(mPageNo ==AppConstants.ONE_CONSTANT) {
-                profileCommunity.setOtherCommunityFirstItem(true);
+            if (mPageNo == 1) {
+                myCommunity.setOtherCommunityFirstItem(true);
             }
-            otherCommunity.set(0 ,profileCommunity);
+            otherCommunity.set(0, myCommunity);
 
             if (mutualCommunity != null) { //other have both mutual and non mutual so making single lust here
                 mutualCommunity.addAll(otherCommunity);

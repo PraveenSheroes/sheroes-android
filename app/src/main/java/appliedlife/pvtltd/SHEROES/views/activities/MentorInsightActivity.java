@@ -338,7 +338,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
     @OnClick(R.id.tv_mentor_answering_question)
     public void mentorAnsweringQuestionClick() {
-        MentorUserProfileActvity.navigateTo(this, mUserSolrObj, true, AppConstants.ASKING_QUESTION_CALL, AppConstants.MENTOR_INSIGHT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this, mUserSolrObj, mUserSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.MENTOR_INSIGHT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

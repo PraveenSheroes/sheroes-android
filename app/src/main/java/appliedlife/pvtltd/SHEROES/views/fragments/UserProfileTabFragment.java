@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,13 +16,12 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -38,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -60,7 +57,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 public class UserProfileTabFragment extends BaseFragment implements ProfileNewView {
-    private static final String SCREEN_LABEL = "Profile Screen - Profile Tab";
+    private static final String SCREEN_LABEL = "Profile - Details";
     private final String TAG = LogUtils.makeLogTag(UserProfileTabFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
@@ -74,6 +71,9 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @Bind(R.id.user_communities)
     GridLayout userCommunityLayout;
+
+    @Bind(R.id.extra_space)
+    TextView spacing;
 
     @Bind(R.id.mutual_community_container)
     LinearLayout mutualCommunityContainer;
@@ -176,7 +176,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1));
+        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
         if(isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
@@ -189,6 +189,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container_community)
     public void openCommunityList() {
         if(isSelfProfile) {
+            ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_EMPTY_VIEW_JOIN_COMMUNITY);
             Intent intent = new Intent(getActivity(), HomeActivity.class);
             intent.putExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT, "Community List");
             startActivity(intent);
@@ -198,6 +199,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
         if(isSelfProfile) {
+            ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_EMPTY_VIEW_FOLLOW_CHAMPION);
             Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
             startActivity(intent);
         }
@@ -205,7 +207,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @OnClick(R.id.followed_view_more)
     public void navigateToFollowedMentors() {
-
+        ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_CHAMPION_VIEW_MORE);
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
             FollowingActivity.navigateTo(getActivity(), userId,  SCREEN_LABEL, null );
         }
@@ -213,6 +215,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @OnClick(R.id.community_view_more)
     public void navigateToCommunityListing() {
+        ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_COMMUNITY_VIEW_MORE);
         if(StringUtil.isNotEmptyCollection(profileCommunities)) {
             ProfileCommunitiesActivity.navigateTo(getActivity(), userId, isSelfProfile, SCREEN_LABEL, null);
         }
@@ -221,7 +224,8 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
-        String name = communities.get(0).getAuthorFirstName()== null ? "User" : communities.get(0).getAuthorFirstName();
+        String name = communities.get(0).getAuthorName() == null ? "User" : communities.get(0).getAuthorName();
+        name = ((MentorUserProfileActvity)getActivity()).getUserNameTitle();
         mutualCommunityLabel.setText(name + " & you share "+ mutualCommunitySize +" mutual communities");
 
         mutualCommunityContainer.removeAllViews();
@@ -306,7 +310,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             view.setLayoutParams(layoutParams);
 
             userCommunityLayout.addView(view);
-
             counter++;
             if (counter == 4) break;
         }
@@ -375,11 +378,14 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 populateMutualCommunities(mutualCommunity); // for mutual community
                 mutualCommunityContainer.setVisibility(View.VISIBLE);
                 mutualCommunityLabel.setVisibility(View.VISIBLE);
+                spacing.setVisibility(View.GONE);
             } else {
+                spacing.setVisibility(View.GONE);
                 mutualCommunityContainer.setVisibility(View.GONE);
                 mutualCommunityLabel.setVisibility(View.GONE);
             }
         } else {
+            spacing.setVisibility(View.VISIBLE);
             mutualCommunityContainer.setVisibility(View.GONE);
             mutualCommunityLabel.setVisibility(View.GONE);
         }
@@ -481,6 +487,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
+        ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_CHAMPION_VIEW_MORE);
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 

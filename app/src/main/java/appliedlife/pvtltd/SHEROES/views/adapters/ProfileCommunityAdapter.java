@@ -9,10 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -32,12 +32,12 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     private List<CommunityFeedSolrObj> communities;
     private final Context mContext;
     private final OnItemClicked onCommunityClickListener;
-    private ProfilePresenterImpl profilePresenter;
+    private boolean isOwnProfile;
 
     //region Constructor
-    public ProfileCommunityAdapter(Context context, ProfilePresenterImpl profilePresenter, OnItemClicked onClickListener) {
+    public ProfileCommunityAdapter(Context context, boolean isSelfProfile, OnItemClicked onClickListener) {
         mContext = context;
-        this.profilePresenter = profilePresenter;
+        isOwnProfile = isSelfProfile;
         onCommunityClickListener = onClickListener;
     }
 
@@ -52,7 +52,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ProfileCommunityAdapter.FollowedUserListItemViewHolder commentListItemViewHolder = (ProfileCommunityAdapter.FollowedUserListItemViewHolder) holder;
         CommunityFeedSolrObj communityFeedSolrObj = communities.get(position);
-        commentListItemViewHolder.bindData(communityFeedSolrObj, position);
+        commentListItemViewHolder.bindData(communityFeedSolrObj);
     }
 
     @Override
@@ -86,19 +86,25 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
         TextView member;
 
         @Bind(R.id.header_title)
-        TextView headderTitle;
+        TextView headerTitle;
+
+        @Bind(R.id.title_header_container)
+        LinearLayout titleHeaderContainer;
 
         @Bind(R.id.community_subtitle)
         TextView community_subtitle;
 
+        @Bind(R.id.subtitle_header_container)
+        LinearLayout subTitleHeaderContainer;
+
         // endregion
 
-        public FollowedUserListItemViewHolder(View itemView) {
+        FollowedUserListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(final CommunityFeedSolrObj profileCommunity, final int position) {
+        public void bindData(final CommunityFeedSolrObj profileCommunity) {
 
             if (null != profileCommunity) {
 
@@ -111,24 +117,21 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 });
 
-                if (headderTitle.getVisibility() != View.VISIBLE && (profileCommunity.isShowHeader())) {
-                    headderTitle.setVisibility(View.VISIBLE);
+                if (profileCommunity.isShowHeader() && getAdapterPosition() ==0) {
+                    titleHeaderContainer.setVisibility(View.VISIBLE);
                 } else{
-                    headderTitle.setVisibility(View.GONE);
+                    titleHeaderContainer.setVisibility(View.GONE);
                 }
 
-                if (profileCommunity.isMutualCommunityFirstItem()) {
-                    community_subtitle.setVisibility(View.VISIBLE);
-                    community_subtitle.setText(profileCommunity.getMutualCommunityCount() + " Mutual Communities");
+                if (profileCommunity.isMutualCommunityFirstItem() && getAdapterPosition() ==0) {
+                    subTitleHeaderContainer.setVisibility(View.VISIBLE);
+                    community_subtitle.setText(String.format(Locale.US, "%d Mutual Communities", profileCommunity.getMutualCommunityCount()));
                 } else if (profileCommunity.isOtherCommunityFirstItem()) {
-                    community_subtitle.setVisibility(View.VISIBLE);
-                    String label = profileCommunity.getMutualCommunityCount() == 0 ? "Communities" : "Other Communities";
-                    if(label.equalsIgnoreCase("Other Communities")) {
-                        headderTitle.setVisibility(View.GONE);
-                    }
+                    String label = isOwnProfile ? "My Communities" : "Communities";
                     community_subtitle.setText(label);
+                    subTitleHeaderContainer.setVisibility(View.VISIBLE);
                 } else {
-                    community_subtitle.setVisibility(View.GONE);
+                    subTitleHeaderContainer.setVisibility(View.GONE);
                 }
 
                 if (profileCommunity.getThumbnailImageUrl() != null) {  //mentor image icon
