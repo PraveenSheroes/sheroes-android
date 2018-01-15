@@ -212,13 +212,13 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
                 communityOpenAboutFragment(mCommunityFeedObj);
             } else {
                 mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-                mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mCommunityFeedObj, communityEnum, mCommunityPostId);
+                mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mCommunityFeedObj, communityEnum, mCommunityPostId, SCREEN_LABEL);
                 mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
                 mViewPager.setAdapter(mViewPagerAdapter);
             }
         } else {
             mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-            mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mCommunityFeedObj, communityEnum, mCommunityPostId);
+            mCommunitiesDetailFragment = CommunitiesDetailFragment.createInstance(mCommunityFeedObj, communityEnum, mCommunityPostId, SCREEN_LABEL);
             mViewPagerAdapter.addFragment(mCommunitiesDetailFragment, getString(R.string.ID_COMMUNITIES));
             mViewPager.setAdapter(mViewPagerAdapter);
         }

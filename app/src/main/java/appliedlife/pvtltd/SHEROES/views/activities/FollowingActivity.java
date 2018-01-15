@@ -26,12 +26,12 @@ import butterknife.OnClick;
 
 /**
  * Created by ravi on 03/01/18.
- * Listing of Profile - User's Community
+ * Listing of Followed Champions
  */
 
 public class FollowingActivity extends BaseActivity {
 
-    private static final String SCREEN_LABEL = "Followed Mentors";
+    private static final String SCREEN_LABEL = "Followed Champions Screen";
     private long userMentorId;
 
     @Bind(R.id.tv_mentor_toolbar_name)

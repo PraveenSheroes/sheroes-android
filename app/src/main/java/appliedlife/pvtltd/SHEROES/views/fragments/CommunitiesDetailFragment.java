@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -76,7 +77,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
 
 
 public class CommunitiesDetailFragment extends BaseFragment {
-    private static final String SCREEN_LABEL = "Community Screen";
+    private static String SCREEN_LABEL = "Community Screen";
     private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
@@ -117,7 +118,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private Comment mComment;
     private boolean hideAnonymousPost = true;
 
-    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId) {
+    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId, String sourceName) {
         CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(AppConstants.COMMUNITY_POST_ID, communityPostId);
@@ -130,6 +131,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         }
         bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, communityEnum);
+        bundle.putString(BaseActivity.SOURCE_SCREEN, sourceName);
         communitiesDetailFragment.setArguments(bundle);
         return communitiesDetailFragment;
     }
@@ -145,6 +147,10 @@ public class CommunitiesDetailFragment extends BaseFragment {
         moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
             mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
+            if(getArguments().getString(BaseActivity.SOURCE_SCREEN) != null){
+                String sourceScreenName = getArguments().getString(BaseActivity.SOURCE_SCREEN);
+                SCREEN_LABEL = sourceScreenName;
+            }
             Parcelable parcelable=getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
             if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()&&null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();

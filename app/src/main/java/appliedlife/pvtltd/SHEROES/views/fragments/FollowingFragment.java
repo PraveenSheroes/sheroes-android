@@ -50,7 +50,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.
 
 public class FollowingFragment extends BaseFragment implements ProfileNewView, ProfileFollowedMentorAdapter.OnItemClicked {
 
-    public static final String SCREEN_LABEL = "Followed Mentors";
+    private static final String SCREEN_LABEL = "Followed Champions Screen";
 
     private long userMentorId;
     private boolean isSelfProfile;
