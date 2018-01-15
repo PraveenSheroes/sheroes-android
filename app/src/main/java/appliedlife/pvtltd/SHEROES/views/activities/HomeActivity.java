@@ -157,6 +157,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REA
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
@@ -1896,8 +1897,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void championProfile(BaseResponse baseResponse, int championValue) {
-        if(championValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
-            championDetailActivity(mUserId, 1, isMentor,  AppConstants.FEED_SCREEN); //self profile
+        if (championValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+            championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
+        } else if (championValue == REQUEST_CODE_CHAMPION_TITLE) {
+            UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
+           // championDetailActivity(feedDetail.getAuthorParticipantId(), 1, isMentor, AppConstants.FEED_SCREEN); //self profile
+            championLinkHandle(feedDetail);
         } else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
@@ -1914,6 +1919,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
         MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
+       //todo - champion post - handle click
+        MentorUserProfileActvity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

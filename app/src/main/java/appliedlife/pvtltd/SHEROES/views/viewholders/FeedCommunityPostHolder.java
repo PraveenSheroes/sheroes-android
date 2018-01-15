@@ -1063,7 +1063,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if(viewInterface instanceof FeedItemCallback){
                 ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }else {
-                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
             }
         }
     }

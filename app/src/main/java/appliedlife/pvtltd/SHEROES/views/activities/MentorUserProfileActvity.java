@@ -709,7 +709,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @Override
     public void stopProgressBar() {
-
     }
 
     @Override
