@@ -495,7 +495,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                                 .tabTitle(communityTab.title)
                                 .tabKey(communityTab.key)
                                 .build();
-                AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+                AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
                 if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
                     mFabButton.setVisibility(View.VISIBLE);
                     mFabButton.setImageResource(R.drawable.challenge_placeholder);

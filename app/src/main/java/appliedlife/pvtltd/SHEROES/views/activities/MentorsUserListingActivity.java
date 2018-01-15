@@ -53,6 +53,7 @@ import butterknife.ButterKnife;
 
 public class MentorsUserListingActivity extends BaseActivity implements HomeView {
     private static final String SCREEN_LABEL = "Mentors Listing Screen";
+
     //region binding view variables
     @Bind(R.id.toolbar)
     Toolbar mToolbar;

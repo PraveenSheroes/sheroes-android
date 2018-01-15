@@ -170,7 +170,6 @@ public class AppConstants {
     public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
     public static final String YOUR_INTEREST = "your_interest";
 
-
     public static final String JOB_DETAIL = "job_detail";
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String MENTOR_INSIGHT = "mentor_insight";

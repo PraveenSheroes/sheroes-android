@@ -57,7 +57,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 public class UserProfileTabFragment extends BaseFragment implements ProfileNewView {
-    private static final String SCREEN_LABEL = "Profile - Details";
+    private static final String SCREEN_LABEL = "Profile Details Screen";
     private final String TAG = LogUtils.makeLogTag(UserProfileTabFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
@@ -189,7 +189,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container_community)
     public void openCommunityList() {
         if(isSelfProfile) {
-            ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_EMPTY_VIEW_JOIN_COMMUNITY);
             Intent intent = new Intent(getActivity(), HomeActivity.class);
             intent.putExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT, "Community List");
             startActivity(intent);
@@ -199,7 +198,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
         if(isSelfProfile) {
-            ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_EMPTY_VIEW_FOLLOW_CHAMPION);
             Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
             startActivity(intent);
         }
@@ -207,17 +205,15 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
     @OnClick(R.id.followed_view_more)
     public void navigateToFollowedMentors() {
-        ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_CHAMPION_VIEW_MORE);
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
-            FollowingActivity.navigateTo(getActivity(), userId,  SCREEN_LABEL, null );
+            FollowingActivity.navigateTo(getActivity(), userId,  getScreenName(), null );
         }
     }
 
     @OnClick(R.id.community_view_more)
     public void navigateToCommunityListing() {
-        ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_COMMUNITY_VIEW_MORE);
         if(StringUtil.isNotEmptyCollection(profileCommunities)) {
-            ProfileCommunitiesActivity.navigateTo(getActivity(), userId, isSelfProfile, SCREEN_LABEL, null);
+            ProfileCommunitiesActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(), null);
         }
     }
 
@@ -487,7 +483,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
-        ((MentorUserProfileActvity)getActivity()).addAnalyticsEvents(Event.PROFILE_CHAMPION_VIEW_MORE);
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 

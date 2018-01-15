@@ -90,6 +90,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     private final String TAG = LogUtils.makeLogTag(MentorUserProfileActvity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
+
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
     private Long mChampionId;
     private boolean isMentor;
@@ -413,11 +414,11 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
+            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
             mViewPagerAdapter.addFragment(UserProfileTabFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_POST));
+            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
         }
 
         mViewPager.setAdapter(mViewPagerAdapter);
@@ -920,6 +921,11 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 .isOwnProfile(isOwnProfile)
                 .build();
         return properties;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
     }
 
     @Override

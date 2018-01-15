@@ -2010,7 +2010,9 @@ public class AppUtils {
     }
 
     public PublicProfileListRequest pubicProfileRequestBuilder( int pageNo) {
+        AppUtils appUtils = AppUtils.getInstance();
         PublicProfileListRequest publicProfileListRequest = new PublicProfileListRequest();
+        publicProfileListRequest.setAppVersion(appUtils.getAppVersionName());
         publicProfileListRequest.setPageNo(pageNo);
         publicProfileListRequest.setPageSize(AppConstants.PAGE_SIZE);
         return publicProfileListRequest;
