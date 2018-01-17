@@ -336,7 +336,11 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
-
+        <receiver android:name="appliedlife.pvtltd.SHEROES.service.BroadCastReceiver" >
+            <intent-filter>
+                <action android:name="BroadCastReceiver" />
+            </intent-filter>
+        </receiver>
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity" android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity"/>
