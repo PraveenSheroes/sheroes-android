@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
     <item android:drawable="@color/email"/>
-    <item>
+    <item android:bottom="40dp" >
         <bitmap
             android:gravity="center"
             android:src="@mipmap/ic_sheroes_icon"/>
     </item>
-    <item android:top="60dp"  >
+    <item android:top="20dp"  >
         <bitmap
             android:gravity="center"
             android:src="@mipmap/splash_text"/>

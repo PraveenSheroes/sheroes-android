@@ -62,6 +62,7 @@
     <color name="red_opacity">#f5c7c5</color>
     <color name="chat_incomming_text_color">#814edf</color>
     <color name="link_color">#008cc9</color>
+    <color name="share_color">#4bc85b</color>
 
     <!-- Text color of the search box hint text  -->
 
