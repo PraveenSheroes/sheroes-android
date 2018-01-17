@@ -9,7 +9,9 @@
         <item name="colorPrimaryDark">@color/text_color_close</item>
         <item name="colorAccent">@color/colorPrimary</item>
         </style>
-
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
     <style name="AlertDialogPositivCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:layout_width">@dimen/dp_size_100</item>
         <item name="android:layout_height">@dimen/dp_size_100</item>

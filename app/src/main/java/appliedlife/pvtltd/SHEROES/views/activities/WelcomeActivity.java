@@ -161,6 +161,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         mLoginPresenter.attachView(this);
