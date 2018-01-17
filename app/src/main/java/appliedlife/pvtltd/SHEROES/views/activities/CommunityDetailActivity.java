@@ -403,7 +403,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private int getDefaultTabPosition() {
         int position = 0;
-        if(mCommunityFeedSolrObj==null){
+        if(mCommunityFeedSolrObj==null || CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)){
             return position;
         }
         if(CommonUtil.isNotEmpty(mDefaultTabKey)){
