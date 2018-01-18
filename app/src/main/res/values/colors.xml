@@ -3,38 +3,26 @@
     <!-- Text color of the search box hint text  -->
     <color name="colorPrimary">#6e2f95</color>
     <color name="colorPrimaryDark">#6e2f95</color>
-    <color name="unAcceptColor">#3023ae</color>
     <color name="colorAccent">#6e2f95</color>
     <color name="once_card">#6d3493</color>
     <color name="light_grey">#4D4D4D</color>
     <color name="gray_light">#878787</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
-    <color name="challenge_count">#303F9F</color>
-    <color name="primary_text_disabled_light">#39000000</color>
-    <color name="primary_text_default_light">#de000000</color>
     <color name="primary_text_default_dark">#FFFFFFFF</color>
     <color name="primary_text_disabled_dark">#4DFFFFFF</color>
     <color name="secondary_text_disabled_dark">#36FFFFFF</color>
     <color name="secondary_text_default_dark">#B3FFFFFF</color>
     <color name="white">#ffffff</color>
-    <color name="eror">#59000000</color>
-    <color name="red_skip">#d94440</color>
-    <color name="growth_followed">#5838ac</color>
-    <color name="challenge">#53a0fe</color>
     <color name="grey8">#fafafa</color>
     <color name="challenge_post">#ff4531</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
     <color name="theme">#ECECEC</color>
-    <color name="public_profile_text">#eaccff</color>
-    <color name="welcome_footer">#ccffffff</color>
-    <color name="facebook_btn">#33ffffff</color>
     <color name="red">#d50000</color>
     <color name="added_member">#56596b</color>
     <color name="dashboard_text">#323940</color>
     <color name="detail_page_text">#4a4a4a</color>
     <color name="event_text">#898989</color>
-    <color name="logging">#8793de</color>
     <color name="dashboard_fed_text">#757e87</color>
     <color name="noConnection">#2f2f2f</color>
     <color name="added_member_text">#cbcddd</color>
@@ -44,16 +32,13 @@
     <color name="on_board_work">#dcdcdc</color>
 
     <color name="black_current">#1a1818</color>
-    <color name="black_gradiant">#80000000</color>
     <color name="add_member_line">#e4e9ec</color>
-    <color name="shadow">#3b99fc</color>
 
     <color name="profile_text">#999999</color>
     <color name="divide_approve_delete">#979797</color>
     <color name="approve_admin">#13c221</color>
 
 
-    <color name="verify_fb">#2d3340</color>
     <color name="searchbox_text_color">#9b9b9b</color>
     <color name="selected_on_boarding">#eaecf6</color>
     <color name="green">#28b51b</color>
@@ -67,32 +52,22 @@
     <!-- Text color of the search box hint text  -->
 
     <color name="view_more">#2793e7</color>
-    <color name="forgot_password">#838a9c</color>
     <color name="searchbox_hint_text_color">#1c2024</color>
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#dc4541</color>
     <color name="posted_in">#90949c</color>
     <color name="search_tab_text">#3949ab</color>
-    <color name="search_box">#273691</color>
-    <color name="growth_buddies_name">#343434</color>
 
-    <color name="search_box_text">#aeb7ee</color>
-    <color name="ask_sheroes">#03d3f3</color>
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>
     <color name="join_conversation">#F7F7F7</color>
-    <color name="default_color_expanded">#F0F0F0</color>
     <color name="fully_transparent">#00000000</color>
-    <color name="background">#f0f1f3</color>
     <color name="feed_article_label">#3C3C3C</color>
     <color name="feed_article_comment">#777f8a</color>
-    <color name="feed_job_card_new">#50e3c2</color>
     <color name="feed_card_time">#90949c</color>
-    <color name="feed_conversation">#878e98</color>
     <color name="requested_btn">#5d6d7d</color>
     <color name="suggested_text">#666666</color>
-    <color name="suggested_card_text">#333333</color>
     <color name="tags_shap_selected_color">#EAECF6</color>
     <color name="comment_text">#3c3c3c</color>
 
@@ -100,13 +75,9 @@
 
     <!--text colors of setting_feedback page-->
     <color name="recent_post_comment">#878787</color>
-    <color name="text_color">#545b61</color>
     <color name="line_color">#a8c0c9d0</color>
     <color name="text_color_follow">#4a4a4a</color>
-    <color name="background_color">#fcffffff</color>
-    <color name="skip_textcolor">#68545b61</color>
     <color name="button_color">#8a8d9e</color>
-    <color name="back_ground_color">#e8ecef</color>
     <!--text colors of setting about page-->
     <color name="text_color_about">#1c2024</color>
     <!--text colors of setting header-->
@@ -115,40 +86,26 @@
     <color name="text_color_setting_preference_basicdetails">#757e87</color>
 
     <!--text colors of setting_preferences_deactiveaccount page-->
-    <color name="setting_errormessage_backgroung">#ea2e11</color>
     <color name="text_color_contactdetails_page">#292f3c</color>
     <!--colors related visiting_card_edit_basicdetails-->
     <color name="star_color">#d0021b</color>
     <color name="line_color_personal">#d2d9de</color>
 
     <color name="photo_placeholder">#e1e1e1</color>
-    <color name="back_colo_aboutme_head">#93dae6</color>
-    <color name="count_char_text_color">#788189</color>
-    <color name="text_color_work_list">#828b93</color>
     <color name="background_color_project_number">#f5f5f5</color>
-    <color name="feed_background">#f5f7fa</color>
-    <color name="anonymous_background">#ebebeb</color>
 
     <!--text colors of deactive_custom dialog page-->
 
-    <color name="text_color_dialog">#1d2832</color>
     <color name="text_color_close">#6e2f95</color>
-    <color name="text_color_date_view">#767f88</color>
     <color name="challenge_header">#6e2f95</color>
-    <color name="color_signin_button_login">#673ab7</color>
-
-    <color name="text_education_line">#a6aac2</color>
 
     <color name="blue_light">#b9f2ff</color>
-    <color name="blue_lighter">#e4f3ff</color>
     <!--colors close trough priyanka-->
-    <color name="facebook_design">#ccffff</color>
     <color name="com_post_share_textcolor1">#757e87</color>
     <color name="com_post_share_textcolor">#323940</color>
     <color name="com_share_post_text_color">#1e2226</color>
     <color name="text_color_date_birth">#4a4a4a</color>
     <color name="share_line_color">#d2dade</color>
-    <color name="communities_post_button_color">#f2403c</color>
     <color name="communities_post_icon">#f8e81c</color>
     <color name="red_oval_shap">#f2403c</color>
     <color name="or_gray">#d2d9de</color>
@@ -156,32 +113,15 @@
 
     <color name="text_color_teg_text">#4a4a4a</color>
     <color name="gray_shap">#9b9b9b</color>
-    <color name="emoji_text">#f5a623</color>
-    <color name="profile_circle">#669b9b9b</color>
 
     <color name="popular_tag_color">#ed3f3b</color>
     <color name="white_color">#FFFFFF</color>
-    <color name="rating_color">#FFA500</color>
-    <color name="comment_text_color">#bf545b61</color>
-    <color name="back_broung_color">#f8f9fc</color>
-    <color name="visiting_card_text_color">#c8cce4</color>
     <color name="job_filter_type_color">#757e87</color>
     <color name="job_filter_desc_color">#1c2024</color>
 
-    <color name="text_color_profile_hor">#1c2024</color>
-    <color name="text_color_profile_hor_txt">#757e87</color>
-    <color name="user_comment_text">#88888b</color>
     <color name="image_upload_bg_color">#d9000000</color>
-    <color name="image_upload_camera_txt_color">#d0d0d0</color>
-    <color name="image_upload_gallery_txt_color">#156167</color>
-    <color name="camera_bg_start_color">#092E35</color>
-    <color name="camera_bg_end_color">#15636A</color>
     <color name="community_tag_color">#788189</color>
     <color name="lighter_gray">#DDDDDD</color>
-
-    <color name="visiting_card_backgroung">#bababa</color>
-    <color name="signup_text_color">#512da8</color>
-    <color name="helpline_edittext_color">#808080</color>
 
     <color name="faq_question_color">#39393a</color>
     <color name="faq_answer_color">#757575</color>
@@ -200,8 +140,4 @@
     <color name="mentor_green">#6bba29</color>
     <color name="mentor_profession">#686868</color>
 
-    <color name="google_plus">#df4a32</color>
-    <color name="google_plus_pressed">#bb4131</color>
-    <color name="button_background_color_focused_disabled">#84878c</color>
-    <color name="button_background_color_disabled">#bdc1c9</color>
 </resources>
