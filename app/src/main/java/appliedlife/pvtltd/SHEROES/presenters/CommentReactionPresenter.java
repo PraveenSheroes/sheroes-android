@@ -201,7 +201,7 @@ public class CommentReactionPresenter extends BasePresenter<AllCommentReactionVi
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if(likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)){
                     comment.isLiked = false;
                     comment.likeCount--;
                 }
