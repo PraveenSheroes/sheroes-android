@@ -41,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -64,12 +63,10 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
@@ -80,7 +77,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
@@ -212,27 +208,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         return fragment;
     }
 
-    /**
-     * Replace Fragment
-     *
-     * @param fragment       Fragment Object
-     * @param bundle         Bundle to pass to the Fragment
-     * @param addToBackStack boolean
-     */
-    public void replaceFragment(Fragment fragment, int resId, Bundle bundle, boolean addToBackStack) {
-        if (fragment != null && !fragment.isAdded()) {
-            fragment.setArguments(bundle);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            if (addToBackStack) ft.addToBackStack(fragment.getClass().getSimpleName());
-            LogUtils.info(TAG, "Fragment TAG given->" + fragment.getClass().getSimpleName());
-            if (resId == 0 && findViewById(R.id.container) != null)
-                ft.replace(R.id.container, fragment, fragment.getClass().getSimpleName());
-            else ft.add(resId, fragment, fragment.getClass().getSimpleName());
-            ft.commitAllowingStateLoss();
-        }
-    }
-
     public void trackEvent(final Event event, final Map<String, Object> properties) {
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -243,10 +218,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             return mPreviousScreen;
         }
         return null;
-    }
-
-    public void replaceFragment(Fragment fragment) {
-        replaceFragment(fragment, 0, null, false);
     }
 
     @Override
@@ -511,12 +482,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
                 startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
-            case R.id.li_feed_job_card:
-                Intent intentJob = new Intent(this, JobDetailActivity.class);
-                Parcelable parcelable = Parcels.wrap(mFeedDetail);
-                intentJob.putExtra(AppConstants.JOB_DETAIL, parcelable);
-                startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
-                break;
+
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
                 ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
@@ -555,27 +521,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
                         }else {
                             CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                            /*Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
-                            Bundle bundleFromPost = new Bundle();
-                            bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                            intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
-                            Parcelable parcelablesss = Parcels.wrap(mFeedDetail);
-                            bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
-                            bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                            intentFromCommunityPost.putExtras(bundleFromPost);
-                            startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
+
                         }
                     }else {
                         CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                       /* Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
-                        Bundle bundleFromPost = new Bundle();
-                        bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                        intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
-                        Parcelable parcelablesss = Parcels.wrap(mFeedDetail);
-                        bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
-                        bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                        intentFromCommunityPost.putExtras(bundleFromPost);
-                        startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
+
                     }
                 }
                 break;
@@ -611,16 +561,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }else
             {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
-            }
-        } else {
-                Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                    ((JobFragment) fragmentBookMark).bookMarkForCard(mFeedDetail);
-                } else {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
-                }
             }
         }
         if(this instanceof ContestActivity){

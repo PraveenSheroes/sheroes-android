@@ -71,7 +71,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.MentorProfileDetailFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -581,11 +580,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 .build();
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
-        if (fragment instanceof MentorProfileDetailFragment) {
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                // ((AllSearchFragment) fragment).setEditText(mSearchEditText.getText().toString());
-            }
-        } else if (fragment instanceof CommunitiesDetailFragment) {
+        if (fragment instanceof CommunitiesDetailFragment) {
 
         } else if (fragment instanceof MentorQADetailFragment) {
 

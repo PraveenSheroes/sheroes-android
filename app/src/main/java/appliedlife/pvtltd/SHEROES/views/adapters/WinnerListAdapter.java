@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,11 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
-import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -135,7 +131,7 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String userImage = CommonUtil.getImgKitUri(prize.imageUrl, mUserPicSize, mUserPicSize);
                     Glide.with(mProfilePic.getContext())
                             .load(userImage)
-                            .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(context))
+                            .bitmapTransform(new CommonUtil.CircleTransform(context))
                             .into(mProfilePic);
                 }
             }

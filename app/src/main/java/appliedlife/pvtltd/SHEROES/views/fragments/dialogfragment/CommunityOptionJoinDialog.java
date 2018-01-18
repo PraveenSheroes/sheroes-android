@@ -26,7 +26,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
@@ -36,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
@@ -131,8 +129,6 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
                 mCommunityFeedObj.setOwner(false);
                 if (mCommunityFeedObj.isFromHome()) {
                     ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mCommunityFeedObj);
-                } else {
-                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getStatus(), mCommunityFeedObj);
                 }
                 entityMoEngageJoinedCommunity(mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mCommunityFeedObj.getItemPosition());
                 dismiss();
@@ -140,8 +136,6 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
             case AppConstants.FAILED:
                 if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getScreenName()) && mCommunityFeedObj.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
                     ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mCommunityFeedObj);
-                } else {
-                    ((CommunitiesDetailActivity) getActivity()).onJoinDialogSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mCommunityFeedObj);
                 }
                 dismiss();
                 break;

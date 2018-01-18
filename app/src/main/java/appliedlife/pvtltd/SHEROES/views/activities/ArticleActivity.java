@@ -75,7 +75,6 @@ import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
@@ -639,7 +638,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
+                        .bitmapTransform(new CommonUtil.CircleTransform(this))
                         .into(authorPic);
 
             }
@@ -647,7 +646,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
+                        .bitmapTransform(new CommonUtil.CircleTransform(this))
                         .into(authorDesPic);
 
             }

@@ -43,7 +43,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CurrentStatusDialog;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,7 +52,7 @@ import butterknife.OnClick;
 public class OnBoardingActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
-    private CurrentStatusDialog mCurrentStatusDialog;
+
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
