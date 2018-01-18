@@ -702,6 +702,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                shareWithMultipleOption(baseResponse);
                 popupWindow.dismiss();
             }
         });
@@ -715,7 +716,35 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
     }
 
-
+    private void shareWithMultipleOption(BaseResponse baseResponse)
+    {
+        FeedDetail feedDetail = (FeedDetail) baseResponse;
+        String deepLinkUrl;
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl()))
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }else
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
+        if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
+                            .title(mFeedDetail.getNameOrTitle())
+                            .companyId(Long.toString(((JobFeedSolrObj)mFeedDetail).getCompanyMasterId()))
+                            .location(mFeedDetail.getAuthorCityName())
+                            .build();
+            trackEvent(Event.JOBS_SHARED, properties);
+        }else {
+            AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
+        }
+    }
     private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
         int id = view.getId();
         switch (id) {
