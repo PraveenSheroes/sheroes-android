@@ -1,6 +1,8 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
+import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 
@@ -11,8 +13,10 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
@@ -94,6 +98,8 @@ public class HomePresenter extends BasePresenter<HomeView> {
     Preference<AllCommunitiesResponse> mAllCommunities;
 
     MasterDataModel mMasterDataModel;
+    @Inject
+    ProfileModel profileModel;
 
     @Inject
     public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
@@ -177,6 +183,39 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
         getMvpView().startProgressBar();
         Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+            @Override
+            public void onCompleted() {
+                getMvpView().stopProgressBar();
+            }
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                LogUtils.info(TAG, "********response***********");
+                getMvpView().stopProgressBar();
+                if (null != feedResponsePojo) {
+                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+
+    //followed profile
+    public void getFeedForProfileFromPresenter(final FeedRequestPojo feedRequestPojo) { //todo - profile - public profile
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        Subscription subscription = profileModel.getFeedFromModelForTestProfile(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
             @Override
             public void onCompleted() {
                 getMvpView().stopProgressBar();
@@ -380,12 +419,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
-                {
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
+                    userSolrObj.setSolrIgnoreIsUserFollowed(true);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                }else
-                {
+                }else {
+                    userSolrObj.setSolrIgnoreIsUserFollowed(false);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                 }
                 getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
@@ -410,18 +449,17 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
-                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
             }
 
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS))
-                {
+                if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                }else
-                {
+                    userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                }else  {
+                    userSolrObj.setSolrIgnoreIsUserFollowed(true);
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                 }
                 getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);

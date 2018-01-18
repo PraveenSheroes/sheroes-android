@@ -73,10 +73,12 @@
     <dimen name="dp_size_165">165dp</dimen>
     <dimen name="dp_size_118">118dp</dimen>
     <dimen name="dp_size_120">120dp</dimen>
+    <dimen name="dp_size_124">124dp</dimen>
     <dimen name="dp_size_170">170dp</dimen>
     <dimen name="dp_size_172">172dp</dimen>
     <dimen name="dp_size_175">175dp</dimen>
     <dimen name="dp_size_180">180dp</dimen>
+    <dimen name="dp_size_191">191dp</dimen>
     <dimen name="dp_size_200">200dp</dimen>
     <dimen name="dp_size_220">220dp</dimen>
     <dimen name="dp_size_212">212dp</dimen>

@@ -50,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -66,18 +65,18 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileDashboardActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -135,13 +134,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
+            mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
         }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
-          /*  if (!AppUtils.isEmpty(mPreviousScreenProperties)) {
+            if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
                 properties.putAll(mPreviousScreenProperties);
-            }*/
+            }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
     }
@@ -283,9 +283,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         // appropriate."
         if (trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
-            /*if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
+            if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
                 properties.putAll(mPreviousScreenProperties);
-            }*/
+            }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
         super.onPause();
@@ -409,6 +409,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                 }
                 break;
+
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall();
                 break;
@@ -465,6 +466,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 /*mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);*/
                // openCommentReactionFragment(mFeedDetail);
+                LikeListBottomSheetFragment.showDialog(this, "", mFeedDetail.getEntityOrParticipantId());
                 break;
             case R.id.tv_feed_community_post_total_reactions:
                 LikeListBottomSheetFragment.showDialog(this, "", mFeedDetail.getEntityOrParticipantId());
@@ -488,6 +490,20 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
+           case R.id.tv_article_card_title :
+            case R.id.iv_article_circle_icon:
+                //Todo - article hv id issue
+               // MentorUserProfileActvity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+
+                break;
+
+            case R.id.iv_feed_community_post_login_user_pic:
+            case R.id.fl_login_user:
+            case R.id.tv_feed_community_post_login_user_name:
+            case R.id.feed_img:
+            case R.id.tv_feed_community_post_user_name:
+                MentorUserProfileActvity.navigateTo(this, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+             break;
 
             case R.id.li_feed_article_images:
                 ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
@@ -509,22 +525,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case R.id.li_community_images:
-                Intent intentMyCommunity = new Intent(this, CommunitiesDetailActivity.class);
-                Bundle bundle = new Bundle();
-                Parcelable parcelables = Parcels.wrap(mFeedDetail);
-                bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelables);
-                bundle.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                intentMyCommunity.putExtras(bundle);
-                startActivityForResult(intentMyCommunity, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 break;
             case R.id.li_featured_community_images:
-                Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
+                CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                /*Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
                 Bundle bundleFeature = new Bundle();
                 Parcelable parcelabless = Parcels.wrap(mFeedDetail);
                 bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelabless);
                 bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
                 intetFeature.putExtras(bundleFeature);
-                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                 break;
             case R.id.tv_feed_community_post_card_title:
                 if(((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
@@ -543,7 +554,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
                             ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
                         }else {
-                            Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                            CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                            /*Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                             Bundle bundleFromPost = new Bundle();
                             bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
                             intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
@@ -551,10 +563,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                             bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                             intentFromCommunityPost.putExtras(bundleFromPost);
-                            startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                            startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                         }
                     }else {
-                        Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
+                        CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                       /* Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
                         Bundle bundleFromPost = new Bundle();
                         bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
                         intentFromCommunityPost.putExtra(AppConstants.COMMUNITY_ID, ((UserPostSolrObj) mFeedDetail).getCommunityId());
@@ -562,7 +575,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
                         bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
                         intentFromCommunityPost.putExtras(bundleFromPost);
-                        startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                        startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                     }
                 }
                 break;
@@ -624,10 +637,19 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void shareCardViaSocial(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
+        String deepLinkUrl;
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl()))
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }else
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
-        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        intent.setPackage(AppConstants.WHATS_APP);
+        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
             HashMap<String, Object> properties =
@@ -641,6 +663,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }else {
             AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
         }
+
     }
 
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {
@@ -803,7 +826,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
                 }
                 break;
 

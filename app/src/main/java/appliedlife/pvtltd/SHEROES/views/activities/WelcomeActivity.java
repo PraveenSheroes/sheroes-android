@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -160,6 +161,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         mLoginPresenter.attachView(this);
@@ -199,6 +201,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } else {
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(WelcomeActivity.this);
+            /*if(null!=getIntent()&&null!=getIntent().getExtras()) {
+                Bundle bundle = getIntent().getExtras();
+                mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
+            }*/
             isFirstTimeUser = true;
             initHomeViewPagerAndTabs();
             loginSetUp();
@@ -233,8 +239,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                                 LoginRequest loginRequest = loginRequestBuilder();
                                                 loginRequest.setAccessToken(accessToken.getToken());
                                                 AppUtils appUtils = AppUtils.getInstance();
-                                                loginRequest.setAppVersion(appUtils.getAppVersionName());
-                                                //TODO:: NEED to Change
                                                 loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
                                                 loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
                                                 loginRequest.setGcmorapnsid(mGcmId);
@@ -292,6 +296,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             openLoginActivity();
         } else {
             Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
+            Bundle bundle=new Bundle();
+            boardingIntent.putExtras(bundle);
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);
             finish();
@@ -374,8 +380,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     private void openLoginActivity() {
         Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
-        Bundle bundle = new Bundle();
-        // bundle.putString(AppConstants.SHEROES_AUTH_TOKEN, mGcmId);
+        Bundle bundle=new Bundle();
         loginIntent.putExtras(bundle);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
@@ -523,19 +528,21 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mProgressDialog.dismiss();
         }
         Intent intent = getIntent();
-        if (intent != null) {
+        if (intent != null&&null!=intent.getExtras()) {
             Bundle extras = intent.getExtras();
-            if (extras != null && null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
-                if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
-                    String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
-                    LogUtils.info(TAG, "********Id of  new Intent ***********" + appContactId);
-                    UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
-                    if (StringUtil.isNotNullOrEmptyString(appContactId)) {
-                        try {
-                            userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
-                            mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
+            if (extras != null ) {
+                if(null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
+                    if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
+                        String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
+                        LogUtils.info(TAG, "********Id of  new Intent ***********" + appContactId);
+                        UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
+                        if (StringUtil.isNotNullOrEmptyString(appContactId)) {
+                            try {
+                                userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
+                                mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
+                            } catch (Exception e) {
+                                Crashlytics.getInstance().core.logException(e);
+                            }
                         }
                     }
                 }
@@ -788,8 +795,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             LoginRequest loginRequest = loginRequestBuilder();
             loginRequest.setAccessToken(mToken);
             AppUtils appUtils = AppUtils.getInstance();
-            loginRequest.setAppVersion(appUtils.getAppVersionName());
-            //TODO:: NEED to Change
             loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
             loginRequest.setGcmorapnsid(mGcmId);
@@ -926,11 +931,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        //super.showError(errorMsg, feedParticipationEnum);
+        //onShowErrorDialog(errorMsg, feedParticipationEnum);
         dismissDialog();
-        fbLogin.setEnabled(true);
-        mUserPreference.delete();
-
+        if(null!=fbLogin) {
+            fbLogin.setEnabled(true);
+            mUserPreference.delete();
+        }
     }
 
 

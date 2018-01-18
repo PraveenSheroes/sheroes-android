@@ -26,6 +26,7 @@ public class NoCommunityHolder  extends BaseViewHolder<FeedDetail> {
     private Context mContext;
     @Bind(R.id.tv_no_community)
     TextView tvNoCommunity;
+
     public NoCommunityHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);

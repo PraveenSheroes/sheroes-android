@@ -36,7 +36,10 @@ public class Article extends Post {
     public int thumbImageHeight;
     public int featureImageWidth;
     public int featureImageHeight;
+    public long creatorId;
+    public boolean isCreatorMentor;
     public ArrayList<Comment> comments = new ArrayList<>();
+    public long entityId;
 
     public
     @DrawableRes

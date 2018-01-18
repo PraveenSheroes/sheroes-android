@@ -1,62 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-    <RelativeLayout
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/pb_chat_progress_bar"
+        android:layout_width="@dimen/dp_size_30"
+        android:layout_height="@dimen/dp_size_30"
+        android:layout_gravity="center|top"
+        android:layout_marginLeft="@dimen/dp_size_170"
+        android:background="@drawable/ripple_button"
+        android:backgroundTint="@color/grey2"
+        android:indeterminateTint="@color/white" />
+
+    <LinearLayout
+        android:id="@+id/bottom_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_view_chat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:layout_above="@+id/bottomtextbtnbar">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_chat_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:divider="@color/fully_transparent"
-                android:background="@color/white"/>
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-    <RelativeLayout
-        android:id="@+id/bottomtextbtnbar"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_size_55"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/round_edittext">
+        android:background="@color/grey_50"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <EditText
             android:id="@+id/et_question_chat"
-            android:layout_width="@dimen/dp_size_250"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_3"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:background="@color/white"
-            android:cursorVisible="true"
-            android:hint="@string/ID_HELPLINE_TYPE_MESSAGE"
-            android:inputType="textMultiLine"
-            android:lines="2"
-            android:maxLength="2000"
-            android:maxLines="20"
-            android:minHeight="@dimen/dp_size_50"
-            android:minLines="2"
-            android:scrollbars="vertical"
-            android:textColor="@color/pure_black"
-            android:textColorHint="@color/helpline_edittext_color"
-            android:textCursorDrawable="@drawable/helpline_cursor_color"
-            android:textSize="@dimen/sp_size_14"></EditText>
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:hint="@string/ID_ASK_QUESTION"
+            android:minHeight="48dp"
+            android:paddingBottom="12dp"
+            android:layout_marginRight="@dimen/dp_size_8"
+            android:paddingLeft="@dimen/dp_size_16"
+            android:paddingTop="12dp"
+            android:textColor="@color/black"
+            android:textColorHint="#90949c"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_chat_voice"
             android:layout_width="@dimen/dp_size_40"
             android:layout_height="@dimen/dp_size_40"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_size_55"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/dp_size_20"
             android:layout_marginTop="@dimen/dp_size_3"
             android:background="@drawable/ic_mic_img" />
 
@@ -64,21 +56,27 @@
             android:id="@+id/btn_chat_send"
             android:layout_width="@dimen/dp_size_40"
             android:layout_height="@dimen/dp_size_40"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_size_10"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="@dimen/dp_size_3"
             android:background="@drawable/ic_send_img" />
+    </LinearLayout>
 
-    </RelativeLayout>
-    </RelativeLayout>
-    <ProgressBar
-        android:id="@+id/pb_chat_progress_bar"
-        android:layout_width="@dimen/dp_size_30"
-        android:layout_height="@dimen/dp_size_30"
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:background="@drawable/ripple_button"
-        android:backgroundTint="@color/grey2"
-        android:indeterminateTint="@color/white"
-        android:layout_gravity="top|center"/>
-</FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_chat_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_container"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/bottom_container"
+        android:background="#DDDDDD" />
+
+</RelativeLayout>

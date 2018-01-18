@@ -159,6 +159,16 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
 
     }
 
+    @OnClick(R.id.user_profile_pic)
+    public void onUserImageClick() {
+      mCommentCallback.userProfileNameClick(mComment,  mUserProfilePic);
+    }
+
+    @OnClick(R.id.comment_author_name)
+    public void onUserNameClick() {
+      mCommentCallback.userProfileNameClick(mComment,  mCommentAuthorName);
+    }
+
     @OnClick(R.id.tv_user_comment_list_menu)
     public void onCommentMenuClick() {
         mComment.setItemPosition(getAdapterPosition());

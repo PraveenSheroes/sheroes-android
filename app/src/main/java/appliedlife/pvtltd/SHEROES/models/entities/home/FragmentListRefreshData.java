@@ -24,7 +24,8 @@ public class FragmentListRefreshData {
     private FeedRequestPojo feedRequestPojo;
     private String subType;
     private int sourceEntity;
-
+    private boolean isSelfProfile;
+    private long mentorUserId;
     private boolean isChallenge;
     public FragmentListRefreshData() {
 
@@ -180,5 +181,21 @@ public class FragmentListRefreshData {
 
     public void setSourceEntity(int sourceEntity) {
         this.sourceEntity = sourceEntity;
+    }
+
+    public boolean isSelfProfile() {
+        return isSelfProfile;
+    }
+
+    public void setSelfProfile(boolean selfProfile) {
+        isSelfProfile = selfProfile;
+    }
+
+    public long getMentorUserId() {
+        return mentorUserId;
+    }
+
+    public void setMentorUserId(long mentorUserId) {
+        this.mentorUserId = mentorUserId;
     }
 }

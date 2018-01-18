@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/title_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_size_16"
+            android:drawableLeft="@drawable/ic_community_icon_dark_grey"
+            android:drawablePadding="@dimen/dp_size_16"
+            android:drawableStart="@drawable/ic_community_icon_dark_grey"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="@integer/int_value_for_line_1"
+            android:text="@string/followed_communities"
+            android:textColor="#3c3c3c"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            tools:text="Followed Communities" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:background="@color/on_board_work" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/subtitle_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+    <TextView
+        android:id="@+id/community_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="@dimen/sp_size_14"
+        android:textStyle="normal"
+        tools:text="8 Mutual Communities" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/on_board_work" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/community_row_item"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_98"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:orientation="horizontal">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_mentor_full_view_icon"
+                android:layout_width="@dimen/dp_size_65"
+                android:layout_height="@dimen/dp_size_65"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginStart="@dimen/dp_size_16"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/community_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:text="@string/ID_LOCATION"
+                    android:textColor="#3c3c3c"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="@string/ID_USER_NAME" />
+
+                <TextView
+                    android:id="@+id/expert_at"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_4"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="@integer/int_value_for_line_2"
+                    android:textColor="#878787"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="@string/ID_POPULAR_SKILL" />
+
+                <TextView
+                    android:id="@+id/member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_4"
+                    android:drawableLeft="@drawable/ic_mentor_follower"
+                    android:drawablePadding="@dimen/dp_size_5"
+                    android:drawableStart="@drawable/ic_mentor_follower"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:textColor="#878787"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="@string/ID_FOLLOWER" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

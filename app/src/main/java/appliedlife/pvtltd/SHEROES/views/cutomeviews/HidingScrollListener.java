@@ -14,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -43,6 +44,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     MembersPresenter mMembersPresenter;
     HelplinePresenter mHelplinePresenter;
     RecyclerView mRecyclerView;
+    ProfilePresenterImpl profilePresenter;
     private LinearLayoutManager mManager;
     private int previousTotal = 0;
     private boolean loading = true;
@@ -60,6 +62,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     }
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter = homePresenter;
+        mRecyclerView = recyclerView;
+        mManager = manager;
+        this.mFragmentListRefreshData = fragmentListRefreshData;
+    }
+
+    public HidingScrollListener(ProfilePresenterImpl presenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
+        profilePresenter = presenter;
         mRecyclerView = recyclerView;
         mManager = manager;
         this.mFragmentListRefreshData = fragmentListRefreshData;
@@ -237,9 +246,24 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(feedRequestSpamListPojo);
                         break;
                     case AppConstants.MENTOR_LISTING:
-                        FeedRequestPojo feedMentor=mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
-                        mHomePresenter.getFeedFromPresenter(feedMentor);
+                        if( mFragmentListRefreshData.getPageNo()!=AppConstants.ONE_CONSTANT) {
+                            FeedRequestPojo feedMentor = mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                            mHomePresenter.getFeedFromPresenter(feedMentor);
+                        }
                         break;
+
+                    case AppConstants.PROFILE_COMMUNITY_LISTING:
+                        if(mFragmentListRefreshData.isSelfProfile()) {
+                            profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+                        } else{
+                            profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+                        }
+                        break;
+
+                    case AppConstants.PROFILE_FOLLOWING:
+                        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+                        break;
+
                     case AppConstants.ON_BOARDING_COMMUNITIES:
                         FeedRequestPojo feedRequestPojo = makeFeedRequest(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setOnBoardingCommunities(true);

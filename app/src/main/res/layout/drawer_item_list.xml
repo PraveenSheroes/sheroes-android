@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ll_drawer_item"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_size_48">
@@ -14,11 +15,14 @@
         android:layout_marginTop="@dimen/dp_size_12" />
 
     <TextView
+        android:layout_toRightOf="@+id/tv_drawer_image"
+        android:layout_toEndOf="@+id/tv_drawer_image"
         android:id="@+id/tv_drawer_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_32"
+        android:text="Profile"
         android:layout_marginStart="@dimen/dp_size_32"
         android:layout_marginBottom="@dimen/dp_size_12"
         android:layout_marginTop="@dimen/dp_size_12"
@@ -26,4 +30,22 @@
         android:lineSpacingExtra="10sp"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_size_13" />
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/new_feature"
+        android:layout_margin="@dimen/dp_size_10"
+        android:layout_toEndOf="@+id/tv_drawer_item"
+        android:layout_toRightOf="@+id/tv_drawer_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        tools:text="New"
+        android:background="@drawable/border_new_feature"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:paddingLeft="@dimen/dp_size_8"
+        android:paddingRight="@dimen/dp_size_8"
+        android:paddingBottom="@dimen/dp_size_2"
+        android:text="@string/new_feature"
+        android:textColor="@color/white" />
+</RelativeLayout>

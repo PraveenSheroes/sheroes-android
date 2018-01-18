@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,6 +53,7 @@ import butterknife.ButterKnife;
 
 public class MentorsUserListingActivity extends BaseActivity implements HomeView {
     private static final String SCREEN_LABEL = "Mentors Listing Screen";
+
     //region binding view variables
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -100,6 +100,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
         mentorSearchInListPagination(mFragmentListRefreshData);
     }
+
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -130,8 +131,8 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
     private void refreshFeedMethod() {
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-        mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
     @Override
@@ -152,7 +153,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                         mentorPost.community.name = userSolrObj.getNameOrTitle();
                         mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                         mentorPost.isEdit = false;
-                        CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false);
+                        CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
 
                     }
                     break;
@@ -163,18 +164,13 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             }
         }
     }
-    private void openMentorProfileDetail(BaseResponse baseResponse) {
+
+    private void openMentorProfileDetail(BaseResponse baseResponse) { //form mentor card in feed only for mentor
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
-        Bundle bundle = new Bundle();
         mFeedDetail = userSolrObj;
-        Parcelable parcelableFeedDetail = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        MentorUserProfileActvity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -268,14 +264,12 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
             mSwipeView.setRefreshing(false);
-
         }
         else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
         {
             List<FeedDetail> data=mPullRefreshList.getFeedResponses();
             data.remove(data.size()-1);
             mAdapter.notifyDataSetChanged();
-            mSwipeView.setRefreshing(false);
         }else
         {
             mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);

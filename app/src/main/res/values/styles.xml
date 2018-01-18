@@ -9,7 +9,9 @@
         <item name="colorPrimaryDark">@color/text_color_close</item>
         <item name="colorAccent">@color/colorPrimary</item>
         </style>
-
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splash</item>
+    </style>
     <style name="AlertDialogPositivCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:layout_width">@dimen/dp_size_100</item>
         <item name="android:layout_height">@dimen/dp_size_100</item>
@@ -163,6 +165,7 @@
         <item name="android:layout_gravity">right</item><!-- I only change the color -->
         <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
     </style>
+
     <style name="subtitle_collapsed">
         <item  name="android:textColor">@color/white</item>
         <item name="android:gravity">right</item>
@@ -180,6 +183,34 @@
         <item name="android:windowMinWidthMajor">0dip</item>
     </style>
     <style name="MyTextInputLayout" parent="AppTheme">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/gray_light</item>
+    </style>
+
+
+    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+        <item name="sv_backgroundColor">#E6000000</item>
+        <item name="sv_showcaseColor">@color/feed_article_label</item>
+        <item name="sv_tintButtonColor">false</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
+        <item name="sv_detailTextAppearance">@style/CustomText</item>
+    </style>
+
+    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+        <item name="android:textSize">@dimen/sp_size_20</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">#000000</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
+    </style>
+
+    <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail">
+        <item name="android:textSize">@dimen/sp_size_16</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">#000000</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_gravity">bottom</item>
     </style>
 </resources>

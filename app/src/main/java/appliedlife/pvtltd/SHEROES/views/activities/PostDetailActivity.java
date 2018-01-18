@@ -2,7 +2,11 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -12,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -54,10 +59,10 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -65,6 +70,8 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
@@ -132,6 +139,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private UserPostSolrObj mUserPostObj;
     private String mUserPostId;
     private boolean mIsAnonymous;
+    private String mPrimaryColor = "#6e2f95";
+    private String mTitleTextColor = "#ffffff";
     //endregion
 
     //region activity methods
@@ -157,6 +166,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 return;
             }
         }
+
+        if (null != getIntent() && getIntent().getExtras()!=null) {
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, "#6e2f95");
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, "#ffffff");
+        }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -175,6 +189,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTitleToolbar.setText(R.string.ID_COMMENTS);
         setupEditInputText();
+        setupToolbarItemsColor();
     }
 
     @OnClick(R.id.tv_user_name_for_post)
@@ -241,6 +256,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private void setResult() {
         UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
+        if (userPostSolrObj == null) {
+            return;
+        }
         userPostSolrObj.setItemPosition(mPositionInFeed);
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -356,6 +374,20 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
        // ActivityCompat.startActivity(fromActivity, intent, null);
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
+
+    public static void navigateTo(Activity fromActivity, String sourceScreen, UserPostSolrObj userPostSolrObj, int requestCode, HashMap<String, Object> properties, boolean showKeyboard, String primaryColor, String titleTextColor) {
+        Intent intent = new Intent(fromActivity, PostDetailActivity.class);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        Parcelable parcelable = Parcels.wrap(userPostSolrObj);
+        intent.putExtra(UserPostSolrObj.USER_POST_OBJ, parcelable);
+        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
     //endregion
 
     //region private methods
@@ -438,27 +470,44 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, TextView view) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId!=userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
+            }
+            if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
+                popup.getMenu().findItem(R.id.top_post).setVisible(true);
+                if(userPostObj.isTopPost()){
+                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
+                }else {
+                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.FEATURE_POST);
+                }
+            } else {
+                popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.edit:
-                            CommunityPostActivity.navigateTo(PostDetailActivity.this, userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST);
+                            CommunityPostActivity.navigateTo(PostDetailActivity.this, userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
                             return true;
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
                             mPostDetailPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()));
                             return true;
+                        case R.id.top_post:
+                            AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
+                            mPostDetailPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(),!userPostObj.isTopPost()));
                         default:
                             return false;
                     }
@@ -466,6 +515,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             });
         }
         popup.show();
+    }
+
+    private String getCreatorType(UserPostSolrObj userPostSolrObj) {
+        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+            return AppConstants.COMMUNITY_OWNER;
+        } else if (userPostSolrObj.isAnonymous()) {
+            return AppConstants.ANONYMOUS;
+        } else {
+            return AppConstants.USER;
+        }
     }
 
     @Override
@@ -496,18 +555,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
         long userId = userPostObj.getCreatedBy();
         int position = userPostObj.getItemPosition();
-        Intent intent = new Intent(this, MentorUserProfileDashboardActivity.class);
-        Bundle bundle = new Bundle();
+        boolean isMentor = userPostObj.isAuthorMentor();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
-        Parcelable parcelable = Parcels.wrap(communityFeedSolrObj);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID,userId);
-        intent.putExtras(bundle);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+        MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override
@@ -562,21 +616,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         }else {
-            if (userPostObj.getCommunityTypeId() == 0) {
+            if (userPostObj.getCommunityId() == 0) {
                 ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
 
             }else {
-                Intent intentFromCommunityPost = new Intent(this, CommunitiesDetailActivity.class);
-                Bundle bundleFromPost = new Bundle();
-                bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                Parcelable parcelablesss = Parcels.wrap(userPostObj);
-                bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
-                bundleFromPost.putLong(AppConstants.COMMUNITY_ID, userPostObj.getCommunityId());
-                bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                intentFromCommunityPost.putExtras(bundleFromPost);
-                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) userPostObj).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         }
+    }
+
+    @Override
+    public void onLikeCountClicked(UserPostSolrObj userPostObj) {
+        LikeListBottomSheetFragment.showDialog(this, "", userPostObj.getEntityOrParticipantId());
     }
 
     //endregion
@@ -594,13 +645,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onCommentMenuClicked(final Comment comment, ImageView userCommentListMenu) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, userCommentListMenu);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            if (adminId == AppConstants.TWO_CONSTANT) {
+            popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
+            if (currentUserId !=comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
@@ -657,5 +712,32 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mPostDetailPresenter.getCommentUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(comment.getEntityId(), comment.getCommentsId()), comment);
         }
     }
+
+    @Override
+    public void userProfileNameClick(Comment comment, View view) {
+        //if(!comment.isAnonymous() && (comment.getParticipationTypeId() == 1 || comment.getParticipationTypeId() == 7)) { //participant_type_id_l
+        /*if(!comment.isAnonymous()) { //TODO - ID of user who have commented have issue , need to fix with backed
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, comment.getParticipantId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }*/
+    }
+
+    @Override
+    public void userProfilePicClick(Comment comment, View view) {
+        userProfileNameClick(comment, view);
+    }
     //endregion
+
+    private void setupToolbarItemsColor() {
+        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+        }
+        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
+    }
 }

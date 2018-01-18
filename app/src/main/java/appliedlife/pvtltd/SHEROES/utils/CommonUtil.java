@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -335,11 +336,24 @@ public class CommonUtil {
     }
 
     public static boolean isSheoresAppLink(Uri url) {
+        if (url==null || url.getScheme() == null) {
+            return false;
+        }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in") ))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
                     || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") ||  url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members")) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public static boolean isSheroesValidLink(Uri url) {
+        if (url==null || url.getScheme() == null) {
+            return false;
+        }
+        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in") ))) {
+          return true;
         }
         return false;
     }

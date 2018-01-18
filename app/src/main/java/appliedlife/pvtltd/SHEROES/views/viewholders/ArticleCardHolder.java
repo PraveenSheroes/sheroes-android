@@ -7,7 +7,6 @@ import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.f2prateek.rx.preferences.Preference;
@@ -29,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -177,7 +176,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             String feedCircleIconUrl = dataItem.getAuthorImageUrl();
             ivArticleCircleIcon.setCircularImage(true);
             ivArticleCircleIcon.bindImage(feedCircleIconUrl);
-
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getImageUrl())) {
             String backgrndImageUrl = dataItem.getImageUrl();
@@ -212,6 +210,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                         }
                     });
             liArticleCoverImage.addView(backgroundImage);
+
         }
 
     }
@@ -221,35 +220,56 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
+
+    @OnClick(R.id.iv_article_circle_icon)
+    public void articleAuthorImageClick() {
+        viewInterface.handleOnClick(dataItem, ivArticleCircleIcon);
+     //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+    }
+
+    @OnClick(R.id.tv_article_card_title)
+    public void articleAuthorNameClick() {
+        viewInterface.handleOnClick(dataItem, tvArticleCardTitle);
+     //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+    }
+
     @OnClick(R.id.tv_article_share)
     public void tvMenuClick() {
-        viewInterface.handleOnClick(dataItem, tvArticleShare);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onPostShared(dataItem);
+        }else {
+            viewInterface.handleOnClick(dataItem, tvArticleShare);
+        }
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
-    @OnClick(R.id.li_article_cover_image)
+    @OnClick({R.id.li_article_cover_image, R.id.li_article_decription, R.id.tv_article_description_text})
     public void articleCoverImageClick() {
-        viewInterface.handleOnClick(dataItem, liArticleCoverImage);
-    }
-    @OnClick(R.id.li_article_decription)
-    public void articleCardClick() {
-        viewInterface.handleOnClick(dataItem, liArticleCoverImage);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback) viewInterface).onArticleItemClicked(dataItem);
+        }else {
+            viewInterface.handleOnClick(dataItem, liArticleCoverImage);
+        }
     }
 
-    @OnClick(R.id.tv_article_description_text)
-    public void articleCardDetailClick() {
-        viewInterface.handleOnClick(dataItem, liArticleCoverImage);
-    }
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
         tvArticleBookmark.setEnabled(false);
         dataItem.setLongPress(true);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
-            viewInterface.handleOnClick(dataItem, tvArticleBookmark);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback) viewInterface).onArticleUnBookMarkClicked(dataItem);
+            }else {
+                viewInterface.handleOnClick(dataItem, tvArticleBookmark);
+            }
             ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
-            viewInterface.handleOnClick(dataItem, tvArticleBookmark);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback) viewInterface).onArticleBookMarkClicked(dataItem);
+            }else {
+                viewInterface.handleOnClick(dataItem, tvArticleBookmark);
+            }
             ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (!dataItem.isBookmarked()) {

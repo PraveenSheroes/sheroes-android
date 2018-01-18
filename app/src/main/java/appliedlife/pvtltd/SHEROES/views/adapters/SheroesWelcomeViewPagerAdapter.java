@@ -104,7 +104,7 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                 }
                 HashMap<String, Object> propertiesThird =
                         new EventProperty.Builder()
-                                .title(context.getString(R.string.ID_SECOND_WELCOME))
+                                .title(context.getString(R.string.ID_THIRD_WELCOME))
                                 .description(text)
                                 .positionInSequence(String.valueOf(position))
                                 .build();

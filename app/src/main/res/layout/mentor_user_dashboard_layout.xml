@@ -63,8 +63,12 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|bottom"
                         android:layout_marginTop="@dimen/dp_size_10"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:layout_marginLeft="@dimen/dp_size_5"
+                        android:layout_alignParentLeft="true"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/white"
+                        android:layout_toLeftOf="@+id/iv_mentor_share"
                         android:textSize="@dimen/sp_size_20" />
 
                     <ImageView
@@ -105,5 +109,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
 </android.support.design.widget.CoordinatorLayout>
 

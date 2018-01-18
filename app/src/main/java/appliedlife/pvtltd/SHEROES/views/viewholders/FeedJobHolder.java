@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
@@ -205,11 +206,19 @@ public class FeedJobHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.li_feed_job_card)
     public void feedJobClick() {
         jobFeedObj.setItemPosition(getAdapterPosition());
-        viewInterface.handleOnClick(jobFeedObj, liFeedJobCard);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onJobPostClicked(jobFeedObj);
+        }else {
+            viewInterface.handleOnClick(jobFeedObj, liFeedJobCard);
+        }
     }
     @OnClick(R.id.tv_feed_job_user_share)
     public void tvFeedJobShare() {
-        viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserShare);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostShared(jobFeedObj);
+        }else {
+            viewInterface.handleOnClick(jobFeedObj, tvFeedJobUserShare);
+        }
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_JOB, AppConstants.EMPTY_STRING);
         ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackScreenView(mContext.getString(R.string.ID_REFER_SHARE_JOB));
     }

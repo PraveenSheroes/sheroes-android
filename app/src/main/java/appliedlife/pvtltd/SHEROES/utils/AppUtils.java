@@ -100,6 +100,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequ
 import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
@@ -136,6 +137,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -1768,30 +1772,11 @@ public class AppUtils {
         }
         return index;
     }
-    /**
-     * Disable the long press on the given edit text
-     *
-     * @param editText edit text on which long press to disable
-     */
-    public static void disableLongPressOnEditText(EditText editText) {
-        editText.setLongClickable(false);
-        editText.setTextIsSelectable(false);
-    }
-    public GooglePlusRequest googlePlusRequestBuilder(User user) {
-        GooglePlusRequest googlePlusRequest = new GooglePlusRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        Device device=new Device();
-        device.setGmcApnsId(SheroesApplication.mContext.getString(R.string.ID_PROJECT_ID));
-        device.setId(appUtils.getDeviceId());
-        device.setType(appUtils.getDeviceModel());
-        googlePlusRequest.setUser(user);
-        googlePlusRequest.setDevice(device);
-        return googlePlusRequest;
-    }
     public static LoginRequest loginRequestBuilder() {
         LoginRequest loginRequest = new LoginRequest();
         AppUtils appUtils = AppUtils.getInstance();
         //TODO:: check real data
+        loginRequest.setAppVersion(appUtils.getAppVersionName());
         loginRequest.setAdvertisementid(appUtils.getDeviceManufacturer());
         loginRequest.setDeviceid(appUtils.getDeviceId());
         loginRequest.setDevicetype(AppConstants.SOURCE_NAME);
@@ -1851,83 +1836,30 @@ public class AppUtils {
 
     }
 
-    public static BoardingTellUsRequest boardingTellUsFormDataRequestBuilder(String typeOfBoardingData, String type, LabelValue labelValue, GetAllDataDocument getAllDataDocument,String mobileNumber) {
-        BoardingTellUsRequest boardingTellUsRequest = new BoardingTellUsRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        //TODO:: check real data
-        boardingTellUsRequest.setAppVersion(appUtils.getAppVersionName());
-        boardingTellUsRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        boardingTellUsRequest.setSource(AppConstants.SOURCE_NAME);
-        boardingTellUsRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        boardingTellUsRequest.setSubtype(typeOfBoardingData);
-        boardingTellUsRequest.setType(type);
-        boardingTellUsRequest.setJobTagId(labelValue.getValue());
-        boardingTellUsRequest.setJobTag(labelValue.getLabel());
-        boardingTellUsRequest.setCityMasterId(Long.parseLong(getAllDataDocument.getId()));
-        boardingTellUsRequest.setCityMaster(getAllDataDocument.getTitle());
-        boardingTellUsRequest.setMobile(mobileNumber);
-        return boardingTellUsRequest;
-    }
-    public  BoardingLookingForHowCanRequest boardingLookingHowCanFormDataRequestBuilder(Set<Long> opportunityids) {
-        BoardingLookingForHowCanRequest boardingLookingForHowCanRequest = new BoardingLookingForHowCanRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        //TODO:: check real data
-        boardingLookingForHowCanRequest.setAppVersion(appUtils.getAppVersionName());
-        boardingLookingForHowCanRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        boardingLookingForHowCanRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        boardingLookingForHowCanRequest.setOpportunityIds(opportunityids);
-        boardingLookingForHowCanRequest.setSubtype(AppConstants.LOOKING_FOR_HOW_CAN);
-        boardingLookingForHowCanRequest.setType(AppConstants.LOOKING_FOR_HOW_CAN_TYPE);
-        return boardingLookingForHowCanRequest;
-    }
-    public static BoardingJobAtRequest boardingJobAtRequestBuilder(Set<Long> skillIds) {
-        BoardingJobAtRequest boardingJobAtRequest = new BoardingJobAtRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        //TODO:: check real data
-        boardingJobAtRequest.setAppVersion(appUtils.getAppVersionName());
-        boardingJobAtRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        boardingJobAtRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        boardingJobAtRequest.setSkillIds(skillIds);
-        boardingJobAtRequest.setSubtype(AppConstants.JOB_AT_SKILL_SERVICE);
-        boardingJobAtRequest.setType(AppConstants.JOB_AT_SKILL_SERVICE_TYPE);
-        boardingJobAtRequest.setSource(AppConstants.SOURCE_NAME);
-        return boardingJobAtRequest;
-    }
-    public static BoardingWorkExpRequest boardingWorkExpRequestBuilder(int totalExpYear, int totalExpMonth) {
-        BoardingWorkExpRequest boardingWorkExpRequest = new BoardingWorkExpRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        //TODO:: check real data
-        boardingWorkExpRequest.setAppVersion(appUtils.getAppVersionName());
-        boardingWorkExpRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        boardingWorkExpRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        boardingWorkExpRequest.setTotalExpYear(totalExpYear);
-        boardingWorkExpRequest.setTotalExpMonth(totalExpMonth);
-        boardingWorkExpRequest.setType(AppConstants.WORK_EXPERIENCE_TYPE);
-        boardingWorkExpRequest.setSubtype(AppConstants.WORK_EXPERIENCE_SUB_TYPE);
-        return boardingWorkExpRequest;
-    }
-    public static BoardingInterestRequest boardingInterestRequestBuilder(Set<Long> interestId) {
-        BoardingInterestRequest boardingInterestRequest = new BoardingInterestRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        //TODO:: check real data
-        boardingInterestRequest.setAppVersion(appUtils.getAppVersionName());
-        boardingInterestRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        boardingInterestRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        boardingInterestRequest.setInterestIds(interestId);
-        boardingInterestRequest.setSubtype(AppConstants.INTEREST_SUB_TYPE);
-        boardingInterestRequest.setType(AppConstants.INTEREST_TYPE);
-        return boardingInterestRequest;
-    }
     public static FeedRequestPojo userCommunityPostRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCommunityId(communityId);
         return feedRequestPojo;
     }
+
     public  FeedRequestPojo userCommunityDetailRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(communityId);
         return feedRequestPojo;
     }
+
+    public  ProfileUsersCommunityRequest userCommunitiesRequestBuilder(int pageNo, long userId) {
+        ProfileUsersCommunityRequest profileUsersCommunityRequest = new ProfileUsersCommunityRequest();
+        profileUsersCommunityRequest.setAppVersion(getAppVersionName());
+        profileUsersCommunityRequest.setDeviceUniqueId(getDeviceId());
+        profileUsersCommunityRequest.setCloudMessagingId(getCloudMessaging());
+        profileUsersCommunityRequest.setPageNo(pageNo);
+        profileUsersCommunityRequest.setPageSize(AppConstants.PAGE_SIZE);
+        profileUsersCommunityRequest.setUserId(userId);
+
+        return profileUsersCommunityRequest;
+    }
+
     public static ShareViaMail shareRequestBuilder(String deepLinkUrl, Long communityId,String emailIds,String subject) {
         AppUtils appUtils = AppUtils.getInstance();
         ShareViaMail shareViaMail = new ShareViaMail();
@@ -1990,12 +1922,26 @@ public class AppUtils {
         myCommunityRequest.setSubType(typeOfFeed);
         return myCommunityRequest;
     }
+
     public PublicProfileListRequest pubicProfileRequestBuilder( int pageNo) {
+        AppUtils appUtils = AppUtils.getInstance();
         PublicProfileListRequest publicProfileListRequest = new PublicProfileListRequest();
+        publicProfileListRequest.setAppVersion(appUtils.getAppVersionName());
         publicProfileListRequest.setPageNo(pageNo);
         publicProfileListRequest.setPageSize(AppConstants.PAGE_SIZE);
         return publicProfileListRequest;
     }
+
+    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
+        profileFollowedMentor.setPageNo(pageNo);
+        profileFollowedMentor.setAppVersion(appUtils.getAppVersionName());
+        profileFollowedMentor.setIdOfEntityParticipant(userId);
+        profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
+        return profileFollowedMentor;
+    }
+
     public  FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
@@ -2023,14 +1969,24 @@ public class AppUtils {
         return jobApplyRequest;
     }
 
-    public  MentorFollowerRequest countFollowerRequestBuilder(Long mentorId) {
+    public UserFollowerOrFollowingRequest countUserFollowersOrFollowing(Long mentorId, boolean isAFollower) {
         AppUtils appUtils = AppUtils.getInstance();
-        MentorFollowerRequest mentorFollowerRequest =new MentorFollowerRequest();
-        mentorFollowerRequest.setAppVersion(appUtils.getAppVersionName());
-        mentorFollowerRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        mentorFollowerRequest.setMentorId(mentorId);
-        return mentorFollowerRequest;
+        UserFollowerOrFollowingRequest userFollowerOrFollowingRequest =new UserFollowerOrFollowingRequest();
+        userFollowerOrFollowingRequest.setAppVersion(appUtils.getAppVersionName());
+        userFollowerOrFollowingRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        userFollowerOrFollowingRequest.setMentorId(mentorId);
+        userFollowerOrFollowingRequest.setIsUserAFollower(isAFollower);
+        userFollowerOrFollowingRequest.setPageSize(AppConstants.PAGE_SIZE);
+        return userFollowerOrFollowingRequest;
     }
+
+    public  FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
+        feedRequestPojo.setAutherId((int) idForDetail);
+        feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
+        return feedRequestPojo;
+    }
+
     public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(idForDetail);
@@ -2115,7 +2071,9 @@ public class AppUtils {
     }
 
     public  UserSummaryRequest getUserProfileRequestBuilder(String subType,String type,  String imageUrl) {
+        AppUtils appUtils = AppUtils.getInstance();
         UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
+        userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
         userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
         userSummaryRequest.setType(type);
         userSummaryRequest.setSubType(subType);
@@ -2404,6 +2362,20 @@ public class AppUtils {
         }
         return communityPostCreateRequest;
     }
+
+    public static CommunityTopPostRequest topCommunityPostRequestBuilder(Long  communityId, String createType, String description,long id, boolean topPost) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommunityTopPostRequest communityTopPostRequest=new CommunityTopPostRequest();
+        communityTopPostRequest.setAppVersion(appUtils.getAppVersionName());
+        communityTopPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        communityTopPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        communityTopPostRequest.setCommunityId(communityId);
+        communityTopPostRequest.setCreatorType(createType);
+        communityTopPostRequest.setDescription(description);
+        communityTopPostRequest.setTopPost(topPost);
+        communityTopPostRequest.setId(id);
+        return communityTopPostRequest;
+    }
     public ApproveSpamPostRequest spamPostApprovedRequestBuilder(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
         AppUtils appUtils = AppUtils.getInstance();
         ApproveSpamPostRequest approveSpamPostRequest=new ApproveSpamPostRequest();
@@ -2549,39 +2521,6 @@ public class AppUtils {
         boardingLookingForHowCanRequest.setSource(AppConstants.SOURCE_NAME);
         return boardingLookingForHowCanRequest;
     }
-    public static ExprienceEntity workExpRequestBuilder(int sector,boolean isActive) {
-        ExprienceEntity exprienceEntity = new ExprienceEntity();
-        exprienceEntity.setSector(sector);
-        exprienceEntity.setActive(true);
-        return exprienceEntity;
-    }
-
-    public void launchPlayStore(Context context) {
-        boolean isLaunchedSuccessfully;
-        Uri uri = Uri.parse(AppConstants.GOOGLE_PLAY_ANDROID_APP_URL);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        try {
-            context.startActivity(intent);
-            isLaunchedSuccessfully = true;
-        } catch (ActivityNotFoundException ex) {
-            isLaunchedSuccessfully = false;
-            LogUtils.error(TAG, ex.toString(), ex);
-        }
-        if (!isLaunchedSuccessfully) {
-            uri = Uri.parse(AppConstants.GOOGLE_PLAY_BROWSER_URL);
-            intent = new Intent(Intent.ACTION_VIEW, uri);
-            try {
-                context.startActivity(intent);
-                isLaunchedSuccessfully = true;
-            } catch (ActivityNotFoundException ex) {
-                isLaunchedSuccessfully = false;
-                LogUtils.error(TAG, ex.toString(), ex);
-            }
-        }
-        if (!isLaunchedSuccessfully) {
-            Toast.makeText(context, "Could not open Google Play, please install the Google Play app.", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public static HelplinePostQuestionRequest helplineQuestionBuilder(String chatQueryText){
         HelplinePostQuestionRequest helplinePostQuestionRequest = new HelplinePostQuestionRequest();
@@ -2597,15 +2536,6 @@ public class AppUtils {
         return helplineGetChatThreadRequest;
     }
 
-    public static SignupRequest signupRequestBuilder() {
-
-        SignupRequest signupRequest = new SignupRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        signupRequest.setAdvertisementid(appUtils.getDeviceManufacturer());
-        signupRequest.setDeviceid(appUtils.getDeviceId());
-        signupRequest.setDevicetype(AppConstants.SOURCE_NAME);
-        return signupRequest;
-    }
     public static FAQSRequest sheFAQSRequestBuilder(){
         FAQSRequest faqsRequest = new FAQSRequest();
         return faqsRequest;

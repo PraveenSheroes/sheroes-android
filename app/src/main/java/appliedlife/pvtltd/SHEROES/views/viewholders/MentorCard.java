@@ -1,7 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -11,12 +14,16 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
 
+import org.parceler.Parcels;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -24,8 +31,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActicity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,6 +47,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 public class MentorCard extends BaseViewHolder<UserSolrObj> {
     private final String TAG = LogUtils.makeLogTag(MentorCard.class);
+
     @Inject
     DateUtil mDateUtil;
     BaseHolderInterface viewInterface;
@@ -92,7 +101,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         if (item.isSuggested()) {
             int width = AppUtils.getWindowWidth(mContext);
             FrameLayout.LayoutParams liHolderLayout = (FrameLayout.LayoutParams) liMentor.getLayoutParams();
-            liHolderLayout.width = (width - 120);
+            liHolderLayout.width = (width - 100);
         } else {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 0, 2);
@@ -102,7 +111,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         }
         setAllData();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            if (mUserPreference.get().getUserSummary().getUserId() == dataItem.getEntityOrParticipantId()) {
+            if (mUserPreference.get().getUserSummary().getUserId() == dataItem.getIdOfEntityOrParticipant()) {
                 tvMentorFollow.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                 tvMentorFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
                 tvMentorFollow.setText(mContext.getString(R.string.ID_EDIT_PROFILE));
@@ -189,15 +198,14 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
     @OnClick(R.id.tv_mentor_follow)
     public void mentorFollowClick() {
         if (tvMentorFollow.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_EDIT_PROFILE))) {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
-                Intent intent = new Intent(mContext, ProfileActicity.class);
-                intent.putExtra(AppConstants.EXTRA_IMAGE, profile);
-                mContext.startActivity(intent);
-            }
+            viewInterface.handleOnClick(dataItem, liMentor);
         } else {
             tvMentorFollow.setEnabled(false);
-            viewInterface.handleOnClick(dataItem, tvMentorFollow);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onMentorFollowClicked(dataItem);
+            }else {
+                viewInterface.handleOnClick(dataItem, tvMentorFollow);
+            }
             if (dataItem.isSolrIgnoreIsMentorFollowed()) {
                 dataItem.setSolrIgnoreIsMentorFollowed(false);
             } else {
@@ -214,13 +222,21 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
             Intent intent = new Intent(mContext, MentorInsightActivity.class);
             mContext.startActivity(intent);
         } else {
-            viewInterface.handleOnClick(dataItem, tvMentorAskQuestion);
+            if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onMentorAskQuestionClicked(dataItem);
+            }else {
+                viewInterface.handleOnClick(dataItem, tvMentorAskQuestion);
+            }
         }
     }
 
     @OnClick(R.id.li_mentor)
     public void mentorCardClick() {
-        viewInterface.handleOnClick(dataItem, liMentor);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onMentorProfileClicked(dataItem);
+        }else {
+            viewInterface.handleOnClick(dataItem, liMentor);
+        }
     }
 
     @Override

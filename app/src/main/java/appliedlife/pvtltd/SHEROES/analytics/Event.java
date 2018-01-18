@@ -21,6 +21,7 @@ public enum Event {
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
     POST_SHARED(AnalyticsEventType.POST, "Shared"),
+    PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
     POST_BOOKMARKED(AnalyticsEventType.POST, "Bookmarked"),
     POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
     POST_EDITED(AnalyticsEventType.POST, "Edited"),
@@ -29,6 +30,7 @@ public enum Event {
     POST_APPROVED(AnalyticsEventType.POST, "Approved"),
     POST_REJECTED(AnalyticsEventType.POST, "Rejected"),
     POST_CREATED(AnalyticsEventType.POST, "Created"),
+    POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
     //endregion
 
     //region reply related events
@@ -96,8 +98,22 @@ public enum Event {
     IMAGE_SHARED(AnalyticsEventType.IMAGE, "Shared"),
     IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link"),
     LOOKING_FOR(AnalyticsEventType.LOOKING_FOR, "Clicked"),
-    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked");
+    PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked"),
+    // endregion
 
+    PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),
+    PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
+    PROFILE_POST_COUNT(AnalyticsEventType.PROFILE, "Post Count Clicked"),
+    PROFILE_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Edit Clicked"),
+    PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited"),
+    PROFILE_PIC_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Picture Edit Clicked"),
+    PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Followers Count Clicked"),
+    PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Following Count Clicked"),
+    //region Image related events
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
+    USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " Started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed");
     // endregion
 
     public final AnalyticsEventType type;

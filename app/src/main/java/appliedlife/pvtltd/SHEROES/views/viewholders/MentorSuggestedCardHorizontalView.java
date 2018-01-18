@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import butterknife.Bind;
@@ -53,7 +54,11 @@ public class MentorSuggestedCardHorizontalView extends BaseViewHolder<MentorData
         if(StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new GenericRecyclerViewAdapter(context, (HomeActivity) context);
+            if(context instanceof HomeActivity){
+                mAdapter = new GenericRecyclerViewAdapter(context, (HomeActivity) context);
+            }else {
+                mAdapter = new GenericRecyclerViewAdapter(context, (CommunityDetailActivity) context);
+            }
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setSheroesGenericListData(list);

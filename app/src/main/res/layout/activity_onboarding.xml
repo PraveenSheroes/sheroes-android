@@ -120,7 +120,7 @@
             android:gravity="bottom|center_horizontal"
             android:paddingBottom="@dimen/dp_size_12"
             android:paddingTop="@dimen/dp_size_12"
-            android:text="@string/ID_FINISH"
+            android:text="@string/ID_LETS_GET_STARTED"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_14" />

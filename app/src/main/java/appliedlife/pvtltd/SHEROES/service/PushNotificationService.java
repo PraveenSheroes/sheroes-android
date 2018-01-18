@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -122,6 +123,12 @@ public class PushNotificationService extends GcmListenerService {
                 } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
                     entityId = data.getString(this.getString(R.string.ID_JOB));
                     moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
+                }else if(url.contains(AppConstants.HELPLINE_URL) || url.contains(AppConstants.HELPLINE_URL_COM))
+                {
+                    Intent intent = new Intent();
+                    intent.setAction("BroadCastReceiver");
+                    intent.putExtra(AppConstants.HELPLINE_CHAT,message);
+                    sendBroadcast(intent);
                 }
                 final HashMap<String, Object> properties = new EventProperty.Builder()
                         .id(notificationId)

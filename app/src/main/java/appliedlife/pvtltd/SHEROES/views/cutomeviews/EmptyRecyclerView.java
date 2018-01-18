@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -108,6 +111,37 @@ public class EmptyRecyclerView extends RecyclerView {
             if (emptyDrawableRes != 0) {
                 emptyImageView.setVisibility(VISIBLE);
                 emptyImageView.setImageResource(emptyDrawableRes);
+            } else {
+                emptyImageView.setVisibility(GONE);
+            }
+        }
+    }
+
+    public void setEmptyViewWithImage(View view, String emptyText, String emptyUrl, String emptySubText) {
+        setEmptyView(view);
+
+        TextView emptyTextView = ButterKnife.findById(view, R.id.empty_text);
+        if (emptyTextView != null) {
+            if (CommonUtil.isNotEmpty(emptyText)) {
+                emptyTextView.setText(emptyText);
+            }
+
+        }
+
+        TextView emptySubTextView = ButterKnife.findById(view, R.id.empty_subtext);
+        if (emptySubTextView != null) {
+            emptySubTextView.setText(emptySubText);
+        }
+
+        ImageView emptyImageView = ButterKnife.findById(view, R.id.empty_image);
+        if(emptyImageView != null) {
+            if (CommonUtil.isNotEmpty(emptyUrl)) {
+                emptyImageView.setVisibility(VISIBLE);
+                Glide.with(emptyImageView.getContext())
+                        .load(emptyUrl)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .skipMemoryCache(true)
+                        .into(emptyImageView);
             } else {
                 emptyImageView.setVisibility(GONE);
             }
