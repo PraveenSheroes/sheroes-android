@@ -65,8 +65,6 @@ public class HelplineFragment extends BaseFragment {
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_chat_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.swipe_view_chat)
-    SwipeRefreshLayout mSwipeView;
     @Bind(R.id.et_question_chat)
     EditText questionText;
     @Bind(R.id.btn_chat_send)
@@ -98,8 +96,6 @@ public class HelplineFragment extends BaseFragment {
         ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
 
         setUpRecyclerView();
-        mSwipeView.setRefreshing(false);
-        mSwipeView.setEnabled(false);
         ((HomeActivity)getActivity()).changeFragmentWithCommunities();
         ((HomeActivity)getActivity()).helplineUi();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
@@ -139,7 +135,6 @@ public class HelplineFragment extends BaseFragment {
         appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
         ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
         mHelplinePresenter.detachView();
-        long timeSpent = System.currentTimeMillis() - startedTime;
     }
 
     private void promptSpeechInput() {
@@ -191,14 +186,13 @@ public class HelplineFragment extends BaseFragment {
             mAdapter.setSheroesGenericListData(mPullRefreshList.getFeedResponses());
             mLayoutManager.setReverseLayout(true);
             mLayoutManager.setStackFromEnd(true);
-            mSwipeView.setRefreshing(false);
-            mSwipeView.setEnabled(false);
             mAdapter.notifyDataSetChanged();
             if (!mPullRefreshList.isPullToRefresh()) {
                 mLayoutManager.scrollToPositionWithOffset(mPullRefreshList.getFeedResponses().size() - chatDocsList.size(), 0);
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
+            //mRecyclerView.smoothScrollToPosition(0);
         }
 
     }

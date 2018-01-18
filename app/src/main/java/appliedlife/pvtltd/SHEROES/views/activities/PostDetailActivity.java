@@ -256,6 +256,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private void setResult() {
         UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
+        if (userPostSolrObj == null) {
+            return;
+        }
         userPostSolrObj.setItemPosition(mPositionInFeed);
         Intent intent = new Intent();
         Bundle bundle = new Bundle();

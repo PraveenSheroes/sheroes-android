@@ -654,10 +654,19 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void shareCardViaSocial(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
+        String deepLinkUrl;
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl()))
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }else
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
-        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        intent.setPackage(AppConstants.WHATS_APP);
+        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
             HashMap<String, Object> properties =
@@ -671,6 +680,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }else {
             AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
         }
+
     }
 
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {

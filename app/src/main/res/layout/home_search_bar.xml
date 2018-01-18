@@ -34,7 +34,7 @@
         android:layout_gravity="center|bottom"
         android:layout_marginLeft="@dimen/dp_size_60"
         android:layout_marginTop="@dimen/dp_size_16"
-        android:background="@drawable/ic_sheroes_icon" />
+        android:background="@drawable/ic_sheroes_header" />
 
     <TextView
         android:id="@+id/tv_search_box"

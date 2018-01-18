@@ -365,4 +365,6 @@ public class AppConstants {
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
 
     public static final String PROFILE_FOLLOWED_CHAMPION= "Profile Followed Champion";
+    public static final String WHATS_APP= "com.whatsapp";
+
 }
