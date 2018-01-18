@@ -27,7 +27,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.UserLikedListPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.LikeListAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IUserLikedListView;
 import butterknife.Bind;
@@ -163,7 +163,7 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
         if(adapterPosition != RecyclerView.NO_POSITION) {
             Comment comment = mLikeListAdapter.getComment(adapterPosition);
             if(comment!=null) {
-                MentorUserProfileActvity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
             }
         }
     }

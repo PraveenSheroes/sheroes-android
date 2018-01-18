@@ -21,7 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -39,12 +38,12 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -54,11 +53,12 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by Ravi on 31/12/17.
+ * Profile Details - Contain Followed Champions and Communities
  */
 
-public class UserProfileTabFragment extends BaseFragment implements ProfileNewView {
+public class ProfileDetailsFragment extends BaseFragment implements ProfileView {
     private static final String SCREEN_LABEL = "Profile Details Screen";
-    private final String TAG = LogUtils.makeLogTag(UserProfileTabFragment.class);
+    private final String TAG = LogUtils.makeLogTag(ProfileDetailsFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
     public static final String USER_MENTOR_NAME ="USER_NAME";
@@ -132,13 +132,13 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static UserProfileTabFragment createInstance(long userId, String name) {
-        UserProfileTabFragment userProfileTabFragment = new UserProfileTabFragment();
+    public static ProfileDetailsFragment createInstance(long userId, String name) {
+        ProfileDetailsFragment profileDetailsFragment = new ProfileDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putString(USER_MENTOR_NAME, name);
-        userProfileTabFragment.setArguments(bundle);
-        return userProfileTabFragment;
+        profileDetailsFragment.setArguments(bundle);
+        return profileDetailsFragment;
     }
 
     @Override
@@ -221,7 +221,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         int mutualCommunitySize = communities.size();
         String name = communities.get(0).getAuthorName() == null ? "User" : communities.get(0).getAuthorName();
-        name = ((MentorUserProfileActvity)getActivity()).getUserNameTitle();
+        name = ((ProfileActivity)getActivity()).getUserNameTitle();
         mutualCommunityLabel.setText(name + " & you share "+ mutualCommunitySize +" mutual communities");
 
         mutualCommunityContainer.removeAllViews();
@@ -348,14 +348,14 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Override
     public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Follower count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((MentorUserProfileActvity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((ProfileActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
     @Override
     public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Following count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((MentorUserProfileActvity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((ProfileActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
@@ -426,7 +426,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Override
     public void getUsersPostCount(int totalPost) {
         LogUtils.info(TAG, "Post count:" + totalPost);
-        ((MentorUserProfileActvity) getActivity()).setUsersPostCount(totalPost);
+        ((ProfileActivity) getActivity()).setUsersPostCount(totalPost);
     }
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
@@ -452,7 +452,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MentorUserProfileActvity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    ((ProfileActivity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                 }
             });
 

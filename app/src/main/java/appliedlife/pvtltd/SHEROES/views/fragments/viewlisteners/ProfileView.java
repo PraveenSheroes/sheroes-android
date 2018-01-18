@@ -1,44 +1,27 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 
 /**
- * Created by priyanka on 07/03/17.
+ * Created by ravi on 01/01/18.
  */
 
 public interface ProfileView extends BaseMvpView {
 
+    void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo);
 
+    void getFeedListSuccess(FeedResponsePojo feedResponsePojo);
 
-    void onBackPressed(int id);
-    void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse);
-    void callFragment(int id);
-    void getEducationResponse(BoardingDataResponse boardingDataResponse);
-    void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse);
-    void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse);
-    void getUserSummaryResponse(BoardingDataResponse boardingDataResponse);
-    void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse);
-    void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse);
-    void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse);
-    // void getUserDetail(UserProfileResponse userProfileResponse);
+    void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse);
 
-    void getUserData(UserProfileResponse userProfileResponse);
+    void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse);
 
-    void getProfileListSuccess(GetTagData getAllData);
+    void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities);
 
-    void getProfileListSuccess(List<Doc> feedDetailList);
-    void getWorkExpListSuccess(WorkExpListResponse workExpListResponse);
-
-
-
-
+    void getUsersPostCount(int totalPost);
 
 }

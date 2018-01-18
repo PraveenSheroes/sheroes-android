@@ -432,7 +432,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
         mCommunityFeedObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         mCommunityFeedObj.setItemPosition(position);
 
-        MentorUserProfileActvity.navigateTo(this, mCommunityFeedObj, userId, isMentor, position, AppConstants.COMMUNITIES_DETAIL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mCommunityFeedObj, userId, isMentor, position, AppConstants.COMMUNITIES_DETAIL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     public void updateOpenAboutFragment(FeedDetail feedDetail) {

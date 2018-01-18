@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />

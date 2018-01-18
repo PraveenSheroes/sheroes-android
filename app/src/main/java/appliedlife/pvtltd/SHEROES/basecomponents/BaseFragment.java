@@ -55,7 +55,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -84,7 +83,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -104,7 +102,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, CommunityView, HelplineView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -715,75 +713,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
     }
 
-    @Override
-    public void onBackPressed(int id) {
-
-    }
-
-    @Override
-    public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-    }
-
-    @Override
-    public void callFragment(int id) {
-
-    }
-
-    @Override
-    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-    }
-
-    @Override
-    public void getUserData(UserProfileResponse userProfileResponse) {
-
-    }
-
-    @Override
-    public void getProfileListSuccess(GetTagData getAllData) {
-
-    }
-
-    @Override
-    public void getProfileListSuccess(List<Doc> feedDetailList) {
-
-    }
-
-    @Override
-    public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
-
-    }
     @Override
     public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
 

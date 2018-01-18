@@ -2,8 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,12 +21,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
 
 /**
  * Created by ravi on 03/01/18.
@@ -62,8 +60,8 @@ public class ProfileCommunitiesActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         if (getIntent().getExtras() != null) {
-            userMentorId = getIntent().getExtras().getLong(UserProfileTabFragment.USER_MENTOR_ID);
-            isSelfProfile = getIntent().getExtras().getBoolean(UserProfileTabFragment.SELF_PROFILE);
+            userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
+            isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
         }
 
         setSupportActionBar(mToolbar);
@@ -98,7 +96,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     //region static methods
     public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile,  String sourceScreen, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, ProfileCommunitiesActivity.class);
-        intent.putExtra(UserProfileTabFragment.USER_MENTOR_ID, mentorID);
+        intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
         intent.putExtra(SELF_PROFILE, isSelfProfile);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
