@@ -407,11 +407,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (mInputText.getText().toString().length() == 0) {
                     mInputText.setMaxLines(SINGLE_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    liUserPostTypeSelection.setVisibility(View.GONE);
                 } else {
                     mInputText.setMaxLines(MAX_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    liUserPostTypeSelection.setVisibility(View.VISIBLE);
                 }
             }
         });
