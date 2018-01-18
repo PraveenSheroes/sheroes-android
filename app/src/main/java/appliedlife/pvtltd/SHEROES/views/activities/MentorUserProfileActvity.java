@@ -10,6 +10,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -598,18 +600,15 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     }
 
-    public void onBackClick() {
-        if (mChampionId > 0) {
-            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-            } else {
-                deepLinkPressHandle();
-            }
-        } else {
-            deepLinkPressHandle();
+    @Override
+    public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
         }
-        finish();
+            finish();
     }
 
     private void deepLinkPressHandle() {
@@ -667,30 +666,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                 break;
         }
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mFragmentOpen != null) {
-            if (mFragmentOpen.isCommentList()) {
-                getSupportFragmentManager().popBackStackImmediate();
-                if (AppUtils.isFragmentUIActive(mFragment)) {
-                    ((CommunitiesDetailFragment) mFragment).commentListRefresh(mUserPostForCommunity, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mUserSolarObject.getIdOfEntityOrParticipant()));
-                mFragmentOpen.setCommentList(false);
-            } else if (mFragmentOpen.isReactionList()) {
-                getSupportFragmentManager().popBackStack();
-                mFragmentOpen.setReactionList(false);
-            } else if (mFragmentOpen.isOpenImageViewer()) {
-                mFragmentOpen.setOpenImageViewer(false);
-                getSupportFragmentManager().popBackStackImmediate();
-            } else {
-                onBackClick();
-            }
-        } else {
-            onBackClick();
-        }
     }
 
 
