@@ -443,6 +443,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 shareCardViaSocial(baseResponse);
                 break;
             /*Card menu option depend on Feed type like post,article etc */
+
+            case R.id.iv_feed_community_post_user_pic:
+            case R.id.tv_feed_community_post_user_name:
+                openUserProfileLastComment(view, baseResponse);
+             break;
+
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
@@ -490,18 +496,18 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
-           case R.id.tv_article_card_title :
-            case R.id.iv_article_circle_icon:
-                //Todo - article hv id issue
-               // MentorUserProfileActvity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
 
-                break;
+           /**
+            * //Todo - article hv id issue, as no profile for article
+            * case R.id.tv_article_card_title :
+            case R.id.iv_article_circle_icon:
+               // MentorUserProfileActvity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                break;**/
 
             case R.id.iv_feed_community_post_login_user_pic:
             case R.id.fl_login_user:
             case R.id.tv_feed_community_post_login_user_name:
             case R.id.feed_img:
-            case R.id.tv_feed_community_post_user_name:
                 MentorUserProfileActvity.navigateTo(this, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
              break;
 
@@ -589,6 +595,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+        }
+    }
+
+    //Open profile from last comment user profile or name click
+    public void openUserProfileLastComment(View view, BaseResponse baseResponse) {
+        Comment comment = (Comment) baseResponse;
+        if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 

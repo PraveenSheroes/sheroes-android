@@ -70,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -440,22 +441,40 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 if (position == RecyclerView.NO_POSITION) {
                     return;
                 }
-                PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
-                popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
+                switch (deleteItem.getId()) {
+                    case R.id.author_pic:
+                    case R.id.author:
+
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if (comment == null) {
-                            return true;
+                        if(!comment.isAnonymous()) {
+                            openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
+                            LogUtils.info("Article", comment.getComment());
                         }
-                        mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
-                        return true;
-                    }
-                });
-                popup.show();
+                        break;
+
+                    case R.id.delete:
+                        PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
+                        popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Comment comment = mCommentsAdapter.getComment(position);
+                                if (comment == null) {
+                                    return true;
+                                }
+                                mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                                return true;
+                            }
+                        });
+                        popup.show();
+                     break;
+                }
             }
         });
         mCommentList.setAdapter(mCommentsAdapter);
+    }
+
+    private void openProfile(Long userId, boolean isMentor, String source) {
+        MentorUserProfileActvity.navigateTo(this, userId, isMentor, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void fetchArticle(int articleId, boolean isImageLoaded) {
@@ -626,7 +645,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
     }
-
 
     private void loadUserViews(Article article) {
         if (article.author != null) {

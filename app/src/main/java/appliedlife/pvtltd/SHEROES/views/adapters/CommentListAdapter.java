@@ -193,7 +193,10 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     //authorPic.setImageDrawable(ContextCompat.getDrawable(mContext, User.getAnonymousPlaceholder()));
                 }
                 hideEditorView(comment);
+                author.setOnClickListener(mOnDeleteClickListener);
+                authorPic.setOnClickListener(mOnDeleteClickListener);
                 delete.setOnClickListener(mOnDeleteClickListener);
+
                 if (comment.isMyOwnParticipation()) {
                     edit.setVisibility(View.VISIBLE);
                     edit.setOnClickListener(new View.OnClickListener() {

@@ -94,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -1847,10 +1848,22 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
            // championDetailActivity(feedDetail.getAuthorParticipantId(), 1, isMentor, AppConstants.FEED_SCREEN); //self profile
             championLinkHandle(feedDetail);
+        }  else if (baseResponse instanceof UserPostSolrObj && championValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+                Comment comment = postDetails.getLastComments().get(0);
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+        } else if(baseResponse instanceof ArticleSolrObj && championValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+                Comment comment = articleDetails.getLastComments().get(0);
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
         } else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
-        } else if (baseResponse instanceof Comment) {
+        }  else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
         }
@@ -1866,7 +1879,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-       //todo - champion post - handle click
         MentorUserProfileActvity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 

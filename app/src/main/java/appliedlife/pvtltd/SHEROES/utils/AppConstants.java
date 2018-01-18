@@ -131,6 +131,8 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
     public static final int REQUEST_CODE_FOR_SELF_PROFILE_DETAIL = 1502;
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
+    public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
+    public static final int REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE = 1506;
     public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT ="helpline";

@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +11,6 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,30 +24,26 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
-import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.UserLikedListPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.adapters.CommunityListAdapter;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.adapters.LikeListAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IUserLikedListView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 
 /**
  * Created by ujjwal on 27/10/17.
  */
 
-public class LikeListBottomSheetFragment extends BottomSheetDialogFragment implements IUserLikedListView{
+public class LikeListBottomSheetFragment extends BottomSheetDialogFragment implements IUserLikedListView, LikeListAdapter.LikeHolderListener {
     private static final String SCREEN_LABEL = "PostBottomSheetFragment";
     private static final String USER_POST_ID = "UserPostId";
 
     private LikeListAdapter mLikeListAdapter;
-    public List<Comment> mCommentList = new ArrayList<>();
     public long mUserPostId;
 
     @Inject
@@ -155,12 +148,24 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
 
     @Override
     public void showUserLikedList(List<Comment> commentList) {
-        mRecyclerView.setAdapter(mLikeListAdapter = new LikeListAdapter(getActivity(), commentList));
+        mRecyclerView.setAdapter(mLikeListAdapter = new LikeListAdapter(getActivity(), commentList, this));
+
         if (mLikeListAdapter != null) {
             mLikeListAdapter.notifyDataSetChanged();
         }
         String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, commentList.size());
         mLikeCount.setText(CommonUtil.getRoundedMetricFormat(commentList.size()) + " " + pluralLikes);
+    }
+
+    @Override
+    public void onCommentClicked(LikeListAdapter.LikeListItemViewHolder likeListItemViewHolder) {
+        int adapterPosition = likeListItemViewHolder.getAdapterPosition();
+        if(adapterPosition != RecyclerView.NO_POSITION) {
+            Comment comment = mLikeListAdapter.getComment(adapterPosition);
+            if(comment!=null) {
+                MentorUserProfileActvity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+            }
+        }
     }
     //endregion
 }

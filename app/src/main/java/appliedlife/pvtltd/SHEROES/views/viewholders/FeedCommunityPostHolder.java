@@ -832,7 +832,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         liFeedCommunityUserPostImages.addView(child);
     }
 
-
     @OnClick({R.id.tv_feed_community_post_total_replies, R.id.tv_feed_community_post_user_comment_post, R.id.li_feed_community_post_user_comments, R.id.tv_feed_community_post_user_comment_post_view_more})
     public void repliesClick() {
         if(viewInterface instanceof FeedItemCallback){
@@ -1042,6 +1041,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         likeCommentOps();
     }
 
+    //Last comment user name or user pic
+    @OnClick({R.id.iv_feed_community_post_user_pic , R.id.tv_feed_community_post_user_name})
+    public void onLastCommentUserClick() { //Open profile from feed
+        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
+            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
+        }
+    }
+
     //Redirect to logged in user
     @OnClick({R.id.iv_feed_community_post_login_user_pic , R.id.tv_feed_community_post_login_user_name})
     public void onCommentAuthorClick() { //Open profile from feed
@@ -1076,7 +1083,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (!mUserPostObj.isAnonymous()) { //todo - naviagte to profile
+                if (!mUserPostObj.isAnonymous()) {
                     if(viewInterface instanceof FeedItemCallback){
                         ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }
@@ -1154,7 +1161,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-           //     if (mUserPostObj.isAuthorMentor())   //todo - click on user
+           //     if (mUserPostObj.isAuthorMentor())
                  {
                     if(viewInterface instanceof FeedItemCallback){
                         ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
