@@ -6,7 +6,6 @@
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
     <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
-    <string name="ID_POST_IN_MODERATION">Posts in Moderation</string>
 
 
     <!--text names in SHEROES-->
@@ -30,7 +29,6 @@
     <string name="ID_POSTED_AN">posted an</string>
     <string name="ID_NEW">NEW</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
-    <string name="ID_JOB_NOT_FOUND"> Sorry! Could not find jobs matching your criteria. Please swipe down to refresh and search again.</string>
     <string name="ID_SPEECH_PROMPT">Say something&#8230;</string>
     <!--String related in home page-->
 
@@ -43,7 +41,6 @@
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notification</string>
-    <string name="ID_JOBS">Jobs</string>
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
@@ -64,7 +61,6 @@
     <string name="ID_SERVER_PROBLEM"> The server encountered an error and could not complete your request.</string>
     <string name="ID_SEARCH">Search</string>
     <string name="ID_SEARCH_LOCATION">Search Location</string>
-    <string name="ID_RECENT_SEARCH">Recent Search</string>
     <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
     <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
     <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
@@ -99,7 +95,6 @@
     <string name="ID_POST">Post as:</string>
     <string name="ID_POSTED">posted</string>
     <string name="ID_MEMBERS">Members</string>
-    <string name="ID_MEMBER">Member</string>
     <string name="ID_NORMAL_MEMBER">normal member</string>
     <string name="ID_ADMIN">Admin</string>
     <string name="ID_REMOTE">Remote</string>
@@ -114,10 +109,7 @@
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
-    <string name="ID_NO_POST_MODERATION">No post to moderation</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
-    <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
-    <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
     <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
@@ -132,26 +124,16 @@
 
     <string name="ID_FOLLOWER">Follower</string>
 
-    <string name="ID_ABOUT">ABOUT</string>
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="ID_BOARDING_COMMUNITIES"> To make Sheroes experience special for you please join some communities of your interests</string>
-    <string name="ID_CHNAGE_PRIVACY"> Change Community Privacy</string>
-    <string name="ID_CHANGE_PRIVACY_LABEL">The following changes will take place:</string>
-    <string name="ID_CHANGE_CLOSE_FIRST">• All members will remain members of the close community.</string>
-    <string name="ID_CHANGE_CLOSE_SECOND">• Posts and notifications will be hidden from the members who have not joined the community. </string>
-    <string name="ID_CHANGE_OPEN_FIRST">• All members will remain members of the open community.</string>
-    <string name="ID_CHANGE_OPEN_SECOND">• Posts will be visible to all SHEROES members.</string>
-    <string name="ID_CHANGE_OPEN_THIRD">• Users with pending requests will be added as members.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>
     <string name="ID_CLOSED">closed</string>
-    <string name="ID_APPLY">Apply</string>
     <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
     <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>
-    <string name="ID_I_M_DONE">I’M DONE</string>
     <string name="ID_INVITE_WOMEN_FRIEND">Invite Friends</string>
     <string name="ID_PLAY_STORE_DATA">Connecting with SHEROES...</string>
     <string name="ID_LOCATION">Location</string>
@@ -172,11 +154,7 @@
     <!--String related to spinnar of setting-->
 
 
-    <string name="portfolio_link">PORTFOLIO LINK</string>
-
     <!--String related setting_preferences_deactiveaccount page -->
-
-    <string name="ID_SPAM">Spam</string>
 
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
@@ -186,7 +164,6 @@
     <!--String Related personal contact details edit page-->
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
     <string name="ID_LOCATION_HINT">LOCATION</string>
-    <string name="ID_WORK_EXPERIENCE">Work experience</string>
 
     <!--String Related personal BASIC details page-->
     <string name="ID_PROFILE_FULL_NAME">FULL NAME</string>
@@ -200,8 +177,6 @@
 
     <!--String Related personal other details page-->
 
-    <string name="ID_SUCCESSFULLY">Successfully</string>
-
 
     <!--String Related professional choose_city details page-->
 
@@ -209,45 +184,11 @@
     <!--String Related professional  travel_like details page-->
     <!--string related professional work_experience page -->
 
-    <string name="ID_SELF_EMP">Self employment</string>
     <string name="ID_JOB">Job</string>
-    <string name="ID_FRELANCE_PROJECT">Freelance project</string>
-    <string name="ID_PERSONAL_PROJECT">Personal project</string>
-    <string name="ID_SCHOOL_PROJECT">School project</string>
-    <string name="ID_INTERSHIP">Intership</string>
-    <string name="ID_WORK_EXPERIENCE_TITTLE">TYPE OF EXPERIENCE</string>
-    <string name="ID_CONTINUE">CONTINUE</string>
 
 
     <!--string related work_experience_selfempolyment page-->
 
-    <string name="ID_SELF_EMP_DESIGNATION_HINT">DESIGNATION</string>
-    <string name="ID_SELF_EMP_FUNCTIONAL_HINT">FUNCTIONAL AREA</string>
-    <string name="ID_SELF_EMP_ORGANIZATION_HINT">ORGANIZATION NAME</string>
-    <string name="ID_SELF_EMP_BRAND_HINT">ORGANIZATION BRAND NAME</string>
-    <string name="ID_SELF_EMP_START">Start </string>
-    <string name="ID_SELF_EMP_END">End</string>
-
-    <string name="ID_SELF_EMP_START_DATE_HINT">DD MM YYYY</string>
-
-
-    <string name="ID_SELF_EMP_TITTLE">Currently Studying</string>
-    <string name="ID_SELF_EMP_DESCRIPTION_HINT">DESCRIPTION OF YOUR WORK</string>
-    <string name="ID_SCHOOL_DESCRIPTION_HINT">DESCRIPTION</string>
-    <string name="ID_SELF_EMP_ORGANIZATION_TYPE_HINT">ORGANIZATION TYPE </string>
-    <string name="ID_SELF_EMP_SECTOR_HINT">SECTOR </string>
-    <string name="ID_SELF_EMP_ABOUT_HINT">ABOUT ORGANIZATION</string>
-    <string name="ID_SELF_EMP_WEBSITE_URL_HINT">WEBSITE URL</string>
-    <string name="ID_SELF_EMP_APP_URL_HINT">MOBILE APP URL</string>
-    <string name="ID_SELF_EMP_LOGO">ADD LOGO/IMAGE</string>
-    <string name="ID_PROJECT">PROJECT</string>
-
-
-    <string name="ID_CURRENT_STATUS">CURRENT STATUS</string>
-    <string name="ID_YEARS">YEAR</string>
-    <string name="ID_MONTHS">MONTH</string>
-    <string name="ID_DAY">Day</string>
-    <string name="ID_ADDED">Added</string>
 
     <!-- String related to setting_preference_work_experience  view page-->
 
@@ -255,15 +196,12 @@
     <!--string_related_profile_basic_details_card-->
 
     <string name="ID_DATE_OF_BIRTH">DATE OF BIRTH</string>
-    <string name="ID_SECTOR_HINT">SECTOR</string>
 
     <string name="ID_LEAVE">Leave</string>
     <string name="FEATURE_POST">Feature This Post</string>
     <string name="UNFEATURE_POST">UnFeature This Post</string>
 
     <!--String related of professional_add_education page-->
-
-    <string name="ID_FILTERS">Filters</string>
 
     <!--string related of personal lokking_for card-->
 
@@ -294,65 +232,19 @@
 
     <!--close sthring through priyanka-->
 
-    <string name="ID_COMMUNITY_TYPE">COMMUNITY TYPE</string>
-    <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
-    <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
-    <string name="ID_SAHRE_TEXT">SHARE</string>
-    <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
-
-    <string name="COMMUNITY_TYPE">COMMUNITY TYPE</string>
-
-    <string name="ID_ABOUT_COMMUNITY">ABOUT COMMUNITY</string>
-    <string name="ID_SELECT_PURPOSE">Select Purpose</string>
-
-    <string name="ID_COMMUNITY_REQUESTED">Requests</string>
-    <string name="ID_EMPLOYER_BRANDING">Employer Branding</string>
-    <string name="ID_COSTOMER_REVIEW">Customer Review</string>
-    <string name="ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT">Associate/Employee engagement</string>
-    <string name="ID_PRODUCT_PROMOTION">Product Promotion</string>
-    <string name="ID_REQUEST">Requests</string>
-    <string name="ID_POPULAR_TAG">Popular Tag</string>
-    <string name="ID_TAG_TXT">Choose tags which you’re interested in</string>
     <string name="ID_JOIN_REGION_TXT">I would like to join because..</string>
     <string name="ID_COMMUNITY_JOIN_TXT">I would like to join because..</string>
     <string name="ID_COMMUNITY_JOIN_REGION1">I am highly interested in joining this community</string>
     <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
     <string name="ID_USER_NAME">User Name</string>
-    <string name="ID_COMMUNITY_REMOVE_OWNER">Are you sure you want to remove this owner ?</string>
-    <string name="ID_INVITE_MEMBER_COMMUNITY">Invite members to your community</string>
-    <string name="ID_INVITE_OWNER_COMMUNITY">Invite owner to your community</string>
-    <string name="ID_INVITE_USER_TEXT">SHEROES users only</string>
-    <string name="ID_EXP">Experience</string>
-    <string name="ID_OPPORTUNITY_TYPE">Opportunities type</string>
-    <string name="ID_JOB_DES">Description</string>
-    <string name="ID_JOB_OPENING">Opening</string>
-    <string name="ID_ADD_HERE">Add</string>
     <string name="ID_JUST_NOW">Just Now</string>
-    <string name="ID_SHARED">Successfully shared community</string>
-    <string-array name="name">
-
-        <item>Topic/Interest</item>
-        <item>Associate/Employee engagement</item>
-        <item>Group</item>
-        <item>Company/Brand</item>
-        <item>Organization</item>
-    </string-array>
 
 
     <string name="app_name">SHEROES</string>
     <string name="ok">DONE</string>
-    <string name="ID_SEARCH_USER">Search Users</string>
 
     <string name="camera">CAMERA</string>
     <!--Work Experience-->
-    <string-array name="work_exp_arr">
-        <item>@string/ID_SELF_EMP</item>
-        <item>@string/ID_JOB</item>
-        <item>@string/ID_FRELANCE_PROJECT</item>
-        <item>@string/ID_PERSONAL_PROJECT</item>
-        <item>@string/ID_SCHOOL_PROJECT</item>
-        <item>@string/ID_INTERSHIP</item>
-    </string-array>
 
     <string name="married">Married</string>
     <string name="unmarried">Unmarried</string>
@@ -401,7 +293,6 @@
 
     <!--Google Analytics Screen Names-->
     <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
-    <string name="ID_VIEW_COMMUNITY">view community</string>
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
@@ -410,16 +301,6 @@
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
     <string name="ID_COMMUNITY_LISTING_ALL_COMMUNITIES">community listing- all communties</string>
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
-    <string name="ID_ABOUT_COMMUNITY_SCREEN">about community</string>
-    <string name="ID_ADD_COMMUNITY_OWNERS">add community owners</string>
-    <string name="ID_COMMUNITY_MEMBERS">community members</string>
-    <string name="ID_SHARE_COMMUNITY_SCREEN">share community</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_WORK_EXPERIENCE">my profile- professional- view added work experiences</string>
-    <string name="ID_VIEW_JOBS_DETAIL">view job details</string>
-    <string name="ID_JOB_LISTING">job listing</string>
-    <string name="ID_JOB_SEARCH_RESULT">job search results</string>
-    <string name="ID_JOB_FILTER_SCREEN">jobs filter screen</string>
-    <string name="ID_JOB_FILTERS_SELECT_LOCATION">jobs filters- select locations</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
 

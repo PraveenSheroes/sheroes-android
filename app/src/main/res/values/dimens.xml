@@ -12,7 +12,6 @@
     <dimen name="dp_size_28">28dp</dimen>
     <dimen name="dp_size_48">48dp</dimen>
     <dimen name="dp_size_98">98dp</dimen>
-    <dimen name="dp_size_89">89dp</dimen>
     <dimen name="dp_size_90">90dp</dimen>
     <dimen name="dp_size_80">80dp</dimen>
     <dimen name="dp_size_65">65dp</dimen>
@@ -58,7 +57,6 @@
     <dimen name="dp_size_191">191dp</dimen>
     <dimen name="dp_size_200">200dp</dimen>
     <dimen name="dp_size_220">220dp</dimen>
-    <dimen name="dp_size_212">212dp</dimen>
     <dimen name="dp_size_238">238dp</dimen>
     <dimen name="dp_size_270">270dp</dimen>
     <dimen name="dp_size_185">185dp</dimen>
@@ -70,7 +68,6 @@
     <dimen name="sp_size_18">18sp</dimen>
 
     <dimen name="sp_size_1">1sp</dimen>
-    <dimen name="sp_size_2">2sp</dimen>
 
     <dimen name="sp_size_9">9sp</dimen>
     <dimen name="sp_size_7">7sp</dimen>
@@ -99,8 +96,6 @@
     <dimen name="dp_size_7">7dp</dimen>
 
     <dimen name="dp_size_24">24dp</dimen>
-    <dimen name="dp_size_68">68dp</dimen>
-    <dimen name="dp_size_81">81dp</dimen>
     <dimen name="dp_size_100">100dp</dimen>
     <dimen name="dp_size_254">254dp</dimen>
     <dimen name="dp_size_36">36dp</dimen>
@@ -115,7 +110,6 @@
     <dimen name="toolbar_title_size">20dp</dimen>
     <dimen name="article_image_height_tmp">200dp</dimen>
     <dimen name="authorPicSize">44dp</dimen>
-    <dimen name="looking_for_circle">70dp</dimen>
     <dimen name="mentor_profile_icon">87dp</dimen>
 
     <!--Text sizes for SHEROES-->

@@ -19,8 +19,6 @@
     <color name="grey2">#b7b7b7</color>
     <color name="theme">#ECECEC</color>
     <color name="red">#d50000</color>
-    <color name="added_member">#56596b</color>
-    <color name="dashboard_text">#323940</color>
     <color name="detail_page_text">#4a4a4a</color>
     <color name="event_text">#898989</color>
     <color name="dashboard_fed_text">#757e87</color>
@@ -40,7 +38,6 @@
 
 
     <color name="searchbox_text_color">#9b9b9b</color>
-    <color name="selected_on_boarding">#eaecf6</color>
     <color name="green">#28b51b</color>
     <color name="light_green">#6bba28</color>
     <color name="email">#dc4541</color>
@@ -68,16 +65,13 @@
     <color name="feed_card_time">#90949c</color>
     <color name="requested_btn">#5d6d7d</color>
     <color name="suggested_text">#666666</color>
-    <color name="tags_shap_selected_color">#EAECF6</color>
     <color name="comment_text">#3c3c3c</color>
 
     <!--colors set through priyanka-->
 
     <!--text colors of setting_feedback page-->
     <color name="recent_post_comment">#878787</color>
-    <color name="line_color">#a8c0c9d0</color>
     <color name="text_color_follow">#4a4a4a</color>
-    <color name="button_color">#8a8d9e</color>
     <!--text colors of setting about page-->
     <color name="text_color_about">#1c2024</color>
     <!--text colors of setting header-->
@@ -88,7 +82,6 @@
     <!--text colors of setting_preferences_deactiveaccount page-->
     <color name="text_color_contactdetails_page">#292f3c</color>
     <!--colors related visiting_card_edit_basicdetails-->
-    <color name="star_color">#d0021b</color>
     <color name="line_color_personal">#d2d9de</color>
 
     <color name="photo_placeholder">#e1e1e1</color>
@@ -101,26 +94,10 @@
 
     <color name="blue_light">#b9f2ff</color>
     <!--colors close trough priyanka-->
-    <color name="com_post_share_textcolor1">#757e87</color>
-    <color name="com_post_share_textcolor">#323940</color>
-    <color name="com_share_post_text_color">#1e2226</color>
-    <color name="text_color_date_birth">#4a4a4a</color>
-    <color name="share_line_color">#d2dade</color>
-    <color name="communities_post_icon">#f8e81c</color>
-    <color name="red_oval_shap">#f2403c</color>
-    <color name="or_gray">#d2d9de</color>
-    <color name="or_color">#8e9fab</color>
 
-    <color name="text_color_teg_text">#4a4a4a</color>
-    <color name="gray_shap">#9b9b9b</color>
-
-    <color name="popular_tag_color">#ed3f3b</color>
     <color name="white_color">#FFFFFF</color>
-    <color name="job_filter_type_color">#757e87</color>
-    <color name="job_filter_desc_color">#1c2024</color>
 
     <color name="image_upload_bg_color">#d9000000</color>
-    <color name="community_tag_color">#788189</color>
     <color name="lighter_gray">#DDDDDD</color>
 
     <color name="faq_question_color">#39393a</color>
