@@ -490,13 +490,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
-           case R.id.tv_article_card_title :
-            case R.id.iv_article_circle_icon:
-                //Todo - article hv id issue
-               // MentorUserProfileActvity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-
-                break;
-
             case R.id.iv_feed_community_post_login_user_pic:
             case R.id.fl_login_user:
             case R.id.tv_feed_community_post_login_user_name:
@@ -507,9 +500,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
             case R.id.li_feed_article_images:
                 ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-                /*Intent intent = new Intent(this, ArticleDetailActivity.class);
-                intent.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
                 break;
             case R.id.li_feed_job_card:
                 Intent intentJob = new Intent(this, JobDetailActivity.class);
@@ -520,9 +510,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
                 ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
-                /*Intent intentArticle = new Intent(this, ArticleDetailActivity.class);
-                intentArticle.putExtra(AppConstants.ARTICLE_DETAIL, mFeedDetail);
-                startActivityForResult(intentArticle, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);*/
+
                 break;
             case R.id.li_community_images:
                 CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -638,9 +626,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private void shareCardViaSocial(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
-        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl()))
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
         {
-            deepLinkUrl=feedDetail.getDeepLinkUrl();
+            deepLinkUrl=feedDetail.getPostShortBranchUrls();
         }else
         {
             deepLinkUrl=feedDetail.getDeepLinkUrl();
@@ -720,9 +708,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
-        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl()))
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
         {
-            deepLinkUrl=feedDetail.getDeepLinkUrl();
+            deepLinkUrl=feedDetail.getPostShortBranchUrls();
         }else
         {
             deepLinkUrl=feedDetail.getDeepLinkUrl();
