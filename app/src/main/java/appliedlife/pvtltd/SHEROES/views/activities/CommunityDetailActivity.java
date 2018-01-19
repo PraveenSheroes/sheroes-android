@@ -699,6 +699,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @OnClick({R.id.bottom_bar, R.id.btn_bottom_bar})
     public void onJoinClicked() {
+        if (mCommunityFeedSolrObj == null) {
+            return;
+        }
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
             showCommunityJoinReason(mCommunityFeedSolrObj);
