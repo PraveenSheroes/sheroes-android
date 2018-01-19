@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,11 +40,8 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -91,7 +87,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView,  HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, HelplineView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -116,11 +112,13 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
     @Inject
     Preference<LoginResponse> userPreference;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
     public void setFragmentData(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }
@@ -172,7 +170,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mPullRefreshList = mPullRefreshList;
     }
 
-    public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView,AppUtils mAppUtils,ProgressBar mProgressBar){
+    public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
         this.mLayoutManager = mLayoutManager;
@@ -220,7 +218,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != feedDetail) {
             mAdapter.addDataOnPosition(feedDetail, 0);
             mAdapter.notifyDataSetChanged();
-            mRecyclerView.smoothScrollBy(0,0);
+            mRecyclerView.smoothScrollBy(0, 0);
         }
     }
 
@@ -283,11 +281,11 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void joinInviteResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (((CommunityFeedSolrObj)mFeedDetail).isClosedCommunity()) {
-                    ((CommunityFeedSolrObj)mFeedDetail).setRequestPending(true);
+                if (((CommunityFeedSolrObj) mFeedDetail).isClosedCommunity()) {
+                    ((CommunityFeedSolrObj) mFeedDetail).setRequestPending(true);
 
                 } else {
-                    ((CommunityFeedSolrObj)mFeedDetail).setMember(true);
+                    ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
@@ -355,12 +353,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    if (mFragmentOpen.isBookmarkFragment()) {
-                        mAdapter.removeDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    }
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
@@ -399,10 +392,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
-                    if(mFeedDetail instanceof OrganizationFeedObj){
+                    if (mFeedDetail instanceof OrganizationFeedObj) {
                         AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail, getScreenName());
-                    }
-                    else {
+                    } else {
                         AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail, getScreenName());
                     }
                     break;
@@ -478,7 +470,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void invalidateLikeUnlike(Comment comment) {
 
     }
-
 
 
     @Override
@@ -559,7 +550,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 handled = true;
             }
         }
-        if(!handled){
+        if (!handled) {
             super.startActivity(intent);
         }
     }
@@ -633,7 +624,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
 
-
     @Override
     public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
 
@@ -645,7 +635,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
     @Override
-    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse){
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
 
     }
 }

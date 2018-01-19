@@ -76,7 +76,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
@@ -251,8 +250,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
-        }else if(null!=mFeedDetail)
-        {
+        } else if (null != mFeedDetail) {
             itemPosition = mFeedDetail.getItemPosition();
         }
         if (mChampionId > 0) {
@@ -639,7 +637,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         int id = view.getId();
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         setFragment(mFragment);
-        mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
         setAllValues(mFragmentOpen);
         super.feedCardsHandled(view, baseResponse);
@@ -666,26 +663,9 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @Override
     public void onBackPressed() {
-        if (mFragmentOpen != null) {
-            if (mFragmentOpen.isCommentList()) {
-                getSupportFragmentManager().popBackStackImmediate();
-                if (AppUtils.isFragmentUIActive(mFragment)) {
-                    ((CommunitiesDetailFragment) mFragment).commentListRefresh(mUserPostForCommunity, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
-                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mUserSolarObject.getIdOfEntityOrParticipant()));
-                mFragmentOpen.setCommentList(false);
-            } else if (mFragmentOpen.isReactionList()) {
-                getSupportFragmentManager().popBackStack();
-                mFragmentOpen.setReactionList(false);
-            } else if (mFragmentOpen.isOpenImageViewer()) {
-                mFragmentOpen.setOpenImageViewer(false);
-                getSupportFragmentManager().popBackStackImmediate();
-            } else {
-                onBackClick();
-            }
-        } else {
-            onBackClick();
-        }
+
+        onBackClick();
+
     }
 
 
@@ -768,7 +748,6 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-        mFragmentOpen.setOpenImageViewer(true);
         setAllValues(mFragmentOpen);
         super.dataOperationOnClick(baseResponse);
     }
@@ -1146,7 +1125,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity,long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -1157,7 +1136,8 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
-    public static void navigateTo(Activity fromActivity,long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode,UserSolrObj userSolrObj) {
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, UserSolrObj userSolrObj) {
         Intent intent = new Intent(fromActivity, MentorUserProfileActvity.class);
         Bundle bundle = new Bundle();
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
