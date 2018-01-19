@@ -53,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -1045,7 +1044,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick({R.id.iv_feed_community_post_user_pic , R.id.tv_feed_community_post_user_name})
     public void onLastCommentUserClick() { //Open profile from feed
         if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
+            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
         }
     }
 
@@ -1053,14 +1052,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick({R.id.iv_feed_community_post_login_user_pic , R.id.tv_feed_community_post_login_user_name})
     public void onCommentAuthorClick() { //Open profile from feed
         if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
         }
     }
 
     @OnClick(R.id.iv_feed_community_post_circle_icon)
-    public void onFeedCommunityPostCircleIconClick() { //Open profile from feed
-        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    public void onFeedCommunityPostCircleIconClick() { //Open profile from feed and community post
+        if (!mUserPostObj.isAnonymous()) {
+            if(mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+                viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+            } else {
+                viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }
         }
     }
 
@@ -1070,7 +1073,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if(viewInterface instanceof FeedItemCallback){
                 ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }else {
-               // viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
+               // viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
             }
         }
     }
@@ -1090,7 +1093,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if(viewInterface instanceof FeedItemCallback){
                         ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }else {
-                        viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
                     }}
             }
@@ -1166,7 +1169,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if(viewInterface instanceof FeedItemCallback){
                         ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }else {
-                        viewInterface.championProfile(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }
                 }
             }

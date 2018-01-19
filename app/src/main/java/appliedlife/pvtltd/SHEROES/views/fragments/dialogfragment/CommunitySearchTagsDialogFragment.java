@@ -483,7 +483,7 @@ public class CommunitySearchTagsDialogFragment extends BaseDialogFragment implem
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
     }
 

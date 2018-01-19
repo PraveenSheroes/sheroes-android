@@ -648,8 +648,8 @@ public class ContestActivity extends BaseActivity implements IContestView {
     //endregion
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
-        if (baseResponse instanceof UserPostSolrObj && championValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);

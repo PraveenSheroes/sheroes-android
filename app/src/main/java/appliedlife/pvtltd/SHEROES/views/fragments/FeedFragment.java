@@ -283,8 +283,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
-        onChampionProfileClicked((UserPostSolrObj)baseResponse,championValue);
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        onChampionProfileClicked((UserPostSolrObj)baseResponse, mValue);
     }
 
     @Override

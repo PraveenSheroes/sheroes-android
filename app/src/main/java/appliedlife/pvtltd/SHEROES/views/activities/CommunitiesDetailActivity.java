@@ -413,7 +413,7 @@ public class CommunitiesDetailActivity extends BaseActivity implements  AppBarLa
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor());

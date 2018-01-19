@@ -270,7 +270,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
                 if (viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 } else {
-                    viewInterface.championProfile(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    viewInterface.navigateToProfileView(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     //  }}
                 }
             }

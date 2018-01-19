@@ -15,6 +15,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -522,6 +523,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
             }
         } else {
+            if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity) {
+                ((ProfileActivity)getActivity()).refreshPostCount(true);
+            }
             super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
 

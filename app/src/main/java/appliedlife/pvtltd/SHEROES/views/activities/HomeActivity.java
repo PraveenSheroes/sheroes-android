@@ -159,6 +159,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
@@ -1846,20 +1847,22 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
-        if (championValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
-        } else if (championValue == REQUEST_CODE_CHAMPION_TITLE) {
+        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            // championDetailActivity(feedDetail.getAuthorParticipantId(), 1, isMentor, AppConstants.FEED_SCREEN); //self profile
             championLinkHandle(feedDetail);
-        }  else if (baseResponse instanceof UserPostSolrObj && championValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+        } else if(mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
+        } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
                 championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
             }
-        } else if(baseResponse instanceof ArticleSolrObj && championValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+        } else if(baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
             ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
                 Comment comment = articleDetails.getLastComments().get(0);

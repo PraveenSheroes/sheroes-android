@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
@@ -96,7 +95,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
     private Long mChampionId;
     private boolean isMentor;
-    private int mFromNotification;
+    private int mFromNotification = -1;
     private FeedDetail mFeedDetail;
     private int askingQuestionCode;
     private long loggedInUserId = -1;
@@ -148,6 +147,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Bind(R.id.tv_mentor_description)
     TextView userDescription;
+
+    @Bind(R.id.loader_gif)
+    CardView loaderGif;
 
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
@@ -218,9 +220,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    @Bind(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
     @Inject
     EditProfilePresenterImpl editProfilePresenter;
 
@@ -237,8 +236,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         mAppBarLayout.addOnOffsetChangedListener(this);
         clHomeFooterList.setVisibility(View.GONE);
 
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        loaderGif.setVisibility(View.VISIBLE);
 
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
@@ -442,9 +440,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
+
+        //todo - follower/following list
+        FollowingActivity.navigateTo(this, mChampionId,  getScreenName(), null );
     }
 
-    @OnClick(R.id.li_follower)
+    @OnClick(R.id.li_following)
     public void followingClick() {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
@@ -454,6 +455,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
+
+        //todo - follower/following list , add api here
+        FollowingActivity.navigateTo(this, mChampionId,  getScreenName(), null );
     }
 
     public void addAnalyticsEvents(Event event) {
@@ -599,13 +603,24 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void onBackPressed() {
+      /*  Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (mChampionId >0 && mFromNotification != -1) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        } else if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+        }
+        finish(); */
+
         Intent upIntent = NavUtils.getParentActivityIntent(this);
         if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
         }
-            finish();
+        finish();
     }
 
     private void deepLinkPressHandle() {
@@ -636,8 +651,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
-        UserPostSolrObj mUserPostForCommunity = userPostSolrObj;
-        int id = view.getId();
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         setFragment(mFragment);
         mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.FOURTH_CONSTANT);
@@ -688,7 +701,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -712,7 +724,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
             setProfileNameData(mUserSolarObject);
         }
-        mProgressBar.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -758,18 +770,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
-        }  else if (championValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+        }  else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             if (loggedInUserId != -1) {
                 championDetailActivity(loggedInUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
             }
-        } else if (championValue == REQUEST_CODE_CHAMPION_TITLE) {
+        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
-        }  else if (baseResponse instanceof UserPostSolrObj && championValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+        }  else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
@@ -782,21 +794,23 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     private void shareCardViaSocial() {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isMentor)
-                        .sourceScreenId(SCREEN_LABEL)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        trackEvent(Event.PROFILE_SHARED, properties);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
         String deepLink = isMentor ? mUserSolarObject.getMentorDeepLinkUrl() : mUserSolarObject.getDeepLinkUrl();
-        intent.putExtra(Intent.EXTRA_TEXT, deepLink);
-        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        if(StringUtil.isNotNullOrEmptyString(deepLink)) {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                            .name(mUserSolarObject.getNameOrTitle())
+                            .isMentor(isMentor)
+                            .sourceScreenId(SCREEN_LABEL)
+                            .isOwnProfile(isOwnProfile)
+                            .build();
+            trackEvent(Event.PROFILE_SHARED, properties);
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType(AppConstants.SHARE_MENU_TYPE);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLink);
+            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        }
     }
 
     @Override
@@ -866,11 +880,20 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     }
 
+    //Update the latest updated information in Dashboard header
     private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
-        userName.setText(name);
-        tvMentorToolbarName.setText(name);
-        tvLoc.setText(location);
-        userDescription.setText(userBio);
+        if (StringUtil.isNotNullOrEmptyString(name)) {
+            userName.setText(name);
+            tvMentorToolbarName.setText(name);
+        }
+
+        if (StringUtil.isNotNullOrEmptyString(location)) {
+            tvLoc.setText(location);
+        }
+
+        if (StringUtil.isNotNullOrEmptyString(userBio)) {
+            userDescription.setText(userBio);
+        }
 
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
@@ -1186,5 +1209,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     public void setUserNameTitle(String userNameTitle) {
         this.userNameTitle = userNameTitle;
+    }
+
+    public void refreshPostCount(boolean isPostDeleted) {
+        if(isPostDeleted) {
+            String postCount = userTotalPostCount.getText().toString();
+            int postNumbers = Integer.parseInt(postCount);
+            postNumbers = postNumbers > 0 ? postNumbers - 1 : 0;
+            setUsersPostCount(postNumbers);
+        }
     }
 }

@@ -925,7 +925,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse,int championValue) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
     }
 

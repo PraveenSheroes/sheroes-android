@@ -64,7 +64,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     public static final String USER_MENTOR_NAME ="USER_NAME";
     public static final String SELF_PROFILE ="SELF_PROFILE";
     private long userId;
-    private String userName = "User";
     private boolean isSelfProfile;
     private List<CommunityFeedSolrObj> profileCommunities;
     private List<UserSolrObj> followedChampions;
@@ -150,12 +149,10 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
         Bundle bundle = getArguments();
         userId = bundle.getLong(USER_MENTOR_ID);
-        userName = bundle.getString(USER_MENTOR_NAME);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
             if (mUserPreference.get().getUserSummary().getUserId() == userId) {
                 isSelfProfile = true;
-                userName = mUserPreference.get().getUserSummary().getFirstName()!=null ? mUserPreference.get().getUserSummary().getFirstName() : "User";
             }
         }
 
@@ -220,9 +217,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
-        String name = communities.get(0).getAuthorName() == null ? "User" : communities.get(0).getAuthorName();
-        name = ((ProfileActivity)getActivity()).getUserNameTitle();
-        mutualCommunityLabel.setText(name + " & you share "+ mutualCommunitySize +" mutual communities");
+        String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+        String mutualCommunityText = getResources().getString(R.string.PLACEHOLDER_MUTUAL_COMMUNITY, name, String.valueOf(mutualCommunitySize));
+        mutualCommunityLabel.setText(mutualCommunityText);
 
         mutualCommunityContainer.removeAllViews();
 
@@ -316,16 +313,15 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
         if(feedResponsePojo.getNumFound() ==0) {
             //empty view
-
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
-            userName = userName ==null ? "User" : userName;
-            String message = getString(R.string.empty_followed_mentor, userName);
+            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
             followedMentorsListContainer.setVisibility(View.GONE);
 
             if(isSelfProfile) {
                 emptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
-                emptyViewFollowedMentor.setText("Follow Champions");
+                emptyViewFollowedMentor.setText(R.string.followed_champion);
                 emptyViewDottedBorder.setVisibility(View.VISIBLE);
             } else{
                 emptyViewDottedBorder.setBackgroundResource(0);
@@ -410,13 +406,13 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             //current scenrio - other hv all so change if future other don't hv mutual - empty view
             emptyViewCommunitiesContainer.setVisibility(View.VISIBLE);
             communityListContainer.setVisibility(View.GONE);
-            String name = userName!=null ? userName : "User";
+            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_community, name);
             emptyViewCommunities.setText(message);
 
             if(isSelfProfile) {
                 dottedCommunityEmptyView.setBackgroundResource(R.drawable.dotted_line_border);
-                emptyViewCommunities.setText("Join Communities & Connect");
+                emptyViewCommunities.setText(R.string.join_communities);
             } else{
                 dottedCommunityEmptyView.setBackgroundResource(0);
             }
@@ -444,8 +440,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
             if (StringUtil.isNotNullOrEmptyString(userSolrObj.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
-                mutualCommunityImage.setPlaceHolderId(R.drawable.default_img);
-                mutualCommunityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 mutualCommunityImage.bindImage(userSolrObj.getThumbnailImageUrl());
             }
 

@@ -281,6 +281,18 @@ public class HomeFragment extends BaseFragment {
         });
         return view;
     }
+
+    /*@Override
+    public void onStart() {
+        super.onStart();
+
+        if(!isChallenge && StringUtil.isNotEmptyCollection(mfeedDetailList) && mfeedDetailList.size()>0) {
+            Toast.makeText(getContext(), "Home fragment load", Toast.LENGTH_SHORT).show();
+            FeedDetail feedDetail = mfeedDetailList.get(0);
+            mAdapter.notifyItemRangeChanged(0, mfeedDetailList.size());
+        }
+    }*/
+
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);

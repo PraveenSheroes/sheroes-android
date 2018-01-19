@@ -174,7 +174,7 @@ public class SelectCommunityDialogFragment extends BaseDialogFragment implements
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
     }
 

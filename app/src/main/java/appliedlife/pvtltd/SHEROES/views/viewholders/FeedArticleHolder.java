@@ -32,9 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -545,7 +543,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_user_name})
     public void onFeedArticleUserNameClick() { //Open profile from feed
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);
+            viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);
     }
 
     @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_article_join_conversation, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})

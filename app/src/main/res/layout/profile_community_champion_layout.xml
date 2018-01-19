@@ -28,7 +28,6 @@
             app:cardCornerRadius="@dimen/dp_size_2">
 
             <TextView
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -65,7 +64,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/community_view_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

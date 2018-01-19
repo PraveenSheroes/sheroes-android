@@ -217,7 +217,8 @@
 
     <string name="ID_ABOUT">ABOUT</string>
     <string name="ID_LETS_TALK"> Let’s Start Talking</string>
-    <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
+    <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>D
+    <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
     <string name="PLACEHOLDER_WEBPAGE_URL">%1$s?auth=%2$s&amp;addHeader=false&amp;addFooter=false</string>
     <string name="ID_BOARDING_COMMUNITIES"> To make Sheroes experience special for you please join some communities of your interests</string>
     <string name="ID_WELCOME_HEADER"> Talk About Things That Matter To You</string>
@@ -962,4 +963,6 @@
     <string name="add_location">Add Location</string>
     <string name="add_skills">Add Skills</string>
     <string name="add_desc">Add Description</string>
+    <string name="followed_champion">Follow Champions</string>
+    <string name="join_communities">Join Communities &amp; Connect></string>
 </resources>
