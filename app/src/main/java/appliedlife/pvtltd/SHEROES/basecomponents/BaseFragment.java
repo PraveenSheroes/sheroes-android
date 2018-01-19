@@ -45,17 +45,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
+
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -66,13 +60,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRespons
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -80,11 +69,9 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -104,7 +91,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, CommunityView, ProfileView, HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView,  HelplineView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -161,19 +148,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mProgressBar = mProgressBar;
     }
 
-    public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, int mPosition, int mPressedEmoji, boolean mListLoad, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mFeedDetail = mFeedDetail;
-        this.mRecyclerView = mRecyclerView;
-        this.mPosition = mPosition;
-        this.mPressedEmoji = mPressedEmoji;
-        this.mListLoad = mListLoad;
-        this.mHomePresenter = mHomePresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
 
     public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
@@ -186,15 +160,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
 
-    public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mFeedDetail = mFeedDetail;
-        this.mRecyclerView = mRecyclerView;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
@@ -205,23 +170,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
     public void setRefreshList(SwipPullRefreshList mPullRefreshList) {
         this.mPullRefreshList = mPullRefreshList;
-    }
-
-    public void callFragment(int layout, Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(layout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    public void setInitializationForProfile(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mRecyclerView = mRecyclerView;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
     }
 
     public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView,AppUtils mAppUtils,ProgressBar mProgressBar){
@@ -684,106 +632,8 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         }
     }
 
-    @Override
-    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
-
-    }
-
-    @Override
-    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
-
-    }
-
-    @Override
-    public void createCommunitySuccess(BaseResponse baseResponse) {
-
-    }
 
 
-    @Override
-    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
-
-    }
-
-    @Override
-    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
-
-    @Override
-    public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
-
-    }
-
-    @Override
-    public void onBackPressed(int id) {
-
-    }
-
-    @Override
-    public void visitingCardOpen(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-    }
-
-    @Override
-    public void callFragment(int id) {
-
-    }
-
-    @Override
-    public void getEducationResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getPersonalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getprofiletracelflexibilityResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalBasicDetailsResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getProfessionalWorkLocationResponse(BoardingDataResponse boardingDataResponse) {
-
-    }
-
-    @Override
-    public void getProfileVisitingCardResponse(ProfileEditVisitingCardResponse profileEditVisitingCardResponse) {
-
-    }
-
-    @Override
-    public void getUserData(UserProfileResponse userProfileResponse) {
-
-    }
-
-    @Override
-    public void getProfileListSuccess(GetTagData getAllData) {
-
-    }
-
-    @Override
-    public void getProfileListSuccess(List<Doc> feedDetailList) {
-
-    }
-
-    @Override
-    public void getWorkExpListSuccess(WorkExpListResponse workExpListResponse) {
-
-    }
     @Override
     public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
 

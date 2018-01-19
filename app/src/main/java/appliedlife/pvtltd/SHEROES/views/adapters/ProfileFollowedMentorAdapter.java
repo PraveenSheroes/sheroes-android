@@ -11,7 +11,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunity;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -24,7 +23,6 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by ravi on 01/01/18.
- *
  */
 
 public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -66,7 +64,7 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
         return communities.size();
     }
 
-    public void setData(List<UserSolrObj>  communities) {
+    public void setData(List<UserSolrObj> communities) {
         this.communities = communities;
         notifyDataSetChanged();
     }
@@ -99,7 +97,7 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
 
             if (null != mentor) {
 
-                if(mentor.getSubType().equalsIgnoreCase(AppConstants.FEED_PROGRESS_BAR)) {
+                if (mentor.getSubType().equalsIgnoreCase(AppConstants.FEED_PROGRESS_BAR)) {
 
                 }
 
@@ -133,13 +131,13 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
                     expertAt.setText(expertFields.toString());
                 }
 
-                if(follower !=null) {
+                if (follower != null) {
                     String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
                     follower.setText(String.valueOf(numericToThousand(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
                 }
             }
-            }
         }
+    }
     //endregion
 
     public interface OnItemClicked {

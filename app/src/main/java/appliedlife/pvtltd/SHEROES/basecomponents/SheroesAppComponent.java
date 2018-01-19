@@ -4,13 +4,8 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
-import appliedlife.pvtltd.SHEROES.models.RequestedListModel;
-import appliedlife.pvtltd.SHEROES.presenters.CommunityTagsPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.OwnerPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -113,16 +108,12 @@ public interface SheroesAppComponent {
     void inject(LoginActivity loginActivity);
 
 
-
-
     void inject(LoginFragment loginFragment);
 
     void inject(ArticleCategorySpinnerFragment articleCategorySpinnerFragment);
 
 
-
     void inject(ArticlesFragment articlesFragment);
-
 
 
     void inject(FeaturedFragment featuredFragment);
@@ -132,7 +123,6 @@ public interface SheroesAppComponent {
     void inject(UserMentorCommunity userMentorCommunity);
 
     void inject(FollowingFragment followingFragment);
-
 
 
     void inject(ProfileCommunitiesActivity profileCommunitiesActivity);
@@ -160,20 +150,7 @@ public interface SheroesAppComponent {
 
     void inject(MyCommunitiesCardHolder myCommunitiesCardHolder);
 
-
-
-    void inject(OwnerPresenter ownerPresenter);
-
-
-    void inject(MembersPresenter membersPresenter);
-
-    void inject(CommunityTagsPresenter communityTagsPresenter);
     void inject(CommunitiesDetailFragment communitiesDetailFragment);
-
-
-    void inject(RequestedPresenter requestedPresenter);
-
-    void inject(RequestedListModel tagsHolder);
 
 
     void inject(OnBoardingActivity onBoardingActivity);
@@ -209,6 +186,7 @@ public interface SheroesAppComponent {
     void inject(FAQSFragment faqsFragment);
 
     void inject(FAQViewHolder faqViewHolder);
+
     void inject(GetAllDataBoardingSearchHolder getAllDataBoardingSearchHolder);
 
 
@@ -235,7 +213,6 @@ public interface SheroesAppComponent {
     void inject(MentorUserProfileActvity mentorUserProfileActvity);
 
     void inject(UserProfileTabFragment userProfileTabFragment);
-
 
 
     void inject(FeedProgressBarHolder feedProgressBarHolder);

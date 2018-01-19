@@ -180,7 +180,6 @@ public class AppConstants {
     public static final String SKILL_LIST_ID = "skill_list_id";
     public static final String MEMBER = "Member_detail";
     public static final String MEMBER_FRAGMENT = "MemberFragment";
-    public static final String PANDING_MEMBER_FRAGMENT = "PandingMemberFragment";
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
     public static final String MARK_AS_SPAM = "Reported as spam";

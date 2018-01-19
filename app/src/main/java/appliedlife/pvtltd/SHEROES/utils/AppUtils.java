@@ -2,26 +2,20 @@ package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.Fragment;
-import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,14 +35,8 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -65,12 +53,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.io.Reader;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -79,36 +62,26 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.community.ApproveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.MemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
@@ -119,24 +92,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobApplyRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.Device;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ExprienceEntity;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileAddEditEducationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
@@ -222,20 +182,24 @@ public class AppUtils {
     public void setApplicationContext(Context context) {
 
     }
+
     public static int convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
         return Math.round(px);
     }
+
     public static int getWindowHeight(Context context) {
         int[] size = getWindowSize(context);
         return size[1];
     }
+
     public static int getWindowWidth(Context context) {
         int[] size = getWindowSize(context);
         return size[0];
     }
+
     public static int[] getWindowSize(Context context) {
         int screenWidth, screenHeight;
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
@@ -252,6 +216,7 @@ public class AppUtils {
 
         return new int[]{screenWidth, screenHeight};
     }
+
     /**
      * This method shows the softkeyboard
      *
@@ -280,13 +245,14 @@ public class AppUtils {
             LogUtils.error(TAG, e);
         }
     }
+
     public static void showKeyboard(View view, String TAG) {
         if (view == null) {
             return;
         }
         try {
-            InputMethodManager inputMethodManager =  (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(view,InputMethodManager.SHOW_FORCED);
+            InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(view, InputMethodManager.SHOW_FORCED);
         } catch (Exception e) {
             LogUtils.error(TAG, e);
         }
@@ -303,6 +269,7 @@ public class AppUtils {
             return "";
         }
     }
+
     public String getCloudMessaging() {
         if (getPackageInfo(0) != null) {
             return getPackageInfo(0).versionName;
@@ -367,85 +334,6 @@ public class AppUtils {
             return " ";
         }
         return mDeviceId;
-    }
-
-    /**
-     * Return device information string which contains Device id, Phone type, Network operator name,
-     * network type, device manufacturer, device model and device's SDK version
-     *
-     * @return device information
-     */
-    public String getDeviceInformation() {
-        LogUtils.enter(TAG, LogUtils.getMethodName());
-        String deviceInfo = "";
-
-        TelephonyManager telephonyManager = (TelephonyManager) SheroesApplication.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-
-        if (telephonyManager != null) {
-            deviceInfo += "DeviceID : " + telephonyManager.getDeviceId() + "\n\r";
-            deviceInfo += "PhoneType : " + telephonyManager.getPhoneType() + "\n\r";
-            deviceInfo += "NetworkOperatorName : " + telephonyManager.getNetworkOperatorName() + "\n\r";
-            deviceInfo += "NetworkType : " + telephonyManager.getNetworkType() + "\n\r";
-            deviceInfo += "SimOperatorName : " + telephonyManager.getSimOperatorName() + "\n\r";
-        }
-
-        deviceInfo += "Manufacturer : " + Build.MANUFACTURER + "\n\r";
-        deviceInfo += "Model : " + Build.MODEL + "\n\r";
-        deviceInfo += "SDK Version : " + Build.VERSION.SDK_INT + "\n\r";
-
-        LogUtils.exit(TAG, LogUtils.getMethodName());
-        return deviceInfo;
-    }
-
-    public String getNetworkOperatorName() {
-        TelephonyManager telephonyManager = ((TelephonyManager) SheroesApplication.mContext.getSystemService(Context.TELEPHONY_SERVICE));
-        String operatorName = telephonyManager.getNetworkOperatorName();
-        return operatorName;
-    }
-
-    public String getNetworkType() {
-        TelephonyManager telephonyManager = ((TelephonyManager) SheroesApplication.mContext.getSystemService(Context.TELEPHONY_SERVICE));
-        String networkTtype = "" + telephonyManager.getNetworkType();
-        return networkTtype;
-    }
-
-    /**
-     * Passed data will be stored in the clipboard which is similar to copy function
-     *
-     * @param text data to stored on the clipboard
-     */
-    public boolean writeToClipboard(String text) {
-        LogUtils.enter(TAG, LogUtils.getMethodName());
-        try {
-            ClipboardManager clipboardManager = (ClipboardManager) SheroesApplication.mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(text, text);
-            clipboardManager.setPrimaryClip(clipData);
-        } catch (Exception ex) {
-            LogUtils.error(TAG, "Error : " + ex, ex);
-        }
-        LogUtils.exit(TAG, LogUtils.getMethodName());
-        return true;
-    }
-
-    /**
-     * Read data from the clipboard which was stored using writeToClipboard function.
-     *
-     * @return Data stored in the clipboard
-     */
-    public String readFromClipboard() {
-        LogUtils.enter(TAG, LogUtils.getMethodName());
-        String text = null;
-        ClipboardManager clipboardManager = (ClipboardManager) SheroesApplication.mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-
-        if (clipboardManager.hasPrimaryClip()) {
-            ClipData.Item item = clipboardManager.getPrimaryClip().getItemAt(0);
-            // Gets the clipboard as text.
-            if (item != null && item.getText() != null) {
-                text = item.getText().toString();
-            }
-        }
-        LogUtils.exit(TAG, LogUtils.getMethodName());
-        return text;
     }
 
 
@@ -540,9 +428,11 @@ public class AppUtils {
     public boolean checkUrl(String url) {
         return URL_WITH_HTTP_ADDRESS_PATTERN.matcher(url).matches();
     }
+
     public boolean checkWWWUrl(String url) {
         return URL_START_WWW_ADDRESS_PATTERN.matcher(url).matches();
     }
+
     public boolean checkEmail(String email) {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
@@ -1279,9 +1169,9 @@ public class AppUtils {
     /**
      * Request for Navigation drawer items
      */
-    public  NavigationDrawerRequest navigationOptionsRequestBuilder() {
+    public NavigationDrawerRequest navigationOptionsRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
-        NavigationDrawerRequest navigationDrawerRequest =  new NavigationDrawerRequest();
+        NavigationDrawerRequest navigationDrawerRequest = new NavigationDrawerRequest();
         navigationDrawerRequest.setDisplayDefault(false);
         navigationDrawerRequest.setSource(AppConstants.SOURCE_NAME);
         navigationDrawerRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1460,6 +1350,7 @@ public class AppUtils {
             return false;
         }
     }
+
     /* Function to check if fragment UI is active*/
     public static boolean isFragmentUIActive(Fragment frag) {
         return frag != null && frag.getActivity() != null && frag.isAdded() && !frag.isDetached() && !frag.isRemoving();
@@ -1487,7 +1378,6 @@ public class AppUtils {
     }
 
 
-
     public static int findNthIndexOf(String str, String needle, int occurence) throws IndexOutOfBoundsException {
         int index = 0;
         Pattern p = Pattern.compile(needle, Pattern.MULTILINE);
@@ -1500,6 +1390,7 @@ public class AppUtils {
         }
         return index;
     }
+
     public static LoginRequest loginRequestBuilder() {
         LoginRequest loginRequest = new LoginRequest();
         AppUtils appUtils = AppUtils.getInstance();
@@ -1510,35 +1401,7 @@ public class AppUtils {
         loginRequest.setDevicetype(AppConstants.SOURCE_NAME);
         return loginRequest;
     }
-    public static DeactivateOwnerRequest deActivateOwnerRequestBuilder(Long communityId) {
-        DeactivateOwnerRequest deactivateOwnerRequest = new DeactivateOwnerRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        deactivateOwnerRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        deactivateOwnerRequest.setCommunityId(communityId);
-        deactivateOwnerRequest.setAppVersion(appUtils.getAppVersionName());
-        deactivateOwnerRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        return deactivateOwnerRequest;
-    }
 
-    public static OwnerListRequest ownerRequestBuilder(Long communityId) {
-        OwnerListRequest ownerListRequest = new OwnerListRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        ownerListRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        ownerListRequest.setCommunityId(communityId);
-        ownerListRequest.setAppVersion(appUtils.getAppVersionName());
-        ownerListRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        return ownerListRequest;
-    }
-    public static CreateCommunityOwnerRequest inviteOwnerRequestBuilder(Long communityId, Long userid) {
-        CreateCommunityOwnerRequest createCommunityOwnerRequest = new CreateCommunityOwnerRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        createCommunityOwnerRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        createCommunityOwnerRequest.setAppVersion(appUtils.getAppVersionName());
-        createCommunityOwnerRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        createCommunityOwnerRequest.setUserId(userid);
-        createCommunityOwnerRequest.setCommunityId(communityId);
-        return createCommunityOwnerRequest;
-    }
     public static RemoveMemberRequest removeMemberRequestBuilder(Long communityId, Long userid) {
         RemoveMemberRequest removeMemberRequest = new RemoveMemberRequest();
         AppUtils appUtils = AppUtils.getInstance();
@@ -1551,18 +1414,7 @@ public class AppUtils {
         return removeMemberRequest;
 
     }
-    public static ApproveMemberRequest approveMemberRequestBuilder(Long communityId, Long userid) {
-        ApproveMemberRequest approveMemberRequest = new ApproveMemberRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        approveMemberRequest.setCommunityId(communityId);
-        approveMemberRequest.setUserId(userid);
-        approveMemberRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        approveMemberRequest.setCommunityId(communityId);
-        approveMemberRequest.setAppVersion(appUtils.getAppVersionName());
-        approveMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        return approveMemberRequest;
 
-    }
 
     public static FeedRequestPojo userCommunityPostRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
@@ -1570,13 +1422,13 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public  FeedRequestPojo userCommunityDetailRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
+    public FeedRequestPojo userCommunityDetailRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(communityId);
         return feedRequestPojo;
     }
 
-    public  ProfileUsersCommunityRequest userCommunitiesRequestBuilder(int pageNo, long userId) {
+    public ProfileUsersCommunityRequest userCommunitiesRequestBuilder(int pageNo, long userId) {
         ProfileUsersCommunityRequest profileUsersCommunityRequest = new ProfileUsersCommunityRequest();
         profileUsersCommunityRequest.setAppVersion(getAppVersionName());
         profileUsersCommunityRequest.setDeviceUniqueId(getDeviceId());
@@ -1588,7 +1440,7 @@ public class AppUtils {
         return profileUsersCommunityRequest;
     }
 
-    public static ShareViaMail shareRequestBuilder(String deepLinkUrl, Long communityId,String emailIds,String subject) {
+    public static ShareViaMail shareRequestBuilder(String deepLinkUrl, Long communityId, String emailIds, String subject) {
         AppUtils appUtils = AppUtils.getInstance();
         ShareViaMail shareViaMail = new ShareViaMail();
         shareViaMail.setAppVersion(appUtils.getAppVersionName());
@@ -1601,6 +1453,7 @@ public class AppUtils {
         shareViaMail.setSubject(subject);
         return shareViaMail;
     }
+
     public static NotificationReadCount notificationReadCountRequestBuilder(String screenName) {
         AppUtils appUtils = AppUtils.getInstance();
         NotificationReadCount notificationReadCount = new NotificationReadCount();
@@ -1611,11 +1464,12 @@ public class AppUtils {
         return notificationReadCount;
     }
 
-    public  AppIntroScreenRequest appIntroRequestBuilder(int pageId) {
+    public AppIntroScreenRequest appIntroRequestBuilder(int pageId) {
         AppIntroScreenRequest appIntroScreenRequest = new AppIntroScreenRequest();
         appIntroScreenRequest.setSheroesPageId(pageId);
         return appIntroScreenRequest;
     }
+
     /**
      * Request for feed api
      */
@@ -1623,6 +1477,7 @@ public class AppUtils {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         return feedRequestPojo;
     }
+
     public static MyCommunityRequest myCommunityRequestBuilder(String typeOfFeed, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         MyCommunityRequest myCommunityRequest = new MyCommunityRequest();
@@ -1651,7 +1506,7 @@ public class AppUtils {
         return myCommunityRequest;
     }
 
-    public PublicProfileListRequest pubicProfileRequestBuilder( int pageNo) {
+    public PublicProfileListRequest pubicProfileRequestBuilder(int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         PublicProfileListRequest publicProfileListRequest = new PublicProfileListRequest();
         publicProfileListRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1670,12 +1525,13 @@ public class AppUtils {
         return profileFollowedMentor;
     }
 
-    public  FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
+    public FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
         return feedRequestPojo;
     }
-    public static FeedRequestPojo jobCategoryRequestBuilder(String typeOfFeed, int pageNo,List<String> cities,Integer experienceFrom,Integer experienceTo,List<String> functionalAreas,List<String> opportunityTypes,List<String> skills) {
+
+    public static FeedRequestPojo jobCategoryRequestBuilder(String typeOfFeed, int pageNo, List<String> cities, Integer experienceFrom, Integer experienceTo, List<String> functionalAreas, List<String> opportunityTypes, List<String> skills) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCities(cities);
         feedRequestPojo.setExperienceFrom(experienceFrom);
@@ -1685,21 +1541,11 @@ public class AppUtils {
         feedRequestPojo.setSkills(skills);
         return feedRequestPojo;
     }
-    public static JobApplyRequest jobApplyRequestBuilder(Long idOFEntityParticipant,String coverNote) {
-        JobApplyRequest jobApplyRequest = new JobApplyRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        jobApplyRequest.setAppVersion(appUtils.getAppVersionName());
-        jobApplyRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        //TODO:: change rquest data
-        jobApplyRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        jobApplyRequest.setCoverNote(coverNote);
-        jobApplyRequest.setJobId(idOFEntityParticipant);
-        return jobApplyRequest;
-    }
+
 
     public UserFollowerOrFollowingRequest countUserFollowersOrFollowing(Long mentorId, boolean isAFollower) {
         AppUtils appUtils = AppUtils.getInstance();
-        UserFollowerOrFollowingRequest userFollowerOrFollowingRequest =new UserFollowerOrFollowingRequest();
+        UserFollowerOrFollowingRequest userFollowerOrFollowingRequest = new UserFollowerOrFollowingRequest();
         userFollowerOrFollowingRequest.setAppVersion(appUtils.getAppVersionName());
         userFollowerOrFollowingRequest.setDeviceUniqueId(appUtils.getDeviceId());
         userFollowerOrFollowingRequest.setMentorId(mentorId);
@@ -1708,18 +1554,19 @@ public class AppUtils {
         return userFollowerOrFollowingRequest;
     }
 
-    public  FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
+    public FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setAutherId((int) idForDetail);
         feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
         return feedRequestPojo;
     }
 
-    public  FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
+    public FeedRequestPojo feedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setIdForFeedDetail(idForDetail);
         return feedRequestPojo;
     }
+
     public WinnerRequest winnerRequestBuilder(String contestId) {
         AppUtils appUtils = AppUtils.getInstance();
         WinnerRequest winnerRequest = new WinnerRequest();
@@ -1798,7 +1645,7 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public  UserSummaryRequest getUserProfileRequestBuilder(String subType,String type,  String imageUrl) {
+    public UserSummaryRequest getUserProfileRequestBuilder(String subType, String type, String imageUrl) {
         AppUtils appUtils = AppUtils.getInstance();
         UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
         userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1808,10 +1655,11 @@ public class AppUtils {
         userSummaryRequest.setImageString(imageUrl);
         return userSummaryRequest;
     }
+
     /**
      * Request for feed api
      */
-    public static GetAllDataRequest onBoardingSearchRequestBuilder(String queryName,  String masterDataTypeSkill) {
+    public static GetAllDataRequest onBoardingSearchRequestBuilder(String queryName, String masterDataTypeSkill) {
         AppUtils appUtils = AppUtils.getInstance();
         GetAllDataRequest getAllDataRequest = new GetAllDataRequest();
         getAllDataRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1824,10 +1672,11 @@ public class AppUtils {
         getAllDataRequest.setSource(AppConstants.SOURCE_NAME);
         return getAllDataRequest;
     }
+
     /**
      * Request for feed api
      */
-    public  FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName,Long communityId,int pageSize) {
+    public FeedRequestPojo searchRequestBuilder(String typeOfFeed, String queryName, int pageNo, String screenName, Long communityId, int pageSize) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1862,7 +1711,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public  LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue) {
+    public LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue) {
         AppUtils appUtils = AppUtils.getInstance();
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1874,7 +1723,7 @@ public class AppUtils {
         return likeRequestPojo;
     }
 
-    public  LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue, long commentId) {
+    public LikeRequestPojo likeRequestBuilder(long entityId, int reactionValue, long commentId) {
         AppUtils appUtils = AppUtils.getInstance();
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1891,7 +1740,7 @@ public class AppUtils {
     /**
      * Request for feed api
      */
-    public  LikeRequestPojo unLikeRequestBuilder(long entityId) {
+    public LikeRequestPojo unLikeRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1902,7 +1751,7 @@ public class AppUtils {
         return likeRequestPojo;
     }
 
-    public  LikeRequestPojo unLikeRequestBuilder(long entityId, long commentId) {
+    public LikeRequestPojo unLikeRequestBuilder(long entityId, long commentId) {
         AppUtils appUtils = AppUtils.getInstance();
         LikeRequestPojo likeRequestPojo = new LikeRequestPojo();
         likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -1941,32 +1790,20 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }
-    public static MemberRequest getPandingMemberRequestBuilder(long entityId, int pageNo) {
+
+    public BellNotificationRequest getBellNotificationRequest() {
         AppUtils appUtils = AppUtils.getInstance();
 
-        MemberRequest memberRequest=new MemberRequest();
-        memberRequest.setAppVersion(appUtils.getAppVersionName());
-        memberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        memberRequest.setCommunityId(entityId);
-        memberRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        memberRequest.setLastScreenName(AppConstants.COMMUNITY_DETAIL);
-        memberRequest.setPageNo(pageNo);
-        memberRequest.setScreenName(AppConstants.PANDING_MEMBER);
-        memberRequest.setPageSize(AppConstants.MEMBER_PAGE_SIZE);
-        return memberRequest;
-    }
-    public  BellNotificationRequest getBellNotificationRequest() {
-        AppUtils appUtils = AppUtils.getInstance();
-
-        BellNotificationRequest bellNotificationRequest=new BellNotificationRequest();
+        BellNotificationRequest bellNotificationRequest = new BellNotificationRequest();
         bellNotificationRequest.setAppVersion(appUtils.getAppVersionName());
         bellNotificationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         bellNotificationRequest.setDeviceUniqueId(appUtils.getDeviceId());
         return bellNotificationRequest;
     }
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long  communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse) {
+
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
         communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
@@ -1975,14 +1812,13 @@ public class AppUtils {
         communityPostCreateRequest.setDescription(description);
         communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setId(mIdForEditPost);
-        if (null!=linkRenderResponse) {
+        if (null != linkRenderResponse) {
             communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
             communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
             communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
             communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
             communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
-        }else
-        {
+        } else {
             communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
             communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
             communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
@@ -1992,38 +1828,10 @@ public class AppUtils {
         return communityPostCreateRequest;
     }
 
-    public static CommunityPostCreateRequest createCommunityPostRequestForChallengeBuilder(String createType, int challengeId, String sourceType,  String description, List<String> imag, LinkRenderResponse linkRenderResponse) {
-        AppUtils appUtils = AppUtils.getInstance();
-        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
-        communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
-        communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        communityPostCreateRequest.setSourceEntityId(challengeId);
-        communityPostCreateRequest.setmSourceType(sourceType);
-        communityPostCreateRequest.setCommunityId(0L);
-        communityPostCreateRequest.setCreatorType(createType);
-        communityPostCreateRequest.setDescription(description);
-        communityPostCreateRequest.setImages(imag);
-        if (null!=linkRenderResponse) {
-            communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
-            communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
-            communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
-            communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
-            communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
-        }else
-        {
-            communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
-            communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
-            communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
-            communityPostCreateRequest.setOgVideoLinkB(false);
-            communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
-        }
-        return communityPostCreateRequest;
-    }
 
     public static ChallengePostCreateRequest createChallengePostRequestBuilder(String createType, int challengeId, String sourceType, String description, List<String> imag, LinkRenderResponse linkRenderResponse) {
         AppUtils appUtils = AppUtils.getInstance();
-        ChallengePostCreateRequest challengePostCreateRequest=new ChallengePostCreateRequest();
+        ChallengePostCreateRequest challengePostCreateRequest = new ChallengePostCreateRequest();
         challengePostCreateRequest.setAppVersion(appUtils.getAppVersionName());
         challengePostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         challengePostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
@@ -2038,14 +1846,13 @@ public class AppUtils {
         challengePostCreateRequest.setCreatorType(createType);
         challengePostCreateRequest.setDescription(description);
         challengePostCreateRequest.setImages(imag);
-        if (null!=linkRenderResponse) {
+        if (null != linkRenderResponse) {
             challengePostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
             challengePostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
             challengePostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
             challengePostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
             challengePostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
-        }else
-        {
+        } else {
             challengePostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
             challengePostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
             challengePostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
@@ -2054,17 +1861,19 @@ public class AppUtils {
         }
         return challengePostCreateRequest;
     }
+
     public LinkRequest linkRequestBuilder(String linkData) {
         AppUtils appUtils = AppUtils.getInstance();
-        LinkRequest linkRequest=new LinkRequest();
+        LinkRequest linkRequest = new LinkRequest();
         linkRequest.setAppVersion(appUtils.getAppVersionName());
         linkRequest.setSource(AppConstants.SOURCE_NAME);
         linkRequest.setLinkUrl(linkData);
         return linkRequest;
     }
-    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long  communityId, String createType,String description,List<String> imag,Long mIdForEditPost,List<Long> deletedImageId,LinkRenderResponse linkRenderResponse) {
+
+    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, List<Long> deletedImageId, LinkRenderResponse linkRenderResponse) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommunityPostCreateRequest communityPostCreateRequest=new CommunityPostCreateRequest();
+        CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
         communityPostCreateRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         communityPostCreateRequest.setDeviceUniqueId(appUtils.getDeviceId());
@@ -2074,14 +1883,13 @@ public class AppUtils {
         communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setId(mIdForEditPost);
         communityPostCreateRequest.setDeleteImagesIds(deletedImageId);
-        if (null!=linkRenderResponse) {
+        if (null != linkRenderResponse) {
             communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
             communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());
             communityPostCreateRequest.setOgImageUrlS(linkRenderResponse.getOgImageUrlS());
             communityPostCreateRequest.setOgVideoLinkB(linkRenderResponse.isOgVideoLinkB());
             communityPostCreateRequest.setOgRequestedUrlS(linkRenderResponse.getOgRequestedUrlS());
-        }else
-        {
+        } else {
             communityPostCreateRequest.setOgTitleS(AppConstants.EMPTY_STRING);
             communityPostCreateRequest.setOgDescriptionS(AppConstants.EMPTY_STRING);
             communityPostCreateRequest.setOgImageUrlS(AppConstants.EMPTY_STRING);
@@ -2091,9 +1899,9 @@ public class AppUtils {
         return communityPostCreateRequest;
     }
 
-    public static CommunityTopPostRequest topCommunityPostRequestBuilder(Long  communityId, String createType, String description,long id, boolean topPost) {
+    public static CommunityTopPostRequest topCommunityPostRequestBuilder(Long communityId, String createType, String description, long id, boolean topPost) {
         AppUtils appUtils = AppUtils.getInstance();
-        CommunityTopPostRequest communityTopPostRequest=new CommunityTopPostRequest();
+        CommunityTopPostRequest communityTopPostRequest = new CommunityTopPostRequest();
         communityTopPostRequest.setAppVersion(appUtils.getAppVersionName());
         communityTopPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         communityTopPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
@@ -2104,9 +1912,10 @@ public class AppUtils {
         communityTopPostRequest.setId(id);
         return communityTopPostRequest;
     }
-    public ApproveSpamPostRequest spamPostApprovedRequestBuilder(FeedDetail feedDetail,boolean isActive,boolean isSpam,boolean isApproved) {
+
+    public ApproveSpamPostRequest spamPostApprovedRequestBuilder(FeedDetail feedDetail, boolean isActive, boolean isSpam, boolean isApproved) {
         AppUtils appUtils = AppUtils.getInstance();
-        ApproveSpamPostRequest approveSpamPostRequest=new ApproveSpamPostRequest();
+        ApproveSpamPostRequest approveSpamPostRequest = new ApproveSpamPostRequest();
         approveSpamPostRequest.setAppVersion(appUtils.getAppVersionName());
         approveSpamPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         approveSpamPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
@@ -2116,15 +1925,17 @@ public class AppUtils {
         approveSpamPostRequest.setSpam(isSpam);
         return approveSpamPostRequest;
     }
+
     public SelectCommunityRequest selectCommunityRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
-        SelectCommunityRequest selectCommunityRequest=new SelectCommunityRequest();
+        SelectCommunityRequest selectCommunityRequest = new SelectCommunityRequest();
         selectCommunityRequest.setAppVersion(appUtils.getAppVersionName());
         selectCommunityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         selectCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
         selectCommunityRequest.setMasterDataType(AppConstants.JOB_AT_GET_ALL_DATA_KEY);
         return selectCommunityRequest;
     }
+
     public BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();
@@ -2165,7 +1976,7 @@ public class AppUtils {
     }
 
 
-    public static CommunityRequest communityRequestBuilder(List<Long> userId, long idOfEntityParticipant,String reasonToJoin) {
+    public static CommunityRequest communityRequestBuilder(List<Long> userId, long idOfEntityParticipant, String reasonToJoin) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityRequest communityRequest = new CommunityRequest();
         communityRequest.setUserId(userId);
@@ -2178,79 +1989,9 @@ public class AppUtils {
         communityRequest.setReasonToJoin(reasonToJoin);
         return communityRequest;
     }
-    public static ProfileAddEditEducationRequest profileAddEducationRequest(String mSchoolName,long mDeegreeId,String study,String[] startTime,String[] endTime,String description) {
-        AppUtils appUtils = AppUtils.getInstance();
-        ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
 
-        profileAddEditEducationRequest.setAppVersion(appUtils.getAppVersionName());
-        profileAddEditEducationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        profileAddEditEducationRequest.setDeviceUniqueId(appUtils.mDeviceId);
-        profileAddEditEducationRequest.setLastScreenName("string");
-        profileAddEditEducationRequest.setScreenName("string");
-        profileAddEditEducationRequest.setType("EDUCATION");
-        profileAddEditEducationRequest.setSubType("EDUCATION_SERVICE");
-        profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
-        profileAddEditEducationRequest.setActive(true);
-        if(null!=startTime&&startTime.length>0) {
-            profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
-            profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
-        }
-        if(null!=endTime&&endTime.length>0) {
-            profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
-            profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
-        }
-        profileAddEditEducationRequest.setSchool(mSchoolName);
-        profileAddEditEducationRequest.setFieldOfStudy(study);
-        profileAddEditEducationRequest.setGrade("0");
-        profileAddEditEducationRequest.setActivities("study");
-        profileAddEditEducationRequest.setDescription(description);
-        return profileAddEditEducationRequest;
-    }
-   public static ProfileAddEditEducationRequest profileEditEducationRequest(long mEducationId,String mSchoolName,long mDeegreeId,String mEtFieldOfStudy,String[] startTime,String[] endTime,String description) {
-        AppUtils appUtils = AppUtils.getInstance();
-        ProfileAddEditEducationRequest profileAddEditEducationRequest = new ProfileAddEditEducationRequest();
 
-       profileAddEditEducationRequest.setAppVersion(appUtils.getAppVersionName());
-       profileAddEditEducationRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-       profileAddEditEducationRequest.setDeviceUniqueId(appUtils.mDeviceId);
-       profileAddEditEducationRequest.setLastScreenName("string");
-       profileAddEditEducationRequest.setScreenName("string");
-       profileAddEditEducationRequest.setType("EDUCATION");
-       profileAddEditEducationRequest.setSubType("EDUCATION_SERVICE");
-       profileAddEditEducationRequest.setDegreeNameMasterId(mDeegreeId);
-       profileAddEditEducationRequest.setActive(true);
-       if(null!=startTime) {
-           profileAddEditEducationRequest.setSessionStartMonth(Integer.parseInt(startTime[0]));
-           profileAddEditEducationRequest.setSessionStartYear(Integer.parseInt(startTime[1]));
-       }
-       if(null!=endTime) {
-           profileAddEditEducationRequest.setSessionEndMonth(Integer.parseInt(endTime[0]));
-           profileAddEditEducationRequest.setSessionEndYear(Integer.parseInt(endTime[1]));
-       }
-       profileAddEditEducationRequest.setSchool(mSchoolName);
-       profileAddEditEducationRequest.setFieldOfStudy(mEtFieldOfStudy);
-       profileAddEditEducationRequest.setGrade("0");
-       profileAddEditEducationRequest.setActivities("study");
-       profileAddEditEducationRequest.setDescription(description);
-       profileAddEditEducationRequest.setId(mEducationId);
-       return profileAddEditEducationRequest;
-    }
-
-    public static BoardingLookingForHowCanRequest profileOpertunityTypeRequestBuilder(Set<Long> skillIds,String subType,String type) {
-        BoardingLookingForHowCanRequest boardingLookingForHowCanRequest = new BoardingLookingForHowCanRequest();
-        AppUtils appUtils = AppUtils.getInstance();
-        //TODO:: check real data
-        boardingLookingForHowCanRequest.setAppVersion(appUtils.getAppVersionName());
-        boardingLookingForHowCanRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        boardingLookingForHowCanRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        boardingLookingForHowCanRequest.setOpportunityIds(skillIds);
-        boardingLookingForHowCanRequest.setSubtype(subType);
-        boardingLookingForHowCanRequest.setType(type);
-        boardingLookingForHowCanRequest.setSource(AppConstants.SOURCE_NAME);
-        return boardingLookingForHowCanRequest;
-    }
-
-    public static HelplinePostQuestionRequest helplineQuestionBuilder(String chatQueryText){
+    public static HelplinePostQuestionRequest helplineQuestionBuilder(String chatQueryText) {
         HelplinePostQuestionRequest helplinePostQuestionRequest = new HelplinePostQuestionRequest();
         helplinePostQuestionRequest.setQuestion(chatQueryText);
         helplinePostQuestionRequest.setSource(AppConstants.SOURCE_NAME);
@@ -2264,12 +2005,12 @@ public class AppUtils {
         return helplineGetChatThreadRequest;
     }
 
-    public static FAQSRequest sheFAQSRequestBuilder(){
+    public static FAQSRequest sheFAQSRequestBuilder() {
         FAQSRequest faqsRequest = new FAQSRequest();
         return faqsRequest;
     }
 
-    public static ICCMemberRequest sheICCMemberListRequestBuilder(){
+    public static ICCMemberRequest sheICCMemberListRequestBuilder() {
         ICCMemberRequest iccMemberRequest = new ICCMemberRequest();
         return iccMemberRequest;
     }

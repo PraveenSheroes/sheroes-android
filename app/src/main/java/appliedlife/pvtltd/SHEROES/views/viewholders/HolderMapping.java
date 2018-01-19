@@ -8,7 +8,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -19,9 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSponsorData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-import appliedlife.pvtltd.SHEROES.models.entities.jobs.JobDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -116,7 +113,7 @@ public enum HolderMapping {
             return new GetAllDataBoardingSearchHolder(view, viewInterface);
         }
     },
-     BELL_NOTIFICATION(R.layout.bel_notification_card) {
+    BELL_NOTIFICATION(R.layout.bel_notification_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new BellNotificationHolder(view, viewInterface);
