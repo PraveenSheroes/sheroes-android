@@ -249,10 +249,7 @@ public class CommonUtil {
     }
 
     public static boolean versionCompare(int ver1, int ver2) {
-        if (ver1 < ver2) {  // if 28100 <  28111, than return true else return false
-            return true;
-        }
-        return false;
+        return ver1 < ver2;
     }
 
     private static final X500Principal DEBUG_DN = new X500Principal("CN=Android Debug,O=Android,C=US");
@@ -356,10 +353,7 @@ public class CommonUtil {
         if (url==null || url.getScheme() == null) {
             return false;
         }
-        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in") ))) {
-          return true;
-        }
-        return false;
+        return ((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")));
     }
 
     public static boolean isValidEmail(CharSequence target) {

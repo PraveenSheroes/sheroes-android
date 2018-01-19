@@ -64,7 +64,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CommentListItemViewHolder commentListItemViewHolder = (CommentListItemViewHolder) holder;
-        Comment comment = (Comment) mCommentList.get(position);
+        Comment comment = mCommentList.get(position);
         commentListItemViewHolder.bindData(comment, position);
     }
 

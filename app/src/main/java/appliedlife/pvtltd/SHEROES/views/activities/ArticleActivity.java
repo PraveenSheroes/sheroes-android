@@ -252,7 +252,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         } else {
             if (getIntent().getExtras() != null) {
                 String notificationId = getIntent().getExtras().getString("notificationId");
-                Long i = (Long) getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
+                Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
                 if (!TextUtils.isEmpty(notificationId)) {
                     setSource(NOTIFICATION_SCREEN);
@@ -279,7 +279,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mArticle != null) {
             loadArticleImage(mArticle);
         }
-        fetchArticle(mArticle == null ? mArticleId : (int) mArticle.id, mArticle!=null ? true : false);
+        fetchArticle(mArticle == null ? mArticleId : (int) mArticle.id, mArticle != null);
 
         mCommentBody.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -447,7 +447,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         if (comment == null) {
                             return true;
                         }
-                        mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
                         return true;
                     }
                 });
@@ -792,11 +792,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
 
         // If scroll is less than 95% only then go to lights off mode
-        if (scrollY > oldScrollY && mScrollPercentage < 95) {
-            isScrollingDown = true;
-        } else {
-            isScrollingDown = false;
-        }
+        isScrollingDown = scrollY > oldScrollY && mScrollPercentage < 95;
 
         if (isScrollingDown) {
             fab.hide();

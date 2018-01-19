@@ -402,11 +402,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean startedFirstTime() {
         if (null != getIntent() && null != getIntent().getExtras()) {
-            if (getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0;
         } else {
             return true;
         }
@@ -1451,7 +1447,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     break;
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != intent.getExtras()) {
-                        UserSolrObj userSolrObj = (UserSolrObj) Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if (null != userSolrObj) {
                             Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                             if (AppUtils.isFragmentUIActive(fragmentMentor)) {
@@ -1517,7 +1513,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void editCommunityPostResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
+            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
             if (null != mFeedDetail) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -1535,7 +1531,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void createCommunityActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
+            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
             //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
             if (AppUtils.isFragmentUIActive(community)) {
@@ -1550,7 +1546,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void articleDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
+            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
             //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
             if (mFragmentOpen.isArticleFragment()) {
                 Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());

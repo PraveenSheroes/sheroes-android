@@ -106,7 +106,7 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     private void joinNewUser(String reasonToJoin) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
-            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+            userIdList.add(userPreference.get().getUserSummary().getUserId());
             mHomePresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), reasonToJoin));
         }
     }

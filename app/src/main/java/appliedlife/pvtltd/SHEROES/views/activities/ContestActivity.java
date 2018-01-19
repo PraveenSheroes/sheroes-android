@@ -132,7 +132,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         setAllValues(mFragmentOpen);*/
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
-            mContest = (Contest) Parcels.unwrap(parcelable);
+            mContest = Parcels.unwrap(parcelable);
             populateContest(mContest);
         } else {
             if (getIntent().getExtras() != null) {

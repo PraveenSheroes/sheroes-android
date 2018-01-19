@@ -803,7 +803,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
-        };
+        }
         Subscription subscription = mHomeModel.getAppContactsResponseInModel(userPhoneContactsListRequest).subscribe(new Subscriber<UserPhoneContactsListResponse>() {
             @Override
             public void onCompleted() {

@@ -279,7 +279,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     public void communityPostClick() {
         if (null!= mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                FeedDetail feedDetail = (FeedDetail) mCommunityFeedObj;
+                FeedDetail feedDetail = mCommunityFeedObj;
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
                 ((MentorUserProfileActvity) getActivity()).createCommunityPostClick(feedDetail);
         }

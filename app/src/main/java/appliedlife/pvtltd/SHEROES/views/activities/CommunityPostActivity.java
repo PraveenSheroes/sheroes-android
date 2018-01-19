@@ -662,11 +662,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public boolean isPostModified() {
-        if (!mOldText.equals(mEtDefaultHintText.getText().toString()) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !mOldText.equals(mEtDefaultHintText.getText().toString()) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList);
     }
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {

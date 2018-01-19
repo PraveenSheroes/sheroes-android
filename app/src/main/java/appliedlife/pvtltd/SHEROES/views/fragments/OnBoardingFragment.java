@@ -256,7 +256,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
-            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+            userIdList.add(userPreference.get().getUserSummary().getUserId());
             mOnBoardingPresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj);
         }
     }

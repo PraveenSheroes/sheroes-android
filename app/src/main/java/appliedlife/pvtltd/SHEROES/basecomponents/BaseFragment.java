@@ -488,7 +488,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void deleteCommunityPost(FeedDetail feedDetail) {
         mListLoad = false;
         mFeedDetail = feedDetail;
-        mHomePresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(feedDetail.getIdOfEntityOrParticipant()));
+        mHomePresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(feedDetail.getIdOfEntityOrParticipant()));
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {
@@ -678,9 +678,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
-            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+            userIdList.add(userPreference.get().getUserSummary().getUserId());
             setFeedDetail(feedDetail);
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+            mHomePresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
     }
 

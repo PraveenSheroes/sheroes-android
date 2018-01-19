@@ -312,11 +312,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     private void postBookMark(final Article article, BookmarkRequestPojo bookmarkRequestPojo, final boolean isBookMarked) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            if (!isBookMarked) {
-                article.isBookmarked = false;
-            } else {
-                article.isBookmarked = true;
-            }
+            article.isBookmarked = isBookMarked;
             getMvpView().invalidateBookmark(article);
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
@@ -330,11 +326,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                if (!isBookMarked) {
-                    article.isBookmarked = false;
-                } else {
-                    article.isBookmarked = true;
-                }
+                article.isBookmarked = isBookMarked;
                 getMvpView().invalidateBookmark(article);
                 getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
 
@@ -350,11 +342,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                         getMvpView().trackEvent(Event.POST_UNBOOKMARKED);
                     }
                 } else {
-                    if (!isBookMarked) {
-                        article.isBookmarked = false;
-                    } else {
-                        article.isBookmarked = true;
-                    }
+                    article.isBookmarked = isBookMarked;
                     getMvpView().invalidateBookmark(article);
                 }
                 getMvpView().invalidateBookmark(article);
@@ -440,10 +428,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     }
 
     public boolean getMenuItemsVisibility(Article article) {
-        if (article != null) {
-            return true;
-        }
-        return false;
+        return article != null;
     }
 
     public void fetchAllComments(CommentReactionRequestPojo commentRequestBuilder) {

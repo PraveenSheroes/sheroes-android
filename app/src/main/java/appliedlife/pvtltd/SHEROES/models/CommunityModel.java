@@ -37,20 +37,6 @@ public class CommunityModel {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.gson= gson;
     }
-    public Observable<CreateCommunityResponse> postCreateCommunity(CreateCommunityRequest createCommunityRequest){
-        LogUtils.info(TAG,"***************create community****"+new Gson().toJson(createCommunityRequest));
-        return sheroesAppServiceApi.postCreateCommunity(createCommunityRequest)
-                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
-
-                        return communityTagsListResponse;
-
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
     public Observable<SelectedCommunityResponse> getSelectedFromModel(SelectCommunityRequest selectCommunityRequest){
         LogUtils.info(TAG,"***************suggested community****"+new Gson().toJson(selectCommunityRequest));
         return sheroesAppServiceApi.suggestedCommunity(selectCommunityRequest)

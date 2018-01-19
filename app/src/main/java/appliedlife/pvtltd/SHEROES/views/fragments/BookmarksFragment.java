@@ -96,7 +96,7 @@ public class BookmarksFragment extends BaseFragment {
             }
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, mPosition, mPressedEmoji, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getBookMarkFromPresenter(AppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,7 +106,7 @@ public class BookmarksFragment extends BaseFragment {
                 mPullRefreshList=new SwipPullRefreshList();
                 setRefreshList(mPullRefreshList);
                 mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mHomePresenter.getBookMarkFromPresenter(mAppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
+                mHomePresenter.getBookMarkFromPresenter(AppUtils.getBookMarks(mFragmentListRefreshData.getPageNo()));
             }
         });
         return view;

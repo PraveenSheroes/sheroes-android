@@ -159,7 +159,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
 
     @OnClick(R.id.et_search_edit_text)
     public void searchLocation() {
-        mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
+        mOnBoardingPresenter.getOnBoardingSearchToPresenter(AppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
     }
 
     /**
@@ -200,7 +200,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
             if (!isDetached()) {
                 mMasterDataSkill = "city";
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                mOnBoardingPresenter.getOnBoardingSearchToPresenter(AppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
 
             }
         }

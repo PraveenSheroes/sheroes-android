@@ -151,7 +151,6 @@ public class AppUtils {
     private static final String TAG = LogUtils.makeLogTag(AppUtils.class);
     private static final String NOTAVAILABLE = " ";
     private static AppUtils sInstance;
-
     private long sInitTime = 0;
 
     private static final int MIN_AMOUNT_FOR_WALLET_CARD = 200;
@@ -1070,127 +1069,6 @@ public class AppUtils {
         return bitmap;
     }
 
-    public String getPhoneNumber() {
-        TelephonyManager mTelephonyMgr = (TelephonyManager) SheroesApplication.mContext.getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTelephonyMgr != null) {
-            return mTelephonyMgr.getLine1Number();
-        }
-        return "";
-    }
-
-    public boolean isRunningOnEmulator() {
-
-        final TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
-        final boolean hasEmulatorImei = telephonyManager != null && telephonyManager.getDeviceId() != null ? telephonyManager.getDeviceId().equals("000000000000000") : true;
-        final boolean hasEmulatorModelName = Build.MODEL.contains("google_sdk")
-                || Build.MODEL.contains("Emulator")
-                || Build.MODEL.contains("Android SDK");
-        //final boolean hasInvalidDeviceId = StringUtil.isNotNullOrEmptyString(getDeviceId());
-        return hasEmulatorImei || hasEmulatorModelName;
-    }
-
-
-    public void scheduleAlarmWithIntent(Intent intent, int timeInMinutes) {
-        try {
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(AppUtils.getInstance().getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) AppUtils.getInstance().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            Calendar c = Calendar.getInstance();
-            if (timeInMinutes > 0) {
-                c.add(Calendar.MINUTE, timeInMinutes);
-            } else {
-                c.add(Calendar.SECOND, 5); // atleast 5 seconds after if time is 0
-            }
-            alarmManager.cancel(pendingIntent);
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-            } else {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-            }
-        } catch (Exception ex) {
-            LogUtils.error(TAG, ex.toString(), ex);
-        }
-    }
-
-
-    public String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-                        String ip = inetAddress.getHostAddress();
-                        return ip;
-                    }
-                }
-            }
-        } catch (SocketException e) {
-            LogUtils.error(TAG, "SocketException in getLocalIpAddress is " + e.getMessage(), e);
-        } catch (Exception e) {
-            LogUtils.error(TAG, "Exception in getLocalIpAddress is " + e.getMessage(), e);
-        }
-        return "";
-    }
-
-
-    public String getAppInstallDate() {
-        try {
-            long installedTIme = AppUtils.getInstance().getApplicationContext().getPackageManager().getPackageInfo("com.makemytrip", 0).firstInstallTime;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = new Date(installedTIme);
-            String installDate = dateFormat.format(date);
-            return installDate;
-        } catch (PackageManager.NameNotFoundException e) {
-            LogUtils.error(TAG, "PackageManager.NameNotFoundException in getAppInstallDate is " + e.getMessage(), e);
-        } catch (Exception e) {
-            LogUtils.error(TAG, "Exception in getAppInstallDate is " + e.getMessage(), e);
-        }
-        return "";
-    }
-
-
-    public String getCurrentInternetConnectionAndApproxSpeed() {
-        try {
-            EncryptionUtils.initialize();
-            NetworkInfo info = SHEROESTracker.SHEROESSystemInfo.getNetworkInfo(getApplicationContext());
-            return ((info != null && info.isConnected()) ? getConnectionTypeAndApproxSpeed(info.getType(), info.getSubtype()) : "");
-        } catch (Exception e) {
-            LogUtils.error(TAG, e);
-            return "";
-        }
-    }
-
-    public int getTotalMemoryDeviceinGB() {
-        try {
-            File path = Environment.getDataDirectory();
-            StatFs stat = new StatFs(path.getPath());
-            float blockSize = stat.getBlockSize();
-            float totalBlocks = stat.getBlockCount();
-            LogUtils.info(TAG, totalBlocks + "");
-            float memory = (totalBlocks * blockSize) / AppConstants.ONEGIGABYTE;
-            return Math.round(memory);
-        } catch (Exception e) {
-            LogUtils.error(TAG, "error while device internal  memory calculation", e);
-        }
-        return 0;
-    }
-
-    /**
-     * @return - connectivity type only if it is wifi or mobile other wise min integer value
-     */
-    public int getConnectivityType() {
-        try {
-            NetworkInfo info = SHEROESTracker.SHEROESSystemInfo.getNetworkInfo(SheroesApplication.mContext);
-            if (info != null && info.isConnected()) {
-                return info.getType();
-            }
-            return Integer.MIN_VALUE;
-        } catch (Exception e) {
-            LogUtils.error(TAG, e);
-            return Integer.MIN_VALUE;
-        }
-
-    }
 
     public String getConnectionTypeAndApproxSpeed(int type, int subType) {
         if (type == ConnectivityManager.TYPE_WIFI) {
@@ -1567,11 +1445,7 @@ public class AppUtils {
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
                         Date expDate = sdf.parse(ntfExpDate);
                         Date curDate = sdf.parse(sdf.format(new Date()));
-                        if (expDate.before(curDate)) {
-                            return true;
-                        } else {
-                            return false;
-                        }
+                        return expDate.before(curDate);
                     } catch (ParseException e) {
                         return true;
                     }
@@ -1586,50 +1460,6 @@ public class AppUtils {
             return false;
         }
     }
-
-
-    /**
-     * Sets ListView height dynamically based on the height of the items.
-     *
-     * @param listView list view whose height need to set
-     * @return true if the listView is successfully resized, false otherwise
-     */
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
-        try {
-            if (listView != null) {
-                ListAdapter listAdapter = listView.getAdapter();
-                // Get padding height
-                int paddingBottom = listView.getPaddingBottom();
-                int paddingTop = listView.getPaddingTop();
-                if (listAdapter != null) {
-                    int numberOfItems = listAdapter.getCount();
-                    // Get total height of all items.
-                    int totalItemsHeight = 0;
-                    for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                        View item = listAdapter.getView(itemPos, null, listView);
-                        if (item != null) {
-                            item.measure(0, 0);
-                            totalItemsHeight += item.getMeasuredHeight();
-                        }
-                    }
-                    // Get total height of all item dividers.
-                    int totalDividersHeight = listView.getDividerHeight() *
-                            (numberOfItems - 1);
-                    // Set list height.
-                    ViewGroup.LayoutParams params = listView.getLayoutParams();
-                    params.height = totalItemsHeight + totalDividersHeight + paddingBottom + paddingTop;
-                    listView.setLayoutParams(params);
-                    listView.requestLayout();
-                    return true;
-                }
-            }
-            return false;
-        } catch (Exception e) {
-            LogUtils.error(TAG, e);
-        }
-        return false;
-    }
-
     /* Function to check if fragment UI is active*/
     public static boolean isFragmentUIActive(Fragment frag) {
         return frag != null && frag.getActivity() != null && frag.isAdded() && !frag.isDetached() && !frag.isRemoving();
@@ -1640,19 +1470,6 @@ public class AppUtils {
         return frag != null && frag.getActivity() != null && frag.isAdded() && !frag.isDetached() && !frag.isRemoving();
     }
 
-    public static void setClippingEnabled(View v, boolean enabled) {
-        try {
-            while (v.getParent() != null && v.getParent() instanceof ViewGroup) {
-                ViewGroup viewGroup = (ViewGroup) v.getParent();
-                viewGroup.setClipChildren(enabled);
-                viewGroup.setClipToPadding(enabled);
-                v = viewGroup;
-            }
-        } catch (Exception e) {
-            LogUtils.error(TAG, "error while toggling cliping  A change in viewheirarchy may be", e);
-        }
-
-    }
 
     public String getIMEI() {
         try {
@@ -1669,95 +1486,6 @@ public class AppUtils {
         return " ";
     }
 
-    public String getDaysSinceInstall() {
-        long noOfdays = 0;
-        try {
-            long installedDate = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
-            long currentTime = System.currentTimeMillis();
-            long diff = currentTime - installedDate;
-            noOfdays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-
-        } catch (Exception ex) {
-            LogUtils.error(TAG, "Error : " + ex, ex);
-            return " ";
-        }
-        return String.valueOf(noOfdays);
-    }
-
-    public long getInstallDateInGMT() {
-        long installedDate = 0;
-        try {
-            long installedDateMilli = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).firstInstallTime;
-            Date date = new Date(installedDateMilli);
-            DateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss z");
-            formatter.setTimeZone(TimeZone.getTimeZone("IST"));
-            formatter.format(date);
-            formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-            String convertedString = formatter.format(date);
-            installedDate = formatter.parse(convertedString).getTime();
-        } catch (Exception e) {
-            LogUtils.error(TAG, "Error : " + e, e);
-            installedDate = 0;
-        }
-        return installedDate;
-    }
-
-
-    public boolean isTablet() {
-        try {
-            return (getApplicationContext().getResources().getConfiguration().screenLayout
-                    & Configuration.SCREENLAYOUT_SIZE_MASK)
-                    >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-        } catch (Exception e) {
-            LogUtils.error(TAG, "Error : " + e, e);
-            return false;
-        }
-    }
-
-    /**
-     * Method to get the current android OS version
-     *
-     * @return String
-     */
-    public String getOSVersion() {
-        String lReleaseVersion = android.os.Build.VERSION.RELEASE;
-        return lReleaseVersion;
-    }
-
-    /**
-     * This method put a line on edit text.
-     *
-     * @param etArea
-     * @param color
-     */
-    public static void setEditTextBackgroundLineColor(EditText etArea, int color) {
-        if (null != etArea && null != etArea.getBackground()) {
-            etArea.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-        }
-    }
-
-    /**
-     * This method put a line on edit text.
-     *
-     * @param progressBar
-     * @param color
-     */
-    public static void setProgressDrawableBackgroundColor(ProgressBar progressBar, int color) {
-        if (null != progressBar && null != progressBar.getIndeterminateDrawable()) {
-            progressBar.getIndeterminateDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        }
-    }
-
-
-    /**
-     * checks if activity is finished and destroyed
-     *
-     * @param isDestroyed
-     * @return
-     */
-    public static boolean isActivityExists(boolean isDestroyed, Activity pActivity) {
-        return !pActivity.isFinishing() && !isDestroyed;
-    }
 
 
     public static int findNthIndexOf(String str, String needle, int occurence) throws IndexOutOfBoundsException {

@@ -179,7 +179,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.HOME_FRAGMENT:
                         if (mFragmentListRefreshData.isChallenge()) {
-                            FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getSourceEntity(), pageNo);
+                            FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getSourceEntity(), pageNo);
                             feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
                             mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                         } else {

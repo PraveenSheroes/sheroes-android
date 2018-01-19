@@ -93,7 +93,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         initAdapter();
 
         mContestList = new ArrayList<>();
-        FeedRequestPojo feedRequestPojo =mAppUtils.makeFeedChallengeListRequest(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1);
+        FeedRequestPojo feedRequestPojo = AppUtils.makeFeedChallengeListRequest(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1);
         feedRequestPojo.setPageSize(100);
         mContestListPresenter.fetchContests(feedRequestPojo);
 
@@ -140,7 +140,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
             }
             Parcelable parcelable = data.getParcelableExtra(Contest.CONTEST_OBJ);
             if (parcelable != null) {
-                Contest contest = (Contest) Parcels.unwrap(parcelable);
+                Contest contest = Parcels.unwrap(parcelable);
                 int position = findPositionById(mContestList, contest.remote_id);
                 if (position != -1) {
                     mContestList.set(position, contest);
