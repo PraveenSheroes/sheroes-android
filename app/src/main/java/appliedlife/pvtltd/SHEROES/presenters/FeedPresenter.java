@@ -197,12 +197,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 getMvpView().stopProgressBar();
                                 mFeedDetailList = feedList;
                                 getMvpView().setFeedEnded(false);
-                                getMvpView().showFeedList(mFeedDetailList);
+                                List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                                getMvpView().showFeedList(feedDetails);
                                 break;
                             case LOAD_MORE_REQUEST:
                                 // append in case of load more
                                 if (!CommonUtil.isEmpty(feedList)) {
-                                    mFeedDetailList.addAll(mFeedDetailList.size() - 1, feedList);
+                                    mFeedDetailList.addAll( feedList);
                                     getMvpView().addAllFeed(feedList);
                                 }else {
                                     getMvpView().setFeedEnded(true);
