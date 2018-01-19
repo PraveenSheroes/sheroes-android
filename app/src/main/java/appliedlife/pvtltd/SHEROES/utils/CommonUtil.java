@@ -358,6 +358,16 @@ public class CommonUtil {
         return false;
     }
 
+    public static boolean isBranchLink(Uri url) {
+        if (url==null || url.getScheme() == null) {
+            return false;
+        }
+        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")))) {
+            return true;
+        }
+        return false;
+    }
+
     public static boolean isValidEmail(CharSequence target) {
         if (TextUtils.isEmpty(target)) {
             return false;
