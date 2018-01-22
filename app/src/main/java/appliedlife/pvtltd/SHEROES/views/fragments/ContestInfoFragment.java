@@ -166,7 +166,7 @@ public class ContestInfoFragment extends BaseFragment {
         if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
             Glide.with(this)
                     .load(mContest.authorImageUrl)
-                    .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(getActivity()))
+                    .bitmapTransform(new CommonUtil.CircleTransform(getActivity()))
                     .into(mAuthorPic);
         }
         mAuthorName.setText(mContest.authorName);

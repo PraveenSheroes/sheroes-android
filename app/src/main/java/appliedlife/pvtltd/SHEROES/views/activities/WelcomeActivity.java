@@ -564,13 +564,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public boolean shouldTrackScreen() {
-        if(isFirstTimeUser)
-        {
-            return true;
-        }else
-        {
-            return false;
-        }
+        return isFirstTimeUser;
     }
 
 

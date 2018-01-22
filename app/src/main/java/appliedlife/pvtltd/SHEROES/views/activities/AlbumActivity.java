@@ -30,16 +30,23 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Album;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.AlbumPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumCarouselAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumGalleryAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
@@ -123,7 +130,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             showAlbum(mAlbum);
         } /*else if (CommonUtil.isNotEmpty(mAlbumId)) {
             mAlbumPresenter.fetchAlbum(mAlbumId);
-        } */else {
+        } */ else {
             return;
         }
     }
@@ -220,9 +227,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             }*/
             onBackPressed();
         } else if (id == R.id.share) {
-            if(CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)){
+            if (CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)) {
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
-                ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
+                CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
+              //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
             }
         }
         return true;
@@ -234,7 +242,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         mAlbumCarouselAdapter = new AlbumCarouselAdapter(this, mAlbum.photos, new View.OnClickListener() {
             @Override
             public void onClick(View imageItem) {
-                View recyclerViewItem = (View) imageItem;
+                View recyclerViewItem = imageItem;
                 int position = mImageListView.getChildAdapterPosition(recyclerViewItem);
                 mViewPager.setCurrentItem(position);
                 mAlbumCarouselAdapter.setSelectedPosition(position);
@@ -264,7 +272,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         album.deepLinkUrl = feedDetail.getDeepLinkUrl();
         Intent intent = new Intent(fromActivity, AlbumActivity.class);
         Parcelable parcelable = Parcels.wrap(album);
-        intent.putExtra(album.ALBUM_OBJ, parcelable);
+        intent.putExtra(Album.ALBUM_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(MAIN_ITEM_POSITION, feedDetail.getItemPosition());
         if (!CommonUtil.isEmpty(properties)) {
@@ -298,10 +306,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         }
         mMainImageUrl = mAlbum.photos.get(0).url;
         mAlbum = album;
-        if(mAlbum.photos.size() < 2){
+        if (mAlbum.photos.size() < 2) {
             getSupportActionBar().setTitle("");
             mImageListView.setVisibility(View.GONE);
-        }else {
+        } else {
             mImageListView.setVisibility(View.VISIBLE);
             getSupportActionBar().setTitle(getString(R.string.album_title, mMainItemPosition + 1, mAlbum.photos.size()));
         }

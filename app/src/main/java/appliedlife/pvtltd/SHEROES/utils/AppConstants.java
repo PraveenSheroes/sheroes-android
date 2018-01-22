@@ -60,7 +60,7 @@ public class AppConstants {
     public static final String SHARE_MENU_TYPE = "text/plain";
     public static final String AVAILABLE = "Available";
     public static final String FOR_ALL = "All";
-    public static final String FEED_SUB_TYPE = "F";
+    public static final String FEED_SUB_TYPE = "A";
     public static final String SEARCH_SUB_TYPE = "S";
     public static final String ALL_DATA_SUB_TYPE = "T";
     public static final String USER_SUB_TYPE = "U";
@@ -180,7 +180,6 @@ public class AppConstants {
     public static final String SKILL_LIST_ID = "skill_list_id";
     public static final String MEMBER = "Member_detail";
     public static final String MEMBER_FRAGMENT = "MemberFragment";
-    public static final String PANDING_MEMBER_FRAGMENT = "PandingMemberFragment";
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
     public static final String MARK_AS_SPAM = "Reported as spam";

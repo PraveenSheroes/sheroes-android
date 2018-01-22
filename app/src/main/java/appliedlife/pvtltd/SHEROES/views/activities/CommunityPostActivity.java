@@ -83,7 +83,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
@@ -663,11 +662,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public boolean isPostModified() {
-        if (!mOldText.equals(mEtDefaultHintText.getText().toString()) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !mOldText.equals(mEtDefaultHintText.getText().toString()) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList);
     }
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
@@ -873,13 +868,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 String authorImage = CommonUtil.getImgKitUri(mUserSummary.getPhotoUrl(), mAuthorPicSize, mAuthorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
+                        .bitmapTransform(new CommonUtil.CircleTransform(this))
                         .into(mUserPicView);
             }
         } else if (mPostAsCommunitySelected) {
             Glide.with(this)
                     .load(mCommunityPost.community.thumbImageUrl)
-                    .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
+                    .bitmapTransform(new CommonUtil.CircleTransform(this))
                     .into(mUserPicView);
         } else {
             mUserPicView.setImageResource(R.drawable.ic_anonomous);

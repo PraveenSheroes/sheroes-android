@@ -90,14 +90,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
@@ -109,7 +106,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.OnBoardingData;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -130,21 +126,17 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobFilterDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.JobLocationSearchDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -246,7 +238,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     MainActivityPresenter activityDataPresenter;
     @Inject
     AppUtils mAppUtils;
-    private JobFilterDialogFragment jobFilterDailogFragment;
+
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
@@ -264,7 +256,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private BellNotificationDialogFragment bellNotificationDialogFragment;
-    private JobLocationSearchDialogFragment jobLocationSearchDialogFragment;
+
     private List<String> mJobLocationList = new ArrayList<>();
     private boolean isSheUser = false;
     private int mSuggestionItemPosition;
@@ -314,8 +306,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")) {
                     communityOnClick();
-                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)) {
-                    openJobFragment();
                 } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
                     renderFAQSView();
                 } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
@@ -355,59 +345,38 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
-                    if (mFragmentOpen.isCommentList()) {
-                        getSupportFragmentManager().popBackStack();
-                    }
                     openArticleFragment(setCategoryIds(), false);
                 }
             }
             if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-                if (mFragmentOpen.isCommentList()) {
-                    getSupportFragmentManager().popBackStack();
-                }
+
                 handleHelpLineFragmentFromDeepLinkAndLoading();
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")) {
-                    if (mFragmentOpen.isCommentList()) {
-                        getSupportFragmentManager().popBackStack();
-                    }
+
                     communityOnClick();
                 }
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-                    if (mFragmentOpen.isCommentList()) {
-                        getSupportFragmentManager().popBackStack();
-                    }
+
                     mentorListActivity();
-                }
-            }
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.JOB_FRAGMENT)) {
-                    if (mFragmentOpen.isCommentList()) {
-                        getSupportFragmentManager().popBackStack();
-                    }
-                    openJobFragment();
                 }
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
-                    if (mFragmentOpen.isCommentList()) {
-                        getSupportFragmentManager().popBackStack();
-                    }
+
                     renderFAQSView();
                 }
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
-                    if (mFragmentOpen.isCommentList()) {
-                        getSupportFragmentManager().popBackStack();
-                    }
+
                     renderICCMemberListView();
                 }
             }
@@ -417,11 +386,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean startedFirstTime() {
         if (null != getIntent() && null != getIntent().getExtras()) {
-            if (getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0;
         } else {
             return true;
         }
@@ -662,62 +627,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @OnClick(R.id.fab_filter)
-    public void openJobFilterActivity() {
+    public void createPostActivity() {
         String fabString = (String) mFloatActionBtn.getTag();
         if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
             CommunityPost communityPost = new CommunityPost();
             communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
             createCommunityPostOnClick(communityPost);
 
-        } else {
-            jobFilterDialog();
         }
 
     }
 
-    private void jobFilterDialog() {
-        jobFilterDailogFragment = (JobFilterDialogFragment) getFragmentManager().findFragmentByTag(JobFilterDialogFragment.class.getName());
-        if (jobFilterDailogFragment == null) {
-            jobFilterDailogFragment = new JobFilterDialogFragment();
-            Bundle bundle = new Bundle();
-            jobFilterDailogFragment.setArguments(bundle);
-        }
-        if (!jobFilterDailogFragment.isVisible() && !jobFilterDailogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            jobFilterDailogFragment.show(getFragmentManager(), JobFilterDialogFragment.class.getName());
-        }
-    }
-
-    public void jobFilterActivityResponse(FeedRequestPojo feedRequestPojo) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((JobFragment) fragment).jobFilterIds(feedRequestPojo);
-            if (null != jobFilterDailogFragment) {
-                jobFilterDailogFragment.dismiss();
-            }
-        }
-    }
-
-    public void searchLocationData(String masterDataSkill, OnBoardingEnum onBoardingEnum) {
-        jobLocationSearchDialogFragment = (JobLocationSearchDialogFragment) getFragmentManager().findFragmentByTag(JobLocationSearchDialogFragment.class.getName());
-        if (jobLocationSearchDialogFragment == null) {
-            jobLocationSearchDialogFragment = new JobLocationSearchDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(AppConstants.MASTER_SKILL, masterDataSkill);
-            jobLocationSearchDialogFragment.setArguments(bundle);
-        }
-        if (!jobLocationSearchDialogFragment.isVisible() && !jobLocationSearchDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            jobLocationSearchDialogFragment.show(getFragmentManager(), JobLocationSearchDialogFragment.class.getName());
-        }
-    }
-
-    public void saveJobLocation() {
-        if (null != jobLocationSearchDialogFragment) {
-            jobLocationSearchDialogFragment.dismiss();
-        }
-        if (null != jobFilterDailogFragment) {
-            jobFilterDailogFragment.locationData(mJobLocationList);
-        }
-    }
 
     public void logOut() {
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
@@ -793,59 +713,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (null != bellNotificationDialogFragment) {
                 bellNotificationDialogFragment.dismiss();
             }
-        } else if (baseResponse instanceof GetAllDataDocument) {
-            GetAllDataDocument getAllDataDocument = (GetAllDataDocument) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(getAllDataDocument.getTitle())) {
-                if (!getAllDataDocument.isChecked()) {
-                    mJobLocationList.add(getAllDataDocument.getTitle());
-                } else {
-                    if (StringUtil.isNotEmptyCollection(mJobLocationList)) {
-                        mJobLocationList.remove(getAllDataDocument.getTitle());
-                    }
-                }
-            }
-        } else if (baseResponse instanceof OnBoardingData) {
-            OnBoardingData onBoardingData = (OnBoardingData) baseResponse;
-            if (null != onBoardingData && StringUtil.isNotNullOrEmptyString(onBoardingData.getFragmentName())) {
-                LabelValue labelValue = (LabelValue) view.getTag();
-                if (onBoardingData.getFragmentName().equalsIgnoreCase(AppConstants.JOB_DATA_OPPORTUNITY_KEY)) {
-                    if (labelValue.isSelected()) {
-                        if (StringUtil.isNotEmptyCollection(mListOfOpportunity)) {
-                            mListOfOpportunity.remove(labelValue.getLabel());
-                        }
-                    } else {
-                        mListOfOpportunity.add(labelValue.getLabel());
-                    }
-                }
-            }
-
         }
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
         ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null, 0, 0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
-    }
-
-    public void openJobFragment() {
-        changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
-        JobFragment jobFragment = new JobFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(JobFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle jobBookMarks = new Bundle();
-        // jobBookMarks.putSerializable(AppConstants.JOB_FRAGMENT, (ArrayList) categoryIds);
-        jobFragment.setArguments(jobBookMarks);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).addToBackStack(JobFragment.class.getName()).commitAllowingStateLoss();
-
-    }
-
-    public void jobUi() {
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.VISIBLE);
-        mTvSearchBox.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
     }
 
     public void resetUiSelectedOptions() {
@@ -983,7 +856,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
                 break;
             default:
-                mFragmentOpen.setOpenCommentReactionFragmentFor(AppConstants.ONE_CONSTANT);
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
@@ -1118,7 +990,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void initHomeViewPagerAndTabs() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
-        mFragmentOpen.setFeedOpen(true);
         mTabLayout.setVisibility(View.GONE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
@@ -1144,15 +1015,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    @OnClick(R.id.tv_search_box)
-    public void searchButtonClick() {
-        Intent intent = new Intent(this, HomeSearchActivity.class);
-        Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(mFragmentOpen);
-        bundle.putParcelable(AppConstants.ALL_SEARCH, parcelable);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
 
     @OnClick(R.id.li_article_spinner_icon)
     public void openSpinnerOnClick() {
@@ -1175,7 +1037,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
-        mFragmentOpen.setFeedOpen(true);
         flFeedFullView.setVisibility(View.VISIBLE);
         mViewPager.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -1196,6 +1057,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
+
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
         mTvHome.setText(getString(R.string.ID_FEED));
@@ -1217,51 +1079,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     }
 
-    public void jobButtonUI() {
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.VISIBLE);
-        mFloatActionBtn.setTag(AppConstants.FEED_JOB);
-        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-        mFloatActionBtn.setImageResource(R.drawable.ic_fab_icon);
-        mTvSearchBox.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_JOBS));
-
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mFragmentOpen.setJobFragment(true);
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-
-        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_selected), null, null);
-        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-        mTvJob.setText(getString(R.string.ID_CARRIER));
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-    }
-
-
-    @OnClick(R.id.tv_job_home)
-    public void jobOnClick() {
-        DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
-        mTabLayout.setVisibility(View.GONE);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.ID_FEED));
-        JobFragment jobFragment = new JobFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
-        }
-        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle bundle = new Bundle();
-        jobFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, jobFragment, JobFragment.class.getName()).commitAllowingStateLoss();
-        mJobLocationList.clear();
-        mListOfOpportunity.clear();
-    }
 
     @OnClick(R.id.tv_communities)
     public void communityOnClick() {
@@ -1283,6 +1100,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void communityButton() {
         mFragmentOpen.setCommunityOpen(true);
+
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
@@ -1394,44 +1212,26 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 getFragmentManager().popBackStack();
             }
         } else {
-            if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen() || mFragmentOpen.isJobFragment()) {
-                if (mFragmentOpen.isCommentList()) {
-                    mFragmentOpen.setCommentList(false);
+            if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()) {
+                if (doubleBackToExitPressedOnce) {
                     getSupportFragmentManager().popBackStackImmediate();
-                    if (mFragmentOpen.isBookmarkFragment()) {
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((BookmarksFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
-                        }
-                    } else {
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, COMMENT_REACTION);
-                        }
-                    }
-                } else if (mFragmentOpen.isReactionList()) {
-                    mFragmentOpen.setReactionList(false);
-                    getSupportFragmentManager().popBackStackImmediate();
-                } else {
-                    if (doubleBackToExitPressedOnce) {
-                        getSupportFragmentManager().popBackStackImmediate();
-                        finish();
-                        return;
-                    }
-                    doubleBackToExitPressedOnce = true;
-                    if (flFeedFullView.getVisibility() == View.VISIBLE) {
-                        Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-
-                    } else {
-                        homeOnClick();
-                    }
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, 2000);
+                    finish();
+                    return;
                 }
+                doubleBackToExitPressedOnce = true;
+                if (flFeedFullView.getVisibility() == View.VISIBLE) {
+                    Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+
+                } else {
+                    homeOnClick();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+
             } else {
                 super.onBackPressed();
             }
@@ -1537,9 +1337,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         }
                     }
                     break;
-                case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
-                    jobDetailActivityResponse(intent);
-                    break;
+
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
                     createCommunityActivityResponse(intent);
                     break;
@@ -1551,7 +1349,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     break;
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != intent.getExtras()) {
-                        UserSolrObj userSolrObj = (UserSolrObj) Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if (null != userSolrObj) {
                             Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                             if (AppUtils.isFragmentUIActive(fragmentMentor)) {
@@ -1617,7 +1415,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void editCommunityPostResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
+            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
             if (null != mFeedDetail) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                 if (AppUtils.isFragmentUIActive(fragment)) {
@@ -1635,7 +1433,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void createCommunityActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
+            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
             //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
             if (AppUtils.isFragmentUIActive(community)) {
@@ -1650,19 +1448,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void articleDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
-            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.HOME_FRAGMENT);
-            if (mFragmentOpen.isArticleFragment()) {
-                Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentArticle)) {
-                    ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
-            } else {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
+            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
+            Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragmentArticle)) {
+                ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+            }
+
         }
     }
 
@@ -1674,24 +1469,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 ArrayList<String> result = intent
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 ((HelplineFragment) fragment).getSpeechText(result.get(0));
-            }
-        }
-    }
-
-    private void jobDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = (FeedDetail) Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
-            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.JOB_FRAGMENT);
-            if (mFragmentOpen.isJobFragment()) {
-                Fragment fragmentJob = getSupportFragmentManager().findFragmentByTag(JobFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentJob)) {
-                    ((JobFragment) fragmentJob).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
-            } else {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                }
             }
         }
     }

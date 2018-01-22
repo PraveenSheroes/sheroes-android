@@ -57,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -192,8 +191,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileActvity) getActivity());
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
-            } else {
-                mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
             }
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
@@ -282,13 +279,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     public void communityPostClick() {
         if (null!= mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                FeedDetail feedDetail = (FeedDetail) mCommunityFeedObj;
+                FeedDetail feedDetail = mCommunityFeedObj;
                 feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
                 ((MentorUserProfileActvity) getActivity()).createCommunityPostClick(feedDetail);
-        } else {
-            FeedDetail feedDetail = mCommunityFeedObj;
-            feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
-            ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
         }
     }
 
@@ -313,7 +306,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @OnClick(R.id.tv_join_view)
     public void joinClick() {
         String joinTxt = mTvJoinView.getText().toString();
-        ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mCommunityFeedObj);
     }
 
     public void updateUiAccordingToFeedDetail(FeedDetail feedDetail) {
@@ -336,8 +328,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         break;
                     case FEATURE_COMMUNITY:
                         if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                        } else {
-                            ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                         }
                         mScreenName = AppConstants.FEATURE_FRAGMENT;
                         if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
@@ -352,10 +342,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         break;
                     case MY_COMMUNITY:
                         if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                        } else {
-                            ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
                         }
-
                         mTvJoinView.setVisibility(View.GONE);
                         mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
                         mTvJoinView.setTag(false);
@@ -418,7 +405,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mCommunityFeedObj = (CommunityFeedSolrObj)feedDetailList.get(0);
                     mCommunityFeedObj.setItemPosition(positionOfFeedDetail);
                     mProgressBar.setVisibility(View.VISIBLE);
-                    ((CommunitiesDetailActivity) getActivity()).initializeUiContent(mCommunityFeedObj);
                     updateUiAccordingToFeedDetail(mCommunityFeedObj);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.EMPTY_STRING);
                 } else {

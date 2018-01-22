@@ -46,7 +46,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerVi
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().getNavigationDrawerItemsFailed();
             return;
-        };
+        }
 
         Subscription subscription = getNavigationDrawerItemsResponseInModel(navigationDrawerRequest).subscribe(new Subscriber<NavigationItems>() {
             @Override

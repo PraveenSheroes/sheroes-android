@@ -1,9 +1,3 @@
 <resources>
 
-    <style name="AlertDialogPositivCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:buttonBarPositiveButtonStyle">@style/positive</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/positive</item>
-        <item name="android:paddingTop">@dimen/dp_size_5</item>
-        <item name="android:paddingBottom">@dimen/dp_size_5</item>
-    </style>
 </resources>

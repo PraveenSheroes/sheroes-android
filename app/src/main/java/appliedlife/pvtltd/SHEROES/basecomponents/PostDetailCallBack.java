@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
  */
 
 public interface PostDetailCallBack {
-    public void loadMoreComments();
+    void loadMoreComments();
 
     void onPostImageClicked(UserPostSolrObj userPostObj);
 

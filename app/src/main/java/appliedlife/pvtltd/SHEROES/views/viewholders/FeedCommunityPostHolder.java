@@ -288,18 +288,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         allTextViewStringOperations(mContext);
         likeCommentOps();
         if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
-            tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+           // tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
-                tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-                tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
+              //  tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+               // tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
             } else {
-                tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
-                tvFeedCommunityPostUserBookmark.setVisibility(View.GONE);
+               // tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+               // tvFeedCommunityPostUserBookmark.setVisibility(View.GONE);
                 if (mUserPostObj.communityId == 0) {
-                    tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+                   // tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
                 } else {
-                    tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
+                    tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
+                   // tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
                 }
                 if (mUserPostObj.communityId == AppConstants.ASKED_QUESTION_TO_MENTOR) {
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
@@ -308,8 +309,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
         } else {
-            tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
-            tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
+           // tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
+           // tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
         }
 
     }
