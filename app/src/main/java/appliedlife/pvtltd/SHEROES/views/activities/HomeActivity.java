@@ -438,52 +438,52 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Branch branch = Branch.getInstance(getApplicationContext());
         JSONObject sessionParams = branch.getFirstReferringParams();
         try {
-            // JSONObject firstSession=branch.getLatestReferringParams();
-            // if(firstSession.length()>0&&branch.getLatestReferringParams().get("+is_first_session")==true||branch.getLatestReferringParams().get("+clicked_branch_link")==true) {
-            if (sessionParams.length() > 0) {
-                String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
-                String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
-                if (StringUtil.isNotNullOrEmptyString(url)) {
-                    if (openWebViewFlag.equalsIgnoreCase("true")) {
-                        Uri urlWebSite = Uri.parse(url);
-                        AppUtils.openChromeTabForce(this, urlWebSite);
-                        return;
-                    }
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
-                        // Do not let others grab our call
-                        intent.setPackage(SheroesApplication.mContext.getPackageName());
-                    } else {
-                        startActivity(intent);
-                        return;
-                    }
-                    Iterator<String> iterator = sessionParams.keys();
-                    while (iterator.hasNext()) {
-                        String key = iterator.next();
-                        try {
-                            Object value = sessionParams.get(key);
-                            if (value instanceof String) {
-                                intent.putExtra(key, (String) value);
-                            }
-                            if (value instanceof Boolean) {
-                                intent.putExtra(key, (boolean) value);
-                            }
-                            if (value instanceof Integer) {
-                                intent.putExtra(key, (int) value);
-                            }
-                        } catch (JSONException e) {
+           // JSONObject firstSession = branch.getLatestReferringParams();
+         //   if (firstSession.length() > 0 && (Boolean)branch.getLatestReferringParams().get("+is_first_session")|| (Boolean)branch.getLatestReferringParams().get("+clicked_branch_link")) {
+                if (sessionParams.length() > 0) {
+                    String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
+                    String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
+                    if (StringUtil.isNotNullOrEmptyString(url)) {
+                        if (openWebViewFlag.equalsIgnoreCase("true")) {
+                            Uri urlWebSite = Uri.parse(url);
+                            AppUtils.openChromeTabForce(this, urlWebSite);
+                            return;
                         }
-                    }
-                    if (isIntentAvailable(this, intent)) {
-                        intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
-                        if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
-                            intent.setClass(this, SheroesDeepLinkingActivity.class);
+                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
+                            // Do not let others grab our call
+                            intent.setPackage(SheroesApplication.mContext.getPackageName());
+                        } else {
+                            startActivity(intent);
+                            return;
                         }
-                        startActivity(intent);
+                        Iterator<String> iterator = sessionParams.keys();
+                        while (iterator.hasNext()) {
+                            String key = iterator.next();
+                            try {
+                                Object value = sessionParams.get(key);
+                                if (value instanceof String) {
+                                    intent.putExtra(key, (String) value);
+                                }
+                                if (value instanceof Boolean) {
+                                    intent.putExtra(key, (boolean) value);
+                                }
+                                if (value instanceof Integer) {
+                                    intent.putExtra(key, (int) value);
+                                }
+                            } catch (JSONException e) {
+                            }
+                        }
+                        if (isIntentAvailable(this, intent)) {
+                            intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
+                            if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
+                                intent.setClass(this, SheroesDeepLinkingActivity.class);
+                            }
+                            startActivity(intent);
+                        }
                     }
                 }
-            }
-            //  }
+           // }
         } catch (JSONException e) {
             Crashlytics.getInstance().core.logException(e);
         }

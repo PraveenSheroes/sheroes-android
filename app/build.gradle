@@ -1,7 +1,7 @@
 def versionMajor = 5
 def versionMinor = 8
 def versionPatch = 2
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionBuild = 2 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'

@@ -6,7 +6,7 @@ import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class LogUtils {
-    public static final boolean ENABLE_LOG = BuildConfig.DEBUG;
+    public static final boolean ENABLE_LOG =BuildConfig.DEBUG;
     private static final String LOG_PREFIX = "sheroes_";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
     private static final int MAX_LOG_TAG_LENGTH = 23;
