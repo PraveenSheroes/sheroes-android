@@ -359,9 +359,17 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 }
                 break;
             case R.id.share:
+                String deepLinkUrl;
+                if(StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls()))
+                {
+                    deepLinkUrl=mCommunityFeedSolrObj.getPostShortBranchUrls();
+                }else
+                {
+                    deepLinkUrl=mCommunityFeedSolrObj.getDeepLinkUrl();
+                }
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, mCommunityFeedSolrObj.getDeepLinkUrl());
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
@@ -385,7 +393,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private void setupTabLayout() {
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
