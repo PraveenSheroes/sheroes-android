@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
+
 
 /**
  * Created by priyanka on 24/04/17.

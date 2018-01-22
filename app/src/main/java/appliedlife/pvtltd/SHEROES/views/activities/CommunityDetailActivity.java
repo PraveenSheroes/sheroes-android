@@ -238,8 +238,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             DrawableCompat.setTint(drawable.mutate(), Color.parseColor(mCommunityTitleTextColor));
             mToolbar.setOverflowIcon(drawable);
         }
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
@@ -267,7 +268,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != data.getExtras()) {
-                        UserSolrObj userSolrObj = (UserSolrObj) Parcels.unwrap(data.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        UserSolrObj userSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if (null != userSolrObj) {
                             Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                             if (AppUtils.isFragmentUIActive(fragmentMentor)) {
@@ -280,7 +281,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
                     if (null != data && null != data.getExtras()) {
                         JobFeedSolrObj jobFeedSolrObj = null;
-                        jobFeedSolrObj = (JobFeedSolrObj) Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+                        jobFeedSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
                         invalidateItem(jobFeedSolrObj);
                     }
                     break;
@@ -295,7 +296,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     Parcelable parcelableArticlePost = data.getParcelableExtra(AppConstants.HOME_FRAGMENT);
                     ArticleSolrObj articleSolrObj = null;
                     if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
-                        articleSolrObj = (ArticleSolrObj) Parcels.unwrap(parcelableArticlePost);
+                        articleSolrObj = Parcels.unwrap(parcelableArticlePost);
                     }
                     if (articleSolrObj != null) {
                         invalidateItem(articleSolrObj);
@@ -358,9 +359,17 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 }
                 break;
             case R.id.share:
+                String deepLinkUrl;
+                if(StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls()))
+                {
+                    deepLinkUrl=mCommunityFeedSolrObj.getPostShortBranchUrls();
+                }else
+                {
+                    deepLinkUrl=mCommunityFeedSolrObj.getDeepLinkUrl();
+                }
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, mCommunityFeedSolrObj.getDeepLinkUrl());
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
@@ -384,7 +393,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private void setupTabLayout() {
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
@@ -698,14 +707,17 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @OnClick({R.id.bottom_bar, R.id.btn_bottom_bar})
     public void onJoinClicked() {
+        if (mCommunityFeedSolrObj == null) {
+            return;
+        }
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
             showCommunityJoinReason(mCommunityFeedSolrObj);
-            ((SheroesApplication) ((BaseActivity) this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
+            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
         } else {
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
-                userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+                userIdList.add(userPreference.get().getUserSummary().getUserId());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                 mCommunityDetailPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));

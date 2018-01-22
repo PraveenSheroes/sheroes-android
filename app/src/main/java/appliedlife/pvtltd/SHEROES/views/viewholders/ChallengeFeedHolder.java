@@ -30,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -173,7 +172,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
             Glide.with(mContext)
                     .load(mContest.authorImageUrl)
-                    .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
+                    .bitmapTransform(new CommonUtil.CircleTransform(mContext))
                     .into(mAuthorImage);
         }
         mAuthorName.setText(mContest.authorName);

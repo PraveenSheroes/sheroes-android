@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +14,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,9 +70,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
@@ -145,10 +149,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         }
         mScreenProperties = new EventProperty.Builder()
-                        .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
+                .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                .sourceTabKey(mCommunityTab.key)
+                .sourceTabTitle(mCommunityTab.title)
+                .build();
         // Initialize recycler view
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
@@ -211,9 +215,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
             if(CommonUtil.isNotEmpty(mCommunityTab.emptyImageUrl)){
                 emptyImage.setVisibility(View.VISIBLE);
-                Glide.with(this)
-                        .load(mCommunityTab.emptyImageUrl)
-                        .into(emptyImage);
+                if(getActivity()!=null){
+                    Glide.with(getActivity())
+                            .load(mCommunityTab.emptyImageUrl)
+                            .into(emptyImage);
+                }
             }else {
                 emptyImage.setVisibility(View.GONE);
             }
@@ -283,8 +289,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-        onChampionProfileClicked((UserPostSolrObj)baseResponse, mValue);
+    public void championProfile(BaseResponse baseResponse, int championValue) {
+        onChampionProfileClicked((UserPostSolrObj)baseResponse,championValue);
     }
 
     @Override
@@ -311,10 +317,20 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostShared(FeedDetail feedDetail) {
+        String deepLinkUrl;
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
+        {
+            deepLinkUrl=feedDetail.getPostShortBranchUrls();
+        }else
+        {
+            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, feedDetail.getDeepLinkUrl());
-        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        intent.setPackage(AppConstants.WHATS_APP);
+        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        startActivity(intent);
+        // startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
@@ -328,6 +344,22 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
         }
         AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
+    }
+    private void shareCardDetail(UserPostSolrObj userPostObj)
+    {
+        String deepLinkUrl;
+        if(StringUtil.isNotNullOrEmptyString(userPostObj.getPostShortBranchUrls()))
+        {
+            deepLinkUrl=userPostObj.getPostShortBranchUrls();
+        }else
+        {
+            deepLinkUrl=userPostObj.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, userPostObj, getScreenName());
     }
 
     @Override
@@ -357,7 +389,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            Menu menu=popup.getMenu();
+            menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+            menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            menu.add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
+
             if (currentUserId!=userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
@@ -376,12 +414,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
+                        case R.id.share:
+                            shareCardDetail(userPostObj);
+                            return true;
                         case R.id.edit:
                             CommunityPostActivity.navigateTo(getActivity(), userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, mPrimaryColor, mTitleTextColor, mScreenProperties);
                             return true;
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
-                            mFeedPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
+                            mFeedPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
@@ -395,17 +436,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         popup.show();
     }
-
+    private CharSequence menuIconWithText(Drawable r, String title) {
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
+    }
     @Override
     public boolean shouldTrackScreen() {
         return false;
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
-        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
-        } else if (userPostSolrObj.isAnonymous()) {
+        if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
+        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+            return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
         }
@@ -480,18 +527,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
-        long userId = userPostObj.getCreatedBy();
-        int position = userPostObj.getItemPosition();
-        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
-        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        communityFeedSolrObj.setItemPosition(position);
-        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, userPostObj.isAuthorMentor(),position, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-
-    }
-
-    @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             if (null != userPostObj) {
@@ -538,10 +573,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onJobPostClicked(JobFeedSolrObj jobFeedObj) {
-        Intent intentJob = new Intent(getActivity(), JobDetailActivity.class);
-        Parcelable parcelable = Parcels.wrap(jobFeedObj);
-        intentJob.putExtra(AppConstants.JOB_DETAIL, parcelable);
-        getActivity().startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
     }
 
     @Override
@@ -639,9 +670,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
 
-        if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
+        else if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
             ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
+    }
+
+    @Override
+    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
+        long userId = userPostObj.getCreatedBy();
+        int position = userPostObj.getItemPosition();
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, userPostObj.isAuthorMentor(),position, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+
     }
 
     @Override
@@ -673,6 +716,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         mSwipeRefresh.setRefreshing(false);
         mAdapter.feedFinishedLoading();
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        onChampionProfileClicked((UserPostSolrObj)baseResponse, mValue);
     }
 
     private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {

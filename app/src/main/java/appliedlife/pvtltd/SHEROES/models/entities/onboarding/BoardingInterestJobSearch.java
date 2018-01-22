@@ -7,13 +7,12 @@ import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.LatLongWithLocation;
 
 /**
  * Created by Praveen_Singh on 26-03-2017.
  */
 @Parcel(analyze = {BoardingInterestJobSearch.class, BaseResponse.class})
-public class BoardingInterestJobSearch  extends BaseResponse{
+public class BoardingInterestJobSearch extends BaseResponse {
     OnBoardingEnum onBoardingEnum;
     @SerializedName("id")
     @Expose

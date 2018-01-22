@@ -27,7 +27,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
  * @since 29/12/2016.
  * Title: Base Dialog class handling fadein and fadeout animations
  */
-public class BaseDialogFragment extends DialogFragment implements BaseMvpView,HomeView {
+public class BaseDialogFragment extends DialogFragment implements BaseMvpView, HomeView {
     private final String TAG = LogUtils.makeLogTag(BaseDialogFragment.class);
     public static final String DISMISS_PARENT_ON_OK_OR_BACK = "DISMISS_PARENT_ON_OK_OR_BACK";
     public static final String IS_CANCELABLE = "is_cancelable";
@@ -51,10 +51,12 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
         manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
     }
 
+
     @Override
     public void dismiss() {
         this.dismissAllowingStateLoss();
     }
+
 
     @Override
     public void startProgressBar() {
@@ -70,6 +72,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
     public void startNextScreen() {
 
     }
+
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
@@ -99,6 +102,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView,Ho
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
+
 
     @Override
     public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {

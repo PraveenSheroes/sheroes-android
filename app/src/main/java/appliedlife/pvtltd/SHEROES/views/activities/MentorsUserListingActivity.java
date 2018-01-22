@@ -178,7 +178,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             switch (requestCode) {
                     case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                         if (null != intent.getExtras()) {
-                            UserSolrObj  userSolrObj = (UserSolrObj) Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                            UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                             mAdapter.setMentoreDataOnPosition(userSolrObj,userSolrObj.currentItemPosition);
                             mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
                         }

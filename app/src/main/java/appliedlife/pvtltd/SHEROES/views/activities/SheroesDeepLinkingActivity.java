@@ -194,29 +194,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         } else {
                             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HELP_LINE, AppConstants.EMPTY_STRING);
                         }
-                    } else if (AppConstants.JOBS_SEARCH_URL.equalsIgnoreCase(urlOfSharedCard) || AppConstants.JOBS_SEARCH_URL_COM.equalsIgnoreCase(urlOfSharedCard)) {
-                        try {
-                            Intent intent = new Intent(this, HomeSearchActivity.class);
-                            Bundle bundle = new Bundle();
-                            FragmentOpen fragmentOpen = new FragmentOpen();
-                            fragmentOpen.setJobFragment(true);
-                            Parcelable parcelable = Parcels.wrap(fragmentOpen);
-                            bundle.putParcelable(AppConstants.ALL_SEARCH, parcelable);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            finish();
-                            if (mFromNotification > 0) {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_JOB, AppConstants.EMPTY_STRING);
-
-                            } else {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_JOB, AppConstants.EMPTY_STRING);
-                            }
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
-                            homeActivityCall("");
-                        }
-
-
                     } else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/")) {
                         homeActivityCall(ArticlesFragment.SCREEN_LABEL);
                     } else if (urlOfSharedCard.equals(AppConstants.JOB_URL) || urlOfSharedCard.equals(AppConstants.JOB_URL_COM) || urlOfSharedCard.equals(AppConstants.JOB_URL + "/") || urlOfSharedCard.equals(AppConstants.JOB_URL_COM + "/")) {
@@ -291,38 +268,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
             }
-        } else if (AppConstants.JOB_URL.equalsIgnoreCase(baseUrl) || AppConstants.JOB_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.JOB_URL.length() < fullLength) {
-            try {
-                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
-                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
-                byte[] id1 = Base64.decode(id, Base64.DEFAULT);
-                dataIdString = new String(id1, AppConstants.UTF_8);
-                Intent jobDetail = new Intent(SheroesDeepLinkingActivity.this, JobDetailActivity.class);
-                jobDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
-                if (!id.equalsIgnoreCase("jobs"))
-                    jobDetail.putExtra(AppConstants.JOB_ID, Long.parseLong(dataIdString));
-                //  jobDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                jobDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                startActivity(jobDetail);
-                finish();
-                if (mFromNotification > 0) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_JOB, AppConstants.EMPTY_STRING);
-
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_JOB, AppConstants.EMPTY_STRING);
-                }
-            } catch (Exception e) {
-                Crashlytics.getInstance().core.logException(e);
-                homeActivityCall("");
-            }
-
-
         }
-        /*
-        "solr_ignore_deep_link_url": "https://sheroes.in/communities/test/Mjcz/MTE0NjI=",
-
-        "solr_ignore_deep_link_url": "https://sheroes.in/communities/sheroes-community/NTc0"
-        * */
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             try {

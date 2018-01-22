@@ -42,7 +42,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
 
 public class BellNotificationDialogFragment extends BaseDialogFragment implements HomeView {
     private static final String SCREEN_LABEL = "Notification Screen";
-    private FragmentListRefreshData mFragmentListRefreshData;
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_bell_notification_list)

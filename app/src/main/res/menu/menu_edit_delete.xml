@@ -2,14 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_share_black"
+        android:title="@string/ID_SHARE" />
+    <item
         android:id="@+id/edit"
-        android:title="@string/ID_EDIT"/>
+        android:icon="@drawable/ic_create"
+
+        android:title="@string/ID_EDIT" />
 
     <item
         android:id="@+id/delete"
-        android:title="@string/delete"/>
+        android:icon="@drawable/ic_delete"
+
+        android:title="@string/delete" />
 
     <item
         android:id="@+id/top_post"
-        android:title="@string/FEATURE_POST"/>
+        android:title="@string/FEATURE_POST" />
+
+
 </menu>

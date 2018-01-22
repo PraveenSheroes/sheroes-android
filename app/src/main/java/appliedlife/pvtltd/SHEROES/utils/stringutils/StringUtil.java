@@ -34,10 +34,7 @@ public class StringUtil {
         if (str == null) {
             return false;
         }
-        if (str.trim().length() == 0) {
-            return false;
-        }
-        return true;
+        return str.trim().length() != 0;
     }
 
     /**
@@ -161,11 +158,7 @@ public class StringUtil {
             return false;
         }
         // Both are not null, compare the lowercase strings
-        if (string1.toLowerCase().equals(string2.toLowerCase())) {
-            return true;
-        } else {
-            return false;
-        }
+        return string1.toLowerCase().equals(string2.toLowerCase());
     }
 
     /**
@@ -253,11 +246,7 @@ public class StringUtil {
         if ((string == null) || string.equals("")) {
             return false;
         } else {
-            if (StringUtil.equalsIgnoreCase(string, "true")) {
-                return true;
-            } else {
-                return false;
-            }
+            return StringUtil.equalsIgnoreCase(string, "true");
         }
     }
 
@@ -323,11 +312,7 @@ public class StringUtil {
         final String protocol = StringUtil.getProtocolFromUrl(url);
         if (protocol == null) {
             return false;
-        } else if (protocol.equals("http") || protocol.equals("https")) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return protocol.equals("http") || protocol.equals("https");
     }
 
     /**
@@ -561,7 +546,7 @@ public class StringUtil {
         if (pIntegerValue == null) {
             return false;
         } else {
-            return pIntegerValue.equals("1") ? true : false;
+            return pIntegerValue.equals("1");
         }
 
     }

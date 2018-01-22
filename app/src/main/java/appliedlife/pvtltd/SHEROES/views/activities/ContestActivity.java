@@ -134,7 +134,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         setAllValues(mFragmentOpen);*/
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
-            mContest = (Contest) Parcels.unwrap(parcelable);
+            mContest = Parcels.unwrap(parcelable);
             populateContest(mContest);
         } else {
             if (getIntent().getExtras() != null) {
@@ -512,7 +512,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             feedRelatedOptions(view, baseResponse);
         }
         if (baseResponse instanceof Comment) {
-           // setAllValues(mFragmentOpen);
+            // setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }

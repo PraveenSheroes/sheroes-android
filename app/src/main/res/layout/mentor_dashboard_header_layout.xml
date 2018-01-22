@@ -218,6 +218,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_mentor_profession"
             android:drawablePadding="@dimen/dp_size_6"
+            android:visibility="gone"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/mentor_profession"
             android:textSize="@dimen/sp_size_14" />

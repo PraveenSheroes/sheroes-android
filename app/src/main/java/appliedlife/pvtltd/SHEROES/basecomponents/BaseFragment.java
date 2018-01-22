@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,16 +40,8 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.DeactivateOwnerResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.Doc;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetTagData;
-import appliedlife.pvtltd.SHEROES.models.entities.community.OwnerListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -65,13 +56,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRespons
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileEditVisitingCardResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.WorkExpListResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -79,7 +65,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.CommunityView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
@@ -102,7 +87,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, CommunityView, HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, HelplineView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -127,11 +112,13 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
     @Inject
     Preference<LoginResponse> userPreference;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
+
     public void setFragmentData(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
     }
@@ -159,19 +146,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mProgressBar = mProgressBar;
     }
 
-    public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, int mPosition, int mPressedEmoji, boolean mListLoad, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mFeedDetail = mFeedDetail;
-        this.mRecyclerView = mRecyclerView;
-        this.mPosition = mPosition;
-        this.mPressedEmoji = mPressedEmoji;
-        this.mListLoad = mListLoad;
-        this.mHomePresenter = mHomePresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
 
     public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
@@ -184,15 +158,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
 
-    public void setCommentReaction(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, FeedDetail mFeedDetail, RecyclerView mRecyclerView, CommentReactionPresenter commentReactionPresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mFeedDetail = mFeedDetail;
-        this.mRecyclerView = mRecyclerView;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
     }
@@ -205,24 +170,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mPullRefreshList = mPullRefreshList;
     }
 
-    public void callFragment(int layout, Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(layout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    public void setInitializationForProfile(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mRecyclerView = mRecyclerView;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
-
-    public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView,AppUtils mAppUtils,ProgressBar mProgressBar){
+    public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
         this.mFragmentListRefreshData = mFragmentListRefreshData;
         this.mAdapter = mAdapter;
         this.mLayoutManager = mLayoutManager;
@@ -270,7 +218,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != feedDetail) {
             mAdapter.addDataOnPosition(feedDetail, 0);
             mAdapter.notifyDataSetChanged();
-            mRecyclerView.smoothScrollBy(0,0);
+            mRecyclerView.smoothScrollBy(0, 0);
         }
     }
 
@@ -333,11 +281,11 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void joinInviteResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (((CommunityFeedSolrObj)mFeedDetail).isClosedCommunity()) {
-                    ((CommunityFeedSolrObj)mFeedDetail).setRequestPending(true);
+                if (((CommunityFeedSolrObj) mFeedDetail).isClosedCommunity()) {
+                    ((CommunityFeedSolrObj) mFeedDetail).setRequestPending(true);
 
                 } else {
-                    ((CommunityFeedSolrObj)mFeedDetail).setMember(true);
+                    ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
@@ -405,12 +353,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (null != mFeedDetail) {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
-                    if (mFragmentOpen.isBookmarkFragment()) {
-                        mAdapter.removeDataOnPosition(mFeedDetail, mFeedDetail.getItemPosition());
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    }
+                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
@@ -449,10 +392,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     PayloadBuilder payloadBuilder = new PayloadBuilder();
                     MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
                     moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
-                    if(mFeedDetail instanceof OrganizationFeedObj){
+                    if (mFeedDetail instanceof OrganizationFeedObj) {
                         AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail, getScreenName());
-                    }
-                    else {
+                    } else {
                         AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail, getScreenName());
                     }
                     break;
@@ -486,7 +428,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void deleteCommunityPost(FeedDetail feedDetail) {
         mListLoad = false;
         mFeedDetail = feedDetail;
-        mHomePresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(feedDetail.getIdOfEntityOrParticipant()));
+        mHomePresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(feedDetail.getIdOfEntityOrParticipant()));
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {
@@ -528,7 +470,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void invalidateLikeUnlike(Comment comment) {
 
     }
-
 
 
     @Override
@@ -609,7 +550,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 handled = true;
             }
         }
-        if(!handled){
+        if (!handled) {
             super.startActivity(intent);
         }
     }
@@ -676,42 +617,12 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
-            userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+            userIdList.add(userPreference.get().getUserSummary().getUserId());
             setFeedDetail(feedDetail);
-            mHomePresenter.communityJoinFromPresenter(mAppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+            mHomePresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
     }
 
-    @Override
-    public void getSelectedCommunityListSuccess(List<CommunityPostResponse> selected_community_response) {
-
-    }
-
-    @Override
-    public void getOwnerListSuccess(OwnerListResponse ownerListResponse) {
-
-    }
-
-    @Override
-    public void createCommunitySuccess(BaseResponse baseResponse) {
-
-    }
-
-
-    @Override
-    public void getOwnerListDeactivateSuccess(DeactivateOwnerResponse deactivateOwnerResponse) {
-
-    }
-
-    @Override
-    public void postCreateCommunityOwner(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-
-    }
-
-    @Override
-    public void getSuccessForAllResponse(BaseResponse baseResponse, CommunityEnum communityEnum) {
-
-    }
 
     @Override
     public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
@@ -724,7 +635,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
     @Override
-    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse){
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
 
     }
 }

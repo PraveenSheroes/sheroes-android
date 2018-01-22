@@ -2,19 +2,17 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
 import android.app.Activity;
 import android.support.design.widget.FloatingActionButton;
-import android.text.Layout;
-import android.view.Gravity;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -33,22 +31,28 @@ public class ShowcaseManager {
     private TextView tvHome;
     private TextView tvCommunities;
     private TextView tvDrawerNavigation;
-
+    private RecyclerView recyclerView;
     public ShowcaseManager(Activity activity) {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities,TextView tvDrawerNavigation) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation,RecyclerView recyclerView) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;
         this.tvCommunities = tvCommunities;
         this.tvDrawerNavigation=tvDrawerNavigation;
+        this.recyclerView=recyclerView;
         tvDrawerNavigation.setEnabled(false);
         floatActionBtn.setEnabled(false);
         tvHome.setEnabled(false);
         tvCommunities.setEnabled(false);
-
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
     }
 
     //region showcase First in MainActivity
@@ -122,6 +126,12 @@ public class ShowcaseManager {
                                 tvHome.setEnabled(true);
                                 tvCommunities.setEnabled(true);
                                 tvDrawerNavigation.setEnabled(true);
+                                recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        return false;
+                                    }
+                                });
                                 HashMap<String, Object> properties = new EventProperty.Builder().build();
                                 AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, "", properties);
                             }

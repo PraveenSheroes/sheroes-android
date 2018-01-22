@@ -181,10 +181,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfessionalWorkExperienceActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
             android:name="com.facebook.FacebookActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -204,22 +200,6 @@
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait" />
-
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-
-        </activity>
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.HomeSearchActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".views.activities.BranchDeepLink"

@@ -14,13 +14,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingJobAtRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingLookingForHowCanRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingTellUsRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingWorkExpRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -35,11 +28,13 @@ public class OnBoardingModel {
     private final String TAG = LogUtils.makeLogTag(OnBoardingModel.class);
     private final SheroesAppServiceApi sheroesAppServiceApi;
     Gson gson;
+
     @Inject
-    public OnBoardingModel(SheroesAppServiceApi sheroesAppServiceApi,Gson gson) {
+    public OnBoardingModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
-        this.gson= gson;
+        this.gson = gson;
     }
+
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
@@ -53,7 +48,7 @@ public class OnBoardingModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<GetAllData> getOnBoardingFromModel(GetAllDataRequest getAllDataRequest){
+    public Observable<GetAllData> getOnBoardingFromModel(GetAllDataRequest getAllDataRequest) {
         return sheroesAppServiceApi.getOnBoardingSearchFromApi(getAllDataRequest)
                 .map(new Func1<GetAllData, GetAllData>() {
                     @Override
@@ -64,78 +59,7 @@ public class OnBoardingModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<GetInterestJobResponse> getInterestjobFromModel(GetAllDataRequest getAllDataRequest){
-        return sheroesAppServiceApi.getInterestJobSearchFromApi(getAllDataRequest)
-                .map(new Func1<GetInterestJobResponse, GetInterestJobResponse>() {
-                    @Override
-                    public GetInterestJobResponse call(GetInterestJobResponse getAllData) {
-                        return getAllData;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<BoardingDataResponse> getCurrentStatusFromModel(BoardingTellUsRequest boardingTellUsRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(boardingTellUsRequest));
-        return sheroesAppServiceApi.getCurrentStatusFromApi(boardingTellUsRequest)
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
-                    @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
-                        return boardingDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<BoardingDataResponse> getLookingForHowCanFromModel(BoardingLookingForHowCanRequest boardingLookingForHowCanRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(boardingLookingForHowCanRequest));
-        return sheroesAppServiceApi.getLookingForHowCanFromApi(boardingLookingForHowCanRequest)
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
-                    @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
-                        return boardingDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
-    public Observable<BoardingDataResponse> getJobAtFromModel(BoardingJobAtRequest boardingJobAtRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(boardingJobAtRequest));
-        return sheroesAppServiceApi.getJobAtFromApi(boardingJobAtRequest)
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
-                    @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
-                        return boardingDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<BoardingDataResponse> getWorkExpFromModel(BoardingWorkExpRequest boardingWorkExpRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(boardingWorkExpRequest));
-        return sheroesAppServiceApi.getWorkExpFromApi(boardingWorkExpRequest)
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
-                    @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
-                        return boardingDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-    public Observable<BoardingDataResponse> getInterestFromModel(BoardingInterestRequest boardingInterestRequest){
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(boardingInterestRequest));
-        return sheroesAppServiceApi.getInterestFromApi(boardingInterestRequest)
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
-                    @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
-                        return boardingDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
     public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(communityRequest));
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
@@ -148,14 +72,15 @@ public class OnBoardingModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    public Observable<MemberListResponse> removeMember(RemoveMemberRequest removeMemberRequest){
-        LogUtils.error("Community Member list req: ",gson.toJson(removeMemberRequest));
+
+    public Observable<MemberListResponse> removeMember(RemoveMemberRequest removeMemberRequest) {
+        LogUtils.error("Community Member list req: ", gson.toJson(removeMemberRequest));
 
         return sheroesAppServiceApi.removeMember(removeMemberRequest)
                 .map(new Func1<MemberListResponse, MemberListResponse>() {
                     @Override
                     public MemberListResponse call(MemberListResponse memberListResponse) {
-                        LogUtils.error("Community Member list res: ",gson.toJson(memberListResponse));
+                        LogUtils.error("Community Member list res: ", gson.toJson(memberListResponse));
                         return memberListResponse;
                     }
                 })

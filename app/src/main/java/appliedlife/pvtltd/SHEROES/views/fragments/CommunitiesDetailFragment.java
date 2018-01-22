@@ -15,7 +15,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -58,8 +57,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunitiesDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
@@ -166,8 +164,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
                     hideAnonymousPost = false;
                 }
-                
-               // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
+
+                // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
                 communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
                 mCommunityFeedObj=communityFeedSolrObj;
             }else
@@ -191,10 +189,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActivity) getActivity());
+                mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileActvity) getActivity());
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
-            } else {
-                mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunitiesDetailActivity) getActivity());
             }
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
@@ -209,8 +205,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                                 mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                             }
                         }
-                        if(getActivity() instanceof ProfileActivity) {
-                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                        if(getActivity() instanceof MentorUserProfileActvity) {
+                            ((MentorUserProfileActvity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
                         }
 
                     } catch (ClassCastException ex) {
@@ -228,8 +224,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                                 mTvJoinView.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
                             }
                         }
-                        if(getActivity() instanceof ProfileActivity) {
-                          //  ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                        if(getActivity() instanceof MentorUserProfileActvity) {
+                            //  ((MentorUserProfileActvity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                         }
                     } catch (ClassCastException ex) {
                         LogUtils.error(TAG, ex.getMessage());
@@ -266,7 +262,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             } else {
                 mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITIES_DETAIL);
                 FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
-                        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+                mHomePresenter.getFeedFromPresenter(feedRequestPojo);
             }
 
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -283,13 +279,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
     public void communityPostClick() {
         if (null!= mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                FeedDetail feedDetail = (FeedDetail) mCommunityFeedObj;
-                feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
-                ((ProfileActivity) getActivity()).createCommunityPostClick(feedDetail);
-        } else {
             FeedDetail feedDetail = mCommunityFeedObj;
             feedDetail.setCallFromName(AppConstants.COMMUNITIES_DETAIL);
-            ((CommunitiesDetailActivity) getActivity()).createCommunityPostClick(feedDetail);
+            ((MentorUserProfileActvity) getActivity()).createCommunityPostClick(feedDetail);
         }
     }
 
@@ -314,7 +306,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @OnClick(R.id.tv_join_view)
     public void joinClick() {
         String joinTxt = mTvJoinView.getText().toString();
-        ((CommunitiesDetailActivity) getActivity()).inviteJoinEventClick(joinTxt, mCommunityFeedObj);
     }
 
     public void updateUiAccordingToFeedDetail(FeedDetail feedDetail) {
@@ -337,8 +328,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         break;
                     case FEATURE_COMMUNITY:
                         if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                        } else {
-                            ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.INVISIBLE);
                         }
                         mScreenName = AppConstants.FEATURE_FRAGMENT;
                         if (!communityFeedSolrObj.isMember() && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isRequestPending() && feedDetail.isFeatured()) {
@@ -353,10 +342,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                         break;
                     case MY_COMMUNITY:
                         if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                        } else {
-                            ((CommunitiesDetailActivity) getActivity()).ivFabPostCommunity.setVisibility(View.VISIBLE);
                         }
-
                         mTvJoinView.setVisibility(View.GONE);
                         mScreenName = AppConstants.MY_COMMUNITIES_FRAGMENT;
                         mTvJoinView.setTag(false);
@@ -388,7 +374,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mLiNoResult.setVisibility(View.GONE);
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                //((ProfileActivity) getActivity()).setUsersPostCount(totalPostCount); //set post count
+                //((MentorUserProfileActvity) getActivity()).setUsersPostCount(totalPostCount); //set post count
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mProgressBar.setVisibility(View.GONE);
                 mPullRefreshList.allListData(feedDetailList);
@@ -419,7 +405,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     mCommunityFeedObj = (CommunityFeedSolrObj)feedDetailList.get(0);
                     mCommunityFeedObj.setItemPosition(positionOfFeedDetail);
                     mProgressBar.setVisibility(View.VISIBLE);
-                    ((CommunitiesDetailActivity) getActivity()).initializeUiContent(mCommunityFeedObj);
                     updateUiAccordingToFeedDetail(mCommunityFeedObj);
                     mFragmentListRefreshData.setSearchStringName(AppConstants.EMPTY_STRING);
                 } else {
@@ -523,9 +508,6 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
             }
         } else {
-            if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity) {
-                ((ProfileActivity)getActivity()).refreshPostCount(true);
-            }
             super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
 

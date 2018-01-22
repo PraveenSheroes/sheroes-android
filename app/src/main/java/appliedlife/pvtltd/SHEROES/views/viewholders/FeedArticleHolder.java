@@ -162,11 +162,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             imageOperations(context);
         }
         // TODO : ujjwal
-        if (articleObj.getAuthorId() == mUserId /*|| articleObj.isOwner()*/) {
+       /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
             tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
         } else {
             tvFeedArticleUserMenu.setVisibility(View.GONE);
-        }
+        }*/
 
     }
 

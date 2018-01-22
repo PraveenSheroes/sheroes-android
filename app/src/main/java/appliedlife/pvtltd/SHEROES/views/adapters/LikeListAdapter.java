@@ -16,7 +16,6 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -30,12 +29,18 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
     private LikeHolderListener onLikeClickListener;
 
     //region Constructor
+    public LikeListAdapter(Context context, List<Comment> likeList) {
+        this.mContext = context;
+        this.mCommentList = likeList;
+    }
+    //endregion
+
+    //region Constructor
     public LikeListAdapter(Context context, List<Comment> likeList, LikeHolderListener onLikeClickListener) {
         this.mContext = context;
         this.mCommentList = likeList;
         this.onLikeClickListener = onLikeClickListener;
     }
-    //endregion
 
     //region UserLikedListAdapter methods
     @Override
@@ -61,10 +66,9 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
             return null;
         }
     }
-
     //endregion
 
-    // region Comment List Item ViewHolder
+    // region User Liked List Item ViewHolder
     public class LikeListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
@@ -91,20 +95,20 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
 
         public void bindData(final Comment comment, final int position) {
             if (comment != null) {
-                    if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
-                        String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
-                        Glide.with(userPic.getContext())
-                                .load(userImage)
-                                .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
-                                .into(userPic);
-                    }
-                    userName.setText(comment.getParticipantName());
+                if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
+                    String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                    Glide.with(userPic.getContext())
+                            .load(userImage)
+                            .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
+                            .into(userPic);
                 }
+                userName.setText(comment.getParticipantName());
+            }
         }
     }
 
     public interface LikeHolderListener {
         void onCommentClicked(LikeListItemViewHolder likeListItemViewHolder);
     }
-
+    // endregion
 }
