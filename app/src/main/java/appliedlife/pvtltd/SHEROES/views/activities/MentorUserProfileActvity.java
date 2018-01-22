@@ -315,6 +315,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             tvLoc.setVisibility(View.VISIBLE);
         } else {
             if (isOwnProfile) {
+                tvLoc.setVisibility(View.VISIBLE);
                 tvLoc.setText(R.string.add_location);
             } else {
                 tvLoc.setVisibility(View.GONE);
@@ -326,6 +327,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
         } else {
             if (isOwnProfile && isMentor) {
                 tvProfession.setText(R.string.add_skills);
+                tvProfession.setVisibility(View.VISIBLE);
             } else {
                 tvProfession.setVisibility(View.GONE);
             }
