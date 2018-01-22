@@ -58,7 +58,6 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
-import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -123,7 +122,6 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
@@ -179,7 +177,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public FloatingActionButton mFloatActionBtn;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
-    public List<String> mListOfOpportunity = new ArrayList<>();
+
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
     @Inject
@@ -209,9 +207,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.tv_job_home)
     TextView mTvJob;
     @Bind(R.id.tv_home)
-    TextView mTvHome;
+    public TextView mTvHome;
     @Bind(R.id.tv_communities)
-    TextView mTvCommunities;
+    public TextView mTvCommunities;
     @Bind(R.id.iv_side_drawer_profile_blur_background)
     ImageView mIvSideDrawerProfileBlurBackground;
     @Bind(R.id.iv_home_notification_icon)
@@ -229,7 +227,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.santa_view)
     ImageView mSantaView;
     @Bind(R.id.tv_drawer_navigation)
-    TextView tvDrawerNavigation;
+    public TextView tvDrawerNavigation;
     GenericRecyclerViewAdapter mAdapter;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -250,22 +248,18 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
     private long mChallengeId;
-    private long mEventId;
     private String mHelpLineChat;
     private EventDetailDialogFragment eventDetailDialogFragment;
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private BellNotificationDialogFragment bellNotificationDialogFragment;
-
-    private List<String> mJobLocationList = new ArrayList<>();
     private boolean isSheUser = false;
     private int mSuggestionItemPosition;
     private int mMentorCardPosition;
     private long mUserId = -1L;
     boolean isMentor;
-    private boolean isShowCase = false;
-    private ShowcaseView showcaseView;
-    private ShowcaseManager showcaseManager;
+    private int mEventId;
+    public boolean mIsFirstTimeOpen = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -275,13 +269,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        long timeSpentFeed = System.currentTimeMillis();
-        moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, timeSpentFeed);
-
+        moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, 0);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
             isSheUser = true;
         }
-
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
 
@@ -289,11 +280,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 isMentor = true;
             }
         }
-
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
-        //For navigation drawer items
-        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+        sheUserInit();
+    }
+
+    private void sheUserInit() {
         if (isSheUser && startedFirstTime()) {
             openHelplineFragment();
         }
@@ -301,7 +293,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
-
         if (getIntent() != null) {
             if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")) {
@@ -315,18 +306,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void showCaseDesign() {
-        isShowCase = false;
-        showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation);
-        showcaseManager.showFirstMainActivityShowcase();
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (isShowCase) {
-            showCaseDesign();
-        }
         if (isInviteReferral) {
             if (null != mProgressDialog) {
                 mProgressDialog.dismiss();
@@ -349,7 +332,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
             if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-
                 handleHelpLineFragmentFromDeepLinkAndLoading();
             }
 
@@ -397,12 +379,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+        //For navigation drawer items
+        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
     }
 
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
+            mIsFirstTimeOpen = true;
             Branch branch = Branch.getInstance();
             branch.resetUserSession();
             branch.initSession(new Branch.BranchReferralInitListener() {
@@ -435,6 +420,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
+            mEventId = getIntent().getExtras().getInt(AppConstants.EVENT_ID);
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
             if (!isSheUser) {
                 initHomeViewPagerAndTabs();
@@ -496,23 +482,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         startActivity(intent);
                     }
                 }
-                isShowCase = true;
             }
             //  }
         } catch (JSONException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after ms
-                if (!isShowCase) {
-                    showCaseDesign();
-                }
-            }
-        }, 500);
-
     }
 
     private boolean isIntentAvailable(Context ctx, Intent intent) {

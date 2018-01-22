@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -76,6 +77,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -113,7 +115,7 @@ public class HomeFragment extends BaseFragment {
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
-    EmptyRecyclerView mRecyclerView;
+    public EmptyRecyclerView mRecyclerView;
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
@@ -149,6 +151,7 @@ public class HomeFragment extends BaseFragment {
     private long mUserId;
     private boolean isChallenge;
     public Contest mContest;
+    private ShowcaseManager showcaseManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,6 +283,11 @@ public class HomeFragment extends BaseFragment {
             }
         });
         return view;
+    }
+    public void showCaseDesign() {
+        ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
+        showcaseManager = new ShowcaseManager(((HomeActivity)getActivity()),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
+        showcaseManager.showFirstMainActivityShowcase();
     }
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -514,6 +522,9 @@ public class HomeFragment extends BaseFragment {
             }else
             {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
+            }
+            if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+                showCaseDesign();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
