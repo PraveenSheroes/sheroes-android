@@ -111,6 +111,7 @@
     <dimen name="sp_size_25">25sp</dimen>
 
     <dimen name="sp_size_4">4sp</dimen>
+    <dimen name="sp_size_8">8sp</dimen>
     <dimen name="sp_size_9">9sp</dimen>
     <dimen name="sp_size_6">6sp</dimen>
     <dimen name="sp_size_7">7sp</dimen>
@@ -137,6 +138,7 @@
     <dimen name="drawer_profile_icon_size">100dp</dimen>
 <!--material spinner-->
     <dimen name="ms__padding_top">24dp</dimen>
+    <dimen name="dp_icon_size">32dp</dimen>
     <dimen name="ms__padding_left">12dp</dimen>
     <dimen name="ms__item_height">48dp</dimen>
     <dimen name="ms__popup_padding_left">24dp</dimen>
@@ -162,6 +164,7 @@
     <dimen name="dp_size_254">254dp</dimen>
     <dimen name="dp_size_36">36dp</dimen>
     <dimen name="dp_size_209">209dp</dimen>
+    <dimen name="dp_size_280">280dp</dimen>
     <dimen name="dp_size_177">177dp</dimen>
     <dimen name="dp_size_125">125dp</dimen>
 

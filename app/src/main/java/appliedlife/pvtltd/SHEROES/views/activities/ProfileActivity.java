@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
@@ -975,6 +976,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             dialog = new Dialog(ProfileActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             dialog.setContentView(R.layout.unfollow_confirmation_dialog);
 
             CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_img_icon);
@@ -984,7 +986,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
 
             TextView text = (TextView) dialog.findViewById(R.id.title);
-            text.setText("Unfollow " + mUserSolarObject.getNameOrTitle());
+            text.setText(String.format("Unfollow %s", mUserSolarObject.getNameOrTitle()));
 
             TextView dialogButton = (TextView) dialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {

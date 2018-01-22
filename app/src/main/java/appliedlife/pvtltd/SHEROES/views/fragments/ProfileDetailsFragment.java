@@ -273,7 +273,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
         int screenWidth = CommonUtil.getWindowWidth(getContext());
-        float aspectRatio = (float) 124 / 160;
+        float aspectRatio = (float) 150 / 160;
         int columnSize = screenWidth / 2 - mImageMargin;
         userCommunityLayout.removeAllViews();
         int counter = 0;
@@ -284,8 +284,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             TextView communityName = ButterKnife.findById(view, R.id.community_name);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 communityImage.setCircularImage(true);
-                communityImage.setPlaceHolderId(R.drawable.default_img);
-                communityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 communityImage.bindImage(community.getThumbnailImageUrl());
 
             }
@@ -299,7 +297,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             });
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    columnSize, (int) (columnSize * aspectRatio));
+                    columnSize, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(layoutParams);
 
             userCommunityLayout.addView(view);
@@ -377,7 +375,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
                 mutualCommunityLabel.setVisibility(View.GONE);
             }
         } else {
-            spacing.setVisibility(View.VISIBLE);
+            spacing.setVisibility(View.GONE);
             mutualCommunityContainer.setVisibility(View.GONE);
             mutualCommunityLabel.setVisibility(View.GONE);
         }

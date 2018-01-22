@@ -35,7 +35,7 @@
                 android:layout_toRightOf="@id/star"
                 android:layout_marginLeft="8dp"
                 android:layout_centerVertical="true"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="#878787"
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
 
                 <TextView
                     android:id="@+id/tv_feed_community_post_time"
@@ -93,7 +93,7 @@
                     android:layout_marginTop="@dimen/dp_size_3"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/feed_card_time"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
             </LinearLayout>
 
             <TextView
@@ -205,7 +205,7 @@
                         android:layout_marginTop="@dimen/dp_size_10"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_12" />
+                        android:textSize="@dimen/sp_size_14" />
 
                     <TextView
                         android:id="@+id/tv_post_link_sub_title"
@@ -288,7 +288,7 @@
                 android:layout_toRightOf="@+id/tv_feed_community_post_reaction1"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_total_replies"
@@ -299,7 +299,7 @@
                 android:layout_alignParentTop="true"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
         </RelativeLayout>
 
 
@@ -407,7 +407,7 @@
                     android:lineSpacingExtra="@dimen/dp_size_3"
                     android:maxLines="@integer/int_value_for_line_2"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -423,7 +423,7 @@
                         android:lineSpacingExtra="@dimen/dp_size_3"
                         android:maxLines="@integer/int_value_for_line_3"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_12" />
+                        android:textSize="@dimen/sp_size_14" />
 
                     <TextView
                         android:id="@+id/tv_feed_community_post_user_comment_post_view_more"
@@ -445,7 +445,7 @@
                     android:id="@+id/comment_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_marginLeft="@dimen/dp_size_10"
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
@@ -457,7 +457,7 @@
                     android:id="@+id/comment_like_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_marginLeft="@dimen/dp_size_10"
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
@@ -479,7 +479,7 @@
                     android:layout_gravity="right"
                     android:paddingRight="@dimen/dp_size_10"
                     android:textColor="@color/recent_post_comment"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
             <TextView
                 android:id="@+id/tv_feed_community_post_user_comment_post_menu"
                 android:layout_width="wrap_content"
@@ -511,8 +511,8 @@
 
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/iv_feed_community_post_login_user_pic"
-                    android:layout_width="@dimen/comment_icon"
-                    android:layout_height="@dimen/comment_icon"
+                    android:layout_width="@dimen/dp_icon_size"
+                    android:layout_height="@dimen/dp_icon_size"
                     android:layout_marginLeft="14dp"
                     android:layout_marginStart="14dp" />
 
@@ -545,7 +545,7 @@
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:maxLines="@integer/int_value_for_line_2"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
 
                 <TextView
                     android:id="@+id/tv_join_conversation"
@@ -560,7 +560,7 @@
                     android:padding="@dimen/dp_size_11"
                     android:text="@string/ID_JOIN_CONVERSATION"
                     android:textColor="@color/feed_card_time"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
 
             </LinearLayout>
 

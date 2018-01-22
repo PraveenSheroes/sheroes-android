@@ -145,7 +145,7 @@
     <string name="ID_XOXO">Xoxo</string>
     <string name="ID_MORE_FROM_LIFE">More From Life</string>
     <string name="ID_FORGOT_PASSWORD">Forgot Password?</string>
-    <string name="ID_PROFILE">Profile</string>
+    <string name="ID_PROFILE">About</string>
     <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_BOOKMARK">Bookmarks</string>
@@ -953,9 +953,9 @@
     <string name="ID_NEXT">Next</string>
     <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
 
-    <string name="followed_communities">Followed Communities</string>
+    <string name="followed_communities">Communities Joined</string>
     <string name="view_more">View More</string>
-    <string name="followed_mentors">Followed Champions</string>
+    <string name="followed_mentors">Following Champions</string>
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="new_feature">New</string>
