@@ -210,9 +210,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
             if(CommonUtil.isNotEmpty(mCommunityTab.emptyImageUrl)){
                 emptyImage.setVisibility(View.VISIBLE);
-                Glide.with(this)
-                        .load(mCommunityTab.emptyImageUrl)
-                        .into(emptyImage);
+                if(getActivity()!=null){
+                    Glide.with(getActivity())
+                            .load(mCommunityTab.emptyImageUrl)
+                            .into(emptyImage);
+                }
             }else {
                 emptyImage.setVisibility(View.GONE);
             }
@@ -401,10 +403,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
-        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
-        } else if (userPostSolrObj.isAnonymous()) {
+        if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
+        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+            return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
         }

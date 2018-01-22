@@ -27,7 +27,7 @@
             android:layout_width="@dimen/dp_size_10"
             android:layout_height="@dimen/dp_size_10"
             android:layout_gravity="center"
-            android:src="@drawable/ic_circle_red" />
+            android:src="@drawable/vector_red_circle" />
 
         <ImageView
             android:id="@+id/iv_welcome_second"

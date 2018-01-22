@@ -81,8 +81,7 @@
             android:background="@color/grey_50"
             android:clickable="false"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_5"
-            android:visibility="gone">
+            android:padding="@dimen/dp_size_5">
 
             <TextView
                 android:id="@+id/tv_post_as_label"

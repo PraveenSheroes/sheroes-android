@@ -407,11 +407,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (mInputText.getText().toString().length() == 0) {
                     mInputText.setMaxLines(SINGLE_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    liUserPostTypeSelection.setVisibility(View.GONE);
                 } else {
                     mInputText.setMaxLines(MAX_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    liUserPostTypeSelection.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -518,10 +516,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
-        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
-        } else if (userPostSolrObj.isAnonymous()) {
+        if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
+        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+            return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
         }
@@ -731,7 +729,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //endregion
 
     private void setupToolbarItemsColor() {
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -143,7 +145,16 @@ public class NavigateToWebViewFragment extends BaseFragment {
                         CommonUtil.shareLinkToFaceBook(getContext(), url);
                     } else if(url.startsWith("http://twitter.com")) { //share on twitter
                         CommonUtil.shareLinkToTwitter(getContext(), url);
-                    } else {
+                    }else if(CommonUtil.isBranchLink(Uri.parse(url))){
+                        if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
+                            Uri uri = Uri.parse(url);
+                            Intent intent = new Intent();
+                            intent.setClass(getActivity(), BranchDeepLink.class);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    }
+                     else {
                         webPagesView.loadUrl(url, getCustomHeaders(url));
                     }
                     return true;

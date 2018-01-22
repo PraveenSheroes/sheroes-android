@@ -63,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -343,6 +344,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 Uri url = Uri.parse(intent.getDataString());
                 AppUtils.openChromeTab(this, url);
                 handled = true;
+            }
+            if(CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))){
+                intent.setClass(this, BranchDeepLink.class);
+                super.startActivity(intent);
+                return;
             }
             }
             if(!handled){

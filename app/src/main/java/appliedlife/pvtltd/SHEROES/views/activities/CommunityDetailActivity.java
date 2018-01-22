@@ -238,8 +238,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             DrawableCompat.setTint(drawable.mutate(), Color.parseColor(mCommunityTitleTextColor));
             mToolbar.setOverflowIcon(drawable);
         }
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
@@ -698,6 +699,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @OnClick({R.id.bottom_bar, R.id.btn_bottom_bar})
     public void onJoinClicked() {
+        if (mCommunityFeedSolrObj == null) {
+            return;
+        }
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
             showCommunityJoinReason(mCommunityFeedSolrObj);
