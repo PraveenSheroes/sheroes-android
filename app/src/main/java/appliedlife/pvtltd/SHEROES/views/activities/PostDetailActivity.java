@@ -346,7 +346,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
             if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST) {
                 if (null != intent && null != intent.getExtras()) {
-                    UserPostSolrObj userPostSolrObj = (UserPostSolrObj) Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
+                    UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
                     mPostDetailPresenter.updateUserPost(userPostSolrObj);
                 }
             }
@@ -401,11 +401,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (mInputText.getText().toString().length() == 0) {
                     mInputText.setMaxLines(SINGLE_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    liUserPostTypeSelection.setVisibility(View.GONE);
                 } else {
                     mInputText.setMaxLines(MAX_LINE);
                     mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
-                    liUserPostTypeSelection.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -497,7 +495,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             return true;
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
-                            mPostDetailPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()));
+                            mPostDetailPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()));
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
@@ -512,10 +510,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
-        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
-        } else if (userPostSolrObj.isAnonymous()) {
+        if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
+        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+            return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
         }
@@ -621,7 +619,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
 
             } else {
-                CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) userPostObj).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         }
     }
@@ -688,7 +686,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .body(comment.getComment())
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -702,7 +700,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         trackEvent(Event.REPLY_EDITED, properties);
         mInputText.setText(comment.getComment());
         mInputText.setSelection(comment.getComment().length());
-        mPostDetailPresenter.editCommentListFromPresenter(mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
     }
 
     @Override
@@ -732,7 +730,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //endregion
 
     private void setupToolbarItemsColor() {
-        final Drawable upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));

@@ -834,7 +834,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
 
-    @OnClick({R.id.tv_feed_community_post_total_replies, R.id.tv_feed_community_post_user_comment_post, R.id.li_feed_community_post_user_comments, R.id.tv_feed_community_post_user_comment_post_view_more})
+    @OnClick({R.id.tv_feed_community_post_total_replies, R.id.tv_feed_community_post_user_comment_post, R.id.li_feed_community_post_user_comments, R.id.tv_feed_community_post_user_comment_post_view_more, R.id.card_view_post})
     public void repliesClick() {
         if(viewInterface instanceof FeedItemCallback){
             ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);

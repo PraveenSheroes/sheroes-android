@@ -165,7 +165,7 @@ public class HomeFragment extends BaseFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             isChallenge = bundle.getBoolean(ContestActivity.IS_CHALLENGE, false);
-            mFeedDetail = (FeedDetail) Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_FRAGMENT));
+            mFeedDetail = Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_FRAGMENT));
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         if(isChallenge){
@@ -241,7 +241,7 @@ public class HomeFragment extends BaseFragment {
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
                         mFragmentListRefreshData.setSubType(AppConstants.FEED_COMMUNITY_POST);
-                        FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
+                        FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
@@ -353,7 +353,7 @@ public class HomeFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         if(isChallenge){
-            FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
+            FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
         }else {
@@ -405,7 +405,7 @@ public class HomeFragment extends BaseFragment {
                         if (mIsSpam) {
                             commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
                         } else {
-                            ((UserPostSolrObj)feedDetail).setSpamPost(false);
+                            feedDetail.setSpamPost(false);
                             commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
                     } catch (CloneNotSupportedException e) {
@@ -634,7 +634,7 @@ public class HomeFragment extends BaseFragment {
                 List<UserContactDetail> userContactDetailsList = new ArrayList<>();
                 UserContactDetail userContactDetail = null;
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                Cursor cursor = ((HomeActivity) getActivity()).getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                Cursor cursor = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
                 if (cursor != null && cursor.getCount() > 0) {
                     try {
                         cursor.moveToFirst();

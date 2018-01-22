@@ -1,6 +1,6 @@
 def versionMajor = 5
 def versionMinor = 8
-def versionPatch = 1
+def versionPatch = 2
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -48,7 +48,7 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
-           //  buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+             //buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
@@ -129,7 +129,7 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
     provided 'javax.annotation:jsr250-api:1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+        transitive = true
     }
     compile 'com.moengage:moe-android-sdk:7.7.01'
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'

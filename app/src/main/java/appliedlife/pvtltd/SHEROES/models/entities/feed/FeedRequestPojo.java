@@ -12,8 +12,6 @@ import org.parceler.Parcel;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 
 @Parcel(analyze = {FeedRequestPojo.class,BaseRequest.class})
 public class FeedRequestPojo extends BaseRequest{

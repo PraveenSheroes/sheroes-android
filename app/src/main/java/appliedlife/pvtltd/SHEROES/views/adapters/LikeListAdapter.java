@@ -16,7 +16,6 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -50,7 +49,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
                 String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), holder.authorPicSize, holder.authorPicSize);
                 Glide.with(holder.userPic.getContext())
                         .load(userImage)
-                        .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
+                        .bitmapTransform(new CommonUtil.CircleTransform(mContext))
                         .into(holder.userPic);
             }
             holder.userName.setText(comment.getParticipantName());

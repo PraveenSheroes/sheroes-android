@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -40,7 +41,7 @@ import android.widget.Scroller;
 /**
  * Created by avinash on 9/2/15.
  */
-public class TouchImageViewNew extends ImageView {
+public class TouchImageViewNew extends AppCompatImageView {
 
     private static final String DEBUG = "DEBUG";
 

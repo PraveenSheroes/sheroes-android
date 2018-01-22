@@ -36,7 +36,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_anonymous_female_new_44dp" />
+                android:src="@drawable/ic_anonomous" />
 
             <EditText
                 android:id="@+id/input_edit_text"
@@ -81,8 +81,7 @@
             android:background="@color/grey_50"
             android:clickable="false"
             android:orientation="horizontal"
-            android:padding="@dimen/dp_size_5"
-            android:visibility="gone">
+            android:padding="@dimen/dp_size_5">
 
             <TextView
                 android:id="@+id/tv_post_as_label"

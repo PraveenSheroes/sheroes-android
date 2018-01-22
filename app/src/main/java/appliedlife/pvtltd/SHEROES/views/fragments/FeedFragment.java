@@ -70,11 +70,9 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.JobDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
@@ -217,9 +215,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
             if(CommonUtil.isNotEmpty(mCommunityTab.emptyImageUrl)){
                 emptyImage.setVisibility(View.VISIBLE);
-                Glide.with(this)
-                        .load(mCommunityTab.emptyImageUrl)
-                        .into(emptyImage);
+                if(getActivity()!=null){
+                    Glide.with(getActivity())
+                            .load(mCommunityTab.emptyImageUrl)
+                            .into(emptyImage);
+                }
             }else {
                 emptyImage.setVisibility(View.GONE);
             }
@@ -394,7 +394,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
             menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
             menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-            menu.add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_avatar), getResources().getString(R.string.FEATURE_POST)));
+            menu.add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
 
             if (currentUserId!=userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
@@ -422,7 +422,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.delete:
                             AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
-                            mFeedPresenter.deleteCommunityPostFromPresenter(mAppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
+                            mFeedPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
@@ -449,10 +449,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
-        if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
-        } else if (userPostSolrObj.isAnonymous()) {
+        if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
+        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+            return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
         }
@@ -585,11 +585,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onJobPostClicked(JobFeedSolrObj jobFeedObj) {
-        Intent intentJob = new Intent(getActivity(), JobDetailActivity.class);
-        Parcelable parcelable = Parcels.wrap(jobFeedObj);
-        intentJob.putExtra(AppConstants.JOB_DETAIL, parcelable);
-        getActivity().startActivityForResult(intentJob, AppConstants.REQUEST_CODE_FOR_JOB_DETAIL);
-    }
+         }
 
     @Override
     public void onChallengeClicked(Contest contest) {

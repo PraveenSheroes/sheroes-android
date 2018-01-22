@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -181,8 +180,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-       // final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
-    //    getSupportActionBar().setHomeAsUpIndicator(backArrow);
+        // final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
+        //    getSupportActionBar().setHomeAsUpIndicator(backArrow);
         tvMentorToolbarName.setText(R.string.ID_EDIT_PROFILE);
 
         String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);

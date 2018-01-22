@@ -7,6 +7,9 @@ import android.text.TextUtils;
 
 
 import com.appsflyer.AppsFlyerLib;
+import com.moe.pushlibrary.MoEHelper;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +80,15 @@ public class AnalyticsManager {
             properties.put(EventProperty.SOURCE.getString(), previousScreenName);
         }
         MixpanelHelper.trackScreenOpen(sAppContext, screenName, properties);
+
+        if (properties == null) {
+            properties = new HashMap<>();
+        }
+
+        // track all event to Moengage
+        properties.put(MixpanelHelper.SCREEN_NAME, screenName);
+        JSONObject jsonObj = new JSONObject(properties);
+        MoEHelper.getInstance(sAppContext).trackEvent(MixpanelHelper.SCREEN_OPEN, jsonObj);
     }
 
     public static void timeScreenView(String screenName) {
@@ -118,16 +130,20 @@ public class AnalyticsManager {
 
         event.addProperties(properties);
 
-        if(isNotNullOrEmptyString(screenName) && !properties.containsKey(screenName)){
+        if (isNotNullOrEmptyString(screenName) && !properties.containsKey(screenName)) {
             properties.put(EventProperty.SOURCE.getString(), screenName);
         }
 
-        if(event.trackEventToProvider(AnalyticsProvider.MIXPANEL)) {
+        if (event.trackEventToProvider(AnalyticsProvider.MIXPANEL)) {
             MixpanelHelper.trackEvent(sAppContext, event.getFullName(), properties);
         }
-        if(event.trackEventToProvider(AnalyticsProvider.APPSFLYER)){
+        if (event.trackEventToProvider(AnalyticsProvider.APPSFLYER)) {
             AppsFlyerLib.getInstance().trackEvent(sAppContext, event.getFullName(), properties);
         }
+
+        // track all event to Moengage
+        JSONObject jsonObj = new JSONObject(properties);
+        MoEHelper.getInstance(sAppContext).trackEvent(event.getFullName(), jsonObj);
 
     }
 

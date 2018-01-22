@@ -370,6 +370,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @OnClick(R.id.tv_login_back)
     public void onBack() {
-        ((LoginActivity) getActivity()).onBackPressed();
+        getActivity().onBackPressed();
     }
 }

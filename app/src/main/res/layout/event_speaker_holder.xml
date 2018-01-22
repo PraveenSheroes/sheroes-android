@@ -12,8 +12,7 @@
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_event_speaker_circle_icon"
             android:layout_width="@dimen/feed_profile_icon_size"
-            android:layout_height="@dimen/feed_profile_icon_size"
-            android:src="@drawable/ic_anonymous_female_new_44dp" />
+            android:layout_height="@dimen/feed_profile_icon_size" />
 
         <LinearLayout
             android:layout_width="match_parent"

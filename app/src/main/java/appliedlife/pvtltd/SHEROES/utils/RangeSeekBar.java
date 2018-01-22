@@ -22,6 +22,7 @@ import android.graphics.*;
 import android.graphics.Paint.Style;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -47,7 +48,7 @@ import appliedlife.pvtltd.SHEROES.R;
  * @author Alex Florescu (florescu@yahoo-inc.com)
  * @author Michael Keppler (bananeweizen@gmx.de)
  */
-public class RangeSeekBar<T extends Number> extends ImageView {
+public class RangeSeekBar<T extends Number> extends AppCompatImageView {
 
     public static final Integer DEFAULT_MINIMUM = 0;
     public static final Integer DEFAULT_MAXIMUM = 100;
@@ -677,24 +678,22 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      */
     public interface OnRangeSeekBarChangeListener<T> {
 
-        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T minValue, T maxValue);
+        void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, T minValue, T maxValue);
     }
 
     /**
      * Thumb constants (min and max).
      */
-    private static enum Thumb {
+    private enum Thumb {
         MIN, MAX
     }
-
-    ;
 
     /**
      * Utility enumeration used to convert between Numbers and doubles.
      *
      * @author Stephan Tittel (stephan.tittel@kom.tu-darmstadt.de)
      */
-    private static enum NumberType {
+    private enum NumberType {
         LONG, DOUBLE, INTEGER, FLOAT, SHORT, BYTE, BIG_DECIMAL;
 
         public static <E extends Number> NumberType fromNumber(E value) throws IllegalArgumentException {

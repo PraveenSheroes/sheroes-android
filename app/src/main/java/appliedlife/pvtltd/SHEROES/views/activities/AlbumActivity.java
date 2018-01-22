@@ -242,7 +242,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         mAlbumCarouselAdapter = new AlbumCarouselAdapter(this, mAlbum.photos, new View.OnClickListener() {
             @Override
             public void onClick(View imageItem) {
-                View recyclerViewItem = (View) imageItem;
+                View recyclerViewItem = imageItem;
                 int position = mImageListView.getChildAdapterPosition(recyclerViewItem);
                 mViewPager.setCurrentItem(position);
                 mAlbumCarouselAdapter.setSelectedPosition(position);
@@ -272,7 +272,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         album.deepLinkUrl = feedDetail.getDeepLinkUrl();
         Intent intent = new Intent(fromActivity, AlbumActivity.class);
         Parcelable parcelable = Parcels.wrap(album);
-        intent.putExtra(album.ALBUM_OBJ, parcelable);
+        intent.putExtra(Album.ALBUM_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(MAIN_ITEM_POSITION, feedDetail.getItemPosition());
         if (!CommonUtil.isEmpty(properties)) {

@@ -1,9 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 import java.util.ArrayList;
 
@@ -24,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -60,7 +64,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         CommentListItemViewHolder commentListItemViewHolder = (CommentListItemViewHolder) holder;
-        Comment comment = (Comment) mCommentList.get(position);
+        Comment comment = mCommentList.get(position);
         commentListItemViewHolder.bindData(comment, position);
     }
 
@@ -182,7 +186,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         Glide.with(mContext)
                                 .load(authorImage)
                                // .placeholder(comment.author.getPlaceholder())
-                                .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(mContext))
+                                .bitmapTransform(new CommonUtil.CircleTransform(mContext))
                                 .into(authorPic);
 
                     } else {

@@ -76,7 +76,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 break;
             case TYPE_COMMENT:
                 CommentNewViewHolder commentNewViewHolder = (CommentNewViewHolder) holder;
-                BaseResponse baseResponse = (BaseResponse) mFeedDetail.get(position);
+                BaseResponse baseResponse = mFeedDetail.get(position);
                 commentNewViewHolder.bindData((Comment) baseResponse, mContext, position);
                 break;
             case TYPE_LOADER:
