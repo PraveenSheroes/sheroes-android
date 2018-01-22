@@ -68,7 +68,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        titleName.setText(R.string.ID_COMMUNITIES);
+        titleName.setText(R.string.followed_communities);
 
         Fragment followingFragment = UserMentorCommunity.createInstance(userMentorId, "", isSelfProfile);
         FragmentManager fragmentManager = getSupportFragmentManager();

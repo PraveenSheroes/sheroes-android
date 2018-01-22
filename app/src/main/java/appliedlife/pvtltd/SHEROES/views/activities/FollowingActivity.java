@@ -53,7 +53,7 @@ public class FollowingActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        titleName.setText(R.string.ID_CHAMPION);
+        titleName.setText(R.string.champions_followed);
 
         Fragment followingFragment = FollowingFragment.createInstance(userMentorId, "");
         FragmentManager fragmentManager = getSupportFragmentManager();

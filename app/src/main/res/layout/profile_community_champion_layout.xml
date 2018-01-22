@@ -200,7 +200,7 @@
                     android:layout_margin="@dimen/dp_size_16"
                     android:fontFamily="sans-serif-medium"
                     android:maxLines="@integer/int_value_for_line_1"
-                    android:text="@string/followed_mentors"
+                    android:text="@string/champions_followed"
                     android:textColor="#3c3c3c"
                     android:textSize="16sp"
                     android:textStyle="normal"

@@ -955,7 +955,7 @@
 
     <string name="followed_communities">Communities Joined</string>
     <string name="view_more">View More</string>
-    <string name="followed_mentors">Following Champions</string>
+    <string name="champions_followed">Champions Followed</string>
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="new_feature">New</string>

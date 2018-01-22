@@ -448,7 +448,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
                 }
             });
 
-            mentorName.setText(userSolrObj.getNameOrTitle());
+            mentorName.setText(StringUtil.toTitleCase(userSolrObj.getNameOrTitle()));
 
             List<String> canHelpInArea = userSolrObj.getCanHelpIns();
             if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
@@ -456,6 +456,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
                 for (int i = 0; i < canHelpInArea.size(); i++) {
                     if (i > 0) {
                         expertFields.append(AppConstants.COMMA);
+                        expertFields.append(AppConstants.SPACE);
                     }
                     expertFields.append(canHelpInArea.get(i));
                 }

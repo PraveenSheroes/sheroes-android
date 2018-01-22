@@ -24,7 +24,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by ravi on 01/01/18.
- * Adapter for community listing on user or mentor profile
+ * Adapter for community listing on user or champion profile
  */
 
 public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

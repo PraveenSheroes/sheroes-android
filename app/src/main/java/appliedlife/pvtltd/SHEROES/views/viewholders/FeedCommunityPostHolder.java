@@ -350,6 +350,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             ivLinkThumbnail.setImageBitmap(profileImage);
                             pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
+                                ivPlay.getBackground().setAlpha(75);
                                 ivPlay.setVisibility(View.VISIBLE);
                             } else {
                                 ivPlay.setVisibility(View.GONE);
@@ -1069,8 +1070,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_card_title)
     public void onAuthorName() { //Open profile from feed
-        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            if(viewInterface instanceof FeedItemCallback){
+        if (!mUserPostObj.isAnonymous()) {
+            if(mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+                viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+            }
+            else if(viewInterface instanceof FeedItemCallback){
                 ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }else {
                // viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
@@ -1166,7 +1170,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             public void onClick(View textView) {
            //     if (mUserPostObj.isAuthorMentor())
                  {
-                    if(viewInterface instanceof FeedItemCallback){
+
+                     if(mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+                         viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                     }
+                    else if(viewInterface instanceof FeedItemCallback){
                         ((FeedItemCallback)viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }else {
                         viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

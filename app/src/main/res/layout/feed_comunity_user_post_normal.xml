@@ -174,12 +174,13 @@
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_media_play_dark"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:background="@drawable/circular_view" />
 
                 <ProgressBar
                     android:id="@+id/progress_bar_post_link"
-                    android:layout_width="@dimen/dp_size_40"
-                    android:layout_height="@dimen/dp_size_40"
+                    android:layout_width="@dimen/dp_size_50"
+                    android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
                     android:backgroundTint="@color/added_member_text" />
             </FrameLayout>
