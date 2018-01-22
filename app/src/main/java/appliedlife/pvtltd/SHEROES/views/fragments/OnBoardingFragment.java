@@ -59,7 +59,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
- * Created by Ajit Kumar on 22-02-2017.
+ * Created by Praveen Singh on 22-02-2017.
  */
 
 public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
