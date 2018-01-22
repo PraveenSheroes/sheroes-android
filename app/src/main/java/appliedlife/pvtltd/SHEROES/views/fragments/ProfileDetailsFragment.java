@@ -319,7 +319,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
             if(isSelfProfile) {
                 emptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
-                emptyViewFollowedMentor.setText(R.string.followed_champion);
+                emptyViewFollowedMentor.setText(R.string.champions_followed);
                 emptyViewDottedBorder.setVisibility(View.VISIBLE);
             } else{
                 emptyViewDottedBorder.setBackgroundResource(0);

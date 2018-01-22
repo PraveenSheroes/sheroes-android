@@ -35,6 +35,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -68,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -411,7 +413,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
-            mViewPagerAdapter.addFragment(UserProfileTabFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
+            mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
         }
 
@@ -757,14 +759,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         mUserSolarObject.setIdOfEntityOrParticipant(userId);
         mUserSolarObject.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         ProfileActivity.navigateTo(this, mUserSolarObject, userId, true, AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-    }
-
-    @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
-        if (baseResponse instanceof Comment) {
-            Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
-        }
     }
 
     private void shareCardViaSocial() {
