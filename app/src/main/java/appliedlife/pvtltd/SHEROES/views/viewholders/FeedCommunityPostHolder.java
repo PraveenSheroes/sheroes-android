@@ -45,9 +45,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -199,6 +201,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private int mAdminId;
     private String mPhotoUrl;
     private Handler mHandler;
+    private boolean isWhatappShareOption=false;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+
 
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -218,6 +225,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             String last = userPreference.get().getUserSummary().getLastName();
             if (StringUtil.isNotNullOrEmptyString(first) || StringUtil.isNotNullOrEmptyString(last)) {
                 loggedInUser = first + AppConstants.SPACE + last;
+            }
+        }
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareOption = "";
+            shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareOption)) {
+                if (shareOption.equalsIgnoreCase("true")) {
+                    isWhatappShareOption=true;
+                }
             }
         }
     }
@@ -254,8 +270,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setTag(true);
         mUserPostObj.setLastReactionValue(mUserPostObj.getReactionValue());
-        //if (!mUserPostObj.isTrending()) {
+
         imageOperations(mContext);
+
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
             liFeedCommunityUserPostImages.removeAllViews();
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
@@ -267,27 +284,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         multipleImageURLs();
         populatePostText();
-        //}
-
-
-        //if (!mUserPostObj.isTrending()) {
-        imageOperations(mContext);
-        if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
-            liFeedCommunityUserPostImages.removeAllViews();
-            liFeedCommunityUserPostImages.removeAllViewsInLayout();
-            liFeedCommunityUserPostImages.setVisibility(View.GONE);
-            liViewLinkRender.setVisibility(View.VISIBLE);
-            setLinkData();
-        } else {
-            liViewLinkRender.setVisibility(View.GONE);
-        }
-        multipleImageURLs();
-        populatePostText();
-        //}
         onBookMarkClick();
         allTextViewStringOperations(mContext);
         likeCommentOps();
-        if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
+        if (mUserPostObj.communityId == 0) {
+            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
+        } else {
+            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
+        }
+        if (mUserPostObj.communityId == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
+        } else {
+            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
+        }
+      /*  if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
            // tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
               //  tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
@@ -311,7 +321,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
            // tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
            // tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-        }
+        }*/
 
     }
 
@@ -365,29 +375,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void multipleImageURLs() {
-       /* if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
-            tvFeedCommunityPostText.setVisibility(View.GONE);
-            liFeedCommunityUserPostImages.removeAllViews();
-            liFeedCommunityUserPostImages.removeAllViewsInLayout();
-            liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
-            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View child = layoutInflater.inflate(R.layout.challenge_image, null);
-            ImageView ivChallenge = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-            TextView tvChallengePost = (TextView) child.findViewById(R.id.tv_challenge_name_post);
-            if (StringUtil.isNotEmptyCollection(mUserPostObj.getImageUrls())) {
-                tvChallengePost.setText(AppConstants.EMPTY_STRING);
-                Glide.with(mContext)
-                        .load(mUserPostObj.getImageUrls().get(0))
-                        .into(ivChallenge);
-            } else {
-                mUserPostObj.setListDescription(AppConstants.EMPTY_STRING);
-                if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getNameOrTitle())) {
-                    tvChallengePost.setText(mUserPostObj.getNameOrTitle());
-                }
-                ivChallenge.setBackgroundResource(R.drawable.challenge_post);
-            }
-            liFeedCommunityUserPostImages.addView(child);
-        } else {*/
+
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         if (StringUtil.isNotEmptyCollection(mUserPostObj.getImageUrls())) {
             liFeedCommunityUserPostImages.setVisibility(View.VISIBLE);
@@ -437,8 +425,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             liFeedCommunityUserPostImages.removeAllViewsInLayout();
             liFeedCommunityUserPostImages.setVisibility(View.GONE);
         }
-        //}
-        // }
+
     }
 
     private void onBookMarkClick() {
@@ -605,6 +592,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void populatePostText() {
+        if(isWhatappShareOption) {
+            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
+            tvFeedCommunityPostUserShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
+            tvFeedCommunityPostUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
+
+        }
+        else
+        {
+            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            tvFeedCommunityPostUserShare.setText(mContext.getString(R.string.ID_SHARE));
+            tvFeedCommunityPostUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
+
+        }
         final String listDescription = mUserPostObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
