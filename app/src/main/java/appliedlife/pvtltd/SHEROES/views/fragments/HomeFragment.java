@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -51,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
@@ -82,7 +80,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pl.droidsonroids.gif.GifTextView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -146,7 +143,6 @@ public class HomeFragment extends BaseFragment {
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-    private long startedTime;
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     private long mUserId;
     private boolean isChallenge;
@@ -162,7 +158,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_feed, container, false);
         ButterKnife.bind(this, view);
         loaderGif.setVisibility(View.VISIBLE);
         Bundle bundle = getArguments();
@@ -175,7 +171,6 @@ public class HomeFragment extends BaseFragment {
             Parcelable parcelable = getArguments().getParcelable(Contest.CONTEST_OBJ);
             mContest = Parcels.unwrap(parcelable);
         }
-        startedTime = System.currentTimeMillis();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT, isChallenge);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -227,7 +222,6 @@ public class HomeFragment extends BaseFragment {
 
         });
         showHeaderOnFeed();
-        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
             ((HomeActivity) getActivity()).logOut();
@@ -273,8 +267,8 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        long timeSpentFeed = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, timeSpentFeed);
+        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, 0);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -298,7 +292,7 @@ public class HomeFragment extends BaseFragment {
     }
     public void showCaseDesign() {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
-        showcaseManager = new ShowcaseManager(((HomeActivity)getActivity()),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
+        showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
     }
     private void getGcmId() {
@@ -309,7 +303,6 @@ public class HomeFragment extends BaseFragment {
             pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
                 @Override
                 public void onSuccess(String registrationId, boolean isNewRegistration) {
-                    LogUtils.info(TAG, "*************Registarion" + registrationId);
                     mGcmId = registrationId;
                     PushManager.getInstance().refreshToken(getActivity(), mGcmId);
                     if (StringUtil.isNotNullOrEmptyString(registrationId)) {
@@ -348,7 +341,7 @@ public class HomeFragment extends BaseFragment {
 
                 @Override
                 public void onFailure(String ex) {
-                    LogUtils.info(TAG, "*************Fail Registarion" + ex);
+
                 }
             });
         }
@@ -372,7 +365,11 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        showHeaderOnFeed();
+        List<FeedDetail> data=new ArrayList<>();
+        FeedDetail header = new FeedDetail();
+        header.setSubType(AppConstants.HEADER);
+        data.add(0, header);
+        mPullRefreshList.allListData(data);
         if(isChallenge){
             FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);

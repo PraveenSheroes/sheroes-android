@@ -9,9 +9,6 @@ package appliedlife.pvtltd.SHEROES.utils;
  * Title: App constants stores all app messages.
  */
 public class AppConstants {
-    public static final String GOOGLE_PLAY_ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask&hl=en";
-    public static final String GOOGLE_PLAY_BROWSER_URL = "https:/android.intent.action.MAIN/play.google.com/store/apps/details?id=appliedlife.pvtltd.sheroesask";
-    //public static final String GOOGLE_PLUS_LOGIN ="https://sheroes.com/APIUsers/gplogin.json";
     public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk";
 
     // YouTube video id
@@ -45,8 +42,7 @@ public class AppConstants {
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
     public static final String AT_THE_RATE_OF = "@";
-    public static final String PRESENT = "PRESENT";
-    public static final String PER_ANUM = "/ Annum";
+
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
@@ -61,40 +57,24 @@ public class AppConstants {
     public static final String AVAILABLE = "Available";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
-    public static final String SEARCH_SUB_TYPE = "S";
-    public static final String ALL_DATA_SUB_TYPE = "T";
+
     public static final String USER_SUB_TYPE = "U";
     public static final String MENTOR_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
-    public static final String TAG_SUB_TYPE = "tags";
-    public static final String SKILL_SUB_TYPE = "skill";
-    public static final String OWNER_SUB_TYPE = "O";
-    public static final String COMMUNITY_NAME_SUB_TYPE = "CN";
+
     public static final String FEED_SCREEN = "feed";
     public static final String COMMUNITIES_ONBOARDING_SCREEN = "community_onboarding";
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
-    public static final String CITY_NAME_DEFAULT = "Delhi";
-    public static final String HOW_CAN_SHEROES_AKA_LOOKING_FOR_SCREEN = "looking_for";
-    public static final String INTEREST_SCREEN = "interest";
-    public static final String CURRENT_STATUS_TYPE = "BASIC_PROFILE";
-    public static final String CURRENT_STATUS = "BASIC_USER_PROFILE_SERVICE";
-    public static final String LOOKING_FOR_HOW_CAN = "OPPORTUNITY_SERVICE";
-    public static final String LOOKING_FOR_HOW_CAN_TYPE = "OPPORTUNITY";
-    public static final String JOB_AT_SKILL_SERVICE = "SKILL_SERVICE";
-    public static final String JOB_AT_SKILL_SERVICE_TYPE = "SKILL";
-    public static final String INTEREST_TYPE = "INTEREST";
+
     public static final String USER = "USER";
     public static final String COMMUNITY_OWNER = "COMMUNITY_OWNER";
     public static final String ANONYMOUS = "ANONYMOUS";
     public static final String ASKING_QUESTION = "asking_question";
     public static final int ASKING_QUESTION_CALL = 101;
 
-    public static final String INTEREST_SUB_TYPE = "INTEREST_SERVICE";
-    public static final String WORK_EXPERIENCE_SUB_TYPE = "TOTAL_EXP";
-    public static final String WORK_EXPERIENCE_TYPE = "TOTAL_EXP";
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
@@ -127,15 +107,14 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
     public static final int REQUEST_CODE_FOR_COMMUNITY_LISTING = 1003;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
-    public static final int REQUEST_CODE_FOR_GOOGLE_PLUS =1301;
+    public static final int REQUEST_CODE_FOR_GOOGLE_PLUS = 1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
     public static final int REQUEST_CODE_FOR_SELF_PROFILE_DETAIL = 1502;
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
-    public static final String HELPLINE_FRAGMENT ="helpline";
-    public static final String PROFILE_FRAGMENT = "profile";
-    public static final String CHAMPION_LISTING = "Profile-CHAMPION_LISTING";
+    public static final String HELPLINE_FRAGMENT = "helpline";
+
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";
@@ -152,8 +131,7 @@ public class AppConstants {
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String ALL_SEARCH = "search";
     public static final String IMAGE = "Img";
-    public static final String MONTH_YEAR_PICKER_DIALOG = "MonthYearPickerDialog";
-    public static final String PANDING_MEMBER = "PandingMember";
+
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
@@ -165,21 +143,14 @@ public class AppConstants {
 
     public static final String EVENT_DETAIL = "event_detail";
     public static final String BELL_NOTIFICATION = "bell_notification";
-    public static final String SPAM_POST = "spam_post";
-    public static final String ARTICLE_DETAIL = "article_detail";
-    public static final String HOW_SHEROES_CAN_HELP = "how_can_sheroes";
-    public static final String YOUR_INTEREST = "your_interest";
 
-    public static final String JOB_DETAIL = "job_detail";
+    public static final String ARTICLE_DETAIL = "article_detail";
+
+
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
-    public static final String COVER_IMAGE = "cover_image";
-    public static final String TAG_LIST = "tag_list";
-    public static final String SKILL_LIST = "skill_list";
-    public static final String SKILL_LIST_ID = "skill_list_id";
-    public static final String MEMBER = "Member_detail";
-    public static final String MEMBER_FRAGMENT = "MemberFragment";
+
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
     public static final String MARK_AS_SPAM = "Reported as spam";
@@ -191,10 +162,10 @@ public class AppConstants {
     public static final int TWO_CONSTANT = 2;
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
-    public static final int FIFTH_CONSTANT = 5;
+
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
-    public static final int MEMBER_PAGE_SIZE = 100;
+
     public static final int INVITE_PAGE_SIZE = 200;
     public static final int NO_REACTION_CONSTANT = 0;
     public static final int HEART_REACTION_CONSTANT = 10;
@@ -212,58 +183,26 @@ public class AppConstants {
 
     /*Master data keys for pages*/
     public static final String MASTER_DATA_ARTICLE_KEY = "ARTICLE_CATEGORY";//article category drop down
-    public static final String MASTER_DATA_INTEREST_KEY = "INTEREST"; //interest
-    public static final String MASTER_DATA_OPPORTUNITY_KEY = "OPPORTUNITY";// looking_for
-    public static final String MASTER_DATA_LOOKING_FOR_KEY = "OPPORTUNITY_FOR_ONBOARDING";// looking_for
-
-    public static final String MASTER_DATA_JOB_TAG_KEY = "JOB_TAG";// currently
-    public static final String MASTER_DATA_SKILL_KEY = "SKILL"; // job at
-    public static final String MASTER_DATA_COMMUNITY_TYPE_KEY = "COMMUNITY_TYPE";
-    public static final String MASTER_DATA_TAGS_KEY = "TAGS";
-    public static final String MASTER_DATA_FUNCTIONAL_AREA_KEY = "FUNCTIONAL_AREA";//jobfilter
-    public static final String JOB_DATA_OPPORTUNITY_KEY = "OPPORTUNITY_FOR_JOB_FILTER";//jobfilter
 
     /*Get all data keys*/
-    public static final String LOCATION_CITY_GET_ALL_DATA_KEY = "city";
+
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
     public static final String BAD_RQUEST = "HTTP 400 Bad Request";
 /**/
 
-    public static final String MASTER_DATA_OPRTUNITY = "Opportunities"; // on second map lavele key
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
     public static final String DAY = " day";
     public static final String HOUR = " hr";
     public static final String MINUT = " min";
-    public static final String BLANK_MESSAGE = "Please fill all the details";
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
     public static final String NAV_DRAWER_FILE_NAME = "nav_items";
     public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
-    public static final int MAX_WORD_COUNTER = 4000;
     public static final String OPEN_COMMUNITY = "open community for join";
-    public static final String LEFT_BRACKET = "(";
-    public static final String RIGHT_BRACKET = ")";
-    public static final String TRAVEL = "TRAVEL_FLEXIBILITY";
     public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY = "SUMMARY";
     public static final String USER_SUMMARY_SERVICE = "USER_SUMMARY_SERVICE";
-    public static final String MASTER_DATA_DEFAULT_CATEGORY = "POPULAR";
-    public static final String USER_PROFILE = "Basic Details";
-    public static final String GOOD_AT_SKILL_PROFILE = "I'm good at";
-    public static final String INTEREST_PROFILE = "I am interested in";
-    public static final String OPPORTUNITY_PROFILE = "Looking for";
-    public static final String CANHELP_IN = "I can help with";
-    public static final String EDUCATION_PROFILE = "Education";
-    public static final String EXPERIENCE_PROFILE = "Work experience";
-    public static final String ABOUT_ME_PROFILE = "About Me";
-    public static final String USER_PROFILE1 = "PROFESSINAL BASIC DETAILS";
-    public static final String CLIENTSIDE = "Horizontal";
-    public static final String DEGREE_KEY = "degree";
-    public static final String FIELD_OF_STUDY_KEY = "field_of_study";
-    public static final String SCHOOL_KEY = "school_name";
-    public static final String MASTER_DATA_SECTOR_KEY = "SECTOR";//for sector search
-    public static final String WORK_EXPERIENCE_CATE = "work_exp_cate";
     public static final String INVALID_URL = "Invalid Url";
     public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
     public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
@@ -295,9 +234,7 @@ public class AppConstants {
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
-    public static final String JOBS_SEARCH_URL_COM = "https://sheroes.com/jobs/search";
-    public static final String JOBS_SEARCH_URL = "https://sheroes.in/jobs/search";
-    public static final String JOB_ID = "job_id";
+
     public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
@@ -307,9 +244,7 @@ public class AppConstants {
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
-    public static final String MODEL_KEY = "key";
-    public static final String BASIC_EXP_YEAR = "Year(s)";
-    public static final String BASIC_EXP_MONTH = "Month(s)";
+
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
     public static final String TITLE = "title";
@@ -319,13 +254,13 @@ public class AppConstants {
     public static final String TICKER = "ticker";
     public static final String CHECK_OUT = "Check out ";
     public static final String THOUSANDS = "K";
-    public static final String TWITTER_SHARE ="com.twitter.android";
-    public static final String TWITTER_SHARE_VIA_BROWSER ="https://twitter.com/intent/tweet?text=";
-    public static final String FACEBOOK_SHARE ="com.facebook.katana";
-    public static final String FACEBOOK_SHARE_VIA_BROSWER ="https://www.facebook.com/sharer/sharer.php?u=";
-    public static final String JPG_FORMATE =".jpg";
-    public static final String HELPLINE_SUB_TYPE_QUESTION= "Q";
-    public static final String HELPlINE_NO_MESSAGE="Please enter your message";
+    public static final String TWITTER_SHARE = "com.twitter.android";
+    public static final String TWITTER_SHARE_VIA_BROWSER = "https://twitter.com/intent/tweet?text=";
+    public static final String FACEBOOK_SHARE = "com.facebook.katana";
+    public static final String FACEBOOK_SHARE_VIA_BROSWER = "https://www.facebook.com/sharer/sharer.php?u=";
+    public static final String JPG_FORMATE = ".jpg";
+    public static final String HELPLINE_SUB_TYPE_QUESTION = "Q";
+    public static final String HELPlINE_NO_MESSAGE = "Please enter your message";
     public static final int REQ_CODE_SPEECH_INPUT = 100;
     public static final int EVENT_COMMUNITY_ID = 299;
     public static final String GOOGLE_PLUS = "Google plus";
@@ -344,7 +279,6 @@ public class AppConstants {
     public static final String orgUserType = "organisations_test_user";
     public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";
     public static final String PRIVATE_FOLDER_NAME = "Sheroes";
-    //public static final String webstyle = "body { font-family: MyFont !important; background-color: #FFFFFF; font-size: 0.987em; font-weight: 120; color: #4D4D4D; line-height: 160%; } strong { font-family: MyFont !important; font-size: 0.987em; } span { font-family: MyFont !important; font-size: 0.987em !important; } img { display: inline; height: auto; max-width: 100%; } .youtube { position: relative; padding-bottom: 56.23%; height: 0; overflow: hidden; max-width: 100%; background: #000; margin: 5px; } .youtube iframe, .youtube object, .youtube embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; background: transparent; } .youtube img { bottom: 0; display: block; left: 0; margin: auto; max-width: 100%; width: 100%; position: absolute; right: 0; top: 0; border: none; height: auto; cursor: pointer; -webkit-transition: .4s all; -moz-transition: .4s all; transition: .4s all; } .youtube img:hover { -webkit-filter: brightness(75%); } .youtube .play { height: 72px; width: 72px; left: 50%; top: 50%; margin-left: -36px; margin-top: -36px; position: absolute; background: url(\"http://i.imgur.com/TxzC70f.png\") no-repeat; cursor: pointer; }";
     public static final String webstyle = "@font-face {font-family: MyFont;src: url(\"fonts/RobotoSlab-Regular.ttf\")}body{font-family: MyFont !important;background-color:#FFFFFF ;font-size:0.987em ;font-weight:120;color: #4D4D4D ;line-height: 160%;}strong {font-family: MyFont !important;font-size:0.987em ;}span {font-family: MyFont !important;font-size: 0.987em !important;}img{display: inline;height: auto !important;max-width: 100% ;}";
     public static final String javascriptcode = "<script type=\"text/javascript\" src=\"jquery.js\"></script> <script type=\"text/javascript\" src=\"jquerylazyload.js\"></script> <script type=\"text/javascript\" language=\"javascript\"> /*source: http://www.appelsiini.net/projects/lazyload*/ function initials() { loadVideo(); convertImages(); loadImages(); } function loadImages() { $(\"img.lazy\").lazyload({ effect: \"fadeIn\" }); $(\"img.lazy\").click(function() { image.openImageActivity($(this).attr(\"data-original\")); }); } function loadVideo() { var n, v = document.getElementsByClassName(\"youtube\"); var l = v.length; for (n = 0; n < l; n++) { var iframe = document.createElement(\"iframe\"); iframe.setAttribute(\"src\", \"https://www.youtube.com/embed/\" + v[n].dataset.id + \"?rel=0&fs=1\"); iframe.setAttribute(\"frameborder\", \"0\"); iframe.setAttribute(\"width\", \"100%\"); iframe.setAttribute(\"id\", \"player\"); iframe.setAttribute(\"height\", \"240\"); iframe.setAttribute(\"allowfullscreen\", \"1\"); while (v[n].firstChild) { v[n].removeChild(v[n].firstChild); } v[n].appendChild(iframe); } } function convertImages() { var n, v = document.getElementsByTagName(\"img\"); var l = v.length; for (n = 0; n < l; n++) { v[n].setAttribute(\"data-original\", v[n].src); v[n].setAttribute(\"src\", \"placeholder.png\"); v[n].setAttribute(\"class\", \"lazy\"); } } </script>";
     public static final String VIEW_MORE_TEXT = "View More";
@@ -352,16 +286,20 @@ public class AppConstants {
     public static final String PLUS = "+";
 
     //Tags - for maintaining the Nav selection of current class
-    public static final String NAV_PROFILE= "Profile";
-    public static final String NAV_ARTICLES= "Articles";
-    public static final String NAV_CHALLENGE= "My Challenges";
-    public static final String NAV_ASK_SHEROES= "Ask Sheroes";
-    public static final String NAV_ICC_MEMBERS= "ICC Members";
-    public static final String NAV_FAQ= "FAQ";
+    public static final String NAV_PROFILE = "Profile";
+    public static final String NAV_ARTICLES = "Articles";
+    public static final String NAV_CHALLENGE = "My Challenges";
+    public static final String NAV_ASK_SHEROES = "Ask Sheroes";
+    public static final String NAV_ICC_MEMBERS = "ICC Members";
+    public static final String NAV_FAQ = "FAQ";
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
 
-    public static final String PROFILE_FOLLOWED_CHAMPION= "Profile Followed Champion";
-    public static final String WHATS_APP= "com.whatsapp";
+    public static final String PROFILE_FOLLOWED_CHAMPION = "Profile Followed Champion";
+    public static final String WHATS_APP = "com.whatsapp";
+
+    public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
+    public static final String APP_SNOW = "SNOW";
+    public static final String APP_SHARE_OPTION = "SHARE_OPTION";
 
 }
