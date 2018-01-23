@@ -99,6 +99,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
                     String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
                     Glide.with(userPic.getContext())
                             .load(userImage)
+                            .bitmapTransform(new CommonUtil.CircleTransform(mContext))
                             .into(userPic);
                 }
                 userName.setText(comment.getParticipantName());

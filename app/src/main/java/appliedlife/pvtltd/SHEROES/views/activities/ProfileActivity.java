@@ -10,6 +10,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -125,6 +127,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.toolbar_mentor)
     Toolbar mToolbar;
 
+    @Bind(R.id.loader_gif)
+    CardView loaderGif;
+
     @Bind(R.id.collapsing_toolbar_mentor)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
@@ -215,9 +220,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    @Bind(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
     @Inject
     EditProfilePresenterImpl editProfilePresenter;
 
@@ -234,8 +236,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         mAppBarLayout.addOnOffsetChangedListener(this);
         clHomeFooterList.setVisibility(View.GONE);
 
-        mProgressBar.setVisibility(View.VISIBLE);
-        mProgressBar.bringToFront();
+        loaderGif.setVisibility(View.VISIBLE);
 
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
@@ -594,15 +595,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     public void onBackClick() {
-        if (mChampionId > 0) {
-            if (mFromNotification == AppConstants.NO_REACTION_CONSTANT) {
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
-            } else {
-                deepLinkPressHandle();
-            }
-        } else {
-            deepLinkPressHandle();
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
         }
         finish();
     }
@@ -665,9 +662,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void onBackPressed() {
-
         onBackClick();
-
     }
 
 
@@ -693,7 +688,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -717,7 +711,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
             setProfileNameData(mUserSolarObject);
         }
-        mProgressBar.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
