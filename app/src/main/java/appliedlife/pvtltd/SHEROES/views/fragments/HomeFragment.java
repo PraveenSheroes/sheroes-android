@@ -193,7 +193,6 @@ public class HomeFragment extends BaseFragment {
         if(getActivity() instanceof ContestActivity){
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (ContestActivity) getActivity());
         }
-
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
@@ -227,6 +226,7 @@ public class HomeFragment extends BaseFragment {
             }
 
         });
+        showHeaderOnFeed();
         ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
@@ -283,6 +283,18 @@ public class HomeFragment extends BaseFragment {
             }
         });
         return view;
+    }
+    private void showHeaderOnFeed()
+    {
+        List<FeedDetail> data=new ArrayList<>();
+        FeedDetail header = new FeedDetail();
+        header.setSubType(AppConstants.HEADER);
+        data.add(0, header);
+        mPullRefreshList.allListData(data);
+        mAdapter.setSheroesGenericListData(data);
+        mAdapter.setUserId(mUserId);
+        mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+        mAdapter.notifyDataSetChanged();
     }
     public void showCaseDesign() {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
@@ -360,6 +372,7 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        showHeaderOnFeed();
         if(isChallenge){
             FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
@@ -503,14 +516,8 @@ public class HomeFragment extends BaseFragment {
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
             data=mPullRefreshList.getFeedResponses();
             int position=data.size()- feedDetailList.size();
-            if (position > 0) {
+            if (position > 1) {
                 data.remove(position - 1);
-            }else {
-                if (!isChallenge) {
-                    FeedDetail header = new FeedDetail();
-                    header.setSubType(AppConstants.HEADER);
-                    data.add(0, header);
-                }
             }
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);

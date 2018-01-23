@@ -46,6 +46,11 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+    }
+
+    @Override
+    public void bindData(FeedDetail item, final Context context, int position) {
+        this.dataItem=item;
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
@@ -54,14 +59,8 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             if (StringUtil.isNotNullOrEmptyString(userName) ) {
                 loggedInUser = userName;
             }
-
             userId = userPreference.get().getUserSummary().getUserId();
         }
-    }
-
-    @Override
-    public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem=item;
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
         if(StringUtil.isNotNullOrEmptyString(loggedInUser)) {

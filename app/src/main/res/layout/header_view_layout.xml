@@ -48,8 +48,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:textColor="@color/feed_article_label"
                 android:textSize="12sp"
-                android:textStyle="normal"
-                tools:text="Garima Sharma" />
+                android:textStyle="normal" />
 
             <TextView
                 android:padding="@dimen/dp_size_2"
