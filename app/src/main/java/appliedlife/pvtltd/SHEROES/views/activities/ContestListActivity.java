@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -84,7 +85,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         setContentView(R.layout.activity_contest_list);
         ButterKnife.bind(this);
         mContestListPresenter.attachView(this);
-
+        setupToolbarItemsColor();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mContestListView.setLayoutManager(mLayoutManager);
 
@@ -96,13 +97,15 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         FeedRequestPojo feedRequestPojo = AppUtils.makeFeedChallengeListRequest(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1);
         feedRequestPojo.setPageSize(100);
         mContestListPresenter.fetchContests(feedRequestPojo);
-
+    }
+    private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setText(R.string.title_contest_list);
     }
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;

@@ -1367,6 +1367,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
                     break;
+                case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
+                    Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragmentMentor)) {
+                        ((HomeFragment) fragmentMentor).onRefreshClick();
+                    }
+                    break;
                 default:
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
