@@ -56,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@color/white"
-                        android:drawableTop="@drawable/ic_communities_ic"
+                        android:drawableTop="@drawable/ic_add_community"
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="16sp" />
@@ -113,6 +113,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_size_12" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <GridLayout
                     android:id="@+id/user_communities"
                     android:layout_width="match_parent"
@@ -123,9 +126,17 @@
                     android:layout_marginStart="@dimen/dp_size_12"
                     android:columnCount="2"
                     android:horizontalSpacing="4dp"
-                    android:minHeight="@dimen/dp_size_100"
+                    android:minHeight="@dimen/dp_size_50"
                     android:rowCount="@integer/int_value_for_line_2"
                     android:verticalSpacing="4dp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_community"
+                    android:layout_width="@dimen/dp_size_50"
+                    android:layout_height="@dimen/dp_size_50"
+                    android:layout_gravity="center"/>
+
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/community_view_more"
@@ -217,6 +228,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_champion"
+                    android:layout_width="@dimen/dp_size_50"
+                    android:layout_height="@dimen/dp_size_50"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:id="@+id/followed_view_more"

@@ -263,7 +263,7 @@
     <string name="ID_JUST">Just</string>
     <string name="ID_STARTED">Started</string>
 
-    <string name="ID_SIGN_UP_MOBILE_HINT"></string>
+    <string name="ID_SIGN_UP_MOBILE_HINT"><font size="10">MOBILE NUMBER</font></string>
 
     <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
 

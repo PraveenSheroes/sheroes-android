@@ -214,7 +214,7 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
             android:orientation="vertical"
-           >
+            android:visibility="gone">
 
             <FrameLayout
                 android:id="@+id/fm_image_thumb"
@@ -237,6 +237,7 @@
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_media_play_dark"
+                    android:visibility="gone"
                     />
 
                 <ProgressBar

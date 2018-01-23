@@ -119,6 +119,12 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @BindDimen(R.dimen.dp_size_12)
     public int mImageMargin;
 
+    @Bind(R.id.progress_bar_champion)
+    ProgressBar progressBarChampion;
+
+    @Bind(R.id.progress_bar_community)
+    ProgressBar progressBarCommunity;
+
     @BindDimen(R.dimen.dp_size_4)
     public int defaultSize;
 
@@ -229,8 +235,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
-                mutualCommunityImage.setPlaceHolderId(R.drawable.default_img);
-                mutualCommunityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 mutualCommunityImage.bindImage(community.getThumbnailImageUrl());
             }
             view.setOnClickListener(new View.OnClickListener() {
@@ -267,7 +271,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             });
             mutualCommunityContainer.addView(remainingMutualCount);
         }
-
     }
 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
@@ -304,6 +307,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             counter++;
             if (counter == 4) break;
         }
+
+        progressBarCommunity.setVisibility(View.GONE);
     }
 
     @Override
@@ -336,7 +341,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
                 followedChampions = feedDetailList;
             }
         }
-
+        progressBarChampion.setVisibility(View.GONE);
     }
 
     @Override

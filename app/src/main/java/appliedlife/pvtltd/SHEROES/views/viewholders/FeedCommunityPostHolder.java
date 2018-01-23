@@ -756,7 +756,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
         }
         ivFeedCommunityPostLoginUserPic.setCircularImage(true);
-        ivFeedCommunityPostLoginUserPic.bindImage(mPhotoUrl);
+        ivFeedCommunityPostLoginUserPic.bindImage(authorImageUrl);
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             tvFeedCommunityPostLoginUserName.setText(loggedInUser);
         }

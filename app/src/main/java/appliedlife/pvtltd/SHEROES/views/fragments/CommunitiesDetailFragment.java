@@ -508,6 +508,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
             }
         } else {
+            if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity) {
+                ((ProfileActivity)getActivity()).refreshPostCount(true);
+            }
             super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
 
