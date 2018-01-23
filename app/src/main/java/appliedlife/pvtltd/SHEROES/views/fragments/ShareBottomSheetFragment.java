@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
@@ -53,6 +54,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private static final String SHARE_COPYLINK = "copy link";
     private static final String IS_IMAGE_SHARE = "Is Image Share";
     private static final String IS_CHALLENGE = "Is Challenge";
+    private static final String SHOW_TITLE = "Show Title";
 
     private android.content.ClipboardManager myClipboard;
     private ClipData myClip;
@@ -63,12 +65,16 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private String mShareCopyLink;
     private boolean mIsImageShare;
     private boolean mIsChallenge;
+    private boolean mShowTitle;
 
     //endregion
 
     // region View variables
     @Bind(R.id.layout_save_to_gallery)
     LinearLayout layoutSaveToGallery;
+
+    @Bind(R.id.title)
+    TextView title;
     // endregion
 
     //region Fragment LifeCycle Methods
@@ -83,6 +89,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             mShareCopyLink = getArguments().getString(SHARE_COPYLINK);
             mIsImageShare = getArguments().getBoolean(IS_IMAGE_SHARE, false);
             mIsChallenge = getArguments().getBoolean(IS_CHALLENGE, false);
+            mShowTitle = getArguments().getBoolean(SHOW_TITLE, false);
         }
         return super.onCreateDialog(savedInstanceState);
     }
@@ -93,6 +100,11 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         View containerView = View.inflate(getContext(), R.layout.dialog_share, null);
         dialog.setContentView(containerView);
         ButterKnife.bind(this, containerView);
+        if(mShowTitle){
+            title.setVisibility(View.VISIBLE);
+        }else {
+            title.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -112,6 +124,22 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         args.putString(SHARE_COPYLINK, shareCopyLink);
         args.putBoolean(IS_IMAGE_SHARE, isImage);
         args.putBoolean(IS_CHALLENGE, isChallenge);
+        shareBottomSheetFragment.setArguments(args);
+        args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
+        return shareBottomSheetFragment;
+    }
+
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink, boolean isChallenge, boolean showTitle) {
+        ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
+        Bundle args = new Bundle();
+        args.putString(SHARE_TEXT, shareText);
+        args.putString(SHARE_DEEPLINK, shareDeepLinkUrl);
+        args.putString(SHARE_IMAGE, shareImage);
+        args.putString(SHARE_COPYLINK, shareCopyLink);
+        args.putBoolean(IS_IMAGE_SHARE, isImage);
+        args.putBoolean(IS_CHALLENGE, isChallenge);
+        args.putBoolean(SHOW_TITLE, showTitle);
         shareBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
