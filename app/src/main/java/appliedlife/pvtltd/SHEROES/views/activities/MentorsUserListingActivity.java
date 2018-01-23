@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -92,12 +93,17 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         setContentView(R.layout.mentor_listing_layout);
         mHomePresenter.attachView(this);
         ButterKnife.bind(this);
+        setupToolbarItemsColor();
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
+        mentorSearchInListPagination(mFragmentListRefreshData);
+    }
+    private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.ID_MENTOR);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
-        mentorSearchInListPagination(mFragmentListRefreshData);
     }
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {

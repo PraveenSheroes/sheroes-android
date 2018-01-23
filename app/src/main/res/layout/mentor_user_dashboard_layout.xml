@@ -34,13 +34,13 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:background="@color/blue">
+                android:layout_marginTop="?attr/actionBarSize">
 
                 <include
-                    android:id="@+id/li_mentor_full_view_header"
+                    android:id="@+id/rl_mentor_full_view_header"
                     layout="@layout/mentor_dashboard_header_layout"
                     android:layout_width="match_parent"
+                    android:visibility="invisible"
                     android:layout_height="wrap_content" />
             </FrameLayout>
 
@@ -50,11 +50,14 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/challenge_header"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/AppTheme.Toolbar"
+                app:popupTheme="@style/AppTheme.PopupMenu">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_size_16"
                     android:orientation="horizontal">
 
                     <TextView
@@ -68,20 +71,8 @@
                         android:layout_alignParentLeft="true"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/white"
-                        android:layout_toLeftOf="@+id/iv_mentor_share"
                         android:textSize="@dimen/sp_size_20" />
-
-                    <ImageView
-                        android:id="@+id/iv_mentor_share"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginRight="@dimen/dp_size_10"
-                        android:padding="@dimen/dp_size_10"
-                        android:src="@drawable/ic_share_card_white" />
-                </RelativeLayout>
+       </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 
