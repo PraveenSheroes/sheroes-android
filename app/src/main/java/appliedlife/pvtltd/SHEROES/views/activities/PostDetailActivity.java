@@ -60,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -93,6 +94,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Inject
     PostDetailViewImpl mPostDetailPresenter;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -184,7 +188,19 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setupEditInputText();
         setupToolbarItemsColor();
     }
-
+    private boolean isWhatsAppShare() {
+        boolean isWhatsappShare = false;
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareText = "";
+            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareText)) {
+                if (shareText.equalsIgnoreCase("true")) {
+                    isWhatsappShare = true;
+                }
+            }
+        }
+        return isWhatsappShare;
+    }
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
         mIsAnonymous = false;
@@ -526,6 +542,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onShareButtonClicked(UserPostSolrObj userPostObj, TextView shareView) {
+
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(userPostObj.getPostShortBranchUrls())) {
             deepLinkUrl = userPostObj.getPostShortBranchUrls();
@@ -534,9 +551,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        startActivity(intent);
+        if (isWhatsAppShare()) {
+            intent.setPackage(AppConstants.WHATS_APP);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
+        } else {
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+
+        }
         AnalyticsManager.trackPostAction(Event.POST_SHARED, userPostObj, getScreenName());
     }
 

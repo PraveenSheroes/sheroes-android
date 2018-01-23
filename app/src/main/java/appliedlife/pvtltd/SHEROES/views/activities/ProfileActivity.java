@@ -461,7 +461,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
     }
 
-    @OnClick(R.id.li_follower)
+    @OnClick(R.id.li_following)
     public void followingClick() {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
@@ -824,7 +824,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
         }  else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
+            if(feedDetail.getEntityOrParticipantTypeId()!= 15) {
+                championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
+            }
         }
     }
 

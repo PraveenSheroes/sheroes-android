@@ -114,6 +114,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private long mUserId;
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
+    private boolean isWhatsAppShare;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +125,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
-            if(getIntent().getExtras().getBoolean(PushNotificationService.FROM_PUSH_NOTIFICATION, false)){
+            if (getIntent().getExtras().getBoolean(PushNotificationService.FROM_PUSH_NOTIFICATION, false)) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
@@ -161,6 +162,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     public void setAllValues(FragmentOpen fragmentOpen) {
         this.mFragmentOpen = fragmentOpen;
+    }
+
+    public void setConfigurableShareOption(boolean isWhatsAppShare) {
+        this.isWhatsAppShare = isWhatsAppShare;
     }
 
     public void setViewPagerAndViewAdapter(ViewPagerAdapter viewPagerAdapter, ViewPager viewPager) {
@@ -335,7 +340,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void startActivity(Intent intent) {
         boolean handled = false;
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_VIEW)) {
-            if(CommonUtil.isSheoresAppLink(Uri.parse(intent.getDataString()))){
+            if (CommonUtil.isSheoresAppLink(Uri.parse(intent.getDataString()))) {
                 intent.setClass(this, SheroesDeepLinkingActivity.class);
                 super.startActivity(intent);
                 return;
@@ -345,13 +350,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 AppUtils.openChromeTab(this, url);
                 handled = true;
             }
-            if(CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))){
+            if (CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))) {
                 intent.setClass(this, BranchDeepLink.class);
                 super.startActivity(intent);
                 return;
             }
         }
-        if(!handled){
+        if (!handled) {
             super.startActivity(intent);
         }
     }
@@ -365,16 +370,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
-                if (((CommunityFeedSolrObj)mFeedDetail).isClosedCommunity()) {
+                if (((CommunityFeedSolrObj) mFeedDetail).isClosedCommunity()) {
                     mFeedDetail.setFromHome(true);
                     showCommunityJoinReason(mFeedDetail);
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                 } else {
-                    if(((CommunityFeedSolrObj)mFeedDetail).isRequestPending())
-                    {
+                    if (((CommunityFeedSolrObj) mFeedDetail).isRequestPending()) {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-                    }else
-                    {
+                    } else {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
                     }
                     if (null != mViewPagerAdapter) {
@@ -402,22 +405,42 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 bookMarkTrending();
                 break;
             case R.id.tv_feed_community_post_user_share:
-                shareCardViaSocial(baseResponse);
+                if (isWhatsAppShare) {
+                    shareCardViaSocial(baseResponse);
+                } else {
+                    shareWithMultipleOption(baseResponse);
+                }
                 break;
             case R.id.tv_feed_review_post_user_share_ic:
-                shareCardViaSocial(baseResponse);
+                if (isWhatsAppShare) {
+                    shareCardViaSocial(baseResponse);
+                } else {
+                    shareWithMultipleOption(baseResponse);
+                }
                 break;
             case R.id.tv_feed_article_user_share:
-                shareCardViaSocial(baseResponse);
+                if (isWhatsAppShare) {
+                    shareCardViaSocial(baseResponse);
+                } else {
+                    shareWithMultipleOption(baseResponse);
+                }
                 break;
             case R.id.tv_feed_job_user_share:
-                shareCardViaSocial(baseResponse);
+                if (isWhatsAppShare) {
+                    shareCardViaSocial(baseResponse);
+                } else {
+                    shareWithMultipleOption(baseResponse);
+                }
                 break;
             case R.id.tv_article_share:
-                shareCardViaSocial(baseResponse);
+                if (isWhatsAppShare) {
+                    shareCardViaSocial(baseResponse);
+                } else {
+                    shareWithMultipleOption(baseResponse);
+                }
                 break;
             case R.id.tv_event_share_btn:
-                shareCardViaSocial(baseResponse);
+                shareWithMultipleOption(baseResponse);
                 break;
             /*Card menu option depend on Feed type like post,article etc */
 
@@ -467,9 +490,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
 
             case R.id.tv_join_conversation:
-                if(mFeedDetail instanceof UserPostSolrObj){
-                    PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
-                }else if(mFeedDetail instanceof ArticleSolrObj){
+                if (mFeedDetail instanceof UserPostSolrObj) {
+                    PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj) mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
+                } else if (mFeedDetail instanceof ArticleSolrObj) {
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
@@ -494,7 +517,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
-                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null,  AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
 
                 break;
             case R.id.li_community_images:
@@ -511,33 +534,33 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                 break;
             case R.id.tv_feed_community_post_card_title:
-                if(((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID){
-                    if(null!=mFeedDetail) {
+                if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                    if (null != mFeedDetail) {
                         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                             mUserId = userPreference.get().getUserSummary().getUserId();
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
-                }else  if(((UserPostSolrObj)mFeedDetail).getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR){
-                    if(null!=mFeedDetail) {
+                } else if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                    if (null != mFeedDetail) {
 
                     }
-                }else {
-                    if(mFeedDetail instanceof UserPostSolrObj ) {
+                } else {
+                    if (mFeedDetail instanceof UserPostSolrObj) {
                         if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
                             ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
-                        }else {
+                        } else {
                             CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
 
                         }
-                    }else {
+                    } else {
                         CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
 
                     }
                 }
                 break;
             case R.id.tv_feed_review_card_title:
-                if(null!=mFeedDetail) {
+                if (null != mFeedDetail) {
                     if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                         mUserId = userPreference.get().getUserSummary().getUserId();
                         openGenericCardInWebView(mFeedDetail);
@@ -549,8 +572,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    private void openGenericCardInWebView(FeedDetail feedDetail){
-        if(StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl())) {
+    private void openGenericCardInWebView(FeedDetail feedDetail) {
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl())) {
             Uri url = Uri.parse(feedDetail.getDeepLinkUrl());
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(url);
@@ -558,7 +581,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    //Open profile from last comment user profile or name click
+
+//Open profile from last comment user profile or name click
     public void openUserProfileLastComment(View view, BaseResponse baseResponse) {
         Comment comment = (Comment) baseResponse;
         if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
@@ -568,18 +592,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
-
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
-            if(mFragment instanceof CommunitiesDetailFragment)
-            {
+            if (mFragment instanceof CommunitiesDetailFragment) {
                 ((CommunitiesDetailFragment) mFragment).bookMarkForCard(mFeedDetail);
-            }else
-            {
+            } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
         }
-        if(this instanceof ContestActivity){
+        if (this instanceof ContestActivity) {
             ((ContestActivity) this).bookmarkPost(mFeedDetail);
         }
     }
@@ -594,29 +615,27 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private void shareCardViaSocial(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
-        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
-        {
-            deepLinkUrl=feedDetail.getPostShortBranchUrls();
-        }else
-        {
-            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
+            deepLinkUrl = feedDetail.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = feedDetail.getDeepLinkUrl();
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
-        if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
+        if (feedDetail.getSubType().equals(AppConstants.FEED_JOB)) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                             .title(mFeedDetail.getNameOrTitle())
-                            .companyId(Long.toString(((JobFeedSolrObj)mFeedDetail).getCompanyMasterId()))
+                            .companyId(Long.toString(((JobFeedSolrObj) mFeedDetail).getCompanyMasterId()))
                             .location(mFeedDetail.getAuthorCityName())
                             .build();
             trackEvent(Event.JOBS_SHARED, properties);
-        }else {
+        } else {
             AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
         }
 
@@ -672,35 +691,22 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
     }
 
-    private void shareWithMultipleOption(BaseResponse baseResponse)
-    {
+    private void shareWithMultipleOption(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
-        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
-        {
-            deepLinkUrl=feedDetail.getPostShortBranchUrls();
-        }else
-        {
-            deepLinkUrl=feedDetail.getDeepLinkUrl();
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
+            deepLinkUrl = feedDetail.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = feedDetail.getDeepLinkUrl();
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT,deepLinkUrl);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
-        if(feedDetail.getSubType().equals(AppConstants.FEED_JOB)){
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
-                            .title(mFeedDetail.getNameOrTitle())
-                            .companyId(Long.toString(((JobFeedSolrObj)mFeedDetail).getCompanyMasterId()))
-                            .location(mFeedDetail.getAuthorCityName())
-                            .build();
-            trackEvent(Event.JOBS_SHARED, properties);
-        }else {
-            AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
-        }
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
     }
+
     private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
         int id = view.getId();
         switch (id) {
@@ -718,10 +724,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if (null != userPreference.get().getUserSummary().getUserBO()) {
                         adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
                     }
-                    if(adminId==AppConstants.TWO_CONSTANT)
-                    {
+                    if (adminId == AppConstants.TWO_CONSTANT) {
                         tvEdit.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         tvEdit.setVisibility(View.VISIBLE);
                     }
                 }
@@ -741,23 +746,20 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-                    int adminId=0;
-                    Long userId=userPreference.get().getUserSummary().getUserId();
-                    if(null != userPreference.get().getUserSummary().getUserBO()) {
+                    int adminId = 0;
+                    Long userId = userPreference.get().getUserSummary().getUserId();
+                    if (null != userPreference.get().getUserSummary().getUserBO()) {
                         adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
                     }
-                    if (mFeedDetail.getAuthorId() == userId|| ((UserPostSolrObj)mFeedDetail).isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT) {
+                    if (mFeedDetail.getAuthorId() == userId || ((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
-                        if(((UserPostSolrObj)mFeedDetail).isCommunityOwner()||adminId==AppConstants.TWO_CONSTANT)
-                        {
-                            if(mFeedDetail.getAuthorId() == userId)
-                            {
+                        if (((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
+                            if (mFeedDetail.getAuthorId() == userId) {
                                 tvEdit.setVisibility(View.VISIBLE);
-                            }else {
+                            } else {
                                 tvEdit.setVisibility(View.GONE);
                             }
-                        }else
-                        {
+                        } else {
                             tvEdit.setVisibility(View.VISIBLE);
                         }
 
@@ -805,7 +807,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (null != mFeedDetail) {
                     // mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.ONE_CONSTANT);
+                    ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.ONE_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -833,7 +835,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     //  mFragmentOpen.setCommentList(true);
                     // mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    ((UserPostSolrObj)mFeedDetail).setIsEditOrDelete(AppConstants.TWO_CONSTANT);
+                    ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.TWO_CONSTANT);
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -843,25 +845,24 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                     } else {
-                        if(mFragment instanceof CommunitiesDetailFragment)
-                        {
+                        if (mFragment instanceof CommunitiesDetailFragment) {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
                                 ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                             }
-                        }else
-                        {
+                        } else {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
                                 ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                             }
                         }
 
                     }
-                    ((SheroesApplication)this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
 
         }
     }
+
     public void openImageFullViewFragment(FeedDetail feedDetail) {
         AlbumActivity.navigateTo(this, feedDetail, "BASE", null);
     }
@@ -871,9 +872,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        if(feedDetail instanceof UserPostSolrObj){
-            PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
-        }else if(feedDetail instanceof ArticleSolrObj){
+        if (feedDetail instanceof UserPostSolrObj) {
+            PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj) feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        } else if (feedDetail instanceof ArticleSolrObj) {
             ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
         }
     }
@@ -931,7 +932,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     } else if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
                         showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                         if (this instanceof HomeActivity) {
-                            ((HomeActivity)this).logOut();
+                            ((HomeActivity) this).logOut();
                         }
                     } else {
                         showNetworkTimeoutDoalog(true, false, errorReason);
@@ -957,14 +958,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void invalidateLikeUnlike(Comment comment) {
 
     }
-    public String screenName(){
+
+    public String screenName() {
         String sourceScreen = "";
-        if(getSupportFragmentManager() !=null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())){
+        if (getSupportFragmentManager() != null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             List<Fragment> fragments = fragmentManager.getFragments();
             if (fragments != null) {
                 for (Fragment fragment : fragments) {
-                    if (fragment != null && fragment.isVisible()){
+                    if (fragment != null && fragment.isVisible()) {
                         sourceScreen = ((BaseFragment) fragment).getScreenName();
                         break;
                     }

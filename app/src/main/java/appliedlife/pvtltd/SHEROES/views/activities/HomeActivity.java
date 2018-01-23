@@ -432,6 +432,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 eventDetailDialog(mEventId);
             }
         }
+        setConfigurableShareOption(isWhatsAppShare());
+
     }
 
     private void deepLinkingRedirection() {
@@ -526,9 +528,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean shouldShowSnowFlake() {
         boolean showSnowFlake = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW"))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW))) {
             String snowFlakeFlag = "";
-            snowFlakeFlag = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("SNOW").get(0).getLabel();
+            snowFlakeFlag = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW).get(0).getLabel();
             if (CommonUtil.isNotEmpty(snowFlakeFlag)) {
                 if (snowFlakeFlag.equalsIgnoreCase("true")) {
                     showSnowFlake = true;
@@ -537,8 +539,20 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         return showSnowFlake;
     }
-
-    private void setProfileImage() { //Drawer top iamge
+    private boolean isWhatsAppShare() {
+        boolean isWhatsappShare = false;
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareText = "";
+            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareText)) {
+                if (shareText.equalsIgnoreCase("true")) {
+                    isWhatsappShare = true;
+                }
+            }
+        }
+        return isWhatsappShare;
+    }
+    private void setProfileImage() { //Drawer top image
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             if (null != profile) {
