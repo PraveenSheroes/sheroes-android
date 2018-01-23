@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -128,8 +129,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
         setContentView(R.layout.activity_contest);
         ButterKnife.bind(this);
         mContestPresenter.attachView(this);
-       /* mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);*/
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
             mContest = Parcels.unwrap(parcelable);
@@ -150,6 +149,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (mContest != null) {
             initializeAllViews();
         }
+        setupToolbarItemsColor();
     }
 
     private void initializeAllViews() {
@@ -170,12 +170,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
             }
         });
-        setSupportActionBar(mToolbarView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        if (mContest != null) {
-            toolbarTitle.setText("Challenge");
-        }
+
         int fragmentIndex = 0;/*getIntent().getIntExtra(ContestPreviewActivity.FRAGMENT_INDEX, -1);*/
         if (fragmentIndex != -1) {
             mTabLayout.getTabAt(fragmentIndex).select();
@@ -185,7 +180,16 @@ public class ContestActivity extends BaseActivity implements IContestView {
             }
         }
     }
-
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbarView);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        if (mContest != null) {
+            toolbarTitle.setText("Challenge");
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();

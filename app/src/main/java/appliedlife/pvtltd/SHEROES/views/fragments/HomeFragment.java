@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -221,7 +222,6 @@ public class HomeFragment extends BaseFragment {
             }
 
         });
-        showHeaderOnFeed();
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
             ((HomeActivity) getActivity()).logOut();
@@ -242,6 +242,10 @@ public class HomeFragment extends BaseFragment {
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        params.setMargins(0, 160, 0, 0);
+                        loaderGif.setLayoutParams(params);
+                        showHeaderOnFeed();
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
@@ -365,16 +369,16 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        List<FeedDetail> data=new ArrayList<>();
-        FeedDetail header = new FeedDetail();
-        header.setSubType(AppConstants.HEADER);
-        data.add(0, header);
-        mPullRefreshList.allListData(data);
         if(isChallenge){
             FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
         }else {
+            List<FeedDetail> data=new ArrayList<>();
+            FeedDetail header = new FeedDetail();
+            header.setSubType(AppConstants.HEADER);
+            data.add(0, header);
+            mPullRefreshList.allListData(data);
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
