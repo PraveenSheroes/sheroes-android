@@ -287,17 +287,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
         allTextViewStringOperations(mContext);
         likeCommentOps();
-        if (mUserPostObj.communityId == 0) {
-            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
-        } else {
-            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
-        }
-        if (mUserPostObj.communityId == AppConstants.ASKED_QUESTION_TO_MENTOR) {
-            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
-        } else {
-            tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
-        }
-      /*  if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
+        if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
            // tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
               //  tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
@@ -321,7 +311,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
            // tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
            // tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
-        }*/
+        }
 
     }
 
