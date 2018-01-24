@@ -43,6 +43,7 @@ public class AppConstants {
     public static final String COMMA = ",";
     public static final String AT_THE_RATE_OF = "@";
 
+    public static final String SHARED_PREFS = "SHARED_PREFS";
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
@@ -181,6 +182,9 @@ public class AppConstants {
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
     public static final int MENTOR_TYPE_ID = 7;
+
+    public static final String HOME_USER_NAME_PREF= "HOME_USERANAME";
+    public static final String PROFILE_SHARE_PREF= "PROFILE_SHARE";
 
 
     /*Master data keys for pages*/

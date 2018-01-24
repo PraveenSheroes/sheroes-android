@@ -113,7 +113,7 @@
                     android:hint="@string/ID_PROFILE_FULL_NAME"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_16" />
             </android.support.design.widget.TextInputLayout>
 
@@ -127,7 +127,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:hint="@string/ID_LOCATION_HINT"
                 android:textColor="@color/text_color_contactdetails_page"
-                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_13" />
 
             <EditText
@@ -143,7 +143,7 @@
                 android:imeOptions="actionNext"
                 android:focusable="false"
                 android:textColor="@color/text_color_contactdetails_page"
-                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_13" />
 
             <android.support.design.widget.TextInputLayout
@@ -167,7 +167,7 @@
                     android:maxLength="@integer/int_value_for_line_160"
                     android:maxLines="@integer/int_value_for_line_4"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_14" />
             </android.support.design.widget.TextInputLayout>
 
@@ -212,7 +212,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:hint="@string/ID_DATE_OF_BIRTH"
                 android:textColor="@color/text_color_contactdetails_page"
-                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_13" />
 
             <EditText
@@ -228,7 +228,7 @@
                 android:imeOptions="actionNext"
                 android:focusable="false"
                 android:textColor="@color/text_color_contactdetails_page"
-                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_13" />
 
             <TextView
@@ -241,8 +241,8 @@
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:gravity="center_vertical"
                 android:hint="@string/ID_RELACTIONSHIP_HINT"
-                android:textColor="@color/text_color_contactdetails_page"
-                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColor="@color/gray_light"
+                android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_13" />
 
             <Spinner
@@ -273,7 +273,7 @@
                     android:maxLength="2"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
@@ -296,7 +296,7 @@
                     android:inputType="number"
                     android:maxLength="10"
                     android:textColor="@color/text_color_contactdetails_page"
-                    android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                    android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_13" />
 
             </android.support.design.widget.TextInputLayout>
@@ -310,8 +310,8 @@
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:hint="@string/ID_EMAIL_ID_HINT"
-                android:textColor="@color/text_color_contactdetails_page"
-                android:textColorHint="@color/text_color_setting_preference_basicdetails"
+                android:textColor="@color/gray_light"
+                android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_13" />
 
             <TextView

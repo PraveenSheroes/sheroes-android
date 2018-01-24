@@ -73,10 +73,12 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ToolTipHelper;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -271,6 +273,7 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
+
         ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, 0);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
@@ -533,6 +536,12 @@ public class HomeFragment extends BaseFragment {
             }
             if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
                 showCaseDesign();
+            } else {
+                if(CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+                    ToolTipHelper toolTipHelper = new ToolTipHelper(getActivity(), "Tap here to check out your profile", null, AppConstants.HOME_USER_NAME_PREF, 170);
+                    toolTipHelper.setArrowOnLeft(true);
+                    toolTipHelper.displayTooltip();
+                }
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);

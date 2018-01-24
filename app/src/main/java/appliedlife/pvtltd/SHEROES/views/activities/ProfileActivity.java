@@ -75,6 +75,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ToolTipHelper;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -320,6 +321,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
         } else {
             followUnFollowMentor();
+        }
+
+        if(isOwnProfile) {
+            if(CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
+                ToolTipHelper toolTipHelper = new ToolTipHelper(ProfileActivity.this, "Share your profile and get friends to follow you on SHEROES", null, AppConstants.PROFILE_SHARE_PREF, 20);
+                toolTipHelper.displayTooltip();
+            }
         }
 
         if (userSolrObj.isAuthorMentor()) isMentor = true;

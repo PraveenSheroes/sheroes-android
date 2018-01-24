@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tooltip_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/spacer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_1" />
+
+    <ImageView
+        android:id="@+id/tooltip_nav"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="end"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/share_tooltip"
+        android:rotation="360" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_tooltip_background">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_weight="0.85"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_size_10"
+            android:padding="10dp"
+            android:gravity="left"
+            android:text="Share your profile and get friends to follow you on SHEROES "
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_marginTop="@dimen/dp_size_20"
+            android:layout_weight="0.15"
+            android:id="@+id/got_it"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Got it"
+            android:textColor="@color/accent"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
