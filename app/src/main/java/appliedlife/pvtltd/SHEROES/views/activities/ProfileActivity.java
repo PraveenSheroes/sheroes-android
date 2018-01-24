@@ -240,6 +240,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
 
+    private boolean isMentorQARefresh = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -263,14 +265,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isMentor = getIntent().getExtras().getBoolean(AppConstants.IS_MENTOR_ID);
             mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
-
         }
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
         } else if (null != mFeedDetail) {
             itemPosition = mFeedDetail.getItemPosition();
         }
-        if (mChampionId > 0) {
+        if (mChampionId > 0 && null == mUserSolarObject) {
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
@@ -281,12 +282,19 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
+
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
+    }
+
+    public void profileActivitiesRefresh() {
+       String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
+        tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
+        tvMentorAnswer.setText(pluralAnswer);
     }
 
     @Override
@@ -750,7 +758,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             if (isMentor) {
                 clHomeFooterList.setVisibility(View.VISIBLE);
             }
-            setProfileNameData(mUserSolarObject);
+            if (isMentorQARefresh) {
+                profileActivitiesRefresh();
+            } else {
+
+                setProfileNameData(mUserSolarObject);
+            }
+
         }
         loaderGif.setVisibility(View.GONE);
     }
@@ -848,22 +862,22 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
-        }  else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+        } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             if (loggedInUserId != -1) {
                 championDetailActivity(loggedInUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
             }
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
-        }  else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+        } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
                 championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
             }
-        }  else if (baseResponse instanceof FeedDetail) {
+        } else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
-            if(feedDetail.getEntityOrParticipantTypeId()!= 15) {
+            if (feedDetail.getEntityOrParticipantTypeId() != 15) {
                 championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
             }
         }
@@ -890,7 +904,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mUserSolarObject);
+                            ((CommunitiesDetailFragment) fragment).swipeToRefreshList();
                         }
                     }
                     break;
@@ -923,6 +937,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                                 ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                             } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                                isMentorQARefresh = true;
+                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
                             }
                         }
                     }
@@ -950,20 +966,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        //LogUtils.info(TAG, "****************offset***" + verticalOffset);
-        /*if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
-            mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
-            mLiHeader.setVisibility(View.INVISIBLE);
-        } else {
-            mLiHeader.setVisibility(View.VISIBLE);
-        }*/
 
-    }
-
-    public void createCommunityPostClick(FeedDetail feedDetail) {
-        CommunityPost communityPost = new CommunityPost();
-        communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false, null);
     }
 
     @Override
@@ -1234,7 +1237,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity,long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, UserSolrObj userSolrObj) {
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, UserSolrObj userSolrObj) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
         Bundle bundle = new Bundle();
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
@@ -1259,7 +1262,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     public void refreshPostCount(boolean isPostDeleted) {
-        if(isPostDeleted) {
+        if (isPostDeleted) {
             String postCount = userTotalPostCount.getText().toString();
             int postNumbers = Integer.parseInt(postCount);
             postNumbers = postNumbers > 0 ? postNumbers - 1 : 0;

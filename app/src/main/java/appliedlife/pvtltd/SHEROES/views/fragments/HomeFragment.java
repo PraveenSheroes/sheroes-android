@@ -304,6 +304,9 @@ public class HomeFragment extends BaseFragment {
         ((HomeActivity)getActivity()).isWalkthroughShown=true;
         showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
+        InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
+        installUpdateForMoEngage.setAppInstallFirstTime(true);
+        mInstallUpdatePreference.set(installUpdateForMoEngage);
     }
 
     private void getGcmId() {

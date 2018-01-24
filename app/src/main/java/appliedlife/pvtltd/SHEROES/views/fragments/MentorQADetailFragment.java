@@ -12,11 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.f2prateek.rx.preferences.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
@@ -42,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -58,22 +54,20 @@ import butterknife.ButterKnife;
  * Created by Praveen on 06/12/17.
  */
 
-public class  MentorQADetailFragment extends BaseFragment {
+public class MentorQADetailFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Mentor QA Detail Screen";
     private final String TAG = LogUtils.makeLogTag(MentorQADetailFragment.class);
     @Inject
     HomePresenter mHomePresenter;
-    @Bind(R.id.rv_communities_detail_list)
+    @Bind(R.id.rv_mentor_qa_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.pb_communities_progress_bar)
+    @Bind(R.id.pb_mentor_qa_progress_bar)
     ProgressBar mProgressBar;
-    @Bind(R.id.swipe_view_communities_detail)
+    @Bind(R.id.swipe_view_mentor_qa)
     SwipeRefreshLayout mSwipeView;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
-    @Bind(R.id.tv_join_view)
-    TextView mTvJoinView;
     @Inject
     AppUtils mAppUtils;
     @Bind(R.id.li_no_result)
@@ -83,17 +77,12 @@ public class  MentorQADetailFragment extends BaseFragment {
     private UserSolrObj mUserSolrObj;
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
-    private String mPressedButtonName;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
-    private FeedDetail mApprovePostFeedDetail;
-    private boolean mIsSpam;
-    private long mUserId;
+
     private Comment mComment;
-    private long mCommunityPostId;
+
 
     public static MentorQADetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId) {
         MentorQADetailFragment mentorQADetailFragment = new MentorQADetailFragment();
@@ -109,12 +98,8 @@ public class  MentorQADetailFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
+        View view = inflater.inflate(R.layout.mentor_qa_fragment_layout, container, false);
         ButterKnife.bind(this, view);
-        LogUtils.info(TAG, "########Metor QA detail");
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
         if (null != getArguments()) {
             Parcelable parcelable = getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
             if (null != parcelable) {
@@ -128,8 +113,14 @@ public class  MentorQADetailFragment extends BaseFragment {
                 return view;
             }
         }
+        initializeAndListner();
+
+
+        return view;
+    }
+
+    private void initializeAndListner() {
         if (null != mUserSolrObj) {
-            mTvJoinView.setEnabled(true);
             mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mUserSolrObj.getIdOfEntityOrParticipant());
             mFragmentListRefreshData.setCommunityId(mUserSolrObj.getIdOfEntityOrParticipant());
             mPullRefreshList = new SwipPullRefreshList();
@@ -141,7 +132,6 @@ public class  MentorQADetailFragment extends BaseFragment {
             mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            mTvJoinView.setTag(false);
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
@@ -164,15 +154,12 @@ public class  MentorQADetailFragment extends BaseFragment {
 
             mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
             mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
-            FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
+            FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), 0);
             feedRequestPojo.setIdForFeedDetail(null);
             feedRequestPojo.setCommunityId(mUserSolrObj.getIdOfEntityOrParticipant());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getFeedFromPresenter(feedRequestPojo);
 
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                mUserId = mUserPreference.get().getUserSummary().getUserId();
-            }
             mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -180,9 +167,6 @@ public class  MentorQADetailFragment extends BaseFragment {
                 }
             });
         }
-
-
-        return view;
     }
 
     public void swipeToRefreshList() {
@@ -191,13 +175,14 @@ public class  MentorQADetailFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
+        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), 0);
         feedRequestPojo.setIdForFeedDetail(null);
         feedRequestPojo.setCommunityId(mUserSolrObj.getIdOfEntityOrParticipant());
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
 
     }
+
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
@@ -251,17 +236,10 @@ public class  MentorQADetailFragment extends BaseFragment {
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(mPressedButtonName) && mPressedButtonName.equalsIgnoreCase(getString(R.string.ID_JOIN))) {
-            switch (feedParticipationEnum) {
-                case JOIN_INVITE:
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
-            }
-        } else {
-            super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
+        super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
+        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity) {
+            ((ProfileActivity)getActivity()).refreshPostCount(true);
         }
-
     }
 
 
@@ -321,16 +299,6 @@ public class  MentorQADetailFragment extends BaseFragment {
         }
     }
 
-
-    @Override
-    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case SPAM_POST_APPROVE:
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
-        }
-    }
 
     @Override
     public String getScreenName() {
