@@ -238,6 +238,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        }
         setResult();
         super.onBackPressed();
 
@@ -248,17 +254,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         CommonUtil.hideKeyboard(this);
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    TaskStackBuilder.create(this)
-                            .addNextIntentWithParentStack(upIntent)
-                            .startActivities();
-                    onBackPressed();
-                } else {
-                    onBackPressed();
-                    // finish();
-                    //NavUtils.navigateUpFromSameTask(this);
-                }
+                onBackPressed();
                 break;
         }
         return true;
