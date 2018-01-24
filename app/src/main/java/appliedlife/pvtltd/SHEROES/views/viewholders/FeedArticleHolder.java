@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +33,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -121,6 +123,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private String mPhotoUrl;
     private String loggedInUser;
     private Handler mHandler;
+    private boolean isWhatappShareOption=false;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     public FeedArticleHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -139,6 +145,15 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = first + AppConstants.SPACE + last;
             }
         }
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareOption = "";
+            shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareOption)) {
+                if (shareOption.equalsIgnoreCase("true")) {
+                    isWhatappShareOption=true;
+                }
+            }
+        }
     }
 
     @Override
@@ -150,8 +165,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (articleObj == null) {
             return;
         }
-
-        //this.dataItem = item;
         this.mContext = context;
         tvFeedArticleUserBookmark.setEnabled(true);
         tvFeedArticleUserReaction.setTag(true);
@@ -182,6 +195,19 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        if(isWhatappShareOption) {
+            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
+            tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
+            tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
+
+        }
+        else
+        {
+            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE));
+            tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
+
+        }
         mViewMoreDescription = articleObj .getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
@@ -543,20 +569,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    //Click on Article Writer
-    /*@OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_card_title})
-    public void onFeedArticleCircleFixedIconClick() { //Open profile from feed
-        if (!articleObj.isAuthorMentor()) {
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
-        }
+    @OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_user_name})
+    public void onFeedArticleUserNameClick() { //Open profile from feed
+            viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);
     }
-
-    @OnClick({R.id.iv_feed_article_card_circle_icon, R.id.tv_feed_article_card_title})
-    public void onFeedArticleCircleIconClick() { //Open profile from feed
-        if (!articleObj.isAuthorMentor()) {
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
-    }*/
 
     @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_article_join_conversation, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
     public void openCommentClick() {

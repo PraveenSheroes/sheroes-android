@@ -38,7 +38,7 @@
         android:layout_marginTop="6dp"
         android:text="2 min"
         android:textColor="@color/text_grey"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/comment_author_name"

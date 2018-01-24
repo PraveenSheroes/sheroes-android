@@ -48,7 +48,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
@@ -137,7 +137,7 @@ public class  MentorQADetailFragment extends BaseFragment {
             mHomePresenter.attachView(this);
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileActvity) getActivity());
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActivity) getActivity());
             mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
@@ -145,13 +145,13 @@ public class  MentorQADetailFragment extends BaseFragment {
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
-                    ((MentorUserProfileActvity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                    ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
 
                 }
 
                 @Override
                 public void onShow() {
-                    ((MentorUserProfileActvity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                    ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                 }
 
                 @Override

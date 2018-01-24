@@ -180,8 +180,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        // final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
-        //    getSupportActionBar().setHomeAsUpIndicator(backArrow);
         tvMentorToolbarName.setText(R.string.ID_EDIT_PROFILE);
 
         String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);

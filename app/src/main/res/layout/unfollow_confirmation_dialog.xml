@@ -4,16 +4,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:minHeight="@dimen/dp_size_209"
-    android:minWidth="@dimen/dp_size_220"
+    android:minWidth="@dimen/dp_size_280"
+    android:background="@drawable/dialog_border"
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_margin="@dimen/dp_size_24"
+        android:layout_marginTop="@dimen/dp_size_24"
         android:id="@+id/title"
+        android:fontFamily="sans-serif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/feed_article_label"
         android:textStyle="normal"
         android:gravity="center_horizontal"
         tools:text="Unfollow Anupriya Kashyap?"/>
@@ -23,11 +25,15 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="@dimen/mentor_profile_icon"
         android:layout_height="@dimen/mentor_profile_icon"
-        android:layout_marginTop="@dimen/dp_size_16"
-        />
+        android:layout_marginTop="@dimen/dp_size_16" />
+
+    <View
+        android:layout_marginTop="@dimen/dp_size_24"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/on_board_work"/>
 
     <LinearLayout
-        android:layout_marginTop="@dimen/dp_size_24"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
@@ -40,7 +46,6 @@
             android:layout_gravity="center"
             android:layout_weight=".5"
             android:textAllCaps="true"
-            android:background="@drawable/rectangle_footer_mentor_dashboard"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="bottom|center_horizontal"
             android:text="@string/cancel"
@@ -53,7 +58,7 @@
             android:id="@+id/view_footer"
             android:layout_width="@dimen/dp_size_1"
             android:layout_height="match_parent"
-            android:background="@color/profile_text"/>
+            android:background="@color/on_board_work"/>
         <TextView
             android:id="@+id/unfollow"
             android:layout_width="0dp"
@@ -61,7 +66,6 @@
             android:layout_gravity="center"
             android:layout_weight=".5"
             android:textAllCaps="true"
-            android:background="@drawable/rectangle_footer_mentor_dashboard"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="bottom|center_horizontal"
             android:text="@string/unfollow"

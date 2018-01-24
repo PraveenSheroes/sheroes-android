@@ -118,7 +118,7 @@
                 android:layout_toRightOf="@id/star"
                 android:layout_marginLeft="8dp"
                 android:layout_centerVertical="true"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:textStyle="normal"
                 android:textColor="#878787"
@@ -166,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
 
                 <TextView
                     android:id="@+id/post_time"
@@ -175,7 +175,7 @@
                     android:layout_marginTop="@dimen/dp_size_3"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/feed_card_time"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/sp_size_14" />
             </LinearLayout>
 
             <TextView
@@ -231,17 +231,19 @@
                     android:visibility="gone" />
 
                 <ImageView
+                    android:background="@drawable/circular_view"
                     android:id="@+id/iv_play"
                     android:layout_width="@dimen/dp_size_50"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_media_play_dark"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
                 <ProgressBar
                     android:id="@+id/progress_bar_post_link"
-                    android:layout_width="@dimen/dp_size_40"
-                    android:layout_height="@dimen/dp_size_40"
+                    android:layout_width="@dimen/dp_size_50"
+                    android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
                     android:backgroundTint="@color/added_member_text" />
             </FrameLayout>
@@ -256,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp_size_9"
                     android:layout_marginLeft="@dimen/dp_size_8"
-                    android:layout_marginRight="@dimen/dp_size_12"
+                    android:layout_marginRight="@dimen/dp_size_14"
                     android:layout_marginTop="@dimen/dp_size_10"
                     android:orientation="vertical">
 
@@ -267,7 +269,7 @@
                         android:layout_marginTop="@dimen/dp_size_10"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_12" />
+                        android:textSize="@dimen/sp_size_14" />
 
                     <TextView
                         android:id="@+id/tv_post_link_sub_title"
@@ -315,7 +317,7 @@
                 android:layout_toRightOf="@+id/like_heart_icon"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
 
             <TextView
                 android:id="@+id/comment_counts"
@@ -326,7 +328,7 @@
                 android:layout_alignParentTop="true"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
         </RelativeLayout>
 
 
@@ -371,7 +373,8 @@
                 android:drawableLeft="@drawable/ic_comment_icon"
                 android:drawablePadding="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_40"
+                android:layout_toRightOf="@+id/like_button"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_10"
