@@ -50,7 +50,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
@@ -176,7 +176,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             mLayoutManager = new LinearLayoutManager(getContext());
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
-                mAdapter = new GenericRecyclerViewAdapter(getContext(), (MentorUserProfileActvity) getActivity());
+                mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActivity) getActivity());
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             }
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -186,8 +186,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 public void onHide() {
                     try {
 
-                        if (getActivity() instanceof MentorUserProfileActvity) {
-                            ((MentorUserProfileActvity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                        if(getActivity() instanceof ProfileActivity) {
+                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
                         }
 
                     } catch (ClassCastException ex) {
@@ -241,6 +241,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                 }
             });
         }
+
     }
 
     public void swipeToRefreshList() {
@@ -390,7 +391,9 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
-
+        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity) {
+            ((ProfileActivity)getActivity()).refreshPostCount(true);
+        }
     }
 
     @Override
@@ -498,4 +501,3 @@ public class CommunitiesDetailFragment extends BaseFragment {
         return null;
     }
 }
-

@@ -177,7 +177,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @OnClick(R.id.tv_list_user_comment)
     public void onCommentWithNameClick() {
        /* if (mComment.isVerifiedMentor()) {
-            viewInterface.championProfile(mComment, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            viewInterface.navigateToProfileView(mComment, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }*/
     }
 

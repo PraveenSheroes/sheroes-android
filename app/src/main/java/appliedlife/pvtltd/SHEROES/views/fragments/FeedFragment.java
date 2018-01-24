@@ -71,13 +71,15 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -120,6 +122,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     TextView emptySubText;
     // endregion
 
+    private long mLoggedInUser = -1;
+    private boolean isLoggedInUserMentor;
     private FeedAdapter mAdapter;
     EventDetailDialogFragment eventDetailDialogFragment;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
@@ -154,7 +158,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         }
         mScreenProperties = new EventProperty.Builder()
-                .sourceScreenId(((CommunityDetailActivity) getActivity()).getCommunityId())
+                .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
                 .sourceTabKey(mCommunityTab.key)
                 .sourceTabTitle(mCommunityTab.title)
                 .build();
@@ -164,6 +168,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mAdapter = new FeedAdapter(getContext(), this);
         mFeedRecyclerView.setAdapter(mAdapter);
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
+
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isLoggedInUserMentor = true;
+            }
+        }
 
         // Initialize Swipe Refresh Layout
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -306,11 +318,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
-    }
-
-    @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
-        onChampionProfileClicked((UserPostSolrObj) baseResponse, championValue);
     }
 
     @Override
@@ -569,18 +576,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
-        long userId = userPostObj.getCreatedBy();
-        int position = userPostObj.getItemPosition();
-        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
-        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        communityFeedSolrObj.setItemPosition(position);
-        MentorUserProfileActvity.navigateTo(getActivity(), communityFeedSolrObj, userId, userPostObj.isAuthorMentor(), position, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-
-    }
-
-    @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             if (null != userPostObj) {
@@ -721,12 +716,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onMentorProfileClicked(UserSolrObj userSolrObj) {
         if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-            MentorUserProfileActvity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
 
-        if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
-            MentorUserProfileActvity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        else if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
+            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
+    }
+
+    @Override
+    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
+        long userId = userPostObj.getCreatedBy();
+        int position = userPostObj.getItemPosition();
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, userPostObj.isAuthorMentor(),position, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+
     }
 
     @Override
@@ -758,6 +765,33 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         mSwipeRefresh.setRefreshing(false);
         mAdapter.feedFinishedLoading();
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+        if(mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+                Comment comment = postDetails.getLastComments().get(0);
+                openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+        } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
+            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
+        } else {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if(postDetails.getEntityOrParticipantTypeId() != 15) {
+                onChampionProfileClicked(postDetails, mValue);
+            }
+        }
+    }
+
+    private void openProfileScreen(Long userId, int position, boolean isMentor, String source) {
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
