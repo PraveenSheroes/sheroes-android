@@ -83,6 +83,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -752,7 +753,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         });
         registerSubscription(subscription);
     }
-    public void getSpamPostApproveFromPresenter(ApproveSpamPostRequest approveSpamPostRequest) {
+    public void getSpamPostApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final UserPostSolrObj userPostSolrObj) {
         getMvpView().startProgressBar();
         Subscription subscription = mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new Subscriber<ApproveSpamPostResponse>() {
 
@@ -771,6 +772,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
+                    if(approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true){
+                        // spam post was rejected
+                        getMvpView().removeItem(userPostSolrObj);
+                    }else if(approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false){
+                        // spam post was approved
+                        userPostSolrObj.setSpamPost(false);
+                        getMvpView().invalidateItem(userPostSolrObj);
+                    }
                     //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
                 }
             }

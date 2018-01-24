@@ -76,4 +76,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onArticlePostLiked(ArticleSolrObj articleSolrObj);
 
     void onArticlePostUnLiked(ArticleSolrObj articleSolrObj);
+
+    void onSpamPostApprove(UserPostSolrObj userPostObj);
+
+    void onSpamPostDelete(UserPostSolrObj userPostObj);
 }

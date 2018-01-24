@@ -584,12 +584,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onSpamApprovedClicked(UserPostSolrObj userPostObj, TextView view) {
-
+        mPostDetailPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostObj, true, false, true), userPostObj);
     }
 
     @Override
     public void onSpamPostDeleteClicked(UserPostSolrObj userPostObj, TextView view) {
-
+        mPostDetailPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostObj, true, true, false), userPostObj);
     }
 
     @Override
@@ -603,7 +603,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
         if (userPostSolrObj != null) {
             builder.title(userPostSolrObj.getNameOrTitle())
-                    .id(Integer.toString(userPostSolrObj.getEntityOrParticipantTypeId()));
+                    .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()));
 
         }
         HashMap<String, Object> properties = builder.build();

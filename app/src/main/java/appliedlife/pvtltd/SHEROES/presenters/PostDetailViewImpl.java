@@ -33,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
@@ -642,6 +644,54 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     @Override
                     public LikeResponse call(LikeResponse likeResponse) {
                         return likeResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void getSpamPostApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final UserPostSolrObj userPostSolrObj) {
+        getMvpView().startProgressBar();
+        final Subscription subscription = getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new Subscriber<ApproveSpamPostResponse>() {
+
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+
+            @Override
+            public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
+                if (null != approveSpamPostResponse) {
+                    if(approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true){
+                        // spam post was rejected
+                        getMvpView().onPostDeleted();
+                    }else if(approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false){
+                        // spam post was approved
+                        userPostSolrObj.setSpamPost(false);
+                        mBaseResponseList.set(0, userPostSolrObj);
+                        getMvpView().setData(0, userPostSolrObj);
+
+                    }
+                    //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
+                }
+            }
+        });
+        registerSubscription(subscription);
+    }
+
+    public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
+        return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
+                .map(new Func1<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
+                    @Override
+                    public ApproveSpamPostResponse call(ApproveSpamPostResponse approveSpamPostResponse) {
+                        return approveSpamPostResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

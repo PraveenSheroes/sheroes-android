@@ -1238,12 +1238,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_approve_spam_post)
     public void onApproveSpamPostClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvApproveSpamPost);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onSpamPostApprove(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvApproveSpamPost);
+        }
     }
 
     @OnClick(R.id.tv_delete_spam_post)
     public void onDeleteSpamPostClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvDeleteSpamPost);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onSpamPostDelete(mUserPostObj);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvDeleteSpamPost);
+        }
     }
 
     @OnClick(R.id.comment_like)
