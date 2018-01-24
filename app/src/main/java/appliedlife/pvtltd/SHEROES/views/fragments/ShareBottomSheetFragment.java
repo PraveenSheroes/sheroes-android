@@ -228,14 +228,15 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         }else {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(AppConstants.SHARE_MENU_TYPE);
+            String shareText = mShareDeepLinkUrl;
             if(mShowTitle && mIsAppLink){
-                    String shareWhatsappAppLink = "";
-                    if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_WHATSAPP"))) {
-                        shareWhatsappAppLink = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB").get(0).getLabel();
+                    String shareFacebookAppLink = "";
+                    if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB"))) {
+                        shareFacebookAppLink = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB").get(0).getLabel();
                     }
-                    mShareText = shareWhatsappAppLink + mShareDeepLinkUrl;
+                shareText = shareFacebookAppLink + mShareDeepLinkUrl;
             }
-            intent.putExtra(Intent.EXTRA_TEXT, mShareDeepLinkUrl);
+            intent.putExtra(Intent.EXTRA_TEXT, shareText);
             // See if official Facebook app is found
             boolean facebookAppFound = false;
             List<ResolveInfo> matches = getActivity().getPackageManager().queryIntentActivities(intent, 0);
@@ -248,7 +249,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             }
             // As fallback, launch sharer.php in a browser
             if (!facebookAppFound) {
-                String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + mShareDeepLinkUrl;
+                String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + shareText;
                 intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
             }
             startActivity(intent);
