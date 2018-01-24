@@ -367,7 +367,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 {
                     deepLinkUrl=mCommunityFeedSolrObj.getDeepLinkUrl();
                 }
-                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true);
+                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false);
                 /*Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
