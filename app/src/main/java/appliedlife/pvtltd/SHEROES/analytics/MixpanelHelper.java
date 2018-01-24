@@ -183,6 +183,7 @@ public class MixpanelHelper {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
+                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .title(feedDetail.getNameOrTitle())
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
