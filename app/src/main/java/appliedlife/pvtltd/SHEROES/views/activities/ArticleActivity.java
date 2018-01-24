@@ -22,6 +22,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -651,7 +652,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             }
             authorDesName.setText(article.author.name);
-            authorDescription.setText(article.author.shortDescription);
+            authorDescription.setText(Html.fromHtml(article.author.shortDescription));
 
         }
         title.setText(article.title);
