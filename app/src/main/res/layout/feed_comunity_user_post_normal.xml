@@ -104,8 +104,8 @@
                 android:drawableRight="@drawable/ic_bookmark_in_active"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_14"
-                android:paddingTop="@dimen/dp_size_5"
-                android:paddingRight="@dimen/dp_size_20" />
+                android:paddingRight="@dimen/dp_size_20"
+                android:paddingTop="@dimen/dp_size_5" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_menu"
@@ -113,9 +113,9 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingBottom="@dimen/dp_size_10"
-                android:paddingTop="@dimen/dp_size_5"
                 android:paddingLeft="@dimen/dp_size_14"
-                android:paddingRight="@dimen/sp_size_24" />
+                android:paddingRight="@dimen/sp_size_24"
+                android:paddingTop="@dimen/dp_size_5" />
 
         </LinearLayout>
 
@@ -348,10 +348,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/dp_size_40"
+                android:layout_toRightOf="@+id/tv_feed_community_post_user_reaction"
                 android:drawableLeft="@drawable/ic_comment_icon"
                 android:drawablePadding="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_10"
@@ -374,8 +375,8 @@
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp_size_10"
-                android:paddingRight="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_10"
                 android:paddingTop="@dimen/dp_size_7"
                 android:text="@string/ID_SHARE_ON_WHATS_APP"
                 android:textColor="@color/share_color"
@@ -599,8 +600,8 @@
         android:id="@+id/fl_spam_post_ui"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
