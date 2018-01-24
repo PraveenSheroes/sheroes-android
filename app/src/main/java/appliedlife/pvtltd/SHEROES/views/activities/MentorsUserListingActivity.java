@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -174,7 +173,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     private void openMentorProfileDetail(BaseResponse baseResponse) { //form mentor card in feed only for mentor
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
         mFeedDetail = userSolrObj;
-        MentorUserProfileActvity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
+        ProfileActivity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
     }
 
     @Override

@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
@@ -570,20 +569,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    //Click on Article Writer
-    /*@OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_card_title})
-    public void onFeedArticleCircleFixedIconClick() { //Open profile from feed
-        if (!articleObj.isAuthorMentor()) {
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
-        }
+    @OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_user_name})
+    public void onFeedArticleUserNameClick() { //Open profile from feed
+            viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);
     }
-
-    @OnClick({R.id.iv_feed_article_card_circle_icon, R.id.tv_feed_article_card_title})
-    public void onFeedArticleCircleIconClick() { //Open profile from feed
-        if (!articleObj.isAuthorMentor()) {
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
-    }*/
 
     @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_article_join_conversation, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
     public void openCommentClick() {

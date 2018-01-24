@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.WinnerListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
@@ -131,7 +132,14 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     }
 
     private void initAdapter() {
-        mWinnerListAdapter = new WinnerListAdapter(getActivity());
+        mWinnerListAdapter = new WinnerListAdapter(getActivity(), new WinnerListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Winner item) {
+                long userId = Long.valueOf(item.userId);
+                ProfileActivity.navigateTo(getActivity(), userId, false, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+            }
+        });
+
         mRecyclerView.setAdapter(mWinnerListAdapter);
     }
 

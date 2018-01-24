@@ -95,17 +95,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <include
+        android:visibility="gone"
+        layout="@layout/gif_loader"/>
+
     <include
         layout="@layout/mentor_dashboard_footer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom" />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

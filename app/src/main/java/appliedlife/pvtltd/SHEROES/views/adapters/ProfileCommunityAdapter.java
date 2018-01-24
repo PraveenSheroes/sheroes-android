@@ -24,7 +24,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by ravi on 01/01/18.
- * Adapter for community listing on user or mentor profile
+ * Adapter for community listing on user or champion profile
  */
 
 public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -136,8 +136,6 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if (profileCommunity.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
-                    mentorIcon.setPlaceHolderId(R.drawable.default_img);
-                    mentorIcon.setErrorPlaceHolderId(R.drawable.default_img);
                     mentorIcon.bindImage(profileCommunity.getThumbnailImageUrl());
                 }
 
@@ -151,6 +149,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                     for (int i = 0; i < canHelpInArea.size(); i++) {
                         if (i > 0) {
                             expertFields.append(AppConstants.COMMA);
+                            expertFields.append(AppConstants.SPACE);
                         }
                         expertFields.append(canHelpInArea.get(i));
                     }

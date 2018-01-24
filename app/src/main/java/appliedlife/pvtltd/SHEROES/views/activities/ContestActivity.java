@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -54,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -514,7 +516,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             feedRelatedOptions(view, baseResponse);
         }
         if (baseResponse instanceof Comment) {
-           // setAllValues(mFragmentOpen);
+            // setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
@@ -648,4 +650,31 @@ public class ContestActivity extends BaseActivity implements IContestView {
         mContestPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
     //endregion
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+                Comment comment = postDetails.getLastComments().get(0);
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+        } else if(baseResponse instanceof UserPostSolrObj) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+                Comment comment = postDetails.getLastComments().get(0);
+                championDetailActivity(comment.getEntityAuthorUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+
+        }
+    }
+
+    private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        mFeedDetail = communityFeedSolrObj;
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
 }

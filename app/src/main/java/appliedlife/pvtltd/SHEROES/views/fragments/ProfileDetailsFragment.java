@@ -21,7 +21,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -39,12 +38,12 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -54,17 +53,17 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 /**
  * Created by Ravi on 31/12/17.
+ * Profile Details - Contain Followed Champions and Communities
  */
 
-public class UserProfileTabFragment extends BaseFragment implements ProfileNewView {
+public class ProfileDetailsFragment extends BaseFragment implements ProfileView {
     private static final String SCREEN_LABEL = "Profile Details Screen";
-    private final String TAG = LogUtils.makeLogTag(UserProfileTabFragment.class);
+    private final String TAG = LogUtils.makeLogTag(ProfileDetailsFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
     public static final String USER_MENTOR_NAME ="USER_NAME";
     public static final String SELF_PROFILE ="SELF_PROFILE";
     private long userId;
-    private String userName = "User";
     private boolean isSelfProfile;
     private List<CommunityFeedSolrObj> profileCommunities;
     private List<UserSolrObj> followedChampions;
@@ -120,6 +119,12 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @BindDimen(R.dimen.dp_size_12)
     public int mImageMargin;
 
+    @Bind(R.id.progress_bar_champion)
+    ProgressBar progressBarChampion;
+
+    @Bind(R.id.progress_bar_community)
+    ProgressBar progressBarCommunity;
+
     @BindDimen(R.dimen.dp_size_4)
     public int defaultSize;
 
@@ -132,13 +137,13 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static UserProfileTabFragment createInstance(long userId, String name) {
-        UserProfileTabFragment userProfileTabFragment = new UserProfileTabFragment();
+    public static ProfileDetailsFragment createInstance(long userId, String name) {
+        ProfileDetailsFragment profileDetailsFragment = new ProfileDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putString(USER_MENTOR_NAME, name);
-        userProfileTabFragment.setArguments(bundle);
-        return userProfileTabFragment;
+        profileDetailsFragment.setArguments(bundle);
+        return profileDetailsFragment;
     }
 
     @Override
@@ -150,12 +155,10 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         Bundle bundle = getArguments();
         userId = bundle.getLong(USER_MENTOR_ID);
-        userName = bundle.getString(USER_MENTOR_NAME);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
             if (mUserPreference.get().getUserSummary().getUserId() == userId) {
                 isSelfProfile = true;
-                userName = mUserPreference.get().getUserSummary().getFirstName()!=null ? mUserPreference.get().getUserSummary().getFirstName() : "User";
             }
         }
 
@@ -220,9 +223,9 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
-        String name = communities.get(0).getAuthorName() == null ? "User" : communities.get(0).getAuthorName();
-        name = ((MentorUserProfileActvity)getActivity()).getUserNameTitle();
-        mutualCommunityLabel.setText(name + " & you share "+ mutualCommunitySize +" mutual communities");
+        String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+        String mutualCommunityText = getResources().getString(R.string.PLACEHOLDER_MUTUAL_COMMUNITY, name, String.valueOf(mutualCommunitySize));
+        mutualCommunityLabel.setText(mutualCommunityText);
 
         mutualCommunityContainer.removeAllViews();
 
@@ -232,8 +235,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
-                mutualCommunityImage.setPlaceHolderId(R.drawable.default_img);
-                mutualCommunityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 mutualCommunityImage.bindImage(community.getThumbnailImageUrl());
             }
             view.setOnClickListener(new View.OnClickListener() {
@@ -270,13 +271,12 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             });
             mutualCommunityContainer.addView(remainingMutualCount);
         }
-
     }
 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
         int screenWidth = CommonUtil.getWindowWidth(getContext());
-        float aspectRatio = (float) 124 / 160;
+        float aspectRatio = (float) 150 / 160;
         int columnSize = screenWidth / 2 - mImageMargin;
         userCommunityLayout.removeAllViews();
         int counter = 0;
@@ -287,8 +287,6 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             TextView communityName = ButterKnife.findById(view, R.id.community_name);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 communityImage.setCircularImage(true);
-                communityImage.setPlaceHolderId(R.drawable.default_img);
-                communityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 communityImage.bindImage(community.getThumbnailImageUrl());
 
             }
@@ -302,13 +300,15 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             });
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    columnSize, (int) (columnSize * aspectRatio));
+                    columnSize, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(layoutParams);
 
             userCommunityLayout.addView(view);
             counter++;
             if (counter == 4) break;
         }
+
+        progressBarCommunity.setVisibility(View.GONE);
     }
 
     @Override
@@ -316,16 +316,15 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
         if(feedResponsePojo.getNumFound() ==0) {
             //empty view
-
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
-            userName = userName ==null ? "User" : userName;
-            String message = getString(R.string.empty_followed_mentor, userName);
+            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
             followedMentorsListContainer.setVisibility(View.GONE);
 
             if(isSelfProfile) {
                 emptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
-                emptyViewFollowedMentor.setText("Follow Champions");
+                emptyViewFollowedMentor.setText(R.string.champions_followed);
                 emptyViewDottedBorder.setVisibility(View.VISIBLE);
             } else{
                 emptyViewDottedBorder.setBackgroundResource(0);
@@ -342,20 +341,20 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 followedChampions = feedDetailList;
             }
         }
-
+        progressBarChampion.setVisibility(View.GONE);
     }
 
     @Override
     public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Follower count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((MentorUserProfileActvity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((ProfileActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
     @Override
     public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
         LogUtils.info(TAG, "Following count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((MentorUserProfileActvity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
+        ((ProfileActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
 
     }
 
@@ -381,7 +380,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 mutualCommunityLabel.setVisibility(View.GONE);
             }
         } else {
-            spacing.setVisibility(View.VISIBLE);
+            spacing.setVisibility(View.GONE);
             mutualCommunityContainer.setVisibility(View.GONE);
             mutualCommunityLabel.setVisibility(View.GONE);
         }
@@ -410,13 +409,13 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
             //current scenrio - other hv all so change if future other don't hv mutual - empty view
             emptyViewCommunitiesContainer.setVisibility(View.VISIBLE);
             communityListContainer.setVisibility(View.GONE);
-            String name = userName!=null ? userName : "User";
+            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_community, name);
             emptyViewCommunities.setText(message);
 
             if(isSelfProfile) {
                 dottedCommunityEmptyView.setBackgroundResource(R.drawable.dotted_line_border);
-                emptyViewCommunities.setText("Join Communities & Connect");
+                emptyViewCommunities.setText(R.string.join_communities);
             } else{
                 dottedCommunityEmptyView.setBackgroundResource(0);
             }
@@ -426,7 +425,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
     @Override
     public void getUsersPostCount(int totalPost) {
         LogUtils.info(TAG, "Post count:" + totalPost);
-        ((MentorUserProfileActvity) getActivity()).setUsersPostCount(totalPost);
+        ((ProfileActivity) getActivity()).setUsersPostCount(totalPost);
     }
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
@@ -444,19 +443,17 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
 
             if (StringUtil.isNotNullOrEmptyString(userSolrObj.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
-                mutualCommunityImage.setPlaceHolderId(R.drawable.default_img);
-                mutualCommunityImage.setErrorPlaceHolderId(R.drawable.default_img);
                 mutualCommunityImage.bindImage(userSolrObj.getThumbnailImageUrl());
             }
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MentorUserProfileActvity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    ((ProfileActivity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                 }
             });
 
-            mentorName.setText(userSolrObj.getNameOrTitle());
+            mentorName.setText(StringUtil.toTitleCase(userSolrObj.getNameOrTitle()));
 
             List<String> canHelpInArea = userSolrObj.getCanHelpIns();
             if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
@@ -464,6 +461,7 @@ public class UserProfileTabFragment extends BaseFragment implements ProfileNewVi
                 for (int i = 0; i < canHelpInArea.size(); i++) {
                     if (i > 0) {
                         expertFields.append(AppConstants.COMMA);
+                        expertFields.append(AppConstants.SPACE);
                     }
                     expertFields.append(canHelpInArea.get(i));
                 }

@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -338,7 +335,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
     @OnClick(R.id.tv_mentor_answering_question)
     public void mentorAnsweringQuestionClick() {
-        MentorUserProfileActvity.navigateTo(this, mUserSolrObj, mUserSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, AppConstants.MENTOR_INSIGHT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserSolrObj, mUserSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, AppConstants.MENTOR_INSIGHT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

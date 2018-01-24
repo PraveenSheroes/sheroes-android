@@ -583,7 +583,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
 
-        MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override
@@ -737,13 +737,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void userProfileNameClick(Comment comment, View view) {
-        //if(!comment.isAnonymous() && (comment.getParticipationTypeId() == 1 || comment.getParticipationTypeId() == 7)) { //participant_type_id_l
-        /*if(!comment.isAnonymous()) { //TODO - ID of user who have commented have issue , need to fix with backed
+        if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantId());
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, comment.getParticipantId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }*/
+            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
     }
 
     @Override

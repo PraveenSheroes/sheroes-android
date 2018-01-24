@@ -89,7 +89,7 @@
     <string name="ID_COMMENTS">Comments</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
-    <string name="ID_PROFILE">Profile</string>
+    <string name="ID_PROFILE">About</string>
     <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_POST">Post as:</string>
@@ -101,7 +101,7 @@
     <string name="ID_REMOVE">Remove</string>
     <string name="ID_INVITE">Invite</string>
     <string name="ID_SHARE">Share</string>
-    <string name="ID_EDIT">Edit</string>
+    <string name="ID_EDIT">EDIT</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_APPROVE">Approve</string>
@@ -263,7 +263,7 @@
     <string name="ID_JUST">Just</string>
     <string name="ID_STARTED">Started</string>
 
-    <string name="ID_SIGN_UP_MOBILE_HINT"></string>
+    <string name="ID_SIGN_UP_MOBILE_HINT"><font size="10">MOBILE NUMBER</font></string>
 
     <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
 
@@ -493,7 +493,6 @@
     <string name="ID_NEXT">Next</string>
     <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
 
-    <string name="followed_communities">Followed Communities</string>
     <string name="view_more">View More</string>
     <string name="followed_mentors">Followed Champions</string>
     <string name="cancel">CANCEL</string>
@@ -503,6 +502,10 @@
     <string name="add_location">Add Location</string>
     <string name="add_skills">Add Skills</string>
     <string name="add_desc">Add Description</string>
+    <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
+    <string name="followed_communities">Communities Joined</string>
+    <string name="champions_followed">Champions Followed</string>
+    <string name="join_communities">Join Communities &amp; Connect></string>
 
     <string name="ID_SHARE_ON_WHATS_APP">Whatsapp</string>
 </resources>
