@@ -253,14 +253,13 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isMentor = getIntent().getExtras().getBoolean(AppConstants.IS_MENTOR_ID);
             mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
-
         }
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
         } else if (null != mFeedDetail) {
             itemPosition = mFeedDetail.getItemPosition();
         }
-        if (mChampionId > 0) {
+        if (mChampionId > 0&&null == mUserSolarObject) {
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);

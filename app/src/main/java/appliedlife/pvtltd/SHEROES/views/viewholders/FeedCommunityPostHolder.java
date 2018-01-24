@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -158,7 +159,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedCommunityPostUserName;
     @Bind(R.id.line_for_no_image)
     View lineForNoImage;
-
+    @Bind(R.id.ripple_feed_post_comment)
+    RippleView rippleView;
     @Bind(R.id.rl_feed_community_post_no_reaction_comments)
     RelativeLayout rlFeedCommunityPostNoReactionComment;
     @Bind(R.id.tv_feed_community_post_user_comment_post_menu)
@@ -835,11 +837,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick({R.id.tv_join_conversation,R.id.tv_feed_community_post_user_comment})
     public void joinConversationClick() {
-        if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
-        }else {
-            viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
-        }
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
+                }else {
+                    viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
+                }
+            }
+        });
+
     }
 
     @OnClick(R.id.li_feed_community_user_post_images)

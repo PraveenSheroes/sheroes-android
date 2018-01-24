@@ -186,8 +186,10 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                     case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                         if (null != intent.getExtras()) {
                             UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                            mAdapter.setMentoreDataOnPosition(userSolrObj,userSolrObj.currentItemPosition);
-                            mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                            if(null!=userSolrObj) {
+                                mAdapter.setMentoreDataOnPosition(userSolrObj, userSolrObj.currentItemPosition);
+                                mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                            }
                         }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
