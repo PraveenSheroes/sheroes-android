@@ -88,7 +88,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onLikeClickListener.onCommentClicked(LikeListItemViewHolder.this);
+                    onLikeClickListener.onLikeRowItemClicked(LikeListItemViewHolder.this);
                 }
             });
         }
@@ -108,7 +108,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
     }
 
     public interface LikeHolderListener {
-        void onCommentClicked(LikeListItemViewHolder likeListItemViewHolder);
+        void onLikeRowItemClicked(LikeListItemViewHolder likeListItemViewHolder);
     }
     // endregion
 }

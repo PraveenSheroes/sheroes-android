@@ -158,7 +158,7 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
     }
 
     @Override
-    public void onCommentClicked(LikeListAdapter.LikeListItemViewHolder likeListItemViewHolder) {
+    public void onLikeRowItemClicked(LikeListAdapter.LikeListItemViewHolder likeListItemViewHolder) {
         int adapterPosition = likeListItemViewHolder.getAdapterPosition();
         if(adapterPosition != RecyclerView.NO_POSITION) {
             Comment comment = mLikeListAdapter.getComment(adapterPosition);

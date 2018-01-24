@@ -755,10 +755,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
-                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
             }
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
-            championDetailActivity(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
+            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
         } else {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(postDetails.getEntityOrParticipantTypeId() != 15) {
@@ -767,7 +767,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
+    private void openProfileScreen(Long userId, int position, boolean isMentor, String source) {
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);

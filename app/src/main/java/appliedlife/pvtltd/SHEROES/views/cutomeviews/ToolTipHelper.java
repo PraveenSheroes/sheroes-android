@@ -50,7 +50,6 @@ public class ToolTipHelper {
             ImageView arrow = (ImageView) popupView.findViewById(R.id.tooltip_nav);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.LEFT | Gravity.START;
-            params.setMargins(10, 0, 0, 0);
             arrow.setLayoutParams(params);
         }
 

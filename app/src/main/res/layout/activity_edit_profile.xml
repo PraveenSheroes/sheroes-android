@@ -78,15 +78,32 @@
                     android:textSize="@dimen/sp_size_14"
                     android:textStyle="normal" />
 
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal|bottom"
-                    android:text="@string/ID_EDIT"
-                    android:drawablePadding="@dimen/dp_size_5"
-                    android:paddingBottom="@dimen/dp_size_10"
-                    android:textColor="@color/white"
+
+                <LinearLayout
+                    android:background="@drawable/ic_combined_shape"
+                    android:layout_gravity="bottom|center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_marginTop="@dimen/dp_size_3"
+                        android:layout_marginLeft="@dimen/dp_size_20"
+                        android:layout_marginStart="@dimen/dp_size_20"
+                        android:text="@string/ID_EDIT"
+                        android:textColor="@color/white"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <ImageView
+                        android:layout_marginTop="@dimen/dp_size_5"
+                        android:layout_marginStart="@dimen/dp_size_5"
+                        android:layout_marginLeft="@dimen/dp_size_5"
+                        android:background="@drawable/ic_photo_camera"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
 
                 <ProgressBar
                     android:visibility="gone"
