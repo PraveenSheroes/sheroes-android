@@ -147,6 +147,7 @@
         android:textSize="14sp"
         android:fontFamily="sans-serif-medium"
         android:textStyle="normal"
+        android:padding="@dimen/dp_size_10"
         android:drawablePadding="6dp"
         android:gravity="center_vertical"
         android:textColor="#dc4541"

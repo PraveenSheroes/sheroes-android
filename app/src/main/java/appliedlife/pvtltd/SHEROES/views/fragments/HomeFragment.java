@@ -301,6 +301,9 @@ public class HomeFragment extends BaseFragment {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
         showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
+        InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
+        installUpdateForMoEngage.setAppInstallFirstTime(true);
+        mInstallUpdatePreference.set(installUpdateForMoEngage);
     }
 
     private void getGcmId() {
@@ -534,13 +537,15 @@ public class HomeFragment extends BaseFragment {
             }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
             }
-            if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
-                showCaseDesign();
-            } else {
-                if(CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
-                    ToolTipHelper toolTipHelper = new ToolTipHelper(getActivity(), "Tap here to check out your profile", null, AppConstants.HOME_USER_NAME_PREF, 170);
-                    toolTipHelper.setArrowOnLeft(true);
-                    toolTipHelper.displayTooltip();
+            if(getActivity() instanceof HomeActivity) {
+                if (((HomeActivity) getActivity()).mIsFirstTimeOpen) {
+                    showCaseDesign();
+                } else {
+                    if (CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+                        ToolTipHelper toolTipHelper = new ToolTipHelper(getActivity(), "Tap here to check out your profile", null, AppConstants.HOME_USER_NAME_PREF, 170);
+                        toolTipHelper.setArrowOnLeft(true);
+                        toolTipHelper.displayTooltip();
+                    }
                 }
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {

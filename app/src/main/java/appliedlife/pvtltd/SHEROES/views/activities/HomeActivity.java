@@ -389,7 +389,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()&&!mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
             Branch branch = Branch.getInstance();
             branch.resetUserSession();

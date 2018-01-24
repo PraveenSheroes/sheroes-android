@@ -22,8 +22,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -487,7 +491,33 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            Menu menu = popup.getMenu();
+            menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+            menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            menu.add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
+
+            //****   Hide/show options according to user
+            if (userPostObj.getAuthorId() == currentUserId || userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
+                popup.getMenu().findItem(R.id.delete).setVisible(true);
+                if (userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
+                    if (userPostObj.getAuthorId() == currentUserId) {
+                        popup.getMenu().findItem(R.id.edit).setVisible(true);
+                    } else {
+                        popup.getMenu().findItem(R.id.edit).setVisible(false);
+                    }
+                } else {
+                    popup.getMenu().findItem(R.id.edit).setVisible(true);
+                }
+
+            }else
+            {
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
+            }
+            popup.getMenu().findItem(R.id.share).setVisible(true);
+
             if (currentUserId != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
@@ -503,6 +533,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
+
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -524,7 +555,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         popup.show();
     }
-
+    private CharSequence menuIconWithText(Drawable r, String title) {
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
+    }
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
         if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;

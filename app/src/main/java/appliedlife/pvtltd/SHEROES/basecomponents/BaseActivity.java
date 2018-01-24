@@ -770,6 +770,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
                         tvReport.setVisibility(View.GONE);
                     }
+                    tvShare.setVisibility(View.VISIBLE);
                 }
                 break;
             default:
