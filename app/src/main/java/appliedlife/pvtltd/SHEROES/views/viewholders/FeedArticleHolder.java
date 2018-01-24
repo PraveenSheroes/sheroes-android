@@ -204,7 +204,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
         else
         {
-            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE));
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 

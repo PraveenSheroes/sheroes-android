@@ -5,18 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipe_view_communities_detail"
+        android:id="@+id/swipe_view_mentor_qa"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_communities_detail_list"
+            android:id="@+id/rv_mentor_qa_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@color/fully_transparent" />
     </android.support.v4.widget.SwipeRefreshLayout>
     <ProgressBar
-        android:id="@+id/pb_communities_progress_bar"
+        android:id="@+id/pb_mentor_qa_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />

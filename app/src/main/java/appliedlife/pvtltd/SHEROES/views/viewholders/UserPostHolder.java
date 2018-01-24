@@ -492,7 +492,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         else
         {
-            mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             mShare.setText(mContext.getString(R.string.ID_SHARE));
         }
         final String listDescription = mUserPostObj.getListDescription();

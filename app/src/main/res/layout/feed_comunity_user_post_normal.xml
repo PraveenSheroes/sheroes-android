@@ -345,10 +345,7 @@
                 android:id="@+id/tv_feed_community_post_user_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="@dimen/dp_size_40"
-                android:layout_toRightOf="@+id/tv_feed_community_post_user_reaction"
                 android:drawableLeft="@drawable/ic_comment_icon"
                 android:drawablePadding="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
@@ -359,7 +356,6 @@
                 android:text="@string/ID_COMMENT"
                 android:textColor="@color/recent_post_comment"
                 android:textSize="@dimen/sp_size_14" />
-
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_share"

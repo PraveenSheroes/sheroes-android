@@ -592,15 +592,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void populatePostText() {
-        if(isWhatappShareOption) {
+       /* if(isWhatappShareOption) {
             tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
             tvFeedCommunityPostUserShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
             tvFeedCommunityPostUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
 
         }
-        else
+        else*/
         {
-            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             tvFeedCommunityPostUserShare.setText(mContext.getString(R.string.ID_SHARE));
             tvFeedCommunityPostUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 

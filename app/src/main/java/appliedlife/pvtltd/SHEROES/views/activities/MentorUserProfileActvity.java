@@ -835,7 +835,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).updateUiAccordingToFeedDetail(mUserSolarObject);
+                            ((CommunitiesDetailFragment) fragment).swipeToRefreshList();
                         }
                     }
                     break;
@@ -895,20 +895,7 @@ public class MentorUserProfileActvity extends BaseActivity implements HomeView, 
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        //LogUtils.info(TAG, "****************offset***" + verticalOffset);
-        /*if (verticalOffset >= AppConstants.NO_REACTION_CONSTANT) {
-            mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
-            mLiHeader.setVisibility(View.INVISIBLE);
-        } else {
-            mLiHeader.setVisibility(View.VISIBLE);
-        }*/
 
-    }
-
-    public void createCommunityPostClick(FeedDetail feedDetail) {
-        CommunityPost communityPost = new CommunityPost();
-        communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST, false, null);
     }
 
     @Override

@@ -371,8 +371,6 @@
                 android:drawableLeft="@drawable/ic_comment_icon"
                 android:drawablePadding="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:layout_marginLeft="@dimen/dp_size_40"
-                android:layout_toRightOf="@+id/like_button"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_10"
