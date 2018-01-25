@@ -90,6 +90,7 @@
                         android:layout_marginLeft="@dimen/dp_size_20"
                         android:layout_marginStart="@dimen/dp_size_20"
                         android:text="@string/ID_EDIT"
+                        android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
