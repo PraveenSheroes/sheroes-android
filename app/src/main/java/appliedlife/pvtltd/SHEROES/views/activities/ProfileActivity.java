@@ -251,7 +251,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (null != getIntent() && null != getIntent().getExtras()) {
             mUserSolarObject = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
             mFeedDetail = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.MENTOR_DETAIL));
-            mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             askingQuestionCode = getIntent().getExtras().getInt(AppConstants.ASKING_QUESTION);
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isMentor = getIntent().getExtras().getBoolean(AppConstants.IS_MENTOR_ID);
@@ -634,8 +634,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
+        }else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
         }
-        finish();
+        super.onBackPressed();
     }
 
     private void deepLinkPressHandle() {
@@ -1194,7 +1200,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        intent.putExtra(AppConstants.BELL_NOTIFICATION, notificationId);
+        intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
@@ -1210,6 +1216,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.ASKING_QUESTION, notificationId);
+        intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         if (!CommonUtil.isEmpty(properties)) {

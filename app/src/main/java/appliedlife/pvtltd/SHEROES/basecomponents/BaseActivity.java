@@ -125,7 +125,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getBoolean(PushNotificationService.FROM_PUSH_NOTIFICATION, false)) {
+            if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0)==1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
