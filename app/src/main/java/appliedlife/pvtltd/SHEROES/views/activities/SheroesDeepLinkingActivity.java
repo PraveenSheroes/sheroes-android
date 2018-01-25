@@ -99,7 +99,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         if (null != getIntent()) {
             Intent intent = getIntent();
             if (null != getIntent().getExtras()) {
-                mFromNotification = getIntent().getExtras().getInt(AppConstants.BELL_NOTIFICATION);
+                mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             }
             if (null != intent.getData()) {
                 mData = intent.getData();
@@ -135,6 +135,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
                                 into.putExtra(AppConstants.CHALLENGE_ID, Long.parseLong(newChallengeId));
                                 into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                                into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
                                 //    into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 startActivity(into);
                                 finish();
@@ -170,6 +171,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             }
                             if (CommonUtil.isNotEmpty(challengeId)) {
                                 into.putExtra(Contest.CONTEST_ID, challengeId);
+                                into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
                                 startActivity(into);
                                 finish();
                             }
@@ -187,6 +189,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         //   helplineIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                         helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);
                         helplineIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        helplineIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
                         startActivity(helplineIntent);
                         finish();
                         if (mFromNotification > 0) {
@@ -253,7 +256,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleActivity.class);
-                articleDetail.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                articleDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
                 articleDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 startActivity(articleDetail);
@@ -290,7 +293,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
                             postIntent.putExtra(UserPostSolrObj.USER_POST_ID, dataIdString);
                             postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
-                            postIntent.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                            postIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                             postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                             startActivity(postIntent);
                         }
@@ -307,7 +310,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                     into.putExtra(AppConstants.COMMUNITY_ID, newCommunityId);
-                    into.putExtra(AppConstants.BELL_NOTIFICATION, mFromNotification);
+                    into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
                     into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     startActivity(into);
                 }
@@ -336,6 +339,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 eventDetail.putExtra(AppConstants.EVENT_ID, Long.parseLong(dataIdString));
                 //  eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 eventDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                eventDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
                 startActivity(eventDetail);
                 finish();
                 if (mFromNotification > 0) {
@@ -354,7 +358,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(champId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), true, mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), true, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 finish();
                 if (mFromNotification > 0) {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_CHAMPION, AppConstants.EMPTY_STRING);
@@ -376,7 +380,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     if (userType == AppConstants.MENTOR_TYPE_ID) {
                         isMentor = true;
                     }
-                    ProfileActivity.navigateTo(this, userId, isMentor, mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    ProfileActivity.navigateTo(this, userId, isMentor, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     finish();
                     if (mFromNotification > 0) {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
@@ -401,7 +405,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 boolean isChampion = false;
-                ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), isChampion, mFromNotification, AppConstants.BELL_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), isChampion, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 finish();
                 if (mFromNotification > 0) {
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
@@ -419,6 +423,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             Intent into = new Intent(this, ContestListActivity.class);
             //   into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
             startActivity(into);
             finish();
             if (mFromNotification > 0) {
@@ -431,10 +436,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
         } else {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
-            /*Intent into = new Intent(Intent.ACTION_VIEW);
-            into.setData(Uri.parse(urlSharedViaSocial));
-            into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(into);*/
             finish();
             if (mFromNotification > 0) {
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_WEB, AppConstants.EMPTY_STRING);
@@ -468,6 +469,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         Intent into = new Intent(this, HomeActivity.class);
         // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
         into.putExtra(OPEN_FRAGMENT, fragmentName);
         startActivity(into);
         finish();

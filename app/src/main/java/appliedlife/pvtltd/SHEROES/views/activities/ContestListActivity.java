@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -75,6 +76,8 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
     //region presenter region
     private List<Contest> mContestList;
     private ContestsListAdapter mContestsListAdapter;
+
+    private int mFromNotification;
     //endregion
 
     //region activity methods
@@ -85,6 +88,9 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         setContentView(R.layout.activity_contest_list);
         ButterKnife.bind(this);
         mContestListPresenter.attachView(this);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+        }
         setupToolbarItemsColor();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mContestListView.setLayoutManager(mLayoutManager);

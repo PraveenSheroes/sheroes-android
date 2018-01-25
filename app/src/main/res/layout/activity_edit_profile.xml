@@ -80,7 +80,7 @@
 
 
                 <LinearLayout
-                    android:background="@drawable/ic_combined_shape"
+                    android:background="@drawable/ic_edit_profile"
                     android:layout_gravity="bottom|center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">

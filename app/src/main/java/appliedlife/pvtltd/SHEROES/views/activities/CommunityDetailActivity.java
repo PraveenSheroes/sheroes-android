@@ -144,6 +144,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private String mCommunitySecondaryColor = "#dc4541";
     private String mCommunityTitleTextColor = "#ffffff";
 
+    private int mFromNotification;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +155,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mCommunityDetailPresenter.attachView(this);
 
         if (getIntent() != null && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
             if (parcelable != null) {
                 mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
@@ -185,6 +188,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
+        }else
+        {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
         }
             finish();
     }

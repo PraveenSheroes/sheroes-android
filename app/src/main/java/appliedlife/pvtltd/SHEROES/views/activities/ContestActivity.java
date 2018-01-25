@@ -129,6 +129,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private String mContestId;
     private long mUserId = -1L;
     boolean isMentor;
+    private int mFromNotification;
     //endregion
 
     //region Activity methods
@@ -144,7 +145,8 @@ public class ContestActivity extends BaseActivity implements IContestView {
             mContest = Parcels.unwrap(parcelable);
             populateContest(mContest);
         } else {
-            if (getIntent().getExtras() != null) {
+            if (getIntent() != null && getIntent().getExtras() != null) {
+                mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
                 mContestId = getIntent().getExtras().getString(Contest.CONTEST_ID);
             }
             if (CommonUtil.isNotEmpty(mContestId)) {
@@ -197,6 +199,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             }
         }
     }
+
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbarView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -207,6 +210,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             toolbarTitle.setText("Challenge");
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -220,7 +224,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode){
+            switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
                             .show();
@@ -253,16 +257,16 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (mHomeFragment!=null) {
+                    if (mHomeFragment != null) {
                         Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
                         if (parcelableUserPost != null) {
                             UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelableUserPost);
                             isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                             mFeedDetail = userPostSolrObj;
                         }
-                        if(isPostDeleted){
+                        if (isPostDeleted) {
                             mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                        }else {
+                        } else {
                             mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                         }
                     }
@@ -357,24 +361,33 @@ public class ContestActivity extends BaseActivity implements IContestView {
     protected boolean trackScreenTime() {
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+            super.onBackPressed();
+        } else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+            if (flagActivity == 0/*ContestListActivity.CONTEST_LIST_ACTIVITY*/) {
+                finish();
+            } else {
+                super.onBackPressed();
+            }
+        }
 
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    TaskStackBuilder.create(this)
-                            .addNextIntentWithParentStack(upIntent)
-                            .startActivities();
-                    onBackPressed();
-                } else {
-                    if (flagActivity == 0/*ContestListActivity.CONTEST_LIST_ACTIVITY*/) {
-                        finish();
-                    } else {
-                        onBackPressed();
-                    }
-                }
+                onBackPressed();
                 break;
             case R.id.share:
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + mContest.shortUrl;
@@ -572,7 +585,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj) feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
     }
 
 
@@ -626,7 +639,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                                 .title(mContest.title)
                                 .build();
                 trackEvent(Event.SEND_ADDRESS_CLICKED, properties);
-                AddressActivity.navigateTo(this, getScreenName(), address,AppConstants.REQUEST_CODE_FOR_ADDRESS, isAddressUpdated, null);
+                AddressActivity.navigateTo(this, getScreenName(), address, AppConstants.REQUEST_CODE_FOR_ADDRESS, isAddressUpdated, null);
             }
         } else if (currentPage == FRAGMENT_RESPONSES) {
             if (!mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING) {

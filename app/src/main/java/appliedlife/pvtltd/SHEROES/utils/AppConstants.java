@@ -145,7 +145,7 @@ public class AppConstants {
     public static final String BACK_SLASH = "/";
 
     public static final String EVENT_DETAIL = "event_detail";
-    public static final String BELL_NOTIFICATION = "bell_notification";
+
 
     public static final String ARTICLE_DETAIL = "article_detail";
 
@@ -307,5 +307,7 @@ public class AppConstants {
     public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
     public static final String APP_SNOW = "SNOW";
     public static final String APP_SHARE_OPTION = "SHARE_OPTION";
+
+    public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
 
 }
