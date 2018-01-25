@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
@@ -277,6 +278,7 @@ public interface SheroesAppComponent {
 
     void inject(OnBoardingFragment onBoardingFragment);
 
+    void inject(ShareBottomSheetFragment shareBottomSheetFragment);
 
 }
 

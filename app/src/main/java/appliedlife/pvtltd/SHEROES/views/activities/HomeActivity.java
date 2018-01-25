@@ -181,6 +181,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public TextView mTvNotificationReadCount;
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
+    @Bind(R.id.invite)
+    ImageView mInvite;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
 
@@ -660,6 +662,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         }
 
+    }
+
+    @OnClick(R.id.invite)
+    public void onInviteClicked(){
+        ShareBottomSheetFragment.showDialog(this, mUserPreference.get().getUserSummary().getAppShareUrl(), null, mUserPreference.get().getUserSummary().getAppShareUrl(), SCREEN_LABEL, false, mUserPreference.get().getUserSummary().getAppShareUrl(), false, true, true);
     }
 
 
