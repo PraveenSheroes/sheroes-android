@@ -774,7 +774,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
-                openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                if(!comment.isAnonymous()) {
+                    openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                }
             }
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
             openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile

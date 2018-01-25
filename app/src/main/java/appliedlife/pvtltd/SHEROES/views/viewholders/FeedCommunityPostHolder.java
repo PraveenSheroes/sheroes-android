@@ -4,12 +4,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
@@ -17,8 +19,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -78,6 +84,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     //spam handling
+
+    @Bind(R.id.card_view_post)
+    CardView rootLayout;
 
     @Bind(R.id.top_post_view)
     RelativeLayout topPostView;
@@ -208,6 +217,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
 
+    @Inject
+    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
 
     public FeedCommunityPostHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -259,6 +270,36 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             flSpamPostUi.setVisibility(View.GONE);
             liApproveDelete.setVisibility(View.GONE);
             tvReviewDescription.setVisibility(View.VISIBLE);
+        }
+
+        if(!mUserPostObj.isAnonymous()) {
+            showToolTip(context);
+        }
+    }
+
+    private void showToolTip(Context context) {
+        if (mInstallUpdatePreference.get() != null && mInstallUpdatePreference.get().isAppInstallFirstTime() && CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+            tvFeedCommunityPostCardTitle.setPaintFlags(tvFeedCommunityPostCardTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+            LayoutInflater inflater = LayoutInflater.from(context);
+            final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+
+            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(50, context), 0, 0);
+            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
+            imageParams.gravity = Gravity.START;
+            imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
+            TextView textView = (TextView) view.findViewById(R.id.tooltip_arrow);
+            textView.setLayoutParams(imageParams);
+            TextView text = (TextView) view.findViewById(R.id.title);
+            text.setText(R.string.tool_tip_user_profile);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rootLayout.removeView(view);
+                }
+            });
+            rootLayout.addView(view, lps);
         }
     }
 
@@ -1056,9 +1097,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     //Redirect to logged in user
     @OnClick({R.id.iv_feed_community_post_login_user_pic , R.id.tv_feed_community_post_login_user_name})
     public void onCommentAuthorClick() { //Open profile from feed
-        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
             viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
-        }
     }
 
     @OnClick(R.id.iv_feed_community_post_circle_icon)
@@ -1268,11 +1307,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     //Last comment user name or user pic
-    @OnClick({R.id.iv_feed_community_post_user_pic , R.id.tv_feed_community_post_user_name})
+    @OnClick({R.id.iv_feed_community_post_user_pic, R.id.tv_feed_community_post_user_name})
     public void onLastCommentUserClick() { //Open profile from feed
-        if (!mUserPostObj.isAnonymous() || mUserPostObj.isAuthorMentor() ) {
-            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
-        }
+        viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
     }
 
     @OnClick(R.id.comment_like)

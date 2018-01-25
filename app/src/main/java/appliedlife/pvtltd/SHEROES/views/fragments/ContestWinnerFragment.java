@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,7 +137,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
             @Override
             public void onItemClick(Winner item) {
                 long userId = Long.valueOf(item.userId);
-                ProfileActivity.navigateTo(getActivity(), userId, false, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(mActivity, userId, false, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
             }
         });
 

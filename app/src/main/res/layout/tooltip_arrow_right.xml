@@ -3,7 +3,6 @@
     android:id="@+id/tooltip_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/dp_size_5"
     android:orientation="vertical">
 
     <TextView
