@@ -82,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
 
@@ -599,7 +600,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
+        }else
+        {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+            }
         }
+
         if (this instanceof ContestActivity) {
             ((ContestActivity) this).bookmarkPost(mFeedDetail);
         }
@@ -715,8 +723,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_article_user_menu:
+                tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_job_user_menu:
+
                 break;
             case R.id.tv_user_comment_list_menu:
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {

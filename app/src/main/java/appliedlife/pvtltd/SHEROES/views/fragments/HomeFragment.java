@@ -247,7 +247,7 @@ public class HomeFragment extends BaseFragment {
                         mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
                         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                        params.setMargins(0, 160, 0, 0);
+                        params.setMargins(0, 190, 0, 0);
                         loaderGif.setLayoutParams(params);
                         showHeaderOnFeed();
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());

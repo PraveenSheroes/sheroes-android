@@ -279,11 +279,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void showToolTip(Context context) {
         if (mInstallUpdatePreference.get() != null && mInstallUpdatePreference.get().isAppInstallFirstTime() && CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
-            tvFeedCommunityPostCardTitle.setPaintFlags(tvFeedCommunityPostCardTitle.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
             LayoutInflater inflater = LayoutInflater.from(context);
             final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
-
             FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
             lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(50, context), 0, 0);
             LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));

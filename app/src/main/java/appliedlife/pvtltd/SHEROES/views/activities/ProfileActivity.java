@@ -65,6 +65,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
@@ -241,6 +242,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     RelativeLayout rlMentorFullViewHeader;
 
     private boolean isMentorQARefresh = false;
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -280,9 +283,22 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
+        setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
-
+    private boolean isWhatsAppShare() {
+        boolean isWhatsappShare = false;
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareText = "";
+            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareText)) {
+                if (shareText.equalsIgnoreCase("true")) {
+                    isWhatsappShare = true;
+                }
+            }
+        }
+        return isWhatsappShare;
+    }
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
