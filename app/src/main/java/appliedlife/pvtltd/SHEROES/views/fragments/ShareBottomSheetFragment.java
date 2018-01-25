@@ -71,6 +71,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private String mShareText;
     private String mShareDeepLinkUrl;
     private String mShareCopyLink;
+    private String mSourceScreen;
     private boolean mIsImageShare;
     private boolean mIsChallenge;
     private boolean mShowTitle;
@@ -97,6 +98,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             mShareImageUrl = getArguments().getString(SHARE_IMAGE);
             mShareText = getArguments().getString(SHARE_TEXT);
             mShareCopyLink = getArguments().getString(SHARE_COPYLINK);
+            mSourceScreen = getArguments().getString(BaseActivity.SOURCE_SCREEN);
             mIsImageShare = getArguments().getBoolean(IS_IMAGE_SHARE, false);
             mIsChallenge = getArguments().getBoolean(IS_CHALLENGE, false);
             mShowTitle = getArguments().getBoolean(SHOW_TITLE, false);
@@ -173,6 +175,11 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                 mShareText = shareWhatsappAppLink + mShareDeepLinkUrl;
             }
             CommonUtil.shareLinkToWhatsApp(getContext(), mShareText);
+            EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Whatsapp");
+            final HashMap<String, Object> properties = builder.build();
+            properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
+            properties.put(EventProperty.URL.getString(), mShareText);
+            AnalyticsManager.trackEvent(Event.LINK_SHARED, SCREEN_LABEL, properties);
         }
     }
 
@@ -236,6 +243,12 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                     }
                 shareText = shareFacebookAppLink + mShareDeepLinkUrl;
             }
+            EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
+            final HashMap<String, Object> properties = builder.build();
+            properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
+            properties.put(EventProperty.URL.getString(), shareText);
+            AnalyticsManager.trackEvent(Event.LINK_SHARED, SCREEN_LABEL, properties);
+            
             intent.putExtra(Intent.EXTRA_TEXT, shareText);
             // See if official Facebook app is found
             boolean facebookAppFound = false;

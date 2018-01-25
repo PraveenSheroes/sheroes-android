@@ -667,6 +667,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @OnClick(R.id.invite)
     public void onInviteClicked(){
         ShareBottomSheetFragment.showDialog(this, mUserPreference.get().getUserSummary().getAppShareUrl(), null, mUserPreference.get().getUserSummary().getAppShareUrl(), SCREEN_LABEL, false, mUserPreference.get().getUserSummary().getAppShareUrl(), false, true, true);
+        AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
     }
 
 
