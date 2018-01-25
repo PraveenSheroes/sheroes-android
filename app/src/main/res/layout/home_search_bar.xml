@@ -85,6 +85,7 @@
             android:drawableLeft="@drawable/ic_notification"
             android:padding="@dimen/dp_size_10" />
 
+
         <FrameLayout
             android:id="@+id/fl_notification_read_count"
             android:layout_width="@dimen/dp_size_25"
@@ -106,5 +107,13 @@
                 android:textSize="@dimen/sp_size_9" />
         </FrameLayout>
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/invite"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/vector_invite_24dp"
+        android:layout_toLeftOf="@id/fl_notification"
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>

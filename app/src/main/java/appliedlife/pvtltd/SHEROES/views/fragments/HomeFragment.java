@@ -17,12 +17,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,12 +75,10 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ToolTipHelper;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -140,6 +140,8 @@ public class HomeFragment extends BaseFragment {
     TextView tvRefresh;
     @Bind(R.id.empty_view)
     View emptyView;
+    @Bind(R.id.root_layout)
+    FrameLayout rootLayout;
     private String mGcmId;
     private long mChallengeId;
     private boolean mIsSpam;
@@ -537,16 +539,8 @@ public class HomeFragment extends BaseFragment {
             }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
             }
-            if(getActivity() instanceof HomeActivity) {
-                if (((HomeActivity) getActivity()).mIsFirstTimeOpen) {
-                    showCaseDesign();
-                } else {
-                    if (CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
-                        ToolTipHelper toolTipHelper = new ToolTipHelper(getActivity(), "Tap here to check out your profile", null, AppConstants.HOME_USER_NAME_PREF, 170);
-                        toolTipHelper.setArrowOnLeft(true);
-                        toolTipHelper.displayTooltip();
-                    }
-                }
+            if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+                showCaseDesign();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
@@ -561,6 +555,7 @@ public class HomeFragment extends BaseFragment {
             getUserContacts();
         }*/
     }
+
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
