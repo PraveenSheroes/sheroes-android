@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -19,9 +21,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +36,7 @@ import android.widget.TextView;
 import com.f2prateek.rx.preferences.Preference;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,7 +77,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ToolTipHelper;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -118,12 +123,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private String mSourceName;
     private String userNameTitle;
 
+    @Bind(R.id.root_layout)
+    CoordinatorLayout rootLayout;
+
     @Bind(R.id.iv_mentor_full_view_icon)
     CircleImageView mProfileIcon;
 
     @Bind(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
 
+    @Bind(R.id.toolbar_container)
+    RelativeLayout toolbarContainer;
 
     @Bind(R.id.view_pager_mentor)
     ViewPager mViewPager;
@@ -227,7 +237,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Inject
     EditProfilePresenterImpl editProfilePresenter;
 
-
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
 
@@ -328,10 +337,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
 
         if (isOwnProfile) {
-            if (CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
-                ToolTipHelper toolTipHelper = new ToolTipHelper(ProfileActivity.this, "Share your profile and get friends to follow you on SHEROES", null, AppConstants.PROFILE_SHARE_PREF, 20);
-                toolTipHelper.displayTooltip();
-            }
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showToolTip();
+                }
+            }, 1000);
         }
 
         if (userSolrObj.isAuthorMentor()) isMentor = true;
@@ -716,6 +728,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void stopProgressBar() {
+        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -789,6 +802,29 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     public void dataOperationOnClick(BaseResponse baseResponse) {
         setAllValues(mFragmentOpen);
         super.dataOperationOnClick(baseResponse);
+    }
+
+    private void showToolTip() {
+        if(CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
+            LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
+            final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+            RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
+            lps.setMargins(70, 50, 0, 0);
+
+            TextView title = (TextView) view.findViewById(R.id.title);
+            title.setText("Share your profile and get friends to follow you on SHEROES");
+            rootLayout.addView(view, lps);
+            TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+            gotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rootLayout.removeView(view);
+                }
+            });
+        }
     }
 
     public void championDetailActivity(Long userId, boolean isMentor) {

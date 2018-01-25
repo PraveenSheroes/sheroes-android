@@ -40,12 +40,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -433,7 +436,37 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         setConfigurableShareOption(isWhatsAppShare());
+        showToolTip(HomeActivity.this);
+    }
 
+    private void showToolTip(Context context) {
+         if(mInstallUpdatePreference.get().isAppInstallFirstTime() && CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+             LayoutInflater inflater = LayoutInflater.from(context);
+             final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+             RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+             lps.addRule(RelativeLayout.BELOW, R.id.header_msg);
+             lps.setMargins(30, 250, 0, 0);
+
+             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(45, 35);
+             layoutParams.gravity = Gravity.LEFT;
+             layoutParams.setMargins(20, 0, 0, 0);
+             TextView arrow = (TextView) view.findViewById(R.id.tooltip_arrow);
+             arrow.setLayoutParams(layoutParams);
+
+             TextView title = (TextView) view.findViewById(R.id.title);
+             title.setText("Tap here to check out your profile");
+
+             mCLMainLayout.addView(view, lps);
+             TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+
+             gotIt.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     mCLMainLayout.removeView(view);
+                 }
+             });
+         }
     }
 
     private void deepLinkingRedirection() {
