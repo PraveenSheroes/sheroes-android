@@ -706,7 +706,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putInt(AppConstants.BELL_NOTIFICATION, AppConstants.ONE_CONSTANT);
+            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION,0);
             intent.putExtras(bundle);
             intent.setData(url);
             startActivity(intent);

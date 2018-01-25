@@ -142,6 +142,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private boolean mIsAnonymous;
     private String mPrimaryColor = "#6e2f95";
     private String mTitleTextColor = "#ffffff";
+
+    private int mFromNotification;
     //endregion
 
     //region activity methods
@@ -169,6 +171,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
 
         if (null != getIntent() && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, "#6e2f95");
             mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, "#ffffff");
         }
@@ -242,6 +245,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        } else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+        }
         setResult();
         super.onBackPressed();
 
@@ -252,17 +267,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         CommonUtil.hideKeyboard(this);
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    TaskStackBuilder.create(this)
-                            .addNextIntentWithParentStack(upIntent)
-                            .startActivities();
-                    onBackPressed();
-                } else {
-                    onBackPressed();
-                    // finish();
-                    //NavUtils.navigateUpFromSameTask(this);
-                }
+                onBackPressed();
                 break;
         }
         return true;
