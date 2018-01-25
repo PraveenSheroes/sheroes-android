@@ -728,6 +728,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void stopProgressBar() {
+        loaderGif.setVisibility(View.GONE);
     }
 
     @Override

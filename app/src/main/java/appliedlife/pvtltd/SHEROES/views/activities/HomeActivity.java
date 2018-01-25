@@ -266,7 +266,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
-    public boolean isWalkthroughShown = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -441,12 +440,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void showToolTip(Context context) {
-         if(isWalkthroughShown && CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+         if(mInstallUpdatePreference.get().isAppInstallFirstTime() && CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
              LayoutInflater inflater = LayoutInflater.from(context);
              final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
              RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-             // lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
              lps.addRule(RelativeLayout.BELOW, R.id.header_msg);
              lps.setMargins(30, 250, 0, 0);
 

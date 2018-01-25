@@ -301,7 +301,6 @@ public class HomeFragment extends BaseFragment {
     }
     public void showCaseDesign() {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
-        ((HomeActivity)getActivity()).isWalkthroughShown=true;
         showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
         InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
