@@ -539,7 +539,7 @@ public class HomeFragment extends BaseFragment {
             }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
             }
-            if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+            if(getActivity() instanceof HomeActivity && ((HomeActivity)getActivity()).mIsFirstTimeOpen) {
                 showCaseDesign();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
