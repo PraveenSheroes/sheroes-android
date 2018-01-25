@@ -508,4 +508,9 @@
     <string name="join_communities">Join Communities &amp; Connect></string>
 
     <string name="ID_SHARE_ON_WHATS_APP">Whatsapp</string>
+
+    <!-- String related to tooltip -->
+    <string name="tool_tip_user_profile">Tap here to check out this user and follow her</string>
+    <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
+
 </resources>

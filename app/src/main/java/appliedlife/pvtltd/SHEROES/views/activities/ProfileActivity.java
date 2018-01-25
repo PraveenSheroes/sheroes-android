@@ -815,7 +815,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             lps.setMargins(70, 50, 0, 0);
 
             TextView title = (TextView) view.findViewById(R.id.title);
-            title.setText("Share your profile and get friends to follow you on SHEROES");
+            title.setText(R.string.tool_tip_user_share);
             rootLayout.addView(view, lps);
             TextView gotIt = (TextView) view.findViewById(R.id.got_it);
             gotIt.setOnClickListener(new View.OnClickListener() {
@@ -862,7 +862,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
+            if(!comment.isAnonymous()) {
+                championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
+            }
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             if (loggedInUserId != -1) {
                 championDetailActivity(loggedInUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
@@ -874,7 +876,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
-                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                if (!comment.isAnonymous()) {
+                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                }
             }
         } else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;

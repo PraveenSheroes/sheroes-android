@@ -24,6 +24,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -91,6 +94,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
     @Inject
     ContestPresenterImpl mContestPresenter;
 
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+
     //region Bind view variables
     @Bind(R.id.toolbar)
     Toolbar mToolbarView;
@@ -121,6 +127,8 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private HomeFragment mHomeFragment;
     private Contest mContest;
     private String mContestId;
+    private long mUserId = -1L;
+    boolean isMentor;
     //endregion
 
     //region Activity methods
@@ -144,6 +152,13 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 mContestPresenter.fetchContest(feedRequestPojo);
             } else {
                 finish();
+            }
+        }
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            mUserId = mUserPreference.get().getUserSummary().getUserId();
+
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
             }
         }
         DrawerViewHolder.selectedOptionName = AppConstants.NAV_CHALLENGE;
@@ -655,17 +670,22 @@ public class ContestActivity extends BaseActivity implements IContestView {
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
-                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                if (!comment.isAnonymous()) {
+                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), SOURCE_SCREEN);
+                }
             }
-        } else if(baseResponse instanceof UserPostSolrObj) {
+        } else if (mValue == AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+            if (mUserId != -1) {
+                championDetailActivity(mUserId, 1, isMentor, SOURCE_SCREEN); //self profile
+            }
+        }
+        else if (baseResponse instanceof UserPostSolrObj) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
-                championDetailActivity(comment.getEntityAuthorUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            if (!postDetails.isAnonymous()) {
+                championDetailActivity(postDetails.getCreatedBy(), 0, postDetails.isAuthorMentor(), SOURCE_SCREEN);
             }
-
         }
     }
 
