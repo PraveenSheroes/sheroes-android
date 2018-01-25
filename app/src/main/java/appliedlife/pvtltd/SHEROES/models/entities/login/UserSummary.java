@@ -57,6 +57,17 @@ public class UserSummary{
     @Expose
     private boolean fbVerificationRequired;
 
+    @SerializedName("user_app_invite_url")
+    private String appShareUrl;
+
+    public String getAppShareUrl() {
+        return appShareUrl;
+    }
+
+    public void setAppShareUrl(String appShareUrl) {
+        this.appShareUrl = appShareUrl;
+    }
+
     public Long getUserId() {
         return userId;
     }

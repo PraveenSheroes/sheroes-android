@@ -892,6 +892,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
+    @OnClick(R.id.tv_feed_community_post_user_comment)
+    public void userCommentClicked() {
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
+        } else {
+            viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
+        }
+
+
+    }
+
     @OnClick(R.id.li_feed_community_user_post_images)
     public void communityPostImageClick() {
         if(viewInterface instanceof FeedItemCallback){

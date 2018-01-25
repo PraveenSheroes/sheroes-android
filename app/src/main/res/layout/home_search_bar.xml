@@ -85,13 +85,14 @@
             android:drawableLeft="@drawable/ic_notification"
             android:padding="@dimen/dp_size_10" />
 
+
         <FrameLayout
             android:id="@+id/fl_notification_read_count"
             android:layout_width="@dimen/dp_size_25"
             android:layout_height="@dimen/dp_size_25"
             android:layout_gravity="top|right"
             android:visibility="gone"
-            android:layout_marginRight="@dimen/dp_size_2"
+            android:layout_marginRight="5dp"
             android:layout_marginBottom="@dimen/dp_size_10"
             android:background="@drawable/ic_red_circle"
             android:backgroundTint="@color/footer_icon_text">
@@ -106,5 +107,14 @@
                 android:textSize="@dimen/sp_size_9" />
         </FrameLayout>
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/invite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vector_invite_24dp"
+        android:layout_toLeftOf="@id/fl_notification"
+        android:padding="@dimen/dp_size_10"
+        android:layout_gravity="center"/>
 
 </RelativeLayout>

@@ -577,8 +577,20 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);
     }
 
-    @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_article_join_conversation, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
+    @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
     public void openCommentClick() {
+        articleObj.setCallFromName(AppConstants.EMPTY_STRING);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onArticleCommentClicked(articleObj);
+        } else {
+            viewInterface.handleOnClick(articleObj, tvFeedArticleUserComment);
+        }
+
+
+    }
+
+    @OnClick( R.id.tv_article_join_conversation)
+    public void openJoinConversationClicked() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
