@@ -137,7 +137,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
             @Override
             public void onItemClick(Winner item) {
                 long userId = Long.valueOf(item.userId);
-                ProfileActivity.navigateTo((AppCompatActivity) getActivity(), userId, false, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(mActivity, userId, false, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
             }
         });
 
