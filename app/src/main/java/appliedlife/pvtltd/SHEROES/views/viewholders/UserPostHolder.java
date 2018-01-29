@@ -369,7 +369,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (mUserPostObj.isAuthorMentor()) {
-                            mAuthorVerifiedIcon.getBackground().setAlpha(75);mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
+                            mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
                         } else {
                             mAuthorVerifiedIcon.setVisibility(View.GONE);
                         }
