@@ -813,6 +813,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private void setupToolbarItemsColor() {
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        upArrow.mutate();
         upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));

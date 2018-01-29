@@ -249,6 +249,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             mToolbar.setOverflowIcon(drawable);
         }
          final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        upArrow.mutate();
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
 
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
@@ -351,6 +352,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         }
         MenuItem menuItem = menu.findItem(R.id.share);
+        menuItem.getIcon().mutate();
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
