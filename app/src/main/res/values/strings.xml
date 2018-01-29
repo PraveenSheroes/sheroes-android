@@ -125,7 +125,7 @@
     <string name="ID_FOLLOWER">Follower</string>
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
-    <string name="ID_BOARDING_COMMUNITIES"> To make Sheroes experience special for you please join some communities of your interests</string>
+    <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\n Help us personalize SHEROES for you by joining some communities of your interests.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>
@@ -512,5 +512,8 @@
     <!-- String related to tooltip -->
     <string name="tool_tip_user_profile">Tap here to check out this user and follow her</string>
     <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
+
+    <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
+
 
 </resources>
