@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class CommunityListAdapter extends RecyclerView.Adapter<CommunityListAdap
                 String userImage = CommonUtil.getImgKitUri(community.thumbImageUrl, holder.authorPicSize, holder.authorPicSize);
                 Glide.with(holder.communityPic.getContext())
                         .load(userImage)
-                        .bitmapTransform(new CommonUtil.CircleTransform(mContext))
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
                         .into(holder.communityPic);
             }
             holder.communityName.setText(community.name);

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +100,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
                     String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
                     Glide.with(userPic.getContext())
                             .load(userImage)
-                            .bitmapTransform(new CommonUtil.CircleTransform(mContext))
+                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
                             .into(userPic);
                 }
                 userName.setText(comment.getParticipantName());

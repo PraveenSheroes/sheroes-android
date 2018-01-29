@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.AttributeSet;
@@ -12,8 +14,10 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.Target;
 
@@ -82,11 +86,10 @@ public class CircleImageView extends ImageView {
           placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
         Glide.with(this.getContext()).load(imageUrl)
-            .dontAnimate()
-            .placeholder(placeHolderDrawableId)
-            .listener(requestListener)
-            .error(errorPlaceHolderDrawableId)
-            .into(this);
+                .apply(new RequestOptions().placeholder(placeHolderDrawableId)
+                        .error(errorPlaceHolderDrawableId))
+                .listener(requestListener)
+                .into(this);
       } else {
         if(errorPlaceHolderDrawableId == 0){
           errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
@@ -104,10 +107,9 @@ public class CircleImageView extends ImageView {
           placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
           Glide.with(this.getContext())
-                  .load(imageUrl)
                   .asBitmap()
-                  .error(errorPlaceHolderDrawableId)
-                  .placeholder(placeHolderDrawableId)
+                  .load(imageUrl)
+                  .apply(new RequestOptions().placeholder(placeHolderDrawableId).error(errorPlaceHolderDrawableId))
                   .into(new BitmapImageViewTarget(this) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -124,7 +126,8 @@ public class CircleImageView extends ImageView {
         if(errorPlaceHolderDrawableId == 0){
           errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
         }
-        Glide.with(this.getContext()).load(placeHolderDrawableId).error(errorPlaceHolderDrawableId)
+        Glide.with(this.getContext()).load(placeHolderDrawableId)
+                .apply(new RequestOptions().error(errorPlaceHolderDrawableId))
             .into(this);
       }
     }
@@ -167,26 +170,24 @@ public class CircleImageView extends ImageView {
     void onImageLoadFailed();
   }
 
-  private RequestListener requestListener = new RequestListener<String, GlideDrawable>() {
+  private RequestListener requestListener = new RequestListener<Drawable>(){
+
     @Override
-    public boolean onException(Exception e, String model, Target<GlideDrawable> target,
-                               boolean isFirstResource) {
+    public boolean onLoadFailed(@Nullable GlideException e, Object o, Target<Drawable> target, boolean b) {
       if(imageLoadListener!=null){
         imageLoadListener.onImageLoadFailed();
       }
       return false;
     }
+
     @Override
-    public boolean onResourceReady(GlideDrawable resource, String model,
-        Target<GlideDrawable> target,
-        boolean isFromMemoryCache, boolean isFirstResource) {
-      setImageDrawable(resource);
+    public boolean onResourceReady(Drawable drawable, Object o, Target<Drawable> target, DataSource dataSource, boolean b) {
+      setImageDrawable(drawable);
       if(imageLoadListener!=null){
         imageLoadListener.onImageLoaded();
       }
       return false;
     }
   };
-
 
 }

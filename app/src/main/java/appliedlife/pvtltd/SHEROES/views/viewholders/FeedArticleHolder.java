@@ -15,8 +15,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences.Preference;
 
 
@@ -430,12 +432,20 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
             }
-            Glide.with(mContext)
-                    .load(backgrndImageUrl).asBitmap()
+
+            RequestOptions requestOptions = new RequestOptions()
+                    .centerCrop()
                     .placeholder(R.color.photo_placeholder)
+                    .error(R.color.photo_placeholder)
+                    .priority(Priority.HIGH);
+
+            Glide.with(mContext)
+                    .asBitmap()
+                    .load(backgrndImageUrl)
+                    .apply(requestOptions)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
                             ivFirstLandscape.setImageBitmap(profileImage);
                             rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }

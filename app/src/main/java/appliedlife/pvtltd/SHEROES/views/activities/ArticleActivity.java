@@ -44,6 +44,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.crashlytics.android.Crashlytics;
 
 import org.parceler.Parcels;
@@ -657,7 +658,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommonUtil.CircleTransform(this))
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                         .into(authorPic);
 
             }
@@ -665,7 +666,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommonUtil.CircleTransform(this))
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                         .into(authorDesPic);
 
             }
@@ -688,8 +689,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (CommonUtil.isNotEmpty(article.featureImage)) {
             String finalImageUri = CommonUtil.getImgKitUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
             Glide.with(ArticleActivity.this)
-                    .load(finalImageUri)
                     .asBitmap()
+                    .load(finalImageUri)
                     .into(image);
         }
         loadUserViews(article);
