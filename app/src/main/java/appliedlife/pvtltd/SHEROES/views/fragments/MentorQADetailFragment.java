@@ -121,7 +121,7 @@ public class MentorQADetailFragment extends BaseFragment {
 
     private void initializeAndListner() {
         if (null != mUserSolrObj) {
-            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mUserSolrObj.getIdOfEntityOrParticipant());
+            mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.QA_POST_FRAGMENT, mUserSolrObj.getIdOfEntityOrParticipant());
             mFragmentListRefreshData.setCommunityId(mUserSolrObj.getIdOfEntityOrParticipant());
             mPullRefreshList = new SwipPullRefreshList();
             mPullRefreshList.setPullToRefresh(false);

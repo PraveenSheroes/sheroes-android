@@ -188,12 +188,17 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallForNameUser()) && mFragmentListRefreshData.getCallForNameUser().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                             FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
                             feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
-                            feedRequestCommunnityDetailPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
+                            Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
+                            feedRequestCommunnityDetailPojo.setAutherId(autherId);
                             mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         } else {
                             mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
                         }
-
+                    case AppConstants.QA_POST_FRAGMENT:
+                        FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                        feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
+                        feedRequestCommunnityDetailPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
+                        mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         break;
                     case AppConstants.INVITE_MEMBER:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mFragmentListRefreshData.getEnitityOrParticpantid(), AppConstants.INVITE_PAGE_SIZE));
