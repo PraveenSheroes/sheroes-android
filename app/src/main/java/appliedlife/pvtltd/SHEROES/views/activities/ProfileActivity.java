@@ -728,7 +728,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 onBackPressed();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override
