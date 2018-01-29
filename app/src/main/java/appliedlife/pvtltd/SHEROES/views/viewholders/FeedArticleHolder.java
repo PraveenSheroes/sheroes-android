@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LastComment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
@@ -45,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ArticleTextView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -115,6 +115,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     CircleImageView ivFeedArticleLoginUserPic;
     @Bind(R.id.tv_feed_article_login_user_name)
     TextView tvFeedArticleLoginUserName;
+    @Bind(R.id.ripple_feed_article_comment)
+    RippleView rippleView;
     BaseHolderInterface viewInterface;
     ArticleSolrObj articleObj;
     private Context mContext;
@@ -204,7 +206,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
         else
         {
-            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE));
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
@@ -570,29 +572,37 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    //Click on Article Writer
-    /*@OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_card_title})
-    public void onFeedArticleCircleFixedIconClick() { //Open profile from feed
-        if (!articleObj.isAuthorMentor()) {
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
-        }
+    @OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_user_name})
+    public void onFeedArticleUserNameClick() { //Open profile from feed
+            viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);
     }
 
-    @OnClick({R.id.iv_feed_article_card_circle_icon, R.id.tv_feed_article_card_title})
-    public void onFeedArticleCircleIconClick() { //Open profile from feed
-        if (!articleObj.isAuthorMentor()) {
-            viewInterface.championProfile(articleObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
-    }*/
-
-    @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_article_join_conversation, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
+    @OnClick({R.id.tv_feed_article_total_replies, R.id.tv_feed_article_user_comment_post, R.id.tv_feed_article_user_comment, R.id.li_feed_article_user_comments})
     public void openCommentClick() {
-        articleObj .setCallFromName(AppConstants.EMPTY_STRING);
-        if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback)viewInterface).onArticleCommentClicked(articleObj);
-        }else {
-            viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
+        articleObj.setCallFromName(AppConstants.EMPTY_STRING);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onArticleCommentClicked(articleObj);
+        } else {
+            viewInterface.handleOnClick(articleObj, tvFeedArticleUserComment);
         }
+
+
+    }
+
+    @OnClick( R.id.tv_article_join_conversation)
+    public void openJoinConversationClicked() {
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                articleObj .setCallFromName(AppConstants.EMPTY_STRING);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onArticleCommentClicked(articleObj);
+                }else {
+                    viewInterface.handleOnClick(articleObj , tvFeedArticleUserComment);
+                }
+            }
+        });
+
     }
 
 }

@@ -43,6 +43,7 @@ public class AppConstants {
     public static final String COMMA = ",";
     public static final String AT_THE_RATE_OF = "@";
 
+    public static final String SHARED_PREFS = "SHARED_PREFS";
     public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
@@ -111,6 +112,8 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
     public static final int REQUEST_CODE_FOR_SELF_PROFILE_DETAIL = 1502;
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
+    public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
+    public static final int REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE = 1506;
     public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT = "helpline";
@@ -142,7 +145,7 @@ public class AppConstants {
     public static final String BACK_SLASH = "/";
 
     public static final String EVENT_DETAIL = "event_detail";
-    public static final String BELL_NOTIFICATION = "bell_notification";
+
 
     public static final String ARTICLE_DETAIL = "article_detail";
 
@@ -179,6 +182,9 @@ public class AppConstants {
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
     public static final int MENTOR_TYPE_ID = 7;
+
+    public static final String HOME_USER_NAME_PREF= "HOME_USERANAME";
+    public static final String PROFILE_SHARE_PREF= "PROFILE_SHARE";
 
 
     /*Master data keys for pages*/
@@ -301,5 +307,7 @@ public class AppConstants {
     public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
     public static final String APP_SNOW = "SNOW";
     public static final String APP_SHARE_OPTION = "SHARE_OPTION";
+
+    public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
 
 }

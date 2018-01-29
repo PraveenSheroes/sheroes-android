@@ -10,6 +10,7 @@ public class InstallUpdateForMoEngage {
     private int appVersion;
     private boolean isFirstOpen;
     private boolean isWelcome;
+    private boolean isAppInstallFirstTime;
     public int getAppVersion() {
         return appVersion;
     }
@@ -35,5 +36,13 @@ public class InstallUpdateForMoEngage {
 
     public void setWelcome(boolean welcome) {
         isWelcome = welcome;
+    }
+
+    public boolean isAppInstallFirstTime() {
+        return isAppInstallFirstTime;
+    }
+
+    public void setAppInstallFirstTime(boolean appInstallFirstTime) {
+        isAppInstallFirstTime = appInstallFirstTime;
     }
 }

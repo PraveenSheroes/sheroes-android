@@ -22,6 +22,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -70,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -439,19 +441,32 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 if (position == RecyclerView.NO_POSITION) {
                     return;
                 }
-                PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
-                popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
+                switch (deleteItem.getId()) {
+                    case R.id.author_pic:
+                    case R.id.author:
+
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if (comment == null) {
-                            return true;
+                        if(!comment.isAnonymous()) {
+                            openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
-                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
-                        return true;
-                    }
-                });
-                popup.show();
+                        break;
+
+                    case R.id.delete:
+                        PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
+                        popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Comment comment = mCommentsAdapter.getComment(position);
+                                if (comment == null) {
+                                    return true;
+                                }
+                                mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                                return true;
+                            }
+                        });
+                        popup.show();
+                        break;
+                }
             }
         });
         mCommentList.setAdapter(mCommentsAdapter);
@@ -459,6 +474,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     private void fetchArticle(int articleId, boolean isImageLoaded) {
         mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded);
+    }
+
+    private void openProfile(Long userId, boolean isMentor, String source) {
+        ProfileActivity.navigateTo(this, userId, isMentor, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void updateTitleCommentCountView() {
@@ -651,7 +670,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             }
             authorDesName.setText(article.author.name);
-            authorDescription.setText(article.author.shortDescription);
+            authorDescription.setText(Html.fromHtml(article.author.shortDescription));
 
         }
         title.setText(article.title);

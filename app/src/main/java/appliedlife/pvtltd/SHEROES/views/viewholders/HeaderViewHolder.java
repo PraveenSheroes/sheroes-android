@@ -71,28 +71,39 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             userName.setText(name);
         }
             headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
-        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                textClickForCreatePost();
-            }
-        });
+
     }
 
     @OnClick(R.id.user_name)
     public void userNameClickForProfile() {
-        dataItem.setEntityOrParticipantId(userId);
-        viewInterface.handleOnClick(dataItem, ivLoginUserPic);
-
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                dataItem.setEntityOrParticipantId(userId);
+                viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+            }
+        });
     }
     @OnClick(R.id.iv_header_circle_icon)
     public void userImageClickForProfile() {
-        dataItem.setEntityOrParticipantId(userId);
-        viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                dataItem.setEntityOrParticipantId(userId);
+                viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+            }
+        });
+
     }
     @OnClick(R.id.header_msg)
     public void textClickForCreatePost() {
-        viewInterface.handleOnClick(dataItem, headerMsg);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                viewInterface.handleOnClick(dataItem, headerMsg);
+            }
+        });
+
     }
 
     @Override

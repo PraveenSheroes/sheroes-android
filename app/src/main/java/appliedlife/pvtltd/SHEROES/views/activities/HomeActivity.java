@@ -91,6 +91,7 @@ import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -148,6 +149,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
@@ -175,6 +177,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public TextView mTvNotificationReadCount;
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
+    @Bind(R.id.invite)
+    ImageView mInvite;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
 
@@ -386,7 +390,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        if (null != mInstallUpdatePreference && mInstallUpdatePreference.get().isFirstOpen()) {
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()&&!mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
             Branch branch = Branch.getInstance();
             branch.resetUserSession();
@@ -430,7 +434,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         setConfigurableShareOption(isWhatsAppShare());
-
     }
 
     private void deepLinkingRedirection() {
@@ -440,52 +443,52 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Branch branch = Branch.getInstance(getApplicationContext());
         JSONObject sessionParams = branch.getFirstReferringParams();
         try {
-           // JSONObject firstSession = branch.getLatestReferringParams();
-         //   if (firstSession.length() > 0 && (Boolean)branch.getLatestReferringParams().get("+is_first_session")|| (Boolean)branch.getLatestReferringParams().get("+clicked_branch_link")) {
-                if (sessionParams.length() > 0) {
-                    String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
-                    String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
-                    if (StringUtil.isNotNullOrEmptyString(url)) {
-                        if (openWebViewFlag.equalsIgnoreCase("true")) {
-                            Uri urlWebSite = Uri.parse(url);
-                            AppUtils.openChromeTabForce(this, urlWebSite);
-                            return;
-                        }
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
-                            // Do not let others grab our call
-                            intent.setPackage(SheroesApplication.mContext.getPackageName());
-                        } else {
-                            startActivity(intent);
-                            return;
-                        }
-                        Iterator<String> iterator = sessionParams.keys();
-                        while (iterator.hasNext()) {
-                            String key = iterator.next();
-                            try {
-                                Object value = sessionParams.get(key);
-                                if (value instanceof String) {
-                                    intent.putExtra(key, (String) value);
-                                }
-                                if (value instanceof Boolean) {
-                                    intent.putExtra(key, (boolean) value);
-                                }
-                                if (value instanceof Integer) {
-                                    intent.putExtra(key, (int) value);
-                                }
-                            } catch (JSONException e) {
+            // JSONObject firstSession = branch.getLatestReferringParams();
+            //   if (firstSession.length() > 0 && (Boolean)branch.getLatestReferringParams().get("+is_first_session")|| (Boolean)branch.getLatestReferringParams().get("+clicked_branch_link")) {
+            if (sessionParams.length() > 0) {
+                String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
+                String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
+                if (StringUtil.isNotNullOrEmptyString(url)) {
+                    if (openWebViewFlag.equalsIgnoreCase("true")) {
+                        Uri urlWebSite = Uri.parse(url);
+                        AppUtils.openChromeTabForce(this, urlWebSite);
+                        return;
+                    }
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
+                        // Do not let others grab our call
+                        intent.setPackage(SheroesApplication.mContext.getPackageName());
+                    } else {
+                        startActivity(intent);
+                        return;
+                    }
+                    Iterator<String> iterator = sessionParams.keys();
+                    while (iterator.hasNext()) {
+                        String key = iterator.next();
+                        try {
+                            Object value = sessionParams.get(key);
+                            if (value instanceof String) {
+                                intent.putExtra(key, (String) value);
                             }
-                        }
-                        if (isIntentAvailable(this, intent)) {
-                            intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
-                            if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
-                                intent.setClass(this, SheroesDeepLinkingActivity.class);
+                            if (value instanceof Boolean) {
+                                intent.putExtra(key, (boolean) value);
                             }
-                            startActivity(intent);
+                            if (value instanceof Integer) {
+                                intent.putExtra(key, (int) value);
+                            }
+                        } catch (JSONException e) {
                         }
                     }
+                    if (isIntentAvailable(this, intent)) {
+                        intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
+                        if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
+                            intent.setClass(this, SheroesDeepLinkingActivity.class);
+                        }
+                        startActivity(intent);
+                    }
                 }
-           // }
+            }
+            // }
         } catch (JSONException e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -626,6 +629,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     }
 
+    @OnClick(R.id.invite)
+    public void onInviteClicked(){
+        ShareBottomSheetFragment.showDialog(this, mUserPreference.get().getUserSummary().getAppShareUrl(), null, mUserPreference.get().getUserSummary().getAppShareUrl(), SCREEN_LABEL, false, mUserPreference.get().getUserSummary().getAppShareUrl(), false, true, true);
+        AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
+    }
+
 
     public void logOut() {
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
@@ -662,7 +671,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putInt(AppConstants.BELL_NOTIFICATION, AppConstants.ONE_CONSTANT);
+            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION,0);
             intent.putExtras(bundle);
             intent.setData(url);
             startActivity(intent);
@@ -860,13 +869,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
         mFeedDetail = userSolrObj;
-
-        MentorUserProfileActvity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.HOME_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-
+        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.HOME_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void openProfileActivity() {
-        MentorUserProfileActvity.navigateTo(this, mUserId, isMentor, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserId, isMentor, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     public void refreshHomeFragment(FeedDetail feedDetail) {
@@ -1616,17 +1623,33 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
-        if (championValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
-        } else if (championValue == REQUEST_CODE_CHAMPION_TITLE) {
+        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            // championDetailActivity(feedDetail.getAuthorParticipantId(), 1, isMentor, AppConstants.FEED_SCREEN); //self profile
             championLinkHandle(feedDetail);
+        } else if(mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
+        } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+                Comment comment = postDetails.getLastComments().get(0);
+                if(!comment.isAnonymous()) {
+                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                }
+            }
+        } else if(baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+                Comment comment = articleDetails.getLastComments().get(0);
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
         } else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
-        } else if (baseResponse instanceof Comment) {
+        }  else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
         }
@@ -1638,12 +1661,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-        MentorUserProfileActvity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        //todo - champion post - handle click
-        MentorUserProfileActvity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

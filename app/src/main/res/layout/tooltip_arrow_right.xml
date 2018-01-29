@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tooltip_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/spacer"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_size_1" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tooltip_arrow"
+            android:layout_width="19dp"
+            android:layout_marginRight="@dimen/dp_size_10"
+            android:layout_marginEnd="@dimen/dp_size_10"
+            android:layout_gravity="end"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/share_tooltip"
+            android:rotation="360" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_tooltip_background">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp_size_5"
+                android:gravity="left"
+                android:text="Share your profile and get friends to follow you on SHEROES "
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/got_it"
+                android:layout_gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:gravity="end"
+                android:text="GOT IT"
+                android:textColor="@color/accent"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

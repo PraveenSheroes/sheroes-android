@@ -27,9 +27,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -75,6 +77,9 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.response_view_count)
     TextView mResponseViewCount;
+
+    @Bind(R.id.ripple_challenge)
+    RippleView rippleView;
 
     BaseHolderInterface viewInterface;
     private Contest mContest;
@@ -184,15 +189,19 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
     }
 
 
-    @OnClick(R.id.card_challenge)
+    @OnClick(R.id.ripple_challenge)
     public void onChallengeClicked(){
-        if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback)viewInterface).onChallengeClicked(mContest);
-        }else {
-            viewInterface.contestOnClick(mContest, mCardChallenge);
-        }
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onChallengeClicked(mContest);
+                }else {
+                    viewInterface.contestOnClick(mContest, mCardChallenge);
+                }
+            }
+        });
     }
-
     @OnClick(R.id.share)
     public void onShareClick(){
         if(viewInterface instanceof FeedItemCallback){

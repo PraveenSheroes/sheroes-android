@@ -26,7 +26,7 @@
         android:text="@string/ID_SHARE"
         android:textColor="@color/recent_post_comment"
         android:textSize="@dimen/sp_size_12"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_article_menu_edit"

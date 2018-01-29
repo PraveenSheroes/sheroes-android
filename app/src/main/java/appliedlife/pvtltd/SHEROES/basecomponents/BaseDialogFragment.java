@@ -114,7 +114,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     }
 
-
     @Override
     public void invalidateLikeUnlike(Comment comment) {
 

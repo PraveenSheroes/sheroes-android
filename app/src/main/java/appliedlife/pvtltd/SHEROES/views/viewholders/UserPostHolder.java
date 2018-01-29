@@ -237,7 +237,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         populatePostText();
         allTextViewStringOperations(mContext);
         likeCommentOps();
-
+/*
         if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
             mPostMenu.setVisibility(View.VISIBLE);
             if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
@@ -253,7 +253,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             }
         } else {
             mPostMenu.setVisibility(View.GONE);
-        }
+        }*/
+        mPostMenu.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.li_post_link_render)
@@ -362,19 +363,19 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-            String feedTitle = mUserPostObj.getAuthorName();
-            String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS() == null ? "" : mUserPostObj.getChallengeAcceptPostTextS();
-            String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" : mUserPostObj.getPostCommunityName();
-            if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
-                if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                    if (mUserPostObj.isAuthorMentor()) {
-                        mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
+                String feedTitle = mUserPostObj.getAuthorName();
+                String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS()==null ? "" :mUserPostObj.getChallengeAcceptPostTextS();
+                String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" :mUserPostObj.getPostCommunityName();
+                if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
+                    if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                        if (mUserPostObj.isAuthorMentor()) {
+                            mAuthorVerifiedIcon.getBackground().setAlpha(75);mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
+                        } else {
+                            mAuthorVerifiedIcon.setVisibility(View.GONE);
+                        }
                     } else {
                         mAuthorVerifiedIcon.setVisibility(View.GONE);
                     }
-                } else {
-                    mAuthorVerifiedIcon.setVisibility(View.GONE);
-                }
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -492,7 +493,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         else
         {
-            mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null, null, null);
+            mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             mShare.setText(mContext.getString(R.string.ID_SHARE));
         }
         final String listDescription = mUserPostObj.getListDescription();

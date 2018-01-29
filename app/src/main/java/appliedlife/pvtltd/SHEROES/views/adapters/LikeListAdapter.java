@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeListItemViewHolder> {
     private final Context mContext;
     private List<Comment> mCommentList = new ArrayList<>();
+    private LikeHolderListener onLikeClickListener;
 
     //region Constructor
     public LikeListAdapter(Context context, List<Comment> likeList) {
@@ -33,6 +34,13 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
         this.mCommentList = likeList;
     }
     //endregion
+
+    //region Constructor
+    public LikeListAdapter(Context context, List<Comment> likeList, LikeHolderListener onLikeClickListener) {
+        this.mContext = context;
+        this.mCommentList = likeList;
+        this.onLikeClickListener = onLikeClickListener;
+    }
 
     //region UserLikedListAdapter methods
     @Override
@@ -43,27 +51,25 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
 
     @Override
     public void onBindViewHolder(LikeListItemViewHolder holder, int position) {
-        Comment comment = mCommentList.get(position);
-        if (comment != null) {
-            if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
-                String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), holder.authorPicSize, holder.authorPicSize);
-                Glide.with(holder.userPic.getContext())
-                        .load(userImage)
-                        .bitmapTransform(new CommonUtil.CircleTransform(mContext))
-                        .into(holder.userPic);
-            }
-            holder.userName.setText(comment.getParticipantName());
-        }
+        holder.bindData(mCommentList.get(position), position);
     }
 
     @Override
     public int getItemCount() {
         return mCommentList == null ? 0 : mCommentList.size();
     }
+
+    public Comment getComment(int position){
+        if(position >= 0 && position < mCommentList.size() ){
+            return mCommentList.get(position);
+        }else {
+            return null;
+        }
+    }
     //endregion
 
     // region User Liked List Item ViewHolder
-    static class LikeListItemViewHolder extends RecyclerView.ViewHolder {
+    public class LikeListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
         @BindDimen(R.dimen.dp_size_40)
@@ -79,7 +85,30 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
         public LikeListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onLikeClickListener.onLikeRowItemClicked(LikeListItemViewHolder.this);
+                }
+            });
         }
+
+        public void bindData(final Comment comment, final int position) {
+            if (comment != null) {
+                if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
+                    String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                    Glide.with(userPic.getContext())
+                            .load(userImage)
+                            .bitmapTransform(new CommonUtil.CircleTransform(mContext))
+                            .into(userPic);
+                }
+                userName.setText(comment.getParticipantName());
+            }
+        }
+    }
+
+    public interface LikeHolderListener {
+        void onLikeRowItemClicked(LikeListItemViewHolder likeListItemViewHolder);
     }
     // endregion
 }

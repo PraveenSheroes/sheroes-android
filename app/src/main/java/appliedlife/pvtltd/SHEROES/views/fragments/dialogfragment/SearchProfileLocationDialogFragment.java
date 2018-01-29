@@ -46,7 +46,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;

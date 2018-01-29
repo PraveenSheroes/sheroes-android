@@ -182,6 +182,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 installUpdateForMoEngage.setFirstOpen(true);
                 installUpdateForMoEngage.setAppVersion(versionCode);
                 installUpdateForMoEngage.setWelcome(true);
+                installUpdateForMoEngage.setAppInstallFirstTime(true);
                 mInstallUpdatePreference.set(installUpdateForMoEngage);
             }
             mMoEHelper.setExistingUser(true);
@@ -189,6 +190,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
             installUpdateForMoEngage.setAppVersion(versionCode);
             installUpdateForMoEngage.setFirstOpen(true);
+            installUpdateForMoEngage.setAppInstallFirstTime(false);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
             mMoEHelper.setExistingUser(false);
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());

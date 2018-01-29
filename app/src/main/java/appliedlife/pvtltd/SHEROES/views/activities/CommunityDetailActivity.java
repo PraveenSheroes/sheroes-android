@@ -144,6 +144,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private String mCommunitySecondaryColor = "#dc4541";
     private String mCommunityTitleTextColor = "#ffffff";
 
+    private int mFromNotification;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +155,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mCommunityDetailPresenter.attachView(this);
 
         if (getIntent() != null && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
             if (parcelable != null) {
                 mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
@@ -185,6 +188,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
+        }else
+        {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
         }
             finish();
     }
@@ -367,13 +377,16 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 {
                     deepLinkUrl=mCommunityFeedSolrObj.getDeepLinkUrl();
                 }
-                Intent intent = new Intent(Intent.ACTION_SEND);
+                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false);
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, getScreenName(), properties);
+                /*Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, getScreenName(), properties);
+                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, getScreenName(), properties);*/
                 break;
             case android.R.id.home:
                 onBackPressed();

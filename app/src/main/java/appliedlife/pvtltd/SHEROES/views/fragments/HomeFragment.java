@@ -17,12 +17,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,6 +140,8 @@ public class HomeFragment extends BaseFragment {
     TextView tvRefresh;
     @Bind(R.id.empty_view)
     View emptyView;
+    @Bind(R.id.root_layout)
+    FrameLayout rootLayout;
     private String mGcmId;
     private long mChallengeId;
     private boolean mIsSpam;
@@ -243,7 +247,7 @@ public class HomeFragment extends BaseFragment {
                         mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
                         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                        params.setMargins(0, 160, 0, 0);
+                        params.setMargins(0, 190, 0, 0);
                         loaderGif.setLayoutParams(params);
                         showHeaderOnFeed();
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
@@ -271,6 +275,7 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
+
         ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, 0);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
@@ -298,7 +303,11 @@ public class HomeFragment extends BaseFragment {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
         showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
+        InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
+        installUpdateForMoEngage.setAppInstallFirstTime(true);
+        mInstallUpdatePreference.set(installUpdateForMoEngage);
     }
+
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -527,11 +536,10 @@ public class HomeFragment extends BaseFragment {
             if (mPageNo == AppConstants.TWO_CONSTANT) {
                 mfeedDetailList = feedDetailList;
                 mAdapter.notifyDataSetChanged();
-            }else
-            {
+            }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
             }
-            if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+            if(getActivity() instanceof HomeActivity && ((HomeActivity)getActivity()).mIsFirstTimeOpen) {
                 showCaseDesign();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
@@ -547,6 +555,7 @@ public class HomeFragment extends BaseFragment {
             getUserContacts();
         }*/
     }
+
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());

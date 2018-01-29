@@ -905,6 +905,19 @@ public class CommonUtil {
     public interface Callback {
         void callBack(boolean isShown);
     }
+
+    public static boolean ensureFirstTime(String key) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return false;
+        }
+        boolean shown = prefs.getBoolean(key, false);
+        if (!shown) {
+            prefs.edit().putBoolean(key, true).apply();
+        }
+        return !shown;
+    }
+
     public  static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {
             super(context);

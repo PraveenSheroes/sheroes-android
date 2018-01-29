@@ -68,7 +68,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
@@ -82,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
 
@@ -125,7 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getBoolean(PushNotificationService.FROM_PUSH_NOTIFICATION, false)) {
+            if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0)==1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
@@ -443,6 +444,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 shareWithMultipleOption(baseResponse);
                 break;
             /*Card menu option depend on Feed type like post,article etc */
+
+            case R.id.iv_feed_community_post_user_pic:
+            case R.id.tv_feed_community_post_user_name:
+                openUserProfileLastComment(view, baseResponse);
+                break;
+
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
@@ -490,12 +497,19 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
                 }
                 break;
+
+            /**
+             * //Todo - article hv id issue, as no profile for article
+             * case R.id.tv_article_card_title :
+             case R.id.iv_article_circle_icon:
+             // ProfileActivity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+             break;**/
+
             case R.id.iv_feed_community_post_login_user_pic:
             case R.id.fl_login_user:
             case R.id.tv_feed_community_post_login_user_name:
             case R.id.feed_img:
-            case R.id.tv_feed_community_post_user_name:
-                MentorUserProfileActvity.navigateTo(this, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(this, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
                 break;
 
             case R.id.li_feed_article_images:
@@ -569,6 +583,16 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
 
+//Open profile from last comment user profile or name click
+    public void openUserProfileLastComment(View view, BaseResponse baseResponse) {
+        Comment comment = (Comment) baseResponse;
+        if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof CommunitiesDetailFragment) {
@@ -576,7 +600,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
+        }else
+        {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
+            }
         }
+
         if (this instanceof ContestActivity) {
             ((ContestActivity) this).bookmarkPost(mFeedDetail);
         }
@@ -692,8 +723,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 tvDelete.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_article_user_menu:
+                tvShare.setVisibility(View.VISIBLE);
                 break;
             case R.id.tv_feed_job_user_menu:
+
                 break;
             case R.id.tv_user_comment_list_menu:
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
@@ -747,6 +780,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
                         tvReport.setVisibility(View.GONE);
                     }
+                    tvShare.setVisibility(View.VISIBLE);
                 }
                 break;
             default:
@@ -873,7 +907,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     @Override
-    public void championProfile(BaseResponse baseResponse, int championValue) {
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
     }
 
