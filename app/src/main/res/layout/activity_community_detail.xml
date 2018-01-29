@@ -45,22 +45,16 @@
         android:visibility="gone"
         android:layout_centerInParent="true" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        style="@style/FabStyle"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_pencil"
-        android:visibility="gone"
-        android:tint="@color/white"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottom_view"
         android:layout_gravity="bottom">
 
         <FrameLayout
@@ -86,4 +80,18 @@
                 android:visibility="visible" />
         </FrameLayout>
     </LinearLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_above="@id/bottom_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        style="@style/FabStyle"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@drawable/ic_pencil"
+        android:visibility="gone"
+        android:tint="@color/white"/>
 </android.support.design.widget.CoordinatorLayout>

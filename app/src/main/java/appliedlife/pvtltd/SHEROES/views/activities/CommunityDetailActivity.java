@@ -766,6 +766,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         }
     }
     public String getCommunityId() {
-        return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (mCommunityFeedSolrObj != null) {
+            return "";
+        }else {
+            return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
+        }
     }
 }
