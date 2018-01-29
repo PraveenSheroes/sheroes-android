@@ -416,12 +416,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-            Menu menu = popup.getMenu();
-            menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
-            menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
-            menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-            menu.add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
+           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            popup.getMenu().add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+            popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            popup.getMenu().add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
 
             //****   Hide/show options according to user
             if (userPostObj.getAuthorId() == currentUserId || userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
@@ -573,6 +572,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onArticlePostUnLiked(ArticleSolrObj articleSolrObj) {
         mFeedPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(articleSolrObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), articleSolrObj);
+    }
+
+    @Override
+    public void onSpamPostApprove(UserPostSolrObj userPostObj) {
+        mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostObj, true, false, true), userPostObj);
+    }
+
+    @Override
+    public void onSpamPostDelete(UserPostSolrObj userPostObj) {
+        mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostObj, true, true, false), userPostObj);
     }
 
     @Override
@@ -814,9 +823,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mAdapter.setData(position, feedDetail);
     }
 
+    @Override
     public void removeItem(FeedDetail feedDetail) {
         int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
-        mAdapter.removeItem(position);
+        if(position!=RecyclerView.NO_POSITION){
+            mAdapter.removeItem(position);
+        }
     }
 
     public int findPositionById(long id) {
