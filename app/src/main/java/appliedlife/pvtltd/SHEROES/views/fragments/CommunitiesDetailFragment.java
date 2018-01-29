@@ -169,6 +169,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
         if (null != mCommunityFeedObj) {
             mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.USER_COMMUNITY_POST_FRAGMENT, mCommunityFeedObj.getIdOfEntityOrParticipant());
             mFragmentListRefreshData.setCommunityId(mCommunityFeedObj.getIdOfEntityOrParticipant());
+            mFragmentListRefreshData.setAnonymous(hideAnonymousPost);
             positionOfFeedDetail = mCommunityFeedObj.getItemPosition();
             mPullRefreshList = new SwipPullRefreshList();
             mPullRefreshList.setPullToRefresh(false);
@@ -255,6 +256,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
             feedRequestPojo.setIdForFeedDetail(null);
             Integer autherId = (int) mCommunityFeedObj.getIdOfEntityOrParticipant();
             feedRequestPojo.setAutherId(autherId);
+            feedRequestPojo.setAnonymousPostHide(hideAnonymousPost);
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getFeedFromPresenter(feedRequestPojo);
         } else {

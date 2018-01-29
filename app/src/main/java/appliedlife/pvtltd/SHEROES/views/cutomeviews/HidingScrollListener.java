@@ -190,6 +190,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                             feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
                             Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
                             feedRequestCommunnityDetailPojo.setAutherId(autherId);
+                            feedRequestCommunnityDetailPojo.setAnonymousPostHide(mFragmentListRefreshData.isAnonymous());
                             mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         } else {
                             mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
