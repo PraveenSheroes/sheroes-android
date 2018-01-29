@@ -42,7 +42,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.errorview.OnBoardingMsgDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -109,15 +111,15 @@ public class OnBoardingActivity extends BaseActivity {
     }
 
     public void onBoardingFragment() {
-        tvNameUser.setText(userPreference.get().getUserSummary().getFirstName());
+        tvNameUser.setText("Welcome "+userPreference.get().getUserSummary().getFirstName()+"!");
         String description = getString(R.string.ID_BOARDING_COMMUNITIES);
         isJoinCount = 0;
         SpannableString spannableString = new SpannableString(description);
         if (StringUtil.isNotNullOrEmptyString(description)) {
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 27, 42, 0);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 27, 42, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length() - 14, description.length(), 0);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length() - 14, description.length(), 0);
+            //spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 34, 42, 0);
+           // spannableString.setSpan(new StyleSpan(Typeface.BOLD), 34, 42, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length() - 30, description.length()-18, 0);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length() - 30, description.length()-18, 0);
             tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
             tvDescription.setText(spannableString, TextView.BufferType.SPANNABLE);
             tvDescription.setSelected(true);
@@ -208,7 +210,16 @@ public class OnBoardingActivity extends BaseActivity {
             homeIntent.putExtras(bundle);
             startActivity(homeIntent);
         } else {
-            Toast.makeText(this, "Please JOIN at least one community", Toast.LENGTH_SHORT).show();
+            OnBoardingMsgDialog fragment = (OnBoardingMsgDialog) getFragmentManager().findFragmentByTag(OnBoardingMsgDialog.class.getName());
+            if (fragment == null) {
+                fragment = new OnBoardingMsgDialog();
+                Bundle b = new Bundle();
+               // b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
+                fragment.setArguments(b);
+            }
+            if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+                fragment.show(getFragmentManager(), OnBoardingMsgDialog.class.getName());
+            }
         }
     }
 
