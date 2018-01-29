@@ -616,12 +616,15 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.post_menu)
     public void userMenuClick() {
+        if(mUserPostObj.isSpamPost()){
+            return;
+        }
         mPostDetailCallback.onPostMenuClicked(mUserPostObj, mPostMenu);
     }
 
     @OnClick(R.id.tv_spam_post_menu)
     public void spamMenuClick() {
-        mPostDetailCallback.onSpamMenuClicked(mUserPostObj, tvSpamPostMenu);
+        mPostDetailCallback.onPostMenuClicked(mUserPostObj, tvSpamPostMenu);
     }
 
     @Override

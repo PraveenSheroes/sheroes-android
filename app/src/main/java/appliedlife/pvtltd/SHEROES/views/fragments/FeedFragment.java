@@ -440,6 +440,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
             }
+            if(userPostObj.communityId == 0){
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+            }
             popup.getMenu().findItem(R.id.share).setVisible(true);
 
             if (currentUserId != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
@@ -456,6 +459,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
+            }
+            if (userPostObj.isSpamPost()) {
+                popup.getMenu().findItem(R.id.share).setVisible(false);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {

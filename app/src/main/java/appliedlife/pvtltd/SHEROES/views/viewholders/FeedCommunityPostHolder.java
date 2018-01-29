@@ -924,7 +924,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_spam_post_menu)
     public void spamMenuClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostMenuClicked(mUserPostObj, tvSpamPostMenu);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
+        }
     }
 
 

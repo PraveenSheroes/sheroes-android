@@ -540,6 +540,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
+            if(userPostObj.communityId == 0){
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+            }
+            if (userPostObj.isSpamPost()) {
+                popup.getMenu().findItem(R.id.share).setVisible(false);
+            }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
