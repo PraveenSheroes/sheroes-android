@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -26,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -74,6 +76,8 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
     //region presenter region
     private List<Contest> mContestList;
     private ContestsListAdapter mContestsListAdapter;
+
+    private int mFromNotification;
     //endregion
 
     //region activity methods
@@ -84,7 +88,10 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         setContentView(R.layout.activity_contest_list);
         ButterKnife.bind(this);
         mContestListPresenter.attachView(this);
-
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+        }
+        setupToolbarItemsColor();
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mContestListView.setLayoutManager(mLayoutManager);
 
@@ -93,16 +100,18 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         initAdapter();
 
         mContestList = new ArrayList<>();
-        FeedRequestPojo feedRequestPojo =mAppUtils.makeFeedChallengeListRequest(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1);
+        FeedRequestPojo feedRequestPojo = AppUtils.makeFeedChallengeListRequest(AppConstants.CHALLENGE_SUB_TYPE_NEW, 1);
         feedRequestPojo.setPageSize(100);
         mContestListPresenter.fetchContests(feedRequestPojo);
-
+    }
+    private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setText(R.string.title_contest_list);
     }
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -140,7 +149,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
             }
             Parcelable parcelable = data.getParcelableExtra(Contest.CONTEST_OBJ);
             if (parcelable != null) {
-                Contest contest = (Contest) Parcels.unwrap(parcelable);
+                Contest contest = Parcels.unwrap(parcelable);
                 int position = findPositionById(mContestList, contest.remote_id);
                 if (position != -1) {
                     mContestList.set(position, contest);

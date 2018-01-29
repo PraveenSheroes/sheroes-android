@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -23,6 +24,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences.Preference;
+
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -40,10 +43,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -54,12 +58,10 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
-import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -67,7 +69,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 
 /**
@@ -92,6 +93,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     @Inject
     ContestPresenterImpl mContestPresenter;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     //region Bind view variables
     @Bind(R.id.toolbar)
@@ -123,6 +127,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private HomeFragment mHomeFragment;
     private Contest mContest;
     private String mContestId;
+    private long mUserId = -1L;
+    boolean isMentor;
+    private int mFromNotification;
     //endregion
 
     //region Activity methods
@@ -133,14 +140,13 @@ public class ContestActivity extends BaseActivity implements IContestView {
         setContentView(R.layout.activity_contest);
         ButterKnife.bind(this);
         mContestPresenter.attachView(this);
-       /* mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);*/
         Parcelable parcelable = getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
         if (parcelable != null) {
-            mContest = (Contest) Parcels.unwrap(parcelable);
+            mContest = Parcels.unwrap(parcelable);
             populateContest(mContest);
         } else {
-            if (getIntent().getExtras() != null) {
+            if (getIntent() != null && getIntent().getExtras() != null) {
+                mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
                 mContestId = getIntent().getExtras().getString(Contest.CONTEST_ID);
             }
             if (CommonUtil.isNotEmpty(mContestId)) {
@@ -150,11 +156,19 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 finish();
             }
         }
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            mUserId = mUserPreference.get().getUserSummary().getUserId();
+
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
+            }
+        }
         DrawerViewHolder.selectedOptionName = AppConstants.NAV_CHALLENGE;
         // Initialize ViewPager
         if (mContest != null) {
             initializeAllViews();
         }
+        setupToolbarItemsColor();
     }
 
     private void initializeAllViews() {
@@ -175,12 +189,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
             }
         });
-        setSupportActionBar(mToolbarView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        if (mContest != null) {
-            toolbarTitle.setText("Challenge");
-        }
+
         int fragmentIndex = 0;/*getIntent().getIntExtra(ContestPreviewActivity.FRAGMENT_INDEX, -1);*/
         if (fragmentIndex != -1) {
             mTabLayout.getTabAt(fragmentIndex).select();
@@ -188,6 +197,17 @@ public class ContestActivity extends BaseActivity implements IContestView {
             if (!mContest.hasMyPost) {
                 mTabLayout.getTabAt(FRAGMENT_INFO).select();
             }
+        }
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbarView);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        if (mContest != null) {
+            toolbarTitle.setText("Challenge");
         }
     }
 
@@ -204,7 +224,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode){
+            switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
                             .show();
@@ -237,16 +257,16 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
                     Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (mHomeFragment!=null) {
+                    if (mHomeFragment != null) {
                         Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
                         if (parcelableUserPost != null) {
                             UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelableUserPost);
                             isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                             mFeedDetail = userPostSolrObj;
                         }
-                        if(isPostDeleted){
+                        if (isPostDeleted) {
                             mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                        }else {
+                        } else {
                             mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                         }
                     }
@@ -341,26 +361,36 @@ public class ContestActivity extends BaseActivity implements IContestView {
     protected boolean trackScreenTime() {
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+            super.onBackPressed();
+        } else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+            if (flagActivity == 0/*ContestListActivity.CONTEST_LIST_ACTIVITY*/) {
+                finish();
+            } else {
+                super.onBackPressed();
+            }
+        }
 
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    TaskStackBuilder.create(this)
-                            .addNextIntentWithParentStack(upIntent)
-                            .startActivities();
-                    onBackPressed();
-                } else {
-                    if (flagActivity == 0/*ContestListActivity.CONTEST_LIST_ACTIVITY*/) {
-                        finish();
-                    } else {
-                        onBackPressed();
-                    }
-                }
+                onBackPressed();
                 break;
             case R.id.share:
+
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + mContest.shortUrl;
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
@@ -515,7 +545,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             feedRelatedOptions(view, baseResponse);
         }
         if (baseResponse instanceof Comment) {
-           // setAllValues(mFragmentOpen);
+            // setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
@@ -556,7 +586,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj)feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj) feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
     }
 
 
@@ -610,7 +640,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                                 .title(mContest.title)
                                 .build();
                 trackEvent(Event.SEND_ADDRESS_CLICKED, properties);
-                AddressActivity.navigateTo(this, getScreenName(), address,AppConstants.REQUEST_CODE_FOR_ADDRESS, isAddressUpdated, null);
+                AddressActivity.navigateTo(this, getScreenName(), address, AppConstants.REQUEST_CODE_FOR_ADDRESS, isAddressUpdated, null);
             }
         } else if (currentPage == FRAGMENT_RESPONSES) {
             if (!mContest.hasMyPost && mContest.getContestStatus() == ContestStatus.ONGOING) {
@@ -649,4 +679,36 @@ public class ContestActivity extends BaseActivity implements IContestView {
         mContestPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
     //endregion
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+                Comment comment = postDetails.getLastComments().get(0);
+                if (!comment.isAnonymous()) {
+                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), SOURCE_SCREEN);
+                }
+            }
+        } else if (mValue == AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+            if (mUserId != -1) {
+                championDetailActivity(mUserId, 1, isMentor, SOURCE_SCREEN); //self profile
+            }
+        }
+        else if (baseResponse instanceof UserPostSolrObj) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if (!postDetails.isAnonymous()) {
+                championDetailActivity(postDetails.getCreatedBy(), 0, postDetails.isAuthorMentor(), SOURCE_SCREEN);
+            }
+        }
+    }
+
+    private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        mFeedDetail = communityFeedSolrObj;
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
 }

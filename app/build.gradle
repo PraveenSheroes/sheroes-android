@@ -1,6 +1,6 @@
 def versionMajor = 5
-def versionMinor = 8
-def versionPatch = 2
+def versionMinor = 9
+def versionPatch = 1
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -129,7 +129,7 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
     provided 'javax.annotation:jsr250-api:1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
+        transitive = true
     }
     compile 'com.moengage:moe-android-sdk:7.7.01'
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'

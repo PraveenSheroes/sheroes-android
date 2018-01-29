@@ -144,6 +144,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private String mCommunitySecondaryColor = "#dc4541";
     private String mCommunityTitleTextColor = "#ffffff";
 
+    private int mFromNotification;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,6 +155,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mCommunityDetailPresenter.attachView(this);
 
         if (getIntent() != null && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
             if (parcelable != null) {
                 mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
@@ -185,6 +188,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
+        }else
+        {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
         }
             finish();
     }
@@ -239,6 +249,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             mToolbar.setOverflowIcon(drawable);
         }
          final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        upArrow.mutate();
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
 
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
@@ -268,7 +279,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != data.getExtras()) {
-                        UserSolrObj userSolrObj = (UserSolrObj) Parcels.unwrap(data.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        UserSolrObj userSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if (null != userSolrObj) {
                             Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                             if (AppUtils.isFragmentUIActive(fragmentMentor)) {
@@ -281,7 +292,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
                     if (null != data && null != data.getExtras()) {
                         JobFeedSolrObj jobFeedSolrObj = null;
-                        jobFeedSolrObj = (JobFeedSolrObj) Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+                        jobFeedSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
                         invalidateItem(jobFeedSolrObj);
                     }
                     break;
@@ -296,7 +307,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     Parcelable parcelableArticlePost = data.getParcelableExtra(AppConstants.HOME_FRAGMENT);
                     ArticleSolrObj articleSolrObj = null;
                     if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
-                        articleSolrObj = (ArticleSolrObj) Parcels.unwrap(parcelableArticlePost);
+                        articleSolrObj = Parcels.unwrap(parcelableArticlePost);
                     }
                     if (articleSolrObj != null) {
                         invalidateItem(articleSolrObj);
@@ -341,6 +352,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         }
         MenuItem menuItem = menu.findItem(R.id.share);
+        menuItem.getIcon().mutate();
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -359,13 +371,24 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 }
                 break;
             case R.id.share:
-                Intent intent = new Intent(Intent.ACTION_SEND);
+                String deepLinkUrl;
+                if(StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls()))
+                {
+                    deepLinkUrl=mCommunityFeedSolrObj.getPostShortBranchUrls();
+                }else
+                {
+                    deepLinkUrl=mCommunityFeedSolrObj.getDeepLinkUrl();
+                }
+                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false);
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, getScreenName(), properties);
+                /*Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, mCommunityFeedSolrObj.getDeepLinkUrl());
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, getScreenName(), properties);
+                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, getScreenName(), properties);*/
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -385,7 +408,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private void setupTabLayout() {
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
@@ -705,11 +728,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
             showCommunityJoinReason(mCommunityFeedSolrObj);
-            ((SheroesApplication) ((BaseActivity) this).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
+            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
         } else {
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
-                userIdList.add((long) userPreference.get().getUserSummary().getUserId());
+                userIdList.add(userPreference.get().getUserSummary().getUserId());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                 mCommunityDetailPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
@@ -745,6 +768,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         }
     }
     public String getCommunityId() {
-        return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (mCommunityFeedSolrObj != null) {
+            return "";
+        }else {
+            return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
+        }
     }
 }

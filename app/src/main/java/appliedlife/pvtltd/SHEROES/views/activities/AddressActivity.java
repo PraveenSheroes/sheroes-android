@@ -268,25 +268,17 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         if (originalAddress != null) {
             Address address = new Address();
             getAddressFromField(address);
-            if (!address.fullName.equals(originalAddress.fullName)
+            return !address.fullName.equals(originalAddress.fullName)
                     || !address.fullAddress.equals(originalAddress.fullAddress)
                     || !address.pinCode.equals(originalAddress.pinCode)
                     || !address.emailAddress.equals(originalAddress.emailAddress)
-                    || !address.mobileNumber.equals(originalAddress.mobileNumber)) {
-                return true;
-            }else {
-                return false;
-            }
+                    || !address.mobileNumber.equals(originalAddress.mobileNumber);
         }
-        if (CommonUtil.isNotEmpty(mNameView.getText().toString())
+        return CommonUtil.isNotEmpty(mNameView.getText().toString())
                 || CommonUtil.isNotEmpty(mPhoneNumberView.getText().toString())
                 || CommonUtil.isNotEmpty(mPinCodeView.getText().toString())
                 || CommonUtil.isNotEmpty(mEmailView.getText().toString())
-                || CommonUtil.isNotEmpty(mAddressView.getText().toString())) {
-            return true;
-        } else {
-            return false;
-        }
+                || CommonUtil.isNotEmpty(mAddressView.getText().toString());
     }
 
 

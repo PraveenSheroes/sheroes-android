@@ -4,13 +4,8 @@
     <string name="ID_APPS_FLYER_DEV_ID">CDkJAsj9hBUkp2V6ERGWd9</string>
     <string name="ID_ROBOTO_REGULAR">sans-serif</string>
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
-    <string name="ID_ROBOTO_CONDENSED">sans-serif-condensed</string>
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
     <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
-    <string name="ID_DD">DD</string>
-    <string name="ID_MM">MM</string>
-    <string name="ID_YYYY">YYYY</string>
-    <string name="ID_POST_IN_MODERATION">Posts in Moderation</string>
 
 
     <!--text names in SHEROES-->
@@ -24,8 +19,6 @@
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
     <string name="ID_TODAY">Today</string>
-    <string name="ID_CREATE">Create</string>
-    <string name="ID_CREATED">Created</string>
     <string name="ID_PROMPT_PASSWORD">Password</string>
     <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
@@ -34,37 +27,20 @@
     <string name="ID_POSTED_IN">posted in</string>
     <string name="ID_ASKED">asked</string>
     <string name="ID_POSTED_AN">posted an</string>
-    <string name="ID_CHALLENGE_ACCEPTED">Challenge Accepted</string>
-    <string name="ID_CHALLENGE_COMPLETED">Challenge Completed</string>
     <string name="ID_NEW">NEW</string>
-    <string name="ID_FB_VERIFY_MSG">Please verify account by linking your SHEROES account with your Facebook account.</string>
-    <string name="ID_LETS_GET_TO">Let’s get to know each other </string>
-    <string name="ID_TELL_US_MESSAGE">This will help you connect with other SHEROES and find relevant opportunities</string>
-    <string name="ID_TELL_US_FORM_VALIDATION">Oops! You need to enter all details.</string>
-    <string name="ID_MOBILE_NUMBER">Please enter valid mobile number</string>
-    <string name="ID_CURRENT_STATUS_DATA">Please select current status</string>
-    <string name="ID_LOCATION_DATA">Please select location</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
-    <string name="ID_JOB_NOT_FOUND"> Sorry! Could not find jobs matching your criteria. Please swipe down to refresh and search again.</string>
-    <string name="ID_CHAT_NOT_FOUND"> Sorry! Could not load you chat. Please swipe down to refresh and try again.</string>
     <string name="ID_SPEECH_PROMPT">Say something&#8230;</string>
-    <string name="ID_SPEECH_NOT_SUPPORTED">Sorry! Your device doesn\'t support speech input</string>
     <!--String related in home page-->
 
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
     <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
-    <string name="title_activity_home_search">HomeSearchActivity</string>
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
     <!--Fragment classes-->
-    <string name="ID_ALL">All</string>
     <string name="ID_COMMUNITIES">Communities</string>
-    <string name="ID_GROWTH_BUDDIES_PUBLIC_PROFILE">ACTIVITY FEED</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
-    <string name="ID_NO_MEMBER">No Member Selected</string>
     <string name="ID_NOTIFICATION">Notification</string>
-    <string name="ID_JOBS">Jobs</string>
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
@@ -77,7 +53,6 @@
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
-    <string name="ID_COMMUNITIY_POST">Community post</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
     <string name="ID_WOMEN_ERROR">Please declare that you are a woman by ticking the box.</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
@@ -86,56 +61,27 @@
     <string name="ID_SERVER_PROBLEM"> The server encountered an error and could not complete your request.</string>
     <string name="ID_SEARCH">Search</string>
     <string name="ID_SEARCH_LOCATION">Search Location</string>
-    <string name="ID_SEARCH_DEGREE">Search Degree</string>
-    <string name="ID_SEARCH_SCHOOL">Search School</string>
-    <string name="ID_SEARCH_FIELD_OF_STUDY">Search Field Of Study</string>
-    <string name="ID_SEARCH_INTEREST">Search Your Interest</string>
-    <string name="ID_SEARCH_GOOD_AT">Search Good At</string>
-    <string name="ID_RECENT_SEARCH">Recent Search</string>
     <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
     <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
-    <string name="ID_SEARCH_IN_ARTICLES">Search Articles</string>
     <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
     <string name="ID_TRENDING">Trending</string>
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
     <string name="ID_DONE">Done</string>
-    <string name="ID_PROCEED">Proceed</string>
     <string name="ID_OK">Ok</string>
-    <string name="ID_OR">OR</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_VIEW_MORE_MENTOR">...View More</string>
-    <string name="ID_STD">+91</string>
-    <string name="ID_CELL_PHONE_NUMBER">CELL PHONE NUMBER</string>
-    <string name="ID_VIEW_MORE_COMMENT">View more replies</string>
     <string name="ID_JOIN">Join</string>
-    <string name="ID_POST_AS_ON_SHEROES">Post on SHEROES as :</string>
-    <string name="ID_SHARE_WITH_FRIENDS">Share with friends</string>
-    <string name="ID_DO_YOU_SEE">Do you see women getting harassed in</string>
-    <string name="ID_YOUR_LOCALITY">your locality?</string>
-    <string name="ID_TELL_YOUR_FRIENDS">Yes, Tell Your Friends About It</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_VIEW">View</string>
-    <string name="ID_REPLIES">Replies</string>
-    <string name="ID_NO_REPLIES">No replies</string>
-    <string name="ID_REPLY">Reply</string>
-    <string name="ID_OPEN_BRACKET">(</string>
-    <string name="ID_CLOSE_BRACKET">)</string>
-    <string name="ID_REACTION">Like</string>
-    <string name="ID_REACTIONS">Likes</string>
-    <string name="ID_NO_REACTION">No reaction</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">min read</string>
     <string name="ID_COMMUNITY_ANNONYMOUS">ANONYMOUS</string>
-    <string name="ID_DON_STAY_QUIET">Don\'t Stay Quiet !</string>
     <string name="ID_JOIN_CONVERSATION">Join the conversation</string>
-    <string name="ID_SHARE_INTEREST">Share Your Interest</string>
-    <string name="ID_WHAT_GOOD_AT">What Are You Good At?</string>
-    <string name="ID_EMPTY_TEXT">Please enter comment</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
     <string name="ID_LIKE">Like</string>
@@ -143,29 +89,18 @@
     <string name="ID_COMMENTS">Comments</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
-    <string name="ID_MORE_FROM_LIFE">More From Life</string>
-    <string name="ID_FORGOT_PASSWORD">Forgot Password?</string>
-    <string name="ID_PROFILE">Profile</string>
+    <string name="ID_PROFILE">About</string>
     <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
-    <string name="ID_BOOKMARK">Bookmarks</string>
-    <string name="ID_ARE_FEMALE">Please check for female</string>
-    <string name="ID_SETTING">Settings</string>
-    <string name="ID_ASK_SHEROES">Ask SHEROES</string>
-    <string name="ID_HELPLINE">Helpline</string>
     <string name="ID_POST">Post as:</string>
     <string name="ID_POSTED">posted</string>
     <string name="ID_MEMBERS">Members</string>
-    <string name="ID_MEMBER">Member</string>
     <string name="ID_NORMAL_MEMBER">normal member</string>
     <string name="ID_ADMIN">Admin</string>
-    <string name="ID_OWNER_REMOVED">Owner removed</string>
     <string name="ID_REMOTE">Remote</string>
     <string name="ID_REMOVE">Remove</string>
     <string name="ID_INVITE">Invite</string>
-    <string name="ID_TOTAL_IMAGES">4+</string>
     <string name="ID_SHARE">Share</string>
-    <string name="ID_SHARE_WITH_COMMUNITY">Type here to share what you are thinking...</string>
     <string name="ID_EDIT">Edit</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_DELETE">Delete</string>
@@ -173,100 +108,41 @@
 
     <string name="ID_REPORT">Report as spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
-    <string name="ID_NO_GROWTH_BUDDIES">No, champions found</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
-    <string name="ID_NO_POST_MODERATION">No post to moderation</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
-    <string name="ID_NO_RESULT_FOUND_TRY">Try another search</string>
-    <string name="ID_NO_RESULT_FOUND_SEARCH">No Result found for</string>
     <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
-    <string name="ID_SUGGESTED">Suggested communities</string>
-    <string name="ID_GROUP">Group</string>
-    <string name="ID_SEE_MORE">See more like this</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
-    <string name="ID_FEMALE">SHEROES is a women only community and I declare I am a female. </string>
     <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>
     <string name="ID_LESS_MENTOR">...View Less</string>
-    <string name="ID_RECENT">Recent</string>
-    <string name="ID_RELATED_ARTICLES">Related Articles</string>
     <string name="ID_TAGS">Tags</string>
-    <string name="ID_PERSONAL">PERSONAL</string>
-    <string name="ID_PROFESSIONAL">PROFESSIONAL</string>
     <string name="ID_BOOKMARKS">Bookmarks</string>
-    <string name="ID_DAILOG">dialog</string>
-    <string name="ID_TELL_US_ABOUT">  Tell Us About Yourself</string>
-
-    <string name="ID_APPRECIATE_FROM_LIFE">SHEROES</string>
-    <string name="ID_I_ENJOY">I Enjoy</string>
-    <string name="ID_I_AM_JOB_AT">I Am Good At</string>
 
     <!--text related setting_dashboard page-->
-    <string name="ID_SETTINGS">SETTINGS</string>
-    <string name="ID_FEEDBACK">FEEDBACK</string>
-    <string name="ID_FEEDS">FEEDS</string>
-    <string name="ID_COMMUNITES">COMMUNITY</string>
 
-    <string name="ID_PREFERENCES">PREFERENCES</string>
-    <string name="ID_DASH">-</string>
-    <string name="ID_FOLLOWERS">Followers</string>
     <string name="ID_FOLLOWER">Follower</string>
-    <string name="ID_GROWTH_BUDDIES_POST">Posts</string>
 
-    <string name="ID_ABOUT">ABOUT</string>
-    <string name="ID_LETS_TALK"> Let’s Start Talking</string>
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
-    <string name="PLACEHOLDER_WEBPAGE_URL">%1$s?auth=%2$s&amp;addHeader=false&amp;addFooter=false</string>
-    <string name="ID_BOARDING_COMMUNITIES"> To make Sheroes experience special for you please join some communities of your interests</string>
-    <string name="ID_WELCOME_HEADER"> Talk About Things That Matter To You</string>
-    <string name="ID_UPLOAD_LOGO">Upload load</string>
-    <string name="ID_UPLOAD_COVER">Upload cover</string>
-    <string name="ID_CREATE_COMMUNITY">Create Community</string>
-    <string name="ID_CHNAGE_PRIVACY"> Change Community Privacy</string>
-    <string name="ID_CHANGE_PRIVACY_LABEL">The following changes will take place:</string>
-    <string name="ID_CHANGE_CLOSE_FIRST">• All members will remain members of the close community.</string>
-    <string name="ID_CHANGE_CLOSE_SECOND">• Posts and notifications will be hidden from the members who have not joined the community. </string>
-    <string name="ID_CHANGE_OPEN_FIRST">• All members will remain members of the open community.</string>
-    <string name="ID_CHANGE_OPEN_SECOND">• Posts will be visible to all SHEROES members.</string>
-    <string name="ID_CHANGE_OPEN_THIRD">• Users with pending requests will be added as members.</string>
+    <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\n Help us personalize SHEROES for you by joining some communities of your interests.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>
     <string name="ID_CLOSED">closed</string>
-    <string name="ID_APPLY">Apply</string>
     <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
     <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>
-    <string name="ID_CHALLENGE_ACCEPT">Challenge accepted</string>
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>
-    <string name="ID_I_M_DONE">I’M DONE</string>
-    <string name="ID_VERIFY">Verify your identity </string>
-    <string name="ID_HEY">Hey</string>
-    <string name="ID_HOW_CAN_SHEROES">How can SHEROES help you? </string>
-    <string name="ID_TERMS_AND_CONDITIONS">TERMS AND CONDITIONS</string>
-    <string name="ID_LOGOUT">Logout</string>
     <string name="ID_INVITE_WOMEN_FRIEND">Invite Friends</string>
     <string name="ID_PLAY_STORE_DATA">Connecting with SHEROES...</string>
-    <string name="ID_INVITE_REFERRAL_FRIEND">Invite &amp; Win </string>
-    <string name="ID_CELL_PHONE">Cell Phone number</string>
     <string name="ID_LOCATION">Location</string>
 
     <!-- String related to preferences_dashboard page-->
 
-    <string name="ID_BASICDETAILS">Basic Details</string>
-    <string name="ID_EDUCATIONDETAILS">EDUCATION DETAILS</string>
-    <string name="ID_WORKEXPERIENCEDETAILS">WORK EXPERIENCE DETAILS</string>
-    <string name="ID_DEACTIVEACCOUNT">DEACTIVATE ACCOUNT</string>
-
 
     <!--string related to setting_deactive account page-->
-    <string name="ID_DEACTIVE_TEXT">Account Deactivated</string>
-    <string name="ID_DEACTIVE_TEXT1"> We are sorry to see you go.</string>
-    <string name="ID_ERROR_REASION"> Your message is too short.</string>
     <string name="ID_CLOSE"> CLOSE </string>
-    <string name="ID_TEXT_OPTIONAL">Tap to leave a comment (optional)</string>
 
     <!--string related to setting_about page-->
 
@@ -274,232 +150,78 @@
     <!--string related to setting_terms_and_condition page-->
 
     <!-- String related to setting_preferences_basicdetails page-->
-    <string name="ID_CHILDRENDIRTH">Number of children</string>
     <!-- String related to setting_education details  page-->
-    <string name="ID_GRADES_PERCENTAGE">Grades/Percentage</string>
-    <string name="ID_ADD_VALUE">Added in the education details</string>
     <!--String related to spinnar of setting-->
-    <string-array name="spinner_iteams">
 
-        <item>ID_ONLYME</item>
-        <item>ID_PUBLIC</item>
-
-    </string-array>
-
-
-    <string name="ID_PORTFOLIO_LINK">Portfolio link </string>
-    <string name="ID_PORTFOLIOS">All your freelancing portfolios</string>
-    <string name="ID_UPLOADED_IMAGES">upload images</string>
-    <string name="ID_ADD_SECTION"> Added to your business/freelancing section.</string>
-    <string name="portfolio_link">PORTFOLIO LINK</string>
 
     <!--String related setting_preferences_deactiveaccount page -->
 
-    <string name="ID_DEACTIVATE">Why do you want to deactivate?</string>
-    <string name="ID_NOTFINDTEXT">I don’t find SHEROES useful</string>
-    <string name="ID_SPAMMED">I feel spammed</string>
-    <string name="ID_SPAM">Spam</string>
-    <string name="ID_PRIVACY">I have privacy issues</string>
-    <string name="ID_OTHER">Other</string>
-    <string name="ID_WRITE_RESON">Write reason</string>
-    <string name="ID_CONFIRM">confirm</string>
-
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
-    <string name="ID_THANK_YOU">THANK YOU</string>
-    <string name="ID_FOLLOW_US">FOLLOW US</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="ID_GROWTH_BUDDIES_FOLLOW">Follow</string>
     <string name="ID_GROWTH_BUDDIES_FOLLOWING">Following</string>
     <!--String Related personal contact details edit page-->
-    <string name="ID_FIRST_NAME_HINT">FIRST NAME</string>
-    <string name="ID_LAST_NAME_HINT">LAST NAME</string>
-    <string name="ID_CONTACT_NUMBER_HINT">CONTACT NUMBER</string>
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
     <string name="ID_LOCATION_HINT">LOCATION</string>
-    <string name="ID_EDUCATION">Education</string>
-    <string name="ID_DEGREE_HINT">DEGREE</string>
-    <string name="ID_DEGREE1_HINT">SCHOOL/COLLEGE/UNIVERSITY</string>
-    <string name="ID_WORK_EXPERIENCE">Work experience</string>
-    <string name="ID_DESIGNATION_HINT">DESIGNATION</string>
-    <string name="ID_COMPANY_NAME_HINT">COMPANY/ORGANIZATION</string>
-    <string name="ID_GOOD_AT_HINT">GOOD AT</string>
 
     <!--String Related personal BASIC details page-->
-    <string name="ID_CONTACT_NO_HINT">CONTACT NUMBER</string>
-    <string name="ID_PROFILE_FULL_NAME">FULL NAME</string>
-    <string name="ID_CURRENT_LOCATION_HINT">CURRENT LOCATION</string>
-    <string name="ID_RELACTIONSHIP_HINT">RELATIONSHIP STATUS</string>
-    <string name="ID_CHILDREN_HINT">NUMBER OF CHILDREN</string>
-    <string name="ID_GOFOR_SETTING_LINK">To change mobile no.or email go to settings</string>
+    <string name="ID_PROFILE_FULL_NAME"><font size="12">FULL NAME</font></string>
+    <string name="ID_RELACTIONSHIP_HINT"><font size="12">RELATIONSHIP STATUS</font></string>
+    <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
     <string name="ID_SAVE">SAVE</string>
-    <string name="ID_MY_CONTACT_CARD">MY CONTACT CARD</string>
     <string name="ID_NEED_TO_BE_REVIEWED">Hi! Your post is being reviewed by our community moderators. Please check back soon.</string>
 
     <!--String Related personal About_me details page-->
-    <string name="ID_ABOUT_ME">ABOUT ME</string>
-    <string name="ID_ABOUT_WRITE_TITTLE">Describe Youself in a Nutshell</string>
-    <string name="ID_WRITE_REASION">Start typing here... </string>
-    <string name="ID_CHAR_COUNT">456 Characters</string>
+    <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
 
     <!--String Related personal other details page-->
-    <string name="ID_ADITIONAL">ADD ADITIONAL ACTIVITIES AND ACHIEVEMENTS</string>
-
-    <string name="ID_SUCCESSFULLY">Successfully</string>
 
 
     <!--String Related professional choose_city details page-->
-    <string name="ID_CITY_LIKE">Where would you like to work?</string>
-    <string name="ID_CITY_text1">Around / in NEW DELHI</string>
-    <string name="ID_CITY_text2">Anywhere in INDIA</string>
-    <string name="ID_CITY_text3">Anywhere in worldwide</string>
-    <string name="ID_CITY_text4">Add city</string>
-    <string name="ID_EXAMPLE">New delhi</string>
 
 
     <!--String Related professional  travel_like details page-->
-    <string name="ID_TRAVEL_LIKE">Are you willing to travel to a client location?</string>
-    <string name="ID_NO">No</string>
-    <string name="ID_YES">Yes</string>
-    <string name="ID_YES_THEN">If yes, then where?</string>
-    <string name="ID_LOCAL">Local</string>
-    <string name="ID_MY_COUNTRY">My Country</string>
-    <string name="ID_WORDSIDE">Worldwide</string>
     <!--string related professional work_experience page -->
 
-    <string name="ID_SELF_EMP">Self employment</string>
     <string name="ID_JOB">Job</string>
-    <string name="ID_FRELANCE_PROJECT">Freelance project</string>
-    <string name="ID_PERSONAL_PROJECT">Personal project</string>
-    <string name="ID_SCHOOL_PROJECT">School project</string>
-    <string name="ID_INTERSHIP">Intership</string>
-    <string name="ID_WORK_EXPERIENCE_TITTLE">TYPE OF EXPERIENCE</string>
-    <string name="ID_CONTINUE">CONTINUE</string>
 
 
     <!--string related work_experience_selfempolyment page-->
 
-    <string name="ID_SELF_EMP_DESIGNATION_HINT">DESIGNATION</string>
-    <string name="ID_SELF_EMP_FUNCTIONAL_HINT">FUNCTIONAL AREA</string>
-    <string name="ID_SELF_EMP_ORGANIZATION_HINT">ORGANIZATION NAME</string>
-    <string name="ID_school_ORGANIZATION_HINT">ORGANIZATION</string>
-    <string name="ID_SELF_EMP_BRAND_HINT">ORGANIZATION BRAND NAME</string>
-    <string name="ID_SELF_EMP_START">Start </string>
-    <string name="ID_SELF_EMP_END">End</string>
-
-    <string name="ID_SELF_EMP_START_DATE_HINT">DD MM YYYY</string>
-    <string name="ID_DATE_START_HINT">MM YYYY</string>
-
-
-    <string name="ID_CURRENTLY_WORK_EXP">Currently Working</string>
-    <string name="ID_SELF_EMP_TITTLE">Currently Studying</string>
-    <string name="ID_SELF_EMP_DESCRIPTION_HINT">DESCRIPTION OF YOUR WORK</string>
-    <string name="ID_SCHOOL_DESCRIPTION_HINT">DESCRIPTION</string>
-    <string name="ID_SELF_EMP_ORGANIZATION_TYPE_HINT">ORGANIZATION TYPE </string>
-    <string name="ID_SELF_EMP_SECTOR_HINT">SECTOR </string>
-    <string name="ID_SELF_EMP_ABOUT_HINT">ABOUT ORGANIZATION</string>
-    <string name="ID_SELF_EMP_WEBSITE_URL_HINT">WEBSITE URL</string>
-    <string name="ID_SELF_EMP_APP_URL_HINT">MOBILE APP URL</string>
-    <string name="ID_SELF_EMP_LOGO">ADD LOGO/IMAGE</string>
-    <string name="ID_PROJECT_NUMBER">PROJECT 1</string>
-    <string name="ID_PROJECT_TITTLE">TITLE</string>
-    <string name="ID_PROJECT_ABOUT_TITLE">ABOUT TITLE</string>
-    <string name="ID_PROJECT">PROJECT</string>
-
-
-    <string name="ID_C_STATUS">Current Status</string>
-    <string name="ID_CURRENT_STATUS">CURRENT STATUS</string>
-    <string name="ID_TOTAL_WORK_EXPERIENCE">Total work experience</string>
-    <string name="ID_DURECTION">DURATION</string>
-    <string name="ID_YEARS">YEAR</string>
-    <string name="ID_MONTHS">MONTH</string>
-    <string name="ID_DAY">Day</string>
-    <string name="ID_LANGUAGE">language</string>
-    <string name="ID_ADD_LANGUAGE">ADD LANGUAGE</string>
-    <string name="ID_SELECT_PROFICIENT">PROFICI</string>
-    <string name="ID_LANGUAGE_LEVEL">Language Level</string>
-    <string name="ID_ADDED">Added</string>
-    <string name="language">Language</string>
 
     <!-- String related to setting_preference_work_experience  view page-->
-
-    <string name="ID_WORK_EXPERIENCE_TITLE">WORK EXPERIENCE</string>
 
 
     <!--string_related_profile_basic_details_card-->
 
-    <string name="basic_details_current_status">Employed</string>
-    <string name="basic_details_sector">Design</string>
-
-    <string name="ID_DIRTH_OF_BIRTH">Date of Birth</string>
     <string name="ID_DATE_OF_BIRTH">DATE OF BIRTH</string>
-    <string name="ID_CURRENT_LOCATION">Current Location</string>
-    <string name="ID_HOMETOWN">Hometown</string>
-    <string name="ID_CONTACT_NUMBER">Contact Number</string>
-    <string name="ID_RELATIONSHIP_STATUS">Relationship Status</string>
-    <string name="ID_CHILD_NO">Number Of Children</string>
-    <string name="ID_STATUS">Current Status</string>
-    <string name="ID_SECTOR">Sector</string>
-    <string name="ID_SECTOR_HINT">SECTOR</string>
 
-    <string name="ID_MORE">MORE</string>
     <string name="ID_LEAVE">Leave</string>
-    <string name="ID_TOP_POST">Top Post</string>
     <string name="FEATURE_POST">Feature This Post</string>
     <string name="UNFEATURE_POST">UnFeature This Post</string>
 
     <!--String related of professional_add_education page-->
-    <string name="ID_FILED_OF_STUDY_HINT">FIELD OF STUDY</string>
-
-    <string name="ID_FILTERS">Filters</string>
 
     <!--string related of personal lokking_for card-->
-
-    <string name="ID_LOOKING_FOR">Looking For</string>
-    <string name="ID_OPP_SEARCh">Opportunity Search</string>
-    <string name="ID_OPP_SEARCH_1">Business and Entrepreneurship</string>
 
     <!--string related of personal i_am_interesting card-->
 
 
-    <string name="ID_INTERESTINNG_TITTLE">I AM INTERESTED IN</string>
-
-
-    <string name="ID_ADD_EDUCATION">EDUCATION</string>
-
     <!--string related welcome page-->
 
-    <string name="ID_GROW_WITH_SHEROES">Grow With SHEROES</string>
-    <string name="ID_WELCOME_TEXT1">Own your success. Invest in your growth
-    with our career guides, flexible jobs,and learning new things</string>
-    <string name="ID_CLICK_TO_JOIN">CLICK TO JOIN</string>
-    <string name="ID_JOIN_COMMUNITIES">Join Community</string>
-    <string name="ID_WELCOME_TEXT2">Talk, share, celebrate, inspire in a community that cares</string>
-    <string name="ID_WELCOME_TEXT3">Discover things that matter to you Career, Life, Love</string>
-    <string name="ID_ALL_OF_YOU">All For You</string>
     <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
-    <string name="IDS_GOOGLE_BUTTON">Login with Google</string>
-    <string name="ID_LINK_TO_FACEBOOK">Link to Facebook</string>
-    <string name="ID_WELCOME_TEXT4">Login Using Email (Only For Existing Users)</string>
     <string name="ID_INFORMATION_WARNING">We never share your info with anyone</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(Only for existing users)</string>
     <string name="ID_WELCOME_FIRST">Ask questions and discuss about health, career, relationships and more...</string>
     <string name="ID_WELCOME_SECOND">Join Communities you like and talk to other women even anonymously</string>
     <string name="ID_WELCOME_THIRD">Get expert advice from champions -  achievers from within the community</string>
-    <string name="ID_WELCOME">Welcome</string>
-    <string name="ID_WELCOME_WOMEN">It’s a delight to have you on SHEROES, a community of over 1 Million women.</string>
-    <string name="ID_WELCOME_DETAIL"> We are team SHEROES, we understand things that you care about and we find want you are looking for, everyday.</string>
     <!--string related client travel page-->
 
-    <string name="ID_TRAVEL_FLEXIBILITY">TRAVEL FLEXIBILITY</string>
     <!--string related work locationpage-->
 
 
-    <string name="ID_PREFERRED_WORK_LOCATION">PREFERRED WORK LOCATION</string>
-
-
     <!--String related good at-->
-    <string name="ID_GOOD_AT">GOOD AT</string>
 
     <!--string relates looking_for-->
 
@@ -508,97 +230,21 @@
 
     <!--string relates interest_in_for-->
 
-    <string name="ID_POPULAR_INTEREST_IN">I AM INTERESTED IN</string>
     <!--close sthring through priyanka-->
-    <string name="ID_ERROR_FIELD_REQUIRED">This field is required</string>
 
-    <string name="ID_COMMUNITY_NAME">COMMUNITY NAME</string>
-    <string name="ID_CHOOSE_COMMUNITY">CHOOSE COMMUNITY</string>
-    <string name="ID_SHARE_COMMUNITY">SHARE</string>
-
-    <string name="ID_COMMUNITY_TYPE">COMMUNITY TYPE</string>
-    <string name="ID_DESCRIPTION"> DESCRIPTION</string>
-    <string name="ID_COMM_SHARE_EMAIL_LINK">SHARE COMMUNITY LINK ON EMAIL</string>
-    <string name="ID_EMAIL_HINT_TEXT">Enter emails to share...</string>
-    <string name="ID_LOGGIN_FACEBOOK">Logging in...</string>
-    <string name="ID_SAHRE_TEXT">SHARE</string>
-    <string name="ID_COMM_SHARE_BUTTON">SHARE VIA SOCIAL MEDIA</string>
-
-    <string name="COMMUNITY_TYPE">COMMUNITY TYPE</string>
-    <string name="ID_EMAIL">Or, Sign Up Using Email</string>
-
-    <string name="ID_ORGANISATION">Organization</string>
-    <string name="ID_TAG_TEXT">Helth, Education, Family Welfare</string>
-    <string name="ID_ABOUT_COMMUNITY">ABOUT COMMUNITY</string>
-    <string name="ID_COMMUNITY_MEMBER">200 Members</string>
-    <string name="ID_SELECT_PURPOSE">Select Purpose</string>
-
-    <string name="ID_COMMUNITY_REQUESTED">Requests</string>
-    <string name="ID_EMPLOYER_BRANDING">Employer Branding</string>
-    <string name="ID_COSTOMER_REVIEW">Customer Review</string>
-    <string name="ID_ASSOCIATE_EMPLOYEE_ENGAGEMENT">Associate/Employee engagement</string>
-    <string name="ID_PRODUCT_PROMOTION">Product Promotion</string>
-    <string name="ID_REQUEST">Requests</string>
-    <string name="ID_POPULAR_TAG">Popular Tag</string>
-    <string name="ID_TAG_TXT">Choose tags which you’re interested in</string>
     <string name="ID_JOIN_REGION_TXT">I would like to join because..</string>
     <string name="ID_COMMUNITY_JOIN_TXT">I would like to join because..</string>
     <string name="ID_COMMUNITY_JOIN_REGION1">I am highly interested in joining this community</string>
     <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
     <string name="ID_USER_NAME">User Name</string>
-    <string name="ID_COMMUNITY_REMOVE_OWNER">Are you sure you want to remove this owner ?</string>
-    <string name="ID_INVITE_MEMBER_COMMUNITY">Invite members to your community</string>
-    <string name="ID_INVITE_OWNER_COMMUNITY">Invite owner to your community</string>
-    <string name="ID_INVITE_USER_TEXT">SHEROES users only</string>
-    <string name="ID_EXP">Experience</string>
-    <string name="ID_OPPORTUNITY_TYPE">Opportunities type</string>
-    <string name="ID_WORK_FROM_HOME">Work From Home</string>
-    <string name="ID_FREELANCE_RORK">Freelance Work</string>
-    <string name="ID_CORPORATE_JOBS">Corporate Jobs</string>
-    <string name="ID_INTERNSHIP_VOLUNTEER">Internship/Volunteer</string>
-    <string name="ID_BUSSINESS_OPPORTUNITIES">Business Opportunities</string>
-    <string name="ID_PART_TIME">Part Time</string>
-    <string name="ID_FULL_TIME">Full Time</string>
-    <string name="ID_JOB_DES">Description</string>
-    <string name="ID_JOB_OPENING">Opening</string>
-    <string name="BY_LOGGING"> By logging in, you agree to SHEROES terms &amp; condition</string>
-    <string name="ID_TELL_ABOUT"> How about you tell us a little more about youself?</string>
-    <string name="ID_ADD_HERE">Add</string>
     <string name="ID_JUST_NOW">Just Now</string>
-    <string name="ID_EDITED">Edited</string>
-    <string name="ID_SHARED">Successfully shared community</string>
-    <string-array name="name">
-
-        <item>Topic/Interest</item>
-        <item>Associate/Employee engagement</item>
-        <item>Group</item>
-        <item>Company/Brand</item>
-        <item>Organization</item>
-    </string-array>
 
 
     <string name="app_name">SHEROES</string>
-    <string name="ID_HOURS">hours ago</string>
-    <string name="ID_MINUTS">minutes ago</string>
-    <string name="ID_EXP_TEXT">What Is Your Total Work Experience?</string>
     <string name="ok">DONE</string>
-    <string name="ID_SEARCH_USER">Search Users</string>
-    <string name="ID_NAME">Name</string>
 
     <string name="camera">CAMERA</string>
-    <string name="gallery">GALLERY</string>
-    <string name="onboarding_join_the_world">Join The World\'s Largest Women Only Network </string>
-    <string name="from_date">From Date</string>
-    <string name="to_date">Date Of Birth</string>
     <!--Work Experience-->
-    <string-array name="work_exp_arr">
-        <item>@string/ID_SELF_EMP</item>
-        <item>@string/ID_JOB</item>
-        <item>@string/ID_FRELANCE_PROJECT</item>
-        <item>@string/ID_PERSONAL_PROJECT</item>
-        <item>@string/ID_SCHOOL_PROJECT</item>
-        <item>@string/ID_INTERSHIP</item>
-    </string-array>
 
     <string name="married">Married</string>
     <string name="unmarried">Unmarried</string>
@@ -606,31 +252,6 @@
         <item>@string/married</item>
         <item>@string/unmarried</item>
     </string-array>
-    <string name="ID_CHALLENGES_YOU">Challenges You</string>
-    <string name="ID_YOUR_FRIENDS">Your Friends</string>
-    <string name="ID_CHALLENGE">Challenge</string>
-    <string name="ID_HAS_ACCEPTED">updated her progress on a</string>
-    <string name="ID_HAS_ACCEPTED_CHALLENGE">challenge</string>
-    <string name="ID_ACCEPT_CHALLENGE">Accept Challenge</string>
-    <string name="ID_JUST_STARTED">Just Started</string>
-    <string name="ID_HALF_DONE">Half Done</string>
-    <string name="ID_ALMOST_THERE">Almost There</string>
-    <string name="ID_COMPLETED">Completed</string>
-    <string name="ID_UPDATE_PROGRESS">Update Progress</string>
-    <string name="ID_SHARE_PROGRESS">Share Progress</string>
-    <string name="ID_COMPLTED_SHARE_WITH_FRIENDS">COMPLETED! Share With Friends</string>
-    <string name="ID_JUST_STARTED_PERCENT">Just Started(0%)</string>
-    <string name="ID_HALF_DONE_PERCENT">Half Done(50%)</string>
-    <string name="ID_ALMOST_DONE_PERCENT">Almost Done(90%)</string>
-    <string name="ID_COMPLETED_PERCENT">Completed(100%)</string>
-    <string name="ID_UPDATE">Update</string>
-    <string name="ID_CONGRATULATION">Congratulations</string>
-    <string name="ID_ADD_PHOTO">Let\'s make this moment more special by adding a photo.</string>
-    <string name="ID_CHOOSE_PHOTO">Choose Photo From gallery</string>
-    <string name="ID_ADD_YOU_TUBE_LINK">Add Youtube link..</string>
-    <string name="ID_JOIN_SHEROES_NETWORK">Join The SHEROES Network</string>
-    <string name="ID_GROWTH_BUDDIES">Champions</string>
-    <string name="ID_CHALLENGED">My Challenges</string>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
     <string name="ID_SPONSORS">Sponsors</string>
@@ -641,29 +262,9 @@
     <string name="ID_ONCE_CARD_DETAIL3">Share your everyday achievements and inspire others.</string>
     <string name="ID_JUST">Just</string>
     <string name="ID_STARTED">Started</string>
-    <string name="ID_SHARE_MSG">Please choose photo or add youtube link.</string>
-    <string name="ID_CHALLENGE_COMPLETED_SUCCESS">Success</string>
 
-    <string name="ID_SIGNUP_LOGIN">Already have an account? Log In</string>
-    <string name="ID_GET_STARTED">GET STARTED</string>
-    <string name="ID_SIGNUP_TEXT">Signup Using Your Email Address</string>
-    <string name="ID_PROMISE">Promise we won\'t share your personal information</string>
-    <string name="ID_SIGN_UP">Sign Up</string>
-    <string name="ID_SIGN_UP_MOBILE_HINT"><font size="10">MOBILE NUMBER</font></string>
-    <string name="ID_SIGN_UP_PASSWORD_HINT"><font size="10">PASSWORD</font></string>
-    <string name="ID_FIRST_NAME">Please enter the first name</string>
-    <string name="ID_LAST_NAME">Please enter the last name</string>
+    <string name="ID_SIGN_UP_MOBILE_HINT"><font size="12">MOBILE NUMBER</font></string>
 
-    <string name="ID_HELPLINE_TYPE_MESSAGE"> Type Your Message</string>
-    <string name="ID_FIRST_NAME_HINT_SIGNUP"><font size="10">FIRST NAME</font></string>
-    <string name="ID_LAST_NAME_HINT_SIGNUP"><font size="10">LAST NAME</font></string>
-    <string name="ID_EMAIL_ID_HINT_SIGNUP"><font size="10">EMAIL ID</font></string>
-    <string name="ID_PASSWORD_STRENTH">Password should be greater than 5 characters.</string>
-    <string name="ID_NAME_CHECK">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
-
-    <string name="ID_ICC_MEMBERS">ICC Members</string>
-    <string name="ID_FAQS">FAQ</string>
-    <string name="ID_TRAINING">Training</string>
     <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
 
     <string name="ID_EVENT">Event</string>
@@ -683,7 +284,6 @@
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">We have sent a password reset link to ***"</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2">, please check your inbox and follow the instructions</string>
     <string name="ID_RESET_PASSWORD_FAILURE_TEXT">The email you entered is either incorrect or unregistered. Please try again.</string>
-    <string name="ID_RESET_PASSWORD_ERROR_TEXT">The Email ID you entered is incorrect, please try again</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">Please enter the email ID associated with your SHEROES account</string>
 
     <string name="ID_RESET_PASSWORD_SUCCESS_LINK_TEXT">Click here to login</string>
@@ -692,54 +292,17 @@
 
 
     <!--Google Analytics Screen Names-->
-    <string name="ID_CROP_IMAGE">image cropping screen</string>
-    <string name="ID_FACEBOOK_SCREEN">facebook screen</string>
     <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
-    <string name="ID_VIEW_COMMUNITY">view community</string>
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
-    <string name="ID_VIEW_ARTICLE">view article</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
-    <string name="ID_SIGN_UP_FORM">sign up (form) screen</string>
     <string name="ID_LOGIN_WITH_EMAIL">Login with Email</string>
     <string name="ID_LOGIN_TEXT">login</string>
-    <string name="ID_ONBOARDING_WELCOME">onboarding- welcome screen</string>
-    <string name="ID_ONBOARDING_LETS_START_TALKING">onboarding- Let’s Start Talking</string>
-    <string name="ID_ONBOARDING_CURRENT_STATUS">onboarding- current status</string>
-    <string name="ID_ONBOARDING_LOOKING_FOR">onboarding- looking for</string>
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
     <string name="ID_COMMUNITY_LISTING_ALL_COMMUNITIES">community listing- all communties</string>
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
-    <string name="ID_CREATE_COMMUNITY_POST">create community post</string>
-    <string name="ID_ABOUT_COMMUNITY_SCREEN">about community</string>
-    <string name="ID_ADD_COMMUNITY_OWNERS">add community owners</string>
-    <string name="ID_COMMUNITY_MEMBERS">community members</string>
-    <string name="ID_SHARE_COMMUNITY_SCREEN">share community</string>
-    <string name="ID_MY_PROFILE_PERSONAL_SCREEN">my profile- personal</string>
-    <string name="ID_MY_PROFILE_PERSONAL_EDIT_LOOKING_FOR">my profile- personal- edit looking for</string>
-    <string name="ID_MY_PROFILE_PERSONAL_EDIT_BASIC_DETAIL">my profile- personal- edit basic details</string>
-    <string name="ID_MY_PROFILE_PERSONAL_EDIT_ABOUT_ME">my profile- personal- edit about me</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL">my profile- professional</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT">my profile- professional- edit good at</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_GOOD_AT_SEARCH_AT">my profile- professional- edit good at- search good at</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_EDUCATION">my profile- professional- view added educations</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_ADD_EDUCATION">my profile- professional- add education</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_EDUCATION">my profile- professional- edit education</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_VIEW_ADDED_WORK_EXPERIENCE">my profile- professional- view added work experiences</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_ADD_WORK_EXPERIENCE">my profile- professional- add work exprience</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_WORK_EXPERIENCE">my profile- professional- edit work exprience</string>
-    <string name="ID_MY_PROFILE_PROFESSIONAL_EDIT_BASIC_DETAIL">my profile- professional- edit basic details</string>
-    <string name="ID_VIEW_JOBS_DETAIL">view job details</string>
-    <string name="ID_SEARCH_">view job details</string>
-    <string name="ID_JOB_LISTING">job listing</string>
-    <string name="ID_JOB_SEARCH_RESULT">job search results</string>
-    <string name="ID_JOB_FILTERS">jobs filters</string>
-    <string name="ID_JOB_FILTER_SCREEN">jobs filter screen</string>
-    <string name="ID_JOB_FILTERS_SELECT_LOCATION">jobs filters- select locations</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
-    <string name="ID_VIEW_REACTION">view reactions</string>
-    <string name="ID_VIEW_REPLIES">view replies</string>
 
 
     <string name="ID_POSTED_REVIEW">posted a review for</string>
@@ -747,21 +310,13 @@
 
     <!-- String related to review post -->
 
-    <string name="ID_REVIEW_POST_SHARE">Share</string>
     <string name="ID_REVIEW_POST_NO_UPVOTE">Upvote</string>
     <string name="ID_REVIEW_POST_NON_ZERO_UPVOTES">Upvotes</string>
 
-    <string name="ID_INTENT_CHOOSER">Select source</string>
     <string name="ID_YOU_TUBE_VIDEO_NOT_PLAYING">Sorry can not play video please check link</string>
 
 
     <string name="crop_image_activity_title"></string>
-    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
-    <string name="crop_image_menu_rotate_right">Rotate</string>
-    <string name="crop_image_menu_crop">Crop</string>
-    <string name="crop_image_menu_flip">Flip</string>
-    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
-    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
     <string name="pick_image_intent_chooser_title">Select source</string>
 
@@ -844,7 +399,6 @@
     <string name="delete">Delete</string>
     <string name="comment_hint">Leave your thoughts here...</string>
     <string name="comment_deleted">Your comment has been deleted</string>
-    <string name="image_kit_width_height">tr:h-%1$d,w-%1$d,fo-auto</string>
     <string name="choose_community">Choose your community to post in</string>
     <string name="other_community">Other Communities</string>
     <string name="add_photo">Add Photo</string>
@@ -863,10 +417,6 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
     <string name="ID_HEADER_TEXT">What\'s on your mind?</string>
-    <string name="ID_WHAT_LOOKING_FOR">What are you looking for?</string>
-
-    <string name="ID_FINISH">Finish</string>
-    <string name="ID_SELECT_LOOKING_FOR">Please tell us what are you looking for</string>
 
 
     <string name="contest.status.ongoing">Live</string>
@@ -874,23 +424,18 @@
     <string name="contest.status.completed">Completed</string>
 
     <string name="contest.status.expired">Challenge Ended</string>
-    <string name="contest.status.challenge.completed">Challenge Completed</string>
 
     <string name="endsOn">ends on</string>
     <string name="starts_at">starts at</string>
-    <string name="joined_by">joined by</string>
     <string name="completed">completed</string>
 
-    <string name="join_contest">join contest</string>
     <string name="submit_response">Submit a response</string>
     <string name="empty_winner_text">&lt;b&gt;No winners announced yet!&lt;/b&gt;</string>
     <string name="empty_winner_subtext">Winner will be announced %1$s. Till then keep checking this place</string>
     <string name="empty_challenge_response_text">No Responses yet!</string>
     <string name="empty_challenge_response_subtext">Be the first one to submit a response</string>
-    <string name="view_response">View response</string>
     <string name="joined">Joined</string>
     <string name="title.contest_list">My Challenges</string>
-    <string name="title.question">Question</string>
     <string name="soon">soon</string>
 
     <string name="hint.full_name">Full Name</string>
@@ -908,16 +453,12 @@
     <string name="title.send_address">Send Address</string>
     <string name="action_send">Send</string>
     <string name="snackbar.submission_submited">Your submission has been submitted successfully</string>
-    <string name="snackbar.address_updated">Your address has been send successfully</string>
     <string name="empty_challenge_text">No Challenges yet!</string>
     <string name="empty_challenge_sub_text">Come back after sometime</string>
     <string name="logoutUrl">/users/logout</string>
     <!--Mentor-->
     <string name="ID_MENTOR_VIEW_ALL">View All</string>
-    <string name="ID_MENTOR_ONLINE">Online</string>
-    <string name="ID_QUESTION">Question</string>
     <string name="ID_MENTOR">Champions</string>
-    <string name="ID_DASHBOARD">Dashboard</string>
     <string name="empty_mentor_text">No champions yet!</string>
     <string name="ID_MENTOR_POST">Posts</string>
     <string name="ID_MENTOR_Q_A">Q &amp; A</string>
@@ -952,7 +493,6 @@
     <string name="ID_NEXT">Next</string>
     <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
 
-    <string name="followed_communities">Followed Communities</string>
     <string name="view_more">View More</string>
     <string name="followed_mentors">Followed Champions</string>
     <string name="cancel">CANCEL</string>
@@ -962,4 +502,18 @@
     <string name="add_location">Add Location</string>
     <string name="add_skills">Add Skills</string>
     <string name="add_desc">Add Description</string>
+    <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
+    <string name="followed_communities">Communities Joined</string>
+    <string name="champions_followed">Champions Followed</string>
+    <string name="join_communities">Join Communities &amp; Connect></string>
+
+    <string name="ID_SHARE_ON_WHATS_APP">Whatsapp</string>
+
+    <!-- String related to tooltip -->
+    <string name="tool_tip_user_profile">Tap here to check out this user and follow her</string>
+    <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
+
+    <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
+
+
 </resources>

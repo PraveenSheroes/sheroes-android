@@ -26,7 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowin
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import rx.Subscriber;
 import rx.Subscription;
 
@@ -37,7 +37,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
  * Created by ravi on 01/01/18.
  */
 
-public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
+public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
 
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
 

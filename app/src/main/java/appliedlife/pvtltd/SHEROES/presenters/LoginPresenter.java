@@ -16,12 +16,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.SignupRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.GooglePlusResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -79,7 +76,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
-       // getMvpView().startProgressBar();
+        // getMvpView().startProgressBar();
         Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp).subscribe(new Subscriber<LoginResponse>() {
             @Override
             public void onCompleted() {
@@ -89,13 +86,13 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-               // getMvpView().stopProgressBar();
+                // getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(LoginResponse loginResponse) {
-               // getMvpView().stopProgressBar();
+                // getMvpView().stopProgressBar();
                 getMvpView().getLogInResponse(loginResponse);
             }
         });
@@ -158,61 +155,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     getMvpView().getGoogleExpireInResponse(expireInResponse);
 
                 }
-            }
-        });
-        registerSubscription(subscription);
-    }
-
-    public void getAuthTokenSignupInPresenter(SignupRequest signupRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getAuthTokenSignupFromModel(signupRequest).subscribe(new Subscriber<LoginResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-            }
-
-            @Override
-            public void onNext(LoginResponse loginResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getLogInResponse(loginResponse);
-            }
-        });
-        registerSubscription(subscription);
-    }
-    public void getGooglePlusUserResponse() {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getGooglePlusUserResponseFromModel().subscribe(new Subscriber<LoginResponse>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-            }
-
-            @Override
-            public void onNext(LoginResponse loginResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getLogInResponse(loginResponse);
             }
         });
         registerSubscription(subscription);
@@ -294,7 +236,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onNext(UserFromReferralResponse userFromReferralResponse) {
-                LogUtils.info(TAG,"************updateUserReferralInModel Response*******"+new Gson().toJson(userFromReferralResponse));
+                LogUtils.info(TAG, "************updateUserReferralInModel Response*******" + new Gson().toJson(userFromReferralResponse));
             }
         });
         registerSubscription(subscription);

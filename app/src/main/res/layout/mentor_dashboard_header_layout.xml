@@ -22,6 +22,7 @@
             android:id="@+id/iv_mentor_verified"
             android:layout_width="@dimen/dp_size_30"
             android:layout_height="@dimen/dp_size_30"
+            android:visibility="gone"
             android:layout_gravity="end|bottom"
             android:background="@drawable/ic_verified" />
     </FrameLayout>
@@ -163,10 +164,11 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:paddingBottom="@dimen/dp_size_7"
-            android:paddingLeft="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_22"
+            android:layout_marginStart="@dimen/dp_size_22"
             android:layout_marginTop="@dimen/dp_size_16"
-            android:paddingRight="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginEnd="@dimen/dp_size_16"
             android:paddingTop="@dimen/dp_size_7"
             android:textAllCaps="true"
             android:textColor="@color/footer_icon_text"
@@ -204,8 +206,8 @@
             android:layout_marginLeft="@dimen/dp_size_5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:drawablePadding="@dimen/dp_size_6"
+            android:maxLines="@integer/int_value_for_line_1"
             android:drawableLeft="@drawable/ic_loc"
-            android:textAllCaps="true"
             android:textColor="@color/mentor_profession"
             android:textSize="@dimen/sp_size_14" />
 
@@ -216,6 +218,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_mentor_profession"
             android:drawablePadding="@dimen/dp_size_6"
+            android:visibility="gone"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/mentor_profession"
             android:textSize="@dimen/sp_size_14" />
@@ -228,10 +231,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:maxLines="@integer/int_value_for_line_3"
+        android:maxLines="@integer/int_value_for_line_4"
         android:maxLength="@integer/int_value_for_line_140"
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
+        android:lineSpacingExtra="@dimen/sp_size_8"
         android:layout_below="@+id/li_loc_profession"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:ellipsize="end"

@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/vector_grey_dots_18dp"
+        android:src="@drawable/vector_menu_horizontal"
         android:layout_below="@id/body"
         android:visibility="gone"/>
 

@@ -74,6 +74,7 @@ public enum Event {
     COMMUNITY_ADDED_MEMBER(AnalyticsEventType.COMMUNITY, "Added Member"),
     COMMUNITY_REMOVED_MEMBER(AnalyticsEventType.COMMUNITY, "Removed Member"),
     COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
+    APP_INVITE(AnalyticsEventType.APP, " Invite Clicked"),
     //endregion
 
     //region Organization related event
@@ -95,6 +96,7 @@ public enum Event {
     // endregion
 
     //region Image related events
+    LINK_SHARED(AnalyticsEventType.LINK, "Shared"),
     IMAGE_SHARED(AnalyticsEventType.IMAGE, "Shared"),
     IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link"),
     LOOKING_FOR(AnalyticsEventType.LOOKING_FOR, "Clicked"),
@@ -129,10 +131,7 @@ public enum Event {
     }
 
     public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-        if (analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS || analyticsProvider == AnalyticsProvider.MIXPANEL || analyticsProvider == AnalyticsProvider.APPSFLYER) {
-            return true;
-        }
-        return false;
+        return analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS || analyticsProvider == AnalyticsProvider.MIXPANEL || analyticsProvider == AnalyticsProvider.APPSFLYER;
     }
 
     public void addProperties(Map<String, Object> properties) {

@@ -1,14 +1,17 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.app.Dialog;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -33,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -65,7 +69,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     @Inject
     AppUtils mAppUtils;
 
-    @Bind(R.id.tv_profile_tittle)
+    @Bind(R.id.tv_search_loc_toolbar_name)
     TextView toolbarTitle;
 
     @Inject
@@ -80,14 +84,16 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     @Bind(R.id.pb_onboarding_search_progress_bar)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.iv_back_profile)
-    ImageView backArrow;
 
+
+    @Bind(R.id.toolbar_search_loc)
+    Toolbar mToolbar;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.rv_onboarding_search, container, false);
         ButterKnife.bind(this, view);
+        setupToolbarItemsColor();
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if (null != getArguments()) {
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
@@ -97,7 +103,6 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         if(mMasterDataSkill ==null) {
             mMasterDataSkill = "city";
         }
-        toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
         mOnBoardingPresenter.attachView(this);
         editTextWatcher();
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (EditUserProfileActivity) getActivity());
@@ -126,8 +131,24 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         setCancelable(true);
         return view;
     }
+    private void setupToolbarItemsColor() {
+        ((EditUserProfileActivity)getActivity()).setSupportActionBar(mToolbar);
+        ((EditUserProfileActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((EditUserProfileActivity)getActivity()).getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        ((EditUserProfileActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbarTitle.setText(R.string.ID_SEARCH_LOCATION);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onSearchBack();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-    @OnClick(R.id.iv_back_profile)
     public void onSearchBack() {
         dismiss();
     }
@@ -159,7 +180,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
 
     @OnClick(R.id.et_search_edit_text)
     public void searchLocation() {
-        mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
+        mOnBoardingPresenter.getOnBoardingSearchToPresenter(AppUtils.onBoardingSearchRequestBuilder("Delhi", mMasterDataSkill));
     }
 
     /**
@@ -200,7 +221,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
             if (!isDetached()) {
                 mMasterDataSkill = "city";
                 mSearchDataName = mSearchDataName.trim().replaceAll(AppConstants.SPACE, AppConstants.EMPTY_STRING);
-                mOnBoardingPresenter.getOnBoardingSearchToPresenter(mAppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
+                mOnBoardingPresenter.getOnBoardingSearchToPresenter(AppUtils.onBoardingSearchRequestBuilder(mSearchDataName, mMasterDataSkill));
 
             }
         }

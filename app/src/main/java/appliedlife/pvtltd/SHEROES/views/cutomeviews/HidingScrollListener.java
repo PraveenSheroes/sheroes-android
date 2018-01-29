@@ -8,21 +8,16 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.presenters.CommentReactionPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
-import appliedlife.pvtltd.SHEROES.presenters.MembersPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
-import appliedlife.pvtltd.SHEROES.presenters.RequestedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getBookMarks;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getPandingMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
@@ -41,7 +36,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     @Inject
     AppUtils mAppUtils;
     HomePresenter mHomePresenter;
-    MembersPresenter mMembersPresenter;
     HelplinePresenter mHelplinePresenter;
     RecyclerView mRecyclerView;
     ProfilePresenterImpl profilePresenter;
@@ -51,15 +45,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private int visibleThreshold = 1;
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
-    private CommentReactionPresenter mCommentReactionPresenter;
     private OnBoardingPresenter mOnBoardingPresenter;
-    RequestedPresenter requestedPresenter;
+
     public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mOnBoardingPresenter = onBoardingPresenter;
         mRecyclerView = recyclerView;
         mManager = manager;
         this.mFragmentListRefreshData = fragmentListRefreshData;
     }
+
     public HidingScrollListener(HomePresenter homePresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mHomePresenter = homePresenter;
         mRecyclerView = recyclerView;
@@ -74,26 +68,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         this.mFragmentListRefreshData = fragmentListRefreshData;
     }
 
-    public HidingScrollListener(MembersPresenter membersPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
-        mMembersPresenter = membersPresenter;
-        mRecyclerView = recyclerView;
-        mManager = manager;
-        this.mFragmentListRefreshData = fragmentListRefreshData;
-    }
-
-    public HidingScrollListener(RequestedPresenter requestedPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
-        this.requestedPresenter = requestedPresenter;
-        mRecyclerView = recyclerView;
-        mManager = manager;
-        this.mFragmentListRefreshData = fragmentListRefreshData;
-    }
-
-    public HidingScrollListener(CommentReactionPresenter commentReactionPresenter, RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
-        mCommentReactionPresenter = commentReactionPresenter;
-        mRecyclerView = recyclerView;
-        mManager = manager;
-        this.mFragmentListRefreshData = fragmentListRefreshData;
-    }
 
     public HidingScrollListener(RecyclerView recyclerView, LinearLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         this.mFragmentListRefreshData = fragmentListRefreshData;
@@ -162,16 +136,16 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 }
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
-                        FeedRequestPojo feedRequestArticlePojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
+                        FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
                         mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
-                        FeedRequestPojo feedRequestCommPostFragPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo);
+                        FeedRequestPojo feedRequestCommPostFragPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo);
                         feedRequestCommPostFragPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
                         mHomePresenter.getFeedFromPresenter(feedRequestCommPostFragPojo);
                         break;
                     case AppConstants.FEATURE_FRAGMENT:
-                        FeedRequestPojo feedRequestFeatureCommPojo=mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, pageNo);
+                        FeedRequestPojo feedRequestFeatureCommPojo = mAppUtils.feedRequestBuilder(AppConstants.FEATURED_COMMUNITY, pageNo);
                         mHomePresenter.getFeedFromPresenter(feedRequestFeatureCommPojo);
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
@@ -179,7 +153,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.HOME_FRAGMENT:
                         if (mFragmentListRefreshData.isChallenge()) {
-                            FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getSourceEntity(), pageNo);
+                            FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getSourceEntity(), pageNo);
                             feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
                             mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                         } else {
@@ -189,7 +163,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         }
                         break;
                     case AppConstants.JOB_FRAGMENT:
-                        if(null!=mFragmentListRefreshData) {
+                        if (null != mFragmentListRefreshData) {
                             if (null != mFragmentListRefreshData.getFeedRequestPojo()) {
                                 FeedRequestPojo feedRequestJobPojo = mFragmentListRefreshData.getFeedRequestPojo();
                                 feedRequestJobPojo.setPageNo(pageNo);
@@ -209,26 +183,24 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     case AppConstants.BOOKMARKS:
                         mHomePresenter.getBookMarkFromPresenter(getBookMarks(pageNo));
                         break;
-                    case AppConstants.COMMENT_REACTION_FRAGMENT:
-                        mCommentReactionPresenter.getAllCommentListFromPresenter(getCommentRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(), pageNo), mFragmentListRefreshData.isReactionList(), AppConstants.NO_REACTION_CONSTANT);
-                        break;
-                    case AppConstants.MEMBER_FRAGMENT:
-                        mMembersPresenter.getAllMembers(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(), pageNo));
-                        break;
-                    case AppConstants.PANDING_MEMBER_FRAGMENT:
-                        requestedPresenter.getAllPendingRequest(getPandingMemberRequestBuilder(mFragmentListRefreshData.getEnitityOrParticpantid(), pageNo));
-                        break;
+
                     case AppConstants.USER_COMMUNITY_POST_FRAGMENT:
                         if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallForNameUser()) && mFragmentListRefreshData.getCallForNameUser().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                             FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
                             feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
                             Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
                             feedRequestCommunnityDetailPojo.setAutherId(autherId);
+                            feedRequestCommunnityDetailPojo.setAnonymousPostHide(mFragmentListRefreshData.isAnonymous());
                             mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         } else {
                             mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
                         }
-
+                        break;
+                    case AppConstants.QA_POST_FRAGMENT:
+                        FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                        feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
+                        feedRequestCommunnityDetailPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
+                        mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         break;
                     case AppConstants.INVITE_MEMBER:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mFragmentListRefreshData.getEnitityOrParticpantid(), AppConstants.INVITE_PAGE_SIZE));
@@ -240,22 +212,22 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.ALL_SEARCH, null, AppConstants.PAGE_SIZE));
                         break;
                     case AppConstants.SPAM_LIST_FRAGMENT:
-                        FeedRequestPojo feedRequestSpamListPojo=mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
+                        FeedRequestPojo feedRequestSpamListPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());
                         feedRequestSpamListPojo.setSpamPost(true);
                         feedRequestSpamListPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
                         mHomePresenter.getFeedFromPresenter(feedRequestSpamListPojo);
                         break;
                     case AppConstants.MENTOR_LISTING:
-                        if( mFragmentListRefreshData.getPageNo()!=AppConstants.ONE_CONSTANT) {
+                        if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
                             FeedRequestPojo feedMentor = mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                             mHomePresenter.getFeedFromPresenter(feedMentor);
                         }
                         break;
 
                     case AppConstants.PROFILE_COMMUNITY_LISTING:
-                        if(mFragmentListRefreshData.isSelfProfile()) {
+                        if (mFragmentListRefreshData.isSelfProfile()) {
                             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
-                        } else{
+                        } else {
                             profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
                         }
                         break;

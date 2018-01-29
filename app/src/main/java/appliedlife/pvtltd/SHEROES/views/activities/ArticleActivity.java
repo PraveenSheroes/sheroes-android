@@ -22,6 +22,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -70,12 +71,12 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
@@ -253,7 +254,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         } else {
             if (getIntent().getExtras() != null) {
                 String notificationId = getIntent().getExtras().getString("notificationId");
-                Long i = (Long) getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
+                Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
                 if (!TextUtils.isEmpty(notificationId)) {
                     setSource(NOTIFICATION_SCREEN);
@@ -280,7 +281,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mArticle != null) {
             loadArticleImage(mArticle);
         }
-        fetchArticle(mArticle == null ? mArticleId : (int) mArticle.id, mArticle!=null ? true : false);
+        fetchArticle(mArticle == null ? mArticleId : (int) mArticle.id, mArticle != null);
 
         mCommentBody.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -440,19 +441,32 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 if (position == RecyclerView.NO_POSITION) {
                     return;
                 }
-                PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
-                popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
+                switch (deleteItem.getId()) {
+                    case R.id.author_pic:
+                    case R.id.author:
+
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if (comment == null) {
-                            return true;
+                        if(!comment.isAnonymous()) {
+                            openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
-                        mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
-                        return true;
-                    }
-                });
-                popup.show();
+                        break;
+
+                    case R.id.delete:
+                        PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
+                        popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Comment comment = mCommentsAdapter.getComment(position);
+                                if (comment == null) {
+                                    return true;
+                                }
+                                mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                                return true;
+                            }
+                        });
+                        popup.show();
+                        break;
+                }
             }
         });
         mCommentList.setAdapter(mCommentsAdapter);
@@ -460,6 +474,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     private void fetchArticle(int articleId, boolean isImageLoaded) {
         mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded);
+    }
+
+    private void openProfile(Long userId, boolean isMentor, String source) {
+        ProfileActivity.navigateTo(this, userId, isMentor, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void updateTitleCommentCountView() {
@@ -639,7 +657,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
+                        .bitmapTransform(new CommonUtil.CircleTransform(this))
                         .into(authorPic);
 
             }
@@ -647,12 +665,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(this))
+                        .bitmapTransform(new CommonUtil.CircleTransform(this))
                         .into(authorDesPic);
 
             }
             authorDesName.setText(article.author.name);
-            authorDescription.setText(article.author.shortDescription);
+            authorDescription.setText(Html.fromHtml(article.author.shortDescription));
 
         }
         title.setText(article.title);
@@ -793,11 +811,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
 
         // If scroll is less than 95% only then go to lights off mode
-        if (scrollY > oldScrollY && mScrollPercentage < 95) {
-            isScrollingDown = true;
-        } else {
-            isScrollingDown = false;
-        }
+        isScrollingDown = scrollY > oldScrollY && mScrollPercentage < 95;
 
         if (isScrollingDown) {
             fab.hide();

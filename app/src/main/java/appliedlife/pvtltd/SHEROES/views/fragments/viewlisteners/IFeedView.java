@@ -25,4 +25,6 @@ public interface IFeedView extends BaseMvpView {
     void addAllFeed(List<FeedDetail> feedList);
 
     void setFeedEnded(boolean feedEnded);
+
+    void removeItem(FeedDetail feedDetail);
 }

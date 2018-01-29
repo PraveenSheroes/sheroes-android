@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
  */
 
 public class NoCommunityHolder  extends BaseViewHolder<FeedDetail> {
-    private final String TAG = LogUtils.makeLogTag(CommunityCardDetailHeader.class);
+    private final String TAG = LogUtils.makeLogTag(NoCommunityHolder.class);
     BaseHolderInterface viewInterface;
     private FeedDetail dataItem;
     private Context mContext;

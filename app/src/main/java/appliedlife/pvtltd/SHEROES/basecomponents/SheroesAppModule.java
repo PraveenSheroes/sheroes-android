@@ -2,15 +2,13 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +20,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -38,14 +35,13 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
@@ -54,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
@@ -71,9 +66,7 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.utils.CommonUtil.getDeviceName;
 
 /**
@@ -115,25 +108,24 @@ public class SheroesAppModule {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
-                Request.Builder builder=original.newBuilder();
+                Request.Builder builder = original.newBuilder();
                 Request request;
                 if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
-                     builder.header("Content-Type", "application/json")
+                    builder.header("Content-Type", "application/json")
                             .header("Authorization", userPreference.get().getToken());
                 } else {
-                     builder.header("Content-Type", "application/json");
+                    builder.header("Content-Type", "application/json");
                 }
                 builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
                 builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
                 if (!NetworkUtil.isConnected(mApplication)) {
-                   // int maxAge =AppConstants.NO_REACTION_CONSTANT; // read from cache for 0 minute if connected
+                    // int maxAge =AppConstants.NO_REACTION_CONSTANT; // read from cache for 0 minute if connected
                     // builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
-                }else
-                {
-                   // int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
+                } else {
+                    // int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
                     // builder.addHeader("Cache-Control","public, only-if-cached, max-stale=" + maxStale);
                 }
-                request=builder.build();
+                request = builder.build();
 
                 okhttp3.Response response = chain.proceed(request);
                 response.cacheResponse();
@@ -204,16 +196,19 @@ public class SheroesAppModule {
                 .setExclusionStrategies(new AnnotationExclusionStrategy())
                 .create();
     }
+
     @Singleton
     @Provides
     public DateUtil provideDateUtil() {
         return DateUtil.getInstance();
     }
+
     @Singleton
     @Provides
     public AppUtils provideAppUtil() {
         return AppUtils.getInstance();
     }
+
     @Singleton
     @Provides
     public RxSharedPreferences provideRxSharedPreferences() {
@@ -245,6 +240,7 @@ public class SheroesAppModule {
     public Preference<MasterDataResponse> provideMasterDataUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
         return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new GsonPreferenceAdapter<>(gson, MasterDataResponse.class));
     }
+
     @Singleton
     @Provides
     public Preference<InstallUpdateForMoEngage> provideInstallUpdatePref(RxSharedPreferences rxSharedPreferences, Gson gson) {

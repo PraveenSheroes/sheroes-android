@@ -17,11 +17,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
@@ -76,11 +78,11 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pl.droidsonroids.gif.GifTextView;
 import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -113,7 +115,7 @@ public class HomeFragment extends BaseFragment {
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_home_list)
-    EmptyRecyclerView mRecyclerView;
+    public EmptyRecyclerView mRecyclerView;
     @Bind(R.id.pb_home_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_home)
@@ -138,17 +140,19 @@ public class HomeFragment extends BaseFragment {
     TextView tvRefresh;
     @Bind(R.id.empty_view)
     View emptyView;
+    @Bind(R.id.root_layout)
+    FrameLayout rootLayout;
     private String mGcmId;
     private long mChallengeId;
     private boolean mIsSpam;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-    private long startedTime;
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     private long mUserId;
     private boolean isChallenge;
     public Contest mContest;
+    private ShowcaseManager showcaseManager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,20 +163,19 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_feed, container, false);
         ButterKnife.bind(this, view);
         loaderGif.setVisibility(View.VISIBLE);
         Bundle bundle = getArguments();
         if (bundle != null) {
             isChallenge = bundle.getBoolean(ContestActivity.IS_CHALLENGE, false);
-            mFeedDetail = (FeedDetail) Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_FRAGMENT));
+            mFeedDetail = Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_FRAGMENT));
             mChallengeId = bundle.getLong(AppConstants.CHALLENGE_ID);
         }
         if(isChallenge){
             Parcelable parcelable = getArguments().getParcelable(Contest.CONTEST_OBJ);
             mContest = Parcels.unwrap(parcelable);
         }
-        startedTime = System.currentTimeMillis();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT, isChallenge);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -190,7 +193,6 @@ public class HomeFragment extends BaseFragment {
         if(getActivity() instanceof ContestActivity){
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (ContestActivity) getActivity());
         }
-
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
@@ -224,7 +226,6 @@ public class HomeFragment extends BaseFragment {
             }
 
         });
-        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
             ((HomeActivity) getActivity()).logOut();
@@ -241,10 +242,14 @@ public class HomeFragment extends BaseFragment {
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
                         mFragmentListRefreshData.setSubType(AppConstants.FEED_COMMUNITY_POST);
-                        FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
+                        FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        params.setMargins(0, 190, 0, 0);
+                        loaderGif.setLayoutParams(params);
+                        showHeaderOnFeed();
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
@@ -270,8 +275,9 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        long timeSpentFeed = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, timeSpentFeed);
+
+        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, 0);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -281,6 +287,27 @@ public class HomeFragment extends BaseFragment {
         });
         return view;
     }
+    private void showHeaderOnFeed()
+    {
+        List<FeedDetail> data=new ArrayList<>();
+        FeedDetail header = new FeedDetail();
+        header.setSubType(AppConstants.HEADER);
+        data.add(0, header);
+        mPullRefreshList.allListData(data);
+        mAdapter.setSheroesGenericListData(data);
+        mAdapter.setUserId(mUserId);
+        mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
+        mAdapter.notifyDataSetChanged();
+    }
+    public void showCaseDesign() {
+        ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
+        showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
+        showcaseManager.showFirstMainActivityShowcase();
+        InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
+        installUpdateForMoEngage.setAppInstallFirstTime(true);
+        mInstallUpdatePreference.set(installUpdateForMoEngage);
+    }
+
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -289,7 +316,6 @@ public class HomeFragment extends BaseFragment {
             pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
                 @Override
                 public void onSuccess(String registrationId, boolean isNewRegistration) {
-                    LogUtils.info(TAG, "*************Registarion" + registrationId);
                     mGcmId = registrationId;
                     PushManager.getInstance().refreshToken(getActivity(), mGcmId);
                     if (StringUtil.isNotNullOrEmptyString(registrationId)) {
@@ -328,7 +354,7 @@ public class HomeFragment extends BaseFragment {
 
                 @Override
                 public void onFailure(String ex) {
-                    LogUtils.info(TAG, "*************Fail Registarion" + ex);
+
                 }
             });
         }
@@ -353,10 +379,15 @@ public class HomeFragment extends BaseFragment {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         if(isChallenge){
-            FeedRequestPojo feedRequestPojo = mAppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
+            FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
         }else {
+            List<FeedDetail> data=new ArrayList<>();
+            FeedDetail header = new FeedDetail();
+            header.setSubType(AppConstants.HEADER);
+            data.add(0, header);
+            mPullRefreshList.allListData(data);
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
@@ -405,7 +436,7 @@ public class HomeFragment extends BaseFragment {
                         if (mIsSpam) {
                             commentListRefresh(feedDetail, DELETE_COMMUNITY_POST);
                         } else {
-                            ((UserPostSolrObj)feedDetail).setSpamPost(false);
+                            feedDetail.setSpamPost(false);
                             commentListRefresh(feedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                         }
                     } catch (CloneNotSupportedException e) {
@@ -474,6 +505,9 @@ public class HomeFragment extends BaseFragment {
         loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            if(getActivity() instanceof HomeActivity && ((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+                showCaseDesign();
+            }
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
                 if (StringUtil.isNotEmptyCollection(mfeedDetailList) && StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
@@ -495,14 +529,8 @@ public class HomeFragment extends BaseFragment {
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
             data=mPullRefreshList.getFeedResponses();
             int position=data.size()- feedDetailList.size();
-            if (position > 0) {
+            if (position > 1) {
                 data.remove(position - 1);
-            }else {
-                if (!isChallenge) {
-                    FeedDetail header = new FeedDetail();
-                    header.setSubType(AppConstants.HEADER);
-                    data.add(0, header);
-                }
             }
             data.add(feedProgressBar);
             mAdapter.setSheroesGenericListData(data);
@@ -511,8 +539,7 @@ public class HomeFragment extends BaseFragment {
             if (mPageNo == AppConstants.TWO_CONSTANT) {
                 mfeedDetailList = feedDetailList;
                 mAdapter.notifyDataSetChanged();
-            }else
-            {
+            }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
@@ -528,6 +555,7 @@ public class HomeFragment extends BaseFragment {
             getUserContacts();
         }*/
     }
+
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
@@ -634,7 +662,7 @@ public class HomeFragment extends BaseFragment {
                 List<UserContactDetail> userContactDetailsList = new ArrayList<>();
                 UserContactDetail userContactDetail = null;
                 Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                Cursor cursor = ((HomeActivity) getActivity()).getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                Cursor cursor = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
                 if (cursor != null && cursor.getCount() > 0) {
                     try {
                         cursor.moveToFirst();

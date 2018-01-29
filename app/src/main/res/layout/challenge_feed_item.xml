@@ -5,195 +5,199 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_10">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/feature_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/feature_image"
-        android:background="@drawable/challenge_holder_gradient">
-    
-    <ImageView
-        android:id="@+id/author_image"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentLeft="true"/>
-
-    <TextView
-        android:id="@+id/author_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginLeft="8dp"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="8dp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:textAllCaps="true"
-        android:textColor="#ffffff"
-        android:layout_toRightOf="@id/author_image"
-        android:letterSpacing="0.07"
-        tools:text="Sheroes" />
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/share"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src = "@drawable/ic_share_card"
-            android:layout_centerVertical="true"
-            android:tint="@color/white"
-            android:layout_margin="8dp"
-            android:layout_alignParentRight="true"/>
+            android:id="@+id/feature_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/feature_image"
+            android:background="@drawable/challenge_holder_gradient">
+
+            <ImageView
+                android:id="@+id/author_image"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/author_image"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.07"
+                android:textAllCaps="true"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                tools:text="Sheroes" />
+
+            <ImageView
+                android:id="@+id/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:padding="@dimen/dp_size_6"
+                android:src="@drawable/ic_share_white_24dp"
+                android:tint="@color/white" />
+        </RelativeLayout>
+
+            <TextView
+                android:id="@+id/contest_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/feature_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.07"
+                android:textColor="#90949c"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/contest_tag"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_horizontal"
+                android:letterSpacing="0.07"
+                android:maxLines="2"
+                android:textColor="#3c3c3c"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                tools:text="Showcase your workspace. Share your workspace photo that motivate you to work daily." />
+
+            <TextView
+                android:id="@+id/contest_end_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:letterSpacing="0.07"
+                android:textColor="#90949c"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                tools:text="Ends in: 4 Days" />
+
+            <TextView
+                android:id="@+id/contest_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/title"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.07"
+                android:text="live"
+                android:textAllCaps="true"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+
+                android:textStyle="normal" />
+
+            <ImageView
+                android:id="@+id/live_dot"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignBottom="@+id/contest_status"
+                android:layout_below="@+id/title"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="16dp"
+                android:layout_toLeftOf="@id/contest_status"
+                android:src="@drawable/vector_live_dot" />
+
+            <View
+                android:id="@+id/divider_top"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/contest_end_text"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/lighter_grey" />
+
+            <TextView
+                android:id="@+id/join_challenge_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_top"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="6dp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center_vertical"
+                android:textAllCaps="true"
+                android:textColor="#dc4541"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                tools:text="Join the Challenge" />
+
+            <View
+                android:id="@+id/divider_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/join_challenge_text"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/lighter_grey" />
+
+            <TextView
+                android:id="@+id/response_view_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider_bottom"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#90949c"
+                android:textSize="14sp"
+                tools:text="198 responses  ·  235 views" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/divider_bottom"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:text="Not Interested"
+                android:textColor="#90949c"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                android:visibility="gone"
+                tools:text="Not Interested" />
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/contest_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/feature_image"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:textColor="#90949c"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="8dp"
-        android:letterSpacing="0.07"
-        android:gravity="center_horizontal" />
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:textColor="#3c3c3c"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:letterSpacing="0.07"
-        android:gravity="center_horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_below="@id/contest_tag"
-        tools:text="Showcase your workspace. Share your workspace photo that motivate you to work daily." />
-    <TextView
-        android:id="@+id/contest_end_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="#90949c"
-        android:layout_below="@+id/title"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:letterSpacing="0.07"
-        tools:text="Ends in: 4 Days" />
-
-    <TextView
-        android:id="@+id/contest_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:textColor="@color/red"
-        android:textAllCaps="true"
-        android:text="live"
-
-        android:letterSpacing="0.07" />
-
-    <ImageView
-        android:id="@+id/live_dot"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_below="@+id/title"
-        android:layout_alignBottom="@+id/contest_status"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="7dp"
-        android:src="@drawable/vector_live_dot"
-        android:layout_toLeftOf="@id/contest_status"/>
-
-    <View
-        android:id="@+id/divider_top"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/lighter_grey"
-        android:layout_below="@id/contest_end_text"/>
-
-    <TextView
-        android:id="@+id/join_challenge_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:drawablePadding="6dp"
-        android:gravity="center_vertical"
-        android:textColor="#dc4541"
-        android:layout_below="@id/divider_top"
-        android:textAllCaps="true"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
-        tools:text="Join the Challenge" />
-
-    <View
-        android:id="@+id/divider_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@color/lighter_grey"
-        android:layout_below="@id/join_challenge_text"/>
-
-    <TextView
-        android:id="@+id/response_view_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/divider_bottom"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="14sp"
-        android:textColor="#90949c"
-        tools:text="198 responses  ·  235 views" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="#90949c"
-        android:layout_below="@id/divider_bottom"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
-        android:text="Not Interested"
-        android:visibility="gone"
-        tools:text="Not Interested" />
-</RelativeLayout>
 </android.support.v7.widget.CardView>

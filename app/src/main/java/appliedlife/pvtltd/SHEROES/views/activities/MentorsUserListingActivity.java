@@ -1,8 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -93,12 +93,17 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         setContentView(R.layout.mentor_listing_layout);
         mHomePresenter.attachView(this);
         ButterKnife.bind(this);
+        setupToolbarItemsColor();
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
+        mentorSearchInListPagination(mFragmentListRefreshData);
+    }
+    private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.ID_MENTOR);
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
-        mentorSearchInListPagination(mFragmentListRefreshData);
     }
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
@@ -168,7 +173,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     private void openMentorProfileDetail(BaseResponse baseResponse) { //form mentor card in feed only for mentor
         UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
         mFeedDetail = userSolrObj;
-        MentorUserProfileActvity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.ASKING_QUESTION_CALL, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
+        ProfileActivity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
     }
 
     @Override
@@ -179,9 +184,11 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             switch (requestCode) {
                     case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                         if (null != intent.getExtras()) {
-                            UserSolrObj  userSolrObj = (UserSolrObj) Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                            mAdapter.setMentoreDataOnPosition(userSolrObj,userSolrObj.currentItemPosition);
-                            mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                            UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                            if(null!=userSolrObj) {
+                                mAdapter.setMentoreDataOnPosition(userSolrObj, userSolrObj.currentItemPosition);
+                                mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                            }
                         }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:

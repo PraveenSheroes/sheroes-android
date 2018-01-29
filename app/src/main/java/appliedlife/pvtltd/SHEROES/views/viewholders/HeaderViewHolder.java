@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,6 +34,8 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView headerMsg;
     @Bind(R.id.user_name)
     TextView userName;
+    @Bind(R.id.ripple)
+    RippleView rippleView;
 
     @Inject
     Preference<LoginResponse> userPreference;
@@ -46,6 +49,11 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+    }
+
+    @Override
+    public void bindData(FeedDetail item, final Context context, int position) {
+        this.dataItem=item;
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
@@ -54,14 +62,8 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             if (StringUtil.isNotNullOrEmptyString(userName) ) {
                 loggedInUser = userName;
             }
-
             userId = userPreference.get().getUserSummary().getUserId();
         }
-    }
-
-    @Override
-    public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem=item;
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
         if(StringUtil.isNotNullOrEmptyString(loggedInUser)) {
@@ -69,22 +71,39 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             userName.setText(name);
         }
             headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
+
     }
 
     @OnClick(R.id.user_name)
     public void userNameClickForProfile() {
-        dataItem.setEntityOrParticipantId(userId);
-        viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                dataItem.setEntityOrParticipantId(userId);
+                viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+            }
+        });
     }
-
     @OnClick(R.id.iv_header_circle_icon)
     public void userImageClickForProfile() {
-        dataItem.setEntityOrParticipantId(userId);
-        viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                dataItem.setEntityOrParticipantId(userId);
+                viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+            }
+        });
+
     }
     @OnClick(R.id.header_msg)
     public void textClickForCreatePost() {
-        viewInterface.handleOnClick(dataItem, headerMsg);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                viewInterface.handleOnClick(dataItem, headerMsg);
+            }
+        });
+
     }
 
     @Override

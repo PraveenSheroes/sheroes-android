@@ -295,9 +295,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     }
 
     public void addAll(List<FeedDetail> feedList) {
-        int startPosition = mFeedDetailList.size() - 1;
+        int startPosition = mFeedDetailList.size();
         mFeedDetailList.addAll(feedList);
-        notifyItemRangeInserted(startPosition, feedList.size());
+        notifyItemRangeChanged(startPosition, mFeedDetailList.size());
     }
     //endregion
 

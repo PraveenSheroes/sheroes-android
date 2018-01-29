@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,11 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
-import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityOpenAboutFragment;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -32,13 +28,15 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private final Context mContext;
     private List<Winner> mPrizes;
+    private static OnItemClickListener listener;
 
     private static final int TYPE_WINNER = 1;
     private static final int TYPE_HEADER = 2;
 
-    public WinnerListAdapter(Context context) {
+    public WinnerListAdapter(Context context, OnItemClickListener itemClickListener) {
         this.mContext = context;
         mPrizes = new ArrayList<>();
+        listener = itemClickListener;
     }
 
     @Override
@@ -120,7 +118,7 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(Winner prize, Context context){
+        public void bindData(final Winner prize, Context context){
             if (prize!=null) {
                 mDescription.setText(prize.prizeDescription);
                 if (CommonUtil.isNotEmpty(prize.mPrizeIcon)) {
@@ -135,9 +133,15 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String userImage = CommonUtil.getImgKitUri(prize.imageUrl, mUserPicSize, mUserPicSize);
                     Glide.with(mProfilePic.getContext())
                             .load(userImage)
-                            .bitmapTransform(new CommunityOpenAboutFragment.CircleTransform(context))
+                            .bitmapTransform(new CommonUtil.CircleTransform(context))
                             .into(mProfilePic);
                 }
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        listener.onItemClick(prize);
+                    }
+                });
             }
         }
     }
@@ -151,6 +155,10 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public void bindData(Winner prize, Context context){
 
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Winner item);
     }
 
 }
