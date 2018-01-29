@@ -497,7 +497,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mShare.setText(mContext.getString(R.string.ID_SHARE));
         }
         final String listDescription = mUserPostObj.getListDescription();
-        linkifyURLs(mPostDescription);
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);
@@ -506,6 +505,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
         }
+        linkifyURLs(mPostDescription);
     }
 
     private void userLike() {
