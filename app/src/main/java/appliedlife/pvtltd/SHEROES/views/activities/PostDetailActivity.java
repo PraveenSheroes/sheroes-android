@@ -559,6 +559,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
                             mPostDetailPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
+                            return true;
                         case R.id.share:
                             shareWithMultipleOption(userPostObj);
                             default:
