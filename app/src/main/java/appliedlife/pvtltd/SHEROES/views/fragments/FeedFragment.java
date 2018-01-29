@@ -779,7 +779,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
-        if(mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
+            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
+        }  else if(baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+                Comment comment = articleDetails.getLastComments().get(0);
+                if(!comment.isAnonymous()) {
+                    openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                }
+            }
+        }
+        else if(baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
@@ -787,9 +798,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
                 }
             }
-        } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
-            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
-        } else {
+        }else {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(postDetails.getEntityOrParticipantTypeId() != 15) {
                 onChampionProfileClicked(postDetails, mValue);
