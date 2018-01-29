@@ -237,7 +237,7 @@ public class MentorQADetailFragment extends BaseFragment {
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
-        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity) {
+        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity&& feedParticipationEnum == FeedParticipationEnum.DELETE_COMMUNITY_POST) {
             ((ProfileActivity)getActivity()).refreshPostCount(true);
         }
     }
