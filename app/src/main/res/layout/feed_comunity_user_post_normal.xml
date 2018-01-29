@@ -444,6 +444,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:lineSpacingExtra="@dimen/dp_size_3"
+                        android:textColorLink="@color/view_more"
                         android:maxLines="@integer/int_value_for_line_3"
                         android:textColor="@color/comment_text"
                         android:textSize="@dimen/sp_size_14" />
