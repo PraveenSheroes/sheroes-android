@@ -1163,7 +1163,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long id, boolean isMentor, int bellNotificationCall, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long id, boolean isMentor, int askinQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
 
         Bundle bundle = new Bundle();
@@ -1172,7 +1172,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         Parcelable parcelableMentor = Parcels.wrap(dataItem);
         intent.putExtra(AppConstants.CHAMPION_ID, id);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.ASKING_QUESTION, bellNotificationCall);
+        intent.putExtra(AppConstants.ASKING_QUESTION, askinQuestion);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -1182,7 +1182,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, boolean isMentor, int bellNotificationCall, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, boolean isMentor, int askingQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
 
         Bundle bundle = new Bundle();
@@ -1190,7 +1190,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(dataItem);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.ASKING_QUESTION, bellNotificationCall);
+        intent.putExtra(AppConstants.ASKING_QUESTION, askingQuestion);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -1208,7 +1208,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         dataItem.setItemPosition(position);
         Parcelable parcelable = Parcels.wrap(dataItem);
-
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
@@ -1264,15 +1263,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, UserSolrObj userSolrObj) {
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int askingQuestionCode, String sourceScreen, HashMap<String, Object> properties, int requestCode, UserSolrObj userSolrObj) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
         Bundle bundle = new Bundle();
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        intent.putExtra(AppConstants.ASKING_QUESTION, notificationId);
-        intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
+        intent.putExtra(AppConstants.ASKING_QUESTION, askingQuestionCode);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         if (!CommonUtil.isEmpty(properties)) {

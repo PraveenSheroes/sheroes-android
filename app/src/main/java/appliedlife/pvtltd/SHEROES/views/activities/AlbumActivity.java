@@ -228,6 +228,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             onBackPressed();
         } else if (id == R.id.share) {
             if (CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)) {
+
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
                 CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
               //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
@@ -269,7 +270,13 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             photo.url = url;
             album.photos.add(photo);
         }
-        album.deepLinkUrl = feedDetail.getDeepLinkUrl();
+        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
+        {
+            album.deepLinkUrl = feedDetail.getPostShortBranchUrls();
+        }else
+        {
+            album.deepLinkUrl = feedDetail.getDeepLinkUrl();
+        }
         Intent intent = new Intent(fromActivity, AlbumActivity.class);
         Parcelable parcelable = Parcels.wrap(album);
         intent.putExtra(Album.ALBUM_OBJ, parcelable);
