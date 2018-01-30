@@ -20,12 +20,14 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IUserLikedListView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 
@@ -52,9 +54,9 @@ public class UserLikedListPresenterImpl extends BasePresenter<IUserLikedListView
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getAllCommentListFromModel(commentReactionRequestPojo,isReaction).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+        getAllCommentListFromModel(commentReactionRequestPojo,isReaction).subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -72,15 +74,15 @@ public class UserLikedListPresenterImpl extends BasePresenter<IUserLikedListView
                 getMvpView().showUserLikedList(comments);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo, boolean isReaction){
         if(!isReaction) {
             return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
-                    .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                    .map(new Function<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                         @Override
-                        public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                        public CommentReactionResponsePojo apply(CommentReactionResponsePojo commentReactionResponsePojo) {
                             return commentReactionResponsePojo;
                         }
                     })
@@ -90,9 +92,9 @@ public class UserLikedListPresenterImpl extends BasePresenter<IUserLikedListView
         else
         {
             return sheroesAppServiceApi.getAllReactionFromApi(commentReactionRequestPojo)
-                    .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                    .map(new Function<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                         @Override
-                        public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                        public CommentReactionResponsePojo apply(CommentReactionResponsePojo commentReactionResponsePojo) {
                             return commentReactionResponsePojo;
                         }
                     })

@@ -86,7 +86,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * Created by Praveen Singh on 29/12/2016.

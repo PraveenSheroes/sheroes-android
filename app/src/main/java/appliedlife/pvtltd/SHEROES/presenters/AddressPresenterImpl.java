@@ -15,12 +15,15 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAddressView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by ujjwal on 04/05/17.
@@ -48,9 +51,9 @@ public class AddressPresenterImpl extends BasePresenter<IAddressView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = updateAddress(address).subscribe(new Subscriber<BaseResponse>() {
+        updateAddress(address).subscribe(new DisposableObserver<BaseResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -69,14 +72,14 @@ public class AddressPresenterImpl extends BasePresenter<IAddressView> {
 
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<BaseResponse> updateAddress(Address address) {
         return sheroesAppServiceApi.updateAddress(address)
-                .map(new Func1<BaseResponse, BaseResponse>() {
+                .map(new Function<BaseResponse, BaseResponse>() {
                     @Override
-                    public BaseResponse call(BaseResponse baseResponse) {
+                    public BaseResponse apply(BaseResponse baseResponse) {
                         return baseResponse;
                     }
                 })

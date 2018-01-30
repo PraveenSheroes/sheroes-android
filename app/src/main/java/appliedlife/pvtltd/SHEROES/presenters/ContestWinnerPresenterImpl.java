@@ -24,12 +24,14 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by ujjwal on 04/05/17.
@@ -56,9 +58,9 @@ public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView
         }
         final WinnerRequest winnerRequest = mAppUtils.winnerRequestBuilder(contest_id);
         getMvpView().startProgressBar();
-        Subscription subscription = getWinnersFromModel(winnerRequest).subscribe(new Subscriber<WinnerResponse>() {
+        getWinnersFromModel(winnerRequest).subscribe(new DisposableObserver<WinnerResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -80,14 +82,14 @@ public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<WinnerResponse> getWinnersFromModel(WinnerRequest winnerRequest) {
         return sheroesAppServiceApi.getWinners(winnerRequest)
-                .map(new Func1<WinnerResponse, WinnerResponse>() {
+                .map(new Function<WinnerResponse, WinnerResponse>() {
                     @Override
-                    public WinnerResponse call(WinnerResponse winnerResponse) {
+                    public WinnerResponse apply(WinnerResponse winnerResponse) {
                         return winnerResponse;
                     }
                 })

@@ -23,8 +23,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -48,10 +48,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = communityModel.addPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+        communityModel.addPostCommunity(communityPostCreateRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -69,7 +69,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             }
 
         });
-        registerSubscription(subscription);
+
     }
 
     public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest){
@@ -78,10 +78,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = communityModel.createChallengePost(challengePostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+        communityModel.createChallengePost(challengePostCreateRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -107,7 +107,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             }
 
         });
-        registerSubscription(subscription);
+
     }
 
     public void fetchLinkDetails(LinkRequest linkRequest) {
@@ -116,10 +116,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = communityModel.linkRenderFromModel(linkRequest).subscribe(new Subscriber<LinkRenderResponse>() {
+        communityModel.linkRenderFromModel(linkRequest).subscribe(new DisposableObserver<LinkRenderResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -137,7 +137,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             }
 
         });
-        registerSubscription(subscription);
+
     }
 
     public void editPost(final CommunityPostCreateRequest communityPostCreateRequest) {
@@ -146,10 +146,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = communityModel.editPostCommunity(communityPostCreateRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+        communityModel.editPostCommunity(communityPostCreateRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -168,6 +168,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             }
 
         });
-        registerSubscription(subscription);
+
     }
 }

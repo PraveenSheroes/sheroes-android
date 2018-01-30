@@ -22,15 +22,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
@@ -62,9 +64,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = communityJoinFromModel(communityRequest).subscribe(new Subscriber<CommunityResponse>() {
+        communityJoinFromModel(communityRequest).subscribe(new DisposableObserver<CommunityResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -84,14 +86,14 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                .map(new Function<CommunityResponse, CommunityResponse>() {
                     @Override
-                    public CommunityResponse call(CommunityResponse communityResponse) {
+                    public CommunityResponse apply(CommunityResponse communityResponse) {
                         return communityResponse;
                     }
                 })
@@ -105,9 +107,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = removeMember(removeMemberRequest).subscribe(new Subscriber<MemberListResponse>() {
+        removeMember(removeMemberRequest).subscribe(new DisposableObserver<MemberListResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -125,14 +127,14 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
-    public rx.Observable<MemberListResponse> removeMember(RemoveMemberRequest removeMemberRequest){
+    public Observable<MemberListResponse> removeMember(RemoveMemberRequest removeMemberRequest){
         return sheroesAppServiceApi.removeMember(removeMemberRequest)
-                .map(new Func1<MemberListResponse, MemberListResponse>() {
+                .map(new Function<MemberListResponse, MemberListResponse>() {
                     @Override
-                    public MemberListResponse call(MemberListResponse memberListResponse) {
+                    public MemberListResponse apply(MemberListResponse memberListResponse) {
                         return memberListResponse;
                     }
                 })
@@ -146,9 +148,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -190,7 +192,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
                 }
             }
         });
-        registerSubscription(subscription);*/
+        */
     }
 
     public void fetchCommunity(String communityId) {
@@ -204,9 +206,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -226,15 +228,15 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
