@@ -11,6 +11,7 @@ public class InstallUpdateForMoEngage {
     private boolean isFirstOpen;
     private boolean isWelcome;
     private boolean isAppInstallFirstTime;
+    private boolean isWalkThroughShown;
     public int getAppVersion() {
         return appVersion;
     }
@@ -44,5 +45,13 @@ public class InstallUpdateForMoEngage {
 
     public void setAppInstallFirstTime(boolean appInstallFirstTime) {
         isAppInstallFirstTime = appInstallFirstTime;
+    }
+
+    public boolean isWalkThroughShown() {
+        return isWalkThroughShown;
+    }
+
+    public void setWalkThroughShown(boolean walkThroughShown) {
+        isWalkThroughShown = walkThroughShown;
     }
 }
