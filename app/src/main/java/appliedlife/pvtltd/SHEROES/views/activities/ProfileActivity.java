@@ -121,6 +121,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     boolean isFollowEvent;
     private String mSourceName;
     private String userNameTitle;
+    private boolean isProfileClicked=false;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -273,6 +274,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             itemPosition = mFeedDetail.getItemPosition();
         }
         if (mChampionId > 0 && null == mUserSolarObject) {
+            isProfileClicked=true;
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
@@ -667,7 +669,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .startActivities();
             }else
             {
-                onActivtyResultOfParentRefresh();
+                if(!isProfileClicked) {
+                    onActivtyResultOfParentRefresh();
+                }
             }
         }
         super.onBackPressed();
