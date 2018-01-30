@@ -582,6 +582,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
+    @OnClick(R.id.iv_feed_article_login_user_pic)
+    public void onLoggedInUserIconClick() {
+        viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+    }
+
     @OnClick({R.id.iv_feed_article_user_pic, R.id.tv_feed_article_user_name})
     public void onFeedArticleUserNameClick() { //Open profile from feed
             viewInterface.navigateToProfileView(articleObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE);

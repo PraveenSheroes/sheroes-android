@@ -780,6 +780,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         }
                         tvReport.setVisibility(View.GONE);
                     }
+                    if (((UserPostSolrObj) mFeedDetail).communityId == 0) {
+                        tvDelete.setVisibility(View.GONE);
+                    }
                     tvShare.setVisibility(View.VISIBLE);
                 }
                 break;

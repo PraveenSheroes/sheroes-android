@@ -738,6 +738,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
                 }
             }
+            linkifyURLs(tvFeedCommunityPostUserCommentPost);
             if (tvFeedCommunityPostUserCommentPost.getLineCount() > 3) {
                 tvFeedCommunityPostUserCommentPostViewMore.setVisibility(View.VISIBLE);
                 String dots = LEFT_HTML_TAG + AppConstants.DOTS + RIGHT_HTML_TAG;
@@ -749,6 +750,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedCommunityPostUserCommentPostViewMore.setVisibility(View.GONE);
             }
+
+
             if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
                 tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
@@ -926,7 +929,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_spam_post_menu)
     public void spamMenuClick() {
-        viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostMenuClicked(mUserPostObj, tvSpamPostMenu);
+        }else {
+            viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
+        }
     }
 
 

@@ -123,6 +123,7 @@ public class AppConstants {
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
     public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
+    public static final String QA_POST_FRAGMENT = "question_answer_fragment";
     public static final String INVITE_MEMBER = "invite_member";
     public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
     public static final String APP_INTRO_SUB_TYPE = "APP_INTRO_TYPE";

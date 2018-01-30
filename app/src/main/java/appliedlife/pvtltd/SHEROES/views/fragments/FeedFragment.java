@@ -440,6 +440,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
             }
+            if(userPostObj.communityId == 0){
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+            }
             popup.getMenu().findItem(R.id.share).setVisible(true);
 
             if (currentUserId != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
@@ -456,6 +459,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
+            }
+            if (userPostObj.isSpamPost()) {
+                popup.getMenu().findItem(R.id.share).setVisible(false);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -779,7 +785,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
-        if(mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
+            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
+        }  else if(baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
+            if(StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+                Comment comment = articleDetails.getLastComments().get(0);
+                if(!comment.isAnonymous()) {
+                    openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                }
+            }
+        }
+        else if(baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
@@ -787,9 +804,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
                 }
             }
-        } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser!= -1) {
-            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
-        } else {
+        }else {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(postDetails.getEntityOrParticipantTypeId() != 15) {
                 onChampionProfileClicked(postDetails, mValue);

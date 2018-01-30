@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,8 +24,7 @@ import com.bumptech.glide.request.target.Target;
 
 import appliedlife.pvtltd.SHEROES.R;
 
-@SuppressLint("AppCompatCustomView")
-public class CircleImageView extends ImageView {
+public class CircleImageView extends AppCompatImageView {
   int measuredHeight;
   int measuredWidth;
   boolean isImageLoadede;
@@ -50,11 +50,6 @@ public class CircleImageView extends ImageView {
   public CircleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     imageView = this;
-  }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public CircleImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
   }
    @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

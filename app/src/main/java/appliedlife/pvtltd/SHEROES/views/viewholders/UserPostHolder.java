@@ -371,7 +371,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (mUserPostObj.isAuthorMentor()) {
-                            mAuthorVerifiedIcon.getBackground().setAlpha(75);mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
+                            mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
                         } else {
                             mAuthorVerifiedIcon.setVisibility(View.GONE);
                         }
@@ -499,7 +499,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mShare.setText(mContext.getString(R.string.ID_SHARE));
         }
         final String listDescription = mUserPostObj.getListDescription();
-        linkifyURLs(mPostDescription);
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);
@@ -508,6 +507,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
         }
+        linkifyURLs(mPostDescription);
     }
 
     private void userLike() {
@@ -621,12 +621,15 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.post_menu)
     public void userMenuClick() {
+        if(mUserPostObj.isSpamPost()){
+            return;
+        }
         mPostDetailCallback.onPostMenuClicked(mUserPostObj, mPostMenu);
     }
 
     @OnClick(R.id.tv_spam_post_menu)
     public void spamMenuClick() {
-        mPostDetailCallback.onSpamMenuClicked(mUserPostObj, tvSpamPostMenu);
+        mPostDetailCallback.onPostMenuClicked(mUserPostObj, tvSpamPostMenu);
     }
 
     @Override

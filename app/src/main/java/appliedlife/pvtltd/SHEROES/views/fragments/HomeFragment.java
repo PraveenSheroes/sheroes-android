@@ -505,6 +505,9 @@ public class HomeFragment extends BaseFragment {
         loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            if(getActivity() instanceof HomeActivity && ((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+                showCaseDesign();
+            }
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
                 if (StringUtil.isNotEmptyCollection(mfeedDetailList) && StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
@@ -538,9 +541,6 @@ public class HomeFragment extends BaseFragment {
                 mAdapter.notifyDataSetChanged();
             }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
-            }
-            if(getActivity() instanceof HomeActivity && ((HomeActivity)getActivity()).mIsFirstTimeOpen) {
-                showCaseDesign();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
