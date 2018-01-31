@@ -631,7 +631,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT+deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         if (feedDetail.getSubType().equals(AppConstants.FEED_JOB)) {
@@ -710,6 +710,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT+Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());

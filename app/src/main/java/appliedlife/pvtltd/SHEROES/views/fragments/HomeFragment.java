@@ -303,7 +303,7 @@ public class HomeFragment extends BaseFragment {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
         showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
-        InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
+        InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
         installUpdateForMoEngage.setAppInstallFirstTime(true);
         mInstallUpdatePreference.set(installUpdateForMoEngage);
     }

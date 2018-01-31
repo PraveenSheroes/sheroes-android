@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -121,6 +122,8 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     @Bind(R.id.bottom_view)
     View mBottomView;
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
     //endregion
 
     //region private member variable
@@ -169,8 +172,21 @@ public class ContestActivity extends BaseActivity implements IContestView {
             initializeAllViews();
         }
         setupToolbarItemsColor();
+        setConfigurableShareOption(isWhatsAppShare());
     }
-
+    private boolean isWhatsAppShare() {
+        boolean isWhatsappShare = false;
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareText = "";
+            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareText)) {
+                if (shareText.equalsIgnoreCase("true")) {
+                    isWhatsappShare = true;
+                }
+            }
+        }
+        return isWhatsappShare;
+    }
     private void initializeAllViews() {
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
