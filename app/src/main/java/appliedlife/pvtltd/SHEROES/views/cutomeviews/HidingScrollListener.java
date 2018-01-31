@@ -245,8 +245,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
                 }
             }
-
             loading = true;
+            previousTotal = totalItemCount;
         }
 
     }
