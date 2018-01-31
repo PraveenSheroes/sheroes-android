@@ -822,6 +822,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 openMentorProfileDetail(baseResponse);
                 break;
             case R.id.share:
+                if (StringUtil.isNotNullOrEmptyString(((FeedDetail) baseResponse).getPostShortBranchUrls())) {
+                    ((FeedDetail) baseResponse).setDeepLinkUrl(((FeedDetail) baseResponse).getPostShortBranchUrls());
+                }
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
                 String sourceId = "";
                 if (baseResponse instanceof UserPostSolrObj) {
