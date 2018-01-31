@@ -21,7 +21,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +35,6 @@ import android.widget.TextView;
 import com.f2prateek.rx.preferences.Preference;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +121,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     boolean isFollowEvent;
     private String mSourceName;
     private String userNameTitle;
+    private boolean isProfileClicked=false;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -275,6 +274,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             itemPosition = mFeedDetail.getItemPosition();
         }
         if (mChampionId > 0 && null == mUserSolarObject) {
+            isProfileClicked=true;
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
@@ -667,12 +667,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 TaskStackBuilder.create(this)
                         .addNextIntentWithParentStack(upIntent)
                         .startActivities();
+            }else
+            {
+                if(!isProfileClicked) {
+                    onActivtyResultOfParentRefresh();
+                }
             }
         }
         super.onBackPressed();
     }
 
-    private void deepLinkPressHandle() {
+    private void onActivtyResultOfParentRefresh() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         mUserSolarObject.currentItemPosition = itemPosition;

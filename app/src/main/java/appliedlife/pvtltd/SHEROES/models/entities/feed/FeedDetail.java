@@ -206,7 +206,7 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     @SerializedName("is_spam_post_b")
     private boolean isSpamPost;
 
-    @SerializedName(value = "post_short_branch_url_s")
+    @SerializedName(value = "short_branch_url_s")
     private String postShortBranchUrls;
 
     //These fields are not from API response
