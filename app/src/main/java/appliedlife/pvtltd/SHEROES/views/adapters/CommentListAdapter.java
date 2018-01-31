@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -186,7 +187,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         Glide.with(mContext)
                                 .load(authorImage)
                                // .placeholder(comment.author.getPlaceholder())
-                                .bitmapTransform(new CommonUtil.CircleTransform(mContext))
+                                .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
                                 .into(authorPic);
 
                     } else {

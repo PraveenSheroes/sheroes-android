@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences.Preference;
 
 import javax.inject.Inject;
@@ -79,8 +80,7 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
             ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_profile_single_image);
             Glide.with(getActivity())
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                     .into(ivUserProfileImage);
             liUserProfileImages.addView(child);
         }

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.webkit.MimeTypeMap;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.BufferedReader;
@@ -286,9 +287,9 @@ public class FileUtil {
             public void call(Subscriber<? super Boolean> subscriber) {
                 try {
                     Bitmap bmp = Glide.with(context)
-                            .load(fullImagePath)
                             .asBitmap()
-                            .skipMemoryCache(true)
+                            .load(fullImagePath)
+                            .apply(new RequestOptions().skipMemoryCache(true))
                             .into(-1, -1)
                             .get();
 
