@@ -515,5 +515,10 @@
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
 
+    <string name="ID_GOT_IT">Got It</string>
+
+    <string name="ID_TOOL_TIP_CREATE_POST">Use this button to hide your identity on the post.</string>
+    <string name="ID_TOOL_TIP_ASK_QUESTION">Tap here to ask a question to this champion.</string>
+    <string name="ID_TOOL_TIP_NOTIFICATION">Your personalized notifications for likes and comments will appear here.</string>
 
 </resources>

@@ -40,12 +40,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -264,6 +267,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
+    private View popupViewToolTip;
+    private PopupWindow popupWindowTooTip;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -287,6 +292,48 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
         sheUserInit();
+        toolTipForNotification();
+    }
+
+    private void toolTipForNotification() {
+        //if(CommonUtil.fromNthTimeOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF,4)) {
+        // if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
+                popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindowTooTip.setOutsideTouchable(false);
+                //popupWindowTooTip.showAsDropDown(mIvHomeNotification, -150, -20);
+                popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP,-10,130);
+                final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
+                final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+                tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
+                tvGotIt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupWindowTooTip.dismiss();
+                    }
+                });
+
+            }
+        }, 5000);
+
+        //  }
+        // }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (popupWindowTooTip != null && popupWindowTooTip.isShowing()) {
+            popupWindowTooTip.dismiss();
+
+        }
+        activityDataPresenter.detachView();
     }
 
     private void sheUserInit() {
@@ -390,7 +437,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()&&!mInstallUpdatePreference.get().isAppInstallFirstTime()) {
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && !mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
             Branch branch = Branch.getInstance();
             branch.resetUserSession();
@@ -539,6 +586,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         return showSnowFlake;
     }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
@@ -552,6 +600,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         return isWhatsappShare;
     }
+
     private void setProfileImage() { //Drawer top image
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             profile = mUserPreference.get().getUserSummary().getPhotoUrl();
@@ -630,7 +679,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @OnClick(R.id.invite)
-    public void onInviteClicked(){
+    public void onInviteClicked() {
         ShareBottomSheetFragment.showDialog(this, mUserPreference.get().getUserSummary().getAppShareUrl(), null, mUserPreference.get().getUserSummary().getAppShareUrl(), SCREEN_LABEL, false, mUserPreference.get().getUserSummary().getAppShareUrl(), false, true, true);
         AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
     }
@@ -671,7 +720,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION,0);
+            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
             intent.putExtras(bundle);
             intent.setData(url);
             startActivity(intent);
@@ -816,6 +865,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 openMentorProfileDetail(baseResponse);
                 break;
             case R.id.share:
+                if (StringUtil.isNotNullOrEmptyString(((FeedDetail) baseResponse).getPostShortBranchUrls())) {
+                    ((FeedDetail) baseResponse).setDeepLinkUrl(((FeedDetail) baseResponse).getPostShortBranchUrls());
+                }
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
                 String sourceId = "";
                 if (baseResponse instanceof UserPostSolrObj) {
@@ -1629,27 +1681,27 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
-        } else if(mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+        } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
         } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
+            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
                 Comment comment = postDetails.getLastComments().get(0);
-                if(!comment.isAnonymous()) {
+                if (!comment.isAnonymous()) {
                     championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
                 }
             }
-        } else if(baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+        } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
             ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+            if (StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
                 Comment comment = articleDetails.getLastComments().get(0);
                 championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
             }
         } else if (baseResponse instanceof FeedDetail) {
             FeedDetail feedDetail = (FeedDetail) baseResponse;
             championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
-        }  else if (baseResponse instanceof Comment) {
+        } else if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
         }

@@ -238,6 +238,7 @@ public class HomeFragment extends BaseFragment {
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
+                    mHomePresenter.getAuthTokenRefreshPresenter();
                     if(isChallenge){
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
@@ -641,6 +642,7 @@ public class HomeFragment extends BaseFragment {
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.delete();
             mUserPreference.set(loginResponse);
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }

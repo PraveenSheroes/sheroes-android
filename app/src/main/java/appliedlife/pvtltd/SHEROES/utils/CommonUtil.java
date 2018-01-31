@@ -917,7 +917,24 @@ public class CommonUtil {
         }
         return !shown;
     }
-
+    public static boolean fromNthTimeOnly(String key, int n) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return false;
+        }
+        int count = prefs.getInt(key, 1);
+        if ((count >= n)) {
+            if (count <= n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return true;
+        } else {
+            if (count < n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return false;
+        }
+    }
     public  static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {
             super(context);

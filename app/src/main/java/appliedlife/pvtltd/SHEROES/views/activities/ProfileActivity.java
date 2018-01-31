@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -121,7 +123,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     boolean isFollowEvent;
     private String mSourceName;
     private String userNameTitle;
-    private boolean isProfileClicked=false;
+    private boolean isProfileClicked = false;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -243,6 +245,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private boolean isMentorQARefresh = false;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+    private View popupViewToolTip;
+    private PopupWindow popupWindowTooTip;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -274,7 +278,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             itemPosition = mFeedDetail.getItemPosition();
         }
         if (mChampionId > 0 && null == mUserSolarObject) {
-            isProfileClicked=true;
+            isProfileClicked = true;
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
@@ -286,6 +290,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
+
+    public void onResume() {
+        super.onResume();
+    }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
@@ -299,6 +308,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
         return isWhatsappShare;
     }
+
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -308,7 +318,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     public void profileActivitiesRefresh() {
-       String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
+        String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
         tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
         tvMentorAnswer.setText(pluralAnswer);
     }
@@ -441,6 +451,23 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
+    private void toolTipForAskQuestion() {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        popupViewToolTip = layoutInflater.inflate(R.layout.tool_tip_center, null);
+        popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindowTooTip.setOutsideTouchable(false);
+        popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, 20);
+        final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
+        final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
+        tvTitle.setText(getString(R.string.ID_TOOL_TIP_ASK_QUESTION));
+        tvGotIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowTooTip.dismiss();
+            }
+        });
+    }
+
     private void followUnFollowMentor() {
 
         if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
@@ -463,8 +490,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         tvMentorAskQuestion.setLayoutParams(ask);
         LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) tvMentorAskQuestion.getLayoutParams();
         secondImageLayout.weight = 1;
+        if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
+            toolTipForAskQuestion();
+        }
     }
-
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();
@@ -662,14 +691,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
-        }else {
+        } else {
             if (mFromNotification > 0) {
                 TaskStackBuilder.create(this)
                         .addNextIntentWithParentStack(upIntent)
                         .startActivities();
-            }else
-            {
-                if(!isProfileClicked) {
+            } else {
+                if (!isProfileClicked) {
                     onActivtyResultOfParentRefresh();
                 }
             }
@@ -745,6 +773,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (popupWindowTooTip != null && popupWindowTooTip.isShowing()) {
+            popupWindowTooTip.dismiss();
+
+        }
         mHomePresenter.detachView();
     }
 
@@ -832,7 +864,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     private void showToolTip() {
-        if(CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
+        if (CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
             LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
             final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
             RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -889,7 +921,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            if(!comment.isAnonymous()) {
+            if (!comment.isAnonymous()) {
                 championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
             }
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tooltip_center_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_tool_tip_center_bg">
+
+        <TextView
+            android:id="@+id/tv_tool_tip_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:gravity="left"
+            android:lineSpacingExtra="@dimen/dp_size_5"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:id="@+id/tv_got_it"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_size_10"
+            android:paddingRight="@dimen/dp_size_10"
+            android:paddingLeft="@dimen/dp_size_10"
+            android:paddingBottom="@dimen/sp_size_20"
+            android:gravity="end"
+            android:textAllCaps="true"
+            android:text="@string/ID_GOT_IT"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+
+    </LinearLayout>
+</RelativeLayout>

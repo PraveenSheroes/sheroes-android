@@ -297,8 +297,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
                 imageParams.gravity = Gravity.START;
                 imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
-                TextView textView = (TextView) view.findViewById(R.id.tooltip_arrow);
-                textView.setLayoutParams(imageParams);
                 TextView text = (TextView) view.findViewById(R.id.title);
                 text.setText(R.string.tool_tip_user_profile);
                 TextView gotIt = (TextView) view.findViewById(R.id.got_it);
