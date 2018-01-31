@@ -47,11 +47,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
@@ -896,13 +898,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 String authorImage = CommonUtil.getImgKitUri(mUserSummary.getPhotoUrl(), mAuthorPicSize, mAuthorPicSize);
                 Glide.with(this)
                         .load(authorImage)
-                        .bitmapTransform(new CommonUtil.CircleTransform(this))
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                         .into(mUserPicView);
             }
         } else if (mPostAsCommunitySelected) {
             Glide.with(this)
                     .load(mCommunityPost.community.thumbImageUrl)
-                    .bitmapTransform(new CommonUtil.CircleTransform(this))
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                     .into(mUserPicView);
         } else {
             mUserPicView.setImageResource(R.drawable.ic_anonomous);
@@ -938,14 +940,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgDescriptionS())) {
                         tvLinkSubTitle.setText(linkRenderResponse.getOgDescriptionS());
                     }
+
+                    RequestOptions requestOptions = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.color.photo_placeholder)
+                            .error(R.color.photo_placeholder)
+                            .priority(Priority.HIGH)
+                            .skipMemoryCache(true);
+
                     if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgImageUrlS())) {
                         Glide.with(this)
-                                .load(linkRenderResponse.getOgImageUrlS()).asBitmap()
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                                .skipMemoryCache(true)
+                                .asBitmap()
+                                .apply(requestOptions)
+                                .load(linkRenderResponse.getOgImageUrlS())
                                 .into(new SimpleTarget<Bitmap>() {
                                     @Override
-                                    public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                                    public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
                                         ivLinkThumbnail.setImageBitmap(profileImage);
                                         ivLinkThumbnail.setVisibility(View.VISIBLE);
                                         pbLink.setVisibility(View.GONE);

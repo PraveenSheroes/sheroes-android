@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,8 +61,7 @@ public class PostPhotoViewHolder extends RecyclerView.ViewHolder {
                 if (CommonUtil.isNotEmpty(photo.url)) {
                     Glide.with(mContext)
                             .load(photo.url)
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .skipMemoryCache(true)
+                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mImage);
                 }
             }

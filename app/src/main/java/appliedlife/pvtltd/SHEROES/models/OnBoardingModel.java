@@ -15,10 +15,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Praveen_Singh on 19-03-2017.
@@ -38,9 +39,9 @@ public class OnBoardingModel {
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -50,9 +51,9 @@ public class OnBoardingModel {
 
     public Observable<GetAllData> getOnBoardingFromModel(GetAllDataRequest getAllDataRequest) {
         return sheroesAppServiceApi.getOnBoardingSearchFromApi(getAllDataRequest)
-                .map(new Func1<GetAllData, GetAllData>() {
+                .map(new Function<GetAllData, GetAllData>() {
                     @Override
-                    public GetAllData call(GetAllData getAllData) {
+                    public GetAllData apply(GetAllData getAllData) {
                         return getAllData;
                     }
                 })
@@ -63,9 +64,9 @@ public class OnBoardingModel {
     public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(communityRequest));
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                .map(new Function<CommunityResponse, CommunityResponse>() {
                     @Override
-                    public CommunityResponse call(CommunityResponse communityResponse) {
+                    public CommunityResponse apply(CommunityResponse communityResponse) {
                         return communityResponse;
                     }
                 })
@@ -77,9 +78,9 @@ public class OnBoardingModel {
         LogUtils.error("Community Member list req: ", gson.toJson(removeMemberRequest));
 
         return sheroesAppServiceApi.removeMember(removeMemberRequest)
-                .map(new Func1<MemberListResponse, MemberListResponse>() {
+                .map(new Function<MemberListResponse, MemberListResponse>() {
                     @Override
-                    public MemberListResponse call(MemberListResponse memberListResponse) {
+                    public MemberListResponse apply(MemberListResponse memberListResponse) {
                         LogUtils.error("Community Member list res: ", gson.toJson(memberListResponse));
                         return memberListResponse;
                     }

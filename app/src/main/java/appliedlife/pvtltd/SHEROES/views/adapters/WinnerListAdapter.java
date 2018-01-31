@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +134,7 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     String userImage = CommonUtil.getImgKitUri(prize.imageUrl, mUserPicSize, mUserPicSize);
                     Glide.with(mProfilePic.getContext())
                             .load(userImage)
-                            .bitmapTransform(new CommonUtil.CircleTransform(context))
+                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(context)))
                             .into(mProfilePic);
                 }
 

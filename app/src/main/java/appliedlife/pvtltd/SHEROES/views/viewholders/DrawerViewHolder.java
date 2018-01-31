@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.f2prateek.rx.preferences.Preference;
+import com.bumptech.glide.request.RequestOptions;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -112,8 +113,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         if (StringUtil.isNotNullOrEmptyString(url)) {
             Glide.with(context)
                     .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                     .into(tvDrawerImage);
         }
     }
