@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.util.Base64;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -32,9 +33,9 @@ public class CompressImageUtil {
             public void subscribe(ObservableEmitter<Boolean> subscriber) {
                 try {
                     Bitmap bmp = Glide.with(context)
-                            .load(fullImagePath)
                             .asBitmap()
-                            .skipMemoryCache(true)
+                            .load(fullImagePath)
+                            .apply(new RequestOptions().skipMemoryCache(true))
                             .into(size, size)
                             .get();
 
@@ -60,9 +61,9 @@ public class CompressImageUtil {
             public void subscribe(ObservableEmitter<Bitmap> subscriber) {
                 try {
                     Bitmap bmp = Glide.with(context)
-                            .load(fullImagePath)
                             .asBitmap()
-                            .skipMemoryCache(true)
+                            .load(fullImagePath)
+                            .apply(RequestOptions.skipMemoryCacheOf(true))
                             .into(sizeWidth, sizeHeight)
                             .get();
 

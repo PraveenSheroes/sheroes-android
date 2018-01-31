@@ -12,6 +12,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.webkit.MimeTypeMap;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.crashlytics.android.Crashlytics;
 
 import java.io.BufferedReader;

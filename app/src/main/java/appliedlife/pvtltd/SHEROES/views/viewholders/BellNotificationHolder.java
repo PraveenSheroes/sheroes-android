@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -67,15 +68,13 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                 if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())) {
                     Glide.with(mContext)
                             .load(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .skipMemoryCache(true)
+                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mIvNotificationImage);
                 }
                 if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreIconImageUrl())) {
                     Glide.with(mContext)
                             .load(mDataItem.getSolrIgnoreIconImageUrl())
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                            .skipMemoryCache(true)
+                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mIvNotificationType);
                 }
 

@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -178,7 +179,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
             Glide.with(mContext)
                     .load(mContest.authorImageUrl)
-                    .bitmapTransform(new CommonUtil.CircleTransform(mContext))
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
                     .into(mAuthorImage);
         }
         mAuthorName.setText(mContest.authorName);

@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import org.parceler.Parcels;
 
@@ -166,7 +167,7 @@ public class ContestInfoFragment extends BaseFragment {
         if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
             Glide.with(this)
                     .load(mContest.authorImageUrl)
-                    .bitmapTransform(new CommonUtil.CircleTransform(getActivity()))
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
                     .into(mAuthorPic);
         }
         mAuthorName.setText(mContest.authorName);

@@ -49,6 +49,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -954,8 +955,8 @@ public class CommonUtil {
         }
 
         @Override
-        public String getId() {
-            return getClass().getName();
+        public void updateDiskCacheKey(MessageDigest messageDigest) {
+
         }
     }
 }

@@ -24,8 +24,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.List;
@@ -284,10 +285,11 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgImageUrlS())) {
             Glide.with(mContext)
-                    .load(mUserPostObj.getOgImageUrlS()).asBitmap()
+                    .asBitmap()
+                    .load(mUserPostObj.getOgImageUrlS())
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                             fmImageThumb.setLayoutParams(params);
                             ivLinkThumbnail.setVisibility(View.VISIBLE);
@@ -586,8 +588,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ivFirst.setOnClickListener(this);
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
             Glide.with(context)
-                    .load(firstImage).asBitmap()
-                    .placeholder(R.color.photo_placeholder)
+                    .asBitmap()
+                    .load(firstImage)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(ivFirst);
         }
 
@@ -595,15 +598,17 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             ivSecond.setOnClickListener(this);
 
             Glide.with(context)
-                    .load(secondImage).asBitmap()
-                    .placeholder(R.color.photo_placeholder)
+                    .asBitmap()
+                    .load(secondImage)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
             Glide.with(context)
-                    .load(thirdImage).asBitmap()
-                    .placeholder(R.color.photo_placeholder)
+                    .asBitmap()
+                    .load(thirdImage)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(ivThird);
         }
         userPostImages.addView(child);

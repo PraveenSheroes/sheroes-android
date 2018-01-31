@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
@@ -75,7 +76,7 @@ public class LeaderViewHolder extends BaseViewHolder<FeedDetail> {
                 String userImage = CommonUtil.getImgKitUri(leaderObj.getThumbnailImageUrl(), mUserPicSize, mUserPicSize);
                 Glide.with(mProfilePic.getContext())
                         .load(userImage)
-                        .bitmapTransform(new CommonUtil.CircleTransform(context))
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(context)))
                         .into(mProfilePic);
             }
         }

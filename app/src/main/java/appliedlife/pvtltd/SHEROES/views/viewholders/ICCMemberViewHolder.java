@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -50,8 +51,7 @@ public class ICCMemberViewHolder extends BaseViewHolder<ICCMember> {
         if (StringUtil.isNotNullOrEmptyString(iccMember.getPhotoUrl())) {
             Glide.with(context)
                     .load(iccMember.getPhotoUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                     .into(ivICCProfileCircleIcon);
         }
         if (StringUtil.isNotNullOrEmptyString(iccMember.getName())) {
