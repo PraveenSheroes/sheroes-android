@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -24,8 +24,8 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.MentorView;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -77,9 +77,9 @@ public class MentorPresenter extends BasePresenter<MentorView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mentorApiPresenterModel.getMentorInsightFromModel(mentorFollowerRequest).subscribe(new Subscriber<MentorInsightResponse>() {
+        mentorApiPresenterModel.getMentorInsightFromModel(mentorFollowerRequest).subscribe(new DisposableObserver<MentorInsightResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -109,7 +109,7 @@ public class MentorPresenter extends BasePresenter<MentorView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
 }

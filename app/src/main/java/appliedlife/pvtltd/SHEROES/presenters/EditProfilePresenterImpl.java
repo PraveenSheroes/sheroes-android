@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -29,8 +29,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IEditProfileView;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 
@@ -66,9 +66,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = profileModel.getAllUserDetailsromModel().subscribe(new Subscriber<UserProfileResponse>() {
+        profileModel.getAllUserDetailsromModel().subscribe(new DisposableObserver<UserProfileResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -87,7 +87,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     // Update User Basic Details
@@ -98,9 +98,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
         }
 
         getMvpView().startProgressBar();
-        Subscription subscription = profileModel.getPersonalBasicDetails(personalBasicDetailsRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
 
             }
@@ -127,7 +127,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     //Update - About me/User Image
@@ -137,9 +137,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new Subscriber<BoardingDataResponse>() {
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -158,6 +158,6 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 }

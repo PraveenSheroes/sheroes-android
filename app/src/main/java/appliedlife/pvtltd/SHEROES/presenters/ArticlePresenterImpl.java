@@ -36,12 +36,14 @@ import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
@@ -69,9 +71,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 //getMvpView().stopProgressBar();
             }
 
@@ -124,7 +126,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void fetchArticle(Article article) {
@@ -134,9 +136,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         //  LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -150,9 +152,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        Subscription subscription = editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
+        editCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 // getMvpView().stopProgressBar();
             }
 
@@ -179,7 +181,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void onEditComment(final int position, CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -188,9 +190,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        Subscription subscription = editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
+        editCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 //getMvpView().stopProgressBar();
             }
 
@@ -217,7 +219,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void postComment(final CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -226,9 +228,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         // getMvpView().startProgressBar();
-        Subscription subscription = addCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
+        addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 // getMvpView().stopProgressBar();
             }
 
@@ -257,14 +259,14 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentAddDelete, CommentAddDelete>() {
+                .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
-                    public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
+                    public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
@@ -274,9 +276,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentAddDelete, CommentAddDelete>() {
+                .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
-                    public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
+                    public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
@@ -317,9 +319,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
         }
-        Subscription subscription = addBookmarkFromModel(bookmarkRequestPojo, isBookMarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
+        addBookmarkFromModel(bookmarkRequestPojo, isBookMarked).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
@@ -348,7 +350,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 getMvpView().invalidateBookmark(article);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     private void postLike(final Article article, LikeRequestPojo likeRequestPojo, final boolean isLiked) {
@@ -365,9 +367,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        Subscription subscription = addLikeFromModel(likeRequestPojo, isLiked).subscribe(new Subscriber<LikeResponse>() {
+        addLikeFromModel(likeRequestPojo, isLiked).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 //  getMvpView().stopProgressBar();
             }
 
@@ -408,7 +410,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public int getBookmarkDrawable(Article article) {
@@ -432,9 +434,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     }
 
     public void fetchAllComments(CommentReactionRequestPojo commentRequestBuilder) {
-        Subscription subscription = getAllCommentListFromModel(commentRequestBuilder).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+        getAllCommentListFromModel(commentRequestBuilder).subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 // getMvpView().stopProgressBar();
             }
 
@@ -451,14 +453,14 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 getMvpView().showComments(new ArrayList<Comment>(commentResponsePojo.getCommentList()), commentResponsePojo.getCommentList().size());
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                .map(new Function<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
-                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                    public CommentReactionResponsePojo apply(CommentReactionResponsePojo commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
@@ -473,9 +475,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
         //LogUtils.info(TAG, "*******************" + new Gson().toJson(bookmarkRequestPojo));
         if (!isBookmarked) {
             return sheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
-                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
-                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                        public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo) {
                             return bookmarkResponsePojo;
                         }
                     })
@@ -483,9 +485,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     .observeOn(AndroidSchedulers.mainThread());
         } else {
             return sheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
-                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
-                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                        public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo) {
                             return bookmarkResponsePojo;
                         }
                     })
@@ -498,9 +500,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
         //LogUtils.info(TAG, "*******************" + new Gson().toJson(bookmarkRequestPojo));
         if (!isLiked) {
             return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
-                    .map(new Func1<LikeResponse, LikeResponse>() {
+                    .map(new Function<LikeResponse, LikeResponse>() {
                         @Override
-                        public LikeResponse call(LikeResponse likeResponse) {
+                        public LikeResponse apply(LikeResponse likeResponse) {
                             return likeResponse;
                         }
                     })
@@ -508,9 +510,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     .observeOn(AndroidSchedulers.mainThread());
         } else {
             return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
-                    .map(new Func1<LikeResponse, LikeResponse>() {
+                    .map(new Function<LikeResponse, LikeResponse>() {
                         @Override
-                        public LikeResponse call(LikeResponse likeResponse) {
+                        public LikeResponse apply(LikeResponse likeResponse) {
                             return likeResponse;
                         }
                     })

@@ -15,8 +15,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutionException;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+
 
 /**
  * Created by Sowrabh on 7/30/2015.
@@ -26,9 +28,9 @@ public class CompressImageUtil {
 
     public static Observable<Boolean> compressImage(final Context context, final Uri fullImagePath, final String newPath, final int size){
 
-        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+        return Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
+            public void subscribe(ObservableEmitter<Boolean> subscriber) {
                 try {
                     Bitmap bmp = Glide.with(context)
                             .asBitmap()
@@ -43,7 +45,7 @@ public class CompressImageUtil {
                     bmp.recycle();
 
                     subscriber.onNext(success);
-                    subscriber.onCompleted();
+                    subscriber.onComplete();
                 }
                 catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
@@ -54,9 +56,9 @@ public class CompressImageUtil {
 
     public static Observable<Bitmap> createBitmap(final Context context, final String fullImagePath, final int sizeWidth, final  int sizeHeight){
 
-        return Observable.create(new Observable.OnSubscribe<Bitmap>() {
+        return Observable.create(new ObservableOnSubscribe<Bitmap>() {
             @Override
-            public void call(Subscriber<? super Bitmap> subscriber) {
+            public void subscribe(ObservableEmitter<Bitmap> subscriber) {
                 try {
                     Bitmap bmp = Glide.with(context)
                             .asBitmap()
@@ -66,7 +68,7 @@ public class CompressImageUtil {
                             .get();
 
                     subscriber.onNext(bmp);
-                    subscriber.onCompleted();
+                    subscriber.onComplete();
                 }
                 catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();

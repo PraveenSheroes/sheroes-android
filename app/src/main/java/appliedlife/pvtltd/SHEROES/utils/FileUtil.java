@@ -27,8 +27,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-import rx.Observable;
-import rx.Subscriber;
+import io.reactivex.Observable;
+
 
 
 /**
@@ -278,35 +278,6 @@ public class FileUtil {
         }
         return type;
     }
-
-
-    public static Observable<Boolean> saveImageToGallery(final Context context, final String fullImagePath, final String newPath, final int size) {
-
-        return Observable.create(new Observable.OnSubscribe<Boolean>() {
-            @Override
-            public void call(Subscriber<? super Boolean> subscriber) {
-                try {
-                    Bitmap bmp = Glide.with(context)
-                            .asBitmap()
-                            .load(fullImagePath)
-                            .apply(new RequestOptions().skipMemoryCache(true))
-                            .into(-1, -1)
-                            .get();
-
-                    boolean success = FileUtil.saveImageToJPGFile(bmp, newPath, context);
-
-                    // Free the bitmap
-                    bmp.recycle();
-
-                    subscriber.onNext(success);
-                    subscriber.onCompleted();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
 
     public static boolean saveImageToJPGFile(Bitmap bitmap, String imagePath, Context context) {
         if (TextUtils.isEmpty(imagePath)) {

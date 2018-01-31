@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
@@ -41,9 +41,10 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Ujjwal on 27-10-2018.
@@ -205,9 +206,9 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             CompressImageUtil.createBitmap(SheroesApplication.mContext, mShareImageUrl, 816, 816)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Bitmap>() {
+                    .subscribe(new DisposableObserver<Bitmap>() {
                         @Override
-                        public void onCompleted() {
+                        public void onComplete() {
 
                         }
 

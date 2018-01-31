@@ -70,9 +70,10 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class CommonUtil {
 
@@ -502,9 +503,9 @@ public class CommonUtil {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Bitmap>() {
+                .subscribe(new DisposableObserver<Bitmap>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
 
                     }
 
