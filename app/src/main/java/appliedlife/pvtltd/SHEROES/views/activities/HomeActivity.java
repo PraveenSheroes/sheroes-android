@@ -296,8 +296,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void toolTipForNotification() {
-        //if(CommonUtil.fromNthTimeOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF,4)) {
-        // if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+        if(CommonUtil.fromNthTimeOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF,4)) {
+         if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -305,9 +305,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
                 popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                popupWindowTooTip.setOutsideTouchable(false);
+                popupWindowTooTip.setOutsideTouchable(true);
                 //popupWindowTooTip.showAsDropDown(mIvHomeNotification, -150, -20);
-                popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP,-10,130);
+                popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP,10,130);
                 final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                 final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
                 tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
@@ -321,8 +321,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }, 5000);
 
-        //  }
-        // }
+          }
+         }
 
     }
 
@@ -734,7 +734,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
         } else if (baseResponse instanceof NavMenuItem) {
-            drawerItemOptions(view, baseResponse);
+         drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */

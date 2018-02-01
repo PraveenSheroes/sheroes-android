@@ -521,4 +521,11 @@
     <string name="ID_TOOL_TIP_ASK_QUESTION">Tap here to ask a question to this champion.</string>
     <string name="ID_TOOL_TIP_NOTIFICATION">Your personalized notifications for likes and comments will appear here.</string>
 
+
+
+    <string name="mention1_username">dirtyhobo</string>
+    <string name="mention2_username">hobo</string>
+    <string name="mention3_username">hendraanggrian</string>
+
+
 </resources>

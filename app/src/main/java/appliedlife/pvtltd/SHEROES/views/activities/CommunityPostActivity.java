@@ -36,6 +36,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,6 +55,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.hendraanggrian.socialview.SocialView;
+import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 
 import org.parceler.Parcels;
 
@@ -78,6 +81,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.SocialPerson;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -90,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.SocialPersonAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
@@ -97,6 +102,8 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
@@ -149,7 +156,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     TextView mCommunityName;
 
     @Bind(R.id.et_default_hint_text)
-    EditText mEtDefaultHintText;
+    SocialAutoCompleteTextView mEtDefaultHintText;
 
     @Bind(R.id.progress_bar_link)
     ProgressBar pbLink;
@@ -202,6 +209,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
+    private ArrayAdapter<SocialPerson> customSocialUserAdapter;
     //endregion
 
     //region Activity methods
@@ -305,8 +313,27 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }
             }, 1500);
         }
+        postCommentSocialTagging();
     }
-
+    private void postCommentSocialTagging()
+    {
+        customSocialUserAdapter = new SocialPersonAdapter(this);
+        customSocialUserAdapter.addAll(
+                new SocialPerson(getString(R.string.mention1_username),310,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
+                new SocialPerson(getString(R.string.mention2_username),400,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
+                new SocialPerson(getString(R.string.mention3_username),500,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"));
+        mEtDefaultHintText.setMentionAdapter(customSocialUserAdapter);
+        mEtDefaultHintText.setThreshold(1);
+        mEtDefaultHintText.setHyperlinkEnabled(true);
+        mEtDefaultHintText.setMentionColor(ContextCompat.getColor(getApplication(), R.color.link_color));
+        mEtDefaultHintText.setHashtagColor(ContextCompat.getColor(getApplication(), R.color.link_color));
+        mEtDefaultHintText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {
+            @Override
+            public Unit invoke(SocialView socialView, String s) {
+                return null;
+            }
+        });
+    }
     private void setViewByCreatePostCall() {
         if (null != mCommunityPost) {
             switch (mCommunityPost.createPostRequestFrom) {

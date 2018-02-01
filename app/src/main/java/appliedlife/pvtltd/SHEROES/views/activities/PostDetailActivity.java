@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -27,18 +28,28 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
+import com.hendraanggrian.socialview.SocialView;
+import com.hendraanggrian.widget.SocialAdapter;
+import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -64,15 +75,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.SocialPerson;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.SocialPersonAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
@@ -80,6 +92,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.annotations.NonNull;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function2;
 
 /**
  * Created by ujjwal on 07/12/17.
@@ -118,7 +133,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     TextView mTitleToolbar;
 
     @Bind(R.id.input_edit_text)
-    EditText mInputText;
+    SocialAutoCompleteTextView mInputText;
 
     @Bind(R.id.user_pic)
     CircleImageView mUserPic;
@@ -146,6 +161,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private String mTitleTextColor = "#ffffff";
 
     private int mFromNotification;
+
+
+
+    private ArrayAdapter<SocialPerson> customSocialUserAdapter;
     //endregion
 
     //region activity methods
@@ -196,6 +215,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mTitleToolbar.setText(R.string.ID_COMMENTS);
         setupEditInputText();
         setupToolbarItemsColor();
+        postCommentSocialTagging();
     }
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
@@ -210,6 +230,28 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         return isWhatsappShare;
     }
+    private void postCommentSocialTagging()
+    {
+        customSocialUserAdapter = new SocialPersonAdapter(this);
+        customSocialUserAdapter.addAll(
+                new SocialPerson(getString(R.string.mention1_username),310,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
+                new SocialPerson(getString(R.string.mention2_username),400,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
+                new SocialPerson(getString(R.string.mention3_username),500,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"));
+        mInputText.setMentionAdapter(customSocialUserAdapter);
+        mInputText.setThreshold(1);
+        mInputText.setMentionEnabled(true);
+        mInputText.setHyperlinkEnabled(true);
+        mInputText.setMentionColor(ContextCompat.getColor(getApplication(), R.color.link_color));
+        mInputText.setHashtagColor(ContextCompat.getColor(getApplication(), R.color.link_color));
+        mInputText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {
+            @Override
+            public Unit invoke(SocialView socialView, String s) {
+                Toast.makeText(getApplicationContext(),"Mention----"+s,Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        });
+    }
+
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
         mIsAnonymous = false;

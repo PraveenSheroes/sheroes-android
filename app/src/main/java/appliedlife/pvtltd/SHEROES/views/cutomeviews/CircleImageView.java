@@ -75,10 +75,10 @@ public class CircleImageView extends AppCompatImageView {
     if(!isCircularImage) {
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          errorPlaceHolderDrawableId = R.drawable.default_img;
         }
         if(placeHolderDrawableId == 0){
-          placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          placeHolderDrawableId = R.drawable.default_img;
         }
         Glide.with(this.getContext()).load(imageUrl)
                 .apply(new RequestOptions().placeholder(placeHolderDrawableId)
@@ -87,7 +87,7 @@ public class CircleImageView extends AppCompatImageView {
                 .into(this);
       } else {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          errorPlaceHolderDrawableId = R.drawable.default_img;
         }
         Glide.with(this.getContext())
             .load(errorPlaceHolderDrawableId)
@@ -96,10 +96,10 @@ public class CircleImageView extends AppCompatImageView {
     }else{
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          errorPlaceHolderDrawableId = R.drawable.ic_women_error_dilog;
         }
         if(placeHolderDrawableId == 0){
-          placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          placeHolderDrawableId = R.drawable.default_img;
         }
           Glide.with(this.getContext())
                   .asBitmap()
@@ -116,10 +116,10 @@ public class CircleImageView extends AppCompatImageView {
                   });
       } else {
         if(placeHolderDrawableId==0){
-          placeHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          placeHolderDrawableId = R.drawable.default_img;
         }
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_createc_ommunity_icon;
+          errorPlaceHolderDrawableId = R.drawable.default_img;
         }
         Glide.with(this.getContext()).load(placeHolderDrawableId)
                 .apply(new RequestOptions().error(errorPlaceHolderDrawableId))
