@@ -631,7 +631,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.invite)
     public void onInviteClicked(){
-        ShareBottomSheetFragment.showDialog(this, mUserPreference.get().getUserSummary().getAppShareUrl(), null, mUserPreference.get().getUserSummary().getAppShareUrl(), SCREEN_LABEL, false, mUserPreference.get().getUserSummary().getAppShareUrl(), false, true, true);
+        String appShareUrl;
+        if (CommonUtil.isNotEmpty(mUserPreference.get().getUserSummary().getAppShareUrl())) {
+            appShareUrl = mUserPreference.get().getUserSummary().getAppShareUrl();
+        } else {
+            appShareUrl = AppConstants.APP_SHARE_LINK;
+        }
+        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true);
         AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
     }
 
@@ -816,6 +822,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 openMentorProfileDetail(baseResponse);
                 break;
             case R.id.share:
+                if (StringUtil.isNotNullOrEmptyString(((FeedDetail) baseResponse).getPostShortBranchUrls())) {
+                    ((FeedDetail) baseResponse).setDeepLinkUrl(((FeedDetail) baseResponse).getPostShortBranchUrls());
+                }
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
                 String sourceId = "";
                 if (baseResponse instanceof UserPostSolrObj) {

@@ -72,6 +72,7 @@ public final class AnalyticsTrackers {
                 default:
                     throw new IllegalArgumentException("Unhandled analytics target " + target);
             }
+            tracker.enableAdvertisingIdCollection(true);
             mTrackers.put(target, tracker);
         }
 
