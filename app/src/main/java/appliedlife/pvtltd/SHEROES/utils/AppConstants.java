@@ -190,6 +190,17 @@ public class AppConstants {
     public static final String ASK_QUESTION_SHARE_PREF= "ASK_QUESTION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF= "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF= "BELL_NOTIFICATION";
+    public static final String FOLLOWER_SHARE_PREF= "FOLLOW_USER";
+    public static final String PICTURE_SHARE_PREF= "PICTURE_SHARE_PREF";
+    public static final String PICTURE_SHARE_SESSION_PREF= "PICTURE_SHARE_SESSION_PREF";
+    public static final String INVITE_FRIEND_SESSION_PREF= "INVITE_FRIEND_SESSION_PREF";
+    public static final String INVITE_FRIEND_PREF= "INVITE_FRIEND_PREF";
+    public static final String ARTICLE_SHARE_SESSION_PREF= "ARTICLE_SHARE_SESSION_PREF";
+    public static final String ARTICLE_SHARE_PREF= "ARTICLE_SHARE_PREF";
+    public static final String HEADER_PROFILE_SESSION_PREF= "HEADER_PROFILE_SESSION_PREF";
+    public static final String HEADER_PROFILE_PREF= "HEADER_PROFILE_PREF";
+    public static final String NAV_SESSION_PREF= "NAV_SESSION_PREF";
+    public static final String NAV_PREF= "NAV_PREF";
 
 
     /*Master data keys for pages*/

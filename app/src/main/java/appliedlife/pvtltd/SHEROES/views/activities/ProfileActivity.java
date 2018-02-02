@@ -28,12 +28,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
@@ -452,20 +454,45 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     private void toolTipForAskQuestion() {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        popupViewToolTip = layoutInflater.inflate(R.layout.tool_tip_center, null);
-        popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindowTooTip.setOutsideTouchable(false);
-        popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, 20);
-        final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
-        final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
-        tvTitle.setText(getString(R.string.ID_TOOL_TIP_ASK_QUESTION));
-        tvGotIt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowTooTip.dismiss();
-            }
-        });
+        try {
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupViewToolTip = layoutInflater.inflate(R.layout.tool_tip_center, null);
+            popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindowTooTip.setOutsideTouchable(false);
+            popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, 20);
+            final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
+            final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
+            tvTitle.setText(getString(R.string.ID_TOOL_TIP_ASK_QUESTION));
+            tvGotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindowTooTip.dismiss();
+                }
+            });
+        } catch (WindowManager.BadTokenException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+    }
+
+    private void toolTipForFollowUser() {
+        try {
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
+            popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindowTooTip.setOutsideTouchable(false);
+            popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, 20);
+            final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+            tvTitle.setText(getString(R.string.ID_TOOL_TIP_FOLLOWER));
+            tvGotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindowTooTip.dismiss();
+                }
+            });
+        } catch (WindowManager.BadTokenException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 
     private void followUnFollowMentor() {
@@ -493,7 +520,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
             toolTipForAskQuestion();
         }
+        if (CommonUtil.ensureFirstTime(AppConstants.FOLLOWER_SHARE_PREF)) {
+            toolTipForFollowUser();
+        }
     }
+
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
         supportPostponeEnterTransition();

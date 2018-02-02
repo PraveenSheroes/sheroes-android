@@ -44,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -295,34 +296,67 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         toolTipForNotification();
     }
 
+
     private void toolTipForNotification() {
-        if(CommonUtil.fromNthTimeOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF,4)) {
-         if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+        if (CommonUtil.fromNthTimeOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, 4)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
+                            popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            popupWindowTooTip.setOutsideTouchable(true);
+                            //popupWindowTooTip.showAsDropDown(mIvHomeNotification, -150, -20);
+                            popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP, 10, 130);
+                            final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
+                            final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
+                            tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
+                            tvGotIt.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    popupWindowTooTip.dismiss();
+                                }
+                            });
+                        } catch (WindowManager.BadTokenException e) {
+                            Crashlytics.getInstance().core.logException(e);
+                        }
+                    }
+                }, 2000);
+
+            }
+        }
+
+    }
+
+    private void toolTipForNav() {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
-                popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                popupWindowTooTip.setOutsideTouchable(true);
-                //popupWindowTooTip.showAsDropDown(mIvHomeNotification, -150, -20);
-                popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP,10,130);
-                final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
-                final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
-                tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
-                tvGotIt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupWindowTooTip.dismiss();
-                    }
-                });
-
+                try {
+                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
+                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowTooTip.setOutsideTouchable(false);
+                    popupWindowTooTip.showAsDropDown(tvDrawerNavigation, 0, -20);
+                    final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
+                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_NAV));
+                    tvGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindowTooTip.dismiss();
+                        }
+                    });
+                } catch (WindowManager.BadTokenException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
             }
-        }, 5000);
+        }, 1000);
 
-          }
-         }
 
     }
 
@@ -734,7 +768,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mFeedDetail = (FeedDetail) baseResponse;
             feedRelatedOptions(view, baseResponse);
         } else if (baseResponse instanceof NavMenuItem) {
-         drawerItemOptions(view, baseResponse);
+            drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
@@ -1311,6 +1345,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.LEFT);
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
+        if (CommonUtil.fromNthTimeOnly(AppConstants.NAV_SESSION_PREF, 3)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
+                toolTipForNav();
+            }
+        }
     }
 
     @Override

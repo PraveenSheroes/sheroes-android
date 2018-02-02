@@ -520,6 +520,14 @@
     <string name="ID_TOOL_TIP_CREATE_POST">Use this button to hide your identity on the post.</string>
     <string name="ID_TOOL_TIP_ASK_QUESTION">Tap here to ask a question to this champion.</string>
     <string name="ID_TOOL_TIP_NOTIFICATION">Your personalized notifications for likes and comments will appear here.</string>
+    <string name="ID_TOOL_TIP_FOLLOWER">Follow her to see what she shares!</string>
+    <string name="ID_TOOL_TIP_PICTURE_SHARE">Like this picture? Share it with friends.</string>
+    <string name="ID_TOOL_TIP_INVITE_FRIEND">Invite your friends to this community by tapping here.</string>
+    <string name="ID_TOOL_TIP_ARTICLE_SHARE">Share this article with a friend who will love reading it.</string>
+    <string name="ID_TOOL_TIP_FEED_HEADER_PROFILE">Added in the navigation tooltip.</string>
+    <string name="ID_TOOL_TIP_NAV">Check out experts, read stories, view your profile activity and much more. Tap here.</string>
+
+
 
 
 

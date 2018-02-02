@@ -1,9 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
@@ -15,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
@@ -36,13 +43,15 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView userName;
     @Bind(R.id.ripple)
     RippleView rippleView;
-
+    private  Context context;
     @Inject
     Preference<LoginResponse> userPreference;
     private String mPhotoUrl;
     private String loggedInUser;
     private long userId;
     private FeedDetail dataItem;
+    private View popupViewToolTip;
+    private PopupWindow popupWindowTooTip;
 
     public HeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -54,6 +63,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem=item;
+        this.context=context;
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
@@ -71,7 +81,11 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             userName.setText(name);
         }
             headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
-
+        if (CommonUtil.fromNthTimeOnly(AppConstants.HEADER_PROFILE_SESSION_PREF, 3)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF)) {
+                toolTipForHeaderFeed();
+            }
+        }
     }
 
     @OnClick(R.id.user_name)
@@ -113,6 +127,34 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void onClick(View v) {
+
+    }
+    private void toolTipForHeaderFeed() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
+                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowTooTip.setOutsideTouchable(true);
+                    popupWindowTooTip.showAsDropDown(ivLoginUserPic, 50, -20);
+                    final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+                    tvTitle.setText(context.getString(R.string.ID_TOOL_TIP_FEED_HEADER_PROFILE));
+                    tvGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindowTooTip.dismiss();
+                        }
+                    });
+                } catch (WindowManager.BadTokenException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
+            }
+        }, 1000);
+
 
     }
 }

@@ -1,11 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -29,9 +31,11 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -39,6 +43,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -72,7 +78,6 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -228,6 +233,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @BindDimen(R.dimen.article_image_height_tmp)
     int articleImageHeight;
 
+    private View popupViewToolTip;
+    private PopupWindow popupWindowTooTip;
     //endregion
 
     //region Activity methods
@@ -303,8 +310,40 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         });
 
         applyPalette();
+        if (CommonUtil.fromNthTimeOnly(AppConstants.ARTICLE_SHARE_SESSION_PREF, 2)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.ARTICLE_SHARE_PREF)) {
+                toolTipForShareArticle();
+            }
+        }
     }
+    private void toolTipForShareArticle() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_bottom_right, null);
+                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowTooTip.setOutsideTouchable(false);
+                    popupWindowTooTip.showAsDropDown(fab, 50, -20);
+                    final TextView tvGotIt =popupViewToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle =popupViewToolTip.findViewById(R.id.title);
+                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_ARTICLE_SHARE));
+                    tvGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindowTooTip.dismiss();
+                        }
+                    });
+                } catch (WindowManager.BadTokenException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
+            }
+        }, 1000);
 
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article, menu);

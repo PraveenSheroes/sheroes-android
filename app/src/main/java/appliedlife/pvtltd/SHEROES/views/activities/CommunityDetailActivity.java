@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,15 +26,19 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
@@ -64,8 +70,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityDetailPresenterImpl;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -145,6 +149,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private String mCommunityTitleTextColor = "#ffffff";
 
     private int mFromNotification;
+    private View popupViewToolTip;
+    private PopupWindow popupWindowTooTip;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -179,8 +185,40 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mCommunityFeedSolrObj != null) {
             initializeLayout();
         }
+        if (CommonUtil.fromNthTimeOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, 2)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
+                toolTipForInviteFriends();
+            }
+        }
     }
+    private void toolTipForInviteFriends() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
+                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowTooTip.setOutsideTouchable(false);
+                    popupWindowTooTip.showAsDropDown(mToolbar, 50, -20);
+                    final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_INVITE_FRIEND));
+                    tvGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindowTooTip.dismiss();
+                        }
+                    });
+                } catch (WindowManager.BadTokenException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
+            }
+        }, 1000);
 
+
+    }
     @Override
     public void onBackPressed() {
         Intent upIntent = NavUtils.getParentActivityIntent(this);

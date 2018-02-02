@@ -478,20 +478,30 @@ public class HomeFragment extends BaseFragment {
                     StringBuilder stringBuilder = new StringBuilder();
                   int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
                     if (notificationReadCountResponse.getUnread_notification_count() > 0) {
-                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
-                        String notification = String.valueOf(notificationCount);
-                        stringBuilder.append(notification);
-                        ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
+                        if(getActivity() instanceof HomeActivity) {
+                            if (((HomeActivity) getActivity()).flNotificationReadCount != null) {
+                                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
+                                String notification = String.valueOf(notificationCount);
+                                stringBuilder.append(notification);
+                                ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
+                            }
+                        }
                     } else {
-                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                        if(getActivity() instanceof HomeActivity) {
+                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                        }
                     }
                 }
                 break;
             case AppConstants.FAILED:
-                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                if(getActivity() instanceof HomeActivity) {
+                    if (((HomeActivity) getActivity()).flNotificationReadCount != null) {
+                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                    }
+                }
                 break;
             default:
-                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+
         }
     }
 
