@@ -18,12 +18,15 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 
@@ -46,18 +49,19 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
+        Observable<FeedResponsePojo> observable = getFeedFromModel(feedRequestPojo);
+        observable.subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
 
+            }
+
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
             }
 
             @Override
@@ -90,15 +94,14 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                 }
             }
         });
-        registerSubscription(subscription);
     }
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         //  LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -112,12 +115,8 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
             return;
         }
         //getMvpView().startProgressBar();
-        Subscription subscription = addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
-            @Override
-            public void onCompleted() {
-                getMvpView().stopProgressBar();
-            }
-
+        Observable<BookmarkResponsePojo> observable = addBookmarkFromModel(bookmarkRequestPojo, isBookmarked);
+        observable.subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
@@ -127,20 +126,25 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
             }
 
             @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
                 //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<BookmarkResponsePojo> addBookmarkFromModel(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!isBookmarked) {
             return sheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
-                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
-                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                        public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo) {
                             return bookmarkResponsePojo;
                         }
                     })
@@ -148,9 +152,9 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                     .observeOn(AndroidSchedulers.mainThread());
         } else {
             return sheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
-                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
-                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                        public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo) {
                             return bookmarkResponsePojo;
                         }
                     })

@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -22,10 +22,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
-import rx.Subscriber;
-import rx.Subscription;
+
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
@@ -72,9 +73,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = onBoardingModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        onBoardingModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -93,7 +94,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                 getMvpView().showDataList(feedResponsePojo.getFeedDetails());
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getOnBoardingSearchToPresenter(GetAllDataRequest getAllDataRequest) {
@@ -102,9 +103,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = onBoardingModel.getOnBoardingFromModel(getAllDataRequest).subscribe(new Subscriber<GetAllData>() {
+        onBoardingModel.getOnBoardingFromModel(getAllDataRequest).subscribe(new DisposableObserver<GetAllData>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -121,7 +122,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                 getMvpView().getAllDataResponse(getAllData);
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
@@ -131,9 +132,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = onBoardingModel.communityJoinFromModel(communityRequest).subscribe(new Subscriber<CommunityResponse>() {
+        onBoardingModel.communityJoinFromModel(communityRequest).subscribe(new DisposableObserver<CommunityResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -153,7 +154,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                 getMvpView().joinResponse(communityFeedSolrObj);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void leaveCommunityAndRemoveMemberToPresenter(RemoveMemberRequest removeMemberRequest, final CommunityFeedSolrObj communityFeedSolrObj) {
@@ -162,9 +163,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = onBoardingModel.removeMember(removeMemberRequest).subscribe(new Subscriber<MemberListResponse>() {
+        onBoardingModel.removeMember(removeMemberRequest).subscribe(new DisposableObserver<MemberListResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -184,7 +185,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                 getMvpView().unJoinResponse(communityFeedSolrObj);
             }
         });
-        registerSubscription(subscription);
+
     }
 
 }

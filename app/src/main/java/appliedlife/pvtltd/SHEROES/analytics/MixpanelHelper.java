@@ -5,7 +5,7 @@ import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONObject;

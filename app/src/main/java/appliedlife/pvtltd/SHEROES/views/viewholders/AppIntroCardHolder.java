@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.HashMap;
@@ -83,8 +83,9 @@ public class AppIntroCardHolder extends BaseViewHolder<FeedDetail> {
             }
         }
         Glide.with(mContext)
-                .load(appIntroData.getCategory()).asBitmap()
-                .placeholder(R.drawable.once_open_card)
+                .asBitmap()
+                .load(appIntroData.getCategory())
+                .apply(new RequestOptions().placeholder(R.drawable.once_open_card))
                 .into(ivAppIntroImage);
 
     }

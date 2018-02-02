@@ -18,10 +18,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInRespo
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Praveen_Singh on 04-01-2017.
@@ -50,9 +51,9 @@ public class LoginModel {
             if(StringUtil.isNotNullOrEmptyString(loginRequest.getCallForSignUp())&&loginRequest.getCallForSignUp().equalsIgnoreCase(AppConstants.GOOGLE_PLUS))
             {
                 return sheroesAppServiceApi.getGpSignUpToken(loginRequest)
-                        .map(new Func1<LoginResponse, LoginResponse>() {
+                        .map(new Function<LoginResponse, LoginResponse>() {
                             @Override
-                            public LoginResponse call(LoginResponse loginResponse) {
+                            public LoginResponse apply(LoginResponse loginResponse) {
                                 return loginResponse;
                             }
                         })
@@ -60,9 +61,9 @@ public class LoginModel {
                         .observeOn(AndroidSchedulers.mainThread());
             }else {
                 return sheroesAppServiceApi.getFbSignUpToken(loginRequest)
-                        .map(new Func1<LoginResponse, LoginResponse>() {
+                        .map(new Function<LoginResponse, LoginResponse>() {
                             @Override
-                            public LoginResponse call(LoginResponse loginResponse) {
+                            public LoginResponse apply(LoginResponse loginResponse) {
                                 return loginResponse;
                             }
                         })
@@ -71,9 +72,9 @@ public class LoginModel {
             }
         } else {
             return sheroesAppServiceApi.getLoginAuthToken(loginRequest)
-                    .map(new Func1<LoginResponse, LoginResponse>() {
+                    .map(new Function<LoginResponse, LoginResponse>() {
                         @Override
-                        public LoginResponse call(LoginResponse loginResponse) {
+                        public LoginResponse apply(LoginResponse loginResponse) {
                             return loginResponse;
                         }
                     })
@@ -85,9 +86,9 @@ public class LoginModel {
     public Observable<LoginResponse> getFBVerificationFromModel(LoginRequest loginRequest) {
         LogUtils.info(TAG,"*******************"+new Gson().toJson(loginRequest));
             return sheroesAppServiceApi.getFBVerification(loginRequest)
-                    .map(new Func1<LoginResponse, LoginResponse>() {
+                    .map(new Function<LoginResponse, LoginResponse>() {
                         @Override
-                        public LoginResponse call(LoginResponse loginResponse) {
+                        public LoginResponse apply(LoginResponse loginResponse) {
                             return loginResponse;
                         }
                     })
@@ -98,9 +99,9 @@ public class LoginModel {
 
     public Observable<ExpireInResponse> getGoogleTokenExpireInFromModel(String expireInUrl) {
         return sheroesAppServiceApi.getGoogleTokenExpire(expireInUrl)
-                .map(new Func1<ExpireInResponse, ExpireInResponse>() {
+                .map(new Function<ExpireInResponse, ExpireInResponse>() {
                     @Override
-                    public ExpireInResponse call(ExpireInResponse expireInResponse) {
+                    public ExpireInResponse apply(ExpireInResponse expireInResponse) {
                         return expireInResponse;
                     }
                 })
@@ -114,9 +115,9 @@ public class LoginModel {
     public Observable<ForgotPasswordResponse> sendForgetPasswordLinkFromModel(ForgotPasswordRequest forgotPasswordRequest) {
         LogUtils.info(TAG,"*******************"+new Gson().toJson(forgotPasswordRequest));
         return sheroesAppServiceApi.forgotPasswordResponse(forgotPasswordRequest)
-                .map(new Func1<ForgotPasswordResponse, ForgotPasswordResponse>() {
+                .map(new Function<ForgotPasswordResponse, ForgotPasswordResponse>() {
                     @Override
-                    public ForgotPasswordResponse call(ForgotPasswordResponse forgotPasswordResponse) {
+                    public ForgotPasswordResponse apply(ForgotPasswordResponse forgotPasswordResponse) {
                         return forgotPasswordResponse;
                     }
                 })
@@ -127,9 +128,9 @@ public class LoginModel {
     public Observable<EmailVerificationResponse> getEmailVerificationFromModel(EmailVerificationRequest emailVerificationRequest) {
         LogUtils.info(TAG,"*******************"+new Gson().toJson(emailVerificationRequest));
         return sheroesAppServiceApi.emailVerificationResponse(emailVerificationRequest)
-                .map(new Func1<EmailVerificationResponse, EmailVerificationResponse>() {
+                .map(new Function<EmailVerificationResponse, EmailVerificationResponse>() {
                     @Override
-                    public EmailVerificationResponse call(EmailVerificationResponse emailVerificationResponse) {
+                    public EmailVerificationResponse apply(EmailVerificationResponse emailVerificationResponse) {
                         return emailVerificationResponse;
                     }
                 })
@@ -141,9 +142,9 @@ public class LoginModel {
     public Observable<UserFromReferralResponse> updateUserReferralInModel(UserFromReferralRequest userFromReferralRequest) {
         LogUtils.info(TAG,"************updateUserReferralInModel*******"+new Gson().toJson(userFromReferralRequest));
         return sheroesAppServiceApi.updateUserReferral(userFromReferralRequest)
-                .map(new Func1<UserFromReferralResponse, UserFromReferralResponse>() {
+                .map(new Function<UserFromReferralResponse, UserFromReferralResponse>() {
                     @Override
-                    public UserFromReferralResponse call(UserFromReferralResponse userFromReferralResponse) {
+                    public UserFromReferralResponse apply(UserFromReferralResponse userFromReferralResponse) {
                         return userFromReferralResponse;
                     }
                 })

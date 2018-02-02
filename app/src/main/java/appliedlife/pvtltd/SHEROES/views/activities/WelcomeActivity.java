@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

@@ -3,11 +3,12 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
-import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.f2prateek.rx.preferences2.Preference;
+import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -51,6 +52,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.preferences.ConverterAdapter;
+import appliedlife.pvtltd.SHEROES.preferences.GsonConverter;
 import appliedlife.pvtltd.SHEROES.preferences.GsonPreferenceAdapter;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -63,8 +66,9 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static appliedlife.pvtltd.SHEROES.utils.CommonUtil.getDeviceName;
@@ -218,33 +222,26 @@ public class SheroesAppModule {
     @Singleton
     @Provides
     public Preference<LoginResponse> provideTokenPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new GsonPreferenceAdapter<>(gson, LoginResponse.class));
+        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new LoginResponse(), new GsonConverter<LoginResponse>(gson, LoginResponse.class));
     }
 
     @Singleton
     @Provides
     public Preference<AllCommunitiesResponse> provideAllCommunities(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.ALL_COMMUNITY_LIST, new GsonPreferenceAdapter<>(gson, AllCommunitiesResponse.class));
-    }
-
-
-    @Singleton
-    @Provides
-    public Preference<CreateCommunityRequest> provideCommunityPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.COMMUNITY_DETAIL, new GsonPreferenceAdapter<>(gson, CreateCommunityRequest.class));
+        return rxSharedPreferences.getObject(AppConstants.ALL_COMMUNITY_LIST, new AllCommunitiesResponse(), new GsonConverter<AllCommunitiesResponse>(gson, AllCommunitiesResponse.class));
     }
 
 
     @Singleton
     @Provides
     public Preference<MasterDataResponse> provideMasterDataUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new GsonPreferenceAdapter<>(gson, MasterDataResponse.class));
+        return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new MasterDataResponse(), new GsonConverter<MasterDataResponse>(gson, MasterDataResponse.class));
     }
 
     @Singleton
     @Provides
     public Preference<InstallUpdateForMoEngage> provideInstallUpdatePref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new GsonPreferenceAdapter<>(gson, InstallUpdateForMoEngage.class));
+        return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new InstallUpdateForMoEngage(), new GsonConverter<InstallUpdateForMoEngage>(gson, InstallUpdateForMoEngage.class));
     }
 
     @Provides
@@ -287,7 +284,7 @@ public class SheroesAppModule {
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(ensureGson()))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 

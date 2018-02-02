@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -64,12 +64,14 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
@@ -172,9 +174,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
                 return;
             }
-            Subscription subscription = mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl).subscribe(new Subscriber<FeedResponsePojo>() {
+            mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl).subscribe(new DisposableObserver<FeedResponsePojo>() {
                 @Override
-                public void onCompleted() {
+                public void onComplete() {
                     getMvpView().stopProgressBar();
                 }
                 @Override
@@ -221,7 +223,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
                 }
             });
-            registerSubscription(subscription);
+
     }
 
     public boolean isFeedLoading() {
@@ -234,9 +236,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest,fragmentListRefreshData).subscribe(new Subscriber<List<FeedDetail>>() {
+        mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest,fragmentListRefreshData).subscribe(new DisposableObserver<List<FeedDetail>>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -256,7 +258,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
@@ -265,9 +267,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -288,7 +290,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getMyCommunityFromPresenter(final MyCommunityRequest myCommunityRequest) {
@@ -297,9 +299,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getMyCommunityFromModel(myCommunityRequest).subscribe(new Subscriber<FeedResponsePojo>() {
+        mHomeModel.getMyCommunityFromModel(myCommunityRequest).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -319,7 +321,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {
@@ -328,9 +330,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getAllCommunityFromModel(myCommunityRequest).subscribe(new Subscriber<AllCommunitiesResponse>() {
+        mHomeModel.getAllCommunityFromModel(myCommunityRequest).subscribe(new DisposableObserver<AllCommunitiesResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -350,7 +352,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
@@ -359,9 +361,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getBookMarkFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        mHomeModel.getBookMarkFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -380,7 +382,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
     public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest,final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -388,9 +390,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getFollowFromModel(publicProfileListRequest).subscribe(new Subscriber<MentorFollowUnfollowResponse>() {
+        mHomeModel.getFollowFromModel(publicProfileListRequest).subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -416,7 +418,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
     public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest,final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -424,9 +426,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getUnFollowFromModel(publicProfileListRequest).subscribe(new Subscriber<MentorFollowUnfollowResponse>() {
+        mHomeModel.getUnFollowFromModel(publicProfileListRequest).subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -452,7 +454,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
     public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -460,9 +462,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -480,7 +482,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().invalidateItem(userPostSolrObj);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getEventNotInteresetedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
@@ -489,9 +491,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -509,7 +511,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().invalidateItem(userPostSolrObj);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
@@ -520,9 +522,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -545,7 +547,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().stopProgressBar();
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getEventNotInteresetedFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
@@ -557,9 +559,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -581,7 +583,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
@@ -591,9 +593,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
+        mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -611,7 +613,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                // //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void communityJoinFromPresenter(CommunityRequest communityRequest) {
@@ -620,9 +622,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.communityJoinFromModel(communityRequest).subscribe(new Subscriber<CommunityResponse>() {
+        mHomeModel.communityJoinFromModel(communityRequest).subscribe(new DisposableObserver<CommunityResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -640,7 +642,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 //getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void deleteCommunityPostFromPresenter(DeleteCommunityPostRequest deleteCommunityPostRequest, final UserPostSolrObj userPostObj) {
@@ -649,9 +651,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.deleteCommunityPostFromModel(deleteCommunityPostRequest).subscribe(new Subscriber<DeleteCommunityPostResponse>() {
+        mHomeModel.deleteCommunityPostFromModel(deleteCommunityPostRequest).subscribe(new DisposableObserver<DeleteCommunityPostResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -670,7 +672,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 //getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void markAsSpamFromPresenter(BookmarkRequestPojo bookmarkResponsePojo) {
@@ -679,9 +681,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.markAsSpamFromModel(bookmarkResponsePojo).subscribe(new Subscriber<BookmarkResponsePojo>() {
+        mHomeModel.markAsSpamFromModel(bookmarkResponsePojo).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -699,7 +701,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getBellNotificationFromPresenter(BellNotificationRequest bellNotificationRequest) {
@@ -708,9 +710,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getNotificationFromModel(bellNotificationRequest).subscribe(new Subscriber<BelNotificationListResponse>() {
+        mHomeModel.getNotificationFromModel(bellNotificationRequest).subscribe(new DisposableObserver<BelNotificationListResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -730,13 +732,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
     public void getNotificationCountFromPresenter(NotificationReadCount notificationReadCount) {
-        Subscription subscription = mHomeModel.getNotificationReadCountFromModel(notificationReadCount).subscribe(new Subscriber<NotificationReadCountResponse>() {
+        mHomeModel.getNotificationReadCountFromModel(notificationReadCount).subscribe(new DisposableObserver<NotificationReadCountResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
@@ -751,14 +753,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
     public void getSpamPostApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final UserPostSolrObj userPostSolrObj) {
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new Subscriber<ApproveSpamPostResponse>() {
+        mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
@@ -784,7 +786,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
@@ -793,9 +795,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
-        Subscription subscription = mHomeModel.getAppContactsResponseInModel(userPhoneContactsListRequest).subscribe(new Subscriber<UserPhoneContactsListResponse>() {
+        mHomeModel.getAppContactsResponseInModel(userPhoneContactsListRequest).subscribe(new DisposableObserver<UserPhoneContactsListResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -814,7 +816,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
@@ -823,9 +825,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new Subscriber<BookmarkResponsePojo>() {
+        mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -843,7 +845,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getPostLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
@@ -855,9 +857,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -884,14 +886,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().invalidateItem(feedDetail);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
-                .map(new Func1<LikeResponse, LikeResponse>() {
+                .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
-                    public LikeResponse call(LikeResponse likeResponse) {
+                    public LikeResponse apply(LikeResponse likeResponse) {
                         return likeResponse;
                     }
                 })
@@ -909,9 +911,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -939,15 +941,15 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().invalidateItem(feedDetail);
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
     public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
-                .map(new Func1<LikeResponse, LikeResponse>() {
+                .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
-                    public LikeResponse call(LikeResponse likeResponse) {
+                    public LikeResponse apply(LikeResponse likeResponse) {
                         return likeResponse;
                     }
                 })
@@ -966,9 +968,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -1002,7 +1004,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getCommentLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment, final UserPostSolrObj userPostSolrObj) {
@@ -1015,9 +1017,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -1051,7 +1053,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
@@ -1060,10 +1062,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = editPostCommunity(communityTopPostRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+        editPostCommunity(communityTopPostRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -1081,15 +1083,15 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             }
 
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest){
         LogUtils.info(TAG,"***************edit community Post****"+new Gson().toJson(communityPostCreateRequest));
         return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
-                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
+                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
-                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
+                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
                         return communityTagsListResponse;
                     }
                 })

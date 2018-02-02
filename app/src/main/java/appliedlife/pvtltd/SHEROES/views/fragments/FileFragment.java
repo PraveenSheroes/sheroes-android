@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -75,15 +78,16 @@ public class FileFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         Glide.with(getActivity())
                 .load(imageUrl)
-                .override(CommonUtil.getWindowWidth(container.getContext()), CommonUtil.getWindowHeight(container.getContext()))
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .apply(new RequestOptions().override(CommonUtil.getWindowWidth(container.getContext()), CommonUtil.getWindowHeight(container.getContext())))
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object o, Target<Drawable> target, boolean b) {
                         progressBar.setVisibility(View.GONE);
                         return false;
                     }
+
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(Drawable drawable, Object o, Target<Drawable> target, DataSource dataSource, boolean b) {
                         progressBar.setVisibility(View.GONE);
                         return false;
                     }

@@ -11,10 +11,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionR
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Deepak on 22-05-2017.
@@ -34,10 +35,10 @@ public class HelplineModel {
     public Observable<HelplinePostQuestionResponse> postHelplineQuestion(HelplinePostQuestionRequest helplinePostQuestionRequest) {
 
         return sheroesAppServiceApi.postHelplineQuestion(helplinePostQuestionRequest)
-                .map(new Func1<HelplinePostQuestionResponse, HelplinePostQuestionResponse>() {
+                .map(new Function<HelplinePostQuestionResponse, HelplinePostQuestionResponse>() {
 
                     @Override
-                    public HelplinePostQuestionResponse call(HelplinePostQuestionResponse helplinePostQuestionResponse) {
+                    public HelplinePostQuestionResponse apply(HelplinePostQuestionResponse helplinePostQuestionResponse) {
 
                         return helplinePostQuestionResponse;
                     }
@@ -50,10 +51,10 @@ public class HelplineModel {
     public Observable<HelplineGetChatThreadResponse> getHelplineChatDetails(HelplineGetChatThreadRequest helplineGetChatThreadRequest) {
 
         return sheroesAppServiceApi.getHelplineChatDetails(helplineGetChatThreadRequest)
-                .map(new Func1<HelplineGetChatThreadResponse, HelplineGetChatThreadResponse>() {
+                .map(new Function<HelplineGetChatThreadResponse, HelplineGetChatThreadResponse>() {
 
                     @Override
-                    public HelplineGetChatThreadResponse call(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
+                    public HelplineGetChatThreadResponse apply(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
 
                         return helplineGetChatThreadResponse;
                     }

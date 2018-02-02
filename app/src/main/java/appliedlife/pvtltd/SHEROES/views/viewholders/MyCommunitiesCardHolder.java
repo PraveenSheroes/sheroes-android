@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.util.List;
 
@@ -193,10 +193,11 @@ public class MyCommunitiesCardHolder extends BaseViewHolder<FeedDetail> {
             final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
             tvTotalMember.setText(mCommunityFeedObj.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
-                    .load(imageUrl).asBitmap()
+                    .asBitmap()
+                    .load(imageUrl)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap profileImage, GlideAnimation glideAnimation) {
+                        public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
                             ivFirstLandscape.setImageBitmap(profileImage);
                             rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }

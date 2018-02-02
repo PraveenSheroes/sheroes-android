@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -139,8 +140,7 @@ public class EmptyRecyclerView extends RecyclerView {
                 emptyImageView.setVisibility(VISIBLE);
                 Glide.with(emptyImageView.getContext())
                         .load(emptyUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .skipMemoryCache(true)
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                         .into(emptyImageView);
             } else {
                 emptyImageView.setVisibility(GONE);
