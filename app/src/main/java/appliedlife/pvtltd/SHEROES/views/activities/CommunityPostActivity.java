@@ -202,6 +202,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String mTitleTextColor = "#ffffff";
     private boolean hasPermission = false;
     CallbackManager callbackManager;
+    private AccessToken mAccessToken;
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
@@ -325,8 +326,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         if (id == R.id.post) {
-            askFacebookPublishPermission();
-/*
             if (!validateFields()) {
                 return true;
             }
@@ -338,13 +337,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 return true;
             }
 
-            if(mIsChallengePost){
-                mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(),mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
-            }else if (!mIsEditPost) {
-                mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse));
-            } else {
-                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
-            }*/
+            askFacebookPublishPermission();
         }
 
         return super.onOptionsItemSelected(item);
@@ -357,37 +350,49 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         LogUtils.info("dddd", "********success fb login ***********");
-                        LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));
-                        LoginResult loginResult1 = loginResult;
-                        loginResult1 = null;
-                        hasPermission = true;
+                        if(!loginResult.getAccessToken().getPermissions().contains("publish_actions")){
+                            LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));
+                            hasPermission = false;
+                        }else {
+                            hasPermission = true;
+                        }
+                        sendPost();
                     }
 
                     @Override
                     public void onCancel() {
-                        boolean is = false;
                         LogUtils.info("dddd", "********cancel fb login ***********");
-                        is = true;
                         hasPermission = false;
+                        sendPost();
                         //Toast.makeText(AppIntro.this, "Login Cancel", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        boolean is = false;
                         LogUtils.info("dddd", "********error fb login ***********");
-                        is = true;
                         hasPermission = false;
+                        sendPost();
                         //Toast.makeText(AppIntro.this, exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken!=null && accessToken.getPermissions().contains("publish_actions")){
             hasPermission = true;
+            sendPost();
            /* alreadyHasFbPermission = true;
             LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));*/
         }else {
             LoginManager.getInstance().logInWithReadPermissions(CommunityPostActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
+        }
+    }
+
+    public void sendPost(){
+        if(mIsChallengePost){
+            mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(),mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
+        }else if (!mIsEditPost) {
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, AccessToken.getCurrentAccessToken().getToken()));
+        } else {
+            mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
         }
     }
 

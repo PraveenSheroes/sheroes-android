@@ -1801,7 +1801,7 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1811,6 +1811,8 @@ public class AppUtils {
         communityPostCreateRequest.setCreatorType(createType);
         communityPostCreateRequest.setDescription(description);
         communityPostCreateRequest.setImages(imag);
+        communityPostCreateRequest.setPostToFacebook(hasPermission);
+        communityPostCreateRequest.setUserFbAccessToken(accessToken);
         communityPostCreateRequest.setId(mIdForEditPost);
         if (null != linkRenderResponse) {
             communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
