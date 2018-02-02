@@ -34,19 +34,19 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RecyclerRowDivider;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.SELF_PROFILE;
-import static appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment.USER_MENTOR_ID;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
 /**
  * Created by ravi on 11/01/18.
  * Community listing
  */
 
-public class UserMentorCommunity extends BaseFragment implements ProfileNewView, ProfileCommunityAdapter.OnItemClicked {
+public class UserMentorCommunity extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
 
     public static final String SCREEN_LABEL = "Followed Communities Screen";
 

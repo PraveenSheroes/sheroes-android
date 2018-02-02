@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -30,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -85,16 +87,22 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
     public ChallengeFeedHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+
     @Override
     public void bindData(FeedDetail feedDetail, Context context, int position) {
-      mContext = context;
-      mFeedDetail = feedDetail;
+        mContext = context;
+        mFeedDetail = feedDetail;
         ChallengeSolrObj challengeSolrObj = (ChallengeSolrObj) feedDetail;
         mContest = new Contest();
+        if (StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls())) {
+            mContest.shortUrl = challengeSolrObj.getPostShortBranchUrls();
+        } else {
+            mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
+        }
         mContest.title = challengeSolrObj.getChallengeTitle();
         mContest.remote_id = (int) challengeSolrObj.getIdOfEntityOrParticipant();
         mContest.body = challengeSolrObj.getListDescription();
@@ -109,7 +117,6 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         mContest.hasMyPost = challengeSolrObj.isChallengeAccepted();
         mContest.tag = challengeSolrObj.getChallengeAcceptPostText();
         mContest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
-        mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
         mContest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
         mContest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
         mContest.winnerAnnouncementDate = challengeSolrObj.getChallengeAnnouncementDate(); //Fix for winner announcement
@@ -119,19 +126,19 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         mFeatureImage.setLayoutParams(params);
 
         ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt());
-        if(contestStatus==ContestStatus.ONGOING){
+        if (contestStatus == ContestStatus.ONGOING) {
             mContestEndText.setText("Ends" + " " + DateUtil.getRelativeTimeSpanString(mContest.getEndAt()));
             mContestStatus.setText(R.string.contest_status_ongoing);
             mLiveDot.setImageResource(R.drawable.vector_live_dot);
             animateLiveDot();
             mContestStatus.setVisibility(View.VISIBLE);
         }
-        if(contestStatus==ContestStatus.UPCOMING){
+        if (contestStatus == ContestStatus.UPCOMING) {
             mContestStatus.setText(context.getString(R.string.contest_status_upcoming));
             mLiveDot.setVisibility(View.GONE);
             mContestStatus.setVisibility(View.VISIBLE);
         }
-        if(contestStatus==ContestStatus.COMPLETED){
+        if (contestStatus == ContestStatus.COMPLETED) {
             mContestStatus.setText(context.getString(R.string.contest_status_completed));
             mContestStatus.setTextColor(context.getResources().getColor(R.color.light_green));
             mLiveDot.setImageResource(R.drawable.vector_contest_completed);
@@ -165,14 +172,14 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
                         .load(imageKitUrl)
                         .into(mFeatureImage);
             }
-        }else {
+        } else {
             mFeatureImage.setImageResource(R.drawable.challenge_placeholder);
         }
 
         if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
             Glide.with(mContext)
                     .load(mContest.authorImageUrl)
-                    .bitmapTransform(new CommonUtil.CircleTransform(mContext))
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
                     .into(mAuthorImage);
         }
         mAuthorName.setText(mContest.authorName);
@@ -185,19 +192,19 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
 
     @OnClick(R.id.card_challenge)
-    public void onChallengeClicked(){
-        if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback)viewInterface).onChallengeClicked(mContest);
-        }else {
+    public void onChallengeClicked() {
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onChallengeClicked(mContest);
+        } else {
             viewInterface.contestOnClick(mContest, mCardChallenge);
         }
     }
 
     @OnClick(R.id.share)
-    public void onShareClick(){
-        if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback)viewInterface).onChallengePostShared(mFeedDetail);
-        }else {
+    public void onShareClick() {
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onChallengePostShared(mFeedDetail);
+        } else {
             viewInterface.handleOnClick(mFeedDetail, mShare);
         }
     }
@@ -207,7 +214,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    private void animateLiveDot(){
+    private void animateLiveDot() {
         mAlphaAnimator = ObjectAnimator.ofFloat(mLiveDot, "alpha", 0f, 1f);
         mAlphaAnimator.setRepeatMode(ValueAnimator.REVERSE);
         mAlphaAnimator.setRepeatCount(Animation.INFINITE);

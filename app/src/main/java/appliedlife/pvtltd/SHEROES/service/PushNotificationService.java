@@ -14,7 +14,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -36,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 
 /**
@@ -50,9 +51,9 @@ public class PushNotificationService extends GcmListenerService {
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
-    private static String MOENGAGE_ALERT_MSG="gcm_alert";
-    private static String MOENGAGE_TITLE="gcm_title";
-    public static String FROM_PUSH_NOTIFICATION = "From Push Notification";
+
+
+
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
@@ -104,7 +105,7 @@ public class PushNotificationService extends GcmListenerService {
                     .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
                     .build();
             AnalyticsManager.trackNonInteractionEvent(Event.PUSH_NOTIFICATION_SHOWN, properties);
-            data.putBoolean(FROM_PUSH_NOTIFICATION, true);
+            data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
             data.putString(AppConstants.NOTIFICATION_ID, MoEngageNotificationUtils.getCampaignIdIfAny(data));
             PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
         }else {
@@ -155,9 +156,9 @@ public class PushNotificationService extends GcmListenerService {
 
         notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
         notificationIntent.setData(url);
-        notificationIntent.putExtra(FROM_PUSH_NOTIFICATION, true);
+        notificationIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, 1);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
-        //stackBuilder.addParentStack(ArticleDetailActivity.class);
+        stackBuilder.addParentStack(HomeActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
         notificationIntent.setAction(AppConstants.SHEROES + mCount);
 

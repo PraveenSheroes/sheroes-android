@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -21,11 +21,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
-import rx.Subscriber;
-import rx.Subscription;
+
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 
@@ -77,9 +78,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         // getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp).subscribe(new Subscriber<LoginResponse>() {
+        mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp).subscribe(new DisposableObserver<LoginResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -96,7 +97,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 getMvpView().getLogInResponse(loginResponse);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getFBVerificationInPresenter(LoginRequest loginRequest) {
@@ -105,9 +106,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getFBVerificationFromModel(loginRequest).subscribe(new Subscriber<LoginResponse>() {
+        mLoginModel.getFBVerificationFromModel(loginRequest).subscribe(new DisposableObserver<LoginResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -125,7 +126,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     getMvpView().getLogInResponse(loginResponse);
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
@@ -135,9 +136,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getGoogleTokenExpireInFromModel(tokenExpireUrl).subscribe(new Subscriber<ExpireInResponse>() {
+        mLoginModel.getGoogleTokenExpireInFromModel(tokenExpireUrl).subscribe(new DisposableObserver<ExpireInResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -157,7 +158,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getForgetPasswordResponseInPresenter(ForgotPasswordRequest forgotPasswordRequest) {
@@ -166,9 +167,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.sendForgetPasswordLinkFromModel(forgotPasswordRequest).subscribe(new Subscriber<ForgotPasswordResponse>() {
+        mLoginModel.sendForgetPasswordLinkFromModel(forgotPasswordRequest).subscribe(new DisposableObserver<ForgotPasswordResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -185,7 +186,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 getMvpView().sendForgotPasswordEmail(forgotPasswordResponse);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getEmailVerificationResponseInPresenter(EmailVerificationRequest emailVerificationRequest) {
@@ -194,9 +195,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mLoginModel.getEmailVerificationFromModel(emailVerificationRequest).subscribe(new Subscriber<EmailVerificationResponse>() {
+        mLoginModel.getEmailVerificationFromModel(emailVerificationRequest).subscribe(new DisposableObserver<EmailVerificationResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -214,7 +215,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 getMvpView().sendVerificationEmailSuccess(emailVerificationResponse);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void updateUserReferralInPresenter(UserFromReferralRequest userFromReferralRequest) {
@@ -222,9 +223,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
-        Subscription subscription = mLoginModel.updateUserReferralInModel(userFromReferralRequest).subscribe(new Subscriber<UserFromReferralResponse>() {
+        mLoginModel.updateUserReferralInModel(userFromReferralRequest).subscribe(new DisposableObserver<UserFromReferralResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
@@ -239,7 +240,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 LogUtils.info(TAG, "************updateUserReferralInModel Response*******" + new Gson().toJson(userFromReferralResponse));
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void onStop() {

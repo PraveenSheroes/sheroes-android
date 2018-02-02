@@ -133,7 +133,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity"
+            android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
@@ -278,6 +279,13 @@
         <!-- Install referrer: Always put new install receiver below referrer-->
         <receiver
             android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.mixpanel.android.mpmetrics.InstallReferrerReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />

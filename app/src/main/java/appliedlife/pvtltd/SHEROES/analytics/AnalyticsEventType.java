@@ -27,6 +27,7 @@ public enum AnalyticsEventType {
     SEARCH("Search"),
     IMAGE("Image"),
     LOOKING_FOR("Looking For"),
+    LINK("Link"),
     PROMO_CARD("Promo Card");
 
     // endregion

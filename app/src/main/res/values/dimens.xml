@@ -26,6 +26,7 @@
     <dimen name="dp_size_32">32dp</dimen>
     <dimen name="dp_size_30">30dp</dimen>
     <dimen name="dp_size_35">35dp</dimen>
+    <dimen name="margin_card_share">22dp</dimen>
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_250">250dp</dimen>
     <dimen name="dp_size_16">16dp</dimen>
@@ -63,12 +64,14 @@
     <dimen name="dp_size_350">350dp</dimen>
     <dimen name="dp_size_282">282dp</dimen>
     <dimen name="dp_size_150">150dp</dimen>
+    <dimen name="dp_size_160">160dp</dimen>
     <!--Text sizes for SHEROES-->
     <dimen name="sp_size_16">16sp</dimen>
     <dimen name="sp_size_18">18sp</dimen>
 
     <dimen name="sp_size_1">1sp</dimen>
-
+    <dimen name="sp_size_4">4sp</dimen>
+    <dimen name="sp_size_8">8sp</dimen>
     <dimen name="sp_size_9">9sp</dimen>
     <dimen name="sp_size_7">7sp</dimen>
     <dimen name="sp_size_15">15sp</dimen>
@@ -86,7 +89,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="feed_profile_icon_size">40dp</dimen>
     <dimen name="drawer_profile_icon_size">100dp</dimen>
-<!--material spinner-->
+    <!--material spinner-->
 
     <dimen name="dp_size_17">17dp</dimen>
     <dimen name="dp_size_45">45dp</dimen>
@@ -101,7 +104,12 @@
     <dimen name="dp_size_36">36dp</dimen>
     <dimen name="dp_size_209">209dp</dimen>
 
+    <dimen name="dp_size_280">280dp</dimen>
+    <dimen name="dp_size_177">177dp</dimen>
+    <dimen name="dp_size_125">125dp</dimen>
 
+    <dimen name="image_upload_w">180dp</dimen>
+    <dimen name="image_upload_h">130dp</dimen>
     <dimen name="mentor_icon">64dp</dimen>
     <dimen name="comment_icon">30dp</dimen>
     <dimen name="user_comment_icon">40dp</dimen>
@@ -111,7 +119,10 @@
     <dimen name="article_image_height_tmp">200dp</dimen>
     <dimen name="authorPicSize">44dp</dimen>
     <dimen name="mentor_profile_icon">87dp</dimen>
+    <dimen name="on_boarding_girl_height">172dp</dimen>
+    <dimen name="on_boarding_girl_width">84dp</dimen>
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->
 </resources>
+

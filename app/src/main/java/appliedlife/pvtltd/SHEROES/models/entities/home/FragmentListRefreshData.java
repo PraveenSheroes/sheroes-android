@@ -27,6 +27,7 @@ public class FragmentListRefreshData {
     private boolean isSelfProfile;
     private long mentorUserId;
     private boolean isChallenge;
+    private boolean isAnonymous;
     public FragmentListRefreshData() {
 
     }
@@ -197,5 +198,13 @@ public class FragmentListRefreshData {
 
     public void setMentorUserId(long mentorUserId) {
         this.mentorUserId = mentorUserId;
+    }
+
+    public boolean isAnonymous() {
+        return isAnonymous;
+    }
+
+    public void setAnonymous(boolean anonymous) {
+        isAnonymous = anonymous;
     }
 }

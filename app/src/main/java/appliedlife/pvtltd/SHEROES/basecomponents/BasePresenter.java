@@ -1,16 +1,17 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+
+
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MASTER_DATA;
 
@@ -25,14 +26,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MASTE
  */
 public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T> {
     private final String TAG = LogUtils.makeLogTag(BasePresenter.class);
-    private CompositeSubscription subscriptions;
+    //private CompositeSubscription subscriptions;
     private T mMvpView;
-    protected void registerSubscription(Subscription subscription) {
+    /*protected void registerSubscription(Subscription subscription) {
         if (subscriptions == null) {
             subscriptions = new CompositeSubscription();
         }
         subscriptions.add(subscription);
-    }
+    }*/
 
     @Override
     public void attachView(T mvpView) {
@@ -41,10 +42,10 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
     @Override
     public void detachView() {
-        mMvpView = null;
+/*        mMvpView = null;
         if (subscriptions != null && !subscriptions.isUnsubscribed()) {
             subscriptions.unsubscribe();
-        }
+        }*/
     }
 
     public boolean isViewAttached() {
@@ -72,9 +73,9 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MASTER_DATA);
             return;
         }
-        Subscription subscription = masterDataModel.getMasterDataFromModel().subscribe(new Subscriber<MasterDataResponse>() {
+        masterDataModel.getMasterDataFromModel().subscribe(new DisposableObserver<MasterDataResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
             }
 
             @Override
@@ -88,6 +89,5 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
                 mUserPreferenceMasterData.set(masterDataResponse);
             }
         });
-        registerSubscription(subscription);
     }
 }

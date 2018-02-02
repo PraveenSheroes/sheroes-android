@@ -4,7 +4,7 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -26,9 +26,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowin
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileNewView;
-import rx.Subscriber;
-import rx.Subscription;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -37,7 +37,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
  * Created by ravi on 01/01/18.
  */
 
-public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
+public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
 
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
 
@@ -70,9 +70,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = profileModel.getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        profileModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -92,7 +92,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     //followed mentor
@@ -103,9 +103,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         }
         getMvpView().startProgressBar();
 
-        Subscription subscription = profileModel.getFollowedMentor(profileFollowedMentor).subscribe(new Subscriber<UserFollowedMentorsResponse>() {
+        profileModel.getFollowedMentor(profileFollowedMentor).subscribe(new DisposableObserver<UserFollowedMentorsResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -126,7 +126,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
 
     }
 
@@ -138,9 +138,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         }
         getMvpView().startProgressBar();
 
-        Subscription subscription = profileModel.getFollowerOrFollowing(userFollowerOrFollowingRequest).subscribe(new Subscriber<BaseResponse>() {
+        profileModel.getFollowerOrFollowing(userFollowerOrFollowingRequest).subscribe(new DisposableObserver<BaseResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -165,7 +165,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
 
     }
 
@@ -176,9 +176,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         }
         getMvpView().startProgressBar();
 
-        Subscription subscription = profileModel.getUserCommunity(profileUsersCommunityRequest).subscribe(new Subscriber<ProfileCommunitiesResponsePojo>() {
+        profileModel.getUserCommunity(profileUsersCommunityRequest).subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -199,7 +199,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     //Community For public profile
@@ -210,9 +210,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
         }
         getMvpView().startProgressBar();
 
-        Subscription subscription = profileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest).subscribe(new Subscriber<ProfileCommunitiesResponsePojo>() {
+        profileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest).subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -232,7 +232,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileNewView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
 }

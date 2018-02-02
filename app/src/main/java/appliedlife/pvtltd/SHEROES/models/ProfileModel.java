@@ -18,10 +18,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowin
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by priyanka on 19/03/17.
@@ -41,9 +42,9 @@ public class ProfileModel {
     public Observable<BaseResponse> getFollowerOrFollowing(UserFollowerOrFollowingRequest userFollowerOrFollowingRequest) {
           return sheroesAppServiceApi.getUsersFollowerOrFollowing(userFollowerOrFollowingRequest)
 
-                .map(new Func1<BaseResponse, BaseResponse>() {
+                .map(new Function<BaseResponse, BaseResponse>() {
                     @Override
-                    public BaseResponse call(BaseResponse followerOrFollowingCount) {
+                    public BaseResponse apply(BaseResponse followerOrFollowingCount) {
                         return followerOrFollowingCount;
                     }
                 })
@@ -56,9 +57,9 @@ public class ProfileModel {
         //LogUtils.error("user_get_preference_request req: ",gson.toJson(profileAddEditEducationRequest));
         return sheroesAppServiceApi.getFollowedMentorFromApiTest(profileFollowedMentor)
 
-                .map(new Func1<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
+                .map(new Function<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
                     @Override
-                    public UserFollowedMentorsResponse call(UserFollowedMentorsResponse feedResponsePojo) {
+                    public UserFollowedMentorsResponse apply(UserFollowedMentorsResponse feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -69,9 +70,9 @@ public class ProfileModel {
     public Observable<FeedResponsePojo> getFeedFromModelForTestProfile(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -88,10 +89,10 @@ public class ProfileModel {
 
         return sheroesAppServiceApi.getPersonalBasicDetailsAuthToken(personalBasicDetailsRequest)
 
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
+                .map(new Function<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
+                    public BoardingDataResponse apply(BoardingDataResponse boardingDataResponse) {
 
                         return boardingDataResponse;
 
@@ -105,10 +106,10 @@ public class ProfileModel {
 
     public Observable<BoardingDataResponse> getPersonalUserSummaryDetails(UserSummaryRequest userSummaryRequest) {
         return sheroesAppServiceApi.getPersonalUserSummaryDetailsAuthToken(userSummaryRequest)
-                .map(new Func1<BoardingDataResponse, BoardingDataResponse>() {
+                .map(new Function<BoardingDataResponse, BoardingDataResponse>() {
 
                     @Override
-                    public BoardingDataResponse call(BoardingDataResponse boardingDataResponse) {
+                    public BoardingDataResponse apply(BoardingDataResponse boardingDataResponse) {
 
                         return boardingDataResponse ;
                     }
@@ -121,9 +122,9 @@ public class ProfileModel {
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -134,9 +135,9 @@ public class ProfileModel {
     public Observable<ProfileCommunitiesResponsePojo> getUserCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(profileUsersCommunityRequest));
         return sheroesAppServiceApi.getUsersCommunity(profileUsersCommunityRequest)
-                .map(new Func1<ProfileCommunitiesResponsePojo, ProfileCommunitiesResponsePojo>() {
+                .map(new Function<ProfileCommunitiesResponsePojo, ProfileCommunitiesResponsePojo>() {
                     @Override
-                    public ProfileCommunitiesResponsePojo call(ProfileCommunitiesResponsePojo profileCommunitiesResponsePojo) {
+                    public ProfileCommunitiesResponsePojo apply(ProfileCommunitiesResponsePojo profileCommunitiesResponsePojo) {
                         return profileCommunitiesResponsePojo;
                     }
                 })
@@ -147,9 +148,9 @@ public class ProfileModel {
     public Observable<ProfileCommunitiesResponsePojo> getPublicProfileUserCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(profileUsersCommunityRequest));
         return sheroesAppServiceApi.getPublicProfileUsersCommunity(profileUsersCommunityRequest)
-                .map(new Func1<ProfileCommunitiesResponsePojo, ProfileCommunitiesResponsePojo>() {
+                .map(new Function<ProfileCommunitiesResponsePojo, ProfileCommunitiesResponsePojo>() {
                     @Override
-                    public ProfileCommunitiesResponsePojo call(ProfileCommunitiesResponsePojo profileCommunitiesResponsePojo) {
+                    public ProfileCommunitiesResponsePojo apply(ProfileCommunitiesResponsePojo profileCommunitiesResponsePojo) {
                         return profileCommunitiesResponsePojo;
                     }
                 })
@@ -160,10 +161,10 @@ public class ProfileModel {
     public Observable<UserProfileResponse> getAllUserDetailsromModel() {
 
         return sheroesAppServiceApi.getUserDetails()
-                .map(new Func1<UserProfileResponse, UserProfileResponse>() {
+                .map(new Function<UserProfileResponse, UserProfileResponse>() {
 
                     @Override
-                    public UserProfileResponse call(UserProfileResponse userProfileResponse) {
+                    public UserProfileResponse apply(UserProfileResponse userProfileResponse) {
                         return userProfileResponse;
 
                     }

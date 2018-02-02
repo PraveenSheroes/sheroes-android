@@ -37,6 +37,7 @@ public class LoginResponse extends BaseResponse{
     @SerializedName("is_app_contact_accessed")
     @Expose
     private boolean isAppContactAccessed;
+
     public String getToken() {
         return token;
     }

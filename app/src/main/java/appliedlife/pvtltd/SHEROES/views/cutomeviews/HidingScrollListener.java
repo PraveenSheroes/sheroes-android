@@ -190,11 +190,17 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                             feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
                             Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
                             feedRequestCommunnityDetailPojo.setAutherId(autherId);
+                            feedRequestCommunnityDetailPojo.setAnonymousPostHide(mFragmentListRefreshData.isAnonymous());
                             mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         } else {
                             mHomePresenter.getFeedFromPresenter(userCommunityPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getCommunityId()));
                         }
-
+                        break;
+                    case AppConstants.QA_POST_FRAGMENT:
+                        FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
+                        feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
+                        feedRequestCommunnityDetailPojo.setCommunityId(mFragmentListRefreshData.getCommunityId());
+                        mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         break;
                     case AppConstants.INVITE_MEMBER:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.USER_SUB_TYPE, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.INVITE_MEMBER, mFragmentListRefreshData.getEnitityOrParticpantid(), AppConstants.INVITE_PAGE_SIZE));
@@ -239,8 +245,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());
                 }
             }
-
             loading = true;
+            previousTotal = totalItemCount;
         }
 
     }

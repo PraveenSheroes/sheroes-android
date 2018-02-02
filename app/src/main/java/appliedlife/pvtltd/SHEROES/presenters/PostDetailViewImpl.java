@@ -33,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
@@ -44,12 +46,14 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
@@ -120,9 +124,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             getMvpView().hideProgressBar();
             return;
         }
-        Subscription subscription = getAllCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentReactionResponsePojo>() {
+        getAllCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -174,7 +178,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 pageNumber++;
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
@@ -183,10 +187,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = editPostCommunity(communityTopPostRequest).subscribe(new Subscriber<CreateCommunityResponse>() {
+        editPostCommunity(communityTopPostRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
 
@@ -204,14 +208,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             }
 
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest){
         return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
-                .map(new Func1<CreateCommunityResponse, CreateCommunityResponse>() {
+                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
-                    public CreateCommunityResponse call(CreateCommunityResponse communityTagsListResponse) {
+                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
                         return communityTagsListResponse;
                     }
                 })
@@ -225,9 +229,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -251,15 +255,15 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -270,9 +274,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     private Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
+                .map(new Function<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
-                    public CommentReactionResponsePojo call(CommentReactionResponsePojo commentReactionResponsePojo) {
+                    public CommentReactionResponsePojo apply(CommentReactionResponsePojo commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
@@ -286,9 +290,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
-        Subscription subscription = addCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
+        addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -319,14 +323,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentAddDelete, CommentAddDelete>() {
+                .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
-                    public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
+                    public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
@@ -340,9 +344,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        Subscription subscription = editCommentListFromModel(commentReactionRequestPojo).subscribe(new Subscriber<CommentAddDelete>() {
+        editCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -369,14 +373,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 }
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
-                .map(new Func1<CommentAddDelete, CommentAddDelete>() {
+                .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
-                    public CommentAddDelete call(CommentAddDelete commentReactionResponsePojo) {
+                    public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
                         return commentReactionResponsePojo;
                     }
                 })
@@ -411,9 +415,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -445,7 +449,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getCommentLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
@@ -458,9 +462,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -492,7 +496,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void deleteCommunityPostFromPresenter(DeleteCommunityPostRequest deleteCommunityPostRequest) {
@@ -501,9 +505,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = deleteCommunityPostFromModel(deleteCommunityPostRequest).subscribe(new Subscriber<DeleteCommunityPostResponse>() {
+        deleteCommunityPostFromModel(deleteCommunityPostRequest).subscribe(new DisposableObserver<DeleteCommunityPostResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -521,14 +525,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().onPostDeleted();
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
         return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
-                .map(new Func1<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
+                .map(new Function<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
                     @Override
-                    public DeleteCommunityPostResponse call(DeleteCommunityPostResponse deleteCommunityPostResponse) {
+                    public DeleteCommunityPostResponse apply(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                         return deleteCommunityPostResponse;
                     }
                 })
@@ -547,9 +551,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -578,7 +582,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().setData(0, userPostSolrObj);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getPostUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
@@ -591,9 +595,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getUnLikesFromModel(likeRequestPojo).subscribe(new Subscriber<LikeResponse>() {
+        getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
 
@@ -621,14 +625,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().setData(0, userPostSolrObj);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
-                .map(new Func1<LikeResponse, LikeResponse>() {
+                .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
-                    public LikeResponse call(LikeResponse likeResponse) {
+                    public LikeResponse apply(LikeResponse likeResponse) {
                         return likeResponse;
                     }
                 })
@@ -638,10 +642,58 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
-                .map(new Func1<LikeResponse, LikeResponse>() {
+                .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
-                    public LikeResponse call(LikeResponse likeResponse) {
+                    public LikeResponse apply(LikeResponse likeResponse) {
                         return likeResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void getSpamPostApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final UserPostSolrObj userPostSolrObj) {
+        getMvpView().startProgressBar();
+        getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+
+            @Override
+            public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
+                if (null != approveSpamPostResponse) {
+                    if(approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true){
+                        // spam post was rejected
+                        getMvpView().onPostDeleted();
+                    }else if(approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false){
+                        // spam post was approved
+                        userPostSolrObj.setSpamPost(false);
+                        mBaseResponseList.set(0, userPostSolrObj);
+                        getMvpView().setData(0, userPostSolrObj);
+
+                    }
+                    //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
+                }
+            }
+        });
+
+    }
+
+    public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
+        return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
+                .map(new Function<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
+                    @Override
+                    public ApproveSpamPostResponse apply(ApproveSpamPostResponse approveSpamPostResponse) {
+                        return approveSpamPostResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

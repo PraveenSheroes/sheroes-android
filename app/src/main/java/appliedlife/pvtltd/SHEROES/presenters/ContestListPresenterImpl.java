@@ -20,13 +20,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestListView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -50,9 +53,9 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = getFeedFromModel(feedRequestPojo).subscribe(new Subscriber<FeedResponsePojo>() {
+        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 //getMvpView().stopProgressBar();
             }
 
@@ -87,7 +90,13 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                             contest.hasMyPost = challengeSolrObj.isChallengeAccepted();
                             contest.tag = challengeSolrObj.getChallengeAcceptPostText();
                             contest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
-                            contest.shortUrl = feedDetail.getDeepLinkUrl();
+                            if(StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls()))
+                            {
+                                contest.shortUrl  = challengeSolrObj.getPostShortBranchUrls();
+                            }else
+                            {
+                                contest.shortUrl  = challengeSolrObj.getDeepLinkUrl();
+                            }
                             contest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
                             contest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
                             contest.winnerAnnouncementDate = challengeSolrObj.getChallengeAnnouncementDate(); //Fix for winner announcement
@@ -98,14 +107,14 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                 getMvpView().showContests(contests);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })

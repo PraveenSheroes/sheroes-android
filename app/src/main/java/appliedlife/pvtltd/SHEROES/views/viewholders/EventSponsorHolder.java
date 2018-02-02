@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import javax.inject.Inject;
 
@@ -48,8 +49,7 @@ public class EventSponsorHolder extends BaseViewHolder<EventSponsorData> {
         if (null != dataItem && StringUtil.isNotNullOrEmptyString(dataItem.getSponsorImageUrl()))
             Glide.with(mContext)
                     .load(dataItem.getSponsorImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                     .into(mIvSponserImage);
     }
 

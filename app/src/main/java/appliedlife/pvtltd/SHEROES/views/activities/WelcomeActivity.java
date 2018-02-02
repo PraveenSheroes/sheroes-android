@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.social.SocialListener;
 import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -140,7 +141,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     AppUtils appUtils;
     public static int isSignUpOpen = AppConstants.NO_REACTION_CONSTANT;
-    private boolean isFirstTimeUser=false;
+    private boolean isFirstTimeUser = false;
     private Handler mHandler;
     private Runnable mRunnable;
     private CallbackManager callbackManager;
@@ -159,6 +160,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String mGcmId;
     private String loggedInChannel;
     private boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.SplashTheme);
@@ -182,13 +184,21 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 installUpdateForMoEngage.setFirstOpen(true);
                 installUpdateForMoEngage.setAppVersion(versionCode);
                 installUpdateForMoEngage.setWelcome(true);
+                installUpdateForMoEngage.setAppInstallFirstTime(true);
                 mInstallUpdatePreference.set(installUpdateForMoEngage);
             }
             mMoEHelper.setExistingUser(true);
+            if (mInstallUpdatePreference.get().isAppInstallFirstTime()) {
+                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                installUpdateForMoEngage.setWalkThroughShown(true);
+                mInstallUpdatePreference.set(installUpdateForMoEngage);
+            }
         } else {
             InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
             installUpdateForMoEngage.setAppVersion(versionCode);
             installUpdateForMoEngage.setFirstOpen(true);
+            installUpdateForMoEngage.setAppInstallFirstTime(false);
+            installUpdateForMoEngage.setWalkThroughShown(false);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
             mMoEHelper.setExistingUser(false);
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
@@ -296,7 +306,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             openLoginActivity();
         } else {
             Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             boardingIntent.putExtras(bundle);
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);
@@ -327,7 +337,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         screenText.add(getString(R.string.ID_WELCOME_SECOND));
         screenText.add(getString(R.string.ID_WELCOME_THIRD));
 
-        mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList,this,screenText);
+        mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList, this, screenText);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(WelcomeActivity.this);
         ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
@@ -380,7 +390,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     private void openLoginActivity() {
         Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         loginIntent.putExtras(bundle);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
@@ -524,14 +534,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     protected void onResume() {
         super.onResume();
-        if (mProgressDialog != null ) {
+        if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
         Intent intent = getIntent();
-        if (intent != null&&null!=intent.getExtras()) {
+        if (intent != null && null != intent.getExtras()) {
             Bundle extras = intent.getExtras();
-            if (extras != null ) {
-                if(null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
+            if (extras != null) {
+                if (null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
                     if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
                         String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
                         LogUtils.info(TAG, "********Id of  new Intent ***********" + appContactId);
@@ -927,7 +937,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         //onShowErrorDialog(errorMsg, feedParticipationEnum);
         dismissDialog();
-        if(null!=fbLogin) {
+        if (null != fbLogin) {
             fbLogin.setEnabled(true);
             mUserPreference.delete();
         }

@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -180,8 +180,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        // final Drawable backArrow = getResources().getDrawable(R.drawable.ic_back_white);
-        //    getSupportActionBar().setHomeAsUpIndicator(backArrow);
         tvMentorToolbarName.setText(R.string.ID_EDIT_PROFILE);
 
         String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);

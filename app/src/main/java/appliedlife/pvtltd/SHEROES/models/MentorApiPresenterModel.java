@@ -8,10 +8,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Praveen on 14/12/17.
@@ -31,9 +32,9 @@ public class MentorApiPresenterModel {
     public Observable<MentorInsightResponse> getMentorInsightFromModel(MentorFollowerRequest mentorFollowerRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(mentorFollowerRequest));
         return sheroesAppServiceApi.getMentorInsightFromApi(mentorFollowerRequest)
-                .map(new Func1<MentorInsightResponse, MentorInsightResponse>() {
+                .map(new Function<MentorInsightResponse, MentorInsightResponse>() {
                     @Override
-                    public MentorInsightResponse call(MentorInsightResponse mentorInsightResponse) {
+                    public MentorInsightResponse apply(MentorInsightResponse mentorInsightResponse) {
                         return mentorInsightResponse;
                     }
                 })

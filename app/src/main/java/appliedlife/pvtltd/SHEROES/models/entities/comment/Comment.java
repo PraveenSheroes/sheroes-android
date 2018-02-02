@@ -85,6 +85,8 @@ public class Comment extends BaseResponse{
     @Expose
     public boolean isLiked;
 
+    @SerializedName("solr_ignore_participant_user_id")
+    private Long participantUserId;
 
     public boolean isEdit() {
         return isEdit;
@@ -263,5 +265,13 @@ public class Comment extends BaseResponse{
 
     public void setVerifiedMentor(boolean verifiedMentor) {
         isVerifiedMentor = verifiedMentor;
+    }
+
+    public Long getParticipantUserId() {
+        return participantUserId;
+    }
+
+    public void setParticipantUserId(Long participantUserId) {
+        this.participantUserId = participantUserId;
     }
 }

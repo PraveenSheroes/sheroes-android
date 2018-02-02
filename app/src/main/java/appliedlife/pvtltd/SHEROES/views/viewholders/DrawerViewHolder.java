@@ -9,19 +9,22 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.f2prateek.rx.preferences.Preference;
+import com.bumptech.glide.request.RequestOptions;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -45,7 +48,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     AppCompatImageView tvDrawerImage;
 
     @Bind(R.id.ll_drawer_item)
-    RelativeLayout llDrawerItem;
+    RippleView rippleView;
 
     @Bind(R.id.new_feature)
     TextView newFeature;
@@ -63,8 +66,8 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     @Override
     public void bindData(NavMenuItem item, final Context context, final int position) {
         this.dataItem = item;
-        llDrawerItem.setOnClickListener(this);
-        llDrawerItem.setTag(item.getMenuName());
+
+        rippleView.setTag(item.getMenuName());
 
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
@@ -92,7 +95,17 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
                 setImageBackground(context, iconSelectedUrl);
             }
         }
-
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                if(null!= rippleView.getTag()) {
+                    selectedOptionName = (String) rippleView.getTag();
+                } else{
+                    selectedOptionName = null;
+                }
+                viewInterface.handleOnClick(dataItem, rippleView);
+            }
+        });
     }
 
     //set the image icon and cache it
@@ -100,8 +113,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         if (StringUtil.isNotNullOrEmptyString(url)) {
             Glide.with(context)
                     .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                     .into(tvDrawerImage);
         }
     }
@@ -116,12 +128,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
         int id = view.getId();
         switch (id) {
             case R.id.ll_drawer_item:
-                if(null!= llDrawerItem.getTag()) {
-                    selectedOptionName = (String) llDrawerItem.getTag();
-                } else{
-                    selectedOptionName = null;
-                }
-                viewInterface.handleOnClick(dataItem, view);
+
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);

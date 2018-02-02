@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.preferences;
 
 import android.content.SharedPreferences;
 
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -12,7 +12,7 @@ import com.google.gson.Gson;
  * @since 29/12/2016.
  * Title: RxSharedpreference use this adapter for save gson response.
  */
-public class GsonPreferenceAdapter<T> implements Preference.Adapter<T> {
+public class GsonPreferenceAdapter<T> implements RealPreference.Adapter<T> {
     final Gson gson;
     private Class<T> clazz;
 

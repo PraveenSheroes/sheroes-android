@@ -1,11 +1,12 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
@@ -42,6 +43,7 @@ public class SheroesApplication extends MultiDexApplication  {
     SheroesAppComponent mSheroesAppComponent;
     public static volatile SheroesApplication mContext;
     private String mCurrentActivityName;
+    private static SheroesApplication sApplicationContext;
 
     public static SheroesAppComponent getAppComponent(Context context) {
         return ((SheroesApplication) context.getApplicationContext()).mSheroesAppComponent;
@@ -68,6 +70,7 @@ public class SheroesApplication extends MultiDexApplication  {
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);
+        sApplicationContext = SheroesApplication.this;
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
         Stetho.initializeWithDefaults(this);
@@ -89,6 +92,13 @@ public class SheroesApplication extends MultiDexApplication  {
             Crashlytics.getInstance().core.logException(e);
             LogUtils.error(TAG, AppConstants.ERROR_OCCUR, e);
         }
+    }
+
+    public static SharedPreferences getAppSharedPrefs(){
+        if(sApplicationContext == null){
+            return null;
+        }
+        return sApplicationContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
     }
 
     public synchronized Tracker getGoogleAnalyticsTracker() {

@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -17,8 +17,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.SHEView;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_GET_FAQS;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_GET_ICC_MEMBERS;
@@ -61,9 +61,9 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_GET_FAQS);
             return;
         }
-        Subscription subscription = mSheModel.getAllFAQS(faqsRequest).subscribe(new Subscriber<FAQSResponse>() {
+        mSheModel.getAllFAQS(faqsRequest).subscribe(new DisposableObserver<FAQSResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -80,7 +80,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
                 getMvpView().getAllFAQs(faqsResponse);
             }
         });
-        registerSubscription(subscription);
+
     }
 
     public void getAllICCMembers(ICCMemberRequest iccMemberRequest) {
@@ -89,9 +89,9 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = mSheModel.getAllICCMembers(iccMemberRequest).subscribe(new Subscriber<ICCMemberListResponse>() {
+        mSheModel.getAllICCMembers(iccMemberRequest).subscribe(new DisposableObserver<ICCMemberListResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -108,7 +108,7 @@ public class SHEPresenter extends BasePresenter<SHEView> {
                 getMvpView().getAllICCMembers(iccMemberListResponse);
             }
         });
-        registerSubscription(subscription);
+
     }
 
 }

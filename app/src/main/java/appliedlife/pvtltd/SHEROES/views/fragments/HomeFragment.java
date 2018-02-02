@@ -17,18 +17,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -51,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
@@ -82,10 +83,9 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pl.droidsonroids.gif.GifTextView;
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -140,13 +140,14 @@ public class HomeFragment extends BaseFragment {
     TextView tvRefresh;
     @Bind(R.id.empty_view)
     View emptyView;
+    @Bind(R.id.root_layout)
+    FrameLayout rootLayout;
     private String mGcmId;
     private long mChallengeId;
     private boolean mIsSpam;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
-    private long startedTime;
     private List<FeedDetail> mfeedDetailList = new ArrayList<>();
     private long mUserId;
     private boolean isChallenge;
@@ -162,7 +163,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_feed, container, false);
         ButterKnife.bind(this, view);
         loaderGif.setVisibility(View.VISIBLE);
         Bundle bundle = getArguments();
@@ -175,7 +176,6 @@ public class HomeFragment extends BaseFragment {
             Parcelable parcelable = getArguments().getParcelable(Contest.CONTEST_OBJ);
             mContest = Parcels.unwrap(parcelable);
         }
-        startedTime = System.currentTimeMillis();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HOME_FRAGMENT, AppConstants.NO_REACTION_CONSTANT, isChallenge);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -226,8 +226,6 @@ public class HomeFragment extends BaseFragment {
             }
 
         });
-        showHeaderOnFeed();
-        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
             ((HomeActivity) getActivity()).logOut();
@@ -248,6 +246,10 @@ public class HomeFragment extends BaseFragment {
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
                     }else {
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        params.setMargins(0, 190, 0, 0);
+                        loaderGif.setLayoutParams(params);
+                        showHeaderOnFeed();
                         FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
                         mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
@@ -273,8 +275,9 @@ public class HomeFragment extends BaseFragment {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        long timeSpentFeed = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, timeSpentFeed);
+
+        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        moEngageUtills.entityMoEngageViewFeed(getActivity(), mMoEHelper, payloadBuilder, 0);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FEED_IMPRESSION));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -298,9 +301,13 @@ public class HomeFragment extends BaseFragment {
     }
     public void showCaseDesign() {
         ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
-        showcaseManager = new ShowcaseManager(((HomeActivity)getActivity()),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
+        showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
         showcaseManager.showFirstMainActivityShowcase();
+        InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+        installUpdateForMoEngage.setAppInstallFirstTime(true);
+        mInstallUpdatePreference.set(installUpdateForMoEngage);
     }
+
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -309,7 +316,6 @@ public class HomeFragment extends BaseFragment {
             pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
                 @Override
                 public void onSuccess(String registrationId, boolean isNewRegistration) {
-                    LogUtils.info(TAG, "*************Registarion" + registrationId);
                     mGcmId = registrationId;
                     PushManager.getInstance().refreshToken(getActivity(), mGcmId);
                     if (StringUtil.isNotNullOrEmptyString(registrationId)) {
@@ -348,7 +354,7 @@ public class HomeFragment extends BaseFragment {
 
                 @Override
                 public void onFailure(String ex) {
-                    LogUtils.info(TAG, "*************Fail Registarion" + ex);
+
                 }
             });
         }
@@ -372,12 +378,16 @@ public class HomeFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        showHeaderOnFeed();
         if(isChallenge){
             FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST,mContest.remote_id, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
         }else {
+            List<FeedDetail> data=new ArrayList<>();
+            FeedDetail header = new FeedDetail();
+            header.setSubType(AppConstants.HEADER);
+            data.add(0, header);
+            mPullRefreshList.allListData(data);
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
             mHomePresenter.getNewHomeFeedFromPresenter(feedRequestPojo, mAppUtils.appIntroRequestBuilder(AppConstants.APP_INTRO),mFragmentListRefreshData);
@@ -495,6 +505,9 @@ public class HomeFragment extends BaseFragment {
         loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            if(getActivity() instanceof HomeActivity && ((HomeActivity)getActivity()).mIsFirstTimeOpen) {
+                showCaseDesign();
+            }
             mPageNo = mFragmentListRefreshData.getPageNo();
             if (mPageNo == AppConstants.ONE_CONSTANT && mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
                 if (StringUtil.isNotEmptyCollection(mfeedDetailList) && StringUtil.isNotNullOrEmptyString(mfeedDetailList.get(0).getId()) && StringUtil.isNotNullOrEmptyString(feedDetailList.get(0).getId())) {
@@ -526,12 +539,8 @@ public class HomeFragment extends BaseFragment {
             if (mPageNo == AppConstants.TWO_CONSTANT) {
                 mfeedDetailList = feedDetailList;
                 mAdapter.notifyDataSetChanged();
-            }else
-            {
+            }else {
                 mAdapter.notifyItemRangeChanged(position+1, feedDetailList.size());
-            }
-            if(((HomeActivity)getActivity()).mIsFirstTimeOpen) {
-                showCaseDesign();
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
             // mLiNoResult.setVisibility(View.VISIBLE);
@@ -546,6 +555,7 @@ public class HomeFragment extends BaseFragment {
             getUserContacts();
         }*/
     }
+
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
@@ -642,43 +652,6 @@ public class HomeFragment extends BaseFragment {
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
 
-    private Observable<Void> getUserPhoneContactsAndSend() {
-
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
-                UserPhoneContactsListRequest userPhoneContactsListRequest = new UserPhoneContactsListRequest();
-                List<UserContactDetail> userContactDetailsList = new ArrayList<>();
-                UserContactDetail userContactDetail = null;
-                Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                Cursor cursor = getActivity().getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                if (cursor != null && cursor.getCount() > 0) {
-                    try {
-                        cursor.moveToFirst();
-                        while (cursor.isAfterLast() == false) {
-                            String contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-                            userContactDetail = new UserContactDetail(contactName, contactNumber);
-                            if (userContactDetail != null) {
-                                userContactDetailsList.add(userContactDetail);
-                            }
-                            userContactDetail = null;
-                            cursor.moveToNext();
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-                    } finally {
-                        cursor.close();
-                    }
-                }
-                userPhoneContactsListRequest.setContactDetailList(userContactDetailsList);
-                mHomePresenter.getAppContactsResponseInPresenter(userPhoneContactsListRequest);
-                subscriber.onCompleted();
-            }
-        });
-    }
 
     private void getAppContactsListSuccess(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
@@ -689,30 +662,6 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_CONTACTS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
-                }
-                return;
-            }
-        }
-    }
-
-    private void getUserContacts() {
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
-            } else {
-                getUserPhoneContactsAndSend().subscribeOn(Schedulers.newThread()).subscribe();
-
-            }
-        }
-    }
 
     @Override
     protected boolean trackScreenTime() {

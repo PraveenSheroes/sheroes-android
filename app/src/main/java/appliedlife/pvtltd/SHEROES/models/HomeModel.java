@@ -45,11 +45,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -75,9 +75,9 @@ public class HomeModel {
     public Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(publicProfileListRequest));
         return sheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Func1<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse call(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
@@ -88,9 +88,9 @@ public class HomeModel {
     public Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(publicProfileListRequest));
         return sheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Func1<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse call(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
@@ -101,9 +101,9 @@ public class HomeModel {
     public Observable<FeedResponsePojo> getCommunityFeedFromModel(CommunityFeedRequestPojo communityFeedRequestPojo, String endpoint) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(communityFeedRequestPojo));
         return sheroesAppServiceApi.getCommunityFeed(endpoint, communityFeedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -114,9 +114,9 @@ public class HomeModel {
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -131,9 +131,9 @@ public class HomeModel {
     public Observable<FeedResponsePojo> getNewFeedFromModel(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getNewFeedFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -146,9 +146,9 @@ public class HomeModel {
         Observable<FeedResponsePojo> feedResponsePojoObservable = getNewFeedFromModel(feedRequestPojo);
         Observable<AppIntroScreenResponse> appIntroScreenResponseObservable = getAppIntroFromModel(appIntroScreenRequest);
 
-        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, appIntroScreenResponseObservable, new Func2<FeedResponsePojo, AppIntroScreenResponse, List<FeedDetail>>() {
+        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, appIntroScreenResponseObservable, new BiFunction<FeedResponsePojo, AppIntroScreenResponse, List<FeedDetail>>() {
             @Override
-            public List<FeedDetail> call(FeedResponsePojo feedResponsePojo, AppIntroScreenResponse appIntroScreenResponse) {
+            public List<FeedDetail> apply(FeedResponsePojo feedResponsePojo, AppIntroScreenResponse appIntroScreenResponse) {
                 ArrayList<FeedDetail> feedDetails = new ArrayList<>();
                 if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
                     FeedDetail appIntroFeedCard = new FeedDetail();
@@ -173,9 +173,9 @@ public class HomeModel {
 
     public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest) {
 
-        return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+        return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Function<FeedResponsePojo, FeedResponsePojo>() {
             @Override
-            public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+            public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
 
                 return feedResponsePojo;
             }
@@ -186,9 +186,9 @@ public class HomeModel {
 
     public Observable<AllCommunitiesResponse> getAllCommunityFromModel(MyCommunityRequest myCommunityRequest) {
 
-        return sheroesAppServiceApi.getAllCommunityFromApi(myCommunityRequest).map(new Func1<AllCommunitiesResponse, AllCommunitiesResponse>() {
+        return sheroesAppServiceApi.getAllCommunityFromApi(myCommunityRequest).map(new Function<AllCommunitiesResponse, AllCommunitiesResponse>() {
             @Override
-            public AllCommunitiesResponse call(AllCommunitiesResponse allCommunitiesResponse) {
+            public AllCommunitiesResponse apply(AllCommunitiesResponse allCommunitiesResponse) {
 
                 return allCommunitiesResponse;
             }
@@ -200,9 +200,9 @@ public class HomeModel {
     public Observable<FeedResponsePojo> getBookMarkFromModel(FeedRequestPojo feedRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
         return sheroesAppServiceApi.getBookMarkFromApi(feedRequestPojo)
-                .map(new Func1<FeedResponsePojo, FeedResponsePojo>() {
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo call(FeedResponsePojo feedResponsePojo) {
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
@@ -214,9 +214,9 @@ public class HomeModel {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(bookmarkRequestPojo));
         if (!isBookmarked) {
             return sheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
-                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
-                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                        public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo) throws Exception {
                             return bookmarkResponsePojo;
                         }
                     })
@@ -224,9 +224,9 @@ public class HomeModel {
                     .observeOn(AndroidSchedulers.mainThread());
         } else {
             return sheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
-                    .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                    .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                         @Override
-                        public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo) {
+                        public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo) {
                             return bookmarkResponsePojo;
                         }
                     })
@@ -238,9 +238,9 @@ public class HomeModel {
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(likeRequestPojo));
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
-                .map(new Func1<LikeResponse, LikeResponse>() {
+                .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
-                    public LikeResponse call(LikeResponse likeResponse) {
+                    public LikeResponse apply(LikeResponse likeResponse) {
                         return likeResponse;
                     }
                 })
@@ -251,9 +251,9 @@ public class HomeModel {
     public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(likeRequestPojo));
         return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
-                .map(new Func1<LikeResponse, LikeResponse>() {
+                .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
-                    public LikeResponse call(LikeResponse likeResponse) {
+                    public LikeResponse apply(LikeResponse likeResponse) {
                         return likeResponse;
                     }
                 })
@@ -264,9 +264,9 @@ public class HomeModel {
     public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(communityRequest));
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                .map(new Function<CommunityResponse, CommunityResponse>() {
                     @Override
-                    public CommunityResponse call(CommunityResponse communityResponse) {
+                    public CommunityResponse apply(CommunityResponse communityResponse) {
                         return communityResponse;
                     }
                 })
@@ -277,9 +277,9 @@ public class HomeModel {
     public Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(deleteCommunityPostRequest));
         return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
-                .map(new Func1<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
+                .map(new Function<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
                     @Override
-                    public DeleteCommunityPostResponse call(DeleteCommunityPostResponse deleteCommunityPostResponse) {
+                    public DeleteCommunityPostResponse apply(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                         return deleteCommunityPostResponse;
                     }
                 })
@@ -290,9 +290,9 @@ public class HomeModel {
     public Observable<BookmarkResponsePojo> markAsSpamFromModel(BookmarkRequestPojo bookmarkResponsePojo) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(bookmarkResponsePojo));
         return sheroesAppServiceApi.markAsSpam(bookmarkResponsePojo)
-                .map(new Func1<BookmarkResponsePojo, BookmarkResponsePojo>() {
+                .map(new Function<BookmarkResponsePojo, BookmarkResponsePojo>() {
                     @Override
-                    public BookmarkResponsePojo call(BookmarkResponsePojo bookmarkResponsePojo1) {
+                    public BookmarkResponsePojo apply(BookmarkResponsePojo bookmarkResponsePojo1) {
                         return bookmarkResponsePojo1;
                     }
                 })
@@ -304,9 +304,9 @@ public class HomeModel {
         LogUtils.info("Community Join req: ", gson.toJson(communityRequest));
 
         return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Func1<CommunityResponse, CommunityResponse>() {
+                .map(new Function<CommunityResponse, CommunityResponse>() {
                     @Override
-                    public CommunityResponse call(CommunityResponse communityResponse) {
+                    public CommunityResponse apply(CommunityResponse communityResponse) {
                         LogUtils.info("Community Join res: ", gson.toJson(communityResponse));
                         return communityResponse;
                     }
@@ -317,9 +317,9 @@ public class HomeModel {
 
     public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
         return sheroesAppServiceApi.getRefreshToken()
-                .map(new Func1<LoginResponse, LoginResponse>() {
+                .map(new Function<LoginResponse, LoginResponse>() {
                     @Override
-                    public LoginResponse call(LoginResponse loginResponse) {
+                    public LoginResponse apply(LoginResponse loginResponse) {
                         return loginResponse;
                     }
                 })
@@ -331,9 +331,9 @@ public class HomeModel {
     public Observable<BelNotificationListResponse> getNotificationFromModel(BellNotificationRequest bellNotificationRequest) {
         LogUtils.info(TAG, "Bell notification request" + new Gson().toJson(bellNotificationRequest));
         return sheroesAppServiceApi.bellNotification(bellNotificationRequest)
-                .map(new Func1<BelNotificationListResponse, BelNotificationListResponse>() {
+                .map(new Function<BelNotificationListResponse, BelNotificationListResponse>() {
                     @Override
-                    public BelNotificationListResponse call(BelNotificationListResponse bellNotificationResponse) {
+                    public BelNotificationListResponse apply(BelNotificationListResponse bellNotificationResponse) {
                         return bellNotificationResponse;
                     }
                 })
@@ -344,9 +344,9 @@ public class HomeModel {
     public Observable<NotificationReadCountResponse> getNotificationReadCountFromModel(NotificationReadCount notificationReadCount) {
         LogUtils.info(TAG, " notification read count request" + new Gson().toJson(notificationReadCount));
         return sheroesAppServiceApi.notificationReadCount(notificationReadCount)
-                .map(new Func1<NotificationReadCountResponse, NotificationReadCountResponse>() {
+                .map(new Function<NotificationReadCountResponse, NotificationReadCountResponse>() {
                     @Override
-                    public NotificationReadCountResponse call(NotificationReadCountResponse notificationReadCountResponse) {
+                    public NotificationReadCountResponse apply(NotificationReadCountResponse notificationReadCountResponse) {
                         return notificationReadCountResponse;
                     }
                 })
@@ -356,9 +356,9 @@ public class HomeModel {
     public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
         LogUtils.info(TAG, " Spam post  request" + new Gson().toJson(approveSpamPostRequest));
         return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
-                .map(new Func1<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
+                .map(new Function<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
                     @Override
-                    public ApproveSpamPostResponse call(ApproveSpamPostResponse approveSpamPostResponse) {
+                    public ApproveSpamPostResponse apply(ApproveSpamPostResponse approveSpamPostResponse) {
                         return approveSpamPostResponse;
                     }
                 })
@@ -371,9 +371,9 @@ public class HomeModel {
     public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest) {
         LogUtils.info(TAG, " **********Appintro  request" + new Gson().toJson(appIntroScreenRequest));
         return sheroesAppServiceApi.appIntroScreen(appIntroScreenRequest)
-                .map(new Func1<AppIntroScreenResponse, AppIntroScreenResponse>() {
+                .map(new Function<AppIntroScreenResponse, AppIntroScreenResponse>() {
                     @Override
-                    public AppIntroScreenResponse call(AppIntroScreenResponse appIntroScreenResponse) {
+                    public AppIntroScreenResponse apply(AppIntroScreenResponse appIntroScreenResponse) {
                         return appIntroScreenResponse;
                     }
                 })
@@ -384,9 +384,9 @@ public class HomeModel {
     public Observable<GcmIdResponse> getNewGCMidFromModel(LoginRequest loginRequest) {
         LogUtils.info(TAG, " Gcm id  request" + new Gson().toJson(loginRequest));
         return sheroesAppServiceApi.getNewGCMidFromApi(loginRequest)
-                .map(new Func1<GcmIdResponse, GcmIdResponse>() {
+                .map(new Function<GcmIdResponse, GcmIdResponse>() {
                     @Override
-                    public GcmIdResponse call(GcmIdResponse gcmIdResponse) {
+                    public GcmIdResponse apply(GcmIdResponse gcmIdResponse) {
                         return gcmIdResponse;
                     }
                 })
@@ -397,9 +397,9 @@ public class HomeModel {
     public Observable<UserPhoneContactsListResponse> getAppContactsResponseInModel(UserPhoneContactsListRequest userPhoneContactsListRequest) {
         LogUtils.info(TAG, "*******************" + new Gson().toJson(userPhoneContactsListRequest));
         return sheroesAppServiceApi.getPhoneContactListResponse(userPhoneContactsListRequest)
-                .map(new Func1<UserPhoneContactsListResponse, UserPhoneContactsListResponse>() {
+                .map(new Function<UserPhoneContactsListResponse, UserPhoneContactsListResponse>() {
                     @Override
-                    public UserPhoneContactsListResponse call(UserPhoneContactsListResponse userPhoneContactsListResponse) {
+                    public UserPhoneContactsListResponse apply(UserPhoneContactsListResponse userPhoneContactsListResponse) {
                         return userPhoneContactsListResponse;
                     }
                 })

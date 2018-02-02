@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,6 +34,8 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView headerMsg;
     @Bind(R.id.user_name)
     TextView userName;
+    @Bind(R.id.ripple)
+    RippleView rippleView;
 
     @Inject
     Preference<LoginResponse> userPreference;
@@ -68,22 +71,39 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             userName.setText(name);
         }
             headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
+
     }
 
     @OnClick(R.id.user_name)
     public void userNameClickForProfile() {
-        dataItem.setEntityOrParticipantId(userId);
-        viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                dataItem.setEntityOrParticipantId(userId);
+                viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+            }
+        });
     }
-
     @OnClick(R.id.iv_header_circle_icon)
     public void userImageClickForProfile() {
-        dataItem.setEntityOrParticipantId(userId);
-        viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                dataItem.setEntityOrParticipantId(userId);
+                viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+            }
+        });
+
     }
     @OnClick(R.id.header_msg)
     public void textClickForCreatePost() {
-        viewInterface.handleOnClick(dataItem, headerMsg);
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                viewInterface.handleOnClick(dataItem, headerMsg);
+            }
+        });
+
     }
 
     @Override

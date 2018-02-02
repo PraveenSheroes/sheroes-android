@@ -6,10 +6,11 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Praveen_Singh on 25-03-2017.
@@ -24,9 +25,9 @@ public class MasterDataModel {
     }
     public Observable<MasterDataResponse> getMasterDataFromModel(){
         return sheroesAppServiceApi.getOnBoardingMasterDataFromApi()
-                .map(new Func1<MasterDataResponse, MasterDataResponse>() {
+                .map(new Function<MasterDataResponse, MasterDataResponse>() {
                     @Override
-                    public MasterDataResponse call(MasterDataResponse masterDataResponse) {
+                    public MasterDataResponse apply(MasterDataResponse masterDataResponse) {
                         return masterDataResponse;
                     }
                 })

@@ -261,7 +261,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                                 android:textColor="@color/pure_black"
-                                android:textSize="@dimen/sp_size_14" />
+                                android:textSize="@dimen/sp_size_16" />
 
                             <TextView
                                 android:id="@+id/tv_link_sub_title"
@@ -272,7 +272,7 @@
                                 android:maxLines="@integer/int_value_for_line_3"
                                 android:ellipsize="end"
                                 android:textColor="@color/detail_page_text"
-                                android:textSize="@dimen/sp_size_12" />
+                                android:textSize="@dimen/sp_size_14" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

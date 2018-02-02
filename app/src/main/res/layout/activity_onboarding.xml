@@ -29,64 +29,41 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_size_24"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:background="@color/white"
                 android:fitsSystemWindows="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_name_user"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/iv_boarding_icon"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_22" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/dp_size_8"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="@string/ID_WELCOME_SHEROES"
-                    android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_18" />
-
-                <FrameLayout
+                    android:layout_height="@dimen/on_boarding_girl_height"
+                    android:layout_gravity="center|top"
+                    android:src="@drawable/on_boarding_girl" />
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_size_16">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_size_16"
-                        android:background="@color/search_shortcut_icon_color"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_on_boarding_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/dp_size_16"
-                            android:layout_marginLeft="@dimen/dp_size_16"
-                            android:layout_marginRight="@dimen/dp_size_16"
-                            android:layout_marginTop="@dimen/dp_size_25"
-                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                            android:gravity="center"
-                            android:textColor="@color/recent_post_comment"
-                            android:textSize="@dimen/sp_size_14" />
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/iv_boarding_icon"
+                    android:layout_marginTop="@dimen/dp_size_18"
+                    android:layout_marginRight="@dimen/dp_size_8"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_name_user"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|top"
-                        android:src="@drawable/ic_boarding_icon" />
-                </FrameLayout>
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:textStyle="bold"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_18" />
+                    <TextView
+                        android:id="@+id/tv_on_boarding_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="@dimen/dp_size_5"
+                        android:text="@string/ID_BOARDING_COMMUNITIES"
+                        android:layout_marginTop="@dimen/dp_size_8"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_14" />
+                </LinearLayout>
             </LinearLayout>
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
 

@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -18,8 +18,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
-import rx.Subscriber;
-import rx.Subscription;
+import io.reactivex.observers.DisposableObserver;
+
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 
@@ -57,9 +57,9 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
-        Subscription subscription = helplineModel.postHelplineQuestion(helplinePostQuestionRequest).subscribe(new Subscriber<HelplinePostQuestionResponse>() {
+        helplineModel.postHelplineQuestion(helplinePostQuestionRequest).subscribe(new DisposableObserver<HelplinePostQuestionResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
 
             }
             @Override
@@ -76,7 +76,7 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 }
             }
         });
-        registerSubscription(subscription);
+
 
     }
 
@@ -86,9 +86,9 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
             return;
         }
         getMvpView().startProgressBar();
-        Subscription subscription = helplineModel.getHelplineChatDetails(helplineGetChatThreadRequest).subscribe(new Subscriber<HelplineGetChatThreadResponse>() {
+        helplineModel.getHelplineChatDetails(helplineGetChatThreadRequest).subscribe(new DisposableObserver<HelplineGetChatThreadResponse>() {
             @Override
-            public void onCompleted() {
+            public void onComplete() {
                 getMvpView().stopProgressBar();
             }
             @Override
@@ -105,7 +105,7 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 }
             }
         });
-        registerSubscription(subscription);
+
 
     }
 

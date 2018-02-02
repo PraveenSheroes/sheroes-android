@@ -19,10 +19,10 @@ import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorUserProfileActvity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
@@ -46,10 +46,11 @@ import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserProfileTabFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -210,11 +211,6 @@ public interface SheroesAppComponent {
 
     void inject(AppIntroCardHolder appIntroCardHolder);
 
-    void inject(MentorUserProfileActvity mentorUserProfileActvity);
-
-    void inject(UserProfileTabFragment userProfileTabFragment);
-
-
     void inject(FeedProgressBarHolder feedProgressBarHolder);
 
     void inject(EventCardHolder eventCardHolder);
@@ -266,6 +262,9 @@ public interface SheroesAppComponent {
 
     void inject(MentorsUserListingActivity mentorsUserListingActivity);
 
+    void inject(ProfileActivity profileActivity);
+
+    void inject(ProfileDetailsFragment profileDetailsFragment);
 
     void inject(MentorQADetailFragment mentorQADetailFragment);
 
@@ -279,4 +278,8 @@ public interface SheroesAppComponent {
 
     void inject(OnBoardingFragment onBoardingFragment);
 
+    void inject(ShareBottomSheetFragment shareBottomSheetFragment);
+
 }
+
+

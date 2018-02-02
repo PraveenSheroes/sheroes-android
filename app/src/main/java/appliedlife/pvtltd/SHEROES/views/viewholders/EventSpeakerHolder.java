@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
 import javax.inject.Inject;
 
@@ -56,8 +57,7 @@ public class EventSpeakerHolder extends BaseViewHolder<EventSpeakerData> {
         if ( StringUtil.isNotNullOrEmptyString(dataItem.getSpeakerImageUrl()))
             Glide.with(mContext)
                     .load(dataItem.getSpeakerImageUrl())
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .skipMemoryCache(true)
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                     .into(mIvSpeakerImage);
         if(StringUtil.isNotNullOrEmptyString(dataItem.getSpeakerDesignation()))
         {
