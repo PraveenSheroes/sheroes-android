@@ -32,6 +32,7 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -136,7 +137,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     RelativeLayout mAnonymousView;
 
     @Bind(R.id.anonymous_select)
-    SwitchCompat mAnonymousSelect;
+    CheckBox mAnonymousSelect;
+
+    @Bind(R.id.share_on_fb)
+    SwitchCompat mShareToFacebook;
 
     @Bind(R.id.user_pic)
     ImageView mUserPicView;
@@ -297,6 +301,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setCommunityName();
         setupTextChangeListener();
         setupCommunityNameListener();
+        setupShareToFbListener();
         setupAnonymousSlelectListener();
         setViewByCreatePostCall();
         setupToolbarItemsColor();
@@ -337,7 +342,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 return true;
             }
 
-            askFacebookPublishPermission();
+            sendPost();
         }
 
         return super.onOptionsItemSelected(item);
@@ -345,25 +350,24 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void askFacebookPublishPermission() {
         callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         LogUtils.info("dddd", "********success fb login ***********");
                         if(!loginResult.getAccessToken().getPermissions().contains("publish_actions")){
-                            LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));
                             hasPermission = false;
                         }else {
                             hasPermission = true;
                         }
-                        sendPost();
                     }
 
                     @Override
                     public void onCancel() {
                         LogUtils.info("dddd", "********cancel fb login ***********");
                         hasPermission = false;
-                        sendPost();
+                        //sendPost();
                         //Toast.makeText(AppIntro.this, "Login Cancel", Toast.LENGTH_LONG).show();
                     }
 
@@ -371,14 +375,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     public void onError(FacebookException exception) {
                         LogUtils.info("dddd", "********error fb login ***********");
                         hasPermission = false;
-                        sendPost();
+                       // sendPost();
                         //Toast.makeText(AppIntro.this, exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken!=null && accessToken.getPermissions().contains("publish_actions")){
             hasPermission = true;
-            sendPost();
+           // sendPost();
            /* alreadyHasFbPermission = true;
             LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));*/
         }else {
@@ -578,6 +582,26 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
         return imageList;
+    }
+
+
+    private void setupShareToFbListener() {
+        mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(!mIsAnonymous) {
+                    compoundButton.setChecked(isChecked);
+                }
+                //mIsAnonymous = isChecked;
+                //mPostAsCommunitySelected = false;
+                setupUserView();
+                if(isChecked) {
+                    askFacebookPublishPermission();
+                } else {
+                    hasPermission = false;
+                }
+            }
+        });
     }
 
     private void setupAnonymousSlelectListener() {
@@ -913,6 +937,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
             if (mIsAnonymous) {
                 mUserName.setText("Anonymous");
+                mShareToFacebook.setChecked(false);
             } else {
                 mUserName.setText(CommonUtil.capitalizeString(mUserSummary.getFirstName() + " " + mUserSummary.getLastName()));
             }
