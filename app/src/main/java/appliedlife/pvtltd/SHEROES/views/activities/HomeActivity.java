@@ -347,7 +347,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
 
-                   // mentorListActivity(); //todo - enable it
+                    mentorListActivity();
                 }
             }
 
@@ -764,11 +764,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
     }
 
-    private void mentorListActivity(CarouselDataObj carouselDataObj) {
-      //  Intent intent = new Intent(this, MentorsUserListingActivity.class);
-       // startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-       // CarouselDataObj mCarouselDataObj = carouselDataObj;
-        CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    private void mentorListActivity() {
+        Intent intent = new Intent(this, MentorsUserListingActivity.class);
+        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -776,7 +774,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         switch (id) {
             case R.id.tv_mentor_view_all:
 
-                mentorListActivity((CarouselDataObj) baseResponse);
+                mentorListActivity();
                 break;
             case R.id.tv_mentor_follow:
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
