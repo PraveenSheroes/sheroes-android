@@ -311,5 +311,6 @@ public class AppConstants {
 
     public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
+    public static final String APP_SHARE_LINK = "https://shrs.me/m/3AICGHn1KJ";
 
 }
