@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
@@ -287,4 +288,7 @@ public interface SheroesAppServiceApi {
 
     @POST()
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
+
+    @POST("participant/feed/community_category_home")
+    Observable<FeedResponsePojo> fetchAllCommunity(@Body BaseRequest baseRequest);
 }
