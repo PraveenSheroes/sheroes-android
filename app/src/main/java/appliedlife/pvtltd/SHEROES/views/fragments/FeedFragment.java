@@ -89,6 +89,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
+    public static final String END_POINT_URL = "End_Point_Url";
 
     @Inject
     AppUtils mAppUtils;
@@ -152,16 +153,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             mPrimaryColor = getArguments().getString(PRIMARY_COLOR);
             mTitleTextColor = getArguments().getString(TITLE_TEXT_COLOR);
         }
-        if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
-            mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
-        } else {
-
+        if(mCommunityTab == null){
+            if(getArguments() !=null) {
+                String dataUrl = getArguments().getString(END_POINT_URL);
+                if (CommonUtil.isNotEmpty(dataUrl)) {
+                    mFeedPresenter.setEndpointUrl(dataUrl);
+                }
+            }
+        }else {
+            if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
+                mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
+            }
+            mScreenProperties = new EventProperty.Builder()
+                    .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                    .sourceTabKey(mCommunityTab.key)
+                    .sourceTabTitle(mCommunityTab.title)
+                    .build();
         }
-        mScreenProperties = new EventProperty.Builder()
-                .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
-                .sourceTabKey(mCommunityTab.key)
-                .sourceTabTitle(mCommunityTab.title)
-                .build();
         // Initialize recycler view
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);

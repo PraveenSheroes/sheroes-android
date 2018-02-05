@@ -13,22 +13,20 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.viewholder.CommentLoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
@@ -85,7 +83,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_MENTOR_SUGGESTION_CAROSEL:
-                return new MentorSuggestedCardHorizontalView(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
+                return new CarouselViewHolder(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_MENTOR_COMPACT:
                 return new MentorCard(mInflater.inflate(R.layout.feed_mentor_card, parent, false), mBaseHolderInterface);
             case TYPE_LEADER:
@@ -138,9 +136,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 appIntroCardHolder.bindData(feedDetail, mContext, position);
                 break;
             case TYPE_MENTOR_SUGGESTION_CAROSEL:
-                MentorSuggestedCardHorizontalView mentorSuggestedCardHorizontalView = (MentorSuggestedCardHorizontalView) holder;
-                MentorDataObj mentorDataObj = (MentorDataObj) mFeedDetailList.get(position);
-                mentorSuggestedCardHorizontalView.bindData(mentorDataObj, mContext, position);
+                CarouselViewHolder carouselViewHolder = (CarouselViewHolder) holder;
+                CarouselDataObj carouselDataObj = (CarouselDataObj) mFeedDetailList.get(position);
+                carouselViewHolder.bindData(carouselDataObj, mContext, position);
                 break;
             case TYPE_MENTOR_COMPACT:
                 MentorCard mentorCard = (MentorCard) holder;
@@ -201,7 +199,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.APP_INTRO_SUB_TYPE)) {
                 return TYPE_INRO;
             }
-            if (feedDetail instanceof MentorDataObj) {
+            if (feedDetail instanceof CarouselDataObj) {
                 return TYPE_MENTOR_SUGGESTION_CAROSEL;
             }
 

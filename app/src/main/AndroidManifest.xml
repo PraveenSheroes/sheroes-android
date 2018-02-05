@@ -264,6 +264,8 @@
             android:name="appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity android:name=".views.activities.TestCommunityActivity"/>
+
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity" />
 
         <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity" />

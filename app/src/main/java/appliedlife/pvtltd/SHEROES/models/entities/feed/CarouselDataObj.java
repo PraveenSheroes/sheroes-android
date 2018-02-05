@@ -1,7 +1,6 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
-import java.util.Date;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,18 +10,18 @@ import org.parceler.Parcel;
 /**
  * Created by Praveen on 4/12/17.
  */
-@Parcel(analyze = {MentorDataObj.class,FeedDetail.class})
-public class MentorDataObj extends FeedDetail {
+@Parcel(analyze = {CarouselDataObj.class,FeedDetail.class})
+public class CarouselDataObj extends FeedDetail {
 
     @SerializedName("solr_ignore_list_of_base_or_participant_model")
     @Expose
-    private List<UserSolrObj> mentorParticipantModel = null;
+    private List<FeedDetail> mentorParticipantModel = null;
 
-    public List<UserSolrObj> getMentorParticipantModel() {
+    public List<FeedDetail> getMentorParticipantModel() {
         return mentorParticipantModel;
     }
 
-    public void setMentorParticipantModel(List<UserSolrObj> mentorParticipantModel) {
+    public void setMentorParticipantModel(List<FeedDetail> mentorParticipantModel) {
         this.mentorParticipantModel = mentorParticipantModel;
     }
 

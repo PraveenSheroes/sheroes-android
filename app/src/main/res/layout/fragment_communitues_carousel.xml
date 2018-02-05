@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nested_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/my_communities_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:paddingEnd="@dimen/dp_size_1"
+            android:paddingLeft="@dimen/dp_size_16"
+            android:paddingRight="@dimen/dp_size_1"
+            android:paddingStart="@dimen/dp_size_16"
+            android:paddingTop="@dimen/dp_size_8"
+            android:text="@string/my_communities"
+            android:textColor="@color/comment_text"
+            android:textSize="@dimen/sp_size_14" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/my_communities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_communities_label"
+            android:layout_marginBottom="@dimen/dp_size_5"
+            android:background="@color/white"
+            android:minHeight="@dimen/dp_size_100" />
+
+        <FrameLayout
+            android:id="@+id/carousel_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/my_communities"
+            android:layout_marginBottom="@dimen/dp_size_5"
+            android:minHeight="@dimen/dp_size_100" />
+
+        <ProgressBar
+            android:id="@+id/pb_home_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="bottom|center"
+            android:background="@drawable/ripple_button"
+            android:backgroundTint="@color/grey2"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>
