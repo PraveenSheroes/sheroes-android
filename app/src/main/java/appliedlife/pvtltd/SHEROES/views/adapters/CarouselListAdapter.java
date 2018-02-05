@@ -12,6 +12,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -27,11 +28,13 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final Context mContext;
     private List<FeedDetail> mFeedDetails;
     private BaseHolderInterface mBaseHolderInterface;
+    private CarouselDataObj mCarouselDataObj;
     //region Constructor
-    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface) {
+    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj) {
         mContext = context;
         this.mFeedDetails = new ArrayList<>();
         this.mBaseHolderInterface = baseHolderInterface;
+        this.mCarouselDataObj = carouselDataObj;
     }
     //endregion
 
@@ -47,7 +50,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return new MentorCard(view, mBaseHolderInterface);
             case TYPE_SEE_MORE:
                 View viewMore = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_see_more_item, parent, false);
-                return new SeeMoreCompactViewHolder(viewMore, mBaseHolderInterface);
+                return new SeeMoreCompactViewHolder(viewMore, mBaseHolderInterface, mCarouselDataObj);
 
         }
         return null;

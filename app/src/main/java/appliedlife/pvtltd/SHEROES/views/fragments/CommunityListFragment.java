@@ -184,13 +184,9 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        if(baseResponse instanceof CarouselDataObj && view.getId() == R.id.tv_mentor_view_all) {
-            CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
-            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-
-        }
 
     }
+
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
@@ -233,8 +229,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     }
 
     @Override
-    public void onShowMoreCommunityList() {
-
+    public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
+        CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }
 
     public void updateItem(FeedDetail feedDetail) {

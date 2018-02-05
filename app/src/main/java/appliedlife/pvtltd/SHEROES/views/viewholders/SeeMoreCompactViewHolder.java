@@ -9,6 +9,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,6 +21,7 @@ import butterknife.OnClick;
 public class SeeMoreCompactViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     private final BaseHolderInterface viewInterface;
+    private CarouselDataObj mCarouselDataObj;
 
     @Bind(R.id.more_button)
     FloatingActionButton mMoreButton;
@@ -27,10 +29,11 @@ public class SeeMoreCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.more_text)
     TextView mMoreText;
 
-    public SeeMoreCompactViewHolder(View seeMoreView, BaseHolderInterface baseHolderInterface) {
+    public SeeMoreCompactViewHolder(View seeMoreView, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj) {
         super(seeMoreView);
         ButterKnife.bind(this, seeMoreView);
         viewInterface = baseHolderInterface;
+        this.mCarouselDataObj = carouselDataObj;
     }
 
     public void bindData() {
@@ -40,7 +43,7 @@ public class SeeMoreCompactViewHolder extends RecyclerView.ViewHolder {
     @OnClick({R.id.more_button})
     public void showMoreClicked(){
         if(viewInterface instanceof AllCommunityItemCallback){
-            ((AllCommunityItemCallback)viewInterface).onShowMoreCommunityList();
+            ((AllCommunityItemCallback)viewInterface).onSeeMoreClicked(mCarouselDataObj);
         }
     }
 

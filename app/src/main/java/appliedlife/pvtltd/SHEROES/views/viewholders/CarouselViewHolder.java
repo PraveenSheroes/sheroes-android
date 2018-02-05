@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -37,7 +38,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     TextView title;
 
     BaseHolderInterface viewInterface;
-    private FeedDetail dataItem;
+    private CarouselDataObj carouselDataObj;
 
     public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -47,7 +48,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     }
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
-        this.dataItem = item;
+        this.carouselDataObj = item;
 
         if(StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             title.setText(item.getTitle());
@@ -61,17 +62,21 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         if(StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new CarouselListAdapter(context, viewInterface);
+            mAdapter = new CarouselListAdapter(context, viewInterface, item);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.scrollToPosition(dataItem.getItemPosition());
+            mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());
             mAdapter.setData(item.getFeedDetails());
             mAdapter.notifyDataSetChanged();
         }
     }
     @OnClick(R.id.tv_mentor_view_all)
     public void viewAllClick() {
-        viewInterface.handleOnClick(dataItem, tvMentorViewAll);
+        if(viewInterface instanceof AllCommunityItemCallback){
+            ((AllCommunityItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
+        }else {
+            viewInterface.handleOnClick(carouselDataObj, tvMentorViewAll);
+        }
     }
 
     @Override
