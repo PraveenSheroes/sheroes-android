@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -30,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
@@ -60,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -82,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorSuggestedCardHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
@@ -121,6 +125,8 @@ public interface SheroesAppComponent {
 
     void inject(MyCommunitiesFragment myCommunitiesFragment);
 
+    void inject(CommunityListFragment myCommunitiesFragment);
+
     void inject(UserMentorCommunity userMentorCommunity);
 
     void inject(FollowingFragment followingFragment);
@@ -138,6 +144,9 @@ public interface SheroesAppComponent {
 
     void inject(HomeSpinnerSelectorHolder homeSpinnerSelectorHolder);
 
+    void inject(MyCommunityHolder myCommunityHolder);
+
+    void inject(CollectionActivity collectionActivity);
 
     void inject(FeatureCardHolder featureCardHolder);
 
@@ -257,6 +266,8 @@ public interface SheroesAppComponent {
     void inject(NavigateToWebViewFragment webUrlFragment);
 
     void inject(MentorSuggestedCardHorizontalView mentorSuggestedCardHorizontalView);
+
+    void inject(CarouselViewHolder mentorSuggestedCardHorizontalView);
 
     void inject(MentorCard mentorCard);
 

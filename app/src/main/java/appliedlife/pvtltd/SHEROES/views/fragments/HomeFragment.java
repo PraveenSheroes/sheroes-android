@@ -1,30 +1,20 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,16 +39,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -83,14 +71,10 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-
-import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
@@ -574,13 +558,13 @@ public class HomeFragment extends BaseFragment {
                     return;
 
                 List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
-                MentorDataObj mentorDataObj=(MentorDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
+                CarouselDataObj carouselDataObj =(CarouselDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
                 if(((UserSolrObj) baseResponse).isSuggested())
                 {
-                    mentorDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
+                    carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
                     UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
-                    List<UserSolrObj> mentorDataObjList=new ArrayList<>();
-                    for(UserSolrObj userSolrObjLocal:mentorDataObj.getMentorParticipantModel())
+                    List<FeedDetail> mentorDataObjList=new ArrayList<>();
+                    for(FeedDetail userSolrObjLocal: carouselDataObj.getFeedDetails())
                     {
                         if(userPassedObject.getItemPosition()==userSolrObjLocal.getItemPosition())
                         {
@@ -590,12 +574,12 @@ public class HomeFragment extends BaseFragment {
                             mentorDataObjList.add(userSolrObjLocal);
                         }
                     }
-                    mentorDataObj.setMentorParticipantModel(mentorDataObjList);
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition,mentorDataObj );
+                    carouselDataObj.setFeedDetails(mentorDataObjList);
+                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
                 }else
                 {
-                    mentorDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition,mentorDataObj );
+                    carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
+                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
                 }
                 break;
             default:

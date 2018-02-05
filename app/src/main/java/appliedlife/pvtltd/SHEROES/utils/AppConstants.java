@@ -60,7 +60,7 @@ public class AppConstants {
     public static final String FEED_SUB_TYPE = "F";
 
     public static final String USER_SUB_TYPE = "U";
-    public static final String MENTOR_SUB_TYPE = "W";
+    public static final String CAROUSEL_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
@@ -251,6 +251,7 @@ public class AppConstants {
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
+    public static final String END_POINT_URL = "end_point_url";
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";

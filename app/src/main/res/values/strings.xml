@@ -334,6 +334,7 @@
     <string name="empty_followed_mentor">%1$s is not following any champion yet"</string>
     <string name="empty_followed_community">%1$s has not joined any community yet"</string>
     <string name="load_more">Load More</string>
+    <string name="more">more</string>
     <string name="following">Following</string>
 
     <plurals name="numberOfComments">
@@ -514,6 +515,7 @@
     <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
+    <string name="my_communities">My Communities</string>
 
 
 </resources>

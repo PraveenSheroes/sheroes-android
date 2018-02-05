@@ -280,7 +280,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
             mUserSolarObject.setIdOfEntityOrParticipant(mChampionId);
         }
-        String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
+        String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
         setConfigurableShareOption(isWhatsAppShare());
@@ -970,7 +970,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                             } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                                 isMentorQARefresh = true;
-                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
+                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
                             }
                         }
                     }

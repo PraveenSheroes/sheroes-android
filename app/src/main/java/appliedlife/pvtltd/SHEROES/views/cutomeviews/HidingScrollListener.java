@@ -219,7 +219,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.MENTOR_LISTING:
                         if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
-                            FeedRequestPojo feedMentor = mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo());
+                            FeedRequestPojo feedMentor = mAppUtils.feedRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, mFragmentListRefreshData.getPageNo());
                             mHomePresenter.getFeedFromPresenter(feedMentor);
                         }
                         break;

@@ -27,12 +27,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -87,11 +85,11 @@ import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -120,18 +118,16 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
-import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
@@ -146,7 +142,6 @@ import io.branch.referral.BranchError;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -200,10 +195,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     NavigationView mNavigationView;
     @Bind(R.id.rv_drawer)
     RecyclerView mRecyclerView;
-    @Bind(R.id.home_view_pager)
-    ViewPager mViewPager;
-    @Bind(R.id.tab_community_view)
-    TabLayout mTabLayout;
+    //@Bind(R.id.home_view_pager)
+    //ViewPager mViewPager;
+    //@Bind(R.id.tab_community_view)
+    //TabLayout mTabLayout;
+    //@Bind(R.id.tab_community_view)
+    //LinearLayout communityContainer;
+
     @Bind(R.id.tv_search_box)
     TextView mTvSearchBox;
     @Bind(R.id.tv_setting)
@@ -247,7 +245,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
     private String profile;
-    private ViewPagerAdapter mViewPagerAdapter;
+   // private ViewPagerAdapter mViewPagerAdapter;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
@@ -775,6 +773,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         int id = view.getId();
         switch (id) {
             case R.id.tv_mentor_view_all:
+
                 mentorListActivity();
                 break;
             case R.id.tv_mentor_follow:
@@ -866,7 +865,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
                 setAllValues(mFragmentOpen);
-                setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
+               // setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
+              //  setViewPagerAndViewAdapter();
                 super.feedCardsHandled(view, baseResponse);
 
         }
@@ -973,7 +973,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
-        mTabLayout.setVisibility(View.GONE);
+       // communityContainer.setVisibility(View.GONE);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
@@ -989,12 +989,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setVisibility(View.GONE);
 
         flFeedFullView.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
+       // communityContainer.setVisibility(View.GONE);
     }
 
     private void initHomeViewPagerAndTabs() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
-        mTabLayout.setVisibility(View.GONE);
+       // communityContainer.setVisibility(View.GONE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
         HomeFragment homeFragment = new HomeFragment();
@@ -1012,11 +1012,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void initCommunityViewPagerAndTabs() {
-        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(new FeaturedFragment(), getString(R.string.ID_FEATURED));
-        mViewPagerAdapter.addFragment(new MyCommunitiesFragment(), getString(R.string.ID_MY_COMMUNITIES));
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
+        CommunityListFragment communitiesFragment_testing = new CommunityListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesFragment_testing, CommunityListFragment.class.getName()).commitAllowingStateLoss();
     }
 
 
@@ -1042,9 +1039,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         flFeedFullView.setVisibility(View.VISIBLE);
-        mViewPager.setVisibility(View.GONE);
+     //   communityContainer.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.GONE);
+       // mTabLayout.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         initHomeViewPagerAndTabs();
     }
@@ -1089,10 +1086,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
-        flFeedFullView.setVisibility(View.GONE);
-        mViewPager.setVisibility(View.VISIBLE);
+       // flFeedFullView.setVisibility(View.GONE);
+     //   communityContainer.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTabLayout.setVisibility(View.VISIBLE);
+       // mTabLayout.setVisibility(View.VISIBLE);
         initCommunityViewPagerAndTabs();
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
@@ -1349,7 +1346,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     editCommunityPostResponse(intent);
                     break;
                 case AppConstants.REQ_CODE_SPEECH_INPUT:
-                    helplineSpeechActivityResponse(intent, resultCode);
+                  //  helplineSpeechActivityResponse(intent, resultCode);
                     break;
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != intent.getExtras()) {
@@ -1442,7 +1439,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void createCommunityActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras()) {
+      /*  if (null != intent && null != intent.getExtras()) {
             mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
             //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
             Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
@@ -1453,7 +1450,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     communityOnClick();
                 }
             }
-        }
+        }*/
     }
 
     private void articleDetailActivityResponse(Intent intent) {
@@ -1484,8 +1481,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
-            CommunityFeedSolrObj communityFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
+       /*   if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
+          CommunityFeedSolrObj communityFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
             CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
             if (null != communityEnum) {
                 switch (communityEnum) {
@@ -1527,7 +1524,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
                 }
             }
-        }
+        }*/
     }
 
 
@@ -1609,9 +1606,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
     public void onJoinEventSuccessResult(String result, FeedDetail feedDetail) {
-        if (StringUtil.isNotNullOrEmptyString(result)) {
+        /*  if (StringUtil.isNotNullOrEmptyString(result)) {
             if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
-                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+              Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                 if (fragment instanceof FeaturedFragment) {
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((FeaturedFragment) fragment).setJoinStatus(result, feedDetail);
@@ -1620,7 +1617,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             } else {
                 onShowErrorDialog(result, JOIN_INVITE);
             }
-        }
+        }*/
     }
 
     @OnClick(R.id.profile_link)
