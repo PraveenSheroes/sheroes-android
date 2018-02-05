@@ -385,8 +385,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
            // sendPost();
            /* alreadyHasFbPermission = true;
             LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));*/
-        }else {
-            LoginManager.getInstance().logInWithReadPermissions(CommunityPostActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
         }
     }
 
@@ -595,7 +593,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 //mIsAnonymous = isChecked;
                 //mPostAsCommunitySelected = false;
                 setupUserView();
-                if(isChecked) {
+                if(!mIsAnonymous && isChecked) {
                     askFacebookPublishPermission();
                 } else {
                     hasPermission = false;
