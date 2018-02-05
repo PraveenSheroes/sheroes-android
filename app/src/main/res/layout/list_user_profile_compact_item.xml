@@ -26,6 +26,7 @@
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/user_image"
+                android:src="@color/black"
                 android:layout_width="80dp"
                 android:layout_height="80dp"/>
 

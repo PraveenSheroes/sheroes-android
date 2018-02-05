@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -59,13 +61,16 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.bio)
     TextView mBio;
 
+    private BaseHolderInterface viewInterface;
+    private UserSolrObj mUserSolrObj;
+
     // endregion
 
-    public UserProfileCompactViewHolder(View itemView, Context context, View.OnClickListener mOnItemClickListener) {
+    public UserProfileCompactViewHolder(View itemView, Context context, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.mContext = context;
-        itemView.setOnClickListener(mOnItemClickListener);
+        this.viewInterface = baseHolderInterface;
     }
 
     public void bindData(UserSolrObj userSolrObj, Context context) {
@@ -115,6 +120,11 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.follow_button)
     public void onFollowClicked() {
+        ((FeedItemCallback)viewInterface).onMentorFollowClicked(mUserSolrObj);
+    }
 
+    @OnClick(R.id.user_compact_card)
+    public void onUserCardClicked() {
+        ((FeedItemCallback)viewInterface).onMentorProfileClicked(mUserSolrObj);
     }
 }
