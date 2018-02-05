@@ -38,7 +38,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -49,7 +48,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -81,7 +79,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.SocialPerson;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -209,7 +207,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
-    private ArrayAdapter<SocialPerson> customSocialUserAdapter;
+    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     //endregion
 
     //region Activity methods
@@ -318,13 +316,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void postCommentSocialTagging()
     {
         customSocialUserAdapter = new SocialPersonAdapter(this);
-        customSocialUserAdapter.addAll(
-                new SocialPerson(getString(R.string.mention1_username),310,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
-                new SocialPerson(getString(R.string.mention2_username),400,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
-                new SocialPerson(getString(R.string.mention3_username),500,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"));
-        mEtDefaultHintText.setMentionAdapter(customSocialUserAdapter);
-        mEtDefaultHintText.setThreshold(1);
-        mEtDefaultHintText.setHyperlinkEnabled(true);
+       // customSocialUserAdapter.addAll(
+               // new UserTaggingPerson(getString(R.string.mention1_username),310,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
+               // new UserTaggingPerson(getString(R.string.mention2_username),400,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
+               // new UserTaggingPerson(getString(R.string.mention3_username),500,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"));
+      //  mEtDefaultHintText.setMentionAdapter(customSocialUserAdapter);
+       // mEtDefaultHintText.setThreshold(1);
+       // mEtDefaultHintText.setHyperlinkEnabled(true);
         mEtDefaultHintText.setMentionColor(ContextCompat.getColor(getApplication(), R.color.link_color));
         mEtDefaultHintText.setHashtagColor(ContextCompat.getColor(getApplication(), R.color.link_color));
         mEtDefaultHintText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {

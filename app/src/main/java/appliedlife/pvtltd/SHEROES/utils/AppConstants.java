@@ -201,6 +201,7 @@ public class AppConstants {
     public static final String HEADER_PROFILE_PREF= "HEADER_PROFILE_PREF";
     public static final String NAV_SESSION_PREF= "NAV_SESSION_PREF";
     public static final String NAV_PREF= "NAV_PREF";
+    public static final int MIN_QUESTION_SEARCH_LENGTH=3;
 
 
     /*Master data keys for pages*/

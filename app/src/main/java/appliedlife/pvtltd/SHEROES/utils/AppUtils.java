@@ -104,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -1590,6 +1591,16 @@ public class AppUtils {
         feedRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
+    }
+    public  SearchUserDataRequest searchUserDataRequest(String query,String listType) {
+        AppUtils appUtils = AppUtils.getInstance();
+        SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
+        searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
+        searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        searchUserDataRequest.setListType(listType);
+        searchUserDataRequest.setSearchText(query);
+        return searchUserDataRequest;
     }
 
     public static FeedRequestPojo makeFeedChallengeListRequest(String typeOfFeed, int pageNo) {

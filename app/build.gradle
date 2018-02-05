@@ -45,9 +45,9 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+           // buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
-            // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
+             buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -145,6 +145,7 @@ dependencies {
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
     compile 'com.hendraanggrian:socialview-core:0.17'
     compile 'com.hendraanggrian:socialview-commons:0.17'
+    compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'

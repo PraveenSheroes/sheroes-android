@@ -4,15 +4,17 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.support.v7.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import com.hendraanggrian.widget.SocialAutoCompleteTextView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -35,15 +37,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Post;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
@@ -52,6 +53,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -77,6 +79,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     private int headerCount = 0;
     private int pageNumber = 1;
     private Comment lastComment;
+
 
     @Inject
     AppUtils mAppUtils;
@@ -534,6 +537,88 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     @Override
                     public DeleteCommunityPostResponse apply(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                         return deleteCommunityPostResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public void initializeRxEditText(SocialAutoCompleteTextView searchQuestionText) {
+        RxTextView.textChanges(searchQuestionText)
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(CharSequence charSequence) {
+
+                        return charSequence.length() >=  AppConstants.MIN_QUESTION_SEARCH_LENGTH;
+                    }
+                })
+                .debounce(200, TimeUnit.MILLISECONDS)
+                .flatMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
+                    @Override
+                    public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
+                        if (charSequence.length() <  AppConstants.MIN_QUESTION_SEARCH_LENGTH) {
+                            return Observable.empty();
+                        }
+                        if(mAppUtils!=null)
+                        {
+                            return searchUserDataFromModel(mAppUtils.searchUserDataRequest(String.valueOf(charSequence).trim(),"COMMENT"));
+                        }
+                        return null;
+
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
+
+                    @Override
+                    public void onNext(SearchUserDataResponse posts) {
+                        getMvpView().showListOfParticipate(posts.getParticipantList());
+                    }
+                });
+    }
+    public void searchUserTagging(SearchUserDataRequest searchUserDataRequest ) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            return;
+        }
+        searchUserDataFromModel(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+
+            @Override
+            public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                if(!searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.INVALID)) {
+                    getMvpView().showListOfParticipate(searchUserDataResponse.getParticipantList());
+                }
+            }
+        });
+
+    }
+    public Observable<SearchUserDataResponse> searchUserDataFromModel(SearchUserDataRequest searchUserDataRequest) {
+        return sheroesAppServiceApi.getUserTaggingResponse(searchUserDataRequest)
+                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
+                    @Override
+                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
+                        return searchUserDataResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

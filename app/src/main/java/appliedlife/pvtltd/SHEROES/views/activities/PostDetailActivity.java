@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -28,28 +27,21 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
 import com.hendraanggrian.socialview.SocialView;
-import com.hendraanggrian.widget.SocialAdapter;
 import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 
-import org.jetbrains.annotations.NotNull;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -75,7 +67,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.SocialPerson;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
@@ -92,7 +84,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.annotations.NonNull;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function2;
 
@@ -163,8 +154,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private int mFromNotification;
 
 
-
-    private ArrayAdapter<SocialPerson> customSocialUserAdapter;
+    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     //endregion
 
     //region activity methods
@@ -217,6 +207,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setupToolbarItemsColor();
         postCommentSocialTagging();
     }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
@@ -230,14 +221,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         return isWhatsappShare;
     }
-    private void postCommentSocialTagging()
-    {
+
+    private void postCommentSocialTagging() {
         customSocialUserAdapter = new SocialPersonAdapter(this);
-        customSocialUserAdapter.addAll(
-                new SocialPerson(getString(R.string.mention1_username),310,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
-                new SocialPerson(getString(R.string.mention2_username),400,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
-                new SocialPerson(getString(R.string.mention3_username),500,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"));
-        mInputText.setMentionAdapter(customSocialUserAdapter);
         mInputText.setThreshold(1);
         mInputText.setMentionEnabled(true);
         mInputText.setHyperlinkEnabled(true);
@@ -246,7 +232,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mInputText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {
             @Override
             public Unit invoke(SocialView socialView, String s) {
-                Toast.makeText(getApplicationContext(),"Mention----"+s,Toast.LENGTH_SHORT).show();
+                if(s.length()>2) {
+                    mPostDetailPresenter.searchUserTagging(mAppUtils.searchUserDataRequest(s, "COMMENT"));
+                }
                 return null;
             }
         });
@@ -379,6 +367,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (comment != null) {
             onDeleteMenuClicked(comment);
         }
+    }
+
+    @Override
+    public void showListOfParticipate(List<UserTaggingPerson> participantLists) {
+        customSocialUserAdapter.addAll(participantLists);
+        mInputText.setMentionAdapter(customSocialUserAdapter);
     }
 
     @Override
@@ -540,7 +534,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             Menu menu = popup.getMenu();
             menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
             menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
@@ -560,8 +554,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     popup.getMenu().findItem(R.id.edit).setVisible(true);
                 }
 
-            }else
-            {
+            } else {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
             }
@@ -582,7 +575,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
-            if(userPostObj.communityId == 0){
+            if (userPostObj.communityId == 0) {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
             if (userPostObj.isSpamPost()) {
@@ -604,7 +597,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             return true;
                         case R.id.share:
                             shareWithMultipleOption(userPostObj);
-                            default:
+                        default:
                             return false;
                     }
                 }
@@ -627,6 +620,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
     }
+
     private CharSequence menuIconWithText(Drawable r, String title) {
         r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
         SpannableString sb = new SpannableString("    " + title);
@@ -634,10 +628,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
     }
+
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
         if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
-        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+        } else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
             return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
@@ -846,7 +841,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void userProfileNameClick(Comment comment, View view) {
-        if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
+        if (!comment.isAnonymous() && comment.getParticipantUserId() != null) {
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
