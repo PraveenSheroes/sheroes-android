@@ -14,7 +14,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -48,7 +47,7 @@ public class MentorSuggestedCardHorizontalView extends BaseViewHolder<CarouselDa
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.dataItem = item;
-        List<FeedDetail> list=item.getMentorParticipantModel();
+        List<FeedDetail> list=item.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);

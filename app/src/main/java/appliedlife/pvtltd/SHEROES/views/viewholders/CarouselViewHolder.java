@@ -16,10 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.TestCommunityActivity;
-import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.CarouselListAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,7 +27,7 @@ import butterknife.OnClick;
 
 public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
-    private GenericRecyclerViewAdapter mAdapter;
+    private CarouselListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
@@ -51,22 +48,16 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.dataItem = item;
-        List<FeedDetail> list=item.getMentorParticipantModel();
+        List<FeedDetail> list=item.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            if(context instanceof HomeActivity){
-                mAdapter = new GenericRecyclerViewAdapter(context, (HomeActivity) context);
-            }else if(context instanceof CommunityDetailActivity){
-                mAdapter = new GenericRecyclerViewAdapter(context, (CommunityDetailActivity) context);
-            }else {
-                mAdapter = new GenericRecyclerViewAdapter(context, (TestCommunityActivity) context);
-            }
+            mAdapter = new CarouselListAdapter(context, viewInterface);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            mAdapter.setSheroesGenericListData(list);
             mRecyclerView.scrollToPosition(dataItem.getItemPosition());
-            mAdapter.setSuggestedCardPosition(position);
+            mAdapter.setData(item.getFeedDetails());
+            mAdapter.notifyDataSetChanged();
         }
     }
     @OnClick(R.id.tv_mentor_view_all)

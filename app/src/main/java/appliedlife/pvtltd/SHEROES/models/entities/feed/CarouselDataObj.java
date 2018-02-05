@@ -15,14 +15,14 @@ public class CarouselDataObj extends FeedDetail {
 
     @SerializedName("solr_ignore_list_of_base_or_participant_model")
     @Expose
-    private List<FeedDetail> mentorParticipantModel = null;
+    private List<FeedDetail> feedDetails = null;
 
-    public List<FeedDetail> getMentorParticipantModel() {
-        return mentorParticipantModel;
+    public List<FeedDetail> getFeedDetails() {
+        return feedDetails;
     }
 
-    public void setMentorParticipantModel(List<FeedDetail> mentorParticipantModel) {
-        this.mentorParticipantModel = mentorParticipantModel;
+    public void setFeedDetails(List<FeedDetail> feedDetails) {
+        this.feedDetails = feedDetails;
     }
 
 }

@@ -564,7 +564,7 @@ public class HomeFragment extends BaseFragment {
                     carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
                     UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
                     List<FeedDetail> mentorDataObjList=new ArrayList<>();
-                    for(FeedDetail userSolrObjLocal: carouselDataObj.getMentorParticipantModel())
+                    for(FeedDetail userSolrObjLocal: carouselDataObj.getFeedDetails())
                     {
                         if(userPassedObject.getItemPosition()==userSolrObjLocal.getItemPosition())
                         {
@@ -574,7 +574,7 @@ public class HomeFragment extends BaseFragment {
                             mentorDataObjList.add(userSolrObjLocal);
                         }
                     }
-                    carouselDataObj.setMentorParticipantModel(mentorDataObjList);
+                    carouselDataObj.setFeedDetails(mentorDataObjList);
                     mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
                 }else
                 {

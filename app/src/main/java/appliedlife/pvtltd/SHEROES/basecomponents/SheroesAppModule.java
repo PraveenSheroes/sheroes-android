@@ -146,7 +146,7 @@ public class SheroesAppModule {
                 .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)
                 .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
-                .registerSubtype(CarouselDataObj.class, AppConstants.MENTOR_SUB_TYPE)
+                .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
                 .registerSubtype(LeaderObj.class, AppConstants.LEADER_SUB_TYPE);
 
         return new GsonBuilder()

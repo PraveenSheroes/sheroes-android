@@ -599,6 +599,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
+
+    }
+
+    @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             if (null != userPostObj) {

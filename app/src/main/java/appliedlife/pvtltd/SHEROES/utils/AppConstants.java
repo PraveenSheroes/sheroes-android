@@ -60,7 +60,7 @@ public class AppConstants {
     public static final String FEED_SUB_TYPE = "F";
 
     public static final String USER_SUB_TYPE = "U";
-    public static final String MENTOR_SUB_TYPE = "W";
+    public static final String CAROUSEL_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";

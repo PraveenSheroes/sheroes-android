@@ -264,7 +264,7 @@ public enum HolderMapping {
                             case AppConstants.HEADER:
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
-                            case AppConstants.MENTOR_SUB_TYPE:
+                            case AppConstants.CAROUSEL_SUB_TYPE:
                                 returnView = MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.USER_SUB_TYPE:
