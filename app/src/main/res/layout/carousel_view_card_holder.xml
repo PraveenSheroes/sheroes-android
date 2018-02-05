@@ -33,7 +33,7 @@
                     android:textSize="@dimen/sp_size_18" />
 
             <TextView
-                android:id="@+id/tv_mentor_view_all"
+                android:id="@+id/show_more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rectangle_feed_commnity_join"
@@ -51,7 +51,7 @@
                 android:visibility="visible" />
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_suggested_mentor_list"
+            android:id="@+id/carousel_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp_size_14"

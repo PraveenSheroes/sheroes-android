@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -121,12 +122,12 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
-import appliedlife.pvtltd.SHEROES.views.fragments.MyCommunityFragmentTest;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
@@ -346,7 +347,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
 
-                    mentorListActivity();
+                   // mentorListActivity(); //todo - enable it
                 }
             }
 
@@ -763,16 +764,19 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
     }
 
-    private void mentorListActivity() {
-        Intent intent = new Intent(this, MentorsUserListingActivity.class);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    private void mentorListActivity(CarouselDataObj carouselDataObj) {
+      //  Intent intent = new Intent(this, MentorsUserListingActivity.class);
+       // startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+       // CarouselDataObj mCarouselDataObj = carouselDataObj;
+        CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_mentor_view_all:
-                mentorListActivity();
+
+                mentorListActivity((CarouselDataObj) baseResponse);
                 break;
             case R.id.tv_mentor_follow:
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
@@ -1010,8 +1014,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void initCommunityViewPagerAndTabs() {
-        MyCommunityFragmentTest communitiesFragment_testing = new MyCommunityFragmentTest();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesFragment_testing, MyCommunityFragmentTest.class.getName()).commitAllowingStateLoss();
+        CommunityListFragment communitiesFragment_testing = new CommunityListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesFragment_testing, CommunityListFragment.class.getName()).commitAllowingStateLoss();
     }
 
 

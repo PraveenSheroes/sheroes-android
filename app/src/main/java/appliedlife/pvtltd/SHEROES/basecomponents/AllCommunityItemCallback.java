@@ -19,4 +19,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 public interface AllCommunityItemCallback extends BaseHolderInterface {
 
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
+
+    void onCommunityJoinUnjoin(CommunityFeedSolrObj communityFeedSolrObj);
+
+    void onShowMoreCommunityList();
 }

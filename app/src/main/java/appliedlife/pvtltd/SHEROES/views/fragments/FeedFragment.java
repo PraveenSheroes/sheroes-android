@@ -89,7 +89,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
-    public static final String END_POINT_URL = "End_Point_Url";
 
     @Inject
     AppUtils mAppUtils;
@@ -155,7 +154,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         if(mCommunityTab == null){
             if(getArguments() !=null) {
-                String dataUrl = getArguments().getString(END_POINT_URL);
+                String dataUrl = getArguments().getString(AppConstants.END_POINT_URL);
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
                 }

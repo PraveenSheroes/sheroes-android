@@ -7,9 +7,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ujjwal on 08/03/17.
@@ -33,6 +35,13 @@ public class SeeMoreCompactViewHolder extends RecyclerView.ViewHolder {
 
     public void bindData() {
 
+    }
+
+    @OnClick({R.id.more_button})
+    public void showMoreClicked(){
+        if(viewInterface instanceof AllCommunityItemCallback){
+            ((AllCommunityItemCallback)viewInterface).onShowMoreCommunityList();
+        }
     }
 
 }

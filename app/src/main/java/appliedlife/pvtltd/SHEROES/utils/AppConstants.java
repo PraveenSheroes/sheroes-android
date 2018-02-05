@@ -251,6 +251,7 @@ public class AppConstants {
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
+    public static final String END_POINT_URL = "end_point_url";
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";

@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
@@ -50,15 +51,12 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
  * Created by ravi on 31-01-2018.
  */
 
-public class MyCommunityFragmentTest extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
+public class CommunityListFragment extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
     private static final String SCREEN_LABEL = "My Communities Screen";
-    private final String TAG = LogUtils.makeLogTag(MyCommunityFragmentTest.class);
+    private final String TAG = LogUtils.makeLogTag(CommunityListFragment.class);
 
     @Inject
     CommunityListingPresenter mCommunityListingPresenter;
-
-   // @Bind(R.id.nested_scroll)
-   // NestedScrollView nestedScrollView;
 
     @Bind(R.id.my_communities_label)
     TextView myCommunityLabel;
@@ -186,6 +184,11 @@ public class MyCommunityFragmentTest extends BaseFragment implements ICommunityL
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
+        if(baseResponse instanceof CarouselDataObj && view.getId() == R.id.tv_mentor_view_all) {
+            CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
+            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+        }
 
     }
 
@@ -222,6 +225,16 @@ public class MyCommunityFragmentTest extends BaseFragment implements ICommunityL
     @Override
     public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    @Override
+    public void onCommunityJoinUnjoin(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void onShowMoreCommunityList() {
+
     }
 
     public void updateItem(FeedDetail feedDetail) {

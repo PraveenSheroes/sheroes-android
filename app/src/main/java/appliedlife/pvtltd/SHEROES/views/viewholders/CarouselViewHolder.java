@@ -48,6 +48,15 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.dataItem = item;
+
+        if(StringUtil.isNotNullOrEmptyString(item.getTitle())) {
+            title.setText(item.getTitle());
+        }
+
+        //if(StringUtil.isNotNullOrEmptyString(item.getEndPointUrl())) {
+        ///    tvMentorViewAll.setText(item.getEndPointUrl());
+       // }
+
         List<FeedDetail> list=item.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);

@@ -13,6 +13,12 @@ import org.parceler.Parcel;
 @Parcel(analyze = {CarouselDataObj.class,FeedDetail.class})
 public class CarouselDataObj extends FeedDetail {
 
+    @SerializedName("endPointUrl")
+    private String endPointUrl;
+
+    @SerializedName("screenTitle")
+    private String title;
+
     @SerializedName("solr_ignore_list_of_base_or_participant_model")
     @Expose
     private List<FeedDetail> feedDetails = null;
@@ -25,4 +31,19 @@ public class CarouselDataObj extends FeedDetail {
         this.feedDetails = feedDetails;
     }
 
+    public String getEndPointUrl() {
+        return endPointUrl;
+    }
+
+    public void setEndPointUrl(String endPointUrl) {
+        this.endPointUrl = endPointUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
