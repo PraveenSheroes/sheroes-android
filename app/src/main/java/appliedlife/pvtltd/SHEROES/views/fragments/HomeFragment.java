@@ -470,27 +470,31 @@ public class HomeFragment extends BaseFragment {
     }
     
     private void unReadNotificationCount(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (baseResponse instanceof NotificationReadCountResponse) {
-                    NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
-                    StringBuilder stringBuilder = new StringBuilder();
-                  int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
-                    if (notificationReadCountResponse.getUnread_notification_count() > 0) {
-                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
-                        String notification = String.valueOf(notificationCount);
-                        stringBuilder.append(notification);
-                        ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
-                    } else {
-                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+        try {
+            switch (baseResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    if (baseResponse instanceof NotificationReadCountResponse) {
+                        NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
+                        StringBuilder stringBuilder = new StringBuilder();
+                        int notificationCount = notificationReadCountResponse.getUnread_notification_count();
+                        if (notificationReadCountResponse.getUnread_notification_count() > 0) {
+                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
+                            String notification = String.valueOf(notificationCount);
+                            stringBuilder.append(notification);
+                            ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
+                        } else {
+                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                        }
                     }
-                }
-                break;
-            case AppConstants.FAILED:
-                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-                break;
-            default:
-                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                    break;
+                case AppConstants.FAILED:
+                    ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                    break;
+                default:
+                    ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+            }
+        }catch (Exception e) {
+            LogUtils.info(TAG, e.getMessage());
         }
     }
 

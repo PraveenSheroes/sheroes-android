@@ -367,24 +367,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     public void onCancel() {
                         LogUtils.info("dddd", "********cancel fb login ***********");
                         hasPermission = false;
-                        //sendPost();
-                        //Toast.makeText(AppIntro.this, "Login Cancel", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         LogUtils.info("dddd", "********error fb login ***********");
                         hasPermission = false;
-                       // sendPost();
-                        //Toast.makeText(AppIntro.this, exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if(accessToken!=null && accessToken.getPermissions().contains("publish_actions")){
             hasPermission = true;
-           // sendPost();
-           /* alreadyHasFbPermission = true;
-            LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));*/
         }
     }
 
