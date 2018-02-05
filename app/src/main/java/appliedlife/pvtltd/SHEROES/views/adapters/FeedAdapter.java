@@ -283,6 +283,17 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
         notifyItemChanged(position);
     }
 
+    public void setData(int outerPosition, int innerPosition,  FeedDetail updatedInnerFeedItem) {
+        FeedDetail feedDetail = mFeedDetailList.get(outerPosition);
+        if (feedDetail instanceof CarouselDataObj) {
+            FeedDetail innerFeedItem = ((CarouselDataObj) feedDetail).getFeedDetails().get(innerPosition);
+            innerFeedItem = updatedInnerFeedItem;
+            ((CarouselDataObj) feedDetail).getFeedDetails().set(innerPosition, updatedInnerFeedItem);
+        }
+        mFeedDetailList.set(outerPosition, feedDetail);
+        notifyItemChanged(outerPosition);
+    }
+
     public void removeItem(int position) {
         mFeedDetailList.remove(position);
         notifyItemRemoved(position);

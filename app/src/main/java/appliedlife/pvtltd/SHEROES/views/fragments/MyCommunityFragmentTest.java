@@ -3,16 +3,13 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -33,8 +32,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityListingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunityAdapter_new;
@@ -216,6 +217,38 @@ public class MyCommunityFragmentTest extends BaseFragment implements ICommunityL
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
+    }
+
+    @Override
+    public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    public void updateItem(FeedDetail feedDetail) {
+        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
+        if (position == RecyclerView.NO_POSITION) {
+            return;
+        }
+        mFeedAdapter.setData(position, feedDetail);
+    }
+
+    public int findPositionById(long id) {
+        if (mFeedAdapter == null) {
+            return -1;
+        }
+        List<FeedDetail> feedDetails = mFeedAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return -1;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 

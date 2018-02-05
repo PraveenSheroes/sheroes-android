@@ -23,6 +23,7 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -140,8 +141,8 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick({R.id.community_card_view})
     public void onCardClicked(){
-        if(viewInterface instanceof FeedItemCallback){
-            ((FeedItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
+        if(viewInterface instanceof AllCommunityItemCallback){
+            ((AllCommunityItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
         }
     }
 }
