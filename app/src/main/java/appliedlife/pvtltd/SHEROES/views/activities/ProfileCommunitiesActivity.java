@@ -40,7 +40,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     private long userMentorId;
     private boolean isSelfProfile;
 
-    @Bind(R.id.community_toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Bind(R.id.tv_mentor_toolbar_name)

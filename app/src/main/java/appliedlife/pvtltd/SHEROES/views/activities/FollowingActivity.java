@@ -35,7 +35,7 @@ public class FollowingActivity extends BaseActivity {
     @Bind(R.id.tv_mentor_toolbar_name)
     TextView titleName;
 
-    @Bind(R.id.community_toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Override

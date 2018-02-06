@@ -172,7 +172,7 @@ public enum HolderMapping {
     }, MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new MentorSuggestedCardHorizontalView(view, viewInterface);
+            return new CarouselViewHolder(view, viewInterface);
         }
     },
     HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
@@ -264,7 +264,7 @@ public enum HolderMapping {
                             case AppConstants.HEADER:
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
-                            case AppConstants.MENTOR_SUB_TYPE:
+                            case AppConstants.CAROUSEL_SUB_TYPE:
                                 returnView = MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.USER_SUB_TYPE:

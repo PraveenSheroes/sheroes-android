@@ -152,16 +152,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             mPrimaryColor = getArguments().getString(PRIMARY_COLOR);
             mTitleTextColor = getArguments().getString(TITLE_TEXT_COLOR);
         }
-        if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
-            mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
-        } else {
-
+        if(mCommunityTab == null){
+            if(getArguments() !=null) {
+                String dataUrl = getArguments().getString(AppConstants.END_POINT_URL);
+                if (CommonUtil.isNotEmpty(dataUrl)) {
+                    mFeedPresenter.setEndpointUrl(dataUrl);
+                }
+            }
+        }else {
+            if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
+                mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
+            }
+            mScreenProperties = new EventProperty.Builder()
+                    .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                    .sourceTabKey(mCommunityTab.key)
+                    .sourceTabTitle(mCommunityTab.title)
+                    .build();
         }
-        mScreenProperties = new EventProperty.Builder()
-                .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
-                .sourceTabKey(mCommunityTab.key)
-                .sourceTabTitle(mCommunityTab.title)
-                .build();
         // Initialize recycler view
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
@@ -588,6 +595,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onSpamPostDelete(UserPostSolrObj userPostObj) {
         mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostObj, true, true, false), userPostObj);
+    }
+
+    @Override
+    public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
+
     }
 
     @Override

@@ -2,60 +2,59 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="@dimen/dp_size_10">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:baselineAligned="false"
-        android:orientation="vertical">
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white">
 
-        <LinearLayout
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:layout_margin="16dp"
+            android:textAllCaps="true"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_16"
-            android:gravity="top"
-            android:orientation="horizontal"
-            android:weightSum="@integer/int_value_for_line_1">
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:layout_toLeftOf="@+id/icon"
+            android:layout_marginTop="16dp"
+            android:textStyle="normal"
+            android:textColor="#3c3c3c"
+            android:letterSpacing="0.04"
+            tools:text="Trending Posts" />
 
-                <TextView
-                    android:id="@+id/tv_feed_mentor_card_title"
-                    android:layout_weight="@integer/int_value_for_line_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textColor="@color/comment_text"
-                    android:text="@string/ID_GET_EXPERT_ADVICE"
-                    android:textSize="@dimen/sp_size_18" />
-
-            <TextView
-                android:id="@+id/tv_mentor_view_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_feed_commnity_join"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:paddingRight="@dimen/dp_size_16"
-                android:textAllCaps="true"
-                android:paddingTop="@dimen/dp_size_8"
-                android:paddingBottom="@dimen/dp_size_8"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:text="@string/ID_MENTOR_VIEW_ALL"
-                android:textColor="@color/footer_icon_text"
-                android:textSize="@dimen/sp_size_14"
-                android:visibility="visible" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#878787"
+            tools:text="Here are some trending posts on SHEROES"
+            />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_suggested_mentor_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_size_14"
-            android:layout_marginBottom="@dimen/dp_size_22"
+            android:layout_below="@id/body"
+            android:layout_marginTop="16dp"
             android:divider="@color/fully_transparent" />
-</LinearLayout>
+</RelativeLayout>
 </android.support.v7.widget.CardView>
