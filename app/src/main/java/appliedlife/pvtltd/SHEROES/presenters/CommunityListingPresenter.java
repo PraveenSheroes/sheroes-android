@@ -197,4 +197,40 @@ public class CommunityListingPresenter extends BasePresenter<ICommunityListingVi
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public void communityJoinFromPresenter(CommunityRequest communityRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        mSheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
+                .map(new Function<CommunityResponse, CommunityResponse>() {
+                    @Override
+                    public CommunityResponse apply(CommunityResponse communityResponse) {
+                        return communityResponse;
+                    }
+                }).subscribe(new DisposableObserver<CommunityResponse>() {
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+
+            }
+
+            @Override
+            public void onNext(CommunityResponse communityResponse) {
+                getMvpView().stopProgressBar();
+                getMvpView().showCommunityJoinUnjoinResponse(communityResponse);
+            }
+        });
+
+    }
+
 }
