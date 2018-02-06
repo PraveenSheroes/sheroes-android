@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsRespon
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -172,12 +173,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     private void populateUserProfileDetails() {
-        boolean hideAnnonymousPost = !isSelfProfile;
-        profilePresenter.getUserPostCountFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, userId, hideAnnonymousPost));
-
-        profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
-
-        profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
+        profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
 
         profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
@@ -345,17 +341,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
-        LogUtils.info(TAG, "Follower count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((ProfileActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
-
-    }
-
-    @Override
-    public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
-        LogUtils.info(TAG, "Following count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((ProfileActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
-
+    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
+        ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
     @Override
@@ -420,12 +407,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
                 dottedCommunityEmptyView.setBackgroundResource(0);
             }
         }
-    }
-
-    @Override
-    public void getUsersPostCount(int totalPost) {
-        LogUtils.info(TAG, "Post count:" + totalPost);
-        ((ProfileActivity) getActivity()).setUsersPostCount(totalPost);
     }
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
