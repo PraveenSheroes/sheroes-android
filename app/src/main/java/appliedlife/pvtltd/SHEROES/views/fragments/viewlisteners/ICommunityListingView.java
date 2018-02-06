@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 
@@ -15,4 +16,6 @@ public interface ICommunityListingView extends BaseMvpView {
     void showAllCommunity(ArrayList<FeedDetail> feedDetails);
 
     void showMyCommunity(List<FeedDetail> feedDetails);
+
+    void showCommunityJoinUnjoinResponse(CommunityResponse response);
 }

@@ -17,7 +17,16 @@ public class CarouselDataObj extends FeedDetail {
     private String endPointUrl;
 
     @SerializedName("screenTitle")
+    private String screenTitle;
+
+    @SerializedName("title")
     private String title;
+
+    @SerializedName("body")
+    private String body;
+
+    @SerializedName("icon_url")
+    private String iconUrl;
 
     @SerializedName("solr_ignore_list_of_base_or_participant_model")
     @Expose
@@ -39,11 +48,35 @@ public class CarouselDataObj extends FeedDetail {
         this.endPointUrl = endPointUrl;
     }
 
+    public String getScreenTitle() {
+        return screenTitle;
+    }
+
+    public void setScreenTitle(String screenTitle) {
+        this.screenTitle = screenTitle;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 }

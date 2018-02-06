@@ -145,7 +145,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.community_join)
     public void onCommunityJoinUnjoinedClicked() {
-        ((AllCommunityItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
+        ((AllCommunityItemCallback)viewInterface).onCommunityJoinUnjoin(mCommunityFeedObj);
     }
 
     @OnClick({R.id.community_card_view})

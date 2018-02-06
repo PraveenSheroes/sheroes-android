@@ -1,10 +1,14 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -15,6 +19,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CarouselListAdapter;
@@ -30,12 +36,18 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
     private CarouselListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+
+    @Bind(R.id.icon)
+    ImageView mIcon;
+
+    @Bind(R.id.title)
+    TextView mTitle;
+
+    @Bind(R.id.body)
+    TextView mBody;
+
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.tv_mentor_view_all)
-    TextView tvMentorViewAll;
-    @Bind(R.id.title)
-    TextView title;
 
     BaseHolderInterface viewInterface;
     private CarouselDataObj carouselDataObj;
@@ -50,13 +62,29 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.carouselDataObj = item;
 
-        if(StringUtil.isNotNullOrEmptyString(item.getTitle())) {
-            title.setText(item.getTitle());
+        if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
+            mTitle.setVisibility(View.VISIBLE);
+            mTitle.setText(item.getTitle());
+        } else {
+            mTitle.setVisibility(View.GONE);
         }
 
-        //if(StringUtil.isNotNullOrEmptyString(item.getEndPointUrl())) {
-        ///    tvMentorViewAll.setText(item.getEndPointUrl());
-       // }
+        if (StringUtil.isNotNullOrEmptyString(item.getBody())) {
+            mBody.setVisibility(View.VISIBLE);
+            mBody.setText(item.getBody());
+        } else {
+            mBody.setVisibility(View.GONE);
+        }
+
+        if (CommonUtil.isNotEmpty(item.getIconUrl())) {
+            mIcon.setVisibility(View.VISIBLE);
+            Glide.with(context)
+                    .asBitmap()
+                    .load(item.getIconUrl())
+                    .into(mIcon);
+        } else {
+            mIcon.setVisibility(View.GONE);
+        }
 
         List<FeedDetail> list=item.getFeedDetails();
         if(StringUtil.isNotEmptyCollection(list)) {
@@ -70,12 +98,23 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             mAdapter.notifyDataSetChanged();
         }
     }
-    @OnClick(R.id.tv_mentor_view_all)
-    public void viewAllClick() {
-        if(viewInterface instanceof AllCommunityItemCallback){
-            ((AllCommunityItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
-        }else {
-            viewInterface.handleOnClick(carouselDataObj, tvMentorViewAll);
+
+    @OnClick(R.id.icon)
+    public void onIconClicked() {
+        if (CommonUtil.isNotEmpty(carouselDataObj.getEndPointUrl()) && CommonUtil.isNotEmpty(carouselDataObj.getScreenTitle())) {
+            if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
+                if (viewInterface instanceof AllCommunityItemCallback) {
+                    ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);
+                } else {
+                    viewInterface.handleOnClick(carouselDataObj, mIcon);
+                }
+            }else {
+                if (viewInterface instanceof AllCommunityItemCallback) {
+                    ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
+                } else {
+                    viewInterface.handleOnClick(carouselDataObj, mIcon);
+                }
+            }
         }
     }
 

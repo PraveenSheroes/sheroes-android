@@ -145,6 +145,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
@@ -766,15 +767,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void mentorListActivity() {
         Intent intent = new Intent(this, MentorsUserListingActivity.class);
-        startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        startActivityForResult(intent, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
+
+
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
-            case R.id.tv_mentor_view_all:
-
-                mentorListActivity();
+            case R.id.icon:
+                if(baseResponse instanceof CarouselDataObj){
+                    CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
+                    if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
+                        mentorListActivity();
+                    }else {
+                        collectionScreen(carouselDataObj);
+                    }
+                }
                 break;
             case R.id.tv_mentor_follow:
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
@@ -873,12 +882,18 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     }
 
+    private void collectionScreen(CarouselDataObj carouselDataObj) {
+        if(carouselDataObj != null) {
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
+
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         mSuggestionItemPosition = userSolrObj.currentItemPosition;
         mMentorCardPosition = userSolrObj.getItemPosition();
         mFeedDetail = userSolrObj;
-        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.HOME_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void openProfileActivity() {
@@ -1348,7 +1363,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 case AppConstants.REQ_CODE_SPEECH_INPUT:
                   //  helplineSpeechActivityResponse(intent, resultCode);
                     break;
-                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != intent.getExtras()) {
                         UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if (null != userSolrObj) {
@@ -1667,11 +1682,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

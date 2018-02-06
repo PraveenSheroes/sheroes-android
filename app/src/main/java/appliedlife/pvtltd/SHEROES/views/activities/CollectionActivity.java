@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,6 +29,7 @@ public class CollectionActivity extends BaseActivity {
 
     private static final String SCREEN_LABEL = "Collection Activity";
     private String endPointUrl;
+    private String title;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
@@ -46,13 +48,16 @@ public class CollectionActivity extends BaseActivity {
 
         if (getIntent().getExtras() != null) {
             endPointUrl = getIntent().getExtras().getString(AppConstants.END_POINT_URL);
+            title = getIntent().getExtras().getString(AppConstants.TOOLBAR_TITTE);
         }
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+       // setSupportActionBar(mToolbar);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setScreenTitle("");
 
-        //titleName.setText(R.string.champions_followed);
+        if(StringUtil.isNotNullOrEmptyString(title)) {
+            titleName.setText(title);
+        }
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
@@ -71,10 +76,11 @@ public class CollectionActivity extends BaseActivity {
         return SCREEN_LABEL;
     }
 
-    public static void navigateTo(Activity fromActivity, String endPointUrl, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, String endPointUrl, String toolbarTitle, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, CollectionActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.END_POINT_URL, endPointUrl);
+        intent.putExtra(AppConstants.TOOLBAR_TITTE, toolbarTitle);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }

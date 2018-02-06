@@ -10,7 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +26,19 @@ import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityListingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -52,7 +56,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
  */
 
 public class CommunityListFragment extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
-    private static final String SCREEN_LABEL = "My Communities Screen";
+    private static final String SCREEN_LABEL = "Communities List Screen";
     private final String TAG = LogUtils.makeLogTag(CommunityListFragment.class);
 
     @Inject
@@ -67,8 +71,14 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Bind(R.id.all_communities)
     RecyclerView mAllCommunityListView;
 
+    @Bind(R.id.progress_bar_community)
+    ProgressBar progressBar;
+
     @Inject
     AppUtils mAppUtils;
+
+    @Inject
+    Preference<LoginResponse> userPreference;
 
     LinearLayoutManager mLayoutManager;
     MyCommunityAdapter_new mMyCommunityAdapter;
@@ -106,6 +116,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
 
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         LogUtils.info(TAG, "**********New Communities fragment on create*********");
@@ -122,7 +134,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         DrawerViewHolder.selectedOptionName = null;
     }
 
-    @Override
+    /*@Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         mMyCommunityAdapter.setData(feedDetailList);
@@ -151,7 +163,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
                 mMyCommunityAdapter.notifyDataSetChanged();
             }
         }
-    }
+    }*/
 
     @Override
     public void onDestroyView() {
@@ -172,9 +184,16 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     }
 
     @Override
+    public void showCommunityJoinUnjoinResponse(CommunityResponse response) {
+        Toast.makeText(getActivity(), "Response join/unjoin", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showAllCommunity(ArrayList<FeedDetail> feedDetails) {
         mFeedAdapter.setData(feedDetails);
         mFeedAdapter.notifyDataSetChanged();
+
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -225,12 +244,23 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Override
     public void onCommunityJoinUnjoin(CommunityFeedSolrObj communityFeedSolrObj) {
+        Toast.makeText(getContext(), "Join/Unjoin", Toast.LENGTH_SHORT).show();
 
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            List<Long> userIdList = new ArrayList();
+            userIdList.add(userPreference.get().getUserSummary().getUserId());
+            mCommunityListingPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+        }
     }
 
     @Override
     public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
-        CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(),  carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    @Override
+    public void openChampionListingScreen(CarouselDataObj carouselDataObj) {
+
     }
 
     public void updateItem(FeedDetail feedDetail) {
