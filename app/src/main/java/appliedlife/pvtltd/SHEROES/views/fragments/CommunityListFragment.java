@@ -244,8 +244,6 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Override
     public void onCommunityJoinUnjoin(CommunityFeedSolrObj communityFeedSolrObj) {
-        Toast.makeText(getContext(), "Join/Unjoin", Toast.LENGTH_SHORT).show();
-
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add(userPreference.get().getUserSummary().getUserId());
@@ -255,7 +253,11 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Override
     public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
-        CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(),  carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        if(carouselDataObj!= null && carouselDataObj.getEndPointUrl()!=null) {
+            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        } else{
+            LogUtils.info(TAG, "End Point Url is Null");
+        }
     }
 
     @Override

@@ -130,8 +130,10 @@ public class CommunityListingPresenter extends BasePresenter<ICommunityListingVi
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
                 // LogUtils.info(TAG, "********response***********");
-                ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
-                getMvpView().showAllCommunity(feedDetails);
+                if(feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
+                    ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
+                    getMvpView().showAllCommunity(feedDetails);
+                }
 
             }
         });

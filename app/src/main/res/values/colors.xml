@@ -15,6 +15,8 @@
     <color name="white">#ffffff</color>
     <color name="grey8">#fafafa</color>
     <color name="challenge_post">#ff4531</color>
+    <color name="carousel_card_bg">#F9F9F9</color>
+    <color name="screen_background">#EEEEEE</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
     <color name="theme">#ECECEC</color>

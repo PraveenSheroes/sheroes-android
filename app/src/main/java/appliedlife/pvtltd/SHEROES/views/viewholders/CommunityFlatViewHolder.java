@@ -70,23 +70,17 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         this.mCommunityFeedObj = (CommunityFeedSolrObj) item;
         mCommunityFeedObj.setItemPosition(position);
         mContext = context;
-        if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getScreenName()) && mCommunityFeedObj.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
+
+        if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
+            mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+            mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
+            mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+        } else if (mCommunityFeedObj.isOwner() || mCommunityFeedObj.isMember()) {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-            mCommunityJoin.setVisibility(View.VISIBLE);
-            mCommunityFeedObj.setCallFromName(AppConstants.FEATURE_FRAGMENT);
-        } else {
-            if (mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner()) {
-                mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                mCommunityJoin.setText(mContext.getString(R.string.ID_VIEW));
-                mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-            } else {
-                mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                mCommunityJoin.setText(mContext.getString(R.string.ID_INVITE));
-                mCommunityJoin.setBackgroundResource(R.drawable.rectangle_community_invite);
-            }
         }
+
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
             Glide.with(context)
                     .asBitmap()
