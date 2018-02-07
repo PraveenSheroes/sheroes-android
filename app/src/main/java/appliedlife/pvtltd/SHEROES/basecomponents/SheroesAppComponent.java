@@ -77,7 +77,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.HeaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
@@ -237,7 +237,7 @@ public interface SheroesAppComponent {
 
     void inject(PostBottomSheetFragment postBottomSheetFragment);
 
-    void inject(HeaderViewHolder headerViewHolder);
+    void inject(HomeHeaderViewHolder homeHeaderViewHolder);
 
     void inject(PushNotificationService pushNotificationService);
 

@@ -275,7 +275,7 @@ public class HomeFragment extends BaseFragment {
     {
         List<FeedDetail> data=new ArrayList<>();
         FeedDetail header = new FeedDetail();
-        header.setSubType(AppConstants.HEADER);
+        header.setSubType(AppConstants.HOME_FEED_HEADER);
         data.add(0, header);
         mPullRefreshList.allListData(data);
         mAdapter.setSheroesGenericListData(data);
@@ -369,7 +369,7 @@ public class HomeFragment extends BaseFragment {
         }else {
             List<FeedDetail> data=new ArrayList<>();
             FeedDetail header = new FeedDetail();
-            header.setSubType(AppConstants.HEADER);
+            header.setSubType(AppConstants.HOME_FEED_HEADER);
             data.add(0, header);
             mPullRefreshList.allListData(data);
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());

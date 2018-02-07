@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
@@ -60,7 +59,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
@@ -85,7 +83,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -109,6 +106,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     MasterDataModel mMasterDataModel;
     private String mEndpointUrl;
+    private boolean mIsHomeFeed;
     private String mNextToken = "";
     private boolean mIsFeedLoading;
     private int mFeedState;
@@ -198,6 +196,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         switch (mFeedState) {
                             case NORMAL_REQUEST:
                                 getMvpView().stopProgressBar();
+                                if(mIsHomeFeed){
+                                    FeedDetail homeFeedHeader = new FeedDetail();
+                                    homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                    feedList.add(0, homeFeedHeader);
+                                }
                                 mFeedDetailList = feedList;
                                 getMvpView().setFeedEnded(false);
                                 List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
@@ -1105,5 +1108,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     public void setEndpointUrl(String endpointUrl) {
         this.mEndpointUrl = endpointUrl;
+    }
+    public void setIsHomeFeed(boolean isHomeFeed) {
+        this.mIsHomeFeed = isHomeFeed;
     }
 }

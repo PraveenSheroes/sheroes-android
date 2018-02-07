@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -26,7 +27,7 @@ import butterknife.OnClick;
  * Created by Praveen on 06/11/17.
  */
 
-public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
+public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     @Bind(R.id.iv_header_circle_icon)
     CircleImageView ivLoginUserPic;
@@ -44,7 +45,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private long userId;
     private FeedDetail dataItem;
 
-    public HeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public HomeHeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
@@ -100,7 +101,11 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                viewInterface.handleOnClick(dataItem, headerMsg);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onAskQuestionClicked();
+                }else {
+                    viewInterface.handleOnClick(dataItem, headerMsg);
+                }
             }
         });
 

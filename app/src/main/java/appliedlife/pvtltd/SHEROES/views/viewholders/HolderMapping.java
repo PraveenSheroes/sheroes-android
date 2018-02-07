@@ -178,7 +178,7 @@ public enum HolderMapping {
     HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new HeaderViewHolder(view, viewInterface);
+            return new HomeHeaderViewHolder(view, viewInterface);
         }
     },
     FEED_CHALLENGE(R.layout.challenge_feed_item) {
@@ -261,7 +261,7 @@ public enum HolderMapping {
                             case AppConstants.FEED_PROGRESS_BAR:
                                 returnView = FEED_PROGRESS_BAR_HOLDER.ordinal();
                                 break;
-                            case AppConstants.HEADER:
+                            case AppConstants.HOME_FEED_HEADER:
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
                             case AppConstants.CAROUSEL_SUB_TYPE:
