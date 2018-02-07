@@ -193,7 +193,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         myClipboard.setPrimaryClip(myClip);
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .id(mShareImageUrl)
+                        .id(mShareCopyLink)
                         .build();
         AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
         dismiss();
