@@ -5,6 +5,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
@@ -27,4 +28,8 @@ public interface IFeedView extends BaseMvpView {
     void setFeedEnded(boolean feedEnded);
 
     void removeItem(FeedDetail feedDetail);
+
+    void showCommunityJoinResponse(CommunityFeedSolrObj communityFeedSolrObj);
+
+    void showCommunityLeftResponse(CommunityFeedSolrObj communityFeedSolrObj);
 }

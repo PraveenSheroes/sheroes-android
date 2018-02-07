@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -26,10 +25,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -37,22 +36,25 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityListingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
-import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunityAdapter_new;
+import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunityAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityListingView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by ravi on 31-01-2018.
+ *
  */
 
 public class CommunityListFragment extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
@@ -81,7 +83,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     Preference<LoginResponse> userPreference;
 
     LinearLayoutManager mLayoutManager;
-    MyCommunityAdapter_new mMyCommunityAdapter;
+    MyCommunityAdapter mMyCommunityAdapter;
     FeedAdapter mFeedAdapter;
 
     int mPageNo = AppConstants.ONE_CONSTANT;
@@ -97,7 +99,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
         mCommunityListingPresenter.attachView(this);
 
-        mMyCommunityAdapter = new MyCommunityAdapter_new(getContext(), (HomeActivity) getActivity());
+        mMyCommunityAdapter = new MyCommunityAdapter(getContext(), this);
+
         mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mMyCommunitiesListView.setAdapter(mMyCommunityAdapter);
@@ -112,9 +115,11 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         mMyCommunitiesListView.setNestedScrollingEnabled(false);
         mAllCommunityListView.setNestedScrollingEnabled(false);
 
-
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
+
+        mMyCommunitiesListView.setVisibility(View.GONE);
+        myCommunityLabel.setVisibility(View.GONE);
 
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
@@ -125,6 +130,21 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         mCommunityListingPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mCommunityListingPresenter.fetchAllCommunity();
 
+        mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunityListingPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
+
         return view;
     }
 
@@ -133,37 +153,6 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         super.onResume();
         DrawerViewHolder.selectedOptionName = null;
     }
-
-    /*@Override
-    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        mMyCommunityAdapter.setData(feedDetailList);
-
-        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mPageNo = mFragmentListRefreshData.getPageNo();
-            mFragmentListRefreshData.setPageNo(++mPageNo);
-            mPullRefreshList.allListData(feedDetailList);
-            List<FeedDetail> data = null;
-            FeedDetail feedProgressBar = new FeedDetail();
-            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-            data = mPullRefreshList.getFeedResponses();
-            int position = data.size() - feedDetailList.size();
-
-            mMyCommunityAdapter.setData(data);
-            if (mPageNo == AppConstants.TWO_CONSTANT) {
-                mMyCommunityAdapter.notifyDataSetChanged();
-            } else {
-                mMyCommunityAdapter.notifyItemRangeChanged(position + 1, feedDetailList.size());
-            }
-        } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
-        } else {
-            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
-            if (data.size() > 0) {
-                mMyCommunityAdapter.setData(data);
-                mMyCommunityAdapter.notifyDataSetChanged();
-            }
-        }
-    }*/
 
     @Override
     public void onDestroyView() {
@@ -178,14 +167,47 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
 
     @Override
-    public void showMyCommunity(List<FeedDetail> feedDetails) {
-        mMyCommunityAdapter.setData(feedDetails);
-        mMyCommunityAdapter.notifyDataSetChanged();
+    public void showMyCommunity(FeedResponsePojo myCommunityResponse) {
+
+        if(myCommunityLabel.getVisibility() != View.VISIBLE) {
+            mMyCommunitiesListView.setVisibility(View.VISIBLE);
+            myCommunityLabel.setVisibility(View.VISIBLE);
+        }
+
+        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunityAdapter != null) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+
+            List<FeedDetail> data = null;
+            FeedDetail feedProgressBar = new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data = mPullRefreshList.getFeedResponses();
+            int position = data.size() - feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
+            }
+            data.add(feedProgressBar);
+
+            mMyCommunityAdapter.setData(data);
+            mMyCommunityAdapter.notifyDataSetChanged();
+
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunityAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
+            mMyCommunityAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void showCommunityJoinUnjoinResponse(CommunityResponse response) {
-        Toast.makeText(getActivity(), "Response join/unjoin", Toast.LENGTH_SHORT).show();
+    public void showCommunityJoinResponse(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
+        carouselViewHolder.mAdapter.setData(communityFeedSolrObj);
+    }
+
+    @Override
+    public void showCommunityUnJoinedResponse(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
+        carouselViewHolder.mAdapter.setData(communityFeedSolrObj);
     }
 
     @Override
@@ -243,11 +265,18 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     }
 
     @Override
-    public void onCommunityJoinUnjoin(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add(userPreference.get().getUserSummary().getUserId());
-            mCommunityListingPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
+            mCommunityListingPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj, carouselViewHolder);
+        }
+    }
+
+    @Override
+    public void unJoinCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            mCommunityListingPresenter.leaveCommunity(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj, carouselViewHolder);
         }
     }
 
@@ -263,33 +292,6 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Override
     public void openChampionListingScreen(CarouselDataObj carouselDataObj) {
 
-    }
-
-    public void updateItem(FeedDetail feedDetail) {
-        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
-        }
-        mFeedAdapter.setData(position, feedDetail);
-    }
-
-    public int findPositionById(long id) {
-        if (mFeedAdapter == null) {
-            return -1;
-        }
-        List<FeedDetail> feedDetails = mFeedAdapter.getDataList();
-
-        if (CommonUtil.isEmpty(feedDetails)) {
-            return -1;
-        }
-
-        for (int i = 0; i < feedDetails.size(); ++i) {
-            FeedDetail feedDetail = feedDetails.get(i);
-            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
-                return i;
-            }
-        }
-        return -1;
     }
 }
 

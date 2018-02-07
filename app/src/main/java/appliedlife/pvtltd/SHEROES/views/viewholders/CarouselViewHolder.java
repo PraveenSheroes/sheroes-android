@@ -34,7 +34,7 @@ import butterknife.OnClick;
 
 public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
-    private CarouselListAdapter mAdapter;
+    public CarouselListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
 
     @Bind(R.id.icon)
@@ -90,7 +90,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         if(StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new CarouselListAdapter(context, viewInterface, item);
+            mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());

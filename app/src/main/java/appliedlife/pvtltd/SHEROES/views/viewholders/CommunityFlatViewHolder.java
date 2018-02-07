@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -12,15 +11,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -110,11 +108,6 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void textViewOperation(Context context) {
-        //TODO:: change for UI
-    }
-
     @Override
     public void onClick(View view) {
 
@@ -122,13 +115,15 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.community_join)
     public void onCommunityJoinUnjoinedClicked() {
-        ((AllCommunityItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
+        if(viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
+        }
     }
 
     @OnClick({R.id.community_card_view})
     public void onCardClicked(){
-        if(viewInterface instanceof AllCommunityItemCallback){
-            ((AllCommunityItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
-        }
+            if(viewInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
+            }
     }
 }

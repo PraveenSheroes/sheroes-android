@@ -10,6 +10,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -20,14 +21,14 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunityHolder;
  * Created by ravi on 31/01/18.
  */
 
-public class MyCommunityAdapter_new extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<FeedDetail> communities;
     private final Context mContext;
     private BaseHolderInterface baseHolderInterface;
 
     //region Constructor
-    public MyCommunityAdapter_new(Context context, BaseHolderInterface baseHolderInterface) {
+    public MyCommunityAdapter(Context context, BaseHolderInterface baseHolderInterface) {
         mContext = context;
         this.baseHolderInterface = baseHolderInterface;
     }
@@ -40,10 +41,9 @@ public class MyCommunityAdapter_new extends RecyclerView.Adapter<RecyclerView.Vi
             View view = mInflater.inflate(R.layout.my_communities_item, parent, false);
             return new MyCommunityHolder(view, baseHolderInterface);
         } else {
-           // View view = mInflater.inflate(R.layout.horizontal_infinite_loading, parent, false);
-          //  return new FeedProgressBarHolder(view, baseHolderInterface);
+            View view = mInflater.inflate(R.layout.horizontal_infinite_loading, parent, false);
+            return new FeedProgressBarHolder(view, baseHolderInterface);
         }
-        return null; //todo -remove this
     }
 
     @Override
@@ -77,5 +77,9 @@ public class MyCommunityAdapter_new extends RecyclerView.Adapter<RecyclerView.Vi
     public void setData(List<FeedDetail> communities) {
         this.communities = communities;
         notifyDataSetChanged();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(CommunityFeedSolrObj feedDetail);
     }
 }

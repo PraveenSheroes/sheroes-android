@@ -791,10 +791,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             if (isMentorQARefresh) {
                 profileActivitiesRefresh();
             } else {
-
                 setProfileNameData(mUserSolarObject);
             }
 
+            if(isMentor) {
+                loaderGif.setVisibility(View.GONE);
+            }
         }
     }
 

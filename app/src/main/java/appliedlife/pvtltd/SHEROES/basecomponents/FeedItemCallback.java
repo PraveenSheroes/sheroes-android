@@ -83,4 +83,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onSpamPostDelete(UserPostSolrObj userPostObj);
 
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
+
+    void onCommunityJoinOrLeave(CommunityFeedSolrObj communityFeedSolrObj);
 }

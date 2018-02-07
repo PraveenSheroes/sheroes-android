@@ -9,9 +9,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -38,7 +40,6 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
 
     public MyCommunityHolder(View itemView, BaseHolderInterface baseHolderInterface) {
-    //public MyCommunityHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
@@ -51,8 +52,6 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
         mFeedDetail = feedDetail;
 
         if (CommonUtil.isNotEmpty(mFeedDetail.getImageUrl())) {
-           // int featureImageHeight = (CommonUtil.getWindowWidth(mContext) / 2);
-           // String imageKitUrl = CommonUtil.getImgKitUri(mFeedDetail.getImageUrl(), CommonUtil.getWindowWidth(mContext), featureImageHeight);
            String imageKitUrl = mFeedDetail.getImageUrl();
             if (CommonUtil.isNotEmpty(imageKitUrl)) {
                 Glide.with(mContext)
@@ -70,11 +69,12 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
 
     @Override
     public void viewRecycled() {
-
     }
 
     @Override
     public void onClick(View view) {
-        viewInterface.handleOnClick(mFeedDetail, communityItemContainer);
+        if(viewInterface instanceof AllCommunityItemCallback){
+            ((AllCommunityItemCallback)viewInterface).onCommunityClicked((CommunityFeedSolrObj) mFeedDetail);
+        }
     }
 }

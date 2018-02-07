@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.presenters.CommunityListingPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
@@ -37,6 +38,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     AppUtils mAppUtils;
     HomePresenter mHomePresenter;
     HelplinePresenter mHelplinePresenter;
+    CommunityListingPresenter mCommunityListingPresenter;
     RecyclerView mRecyclerView;
     ProfilePresenterImpl profilePresenter;
     private LinearLayoutManager mManager;
@@ -87,6 +89,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         mRecyclerView = recyclerView;
         mManager = manager;
         this.mFragmentListRefreshData = fragmentListRefreshData;
+    }
+
+    public HidingScrollListener(CommunityListingPresenter communityListingPresenter, RecyclerView recyclerView, LinearLayoutManager mLayoutManager, FragmentListRefreshData mFragmentListRefreshData) {
+        mCommunityListingPresenter = communityListingPresenter;
+        mRecyclerView = recyclerView;
+        mManager = mLayoutManager;
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
     }
 
     @Override
@@ -149,7 +158,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mHomePresenter.getFeedFromPresenter(feedRequestFeatureCommPojo);
                         break;
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
-                        mHomePresenter.getMyCommunityFromPresenter(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
+                        mCommunityListingPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
                         break;
                     case AppConstants.HOME_FRAGMENT:
                         if (mFragmentListRefreshData.isChallenge()) {

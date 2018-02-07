@@ -74,12 +74,14 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
     private Handler mHandler;
     private CommunityFeedSolrObj mCommunityFeedObj;
+    private CarouselViewHolder mCarouselViewHolder;
 
-    public CommunityCompactViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public CommunityCompactViewHolder(View itemView, BaseHolderInterface baseHolderInterface, CarouselViewHolder carouselViewHolder) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         mHandler = new Handler();
         this.viewInterface = baseHolderInterface;
+        this.mCarouselViewHolder = carouselViewHolder;
     }
 
     @Override
@@ -88,14 +90,15 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         mCommunityFeedObj.setItemPosition(position);
         mContext = context;
 
-        if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
-            mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-            mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
-            mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
-        } else if (mCommunityFeedObj.isOwner() || mCommunityFeedObj.isMember()) {
+        if (mCommunityFeedObj.isOwner() || mCommunityFeedObj.isMember()) {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+        }
+        else if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
+            mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+            mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
+            mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
@@ -139,7 +142,17 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.community_join)
     public void onCommunityJoinUnjoinedClicked() {
-        ((AllCommunityItemCallback)viewInterface).onCommunityJoinUnjoin(mCommunityFeedObj);
+        if(viewInterface instanceof AllCommunityItemCallback) {
+            if(mCommunityFeedObj.isMember()){
+                mCommunityFeedObj.setMember(false);
+                mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+                ((AllCommunityItemCallback) viewInterface).unJoinCommunity(mCommunityFeedObj, mCarouselViewHolder);
+            }else {
+                mCommunityFeedObj.setMember(true);
+                mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+                ((AllCommunityItemCallback) viewInterface).joinRequestForOpenCommunity(mCommunityFeedObj, mCarouselViewHolder);
+            }
+        }
     }
 
     @OnClick({R.id.community_card_view})
