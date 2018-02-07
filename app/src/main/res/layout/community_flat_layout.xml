@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_10"
             android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_marginBottom="@dimen/dp_size_16"
+            android:layout_marginBottom="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_12">
 
             <LinearLayout
@@ -40,27 +40,22 @@
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/community_icon"
                     android:layout_width="@dimen/dp_size_40"
-                    android:layout_marginLeft="@dimen/dp_size_2"
-                    android:layout_marginStart="@dimen/dp_size_2"
                     android:layout_height="@dimen/dp_size_40"
                     tools:src="@drawable/ic_champion_avatar" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_size_5"
-                    android:layout_marginLeft="@dimen/dp_size_5"
-                    android:layout_marginRight="@dimen/dp_size_5"
-                    android:layout_marginStart="@dimen/dp_size_5"
+                    android:layout_marginEnd="@dimen/dp_size_7"
+                    android:layout_marginLeft="@dimen/dp_size_7"
+                    android:layout_marginRight="@dimen/dp_size_7"
+                    android:layout_marginStart="@dimen/dp_size_7"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_marginLeft="@dimen/dp_size_7"
-                        android:layout_marginStart="@dimen/dp_size_7"
                         android:id="@+id/community_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_size_1"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:letterSpacing="0.04"
                         android:maxLines="@integer/int_value_for_line_1"
@@ -71,10 +66,7 @@
                     <TextView
                         android:id="@+id/community_member_count"
                         android:layout_width="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_7"
-                        android:layout_marginStart="@dimen/dp_size_7"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_size_1"
                         android:drawableLeft="@drawable/ic_member_icon"
                         android:drawableStart="@drawable/ic_member_icon"
                         android:drawablePadding="@dimen/dp_size_5"
@@ -88,8 +80,8 @@
 
             <TextView
                 android:id="@+id/community_join"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_size_78"
+                android:layout_height="@dimen/dp_size_30"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -99,6 +91,7 @@
                 android:layout_marginStart="@dimen/dp_size_16"
                 android:gravity="center"
                 android:letterSpacing="0.07"
+                android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_14"
                 tools:text="@string/ID_JOIN" />

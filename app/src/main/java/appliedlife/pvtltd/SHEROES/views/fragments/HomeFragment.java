@@ -561,8 +561,8 @@ public class HomeFragment extends BaseFragment {
                 if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
                     return;
 
-                List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
-                CarouselDataObj carouselDataObj =(CarouselDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
+                List<CarouselDataObj> feedDetailList=mPullRefreshList.getFeedResponses(); //todo - fix this crash
+                CarouselDataObj carouselDataObj = feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
                 if(((UserSolrObj) baseResponse).isSuggested())
                 {
                     carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());

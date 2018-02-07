@@ -2,11 +2,13 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -27,16 +29,15 @@ import butterknife.ButterKnife;
 
 public class CollectionActivity extends BaseActivity {
 
-    private static final String SCREEN_LABEL = "Collection Activity";
+    private static String SCREEN_LABEL = "Collection Activity";
     private String endPointUrl;
     private String title;
 
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.tv_mentor_toolbar_name)
+    @Bind(R.id.toolbar_name)
     TextView titleName;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,13 +52,7 @@ public class CollectionActivity extends BaseActivity {
             title = getIntent().getExtras().getString(AppConstants.TOOLBAR_TITTE);
         }
 
-       // setSupportActionBar(mToolbar);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       // getSupportActionBar().setScreenTitle("");
-
-        if(StringUtil.isNotNullOrEmptyString(title)) {
-            titleName.setText(title);
-        }
+        setupToolbar(title);
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
@@ -66,9 +61,30 @@ public class CollectionActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
         feedFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.followed_mentor_container, feedFragment);
+        fragmentTransaction.replace(R.id.container, feedFragment);
         fragmentTransaction.commit();
 
+    }
+
+    private void setupToolbar(String toolbarTitle) {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        if(StringUtil.isNotNullOrEmptyString(toolbarTitle)) {
+            titleName.setText(toolbarTitle);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -81,6 +97,11 @@ public class CollectionActivity extends BaseActivity {
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.END_POINT_URL, endPointUrl);
         intent.putExtra(AppConstants.TOOLBAR_TITTE, toolbarTitle);
+
+        if(CommonUtil.isNotEmpty(toolbarTitle)) {
+            SCREEN_LABEL = toolbarTitle;
+        }
+
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }

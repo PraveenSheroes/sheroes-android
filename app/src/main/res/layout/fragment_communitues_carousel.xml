@@ -34,6 +34,9 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/my_communities"
+                android:paddingLeft="@dimen/dp_size_16"
+                android:paddingRight="@dimen/dp_size_1"
+                android:paddingStart="@dimen/dp_size_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_size_5"
@@ -47,10 +50,11 @@
                 android:minHeight="@dimen/dp_size_100" />
         </LinearLayout>
 
-        <ProgressBar
-            android:id="@+id/progress_bar_community"
-            android:layout_width="@dimen/dp_size_50"
-            android:layout_height="@dimen/dp_size_50"
-            android:layout_gravity="center"/>
+
+
+        <include
+            android:visibility="gone"
+            layout="@layout/gif_loader"/>
+
     </FrameLayout>
 </android.support.v4.widget.NestedScrollView>

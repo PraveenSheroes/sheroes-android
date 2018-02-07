@@ -51,8 +51,6 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(CommunityCompactViewHolder.class);
-    private static final String LEFT_HTML_TAG = "<font color='#000000'>";
-    private static final String RIGHT_HTML_TAG = "</font>";
     @Bind(R.id.feature_image)
     ImageView mFeatureImage;
 

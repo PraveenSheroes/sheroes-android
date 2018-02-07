@@ -222,7 +222,7 @@
                     android:background="@color/on_board_work" />
 
                 <LinearLayout
-                    android:id="@+id/followed_mentor_container"
+                    android:id="@+id/container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />

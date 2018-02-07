@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -58,15 +59,15 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.carouselDataObj = item;
-
-        if (StringUtil.isNotNullOrEmptyString(item.getScreenTitle())) { //todo - timebeing chnage once api done with gettitle
+        if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             mTitle.setVisibility(View.VISIBLE);
-            mTitle.setText(item.getScreenTitle());
+            mTitle.setText(item.getTitle());
         } else {
-            mTitle.setVisibility(View.GONE);
+          //  mTitle.setVisibility(View.GONE);
         }
 
         if (StringUtil.isNotNullOrEmptyString(item.getBody())) {
@@ -83,7 +84,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
                     .load(item.getIconUrl())
                     .into(mIcon);
         } else {
-            mIcon.setVisibility(View.GONE);
+         //   mIcon.setVisibility(View.GONE);
         }
 
         List<FeedDetail> list=item.getFeedDetails();

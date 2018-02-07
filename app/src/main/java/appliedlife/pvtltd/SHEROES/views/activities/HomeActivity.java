@@ -145,6 +145,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 
@@ -884,7 +885,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void collectionScreen(CarouselDataObj carouselDataObj) {
         if(carouselDataObj != null) {
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 
@@ -1027,8 +1028,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void initCommunityViewPagerAndTabs() {
-        CommunityListFragment communitiesFragment_testing = new CommunityListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesFragment_testing, CommunityListFragment.class.getName()).commitAllowingStateLoss();
+        CommunityListFragment communityListFragment = new CommunityListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communityListFragment, CommunityListFragment.class.getName()).commitAllowingStateLoss();
     }
 
 

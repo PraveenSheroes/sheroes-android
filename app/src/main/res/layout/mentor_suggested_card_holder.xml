@@ -11,13 +11,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_1">
 
+        <RelativeLayout
+            android:id="@+id/top_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/icon"
             android:layout_width="@dimen/dp_size_40"
-            android:layout_height="@dimen/dp_size_40"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:gravity="center"
+            android:src="@drawable/more"
             android:layout_margin="@dimen/dp_size_16"
             android:textAllCaps="true" />
 
@@ -34,8 +40,9 @@
             android:layout_marginStart="@dimen/dp_size_16"
             android:textStyle="normal"
             android:textColor="#3c3c3c"
+            android:text="@string/ID_GET_EXPERT_ADVICE"
             android:letterSpacing="0.04"
-            tools:text="Trending Posts" />
+            />
 
         <TextView
             android:id="@+id/body"
@@ -44,18 +51,21 @@
             android:layout_below="@id/title"
             android:layout_marginTop="@dimen/dp_size_4"
             android:textSize="@dimen/sp_size_14"
+            android:maxLines="@integer/int_value_for_line_1"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_LIGHT"
             android:textStyle="normal"
             android:textColor="@color/gray_light"
-            tools:text="Here are some trending posts on SHEROES"
-            />
+            tools:text="Here are some trending posts on SHEROES" />
+
+        </RelativeLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_suggested_mentor_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/body"
+            android:layout_below="@id/top_section"
             android:divider="@color/fully_transparent" />
 </RelativeLayout>
 </android.support.v7.widget.CardView>

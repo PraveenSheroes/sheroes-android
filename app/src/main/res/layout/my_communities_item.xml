@@ -15,7 +15,7 @@
         tools:src="@color/green" />
 
     <TextView
-        android:layout_margin="@dimen/dp_size_2"
+        android:layout_margin="@dimen/dp_size_4"
         android:id="@+id/community_name"
         android:maxLines="@integer/int_value_for_line_1"
         android:ellipsize="end"

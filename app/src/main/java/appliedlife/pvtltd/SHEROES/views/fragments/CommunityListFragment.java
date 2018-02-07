@@ -58,7 +58,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  */
 
 public class CommunityListFragment extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
-    private static final String SCREEN_LABEL = "Communities List Screen";
+    private static final String SCREEN_LABEL = "Communities Screen";
     private final String TAG = LogUtils.makeLogTag(CommunityListFragment.class);
 
     @Inject
@@ -73,8 +73,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Bind(R.id.all_communities)
     RecyclerView mAllCommunityListView;
 
-    @Bind(R.id.progress_bar_community)
-    ProgressBar progressBar;
+    @Bind(R.id.loader_gif)
+    CardView loaderGif;
 
     @Inject
     AppUtils mAppUtils;
@@ -121,14 +121,10 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         mMyCommunitiesListView.setVisibility(View.GONE);
         myCommunityLabel.setVisibility(View.GONE);
 
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.bringToFront();
+        loaderGif.setVisibility(View.VISIBLE);
+        loaderGif.bringToFront();
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
-        LogUtils.info(TAG, "**********New Communities fragment on create*********");
-
-        mCommunityListingPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mCommunityListingPresenter.fetchAllCommunity();
 
         mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunityListingPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
             @Override
@@ -146,6 +142,14 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mCommunityListingPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mCommunityListingPresenter.fetchAllCommunity();
     }
 
     @Override
@@ -215,7 +219,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         mFeedAdapter.setData(feedDetails);
         mFeedAdapter.notifyDataSetChanged();
 
-        progressBar.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -291,6 +295,14 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Override
     public void openChampionListingScreen(CarouselDataObj carouselDataObj) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
 
     }
 }

@@ -32,6 +32,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private BaseHolderInterface mBaseHolderInterface;
     private CarouselDataObj mCarouselDataObj;
     private CarouselViewHolder carouselViewHolder;
+
     //region Constructor
     public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj, CarouselViewHolder carouselViewHolder) {
         mContext = context;
@@ -62,25 +63,33 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
-
-            case TYPE_COMMUNITY:
-                CommunityCompactViewHolder communityCompactViewHolder = (CommunityCompactViewHolder) holder;
-                CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetails.get(position);
-                communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
-                break;
-
-            case TYPE_USER:
-                MentorCard mentorCard = (MentorCard) holder;
-                UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
-                mentorCard.bindData(userSolrObj, mContext,position);
-                break;
-            case TYPE_SEE_MORE:
-                SeeMoreCompactViewHolder seeMoreCompactViewHolder = (SeeMoreCompactViewHolder) holder;
-                seeMoreCompactViewHolder.bindData();
-                break;
-
+        if (holder == null) {
+            return;
         }
+
+        if(holder.getItemViewType() == -1) {
+            return;
+        }
+
+            switch (holder.getItemViewType()) {
+
+                case TYPE_COMMUNITY:
+                    CommunityCompactViewHolder communityCompactViewHolder = (CommunityCompactViewHolder) holder;
+                    CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetails.get(position);
+                    communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
+                    break;
+
+                case TYPE_USER:
+                    MentorCard mentorCard = (MentorCard) holder;
+                    UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
+                    mentorCard.bindData(userSolrObj, mContext, position);
+                    break;
+                case TYPE_SEE_MORE:
+                    SeeMoreCompactViewHolder seeMoreCompactViewHolder = (SeeMoreCompactViewHolder) holder;
+                    seeMoreCompactViewHolder.bindData();
+                    break;
+
+            }
 
     }
 
@@ -95,18 +104,21 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (feedDetail instanceof CommunityFeedSolrObj) {
                 return TYPE_COMMUNITY;
             }
-            if (feedDetail instanceof UserSolrObj) {
+            else if (feedDetail instanceof UserSolrObj) {
                 return TYPE_USER;
             }
         }
-        if(position == mFeedDetails.size()){
+        if(position == getDataItemCount() && !(mFeedDetails.get(getDataItemCount() -1) instanceof UserSolrObj)){
             return TYPE_SEE_MORE;
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public int getItemCount() {
+        if(getDataItemCount()>0 && mFeedDetails.get(getDataItemCount() -1) instanceof UserSolrObj) {
+            return mFeedDetails == null ? 0 : mFeedDetails.size();
+        }
         return mFeedDetails == null ? 0 : mFeedDetails.size() + 1;
     }
     //endregion
