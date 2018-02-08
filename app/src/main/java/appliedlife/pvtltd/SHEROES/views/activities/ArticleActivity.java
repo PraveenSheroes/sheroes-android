@@ -310,7 +310,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         });
 
         applyPalette();
-        if (CommonUtil.fromNthTimeOnly(AppConstants.ARTICLE_SHARE_SESSION_PREF, 2)) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.ARTICLE_SHARE_SESSION_PREF, AppConstants.ARTICLE_SESSION)== AppConstants.ARTICLE_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.ARTICLE_SHARE_PREF)) {
                 toolTipForShareArticle();
             }
@@ -326,7 +326,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_bottom_right, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(false);
-                    popupWindowTooTip.showAsDropDown(fab, 50, -20);
+                  //  popupWindowTooTip.showAsDropDown(fab, 50, -20);
+                    popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
                     final TextView tvGotIt =popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle =popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_ARTICLE_SHARE));

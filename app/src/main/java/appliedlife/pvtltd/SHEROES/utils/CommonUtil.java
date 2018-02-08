@@ -919,7 +919,8 @@ public class CommonUtil {
         }
         return !shown;
     }
-    public static boolean fromNthTimeOnly(String key, int n) {
+
+   /* public static boolean fromNthTimeOnly(String key, int n) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (prefs == null) {
             return false;
@@ -935,6 +936,24 @@ public class CommonUtil {
                 prefs.edit().putInt(key, (count + 1)).apply();
             }
             return false;
+        }
+    }*/
+    public static int forGivenCountOnly(String key, int n) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return 0;
+        }
+        int count = prefs.getInt(key, 1);
+        if ((count >= n)) {
+            if (count <= n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return count;
+        } else {
+            if (count < n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return count;
         }
     }
     public  static class CircleTransform extends BitmapTransformation {

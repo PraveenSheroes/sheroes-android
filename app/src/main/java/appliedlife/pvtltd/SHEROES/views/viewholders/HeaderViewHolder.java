@@ -43,7 +43,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView userName;
     @Bind(R.id.ripple)
     RippleView rippleView;
-    private  Context context;
+    private Context context;
     @Inject
     Preference<LoginResponse> userPreference;
     private String mPhotoUrl;
@@ -52,39 +52,43 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private FeedDetail dataItem;
     private View popupViewToolTip;
     private PopupWindow popupWindowTooTip;
+    private boolean isToolTip;
 
     public HeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        if (CommonUtil.forGivenCountOnly(AppConstants.HEADER_PROFILE_SESSION_PREF, AppConstants.HEADER_SESSION) == AppConstants.HEADER_SESSION) {
+            if (CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF)) {
+                isToolTip = true;
+            }
+        }
     }
 
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem=item;
-        this.context=context;
+        this.dataItem = item;
+        this.context = context;
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
             }
-            String userName = userPreference.get().getUserSummary().getFirstName() +AppConstants.SPACE + userPreference.get().getUserSummary().getLastName();
-            if (StringUtil.isNotNullOrEmptyString(userName) ) {
+            String userName = userPreference.get().getUserSummary().getFirstName() + AppConstants.SPACE + userPreference.get().getUserSummary().getLastName();
+            if (StringUtil.isNotNullOrEmptyString(userName)) {
                 loggedInUser = userName;
             }
             userId = userPreference.get().getUserSummary().getUserId();
         }
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
-        if(StringUtil.isNotNullOrEmptyString(loggedInUser)) {
+        if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);
         }
-            headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
-        if (CommonUtil.fromNthTimeOnly(AppConstants.HEADER_PROFILE_SESSION_PREF, 3)) {
-            if (CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF)) {
-                toolTipForHeaderFeed();
-            }
+        headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
+        if (isToolTip) {
+            toolTipForHeaderFeed();
         }
     }
 
@@ -98,6 +102,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
             }
         });
     }
+
     @OnClick(R.id.iv_header_circle_icon)
     public void userImageClickForProfile() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -109,6 +114,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         });
 
     }
+
     @OnClick(R.id.header_msg)
     public void textClickForCreatePost() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -129,17 +135,18 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     public void onClick(View v) {
 
     }
+
     private void toolTipForHeaderFeed() {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 try {
-                    LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(true);
-                    popupWindowTooTip.showAsDropDown(ivLoginUserPic, 50, -20);
+                    popupWindowTooTip.showAsDropDown(ivLoginUserPic, 10, 10);
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(context.getString(R.string.ID_TOOL_TIP_FEED_HEADER_PROFILE));

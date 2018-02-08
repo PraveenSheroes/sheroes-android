@@ -62,6 +62,8 @@ public enum Event {
     CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared"),
     CHALLENGE_COMPLETED(AnalyticsEventType.CHALLENGE, "Completed"),
     CHALLENGE_SUBMIT_CLICKED(AnalyticsEventType.CHALLENGE, "Submit Clicked"),
+    CHALLENGE_GRATIFICATION_WHATS(AnalyticsEventType.CHALLENGE, " Challenge Gratification Whatsapp Clicked"),
+    CHALLENGE_GRATIFICATION_FACEBOOK(AnalyticsEventType.CHALLENGE, " Challenge Gratification facebook Clicked"),
     SEND_ADDRESS_CLICKED(AnalyticsEventType.CHALLENGE, "Send Address Clicked"),
     //endregion
 

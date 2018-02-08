@@ -544,49 +544,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
 
-    public void initializeRxEditText(SocialAutoCompleteTextView searchQuestionText) {
-        RxTextView.textChanges(searchQuestionText)
-                .filter(new Predicate<CharSequence>() {
-                    @Override
-                    public boolean test(CharSequence charSequence) {
-
-                        return charSequence.length() >=  AppConstants.MIN_QUESTION_SEARCH_LENGTH;
-                    }
-                })
-                .debounce(200, TimeUnit.MILLISECONDS)
-                .flatMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
-                    @Override
-                    public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
-                        if (charSequence.length() <  AppConstants.MIN_QUESTION_SEARCH_LENGTH) {
-                            return Observable.empty();
-                        }
-                        if(mAppUtils!=null)
-                        {
-                            return searchUserDataFromModel(mAppUtils.searchUserDataRequest(String.valueOf(charSequence).trim(),"COMMENT"));
-                        }
-                        return null;
-
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
-                    @Override
-                    public void onComplete() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                    }
-
-                    @Override
-                    public void onNext(SearchUserDataResponse posts) {
-                        getMvpView().showListOfParticipate(posts.getParticipantList());
-                    }
-                });
-    }
     public void searchUserTagging(SearchUserDataRequest searchUserDataRequest ) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);

@@ -1592,9 +1592,10 @@ public class AppUtils {
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
-    public  SearchUserDataRequest searchUserDataRequest(String query,String listType) {
+    public  SearchUserDataRequest searchUserDataRequest(String query,String listType,long entityOrParticipantId) {
         AppUtils appUtils = AppUtils.getInstance();
         SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
+        searchUserDataRequest.setParticipatingEntityParticipantId(entityOrParticipantId);
         searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
         searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
         searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());

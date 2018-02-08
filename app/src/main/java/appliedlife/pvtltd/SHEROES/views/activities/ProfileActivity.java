@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -459,7 +460,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             popupViewToolTip = layoutInflater.inflate(R.layout.tool_tip_center, null);
             popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindowTooTip.setOutsideTouchable(false);
-            popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, 20);
+           // popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, -120);
+            popupWindowTooTip.showAtLocation(tvMentorAskQuestion, Gravity.BOTTOM, 0, 230);
             final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
             final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
             tvTitle.setText(getString(R.string.ID_TOOL_TIP_ASK_QUESTION));
@@ -480,7 +482,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
             popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindowTooTip.setOutsideTouchable(false);
-            popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, 20);
+          //  popupWindowTooTip.showAsDropDown(tvMentorDashBoardFollow, 150, 20);
+            popupWindowTooTip.showAtLocation(tvMentorDashBoardFollow, Gravity.TOP, -60, 430);
             final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
             final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
             tvTitle.setText(getString(R.string.ID_TOOL_TIP_FOLLOWER));
@@ -517,6 +520,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         tvMentorAskQuestion.setLayoutParams(ask);
         LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) tvMentorAskQuestion.getLayoutParams();
         secondImageLayout.weight = 1;
+
         if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
             toolTipForAskQuestion();
         }
@@ -902,7 +906,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
             lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
-            lps.setMargins(70, 50, 0, 0);
+            lps.setMargins(40, 70, 0, 0);
 
             TextView title = (TextView) view.findViewById(R.id.title);
             title.setText(R.string.tool_tip_user_share);

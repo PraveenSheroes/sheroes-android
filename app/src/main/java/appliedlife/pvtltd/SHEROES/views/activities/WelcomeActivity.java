@@ -226,6 +226,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
         mLoginPresenter.getMasterDataToPresenter();
+        //
+
     }
 
     private void loginSetUp() {

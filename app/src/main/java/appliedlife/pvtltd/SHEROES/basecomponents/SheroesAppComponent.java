@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -279,6 +280,8 @@ public interface SheroesAppComponent {
     void inject(OnBoardingFragment onBoardingFragment);
 
     void inject(ShareBottomSheetFragment shareBottomSheetFragment);
+
+    void inject(ChallengeGratificationActivity challengeGratificationActivity);
 
 }
 

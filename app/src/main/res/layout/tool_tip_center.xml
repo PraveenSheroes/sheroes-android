@@ -6,17 +6,19 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ic_tool_tip_center_bg">
 
         <TextView
             android:id="@+id/tv_tool_tip_desc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="@integer/int_value_for_line_1"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginBottom="@dimen/dp_size_24"
             android:layout_marginRight="@dimen/dp_size_16"
             android:gravity="left"
             android:lineSpacingExtra="@dimen/dp_size_5"
@@ -26,14 +28,13 @@
 
         <TextView
             android:id="@+id/tv_got_it"
-            android:layout_gravity="end"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/dp_size_10"
             android:paddingRight="@dimen/dp_size_10"
             android:paddingLeft="@dimen/dp_size_10"
             android:paddingBottom="@dimen/sp_size_20"
-            android:gravity="end"
             android:textAllCaps="true"
             android:text="@string/ID_GOT_IT"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"

@@ -294,11 +294,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         assignNavigationRecyclerListView();
         sheUserInit();
         toolTipForNotification();
+        if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION)== AppConstants.DRAWER_SESSION) {
+            if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
+                toolTipForNav();
+            }
+        }
     }
-
-
     private void toolTipForNotification() {
-        if (CommonUtil.fromNthTimeOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, 4)) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION)== AppConstants.NOTIFICATION_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -310,7 +313,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             popupWindowTooTip.setOutsideTouchable(true);
                             //popupWindowTooTip.showAsDropDown(mIvHomeNotification, -150, -20);
-                            popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP, 10, 130);
+                            popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP, 10, 140);
                             final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                             final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
                             tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
@@ -340,8 +343,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowTooTip.setOutsideTouchable(false);
-                    popupWindowTooTip.showAsDropDown(tvDrawerNavigation, 0, -20);
+                    popupWindowTooTip.setOutsideTouchable(true);
+                    popupWindowTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
                     final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_NAV));
@@ -1345,11 +1348,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.LEFT);
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
-        if (CommonUtil.fromNthTimeOnly(AppConstants.NAV_SESSION_PREF, 3)) {
-            if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
-                toolTipForNav();
-            }
-        }
     }
 
     @Override

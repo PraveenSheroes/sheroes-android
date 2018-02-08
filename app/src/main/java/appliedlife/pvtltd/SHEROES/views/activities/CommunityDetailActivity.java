@@ -26,6 +26,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -185,10 +186,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mCommunityFeedSolrObj != null) {
             initializeLayout();
         }
-        if (CommonUtil.fromNthTimeOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, 2)) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, AppConstants.INVITE_FRIEND_SESSION)== AppConstants.INVITE_FRIEND_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
                 toolTipForInviteFriends();
-            }
+           }
         }
     }
     private void toolTipForInviteFriends() {
@@ -201,7 +202,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(false);
-                    popupWindowTooTip.showAsDropDown(mToolbar, 50, -20);
+                   // popupWindowTooTip.showAsDropDown(mToolbar, 50, -20);
+                    popupWindowTooTip.showAtLocation(mToolbar, Gravity.TOP, -120, 135);
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_INVITE_FRIEND));

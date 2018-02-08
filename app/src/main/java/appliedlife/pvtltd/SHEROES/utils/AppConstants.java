@@ -154,6 +154,7 @@ public class AppConstants {
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
+    public static final String CHALLENGE_GRATIFICATION = "challenge_gratification";
 
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
@@ -327,5 +328,12 @@ public class AppConstants {
 
     public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
+    public static final int DRAWER_SESSION = 3;
+    public static final int NOTIFICATION_SESSION = 4;
+    public static final int ALBUM_SESSION = 2;
+    public static final int ARTICLE_SESSION = 2;
+    public static final int HEADER_SESSION = 3;
+    public static final int INVITE_FRIEND_SESSION = 2;
+    public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
 
 }

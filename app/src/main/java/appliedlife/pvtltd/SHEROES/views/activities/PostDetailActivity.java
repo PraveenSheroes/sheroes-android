@@ -233,7 +233,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             @Override
             public Unit invoke(SocialView socialView, String s) {
                 if(s.length()>2) {
-                    mPostDetailPresenter.searchUserTagging(mAppUtils.searchUserDataRequest(s, "COMMENT"));
+                    if(null!=mUserPostObj) {
+                        mPostDetailPresenter.searchUserTagging(mAppUtils.searchUserDataRequest(s, "COMMENT",mUserPostObj.getEntityOrParticipantId()));
+                    }
                 }
                 return null;
             }

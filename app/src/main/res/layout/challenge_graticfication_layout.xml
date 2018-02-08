@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <ImageView
+        android:id="@+id/iv_challenge_response"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/challenge_completed_height"
+        android:adjustViewBounds="true"
+        android:background="@color/photo_placeholder"
+        android:scaleType="centerCrop" />
+    <TextView
+        android:id="@+id/tv_challenge_response_text_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_CHALLENGE_DONE"
+        android:layout_marginTop="@dimen/dp_size_12"
+        android:textSize="@dimen/sp_size_18"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/comment_text"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"/>
+    <TextView
+        android:id="@+id/tv_challenge_response_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ID_SHARE_WITH_FRIENDS"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:textSize="@dimen/sp_size_14"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="@color/comment_text"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dp_size_12"
+        android:background="@color/email">
+
+        <ImageView
+            android:id="@+id/iv_gratication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:src="@drawable/challenge_gratif" />
+
+        <TextView
+            android:id="@+id/tv_gratification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_gratication"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:lineSpacingExtra="@dimen/dp_size_5"
+            android:gravity="center"
+            android:text="@string/ID_SHARE_WITH_FRIENDS_TEXT"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+
+        <LinearLayout
+            android:id="@+id/ll_share"
+            android:layout_width="@dimen/challenge_width"
+            android:layout_height="@dimen/dp_size_36"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tv_gratification"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:background="@drawable/rectangle_comment_background"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:src="@drawable/ic_gratification_share" />
+
+            <View
+                android:layout_width="@dimen/dp_size_0.5"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_size_10"
+                android:alpha=".5"
+                android:background="@color/email" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_5"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:text="@string/ID_SHARE_WITH_FRIENDS"
+                android:textAllCaps="true"
+                android:textColor="@color/email"
+                android:textSize="@dimen/sp_size_14" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

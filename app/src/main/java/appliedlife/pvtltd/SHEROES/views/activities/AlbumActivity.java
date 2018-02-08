@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumCarouselAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumGalleryAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAlbumView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -138,7 +139,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         } */ else {
             return;
         }
-        if (CommonUtil.fromNthTimeOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, 2)) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
                 toolTipForPictureShare();
             }
@@ -240,8 +241,8 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             if (CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)) {
 
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
-                CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
-                //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
+               // CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
+                  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
             }
         }
         return true;
@@ -279,7 +280,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(false);
-                    popupWindowTooTip.showAsDropDown(mToolbar, 50, -20);
+                    popupWindowTooTip.showAsDropDown(mToolbar, 40, -10);
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_PICTURE_SHARE));
