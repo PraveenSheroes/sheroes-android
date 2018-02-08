@@ -91,7 +91,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  */
 
 public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
-    public static final String SCREEN_LABEL = "Community Screen Activity";
+    public static String SCREEN_LABEL = "Community Screen Activity";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
 
@@ -160,6 +160,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if(mCommunityTab == null){
             if(getArguments() !=null) {
                 String dataUrl = getArguments().getString(AppConstants.END_POINT_URL);
+                String screenName = getArguments().getString(AppConstants.SCREEN_NAME);
+
+                if(CommonUtil.isNotEmpty(screenName)) {
+                    SCREEN_LABEL = screenName;
+                }
+
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
                 }
@@ -612,6 +618,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (mCommunityFeedObj.isMember()) {
             mCommunityFeedObj.setMember(false);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 mFeedPresenter.leaveCommunity(removeMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), mCommunityFeedObj);
@@ -619,6 +626,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else {
             mCommunityFeedObj.setMember(true);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();

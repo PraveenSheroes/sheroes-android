@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
@@ -190,6 +191,40 @@ public class MixpanelHelper {
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
+        }
+    }
+
+    //TODO - Fix this with ujjwal
+    public static void trackCommunityEvent(Event event, CommunityFeedSolrObj communityDetails, String screenName, String positionInCarousel, String positionOfCarousel) {
+        if (StringUtil.isNotNullOrEmptyString(communityDetails.getSubType())) {
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(communityDetails.getIdOfEntityOrParticipant()))
+                            .title(communityDetails.getNameOrTitle())
+                            .communityCategory(communityDetails.getCommunityType())
+                            .positionInCarousel(positionInCarousel)
+                            .positionOfCarousel(positionOfCarousel)
+                            .type(getTypeFromSubtype(communityDetails.getSubType()))
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+
+            AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
+        }
+    }
+
+    public static void trackCommunityEvent(Event event, CommunityFeedSolrObj communityDetails, String screenName) {
+        if (StringUtil.isNotNullOrEmptyString(communityDetails.getSubType())) {
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(communityDetails.getIdOfEntityOrParticipant()))
+                            .title(communityDetails.getNameOrTitle())
+                            .communityCategory(communityDetails.getCommunityType())
+                            .type(getTypeFromSubtype(communityDetails.getSubType()))
+                            .positionInList(communityDetails.getItemPosition())
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+
+            AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
         }
     }
 

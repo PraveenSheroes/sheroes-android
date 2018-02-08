@@ -22,6 +22,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -277,17 +279,20 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
             userIdList.add(userPreference.get().getUserSummary().getUserId());
+            //JOin Click get position
+            String position[] = getCommunityPositionInCarousel(communityFeedSolrObj);
+            if(position!=null)
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, communityFeedSolrObj, getScreenName(), position[0], position[1]);
             mCommunityListingPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj, carouselViewHolder);
         }
-
-        //JOin Click get position
-        getOuterCarousel(communityFeedSolrObj);
-
     }
 
     @Override
     public void unJoinCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            //Leave Click get position
+            String position[] = getCommunityPositionInCarousel(communityFeedSolrObj);
+            if(position!=null) AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, communityFeedSolrObj, getScreenName(), position[0], position[1]);
             mCommunityListingPresenter.leaveCommunity(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj, carouselViewHolder);
         }
     }
@@ -300,6 +305,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
                     new EventProperty.Builder()
                             .name(getString(R.string.ID_CAROUSEL_SEE_MORE))
                             .build();
+
+
             CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
         } else{
             LogUtils.info(TAG, "End Point Url is Null");
@@ -316,7 +323,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public String[] getOuterCarousel(FeedDetail updatedFeedDetail) {
+    public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {
+        String position[] = new String[2];
         if (mFeedAdapter == null) {
             return null;
         }
@@ -334,11 +342,13 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
                     FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
                     if (innerFeedDetail.getIdOfEntityOrParticipant() == updatedFeedDetail.getIdOfEntityOrParticipant()) {
                         LogUtils.info(TAG, "Row :" + i + "Seq" + j + "::" + innerFeedDetail.getNameOrTitle());
+                        position[0] = String.valueOf(i);
+                        position[1] = String.valueOf(j);
                     }
                 }
             }
         }
-        return null;
+        return position;
     }
 
 }

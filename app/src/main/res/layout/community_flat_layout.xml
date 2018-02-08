@@ -61,6 +61,7 @@
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:letterSpacing="0.04"
                         android:maxLines="@integer/int_value_for_line_1"
+                        android:ellipsize="end"
                         android:textColor="@color/comment_text"
                         android:textSize="@dimen/sp_size_15"
                         tools:text="Health Tips" />

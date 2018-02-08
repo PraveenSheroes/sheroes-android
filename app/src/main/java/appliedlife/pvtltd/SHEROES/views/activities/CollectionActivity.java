@@ -57,6 +57,8 @@ public class CollectionActivity extends BaseActivity {
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, endPointUrl);
+        bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
