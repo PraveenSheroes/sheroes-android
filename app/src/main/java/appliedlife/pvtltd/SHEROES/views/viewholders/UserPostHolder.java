@@ -688,7 +688,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if (!mUserPostObj.isAnonymous()) {
+        if(mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+            mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+        }
+        else if (!mUserPostObj.isAnonymous()) {
             mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
@@ -701,7 +704,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (!mUserPostObj.isAnonymous()) {
+                if(mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                    mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+                }
+                else if (!mUserPostObj.isAnonymous()) {
                     mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
@@ -822,9 +828,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
-                // TODO : ujjwal
-                // viewInterface.handleOnClick(mUserPostObj, mTitle);
+                if(mUserPostObj!=null && !mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15)
+                mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
             }
 
             @Override

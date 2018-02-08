@@ -74,7 +74,7 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void onClick(View view) {
         if(viewInterface instanceof AllCommunityItemCallback){
-            ((AllCommunityItemCallback)viewInterface).onCommunityClicked((CommunityFeedSolrObj) mFeedDetail);
+            ((AllCommunityItemCallback)viewInterface).onMyCommunityClicked((CommunityFeedSolrObj) mFeedDetail);
         }
     }
 }

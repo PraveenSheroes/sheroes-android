@@ -102,7 +102,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     @OnClick(R.id.icon)
     public void onIconClicked() {
-        if (CommonUtil.isNotEmpty(carouselDataObj.getEndPointUrl()) && CommonUtil.isNotEmpty(carouselDataObj.getScreenTitle())) {
+        if (carouselDataObj!=null && carouselDataObj.getFeedDetails()!=null && carouselDataObj.getFeedDetails().get(0) !=null) {
             if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);

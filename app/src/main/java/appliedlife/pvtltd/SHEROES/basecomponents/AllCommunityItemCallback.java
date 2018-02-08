@@ -10,6 +10,8 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 
 public interface AllCommunityItemCallback extends BaseHolderInterface {
 
+    void onMyCommunityClicked(CommunityFeedSolrObj communityFeedObj);
+
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
 
     void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);

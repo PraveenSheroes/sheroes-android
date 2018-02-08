@@ -263,6 +263,11 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     }
 
     @Override
+    public void onMyCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    @Override
     public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }

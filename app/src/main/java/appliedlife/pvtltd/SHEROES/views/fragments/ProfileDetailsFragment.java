@@ -218,6 +218,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
+        if(((ProfileActivity)getActivity()) == null) return;
         String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
         String mutualCommunityText = getResources().getString(R.string.PLACEHOLDER_MUTUAL_COMMUNITY, name, String.valueOf(mutualCommunitySize));
         mutualCommunityLabel.setText(mutualCommunityText);
@@ -270,7 +271,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
-        int screenWidth = CommonUtil.getWindowWidth(getContext());
+        if(getActivity() ==null) return;
+        int screenWidth = CommonUtil.getWindowWidth(getActivity());
         int columnSize = screenWidth / 2 - mImageMargin;
         userCommunityLayout.removeAllViews();
         int counter = 0;

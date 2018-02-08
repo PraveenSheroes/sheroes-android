@@ -78,8 +78,4 @@ public class MyCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.communities = communities;
         notifyDataSetChanged();
     }
-
-    public interface OnItemClickListener {
-        void onItemClick(CommunityFeedSolrObj feedDetail);
-    }
 }

@@ -29,8 +29,9 @@
         android:textStyle="normal"
         android:layout_marginTop="16dp"
         android:textColor="#dc4541"
+        android:textAllCaps="true"
         android:letterSpacing="0.07"
-        android:text="SEE MORE"
+        android:text="@string/ID_CAROUSEL_SEE_MORE"
         />
 
 </RelativeLayout>
