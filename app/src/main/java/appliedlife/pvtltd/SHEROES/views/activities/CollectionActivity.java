@@ -64,6 +64,7 @@ public class CollectionActivity extends BaseActivity {
         fragmentTransaction.replace(R.id.container, feedFragment);
         fragmentTransaction.commit();
 
+        ((SheroesApplication) getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     private void setupToolbar(String toolbarTitle) {
@@ -92,14 +93,15 @@ public class CollectionActivity extends BaseActivity {
         return SCREEN_LABEL;
     }
 
-    public static void navigateTo(Activity fromActivity, String endPointUrl, String toolbarTitle, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, String endPointUrl, String toolbarTitle, String sourceScreen, String screenName, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, CollectionActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.END_POINT_URL, endPointUrl);
         intent.putExtra(AppConstants.TOOLBAR_TITTE, toolbarTitle);
+        intent.putExtra(AppConstants.SCREEN_NAME, screenName);
 
-        if(CommonUtil.isNotEmpty(toolbarTitle)) {
-            SCREEN_LABEL = toolbarTitle;
+        if(CommonUtil.isNotEmpty(screenName)) {
+            SCREEN_LABEL = screenName;
         }
 
         if (!CommonUtil.isEmpty(properties)) {

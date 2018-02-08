@@ -271,7 +271,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
         int screenWidth = CommonUtil.getWindowWidth(getContext());
-        float aspectRatio = (float) 150 / 160;
         int columnSize = screenWidth / 2 - mImageMargin;
         userCommunityLayout.removeAllViews();
         int counter = 0;

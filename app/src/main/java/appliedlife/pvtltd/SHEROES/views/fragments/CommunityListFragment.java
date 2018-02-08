@@ -16,11 +16,13 @@ import android.widget.TextView;
 import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -36,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityListingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -126,6 +129,9 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
 
+        mCommunityListingPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mCommunityListingPresenter.fetchAllCommunity();
+
         mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunityListingPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -141,15 +147,9 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             }
         });
 
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITIES_LISTING));
+
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mCommunityListingPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mCommunityListingPresenter.fetchAllCommunity();
     }
 
     @Override
@@ -168,7 +168,6 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 
     @Override
     public void showMyCommunity(FeedResponsePojo myCommunityResponse) {
@@ -275,6 +274,10 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             userIdList.add(userPreference.get().getUserSummary().getUserId());
             mCommunityListingPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj, carouselViewHolder);
         }
+
+        //JOin Click get position
+        getOuterCarousel(communityFeedSolrObj);
+
     }
 
     @Override
@@ -287,7 +290,12 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Override
     public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
         if(carouselDataObj!= null && carouselDataObj.getEndPointUrl()!=null) {
-            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .name(getString(R.string.ID_CAROUSEL_SEE_MORE))
+                            .build();
+            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
         } else{
             LogUtils.info(TAG, "End Point Url is Null");
         }
@@ -301,9 +309,32 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
-
     }
+
+    public String[] getOuterCarousel(FeedDetail updatedFeedDetail) {
+        if (mFeedAdapter == null) {
+            return null;
+        }
+        List<FeedDetail> feedDetails = mFeedAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return null;
+        }
+
+        for (int i = 0; i < feedDetails.size(); i++) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail instanceof CarouselDataObj) {
+                int size = ((CarouselDataObj) feedDetail).getFeedDetails().size();
+                for (int j = 0; j < size; ++j) {
+                    FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
+                    if (innerFeedDetail.getIdOfEntityOrParticipant() == updatedFeedDetail.getIdOfEntityOrParticipant()) {
+                        LogUtils.info(TAG, "Row :" + i + "Seq" + j + "::" + innerFeedDetail.getNameOrTitle());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
 }
 

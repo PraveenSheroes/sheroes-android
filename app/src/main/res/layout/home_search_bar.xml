@@ -22,8 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/dp_size_8"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_17"
+        android:textSize="@dimen/sp_size_20"
         android:visibility="gone"
         />
 

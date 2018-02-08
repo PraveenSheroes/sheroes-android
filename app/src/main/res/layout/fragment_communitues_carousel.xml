@@ -18,10 +18,10 @@
             android:orientation="vertical">
 
             <TextView
+                android:background="@color/carousel_card_bg"
                 android:id="@+id/my_communities_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:paddingEnd="@dimen/dp_size_1"
                 android:paddingLeft="@dimen/dp_size_16"
@@ -34,13 +34,13 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/my_communities"
+                android:background="@color/carousel_card_bg"
                 android:paddingLeft="@dimen/dp_size_16"
                 android:paddingRight="@dimen/dp_size_1"
                 android:paddingStart="@dimen/dp_size_16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_size_5"
-                android:background="@color/white"
                 android:minHeight="@dimen/dp_size_100" />
 
             <android.support.v7.widget.RecyclerView
@@ -49,8 +49,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="@dimen/dp_size_100" />
         </LinearLayout>
-
-
 
         <include
             android:visibility="gone"

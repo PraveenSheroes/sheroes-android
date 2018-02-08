@@ -561,10 +561,9 @@ public class HomeFragment extends BaseFragment {
                 if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
                     return;
 
-                List<CarouselDataObj> feedDetailList=mPullRefreshList.getFeedResponses(); //todo - fix this crash
-                CarouselDataObj carouselDataObj = feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
-                if(((UserSolrObj) baseResponse).isSuggested())
-                {
+                List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses(); //todo - fix this crash
+             /*   CarouselDataObj carouselDataObj = (CarouselDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
+                if(((UserSolrObj) baseResponse).isSuggested()) {
                     carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
                     UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
                     List<FeedDetail> mentorDataObjList=new ArrayList<>();
@@ -584,7 +583,7 @@ public class HomeFragment extends BaseFragment {
                 {
                     carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
                     mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
-                }
+                }*/
                 break;
             default:
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);

@@ -253,6 +253,7 @@ public class AppConstants {
     public static final String CHALLENGE_ID = "challenge_id";
     public static final String END_POINT_URL = "end_point_url";
     public static final String TOOLBAR_TITTE = "toolbar_title";
+    public static final String SCREEN_NAME = "screen_name";
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";

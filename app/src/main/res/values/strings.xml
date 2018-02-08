@@ -295,6 +295,8 @@
     <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
+    <string name="ID_COMMUNITIES_LISTING">Communities Screen</string>
+    <string name="ID_COMMUNITIES_CATEGORY">Communities Category Screen</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_LOGIN_WITH_EMAIL">Login with Email</string>
     <string name="ID_LOGIN_TEXT">login</string>
@@ -303,6 +305,8 @@
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
+    <string name="ID_TOP_SEE_MORE">More Top Icon</string>
+    <string name="ID_CAROUSEL_SEE_MORE">See More</string>
 
 
     <string name="ID_POSTED_REVIEW">posted a review for</string>

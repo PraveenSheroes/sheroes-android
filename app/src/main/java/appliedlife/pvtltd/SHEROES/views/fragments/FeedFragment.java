@@ -886,12 +886,20 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void showCommunityJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
-        mAdapter.notifyDataSetChanged();
+        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (position == RecyclerView.NO_POSITION) {
+            return;
+        }
+        mAdapter.setItem(position, communityFeedSolrObj);
     }
 
     @Override
     public void showCommunityLeftResponse(CommunityFeedSolrObj communityFeedSolrObj) {
-        mAdapter.notifyDataSetChanged();
+        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (position == RecyclerView.NO_POSITION) {
+            return;
+        }
+        mAdapter.setItem(position, communityFeedSolrObj);
     }
 
     public int findPositionById(long id) {

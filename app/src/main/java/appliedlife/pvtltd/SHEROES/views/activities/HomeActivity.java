@@ -197,13 +197,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     NavigationView mNavigationView;
     @Bind(R.id.rv_drawer)
     RecyclerView mRecyclerView;
-    //@Bind(R.id.home_view_pager)
-    //ViewPager mViewPager;
-    //@Bind(R.id.tab_community_view)
-    //TabLayout mTabLayout;
-    //@Bind(R.id.tab_community_view)
-    //LinearLayout communityContainer;
-
     @Bind(R.id.tv_search_box)
     TextView mTvSearchBox;
     @Bind(R.id.tv_setting)
@@ -247,7 +240,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
     private String profile;
-   // private ViewPagerAdapter mViewPagerAdapter;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
@@ -412,6 +404,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         pbNavDrawer.setVisibility(View.VISIBLE);
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
+        mInvite.setVisibility(View.VISIBLE);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -885,7 +878,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void collectionScreen(CarouselDataObj carouselDataObj) {
         if(carouselDataObj != null) {
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, null, REQUEST_CODE_FOR_COMMUNITY_LISTING);
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.ID_TOP_SEE_MORE), getString(R.string.ID_COMMUNITIES_CATEGORY),  null, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 
@@ -1028,6 +1021,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void initCommunityViewPagerAndTabs() {
+
+        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
+        mTitleText.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mInvite.setVisibility(View.GONE);
+
         CommunityListFragment communityListFragment = new CommunityListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communityListFragment, CommunityListFragment.class.getName()).commitAllowingStateLoss();
     }
@@ -1055,9 +1054,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         flFeedFullView.setVisibility(View.VISIBLE);
-     //   communityContainer.setVisibility(View.GONE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-       // mTabLayout.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         initHomeViewPagerAndTabs();
     }
@@ -1094,6 +1091,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
 
+        mTitleText.setText("");
+        mTitleText.setVisibility(View.VISIBLE);
+        mInvite.setVisibility(View.VISIBLE);
+
     }
 
 
@@ -1102,10 +1103,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
-       // flFeedFullView.setVisibility(View.GONE);
-     //   communityContainer.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-       // mTabLayout.setVisibility(View.VISIBLE);
         initCommunityViewPagerAndTabs();
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
@@ -1131,7 +1129,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTvSearchBox.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
     }
 
     public void createCommunityPostOnClick(CommunityPost communityPost) {
@@ -1161,6 +1158,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
+
+        mTitleText.setText("");
+        mTitleText.setVisibility(View.VISIBLE);
+        mInvite.setVisibility(View.VISIBLE);
     }
 
     public void inviteMyCommunityDialog() {
@@ -1214,6 +1215,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else {
             mICSheroes.setVisibility(View.VISIBLE);
         }
+        mTitleText.setText("");
+        mTitleText.setVisibility(View.VISIBLE);
+        mInvite.setVisibility(View.VISIBLE);
 
     }
 

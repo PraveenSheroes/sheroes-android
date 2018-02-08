@@ -79,10 +79,10 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         if (CommonUtil.isNotEmpty(item.getIconUrl())) {
             mIcon.setVisibility(View.VISIBLE);
-            Glide.with(context)
+           /* Glide.with(context)
                     .asBitmap()
                     .load(item.getIconUrl())
-                    .into(mIcon);
+                    .into(mIcon);*/
         } else {
          //   mIcon.setVisibility(View.GONE);
         }
