@@ -241,8 +241,8 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             if (CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)) {
 
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
-               // CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
-                  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
+                CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
+                //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
             }
         }
         return true;

@@ -335,5 +335,6 @@ public class AppConstants {
     public static final int HEADER_SESSION = 3;
     public static final int INVITE_FRIEND_SESSION = 2;
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
+    public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Gratification";
 
 }

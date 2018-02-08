@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,9 +33,10 @@ import java.util.HashMap;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,8 +60,8 @@ public class ChallengeGratificationActivity extends BaseActivity {
     TextView toolbarTitle;
     @Bind(R.id.toolbar)
     Toolbar mToolbarView;
-    private FeedDetail mFeedDetail;
-
+    private Contest mContest;
+    private String shareText;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +74,16 @@ public class ChallengeGratificationActivity extends BaseActivity {
 
     private void init() {
         if (null != getIntent() && null != getIntent().getExtras()) {
-            mFeedDetail = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.CHALLENGE_GRATIFICATION));
+            mContest = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.CHALLENGE_GRATIFICATION));
+            shareText="You have completed the #"+mContest.tag+" challenge ";
+            SpannableString spannableSecond = new SpannableString(shareText);
+            if (StringUtil.isNotNullOrEmptyString(shareText)) {
+                spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.email)), 22, shareText.length()-11, 0);
+                spannableSecond.setSpan(new StyleSpan(Typeface.BOLD), 22, shareText.length()-11, 0);
+                tvChallengeResponseText.setMovementMethod(LinkMovementMethod.getInstance());
+                tvChallengeResponseText.setText(spannableSecond, TextView.BufferType.SPANNABLE);
+                tvChallengeResponseText.setSelected(true);
+            }
         }
     }
 
@@ -80,24 +96,25 @@ public class ChallengeGratificationActivity extends BaseActivity {
         toolbarTitle.setText(getString(R.string.ID_CHALLENGE_COMPLETED));
     }
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+    public static void navigateTo(Activity fromActivity, Contest contest, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, ChallengeGratificationActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
         Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(feedDetail);
+        Parcelable parcelable = Parcels.wrap(contest);
         bundle.putParcelable(AppConstants.CHALLENGE_GRATIFICATION, parcelable);
         intent.putExtras(bundle);
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    @OnClick(R.id.tv_mentor_answering_question)
+    @OnClick(R.id.ll_share)
     public void shareClick() {
-        if (mFeedDetail != null) {
-            Bitmap bitmap = createShareImage();
-            ShareBottomSheetFragment.showDialog(this, mFeedDetail, bitmap, SCREEN_LABEL);
+        if (mContest != null) {
+            ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false);
+            //  Bitmap bitmap = createShareImage();
+         //   ShareBottomSheetFragment.showDialog(this, mContest, bitmap, SCREEN_LABEL);
         }
     }
 
@@ -111,9 +128,9 @@ public class ChallengeGratificationActivity extends BaseActivity {
         TextView shareText = view.findViewById(R.id.tv_challenge_share_text);
         TextView shareDesc = view.findViewById(R.id.tv_challenge_share_card);
 
-        shareText.setText(mFeedDetail.getNameOrTitle());
+        shareText.setText(mContest.title);
         Glide.with(profilePic.getContext())
-                .load(mFeedDetail.getImageUrl())
+                .load(mContest.thumbImage)
                 .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                 .into(profilePic);
         return CommonUtil.getViewBitmap(userDetailContainer);

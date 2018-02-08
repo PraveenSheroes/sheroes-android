@@ -122,7 +122,7 @@
     <dimen name="on_boarding_girl_height">172dp</dimen>
     <dimen name="on_boarding_girl_width">84dp</dimen>
     <dimen name="challenge_width">225dp</dimen>
-    <dimen name="challenge_completed_height">170dp</dimen>
+    <dimen name="challenge_completed_height">180dp</dimen>
     <dimen name="challenge_share_height">180dp</dimen>
     <dimen name="challenge_girl_height">151dp</dimen>
     <dimen name="challenge_girl_width">156dp</dimen>

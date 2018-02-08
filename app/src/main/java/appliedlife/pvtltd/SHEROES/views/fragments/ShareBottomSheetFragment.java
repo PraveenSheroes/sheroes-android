@@ -38,9 +38,9 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
@@ -93,7 +93,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     @Bind(R.id.title)
     TextView title;
 
-    private FeedDetail mFeedDetail;
+    private Contest mContest;
     private boolean isUserShareBitmap;
     private Bitmap userShareBitmap;
     // endregion
@@ -108,7 +108,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             Parcelable parcelable;
             if (getArguments().getParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ) != null) {
                 parcelable = getArguments().getParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ);
-                mFeedDetail = Parcels.unwrap(parcelable);
+                mContest = Parcels.unwrap(parcelable);
                 byte[] byteArray = getArguments().getByteArray("image");
                 userShareBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 isUserShareBitmap = true;
@@ -147,10 +147,10 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //endregion
 
     //region Public Static methods
-    public static void showDialog(AppCompatActivity activity, FeedDetail user, Bitmap bitmap, String sourceScreen) {
+    public static void showDialog(AppCompatActivity activity, Contest contest, Bitmap bitmap, String sourceScreen) {
         ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
         Bundle args = new Bundle();
-        args.putParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ, Parcels.wrap(user));
+        args.putParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ, Parcels.wrap(contest));
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
@@ -200,15 +200,17 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     public void onWhatsAppClick() {
         if (isUserShareBitmap) {
             Config config = Config.getConfig();
-            String whatsAppShareText = "";
-            if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getImageUrl())) {
-                String imageShareText = "";
-            }
-            CommonUtil.shareBitmapWhatsApp(getContext(), userShareBitmap, mSourceScreen, mFeedDetail.getImageUrl(), whatsAppShareText, Event.CHALLENGE_GRATIFICATION_WHATS);
+            String whatsAppShareText = mContest.shortUrl;
+            CommonUtil.shareBitmapWhatsApp(getContext(), userShareBitmap, mSourceScreen, mContest.thumbImage, whatsAppShareText, Event.CHALLENGE_GRATIFICATION_WHATS);
             return;
         }
         if (mIsImageShare) {
-            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, "Album Screen", true);
+            String shareScreen="Album Screen";
+            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+            {
+                shareScreen=mSourceScreen;
+            }
+            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, shareScreen, true);
         } else {
             if (mShowTitle && mIsAppLink) {
                 String shareWhatsappAppLink = "";
@@ -255,7 +257,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
             Map<String, Object> properties;
             EventProperty.Builder builder = new EventProperty.Builder();
-            builder.id(String.valueOf(mFeedDetail.getIdOfEntityOrParticipant()));
+            builder.id(String.valueOf(mContest.remote_id));
             properties = builder.build();
             AnalyticsManager.trackEvent(Event.CHALLENGE_GRATIFICATION_FACEBOOK, mSourceScreen, properties);
             dismiss();
