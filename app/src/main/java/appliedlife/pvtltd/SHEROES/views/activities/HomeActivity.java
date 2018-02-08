@@ -878,7 +878,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void collectionScreen(CarouselDataObj carouselDataObj) {
         if(carouselDataObj != null) {
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.ID_TOP_SEE_MORE), getString(R.string.ID_COMMUNITIES_CATEGORY),  null, REQUEST_CODE_FOR_COMMUNITY_LISTING);
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .name(getString(R.string.ID_TOP_SEE_MORE))
+                            .communityCategory(carouselDataObj.getScreenTitle())
+                            .build();
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.ID_TOP_SEE_MORE), getString(R.string.ID_COMMUNITIES_CATEGORY),  properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 

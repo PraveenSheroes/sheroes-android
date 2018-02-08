@@ -304,8 +304,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .name(getString(R.string.ID_CAROUSEL_SEE_MORE))
+                            .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
-
 
             CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
         } else{
