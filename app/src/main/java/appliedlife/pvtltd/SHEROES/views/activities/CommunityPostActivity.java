@@ -141,6 +141,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.anonymous_select)
     SwitchCompat mAnonymousSelect;
 
+    @Bind(R.id.view_tooltip_anony)
+    View viewToolTipAnony;
+
+
     @Bind(R.id.user_pic)
     ImageView mUserPicView;
 
@@ -301,15 +305,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupAnonymousSlelectListener();
         setViewByCreatePostCall();
         setupToolbarItemsColor();
-        if(CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //Do something after 100ms
-                    toolTip();
-                }
-            }, 1500);
+        if(!mIsChallengePost) {
+           if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something after 100ms
+                        toolTip();
+                    }
+                }, 1500);
+            }
         }
         postCommentSocialTagging();
     }
@@ -572,11 +578,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void toolTip() {
+        final View popupView;
+        final PopupWindow popupWindow;
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         popupView = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setOutsideTouchable(false);
-        popupWindow.showAsDropDown(mAnonymousSelect, 20, 10);
+        popupWindow.showAsDropDown(viewToolTipAnony, 0, 30);
         final TextView tvGotIt = (TextView) popupView.findViewById(R.id.got_it);
         final TextView tvTitle = (TextView) popupView.findViewById(R.id.title);
         tvTitle.setText(getString(R.string.ID_TOOL_TIP_CREATE_POST));

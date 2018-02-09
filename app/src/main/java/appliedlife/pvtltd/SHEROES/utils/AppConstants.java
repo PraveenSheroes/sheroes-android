@@ -189,6 +189,7 @@ public class AppConstants {
     public static final String PROFILE_SHARE_PREF= "PROFILE_SHARE";
     public static final String CREATE_POST_SHARE_PREF= "CREATE_POST_ANONYMOUS";
     public static final String ASK_QUESTION_SHARE_PREF= "ASK_QUESTION_ANONYMOUS";
+    public static final String ASK_QUESTION_SESSION_SHARE_PREF= "ASK_QUESTION_SESSION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF= "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF= "BELL_NOTIFICATION";
     public static final String FOLLOWER_SHARE_PREF= "FOLLOW_USER";
@@ -334,7 +335,9 @@ public class AppConstants {
     public static final int ARTICLE_SESSION = 2;
     public static final int HEADER_SESSION = 3;
     public static final int INVITE_FRIEND_SESSION = 2;
+    public static final int ASK_QUESTION_SESSION = 2;
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
     public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Gratification";
+    public static final String LIST_TYPE_TAGGING = "COMMENT";
 
 }

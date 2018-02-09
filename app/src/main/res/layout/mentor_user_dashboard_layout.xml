@@ -101,7 +101,13 @@
     <include
         android:visibility="gone"
         layout="@layout/gif_loader"/>
-
+    <View
+        android:id="@+id/view_profile"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dp_size_150"
+        android:visibility="invisible"
+        android:layout_gravity="end|bottom"/>
     <include
         layout="@layout/mentor_dashboard_footer_layout"
         android:layout_width="match_parent"

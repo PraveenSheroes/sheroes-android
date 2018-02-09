@@ -2,10 +2,14 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v7.widget.CardView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -34,6 +38,8 @@ import butterknife.OnClick;
  */
 
 public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
+    @Bind(R.id.card_header_view)
+    CardView rootLayout;
     BaseHolderInterface viewInterface;
     @Bind(R.id.iv_header_circle_icon)
     CircleImageView ivLoginUserPic;
@@ -62,7 +68,11 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         if (CommonUtil.forGivenCountOnly(AppConstants.HEADER_PROFILE_SESSION_PREF, AppConstants.HEADER_SESSION) == AppConstants.HEADER_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF)) {
                 isToolTip = true;
+            } else {
+                isToolTip = false;
             }
+        } else {
+            isToolTip = false;
         }
     }
 
@@ -88,7 +98,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         }
         headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
         if (isToolTip) {
-            toolTipForHeaderFeed();
+            toolTipForHeaderFeed(context);
         }
     }
 
@@ -136,32 +146,25 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    private void toolTipForHeaderFeed() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+    private void toolTipForHeaderFeed(Context context) {
+        LayoutInflater inflater = null;
+        inflater = LayoutInflater.from(context);
+        final View view  = inflater.inflate(R.layout.tooltip_arrow_nav, null);
+        FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
+        imageParams.gravity = Gravity.START;
+        imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
+        TextView text = (TextView) view.findViewById(R.id.title);
+        text.setText(R.string.ID_TOOL_TIP_FEED_HEADER_PROFILE);
+        TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+        gotIt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                try {
-                    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
-                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowTooTip.setOutsideTouchable(true);
-                    popupWindowTooTip.showAsDropDown(ivLoginUserPic, 10, 10);
-                    final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
-                    tvTitle.setText(context.getString(R.string.ID_TOOL_TIP_FEED_HEADER_PROFILE));
-                    tvGotIt.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            popupWindowTooTip.dismiss();
-                        }
-                    });
-                } catch (WindowManager.BadTokenException e) {
-                    Crashlytics.getInstance().core.logException(e);
-                }
+            public void onClick(View v) {
+
+                    rootLayout.removeView(view);
             }
-        }, 1000);
-
-
+        });
+        rootLayout.addView(view, lps);
     }
 }

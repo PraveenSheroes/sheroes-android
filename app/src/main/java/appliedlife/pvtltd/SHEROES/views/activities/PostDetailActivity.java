@@ -36,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.hendraanggrian.socialview.SocialView;
@@ -67,9 +66,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -205,7 +204,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mTitleToolbar.setText(R.string.ID_COMMENTS);
         setupEditInputText();
         setupToolbarItemsColor();
-        postCommentSocialTagging();
+      //  postCommentSocialTagging();
     }
 
     private boolean isWhatsAppShare() {
@@ -224,6 +223,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private void postCommentSocialTagging() {
         customSocialUserAdapter = new SocialPersonAdapter(this);
+        mInputText.setMentionAdapter(customSocialUserAdapter);
         mInputText.setThreshold(1);
         mInputText.setMentionEnabled(true);
         mInputText.setHyperlinkEnabled(true);
@@ -231,15 +231,39 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mInputText.setHashtagColor(ContextCompat.getColor(getApplication(), R.color.link_color));
         mInputText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {
             @Override
-            public Unit invoke(SocialView socialView, String s) {
-                if(s.length()>2) {
-                    if(null!=mUserPostObj) {
-                        mPostDetailPresenter.searchUserTagging(mAppUtils.searchUserDataRequest(s, "COMMENT",mUserPostObj.getEntityOrParticipantId()));
-                    }
+            public Unit invoke(SocialView socialView, String searchText) {
+                if (searchText.length() > 2) {
+                   /* if (!isTagTyping) {
+                        if (null != mUserPostObj) {
+                            mPostDetailPresenter.searchUserTagging(mAppUtils.searchUserDataRequest(searchText, "COMMENT", mUserPostObj.getEntityOrParticipantId()));
+                        }
+                    } else {
+                        isTagTyping=false;
+                        isUserTagging = true;
+                        customSocialUserAdapter.clear();
+                        String shortUrl;
+                        if(StringUtil.isNotNullOrEmptyString(mUserPostObj.getPostShortBranchUrls()))
+                        {
+                            shortUrl=mUserPostObj.getPostShortBranchUrls();
+                        }else
+                        {
+                            shortUrl=mUserPostObj.getDeepLinkUrl();
+                        }
+                        String taggingLink ="<a href="+shortUrl+">"+searchText+"</a>"+mInputText.getText().toString();
+                    }*/
                 }
                 return null;
             }
         });
+      /*  customSocialUserAdapter = new SocialPersonAdapter(this);
+        List<UserTaggingPerson> participantList=new ArrayList<>();
+        UserTaggingPerson userTaggingPerson=new UserTaggingPerson();
+        userTaggingPerson.name="Amlesh";
+        UserTaggingPerson userTaggingPerson1=new UserTaggingPerson();
+        userTaggingPerson1.name="Amlhhhh";
+        participantList.add(userTaggingPerson);
+        participantList.add(userTaggingPerson1);
+        customSocialUserAdapter.addAll(participantList);*/
     }
 
     @OnClick(R.id.tv_user_name_for_post)
@@ -374,7 +398,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void showListOfParticipate(List<UserTaggingPerson> participantLists) {
         customSocialUserAdapter.addAll(participantLists);
-        mInputText.setMentionAdapter(customSocialUserAdapter);
+        customSocialUserAdapter.notifyDataSetChanged();
     }
 
     @Override

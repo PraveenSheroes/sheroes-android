@@ -26,6 +26,13 @@ public class CommentReactionRequestPojo extends BaseRequest {
     @Expose
     private long participationId;
 
+    @SerializedName("list_type")
+    @Expose
+    private String listType;
+    @SerializedName("search_text")
+    @Expose
+    private String searchText;
+
     public String getUserComment() {
         return userComment;
     }
@@ -80,5 +87,21 @@ public class CommentReactionRequestPojo extends BaseRequest {
 
     public void setAnonymous(boolean anonymous) {
         isAnonymous = anonymous;
+    }
+
+    public String getListType() {
+        return listType;
+    }
+
+    public void setListType(String listType) {
+        this.listType = listType;
+    }
+
+    public String getSearchText() {
+        return searchText;
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText = searchText;
     }
 }

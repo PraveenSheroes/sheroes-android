@@ -22,7 +22,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -173,6 +172,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
 
+    @Bind(R.id.ll_profile)
+    LinearLayout llProfile;
     @Bind(R.id.li_post)
     LinearLayout liPost;
 
@@ -244,6 +245,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
+
+    @Bind(R.id.view_profile)
+    View toolTipProfile;
+    @Bind(R.id.view_tool_follow)
+    View viewToolTipFollow;
+
 
     private boolean isMentorQARefresh = false;
     @Inject
@@ -456,12 +463,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private void toolTipForAskQuestion() {
         try {
+            toolTipProfile.setVisibility(View.INVISIBLE);
+            final View popupViewToolTip;
+            final PopupWindow popupWindowTooTip;
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupViewToolTip = layoutInflater.inflate(R.layout.tool_tip_center, null);
             popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            popupWindowTooTip.setOutsideTouchable(false);
-           // popupWindowTooTip.showAsDropDown(tvMentorAskQuestion, 20, -120);
-            popupWindowTooTip.showAtLocation(tvMentorAskQuestion, Gravity.BOTTOM, 0, 230);
+            popupWindowTooTip.setOutsideTouchable(true);
+            popupWindowTooTip.showAsDropDown(toolTipProfile, 0, 0);
+            // popupWindowTooTip.showAtLocation(tvMentorAskQuestion, Gravity.BOTTOM, 0, 70);
             final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
             final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
             tvTitle.setText(getString(R.string.ID_TOOL_TIP_ASK_QUESTION));
@@ -469,6 +479,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 @Override
                 public void onClick(View v) {
                     popupWindowTooTip.dismiss();
+                    toolTipProfile.setVisibility(View.GONE);
                 }
             });
         } catch (WindowManager.BadTokenException e) {
@@ -478,12 +489,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private void toolTipForFollowUser() {
         try {
+            viewToolTipFollow.setVisibility(View.INVISIBLE);
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
             popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            popupWindowTooTip.setOutsideTouchable(false);
-          //  popupWindowTooTip.showAsDropDown(tvMentorDashBoardFollow, 150, 20);
-            popupWindowTooTip.showAtLocation(tvMentorDashBoardFollow, Gravity.TOP, -60, 430);
+            popupWindowTooTip.setOutsideTouchable(true);
+            popupWindowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
+            // popupWindowTooTip.showAtLocation(tvMentorDashBoardFollow,0, 0, 300);
             final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
             final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
             tvTitle.setText(getString(R.string.ID_TOOL_TIP_FOLLOWER));
@@ -491,6 +503,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 @Override
                 public void onClick(View v) {
                     popupWindowTooTip.dismiss();
+                    viewToolTipFollow.setVisibility(View.GONE);
                 }
             });
         } catch (WindowManager.BadTokenException e) {
@@ -520,9 +533,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         tvMentorAskQuestion.setLayoutParams(ask);
         LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) tvMentorAskQuestion.getLayoutParams();
         secondImageLayout.weight = 1;
-
-        if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
-            toolTipForAskQuestion();
+        if (isMentor) {
+            if (CommonUtil.forGivenCountOnly(AppConstants.ASK_QUESTION_SESSION_SHARE_PREF, AppConstants.ASK_QUESTION_SESSION) == AppConstants.ASK_QUESTION_SESSION) {
+                if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
+                    toolTipForAskQuestion();
+                }
+            }
         }
         if (CommonUtil.ensureFirstTime(AppConstants.FOLLOWER_SHARE_PREF)) {
             toolTipForFollowUser();

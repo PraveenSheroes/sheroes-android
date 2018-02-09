@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
 import appliedlife.pvtltd.SHEROES.presenters.AlbumPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumCarouselAdapter;
@@ -140,7 +141,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             return;
         }
         if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
+           if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
                 toolTipForPictureShare();
             }
         }
@@ -276,11 +277,18 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             @Override
             public void run() {
                 try {
+                    int width = AppUtils.getWindowWidth(AlbumActivity.this);
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(false);
-                    popupWindowTooTip.showAsDropDown(mToolbar, 40, -10);
+                    if(width<750) {
+                        popupWindowTooTip.showAsDropDown(mToolbar, 40, -10);
+                    }else
+                    {
+                        popupWindowTooTip.showAsDropDown(mToolbar, width-200, -10);
+                    }
+
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_PICTURE_SHARE));

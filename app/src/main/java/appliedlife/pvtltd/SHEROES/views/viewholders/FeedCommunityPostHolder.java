@@ -292,9 +292,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (!mUserPostObj.isAnonymous()) {
                 isToolTipForUser = false;
                 inflater = LayoutInflater.from(context);
-                view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+                view = inflater.inflate(R.layout.tooltip_arrow_nav, null);
                 FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(52, context), 0, 0);
+                lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
                 imageParams.gravity = Gravity.START;
                 imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);

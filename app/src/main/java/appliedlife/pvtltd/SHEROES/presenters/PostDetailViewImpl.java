@@ -9,12 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import com.hendraanggrian.widget.SocialAutoCompleteTextView;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -48,12 +45,8 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -186,7 +179,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -214,7 +207,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest){
+    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
         return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
@@ -292,7 +285,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
-        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
+        CommentReactionRequestPojo  commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
@@ -544,7 +537,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
 
-    public void searchUserTagging(SearchUserDataRequest searchUserDataRequest ) {
+    public void searchUserTagging(SearchUserDataRequest searchUserDataRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             return;
@@ -563,13 +556,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
             @Override
             public void onNext(SearchUserDataResponse searchUserDataResponse) {
-                if(!searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.INVALID)) {
+                if (!searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.INVALID)) {
                     getMvpView().showListOfParticipate(searchUserDataResponse.getParticipantList());
                 }
             }
         });
 
     }
+
     public Observable<SearchUserDataResponse> searchUserDataFromModel(SearchUserDataRequest searchUserDataRequest) {
         return sheroesAppServiceApi.getUserTaggingResponse(searchUserDataRequest)
                 .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
@@ -713,10 +707,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    if(approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true){
+                    if (approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true) {
                         // spam post was rejected
                         getMvpView().onPostDeleted();
-                    }else if(approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false){
+                    } else if (approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false) {
                         // spam post was approved
                         userPostSolrObj.setSpamPost(false);
                         mBaseResponseList.set(0, userPostSolrObj);

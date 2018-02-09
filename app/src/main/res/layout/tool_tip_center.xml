@@ -34,7 +34,7 @@
             android:paddingTop="@dimen/dp_size_10"
             android:paddingRight="@dimen/dp_size_10"
             android:paddingLeft="@dimen/dp_size_10"
-            android:paddingBottom="@dimen/sp_size_20"
+            android:paddingBottom="@dimen/sp_size_10"
             android:textAllCaps="true"
             android:text="@string/ID_GOT_IT"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"

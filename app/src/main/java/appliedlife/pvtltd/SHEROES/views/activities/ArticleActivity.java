@@ -322,12 +322,17 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             @Override
             public void run() {
                 try {
+                    int width = AppUtils.getWindowWidth(ArticleActivity.this);
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_bottom_right, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowTooTip.setOutsideTouchable(false);
-                  //  popupWindowTooTip.showAsDropDown(fab, 50, -20);
-                    popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
+                    popupWindowTooTip.setOutsideTouchable(true);
+                    if (width < 750) {
+                        popupWindowTooTip.showAsDropDown(fab, -500, -250);
+                    } else {
+                        popupWindowTooTip.showAsDropDown(fab, -700, -350);
+                    }
+                   // popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
                     final TextView tvGotIt =popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle =popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_ARTICLE_SHARE));

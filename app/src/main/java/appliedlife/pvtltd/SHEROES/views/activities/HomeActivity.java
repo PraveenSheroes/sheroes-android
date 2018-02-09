@@ -226,6 +226,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     FrameLayout mFlNotification;
     @Bind(R.id.title_text)
     TextView mTitleText;
+    @Bind(R.id.view_tool_tip_notification)
+    View viewtoolTipNotification;
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
     @Bind(R.id.pb_login_progress_bar)
@@ -308,12 +310,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     @Override
                     public void run() {
                         try {
+                            int width = AppUtils.getWindowWidth(HomeActivity.this);
                             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
                             popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             popupWindowTooTip.setOutsideTouchable(true);
-                            //popupWindowTooTip.showAsDropDown(mIvHomeNotification, -150, -20);
-                            popupWindowTooTip.showAtLocation(mIvHomeNotification, Gravity.TOP, 10, 140);
+                            if(width<750) {
+                                popupWindowTooTip.showAsDropDown(viewtoolTipNotification, -100, 30);
+                            }else
+                            {
+                                popupWindowTooTip.showAsDropDown(viewtoolTipNotification, 0, 30);
+                            }
                             final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                             final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
                             tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
@@ -340,6 +347,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             @Override
             public void run() {
                 try {
+                    final View popupViewToolTip;
+                    final PopupWindow popupWindowTooTip;
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
