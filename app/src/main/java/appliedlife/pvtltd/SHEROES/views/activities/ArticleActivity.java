@@ -328,9 +328,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(true);
                     if (width < 750) {
-                        popupWindowTooTip.showAsDropDown(fab, -500, -200);
+                        popupWindowTooTip.showAsDropDown(fab, -400, -200);
                     } else {
-                        popupWindowTooTip.showAsDropDown(fab, -800, -400);
+                        popupWindowTooTip.showAsDropDown(fab, -700, -400);
                     }
                     // popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
                     final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
