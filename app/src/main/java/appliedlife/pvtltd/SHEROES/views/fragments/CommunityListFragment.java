@@ -332,6 +332,14 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             return;
         }
 
+        if(updatedFeedDetail.size()>6) {
+            List<FeedDetail> newList = new ArrayList<>();
+            for(int k=0; k<6; k++) {
+                newList.add(updatedFeedDetail.get(k));
+            }
+            updatedFeedDetail = newList;
+        }
+
         CommunityFeedSolrObj community = (CommunityFeedSolrObj) updatedFeedDetail.get(0);
         String type = community.getCommunityType();
 
