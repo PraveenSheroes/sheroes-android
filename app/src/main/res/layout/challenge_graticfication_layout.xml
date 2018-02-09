@@ -49,7 +49,6 @@
                 android:layout_marginTop="@dimen/dp_size_7"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
-                android:text="@string/ID_SHARE_WITH_FRIENDS"
                 android:textColor="@color/comment_text"
                 android:textSize="@dimen/sp_size_14" />
 

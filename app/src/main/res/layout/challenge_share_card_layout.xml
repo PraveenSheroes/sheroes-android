@@ -61,7 +61,6 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/dp_size_5"
-        android:text="@string/ID_CHALLENGE_SHARE_TEXT"
         android:textColor="@color/comment_text"
         android:textSize="@dimen/sp_size_14" />
 

@@ -201,7 +201,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         if (isUserShareBitmap) {
             Config config = Config.getConfig();
             String whatsAppShareText = mContest.shortUrl;
-            CommonUtil.shareBitmapWhatsApp(getContext(), userShareBitmap, mSourceScreen, mContest.thumbImage, whatsAppShareText, Event.CHALLENGE_GRATIFICATION_WHATS);
+           // CommonUtil.shareBitmapWhatsApp(getContext(), userShareBitmap, mSourceScreen, mContest.thumbImage, whatsAppShareText, Event.CHALLENGE_GRATIFICATION_WHATS);
             return;
         }
         if (mIsImageShare) {
@@ -235,11 +235,15 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         }
         myClip = ClipData.newPlainText("copy_link", mShareCopyLink);
         myClipboard.setPrimaryClip(myClip);
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(mShareImageUrl)
-                        .build();
-        AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
+        if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+        {
+            HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Copy Link").build();
+            properties.put(EventProperty.URL.getString(), mShareImageUrl);
+            AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
+        }else {
+            HashMap<String, Object> properties =new EventProperty.Builder().id(mShareImageUrl).build();
+            AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
+        }
         dismiss();
         Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
     }
@@ -255,11 +259,12 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                     .build();
             ShareDialog shareDialog = new ShareDialog(getActivity());
             shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
-            Map<String, Object> properties;
-            EventProperty.Builder builder = new EventProperty.Builder();
-            builder.id(String.valueOf(mContest.remote_id));
-            properties = builder.build();
-            AnalyticsManager.trackEvent(Event.CHALLENGE_GRATIFICATION_FACEBOOK, mSourceScreen, properties);
+            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+            {
+                HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Facebook").build();
+                properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
+            }
             dismiss();
             return;
         }
@@ -288,10 +293,17 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                                     .build();
                             ShareDialog shareDialog = new ShareDialog(getActivity());
                             shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
-                            EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
-                            final HashMap<String, Object> properties = builder.build();
-                            properties.put(EventProperty.URL.getString(), mShareImageUrl);
-                            AnalyticsManager.trackEvent(Event.IMAGE_SHARED, SCREEN_LABEL, properties);
+                            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+                            {
+                                HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Facebook").build();
+                                properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                                AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
+                            }else {
+                                EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
+                                final HashMap<String, Object> properties = builder.build();
+                                properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                                AnalyticsManager.trackEvent(Event.IMAGE_SHARED, SCREEN_LABEL, properties);
+                            }
                         }
                     });
         } else {

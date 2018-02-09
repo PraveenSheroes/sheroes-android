@@ -61,7 +61,6 @@ public class ChallengeGratificationActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbarView;
     private Contest mContest;
-    private String shareText;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +74,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
     private void init() {
         if (null != getIntent() && null != getIntent().getExtras()) {
             mContest = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.CHALLENGE_GRATIFICATION));
-            shareText="You have completed the #"+mContest.tag+" challenge ";
+        String    shareText="You have completed the #"+mContest.tag+" challenge ";
             SpannableString spannableSecond = new SpannableString(shareText);
             if (StringUtil.isNotNullOrEmptyString(shareText)) {
                 spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.email)), 22, shareText.length()-11, 0);
@@ -85,6 +84,14 @@ public class ChallengeGratificationActivity extends BaseActivity {
                 tvChallengeResponseText.setSelected(true);
             }
         }
+        if(StringUtil.isNotNullOrEmptyString(mContest.thumbImage)) {
+            Glide.with(this)
+                    .asBitmap()
+                    .load(mContest.thumbImage)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .into(tvChallengeResponse);
+        }
+
     }
 
     private void setupToolbar() {
@@ -98,7 +105,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
 
     public static void navigateTo(Activity fromActivity, Contest contest, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ChallengeGratificationActivity.class);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, SCREEN_LABEL);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
@@ -112,6 +119,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
     @OnClick(R.id.ll_share)
     public void shareClick() {
         if (mContest != null) {
+            String shareText="Yay! I just completed the #"+mContest.tag+" challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: "+mContest.shortUrl;
             ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false);
             //  Bitmap bitmap = createShareImage();
          //   ShareBottomSheetFragment.showDialog(this, mContest, bitmap, SCREEN_LABEL);

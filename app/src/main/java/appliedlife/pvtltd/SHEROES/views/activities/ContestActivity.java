@@ -405,7 +405,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 onBackPressed();
                 break;
             case R.id.share:
-
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + mContest.shortUrl;
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
