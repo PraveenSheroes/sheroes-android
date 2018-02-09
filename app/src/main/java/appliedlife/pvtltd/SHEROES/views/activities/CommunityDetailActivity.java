@@ -202,15 +202,24 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             public void run() {
                 try {
                     int width = AppUtils.getWindowWidth(CommunityDetailActivity.this);
-                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
-                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowTooTip.setOutsideTouchable(false);
-                    if (width < 750) {
+                    if (width < 600) {
+                        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right_small, null);
+                        popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindowTooTip.setOutsideTouchable(false);
                         popupWindowTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                     } else {
-                        popupWindowTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
+                        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
+                        popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindowTooTip.setOutsideTouchable(false);
+                        if (width < 750) {
+                            popupWindowTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
+                        } else {
+                            popupWindowTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
+                        }
                     }
+
                     // popupWindowTooTip.showAtLocation(mToolbar, Gravity.TOP, -50, 150);
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);

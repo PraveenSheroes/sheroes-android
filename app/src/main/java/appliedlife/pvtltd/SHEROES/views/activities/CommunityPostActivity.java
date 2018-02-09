@@ -303,7 +303,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setViewByCreatePostCall();
         setupToolbarItemsColor();
         if(!mIsChallengePost) {
-           if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
+         //  if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -312,7 +312,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         toolTip();
                     }
                 }, 1500);
-            }
+           // }
         }
     }
 
