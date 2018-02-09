@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="300dp"
+        android:layout_width="310dp"
         android:layout_height="68dp"
         android:background="@drawable/ic_too_tip_nav"
         android:orientation="horizontal">
@@ -16,12 +16,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_size_8"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_8"
             android:layout_marginTop="@dimen/dp_size_16"
             android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="left"
+            android:text="@string/ID_TOOL_TIP_FEED_HEADER_PROFILE"
             android:lineSpacingExtra="@dimen/dp_size_5"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_14" />
@@ -32,8 +32,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:padding="@dimen/dp_size_10"
+            android:padding="@dimen/dp_size_5"
             android:text="@string/ID_GOT_IT"
+            android:layout_marginBottom="@dimen/dp_size_4"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_14" />
