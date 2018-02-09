@@ -104,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -143,6 +144,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.COMMUNITIES_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
@@ -1506,50 +1508,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void communityDetailActivityResponse(Intent intent) {
-       /*   if (null != intent && null != intent.getExtras() && null != intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL)) {
-          CommunityFeedSolrObj communityFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
-            CommunityEnum communityEnum = (CommunityEnum) intent.getExtras().get(AppConstants.MY_COMMUNITIES_FRAGMENT);
-            if (null != communityEnum) {
-                switch (communityEnum) {
-                    case FEATURE_COMMUNITY:
-                        if (mViewPagerAdapter == null) {
-                            return;
-                        }
-                        Fragment feature = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                        if (AppUtils.isFragmentUIActive(feature)) {
-                            if (communityFeedSolrObj.isFeatured() && communityFeedSolrObj.isMember()) {
-                                communityOnClick();
-                            } else {
-                                ((FeaturedFragment) feature).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                            }
-                        }
-                        break;
-                    case MY_COMMUNITY:
-                        if (StringUtil.isNotNullOrEmptyString(communityFeedSolrObj.getCallFromName()) && communityFeedSolrObj.getCallFromName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
-                            communityOnClick();
-                        } else {
-                            if (null != mViewPagerAdapter) {
-                                Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-                                if (AppUtils.isFragmentUIActive(community)) {
-                                    ((MyCommunitiesFragment) community).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                                }
-                            } else {
-                                if (communityFeedSolrObj.isViewed()) {
-                                    homeOnClick();
-                                } else {
-                                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                                    if (AppUtils.isFragmentUIActive(fragment)) {
-                                        ((HomeFragment) fragment).commentListRefresh(communityFeedSolrObj, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + communityEnum);
+        if (null != intent && null != intent.getExtras()) {
+            CommunityListFragment currentFragment = (CommunityListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+
+            if (currentFragment != null && currentFragment.isVisible()) {
+                Bundle bundle = intent.getExtras();
+                List<FeedDetail> communitiesData = Parcels.unwrap(bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL));
+                if (communitiesData.size() > 0) {
+                    currentFragment.updateCommunityCarousel(communitiesData);
                 }
             }
-        }*/
+        }
     }
 
 

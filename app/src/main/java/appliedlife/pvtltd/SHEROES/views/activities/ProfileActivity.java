@@ -869,7 +869,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getPostShortBranchUrls())) {
             branchPostDeepLink = mUserSolarObject.getPostShortBranchUrls();
         } else {
-            branchPostDeepLink = mUserSolarObject.getDeepLinkUrl();
+            if(isMentor) {
+                branchPostDeepLink = mUserSolarObject.getMentorDeepLinkUrl();
+            } else {
+                branchPostDeepLink = mUserSolarObject.getDeepLinkUrl();
+            }
         }
 
         HashMap<String, Object> properties =
@@ -883,8 +887,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        String deepLink = isMentor ? mUserSolarObject.getMentorDeepLinkUrl() : branchPostDeepLink;
-        intent.putExtra(Intent.EXTRA_TEXT, deepLink);
+        intent.putExtra(Intent.EXTRA_TEXT, branchPostDeepLink);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 

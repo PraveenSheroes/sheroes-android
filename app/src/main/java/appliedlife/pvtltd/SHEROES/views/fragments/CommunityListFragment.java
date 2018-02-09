@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -266,7 +265,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Override
     public void onMyCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
-        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL);
     }
 
     @Override
@@ -321,6 +320,43 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //Update on Community Category changes
+    public void updateCommunityCarousel(List<FeedDetail> updatedFeedDetail) {
+        if (mFeedAdapter == null) {
+            return;
+        }
+        List<FeedDetail> feedDetails = mFeedAdapter.getDataList();
+        if (CommonUtil.isEmpty(feedDetails) && CommonUtil.isEmpty(updatedFeedDetail)) {
+            return;
+        }
+
+        CommunityFeedSolrObj community = (CommunityFeedSolrObj) updatedFeedDetail.get(0);
+        String type = community.getCommunityType();
+
+        for (int i = 0; i < feedDetails.size(); i++) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail instanceof CarouselDataObj) {
+
+                List<FeedDetail> data = ((CarouselDataObj) feedDetail).getFeedDetails();
+                int size = data.size() -1;
+                for (int j = 0; j < size; ++j) {
+
+                    CommunityFeedSolrObj innerFeedDetail = (CommunityFeedSolrObj) (data.get(j));
+                    String names = innerFeedDetail.getCommunityType();
+                    if (type.equalsIgnoreCase(names)) {
+                        data = updatedFeedDetail;
+                        ((CarouselDataObj) feedDetail).setFeedDetails(data);
+                        break;
+                    }
+                    ((CarouselDataObj) feedDetail).setFeedDetails(data);
+                }
+            }
+            feedDetails.set(i, feedDetail);
+        }
+        mFeedAdapter.setData(feedDetails);
+        mFeedAdapter.notifyDataSetChanged();
     }
 
     public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {

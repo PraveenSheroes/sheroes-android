@@ -688,7 +688,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if(mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+        if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
             mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
         }
         else if (!mUserPostObj.isAnonymous()) {

@@ -100,7 +100,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         }
     }
 
-    @OnClick(R.id.icon)
+    @OnClick(R.id.icon_container)
     public void onIconClicked() {
         if (carouselDataObj!=null && carouselDataObj.getFeedDetails()!=null && carouselDataObj.getFeedDetails().get(0) !=null) {
             if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){

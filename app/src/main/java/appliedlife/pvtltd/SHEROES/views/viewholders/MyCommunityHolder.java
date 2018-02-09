@@ -51,8 +51,8 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
         mContext = context;
         mFeedDetail = feedDetail;
 
-        if (CommonUtil.isNotEmpty(mFeedDetail.getImageUrl())) {
-           String imageKitUrl = mFeedDetail.getImageUrl();
+        if (CommonUtil.isNotEmpty(mFeedDetail.getThumbnailImageUrl())) {
+           String imageKitUrl = mFeedDetail.getThumbnailImageUrl();
             if (CommonUtil.isNotEmpty(imageKitUrl)) {
                 Glide.with(mContext)
                         .load(imageKitUrl)

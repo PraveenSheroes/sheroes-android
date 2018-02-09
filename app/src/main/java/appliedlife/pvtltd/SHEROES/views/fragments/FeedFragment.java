@@ -41,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -71,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -297,7 +297,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void addAllFeed(List<FeedDetail> feedList) {
         mAdapter.addAll(feedList);
     }
-
+    
     @Override
     public void setFeedEnded(boolean feedEnded) {
         this.hasFeedEnded = feedEnded;
@@ -899,6 +899,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return;
         }
         mAdapter.setItem(position, communityFeedSolrObj);
+        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
     }
 
     @Override
@@ -908,6 +909,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return;
         }
         mAdapter.setItem(position, communityFeedSolrObj);
+        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
     }
 
     public int findPositionById(long id) {

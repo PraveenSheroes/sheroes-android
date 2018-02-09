@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,17 +12,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
 
 /**
  * Created by ravi on 05/02/18.
@@ -38,6 +45,9 @@ public class CollectionActivity extends BaseActivity {
 
     @Bind(R.id.toolbar_name)
     TextView titleName;
+
+    private List<FeedDetail> feedDetailList;
+    private int position = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +98,23 @@ public class CollectionActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void setData(List<FeedDetail> feedDetails) {
+        feedDetailList = feedDetails;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(feedDetailList!=null) {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, Parcels.wrap(feedDetailList));
+            intent.putExtras(bundle);
+            setResult(REQUEST_CODE_FOR_COMMUNITY_LISTING, intent);
+        }
+        finish();
     }
 
     @Override
