@@ -32,14 +32,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.hendraanggrian.socialview.SocialView;
-import com.hendraanggrian.widget.SocialAutoCompleteTextView;
+
 
 import org.parceler.Parcels;
 
@@ -83,8 +83,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
+
 
 /**
  * Created by ujjwal on 07/12/17.
@@ -123,7 +122,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     TextView mTitleToolbar;
 
     @Bind(R.id.input_edit_text)
-    SocialAutoCompleteTextView mInputText;
+    EditText mInputText;
 
     @Bind(R.id.user_pic)
     CircleImageView mUserPic;
@@ -219,51 +218,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         }
         return isWhatsappShare;
-    }
-
-    private void postCommentSocialTagging() {
-        customSocialUserAdapter = new SocialPersonAdapter(this);
-        mInputText.setMentionAdapter(customSocialUserAdapter);
-        mInputText.setThreshold(1);
-        mInputText.setMentionEnabled(true);
-        mInputText.setHyperlinkEnabled(true);
-        mInputText.setMentionColor(ContextCompat.getColor(getApplication(), R.color.link_color));
-        mInputText.setHashtagColor(ContextCompat.getColor(getApplication(), R.color.link_color));
-        mInputText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {
-            @Override
-            public Unit invoke(SocialView socialView, String searchText) {
-                if (searchText.length() > 2) {
-                   /* if (!isTagTyping) {
-                        if (null != mUserPostObj) {
-                            mPostDetailPresenter.searchUserTagging(mAppUtils.searchUserDataRequest(searchText, "COMMENT", mUserPostObj.getEntityOrParticipantId()));
-                        }
-                    } else {
-                        isTagTyping=false;
-                        isUserTagging = true;
-                        customSocialUserAdapter.clear();
-                        String shortUrl;
-                        if(StringUtil.isNotNullOrEmptyString(mUserPostObj.getPostShortBranchUrls()))
-                        {
-                            shortUrl=mUserPostObj.getPostShortBranchUrls();
-                        }else
-                        {
-                            shortUrl=mUserPostObj.getDeepLinkUrl();
-                        }
-                        String taggingLink ="<a href="+shortUrl+">"+searchText+"</a>"+mInputText.getText().toString();
-                    }*/
-                }
-                return null;
-            }
-        });
-      /*  customSocialUserAdapter = new SocialPersonAdapter(this);
-        List<UserTaggingPerson> participantList=new ArrayList<>();
-        UserTaggingPerson userTaggingPerson=new UserTaggingPerson();
-        userTaggingPerson.name="Amlesh";
-        UserTaggingPerson userTaggingPerson1=new UserTaggingPerson();
-        userTaggingPerson1.name="Amlhhhh";
-        participantList.add(userTaggingPerson);
-        participantList.add(userTaggingPerson1);
-        customSocialUserAdapter.addAll(participantList);*/
     }
 
     @OnClick(R.id.tv_user_name_for_post)

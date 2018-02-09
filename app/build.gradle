@@ -143,8 +143,6 @@ dependencies {
     compile 'org.parceler:parceler-api:1.1.6'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
-    compile 'com.hendraanggrian:socialview-core:0.17'
-    compile 'com.hendraanggrian:socialview-commons:0.17'
     compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
     apt 'org.parceler:parceler:1.1.6'
 }

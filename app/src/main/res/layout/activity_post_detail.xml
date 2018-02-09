@@ -39,7 +39,7 @@
                 android:layout_marginRight="8dp"
                 android:src="@drawable/ic_anonomous" />
 
-            <com.hendraanggrian.widget.SocialAutoCompleteTextView
+            <EditText
                 android:id="@+id/input_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

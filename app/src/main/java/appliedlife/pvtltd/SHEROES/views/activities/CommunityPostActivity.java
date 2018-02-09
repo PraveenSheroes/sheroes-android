@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -53,8 +54,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.hendraanggrian.socialview.SocialView;
-import com.hendraanggrian.widget.SocialAutoCompleteTextView;
 
 import org.parceler.Parcels;
 
@@ -100,8 +99,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function2;
+
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
@@ -158,7 +156,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     TextView mCommunityName;
 
     @Bind(R.id.et_default_hint_text)
-    SocialAutoCompleteTextView mEtDefaultHintText;
+    EditText mEtDefaultHintText;
 
     @Bind(R.id.progress_bar_link)
     ProgressBar pbLink;
@@ -317,27 +315,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }, 1500);
             }
         }
-        postCommentSocialTagging();
     }
-    private void postCommentSocialTagging()
-    {
-        customSocialUserAdapter = new SocialPersonAdapter(this);
-       // customSocialUserAdapter.addAll(
-               // new UserTaggingPerson(getString(R.string.mention1_username),310,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
-               // new UserTaggingPerson(getString(R.string.mention2_username),400,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"),
-               // new UserTaggingPerson(getString(R.string.mention3_username),500,"https://img.sheroes.in/img/uploads/community/logo/201704080035059859.jpeg"));
-      //  mEtDefaultHintText.setMentionAdapter(customSocialUserAdapter);
-       // mEtDefaultHintText.setThreshold(1);
-       // mEtDefaultHintText.setHyperlinkEnabled(true);
-        mEtDefaultHintText.setMentionColor(ContextCompat.getColor(getApplication(), R.color.link_color));
-        mEtDefaultHintText.setHashtagColor(ContextCompat.getColor(getApplication(), R.color.link_color));
-        mEtDefaultHintText.setMentionTextChangedListener(new Function2<SocialView, String, Unit>() {
-            @Override
-            public Unit invoke(SocialView socialView, String s) {
-                return null;
-            }
-        });
-    }
+
     private void setViewByCreatePostCall() {
         if (null != mCommunityPost) {
             switch (mCommunityPost.createPostRequestFrom) {
