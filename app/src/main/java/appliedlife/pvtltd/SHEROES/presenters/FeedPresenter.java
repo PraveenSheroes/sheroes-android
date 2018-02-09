@@ -220,7 +220,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
 
                     }else {
-                        if(!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size()<5){
+
+                        if(feedResponsePojo.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
+                            getMvpView().setFeedEnded(true);
+                        }
+                        else if(!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size()<5){
                             getMvpView().setFeedEnded(true);
                         }
                         getMvpView().showFeedList(mFeedDetailList);
