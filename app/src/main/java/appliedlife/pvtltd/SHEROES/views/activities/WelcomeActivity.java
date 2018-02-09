@@ -579,6 +579,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         return isFirstTimeUser;
     }
 
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
 
     private void googlePlusLogin() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -1,6 +1,6 @@
 def versionMajor = 5
 def versionMinor = 9
-def versionPatch = 2
+def versionPatch = 3
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -89,9 +89,9 @@ dexcount {
 }
 repositories {
     mavenCentral()
-    google()
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.google.com'}
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

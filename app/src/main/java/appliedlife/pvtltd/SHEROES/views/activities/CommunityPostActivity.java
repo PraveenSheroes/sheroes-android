@@ -209,6 +209,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
     private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
+    private View popupView;
+    private PopupWindow popupWindow;
     //endregion
 
     //region Activity methods
@@ -303,7 +305,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setViewByCreatePostCall();
         setupToolbarItemsColor();
         if(!mIsChallengePost) {
-         //  if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
+           if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -312,7 +314,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         toolTip();
                     }
                 }, 1500);
-           // }
+            }
         }
     }
 
@@ -556,8 +558,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void toolTip() {
-        final View popupView;
-        final PopupWindow popupWindow;
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         popupView = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -628,6 +628,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
 
                 } else {
+                }
+                if(popupWindow!=null)
+                {
+                    popupWindow.dismiss();
                 }
             }
         });

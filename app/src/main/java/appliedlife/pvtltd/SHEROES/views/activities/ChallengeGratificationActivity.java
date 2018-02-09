@@ -47,7 +47,7 @@ import butterknife.OnClick;
  */
 
 public class ChallengeGratificationActivity extends BaseActivity {
-    private static final String SCREEN_LABEL = "Challenge Gratification Activity";
+    private static final String SCREEN_LABEL = "Challenge Completed Screen";
     @Bind(R.id.tv_challenge_response_text_header)
     TextView tvChallengeResponseTextHeader;
     @Bind(R.id.iv_challenge_response)

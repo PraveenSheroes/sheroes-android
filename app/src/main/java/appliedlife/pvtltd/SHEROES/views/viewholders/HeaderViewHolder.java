@@ -149,7 +149,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private void toolTipForHeaderFeed(Context context) {
         LayoutInflater inflater = null;
         inflater = LayoutInflater.from(context);
-        final View view  = inflater.inflate(R.layout.tooltip_arrow_nav, null);
+        final View view  = inflater.inflate(R.layout.too_tip_left_arrow, null);
         FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
