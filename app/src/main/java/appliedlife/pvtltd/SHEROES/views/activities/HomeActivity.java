@@ -270,8 +270,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
-    private View popupViewToolTip;
-    private PopupWindow popupWindowTooTip;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -310,6 +309,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     @Override
                     public void run() {
                         try {
+                            final View popupViewToolTip;
+                            final PopupWindow popupWindowTooTip;
                             int width = AppUtils.getWindowWidth(HomeActivity.this);
                             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
@@ -319,7 +320,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                                 popupWindowTooTip.showAsDropDown(viewtoolTipNotification, -100, 30);
                             }else
                             {
-                                popupWindowTooTip.showAsDropDown(viewtoolTipNotification, 0, 30);
+                                popupWindowTooTip.showAsDropDown(viewtoolTipNotification, -150, 30);
                             }
                             final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                             final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
@@ -375,10 +376,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (popupWindowTooTip != null && popupWindowTooTip.isShowing()) {
-            popupWindowTooTip.dismiss();
-
-        }
         activityDataPresenter.detachView();
     }
 

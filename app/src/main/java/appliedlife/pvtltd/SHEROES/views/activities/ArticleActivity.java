@@ -43,7 +43,6 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -310,12 +309,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         });
 
         applyPalette();
-        if (CommonUtil.forGivenCountOnly(AppConstants.ARTICLE_SHARE_SESSION_PREF, AppConstants.ARTICLE_SESSION)== AppConstants.ARTICLE_SESSION) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.ARTICLE_SHARE_SESSION_PREF, AppConstants.ARTICLE_SESSION) == AppConstants.ARTICLE_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.ARTICLE_SHARE_PREF)) {
                 toolTipForShareArticle();
             }
         }
     }
+
     private void toolTipForShareArticle() {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -328,13 +328,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowTooTip.setOutsideTouchable(true);
                     if (width < 750) {
-                        popupWindowTooTip.showAsDropDown(fab, -500, -250);
+                        popupWindowTooTip.showAsDropDown(fab, -500, -200);
                     } else {
-                        popupWindowTooTip.showAsDropDown(fab, -700, -350);
+                        popupWindowTooTip.showAsDropDown(fab, -800, -400);
                     }
-                   // popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
-                    final TextView tvGotIt =popupViewToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle =popupViewToolTip.findViewById(R.id.title);
+                    // popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
+                    final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.ID_TOOL_TIP_ARTICLE_SHARE));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -350,6 +350,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article, menu);
@@ -425,7 +426,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
         }
-        if (webChromeClient != null && !webChromeClient.onBackPressed()){
+        if (webChromeClient != null && !webChromeClient.onBackPressed()) {
             if (webViewText.canGoBack()) {
                 webViewText.goBack();
             } else {
@@ -492,7 +493,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     case R.id.author:
 
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if(!comment.isAnonymous()) {
+                        if (!comment.isAnonymous()) {
                             openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
                         break;
@@ -846,6 +847,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region OnScroll methods
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (popupWindowTooTip != null) {
+            popupWindowTooTip.dismiss();
+        }
         int totalHeight = mArticleLayout.getChildAt(0).getHeight();
         int articleHeight = totalHeight;
 
@@ -864,7 +868,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             int uiOptions = View.SYSTEM_UI_FLAG_LOW_PROFILE;
             getWindow().getDecorView().setSystemUiVisibility(uiOptions);
         } else {
-            if(!mHasFocus){
+            if (!mHasFocus) {
                 fab.show();
             }
             getSupportActionBar().show();
@@ -956,7 +960,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @OnClick(R.id.like_count)
-    public void onLikeCountClicked(){
+    public void onLikeCountClicked() {
         LikeListBottomSheetFragment.showDialog(this, "", mArticle.entityId);
     }
     //endregion

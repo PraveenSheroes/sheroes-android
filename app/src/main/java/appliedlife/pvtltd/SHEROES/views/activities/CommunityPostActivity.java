@@ -561,7 +561,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         popupView = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setOutsideTouchable(false);
+        popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(viewToolTipAnony, 0, 30);
         final TextView tvGotIt = (TextView) popupView.findViewById(R.id.got_it);
         final TextView tvTitle = (TextView) popupView.findViewById(R.id.title);

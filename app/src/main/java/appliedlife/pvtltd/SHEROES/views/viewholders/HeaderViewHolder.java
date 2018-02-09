@@ -161,7 +161,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         gotIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isToolTip=false;
                     rootLayout.removeView(view);
             }
         });

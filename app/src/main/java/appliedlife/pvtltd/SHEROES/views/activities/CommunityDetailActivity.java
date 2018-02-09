@@ -209,7 +209,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     if (width < 750) {
                         popupWindowTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                     } else {
-                        popupWindowTooTip.showAsDropDown(viewToolTipInvite, 0, 0);
+                        popupWindowTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
                     }
                     // popupWindowTooTip.showAtLocation(mToolbar, Gravity.TOP, -50, 150);
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
