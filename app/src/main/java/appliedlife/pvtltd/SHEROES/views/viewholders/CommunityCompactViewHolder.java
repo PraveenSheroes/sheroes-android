@@ -50,7 +50,17 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
+
+    //region private variables and constants
     private final String TAG = LogUtils.makeLogTag(CommunityCompactViewHolder.class);
+    private BaseHolderInterface viewInterface;
+    private Context mContext;
+    private Handler mHandler;
+    private CommunityFeedSolrObj mCommunityFeedObj;
+    private CarouselViewHolder mCarouselViewHolder;
+    //endregion
+
+    //region bind variables
     @Bind(R.id.feature_image)
     ImageView mFeatureImage;
 
@@ -68,12 +78,9 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @BindDimen(R.dimen.dp_size_40)
     int mCommunityIconSize;
-    BaseHolderInterface viewInterface;
-    private Context mContext;
-    private Handler mHandler;
-    private CommunityFeedSolrObj mCommunityFeedObj;
-    private CarouselViewHolder mCarouselViewHolder;
+    //endregion
 
+    //region constructor
     public CommunityCompactViewHolder(View itemView, BaseHolderInterface baseHolderInterface, CarouselViewHolder carouselViewHolder) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -81,7 +88,9 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         this.viewInterface = baseHolderInterface;
         this.mCarouselViewHolder = carouselViewHolder;
     }
+    //endregion
 
+    //region adapter method
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mCommunityFeedObj = (CommunityFeedSolrObj) item;
@@ -92,8 +101,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        }
-        else if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
+        } else if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -115,7 +123,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
                     .into(mCommunityIcon);
         }
 
-        if(CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
+        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
             mCommunityName.setText(mCommunityFeedObj.getNameOrTitle());
         }
 
@@ -132,7 +140,9 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     private void textViewOperation(Context context) {
         //TODO:: change for UI
     }
+    //endregion
 
+    //region onclick method
     @Override
     public void onClick(View view) {
 
@@ -140,12 +150,12 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.community_join)
     public void onCommunityJoinUnjoinedClicked() {
-        if(viewInterface instanceof AllCommunityItemCallback) {
-            if(mCommunityFeedObj.isMember()){
+        if (viewInterface instanceof AllCommunityItemCallback) {
+            if (mCommunityFeedObj.isMember()) {
                 mCommunityFeedObj.setMember(false);
                 mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
                 ((AllCommunityItemCallback) viewInterface).unJoinCommunity(mCommunityFeedObj, mCarouselViewHolder);
-            }else {
+            } else {
                 mCommunityFeedObj.setMember(true);
                 mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
                 ((AllCommunityItemCallback) viewInterface).joinRequestForOpenCommunity(mCommunityFeedObj, mCarouselViewHolder);
@@ -154,9 +164,10 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick({R.id.community_card_view})
-    public void onCardClicked(){
-        if(viewInterface instanceof AllCommunityItemCallback){
-            ((AllCommunityItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
+    public void onCardClicked() {
+        if (viewInterface instanceof AllCommunityItemCallback) {
+            ((AllCommunityItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
         }
     }
+    //endregion
 }

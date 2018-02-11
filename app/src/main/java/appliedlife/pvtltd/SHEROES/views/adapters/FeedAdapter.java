@@ -45,6 +45,7 @@ import butterknife.ButterKnife;
 
 public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
+    //region private variables
     public static final String TAG = "feedAdapter";
     public static final String LIST_FEED = "FEED";
     private final Context mContext;
@@ -52,6 +53,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
+    //endregion
 
     //region Constructor
     public FeedAdapter(Context context, BaseHolderInterface baseHolderInterface) {

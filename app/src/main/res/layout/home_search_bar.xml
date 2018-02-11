@@ -36,38 +36,6 @@
         android:layout_marginTop="@dimen/dp_size_16"
         android:background="@drawable/ic_sheroes_header" />
 
-    <TextView
-        android:id="@+id/tv_search_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_toLeftOf="@id/fl_notification"
-        android:layout_toRightOf="@id/tv_drawer_navigation"
-        android:background="@drawable/rectangle_search_bar"
-        android:drawableLeft="@drawable/ic_search_box_icon"
-        android:drawablePadding="@dimen/dp_size_12"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:layerType="software"
-        android:padding="@dimen/dp_size_12"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_12"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/tv_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_toLeftOf="@id/fl_notification"
-        android:layout_toRightOf="@id/tv_drawer_navigation"
-        android:gravity="center"
-        android:text="@string/ID_BOOKMARKS"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_19"
-        android:visibility="gone" />
-
     <FrameLayout
         android:id="@+id/fl_notification"
         android:layout_width="wrap_content"
@@ -108,6 +76,43 @@
                 android:textSize="@dimen/sp_size_9" />
         </FrameLayout>
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_search_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_toLeftOf="@id/fl_notification"
+        android:layout_toStartOf="@id/fl_notification"
+        android:layout_toEndOf="@id/tv_drawer_navigation"
+        android:layout_toRightOf="@id/tv_drawer_navigation"
+        android:background="@drawable/rectangle_search_bar"
+        android:drawableLeft="@drawable/ic_search_box_icon"
+        android:drawablePadding="@dimen/dp_size_12"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:layerType="software"
+        android:padding="@dimen/dp_size_12"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_toLeftOf="@id/fl_notification"
+        android:layout_toStartOf="@id/fl_notification"
+        android:layout_toEndOf="@id/tv_drawer_navigation"
+        android:layout_toRightOf="@id/tv_drawer_navigation"
+        android:gravity="center"
+        android:text="@string/ID_BOOKMARKS"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_19"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/invite"

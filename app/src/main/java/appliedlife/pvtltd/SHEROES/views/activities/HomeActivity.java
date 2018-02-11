@@ -813,9 +813,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
                 createCommunityPostOnClick(communityPost);
                 break;
-            case R.id.tv_community_detail_invite:
-                inviteMyCommunityDialog();
-                break;
             case R.id.li_event_card_main_layout:
                 eventDetailDialog(0);
                 break;

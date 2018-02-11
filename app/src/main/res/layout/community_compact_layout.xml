@@ -28,6 +28,24 @@
             android:layout_marginBottom="@dimen/dp_size_8"
             android:layout_marginTop="@dimen/dp_size_12">
 
+            <TextView
+                android:id="@+id/community_join"
+                android:layout_width="@dimen/dp_size_78"
+                android:layout_height="@dimen/dp_size_30"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginStart="@dimen/dp_size_16"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:letterSpacing="0.07"
+                android:textColor="@color/footer_icon_text"
+                android:textSize="@dimen/sp_size_14"
+                tools:text="@string/ID_JOIN" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,23 +113,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/community_join"
-                android:layout_width="@dimen/dp_size_78"
-                android:layout_height="@dimen/dp_size_30"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dp_size_16"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginRight="@dimen/dp_size_16"
-                android:layout_marginStart="@dimen/dp_size_16"
-                android:gravity="center"
-                android:textAllCaps="true"
-                android:letterSpacing="0.07"
-                android:textColor="@color/footer_icon_text"
-                android:textSize="@dimen/sp_size_14"
-                tools:text="@string/ID_JOIN" />
         </RelativeLayout>
 
     </LinearLayout>

@@ -31,9 +31,14 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  */
 
 public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
+
+    //region private variable and constant
     private final String TAG = LogUtils.makeLogTag(CommunityFlatViewHolder.class);
-    private static final String LEFT_HTML_TAG = "<font color='#000000'>";
-    private static final String RIGHT_HTML_TAG = "</font>";
+    private BaseHolderInterface viewInterface;
+    private CommunityFeedSolrObj mCommunityFeedObj;
+    //endregion
+
+    //region bind variables
     @Bind(R.id.feature_image)
     ImageView mFeatureImage;
 
@@ -51,23 +56,23 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 
     @BindDimen(R.dimen.dp_size_40)
     int mCommunityIconSize;
-    BaseHolderInterface viewInterface;
-    private Context mContext;
-    private Handler mHandler;
-    private CommunityFeedSolrObj mCommunityFeedObj;
+    //endregion
 
+    //region constructor
     public CommunityFlatViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        mHandler = new Handler();
+        Handler mHandler = new Handler();
         this.viewInterface = baseHolderInterface;
     }
+    //endregion
 
+    //region adapter method
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mCommunityFeedObj = (CommunityFeedSolrObj) item;
         mCommunityFeedObj.setItemPosition(position);
-        mContext = context;
+        Context mContext = context;
 
         if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
@@ -95,7 +100,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
                     .into(mCommunityIcon);
         }
 
-        if(CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
+        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
             mCommunityName.setText(mCommunityFeedObj.getNameOrTitle());
         }
 
@@ -107,7 +112,9 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
+//endregion
 
+    //region onclick method
     @Override
     public void onClick(View view) {
 
@@ -115,15 +122,16 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.community_join)
     public void onCommunityJoinUnjoinedClicked() {
-        if(viewInterface instanceof FeedItemCallback) {
+        if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
         }
     }
 
     @OnClick({R.id.community_card_view})
-    public void onCardClicked(){
-            if(viewInterface instanceof FeedItemCallback) {
-                ((FeedItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
-            }
+    public void onCardClicked() {
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
+        }
     }
+    //endregion
 }

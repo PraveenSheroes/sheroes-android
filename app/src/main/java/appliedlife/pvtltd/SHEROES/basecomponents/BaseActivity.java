@@ -511,9 +511,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
 
                 break;
-            case R.id.li_community_images:
-                CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 /*Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);

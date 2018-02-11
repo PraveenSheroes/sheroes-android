@@ -365,6 +365,26 @@
                 android:textSize="@dimen/sp_size_14"/>
 
             <TextView
+                android:id="@+id/share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/comment_button"
+                android:layout_alignBottom="@+id/comment_button"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/ic_share_card"
+                android:drawablePadding="@dimen/dp_size_8"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_10"
+                android:paddingRight="@dimen/dp_size_10"
+                android:paddingTop="@dimen/dp_size_7"
+                android:text="@string/ID_SHARE_ON_WHATS_APP"
+                android:textColor="@color/share_color"
+                android:textSize="@dimen/sp_size_14"  />
+
+            <TextView
                 android:id="@+id/comment_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -382,27 +402,6 @@
                 android:text="@string/ID_COMMENT"
                 android:textColor="@color/recent_post_comment"
                 android:textSize="@dimen/sp_size_14"/>
-
-
-            <TextView
-                android:id="@+id/share_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/comment_button"
-                android:layout_alignBottom="@id/comment_button"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:drawableLeft="@drawable/ic_share_card"
-                android:drawablePadding="@dimen/dp_size_8"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center"
-                android:paddingBottom="@dimen/dp_size_10"
-                android:paddingLeft="@dimen/dp_size_10"
-                android:paddingRight="@dimen/dp_size_10"
-                android:paddingTop="@dimen/dp_size_7"
-                android:text="@string/ID_SHARE_ON_WHATS_APP"
-                android:textColor="@color/share_color"
-                android:textSize="@dimen/sp_size_14"  />
         </RelativeLayout>
 
     </LinearLayout>
