@@ -41,6 +41,11 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private boolean isUpdateFromProfile;
     //endregion
 
+    //region public variable
+    public CarouselListAdapter mAdapter = null;
+    //endregion
+
+
     //region bind variable
     @Bind(R.id.icon)
     TextView mIcon;
@@ -96,7 +101,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         if (StringUtil.isNotEmptyCollection(list)) {
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            CarouselListAdapter mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
+            mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());
