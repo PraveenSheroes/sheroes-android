@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -767,13 +766,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
-            case R.id.icon:
+            case R.id.icon:  //TODO - Fix hardcoding
                 if(baseResponse instanceof CarouselDataObj){
                     CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
                     if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
                         mentorListActivity();
                     }else {
-                        collectionScreen(carouselDataObj);
+                        navigateToCollectionScreen(carouselDataObj);
                     }
                 }
                 break;
@@ -871,14 +870,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     }
 
-    private void collectionScreen(CarouselDataObj carouselDataObj) {
+    private void navigateToCollectionScreen(CarouselDataObj carouselDataObj) {
         if(carouselDataObj != null) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
-                            .name(getString(R.string.ID_TOP_SEE_MORE))
+                            .name(getString(R.string.carousel_outer_seemore))
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.ID_TOP_SEE_MORE), getString(R.string.ID_COMMUNITIES_CATEGORY),  properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.carousel_outer_seemore), getString(R.string.ID_COMMUNITIES_CATEGORY),  properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 
@@ -981,7 +980,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
-       // communityContainer.setVisibility(View.GONE);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
@@ -997,12 +995,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setVisibility(View.GONE);
 
         flFeedFullView.setVisibility(View.VISIBLE);
-       // communityContainer.setVisibility(View.GONE);
     }
 
     private void initHomeViewPagerAndTabs() {
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
-       // communityContainer.setVisibility(View.GONE);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
         HomeFragment homeFragment = new HomeFragment();
@@ -1357,15 +1353,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         }
                     }
                     break;
-
-                case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
-                    createCommunityActivityResponse(intent);
-                    break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     editCommunityPostResponse(intent);
-                    break;
-                case AppConstants.REQ_CODE_SPEECH_INPUT:
-                  //  helplineSpeechActivityResponse(intent, resultCode);
                     break;
                 case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                     if (null != intent.getExtras()) {
@@ -1455,21 +1444,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void createCommunityActivityResponse(Intent intent) {
-      /*  if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITIES_DETAIL));
-            //mFeedDetail = (FeedDetail) intent.getExtras().get(AppConstants.COMMUNITIES_DETAIL);
-            Fragment community = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-            if (AppUtils.isFragmentUIActive(community)) {
-                if (null != mFeedDetail) {
-                    ((MyCommunitiesFragment) community).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                } else {
-                    communityOnClick();
-                }
-            }
-        }*/
-    }
-
     private void articleDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
             mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
@@ -1482,18 +1456,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
 
-        }
-    }
-
-    private void helplineSpeechActivityResponse(Intent intent, int resultCode) {
-
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HelplineFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            if (resultCode == Activity.RESULT_OK && null != intent) {
-                ArrayList<String> result = intent
-                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                ((HelplineFragment) fragment).getSpeechText(result.get(0));
-            }
         }
     }
 
@@ -1510,7 +1472,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
     }
-
 
     @Override
     public void onCancelDone(int pressedEvent) {
@@ -1586,22 +1547,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         return categoryIds;
-    }
-
-
-    public void onJoinEventSuccessResult(String result, FeedDetail feedDetail) {
-        /*  if (StringUtil.isNotNullOrEmptyString(result)) {
-            if (result.equalsIgnoreCase(AppConstants.SUCCESS)) {
-              Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                if (fragment instanceof FeaturedFragment) {
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((FeaturedFragment) fragment).setJoinStatus(result, feedDetail);
-                    }
-                }
-            } else {
-                onShowErrorDialog(result, JOIN_INVITE);
-            }
-        }*/
     }
 
     @OnClick(R.id.profile_link)

@@ -36,7 +36,7 @@
                 android:id="@+id/iv_notification_type"
                 android:layout_width="@dimen/dp_size_16"
                 android:layout_height="@dimen/dp_size_20"
-                android:layout_below="@+id/tv_notification_tittle"
+                android:layout_below="@id/tv_notification_tittle"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="@dimen/dp_size_8"/>
             <TextView

@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
@@ -63,11 +62,9 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import io.reactivex.Observable;
 
 
@@ -89,7 +86,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -1120,7 +1116,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
             communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
             communityFeedSolrObj.setMember(false);
-            getMvpView().showCommunityJoinResponse(communityFeedSolrObj);
+            getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
             return;
         }
         getMvpView().startProgressBar();
@@ -1147,7 +1143,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
                         communityFeedSolrObj.setMember(false);
-                        getMvpView().showCommunityJoinResponse(communityFeedSolrObj);
+                        getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
 
                     }
 
@@ -1156,9 +1152,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         if (communityResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
                             communityFeedSolrObj.setMember(false);
-                            getMvpView().showCommunityJoinResponse(communityFeedSolrObj);
+                            getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
                         }else {
-                            getMvpView().showCommunityJoinResponse(communityFeedSolrObj);
+                            getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
                         }
                         getMvpView().stopProgressBar();
                     }
@@ -1171,7 +1167,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
             communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
             communityFeedSolrObj.setMember(true);
-            getMvpView().showCommunityJoinResponse(communityFeedSolrObj);
+            getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
             return;
         }
         getMvpView().startProgressBar();
@@ -1197,7 +1193,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
                         communityFeedSolrObj.setMember(true);
-                        getMvpView().showCommunityJoinResponse(communityFeedSolrObj);
+                        getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
                         getMvpView().stopProgressBar();
                     }
 
@@ -1208,7 +1204,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
                             communityFeedSolrObj.setMember(true);
                         }
-                        getMvpView().showCommunityLeftResponse(communityFeedSolrObj);
+                        getMvpView().invalidateCommunityLeft(communityFeedSolrObj);
                         getMvpView().stopProgressBar();
                     }
                 });

@@ -29,7 +29,7 @@ public interface IFeedView extends BaseMvpView {
 
     void removeItem(FeedDetail feedDetail);
 
-    void showCommunityJoinResponse(CommunityFeedSolrObj communityFeedSolrObj);
+    void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj);
 
-    void showCommunityLeftResponse(CommunityFeedSolrObj communityFeedSolrObj);
+    void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj);
 }

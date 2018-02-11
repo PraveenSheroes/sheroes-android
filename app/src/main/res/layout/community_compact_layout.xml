@@ -8,9 +8,9 @@
     android:elevation="@dimen/dp_size_5">
 
     <LinearLayout
-        android:background="@color/carousel_card_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/carousel_card_bg"
         android:orientation="vertical">
 
         <ImageView
@@ -23,9 +23,9 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_8"
             android:layout_marginLeft="@dimen/dp_size_10"
             android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_marginBottom="@dimen/dp_size_8"
             android:layout_marginTop="@dimen/dp_size_12">
 
             <TextView
@@ -40,8 +40,8 @@
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginStart="@dimen/dp_size_16"
                 android:gravity="center"
-                android:textAllCaps="true"
                 android:letterSpacing="0.07"
+                android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_14"
                 tools:text="@string/ID_JOIN" />
@@ -56,10 +56,10 @@
 
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/community_icon"
-                    android:layout_width="@dimen/dp_size_40"
+                    android:layout_width="@dimen/dp_community_icon_width"
+                    android:layout_height="@dimen/dp_community_icon_height"
                     android:layout_marginLeft="@dimen/dp_size_9"
                     android:layout_marginStart="@dimen/dp_size_9"
-                    android:layout_height="@dimen/dp_size_40"
                     tools:src="@drawable/ic_champion_avatar" />
 
                 <LinearLayout
@@ -75,10 +75,10 @@
                         android:id="@+id/community_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:letterSpacing="0.04"
                         android:maxLines="@integer/int_value_for_line_1"
-                        android:ellipsize="end"
                         android:textColor="@color/comment_text"
                         android:textSize="@dimen/sp_size_15"
                         tools:text="Health Tips" />
@@ -89,21 +89,21 @@
 
                         <ImageView
                             android:id="@+id/icon"
-                            android:src="@drawable/ic_member_icon"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_member_icon" />
 
                         <TextView
-                            android:layout_toRightOf="@id/icon"
-                            android:layout_toEndOf="@id/icon"
-                            android:layout_marginTop="@dimen/dp_size_1"
-                            android:layout_marginStart="@dimen/dp_size_8"
-                            android:layout_marginLeft="@dimen/dp_size_8"
-                            android:gravity="center"
                             android:id="@+id/community_member_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_size_8"
+                            android:layout_marginStart="@dimen/dp_size_8"
+                            android:layout_marginTop="@dimen/dp_size_1"
+                            android:layout_toEndOf="@id/icon"
+                            android:layout_toRightOf="@id/icon"
                             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                            android:gravity="center"
                             android:maxLines="@integer/int_value_for_line_1"
                             android:textColor="@color/recent_post_comment"
                             android:textSize="@dimen/sp_size_14"

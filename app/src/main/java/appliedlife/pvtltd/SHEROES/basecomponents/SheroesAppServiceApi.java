@@ -291,5 +291,5 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 
     @POST("participant/feed/community_category_home")
-    Observable<FeedResponsePojo> fetchAllCommunity(@Body BaseRequest baseRequest);
+    Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
 }

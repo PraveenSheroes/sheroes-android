@@ -82,7 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
-import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunityHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
@@ -135,7 +135,7 @@ public interface SheroesAppComponent {
 
     void inject(HomeSpinnerSelectorHolder homeSpinnerSelectorHolder);
 
-    void inject(MyCommunityHolder myCommunityHolder);
+    void inject(MyCommunitiesViewHolder myCommunitiesViewHolder);
 
     void inject(CollectionActivity collectionActivity);
 

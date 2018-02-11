@@ -85,7 +85,7 @@
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
     <string name="ID_LIKE">Like</string>
-    <string name="ID_COMMENT">Comment</string>
+    <string name="comment">Comment</string>
     <string name="ID_COMMENTS">Comments</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
@@ -295,7 +295,7 @@
     <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
-    <string name="ID_COMMUNITIES_LISTING">Communities Screen</string>
+    <string name="communities_listing">Communities Screen</string>
     <string name="ID_COMMUNITIES_CATEGORY">Communities Category Screen</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_LOGIN_WITH_EMAIL">Login with Email</string>
@@ -305,7 +305,7 @@
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
-    <string name="ID_TOP_SEE_MORE">More Top Icon</string>
+    <string name="carousel_outer_seemore">More Top Icon</string>
     <string name="ID_CAROUSEL_SEE_MORE">See More</string>
 
 

@@ -18,7 +18,7 @@
             android:id="@+id/feature_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp_size_150"
+            android:minHeight="@dimen/dp_community_image_background_width"
             tools:src="@drawable/vector_empty_winner" />
 
         <RelativeLayout
@@ -57,8 +57,8 @@
 
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/community_icon"
-                    android:layout_width="@dimen/dp_size_40"
-                    android:layout_height="@dimen/dp_size_40"
+                    android:layout_width="@dimen/dp_community_icon_width"
+                    android:layout_height="@dimen/dp_community_icon_height"
                     tools:src="@drawable/ic_champion_avatar" />
 
                 <LinearLayout

@@ -24,8 +24,15 @@ import butterknife.ButterKnife;
  * Created by ravi on 31/01/18.
  */
 
-public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
+public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
 
+    //region private variables
+    private BaseHolderInterface viewInterface;
+    private FeedDetail mFeedDetail;
+    private Context mContext;
+    //endregion
+
+    //region bind variables
     @Bind(R.id.community_item)
     LinearLayout communityItemContainer;
 
@@ -34,18 +41,18 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.community_name)
     TextView mCommunityName;
+    //endregion
 
-    BaseHolderInterface viewInterface;
-    private FeedDetail mFeedDetail;
-    private Context mContext;
-
-    public MyCommunityHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    //region constructor
+    public MyCommunitiesViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+    //endregion
 
+    //region adapter method
     @Override
     public void bindData(FeedDetail feedDetail, Context context, int position) {
         mContext = context;
@@ -66,15 +73,20 @@ public class MyCommunityHolder extends BaseViewHolder<FeedDetail> {
         mCommunityName.setText(mFeedDetail.getNameOrTitle());
         communityItemContainer.setOnClickListener(this);
     }
+    //endregion
 
+    //region public method
     @Override
     public void viewRecycled() {
     }
+    //endregion
 
+    //region onclick method
     @Override
     public void onClick(View view) {
         if(viewInterface instanceof AllCommunityItemCallback){
             ((AllCommunityItemCallback)viewInterface).onMyCommunityClicked((CommunityFeedSolrObj) mFeedDetail);
         }
     }
+    //endregion
 }

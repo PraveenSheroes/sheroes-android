@@ -39,7 +39,7 @@ public class CollectionActivity extends BaseActivity {
     private static String SCREEN_LABEL = "Collection Activity";
     private String mEndPointUrl;
     private String mTitle;
-    private List<FeedDetail> mFeedDetailList;
+    private List<FeedDetail> mFeedDetailList = null;
     //endregion
 
     //region Bind view variables
@@ -122,7 +122,9 @@ public class CollectionActivity extends BaseActivity {
     }
 
     public void setData(List<FeedDetail> feedDetails) {
-        mFeedDetailList = feedDetails;
+        if(StringUtil.isNotEmptyCollection(feedDetails)) {
+            mFeedDetailList = feedDetails;
+        }
     }
     //endregion
 

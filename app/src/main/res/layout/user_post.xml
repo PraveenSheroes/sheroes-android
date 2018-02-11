@@ -399,7 +399,7 @@
                 android:paddingLeft="@dimen/dp_size_10"
                 android:paddingRight="@dimen/dp_size_10"
                 android:paddingTop="@dimen/dp_size_10"
-                android:text="@string/ID_COMMENT"
+                android:text="@string/comment"
                 android:textColor="@color/recent_post_comment"
                 android:textSize="@dimen/sp_size_14"/>
         </RelativeLayout>

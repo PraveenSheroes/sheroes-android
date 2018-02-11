@@ -45,9 +45,9 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
-import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunityAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityListingView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunitiesListView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -60,12 +60,13 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  * Created by ravi on 31-01-2018.
  */
 
-public class CommunitiesListFragment extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
+public class CommunitiesListFragment extends BaseFragment implements ICommunitiesListView, AllCommunityItemCallback {
 
     //region private variables and constants
     private static final String SCREEN_LABEL = "Communities Screen";
     private final String TAG = LogUtils.makeLogTag(CommunitiesListFragment.class);
-    private MyCommunityAdapter mMyCommunityAdapter;
+    private static final int MAX_COMMUNITIES_LIMIT = 6;
+    private MyCommunitiesAdapter mMyCommunitiesAdapter;
     private FeedAdapter mFeedAdapter;
     int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -77,13 +78,13 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
     CommunitiesListPresenter mCommunitiesListPresenter;
 
     @Bind(R.id.title)
-    TextView myCommunityLabel;
+    TextView mMyCommunitiesLabel;
 
     @Bind(R.id.my_communities)
     RecyclerView mMyCommunitiesListView;
 
     @Bind(R.id.all_communities)
-    RecyclerView mAllCommunityListView;
+    RecyclerView mAllCommunitiesListView;
 
     @Bind(R.id.loader_gif)
     CardView loaderGif;
@@ -95,7 +96,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
     Preference<LoginResponse> userPreference;
     //endregion
 
-    //region Activity method
+    //region Fragment lifecycle method
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -104,33 +105,33 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
 
         mCommunitiesListPresenter.attachView(this);
 
-        mMyCommunityAdapter = new MyCommunityAdapter(getContext(), this);
+        mMyCommunitiesAdapter = new MyCommunitiesAdapter(getContext(), this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mMyCommunitiesListView.setAdapter(mMyCommunityAdapter);
+        mMyCommunitiesListView.setAdapter(mMyCommunitiesAdapter);
         mMyCommunitiesListView.setLayoutManager(mLayoutManager);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mAllCommunityListView.setLayoutManager(linearLayoutManager);
+        mAllCommunitiesListView.setLayoutManager(linearLayoutManager);
         mFeedAdapter = new FeedAdapter(getContext(), this);
-        mAllCommunityListView.setAdapter(mFeedAdapter);
+        mAllCommunitiesListView.setAdapter(mFeedAdapter);
 
         mMyCommunitiesListView.setNestedScrollingEnabled(false);
-        mAllCommunityListView.setNestedScrollingEnabled(false);
+        mAllCommunitiesListView.setNestedScrollingEnabled(false);
 
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
 
         mMyCommunitiesListView.setVisibility(View.GONE);
-        myCommunityLabel.setVisibility(View.GONE);
+        mMyCommunitiesLabel.setVisibility(View.GONE);
 
         loaderGif.setVisibility(View.VISIBLE);
         loaderGif.bringToFront();
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
 
-        mCommunitiesListPresenter.fetchMyCommunity(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mCommunitiesListPresenter.fetchAllCommunities();
 
         mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunitiesListPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
@@ -148,7 +149,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
             }
         });
 
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_COMMUNITIES_LISTING));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.communities_listing));
 
         return view;
     }
@@ -173,15 +174,15 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
 
     //region public method
     @Override
-    public void showMyCommunity(FeedResponsePojo myCommunityResponse) {
+    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
 
-        if (myCommunityLabel.getVisibility() != View.VISIBLE) {
+        if (mMyCommunitiesLabel.getVisibility() != View.VISIBLE) {
             mMyCommunitiesListView.setVisibility(View.VISIBLE);
-            myCommunityLabel.setVisibility(View.VISIBLE);
+            mMyCommunitiesLabel.setVisibility(View.VISIBLE);
         }
 
         List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
-        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunityAdapter != null) {
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
@@ -196,13 +197,13 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
             }
             data.add(feedProgressBar);
 
-            mMyCommunityAdapter.setData(data);
-            mMyCommunityAdapter.notifyDataSetChanged();
+            mMyCommunitiesAdapter.setData(data);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
 
-        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunityAdapter != null) {
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
-            mMyCommunityAdapter.notifyDataSetChanged();
+            mMyCommunitiesAdapter.notifyDataSetChanged();
         }
     }
 
@@ -320,7 +321,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
     }
 
     //Update on Community Category changes
-    public void updateCommunityCarousel(List<FeedDetail> updatedFeedDetail) {
+    public void updateCommunityCarousel(List<FeedDetail> updatedFeedDetail) { //todo - move to presenter
         if (mFeedAdapter == null) {
             return;
         }
@@ -329,9 +330,9 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
             return;
         }
 
-        if (updatedFeedDetail.size() > 6) {
+        if (updatedFeedDetail.size() > MAX_COMMUNITIES_LIMIT) {
             List<FeedDetail> newList = new ArrayList<>();
-            for (int k = 0; k < 6; k++) {
+            for (int k = 0; k < MAX_COMMUNITIES_LIMIT; k++) {
                 newList.add(updatedFeedDetail.get(k));
             }
             updatedFeedDetail = newList;
@@ -390,7 +391,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunityL
             }
         }
         return position;
-    }
+    } //todo - move to presenter
     //endregion
 
 }

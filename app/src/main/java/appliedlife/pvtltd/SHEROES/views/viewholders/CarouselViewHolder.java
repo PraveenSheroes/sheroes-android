@@ -34,9 +34,14 @@ import butterknife.OnClick;
  */
 
 public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
+    //region private variable
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
-    public CarouselListAdapter mAdapter;
+    private BaseHolderInterface viewInterface;
+    private CarouselDataObj carouselDataObj;
+    private boolean isUpdateFromProfile;
+    //endregion
 
+    //region bind variable
     @Bind(R.id.icon)
     TextView mIcon;
 
@@ -48,18 +53,18 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
+    //endregion
 
-    BaseHolderInterface viewInterface;
-    private CarouselDataObj carouselDataObj;
-    private boolean isUpdateFromProfile;
-
+    //region constructor
     public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+    //endregion
 
+    //region public method
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.carouselDataObj = item;
@@ -91,7 +96,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         if (StringUtil.isNotEmptyCollection(list)) {
             LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
+            CarouselListAdapter mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());
@@ -111,7 +116,9 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             }
         }
     }
+    //endregion
 
+    //region onclick method
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
         if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null && carouselDataObj.getFeedDetails().get(0) != null) {
@@ -139,6 +146,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     @Override
     public void onClick(View view) {
     }
+    //endregion
 
 }
 

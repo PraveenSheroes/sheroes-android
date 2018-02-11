@@ -13,10 +13,10 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
  * Created by ujjwal on 04/05/17.
  */
 
-public interface ICommunityListingView extends BaseMvpView {
+public interface ICommunitiesListView extends BaseMvpView {
     void showAllCommunity(ArrayList<FeedDetail> feedDetails);
 
-    void showMyCommunity(FeedResponsePojo feedResponse);
+    void showMyCommunities(FeedResponsePojo feedResponse);
 
     void showCommunityJoinResponse(final CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
 

@@ -893,7 +893,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void showCommunityJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
         int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
         if (position == RecyclerView.NO_POSITION) {
             return;
@@ -903,7 +903,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void showCommunityLeftResponse(CommunityFeedSolrObj communityFeedSolrObj) {
+    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
         int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
         if (position == RecyclerView.NO_POSITION) {
             return;
@@ -912,7 +912,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
     }
 
-    public int findPositionById(long id) {
+    public int findPositionById(long id) { //TODO - move to presenter
         if (mAdapter == null) {
             return -1;
         }
