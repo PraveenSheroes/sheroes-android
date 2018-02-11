@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,19 +35,22 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 
 public class CollectionActivity extends BaseActivity {
 
+    //region Private Variables
     private static String SCREEN_LABEL = "Collection Activity";
-    private String endPointUrl;
-    private String title;
+    private String mEndPointUrl;
+    private String mTitle;
+    private List<FeedDetail> mFeedDetailList;
+    //endregion
 
+    //region Bind view variables
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Bind(R.id.toolbar_name)
     TextView titleName;
+    //endregion
 
-    private List<FeedDetail> feedDetailList;
-    private int position = -1;
-
+    //region Activity methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +60,15 @@ public class CollectionActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         if (getIntent().getExtras() != null) {
-            endPointUrl = getIntent().getExtras().getString(AppConstants.END_POINT_URL);
-            title = getIntent().getExtras().getString(AppConstants.TOOLBAR_TITTE);
+            mEndPointUrl = getIntent().getExtras().getString(AppConstants.END_POINT_URL);
+            mTitle = getIntent().getExtras().getString(AppConstants.TOOLBAR_TITTE);
         }
 
-        setupToolbar(title);
+        setupToolbar(mTitle);
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.END_POINT_URL, endPointUrl);
+        bundle.putString(AppConstants.END_POINT_URL, mEndPointUrl);
         bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -79,17 +81,6 @@ public class CollectionActivity extends BaseActivity {
         ((SheroesApplication) getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
-    private void setupToolbar(String toolbarTitle) {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        if(StringUtil.isNotNullOrEmptyString(toolbarTitle)) {
-            titleName.setText(toolbarTitle);
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -100,17 +91,12 @@ public class CollectionActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void setData(List<FeedDetail> feedDetails) {
-        feedDetailList = feedDetails;
-    }
-
     @Override
     public void onBackPressed() {
-        if(feedDetailList!=null) {
+        if (mFeedDetailList != null) {
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
-            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, Parcels.wrap(feedDetailList));
+            bundle.putParcelable(AppConstants.COMMUNITIES_DETAIL, Parcels.wrap(mFeedDetailList));
             intent.putExtras(bundle);
             setResult(REQUEST_CODE_FOR_COMMUNITY_LISTING, intent);
         }
@@ -121,7 +107,26 @@ public class CollectionActivity extends BaseActivity {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+    //endregion
 
+    //region private method
+    private void setupToolbar(String toolbarTitle) {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        if (StringUtil.isNotNullOrEmptyString(toolbarTitle)) {
+            titleName.setText(toolbarTitle);
+        }
+    }
+
+    public void setData(List<FeedDetail> feedDetails) {
+        mFeedDetailList = feedDetails;
+    }
+    //endregion
+
+    //region static method
     public static void navigateTo(Activity fromActivity, String endPointUrl, String toolbarTitle, String sourceScreen, String screenName, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, CollectionActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -129,7 +134,7 @@ public class CollectionActivity extends BaseActivity {
         intent.putExtra(AppConstants.TOOLBAR_TITTE, toolbarTitle);
         intent.putExtra(AppConstants.SCREEN_NAME, screenName);
 
-        if(CommonUtil.isNotEmpty(screenName)) {
+        if (CommonUtil.isNotEmpty(screenName)) {
             SCREEN_LABEL = screenName;
         }
 
@@ -138,4 +143,6 @@ public class CollectionActivity extends BaseActivity {
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
+    //endregion
+
 }

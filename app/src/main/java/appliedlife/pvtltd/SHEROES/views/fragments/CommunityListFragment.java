@@ -58,17 +58,25 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
 
 /**
  * Created by ravi on 31-01-2018.
- *
  */
 
 public class CommunityListFragment extends BaseFragment implements ICommunityListingView, AllCommunityItemCallback {
+
+    //region private variables and constants
     private static final String SCREEN_LABEL = "Communities Screen";
     private final String TAG = LogUtils.makeLogTag(CommunityListFragment.class);
+    private MyCommunityAdapter mMyCommunityAdapter;
+    private FeedAdapter mFeedAdapter;
+    int mPageNo = AppConstants.ONE_CONSTANT;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private SwipPullRefreshList mPullRefreshList;
+    //endregion
 
+    //region Bind view variables
     @Inject
     CommunityListingPresenter mCommunityListingPresenter;
 
-    @Bind(R.id.my_communities_label)
+    @Bind(R.id.title)
     TextView myCommunityLabel;
 
     @Bind(R.id.my_communities)
@@ -85,16 +93,9 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     @Inject
     Preference<LoginResponse> userPreference;
+    //endregion
 
-    LinearLayoutManager mLayoutManager;
-    MyCommunityAdapter mMyCommunityAdapter;
-    FeedAdapter mFeedAdapter;
-
-    int mPageNo = AppConstants.ONE_CONSTANT;
-    private FragmentListRefreshData mFragmentListRefreshData;
-    private SwipPullRefreshList mPullRefreshList;
-
-
+    //region Activity method
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -104,8 +105,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         mCommunityListingPresenter.attachView(this);
 
         mMyCommunityAdapter = new MyCommunityAdapter(getContext(), this);
-
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mMyCommunitiesListView.setAdapter(mMyCommunityAdapter);
         mMyCommunitiesListView.setLayoutManager(mLayoutManager);
@@ -169,11 +169,13 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+    //endregion
 
+    //region public method
     @Override
     public void showMyCommunity(FeedResponsePojo myCommunityResponse) {
 
-        if(myCommunityLabel.getVisibility() != View.VISIBLE) {
+        if (myCommunityLabel.getVisibility() != View.VISIBLE) {
             mMyCommunitiesListView.setVisibility(View.VISIBLE);
             myCommunityLabel.setVisibility(View.VISIBLE);
         }
@@ -232,7 +234,6 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
 
     }
 
-
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
 
@@ -280,8 +281,8 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             userIdList.add(userPreference.get().getUserSummary().getUserId());
             //JOin Click get position
             String position[] = getCommunityPositionInCarousel(communityFeedSolrObj);
-            if(position!=null)
-            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, communityFeedSolrObj, getScreenName(), position[0], position[1]);
+            if (position != null)
+                AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, communityFeedSolrObj, getScreenName(), position[0], position[1]);
             mCommunityListingPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj, carouselViewHolder);
         }
     }
@@ -291,14 +292,15 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             //Leave Click get position
             String position[] = getCommunityPositionInCarousel(communityFeedSolrObj);
-            if(position!=null) AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, communityFeedSolrObj, getScreenName(), position[0], position[1]);
+            if (position != null)
+                AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, communityFeedSolrObj, getScreenName(), position[0], position[1]);
             mCommunityListingPresenter.leaveCommunity(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj, carouselViewHolder);
         }
     }
 
     @Override
     public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
-        if(carouselDataObj!= null && carouselDataObj.getEndPointUrl()!=null) {
+        if (carouselDataObj != null && carouselDataObj.getEndPointUrl() != null) {
 
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
@@ -307,7 +309,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
                             .build();
 
             CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-        } else{
+        } else {
             LogUtils.info(TAG, "End Point Url is Null");
         }
     }
@@ -315,11 +317,6 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
     @Override
     public void openChampionListingScreen(CarouselDataObj carouselDataObj) {
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     //Update on Community Category changes
@@ -332,9 +329,9 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             return;
         }
 
-        if(updatedFeedDetail.size()>6) {
+        if (updatedFeedDetail.size() > 6) {
             List<FeedDetail> newList = new ArrayList<>();
-            for(int k=0; k<6; k++) {
+            for (int k = 0; k < 6; k++) {
                 newList.add(updatedFeedDetail.get(k));
             }
             updatedFeedDetail = newList;
@@ -348,7 +345,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
             if (feedDetail instanceof CarouselDataObj) {
 
                 List<FeedDetail> data = ((CarouselDataObj) feedDetail).getFeedDetails();
-                int size = data.size() -1;
+                int size = data.size() - 1;
                 for (int j = 0; j < size; ++j) {
 
                     CommunityFeedSolrObj innerFeedDetail = (CommunityFeedSolrObj) (data.get(j));
@@ -394,6 +391,7 @@ public class CommunityListFragment extends BaseFragment implements ICommunityLis
         }
         return position;
     }
+    //endregion
 
 }
 

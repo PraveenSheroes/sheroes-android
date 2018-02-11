@@ -10,7 +10,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -23,9 +22,14 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunityHolder;
 
 public class MyCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<FeedDetail> communities;
+    //region Private variables & Constants
+    private static final int TYPE_COMMUNITY = 0;
+    private static final int TYPE_SHOW_MORE = 1;
+    private static final int TYPE_EMPTY = 0;
+    private List<FeedDetail> mCommunities;
     private final Context mContext;
     private BaseHolderInterface baseHolderInterface;
+    //endregion
 
     //region Constructor
     public MyCommunityAdapter(Context context, BaseHolderInterface baseHolderInterface) {
@@ -34,10 +38,12 @@ public class MyCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     //endregion
+
+    //region Adapter method
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-        if(viewType == 0) {
+        if (viewType == TYPE_COMMUNITY) {
             View view = mInflater.inflate(R.layout.my_communities_item, parent, false);
             return new MyCommunityHolder(view, baseHolderInterface);
         } else {
@@ -48,34 +54,32 @@ public class MyCommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder.getItemViewType() == 0) {
+        if (holder.getItemViewType() == TYPE_COMMUNITY) {
             MyCommunityHolder commentListItemViewHolder = (MyCommunityHolder) holder;
-            FeedDetail communityFeedSolrObj = communities.get(position);
+            FeedDetail communityFeedSolrObj = mCommunities.get(position);
             commentListItemViewHolder.bindData(communityFeedSolrObj, mContext, position);
 
         } else {
             FeedProgressBarHolder loaderViewHolder = ((FeedProgressBarHolder) holder);
-            loaderViewHolder.bindData(communities.get(position), mContext,  position);
+            loaderViewHolder.bindData(mCommunities.get(position), mContext, position);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        super.getItemViewType(position);
-        return communities.get(position).getSubType()!= null && communities.get(position).getSubType().equals(AppConstants.FEED_PROGRESS_BAR) ? 1 : 0;
+        return mCommunities.get(position).getSubType() != null && mCommunities.get(position).getSubType().equals(AppConstants.FEED_PROGRESS_BAR) ? TYPE_SHOW_MORE : TYPE_COMMUNITY;
     }
 
     @Override
     public int getItemCount() {
-        if (CommonUtil.isEmpty(communities)) {
-            return 0;
-        }
-        return communities.size();
+        return CommonUtil.isEmpty(mCommunities) ? TYPE_EMPTY : mCommunities.size();
     }
+    //endregion
 
-
+    //region Public method
     public void setData(List<FeedDetail> communities) {
-        this.communities = communities;
+        this.mCommunities = communities;
         notifyDataSetChanged();
     }
+    //endregion
 }

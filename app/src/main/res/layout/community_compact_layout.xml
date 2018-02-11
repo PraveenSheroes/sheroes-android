@@ -18,8 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="@dimen/dp_size_150"
-            android:adjustViewBounds="false"
-            android:scaleType="fitXY"
             tools:src="@drawable/vector_empty_winner" />
 
         <RelativeLayout
