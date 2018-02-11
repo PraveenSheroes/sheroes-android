@@ -144,7 +144,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.COMMUNITIES_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
@@ -252,8 +251,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private boolean isInviteReferral;
     private BellNotificationDialogFragment bellNotificationDialogFragment;
     private boolean isSheUser = false;
-    private int mSuggestionItemPosition;
-    private int mMentorCardPosition;
     private long mUserId = -1L;
     boolean isMentor;
     private int mEventId;
@@ -891,8 +888,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-        mSuggestionItemPosition = userSolrObj.currentItemPosition;
-        mMentorCardPosition = userSolrObj.getItemPosition();
+        userSolrObj.setSuggested(false);
         mFeedDetail = userSolrObj;
         ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -1381,8 +1377,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         if (null != userSolrObj) {
                             Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                             if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                                userSolrObj.currentItemPosition = mSuggestionItemPosition;
-                                userSolrObj.setItemPosition(mMentorCardPosition);
                                 userSolrObj.setSuggested(true);
                                 ((HomeFragment) fragmentMentor).getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
                             }

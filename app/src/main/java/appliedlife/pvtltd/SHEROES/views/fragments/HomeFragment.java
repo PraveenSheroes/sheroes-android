@@ -28,6 +28,7 @@ import com.moengage.push.PushManager;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -561,35 +562,56 @@ public class HomeFragment extends BaseFragment {
                 if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
                     return;
 
-                List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses(); //todo - fix this crash
-             /*   CarouselDataObj carouselDataObj = (CarouselDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
-                if(((UserSolrObj) baseResponse).isSuggested()) {
-                    carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
-                    List<FeedDetail> mentorDataObjList=new ArrayList<>();
-                    for(FeedDetail userSolrObjLocal: carouselDataObj.getFeedDetails())
-                    {
-                        if(userPassedObject.getItemPosition()==userSolrObjLocal.getItemPosition())
-                        {
-                            mentorDataObjList.add(userPassedObject);
-                        }else
-                        {
-                            mentorDataObjList.add(userSolrObjLocal);
-                        }
-                    }
-                    carouselDataObj.setFeedDetails(mentorDataObjList);
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
-                }else
-                {
-                    carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
-                }*/
+                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                List<Object> dataItems = findPositionById(userSolrObj.getIdOfEntityOrParticipant(),userSolrObj);
+                int pos[] = (int[]) dataItems.get(0);
+                if (pos!=null  && pos[0] == RecyclerView.NO_POSITION ) {
+                    return;
+                }
+                if(null!=dataItems&&dataItems.size()>1) {
+                        CarouselDataObj carouselDataObj= (CarouselDataObj) dataItems.get(1);
+                        int positions = pos != null ? pos[0] : 0;
+                        mAdapter.notifyItemChanged(positions,carouselDataObj);
+                }
                 break;
             default:
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
     }
+    public List<Object> findPositionById(long id, UserSolrObj userSolrObj) {
+        ArrayList<Object> arrayList = new ArrayList<>();
+        int position[] = new int[2];
+        if (mAdapter == null) {
+            return null;
+        }
+        List<FeedDetail> feedDetails = mPullRefreshList.getFeedResponses();
 
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return null;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail instanceof CarouselDataObj) {
+                CarouselDataObj carouselDataObj = (CarouselDataObj) feedDetails.get(i);
+                List<FeedDetail> carouselFeedDetail = carouselDataObj.getFeedDetails();
+                for (int j = 0; j < carouselFeedDetail.size(); j++) {
+                    if (carouselFeedDetail.get(j).getIdOfEntityOrParticipant() == id) {
+                        userSolrObj.setItemPosition(j);
+                        carouselFeedDetail.set(j, userSolrObj);
+                        position[0] = i;
+                        position[1] = j;
+                        arrayList.add(position);
+                        carouselDataObj.setFeedDetails(carouselFeedDetail);
+                        arrayList.add(carouselDataObj);
+                        break;
+                    }
+                }
+            }
+
+        }
+        return arrayList;
+    }
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);
     }

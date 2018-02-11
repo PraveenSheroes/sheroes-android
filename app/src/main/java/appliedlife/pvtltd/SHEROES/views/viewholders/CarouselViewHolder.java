@@ -39,7 +39,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private LinearLayoutManager mLayoutManager;
 
     @Bind(R.id.icon)
-    ImageView mIcon;
+    TextView mIcon;
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -52,6 +52,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     BaseHolderInterface viewInterface;
     private CarouselDataObj carouselDataObj;
+    private boolean isUpdateFromProfile;
 
     public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -67,7 +68,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             mTitle.setVisibility(View.VISIBLE);
             mTitle.setText(item.getTitle());
         } else {
-          //  mTitle.setVisibility(View.GONE);
+            //  mTitle.setVisibility(View.GONE); //TODO - Enable it once title coming for champion cards
         }
 
         if (StringUtil.isNotNullOrEmptyString(item.getBody())) {
@@ -79,16 +80,16 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         if (CommonUtil.isNotEmpty(item.getIconUrl())) {
             mIcon.setVisibility(View.VISIBLE);
-           /* Glide.with(context)
+           /* Glide.with(context)        //TODO - Enable it once title coming for champion cards
                     .asBitmap()
                     .load(item.getIconUrl())
                     .into(mIcon);*/
         } else {
-         //   mIcon.setVisibility(View.GONE);
+            //   mIcon.setVisibility(View.GONE); //TODO - Enable it once title coming for champion cards
         }
 
-        List<FeedDetail> list=item.getFeedDetails();
-        if(StringUtil.isNotEmptyCollection(list)) {
+        List<FeedDetail> list = item.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(list)) {
             mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
@@ -96,20 +97,32 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());
             mAdapter.setData(item.getFeedDetails());
-            mAdapter.notifyDataSetChanged();
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) instanceof UserSolrObj) {
+                    boolean isSuggested = ((UserSolrObj) list.get(i)).isSuggested();
+                    if (isSuggested) {
+                        isUpdateFromProfile = isSuggested;
+                        UserSolrObj userSolrObj = ((UserSolrObj) list.get(i));
+                        mAdapter.notifyItemChanged(i, userSolrObj);
+                    }
+                }
+            }
+            if (!isUpdateFromProfile) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        if (carouselDataObj!=null && carouselDataObj.getFeedDetails()!=null && carouselDataObj.getFeedDetails().get(0) !=null) {
-            if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
+        if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null && carouselDataObj.getFeedDetails().get(0) != null) {
+            if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);
                 } else {
                     viewInterface.handleOnClick(carouselDataObj, mIcon);
                 }
-            }else {
+            } else {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
                 } else {
@@ -123,6 +136,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public void viewRecycled() {
 
     }
+
     @Override
     public void onClick(View view) {
     }
