@@ -103,8 +103,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="@dimen/dp_size_24"
-                    android:layout_toEndOf="@+id/view_mentor"
-                    android:layout_toRightOf="@+id/view_mentor"
+                    android:layout_toEndOf="@id/view_mentor"
+                    android:layout_toRightOf="@id/view_mentor"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_22" />
@@ -126,9 +126,9 @@
                     android:layout_width="@dimen/dp_size_1"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_marginLeft="@dimen/dp_size_10"
-                    android:layout_alignBottom="@+id/tv_mentor_insight_follower"
-                    android:layout_toEndOf="@+id/tv_mentor_insight_follower"
-                    android:layout_toRightOf="@+id/tv_mentor_insight_follower"
+                    android:layout_alignBottom="@id/tv_mentor_insight_follower"
+                    android:layout_toEndOf="@id/tv_mentor_insight_follower"
+                    android:layout_toRightOf="@id/tv_mentor_insight_follower"
                     android:background="@color/on_board_work" />
             </RelativeLayout>
             <LinearLayout
@@ -191,8 +191,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="@dimen/dp_size_24"
-                    android:layout_toEndOf="@+id/view_insight"
-                    android:layout_toRightOf="@+id/view_insight"
+                    android:layout_toEndOf="@id/view_insight"
+                    android:layout_toRightOf="@id/view_insight"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_22" />
@@ -214,9 +214,9 @@
                     android:layout_width="@dimen/dp_size_1"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_marginLeft="@dimen/dp_size_10"
-                    android:layout_alignBottom="@+id/tv_mentor_insight_post"
-                    android:layout_toEndOf="@+id/tv_mentor_insight_post"
-                    android:layout_toRightOf="@+id/tv_mentor_insight_post"
+                    android:layout_alignBottom="@id/tv_mentor_insight_post"
+                    android:layout_toEndOf="@id/tv_mentor_insight_post"
+                    android:layout_toRightOf="@id/tv_mentor_insight_post"
                     android:background="@color/on_board_work" />
             </RelativeLayout>
             <LinearLayout
@@ -243,8 +243,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="@dimen/dp_size_6"
-                        android:layout_toLeftOf="@+id/tv_insight_like"
-                        android:layout_toStartOf="@+id/tv_insight_like"
+                        android:layout_toLeftOf="@id/tv_insight_like"
+                        android:layout_toStartOf="@id/tv_insight_like"
                         android:src="@drawable/ic_heart_in_active" />
 
                     <TextView
@@ -282,8 +282,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="@dimen/dp_size_6"
-                        android:layout_toLeftOf="@+id/tv_insight_comment"
-                        android:layout_toStartOf="@+id/tv_insight_comment"
+                        android:layout_toLeftOf="@id/tv_insight_comment"
+                        android:layout_toStartOf="@id/tv_insight_comment"
                         android:src="@drawable/ic_comment_icon" />
 
                     <TextView
@@ -329,8 +329,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_marginLeft="@dimen/dp_size_10"
-                        android:layout_toEndOf="@+id/iv_share"
-                        android:layout_toRightOf="@+id/iv_share"
+                        android:layout_toEndOf="@id/iv_share"
+                        android:layout_toRightOf="@id/iv_share"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/recent_post_comment"
                         android:textSize="@dimen/sp_size_14" />
@@ -340,9 +340,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
-                        android:layout_toEndOf="@+id/iv_share"
+                        android:layout_toEndOf="@id/iv_share"
                         android:layout_marginLeft="@dimen/dp_size_10"
-                        android:layout_toRightOf="@+id/iv_share"
+                        android:layout_toRightOf="@id/iv_share"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/recent_post_comment"
                         android:textSize="@dimen/sp_size_14" />
@@ -388,8 +388,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="@dimen/dp_size_24"
-                    android:layout_toEndOf="@+id/view_question"
-                    android:layout_toRightOf="@+id/view_question"
+                    android:layout_toEndOf="@id/view_question"
+                    android:layout_toRightOf="@id/view_question"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_22" />
@@ -411,9 +411,9 @@
                     android:layout_width="@dimen/dp_size_1"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_marginLeft="@dimen/dp_size_10"
-                    android:layout_alignBottom="@+id/tv_mentor_insight_question"
-                    android:layout_toEndOf="@+id/tv_mentor_insight_question"
-                    android:layout_toRightOf="@+id/tv_mentor_insight_question"
+                    android:layout_alignBottom="@id/tv_mentor_insight_question"
+                    android:layout_toEndOf="@id/tv_mentor_insight_question"
+                    android:layout_toRightOf="@id/tv_mentor_insight_question"
                     android:background="@color/on_board_work" />
             </RelativeLayout>
             <RelativeLayout
@@ -451,8 +451,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="@dimen/dp_size_24"
-                    android:layout_toEndOf="@+id/view_answer"
-                    android:layout_toRightOf="@+id/view_answer"
+                    android:layout_toEndOf="@id/view_answer"
+                    android:layout_toRightOf="@id/view_answer"
                     android:fontFamily="@string/ID_ROBOTO_BOLD"
                     android:textColor="@color/feed_article_label"
                     android:textSize="@dimen/sp_size_22" />
@@ -474,9 +474,9 @@
                     android:layout_width="@dimen/dp_size_1"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_marginLeft="@dimen/dp_size_10"
-                    android:layout_alignBottom="@+id/tv_mentor_insight_answer"
-                    android:layout_toEndOf="@+id/tv_mentor_insight_answer"
-                    android:layout_toRightOf="@+id/tv_mentor_insight_answer"
+                    android:layout_alignBottom="@id/tv_mentor_insight_answer"
+                    android:layout_toEndOf="@id/tv_mentor_insight_answer"
+                    android:layout_toRightOf="@id/tv_mentor_insight_answer"
                     android:background="@color/on_board_work" />
             </RelativeLayout>
             <RelativeLayout

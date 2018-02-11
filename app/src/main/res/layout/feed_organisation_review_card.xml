@@ -110,10 +110,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:layout_marginLeft="@dimen/dp_size_10"
-                android:layout_toEndOf="@+id/iv_company_icon"
-                android:layout_toLeftOf="@+id/review_post_img_heart"
-                android:layout_toRightOf="@+id/iv_company_icon"
-                android:layout_toStartOf="@+id/review_post_img_heart"
+                android:layout_toEndOf="@id/iv_company_icon"
+                android:layout_toLeftOf="@id/review_post_img_heart"
+                android:layout_toRightOf="@id/iv_company_icon"
+                android:layout_toStartOf="@id/review_post_img_heart"
                 android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:textColor="@color/comment_text"
                 android:textSize="@dimen/sp_size_16" />
@@ -122,9 +122,9 @@
                 android:id="@+id/review_post_img_heart"
                 android:layout_width="@dimen/dp_size_28"
                 android:layout_height="@dimen/dp_size_20"
-                android:layout_alignTop="@+id/tv_review_company_title"
-                android:layout_toLeftOf="@+id/tv_review_company_rating"
-                android:layout_toStartOf="@+id/tv_review_company_rating"
+                android:layout_alignTop="@id/tv_review_company_title"
+                android:layout_toLeftOf="@id/tv_review_company_rating"
+                android:layout_toStartOf="@id/tv_review_company_rating"
                 android:drawableLeft="@drawable/ic_star_rating"
                 android:gravity="top" />
 
@@ -132,8 +132,8 @@
                 android:id="@+id/tv_review_company_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/review_post_img_heart"
-                android:layout_alignBottom="@+id/review_post_img_heart"
+                android:layout_alignBaseline="@id/review_post_img_heart"
+                android:layout_alignBottom="@id/review_post_img_heart"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_size_16"
@@ -174,7 +174,6 @@
                 android:layout_height="@dimen/dp_size_15"
                 android:layout_gravity="center"
                 android:textColor="@color/comment_text"
-                android:layout_alignLeft="@+id/iv_review_upvote"
                 android:textSize="@dimen/sp_size_12"/>
 
             <TextView
@@ -194,7 +193,6 @@
                 android:fontFamily="@string/ID_ROBOTO_LIGHT"
                 android:text="@string/ID_SHARE_ON_WHATS_APP"
                 android:textColor="@color/share_color"
-                android:layout_alignLeft="@+id/tv_feed_review_post_user_share"
                 android:layout_marginLeft="@dimen/dp_size_5"
                 android:textSize="@dimen/sp_size_12"/>
 

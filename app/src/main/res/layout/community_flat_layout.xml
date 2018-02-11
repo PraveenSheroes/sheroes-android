@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/community_join"
-                android:layout_toStartOf="@+id/community_join">
+                android:layout_toLeftOf="@id/community_join"
+                android:layout_toStartOf="@id/community_join">
 
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/community_icon"

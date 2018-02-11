@@ -33,7 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
-        android:layout_toRightOf="@+id/fl_profile_icon"
+        android:layout_toRightOf="@id/fl_profile_icon"
         android:orientation="vertical"
         android:id="@+id/linearLayout">
 
