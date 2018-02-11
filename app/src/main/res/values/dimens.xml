@@ -125,5 +125,14 @@
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="community_compact_card_width">300dp</dimen>
+    <dimen name="community_compact_card_height">212dp</dimen>
+    <dimen name="community_join_width">78dp</dimen>
+    <dimen name="community_join_height">30dp</dimen>
+    <dimen name="my_community_container_width">111dp</dimen>
+    <dimen name="my_community_container_height">94dp</dimen>
+    <dimen name="my_community_icon_width">50dp</dimen>
+    <dimen name="my_community_icon_height">50dp</dimen>
 </resources>
 

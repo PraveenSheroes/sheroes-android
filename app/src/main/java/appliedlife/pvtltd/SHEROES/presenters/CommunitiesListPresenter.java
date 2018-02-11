@@ -4,7 +4,6 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -33,8 +32,6 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 
 /**
@@ -45,18 +42,18 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
  * @since 29/12/2016.
  * Title: Hotel presenter perform required response data for Home activity.
  */
-public class CommunityListingPresenter extends BasePresenter<ICommunityListingView> {
-    private final String TAG = LogUtils.makeLogTag(CommunityListingPresenter.class);
+public class CommunitiesListPresenter extends BasePresenter<ICommunityListingView> {
+    private final String TAG = LogUtils.makeLogTag(CommunitiesListPresenter.class);
     private SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi mSheroesAppServiceApi;
 
     @Inject
-    public CommunityListingPresenter(SheroesApplication sheroesApplication, SheroesAppServiceApi sheroesAppServiceApi) {
+    public CommunitiesListPresenter(SheroesApplication sheroesApplication, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mSheroesApplication = sheroesApplication;
         this.mSheroesAppServiceApi = sheroesAppServiceApi;
     }
 
-    public void fetchAllCommunity() {
+    public void fetchAllCommunities() {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
@@ -80,7 +77,6 @@ public class CommunityListingPresenter extends BasePresenter<ICommunityListingVi
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
-                // LogUtils.info(TAG, "********response***********");
                 if(feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
                     ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
                     getMvpView().showAllCommunity(feedDetails);
@@ -121,10 +117,7 @@ public class CommunityListingPresenter extends BasePresenter<ICommunityListingVi
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 getMvpView().stopProgressBar();
                 if (null != feedResponsePojo) {
-                   // if(feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
-                   //     List<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
                         getMvpView().showMyCommunity(feedResponsePojo);
-                  //  }
                 }
             }
         });

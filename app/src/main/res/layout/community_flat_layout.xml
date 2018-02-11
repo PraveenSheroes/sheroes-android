@@ -31,8 +31,8 @@
 
             <TextView
                 android:id="@+id/community_join"
-                android:layout_width="@dimen/dp_size_78"
-                android:layout_height="@dimen/dp_size_30"
+                android:layout_width="@dimen/community_join_width"
+                android:layout_height="@dimen/community_join_height"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

@@ -104,7 +104,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -123,7 +122,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
@@ -1027,8 +1026,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mICSheroes.setVisibility(View.GONE);
         mInvite.setVisibility(View.GONE);
 
-        CommunityListFragment communityListFragment = new CommunityListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communityListFragment, CommunityListFragment.class.getName()).commitAllowingStateLoss();
+        CommunitiesListFragment communitiesListFragment = new CommunitiesListFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesListFragment, CommunitiesListFragment.class.getName()).commitAllowingStateLoss();
     }
 
 
@@ -1500,7 +1499,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void communityDetailActivityResponse(Intent intent) {
         if (null != intent && null != intent.getExtras()) {
-            CommunityListFragment currentFragment = (CommunityListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+            CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
 
             if (currentFragment != null && currentFragment.isVisible()) {
                 Bundle bundle = intent.getExtras();
