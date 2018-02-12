@@ -71,6 +71,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -86,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -382,6 +386,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public void sendPost(){
+        if(hasPermission){
+            if(mCommunityPost!=null){
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Integer.toString(mCommunityPost.remote_id))
+                                .title(mCommunityPost.title)
+                                .build();
+                AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
+            }
+        }
         if(mIsChallengePost){
             mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(),mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
         }else if (!mIsEditPost) {
@@ -580,6 +594,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(mCommunityPost!=null){
+                    final HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Integer.toString(mCommunityPost.remote_id))
+                                    .title(mCommunityPost.title)
+                                    .isChecked(isChecked)
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED_CLICKED, getScreenName(), properties);
+                }
                 if(!mIsAnonymous) {
                     compoundButton.setChecked(isChecked);
                 }
