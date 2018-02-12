@@ -48,6 +48,7 @@ public enum EventProperty {
     DESCRIPTION("Description"),
     COMMUNITY_CATEGORY("Community Category"),
     POSITION_IN_CAROUSEL("Position In Carousel"),
+    IS_CHECKED("Is Checked"),
     POSITION_OF_CAROUSEL("Position Of Carousel");
 
     private final String string;
@@ -250,6 +251,12 @@ public enum EventProperty {
             put(IS_MENTOR, isMentor);
             return this;
         }
+
+        public Builder isChecked(final boolean isChecked){
+            put(IS_CHECKED, isChecked);
+            return this;
+        }
+
         public Builder isOwnProfile(final boolean isOwnProfile){
             put(IS_OWN_PROFILE, isOwnProfile);
             return this;
