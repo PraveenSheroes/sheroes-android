@@ -60,7 +60,7 @@ public class AppConstants {
     public static final String FEED_SUB_TYPE = "F";
 
     public static final String USER_SUB_TYPE = "U";
-    public static final String MENTOR_SUB_TYPE = "W";
+    public static final String CAROUSEL_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
@@ -96,6 +96,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CHALLENGE_DETAIL = 1901;
     public static final int REQUEST_CODE_FOR_POST_DETAIL = 1902;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
+    public static final int REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL = 2002;
     public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
     public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
@@ -269,6 +270,9 @@ public class AppConstants {
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
+    public static final String END_POINT_URL = "end_point_url";
+    public static final String TOOLBAR_TITTE = "toolbar_title";
+    public static final String SCREEN_NAME = "screen_name";
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";

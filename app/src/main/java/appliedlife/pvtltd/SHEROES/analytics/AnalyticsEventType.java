@@ -18,6 +18,7 @@ public enum AnalyticsEventType {
     COMMUNITY("Community"),
     ON_BOARDING("Onboarding"),
     WALKTHROUGH("Walkthrough"),
+    FACEBOOK_PUBLISH("Facebook Publish"),
     ORGANIZATION("Organization"),
     ARTICLE("Article"),
     CHAT("Chat"),

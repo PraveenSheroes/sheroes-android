@@ -85,7 +85,7 @@
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
     <string name="ID_LIKE">Like</string>
-    <string name="ID_COMMENT">Comment</string>
+    <string name="comment">Comment</string>
     <string name="ID_COMMENTS">Comments</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
@@ -295,6 +295,8 @@
     <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
+    <string name="communities_listing">Communities Screen</string>
+    <string name="ID_COMMUNITIES_CATEGORY">Communities Category Screen</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_LOGIN_WITH_EMAIL">Login with Email</string>
     <string name="ID_LOGIN_TEXT">login</string>
@@ -303,6 +305,8 @@
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
+    <string name="carousel_outer_seemore">More Top Icon</string>
+    <string name="ID_CAROUSEL_SEE_MORE">See More</string>
 
 
     <string name="ID_POSTED_REVIEW">posted a review for</string>
@@ -334,6 +338,7 @@
     <string name="empty_followed_mentor">%1$s is not following any champion yet"</string>
     <string name="empty_followed_community">%1$s has not joined any community yet"</string>
     <string name="load_more">Load More</string>
+    <string name="more">more</string>
     <string name="following">Following</string>
 
     <plurals name="numberOfComments">
@@ -514,6 +519,7 @@
     <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
+    <string name="my_communities">My Communities</string>
 
     <string name="got_it">Got It</string>
 

@@ -181,7 +181,6 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             tools:replace="android:theme" />
         <activity
@@ -256,8 +255,13 @@
         <activity
             android:name=".views.activities.EditUserProfileActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".views.activities.ProfileCommunitiesActivity" />
-        <activity android:name=".views.activities.FollowingActivity" />
+
+
+        <activity android:name=".views.activities.CollectionActivity"/>
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity" />
+
+        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity" />
 
         <service
             android:name=".service.PushNotificationService"

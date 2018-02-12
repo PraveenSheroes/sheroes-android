@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-   >
+    android:layout_height="match_parent">
 
     <include
         layout="@layout/toolbar"
@@ -48,6 +45,25 @@
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
 
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_below="@id/image_list_view"
+            android:id="@+id/anonymous"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <CheckBox
+                android:id="@+id/anonymous_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:defaultValue="true"
+                android:text="@string/post_anonymous"
+                android:textColor="#878787"
+                android:textSize="14sp" />
         </RelativeLayout>
 
     <LinearLayout
@@ -114,10 +130,37 @@
     </LinearLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/fb_share_container"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/toolbar"
+        android:background="#ebebeb">
+
+        <View
+            android:id="@+id/view_tooltip_anony"
+            android:layout_width="@dimen/dp_size_10"
+            android:layout_height="@dimen/dp_size_10"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/share_on_fb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:defaultValue="true"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="Share on Facebook"
+            android:textColor="#878787"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
     <ScrollView
+        android:layout_below="@id/fb_share_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
         android:layout_above="@id/upload_image_container">
 
         <RelativeLayout
@@ -125,34 +168,9 @@
             android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:id="@+id/anonymous"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_below="@id/toolbar"
-                android:background="#ebebeb">
-                <View
-                    android:id="@+id/view_tooltip_anony"
-                    android:layout_width="@dimen/dp_size_10"
-                    android:layout_alignRight="@+id/anonymous_select"
-                    android:layout_centerVertical="true"
-                    android:layout_height="@dimen/dp_size_10"/>
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/anonymous_select"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dp_size_16"
-                    android:defaultValue="true"
-                    android:text="@string/post_anonymous"
-                    android:textColor="#878787"
-                    android:textSize="14sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/user_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/anonymous"
                 android:layout_marginTop="12dp"
                 android:layout_marginLeft="16dp"
                 android:gravity="center_vertical">
@@ -204,7 +222,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/user_container"
                 android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginTop="@dimen/dp_size_24"
+                android:layout_marginTop="@dimen/dp_size_5"
                 android:background="@null"
                 android:textSize="20sp"
                 android:gravity="top"

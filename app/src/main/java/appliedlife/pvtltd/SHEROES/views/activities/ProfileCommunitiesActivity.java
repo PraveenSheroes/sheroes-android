@@ -40,10 +40,10 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     private long userMentorId;
     private boolean isSelfProfile;
 
-    @Bind(R.id.community_toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.tv_mentor_toolbar_name)
+    @Bind(R.id.toolbar_name)
     TextView titleName;
 
     @Inject
@@ -74,7 +74,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.followed_mentor_container, followingFragment);
+        fragmentTransaction.replace(R.id.container, followingFragment);
         fragmentTransaction.commit();
     }
 

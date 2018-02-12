@@ -65,11 +65,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeatureCardHolder(view, viewInterface);
         }
-    }, MY_COMMUNITIES_CARD(R.layout.my_communities_card_item) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new MyCommunitiesCardHolder(view, viewInterface);
-        }
     }, ARTICLE_CARD_HOLDER(R.layout.article_card_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -172,7 +167,7 @@ public enum HolderMapping {
     }, MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new MentorSuggestedCardHorizontalView(view, viewInterface);
+            return new CarouselViewHolder(view, viewInterface);
         }
     },
     HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
@@ -264,7 +259,7 @@ public enum HolderMapping {
                             case AppConstants.HEADER:
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
-                            case AppConstants.MENTOR_SUB_TYPE:
+                            case AppConstants.CAROUSEL_SUB_TYPE:
                                 returnView = MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.USER_SUB_TYPE:
@@ -288,8 +283,6 @@ public enum HolderMapping {
                                 boolean isFeatured = feedDetail.isFeatured();
                                 if (isFeatured && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
-                                } else {
-                                    returnView = MY_COMMUNITIES_CARD.ordinal();
                                 }
                                 break;
                             case AppConstants.FEED_JOB:

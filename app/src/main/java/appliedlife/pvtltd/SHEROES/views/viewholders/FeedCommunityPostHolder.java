@@ -285,7 +285,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void showToolTip(Context context) {
         if (isToolTipForUser) {
-            if (!mUserPostObj.isAnonymous()) {
+            if (!mUserPostObj.isAnonymous() && !mUserPostObj.isAuthorMentor()) {
                 isToolTipForUser = false;
                 inflater = LayoutInflater.from(context);
                 view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);

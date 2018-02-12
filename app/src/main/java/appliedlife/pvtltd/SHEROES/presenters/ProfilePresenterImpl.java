@@ -11,24 +11,21 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import io.reactivex.observers.DisposableObserver;
-
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -57,41 +54,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
         this.profileModel = profileModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
-
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-
-    }
-
-    //post count
-
-    public void getUserPostCountFromPresenter(final FeedRequestPojo feedRequestPojo) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        profileModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-
-            }
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                LogUtils.info(TAG, "********response***********");
-                getMvpView().stopProgressBar();
-                if (null != feedResponsePojo) {
-                    getMvpView().getUsersPostCount(feedResponsePojo.getNumFound());
-                }
-            }
-        });
 
     }
 
@@ -126,19 +89,17 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
                 }
             }
         });
-
-
     }
 
-    //get follower/following
-    public void getUsersFollowerOrFollowingCount(final UserFollowerOrFollowingRequest userFollowerOrFollowingRequest) {
+    //get profile Top section Count
+    public void getProfileTopSectionCount(final ProfileTopCountRequest profileTopCountRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
 
-        profileModel.getFollowerOrFollowing(userFollowerOrFollowingRequest).subscribe(new DisposableObserver<BaseResponse>() {
+        profileModel.getProfileTopSectionCount(profileTopCountRequest).subscribe(new DisposableObserver<ProfileTopSectionCountsResponse>() {
             @Override
             public void onComplete() {
 
@@ -152,21 +113,16 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onNext(BaseResponse userFollowerOrFollowingCount) {
+            public void onNext(ProfileTopSectionCountsResponse userFollowerOrFollowingCount) {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != userFollowerOrFollowingCount) {
                     Log.i(TAG, userFollowerOrFollowingCount.getStatus());
-                    if (userFollowerOrFollowingRequest.getIsUserAFollower())
-                        getMvpView().getUsersFollowerCount(userFollowerOrFollowingCount);
-                    else
-                        getMvpView().getUsersFollowingCount(userFollowerOrFollowingCount);
+                    getMvpView().getTopSectionCount(userFollowerOrFollowingCount);
 
                 }
             }
         });
-
-
     }
 
     public void getUsersCommunity(ProfileUsersCommunityRequest profileUsersCommunityRequest) {
