@@ -32,10 +32,10 @@ public class FollowingActivity extends BaseActivity {
     private static final String SCREEN_LABEL = "Followed Champions Screen";
     private long userMentorId;
 
-    @Bind(R.id.tv_mentor_toolbar_name)
+    @Bind(R.id.toolbar_name)
     TextView titleName;
 
-    @Bind(R.id.community_toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Override
@@ -59,7 +59,7 @@ public class FollowingActivity extends BaseActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.followed_mentor_container, followingFragment);
+        fragmentTransaction.replace(R.id.container, followingFragment);
         fragmentTransaction.commit();
     }
 

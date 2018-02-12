@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|bottom"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_14"
                     android:textStyle="normal" />
@@ -209,7 +209,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:fontFamily="sans-serif-medium"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:layout_marginLeft="@dimen/dp_size_3"

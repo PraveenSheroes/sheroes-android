@@ -13,30 +13,29 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.viewholder.CommentLoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityFlatViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
-import appliedlife.pvtltd.SHEROES.views.viewholders.MentorSuggestedCardHorizontalView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.ButterKnife;
 
@@ -46,6 +45,7 @@ import butterknife.ButterKnife;
 
 public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
+    //region private variables
     public static final String TAG = "feedAdapter";
     public static final String LIST_FEED = "FEED";
     private final Context mContext;
@@ -53,6 +53,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
+    //endregion
 
     //region Constructor
     public FeedAdapter(Context context, BaseHolderInterface baseHolderInterface) {
@@ -85,11 +86,13 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_MENTOR_SUGGESTION_CAROSEL:
-                return new MentorSuggestedCardHorizontalView(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
+                return new CarouselViewHolder(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_MENTOR_COMPACT:
                 return new MentorCard(mInflater.inflate(R.layout.feed_mentor_card, parent, false), mBaseHolderInterface);
             case TYPE_LEADER:
                 return new LeaderViewHolder(mInflater.inflate(R.layout.list_leader_item, parent, false), mBaseHolderInterface);
+            case TYPE_COMMUNITY:
+                return new CommunityFlatViewHolder(mInflater.inflate(R.layout.community_flat_layout, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -138,14 +141,19 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 appIntroCardHolder.bindData(feedDetail, mContext, position);
                 break;
             case TYPE_MENTOR_SUGGESTION_CAROSEL:
-                MentorSuggestedCardHorizontalView mentorSuggestedCardHorizontalView = (MentorSuggestedCardHorizontalView) holder;
-                MentorDataObj mentorDataObj = (MentorDataObj) mFeedDetailList.get(position);
-                mentorSuggestedCardHorizontalView.bindData(mentorDataObj, mContext, position);
+                CarouselViewHolder carouselViewHolder = (CarouselViewHolder) holder;
+                CarouselDataObj carouselDataObj = (CarouselDataObj) mFeedDetailList.get(position);
+                carouselViewHolder.bindData(carouselDataObj, mContext, position);
                 break;
             case TYPE_MENTOR_COMPACT:
                 MentorCard mentorCard = (MentorCard) holder;
                 UserSolrObj userSolrObj = (UserSolrObj) mFeedDetailList.get(position);
                 mentorCard.bindData(userSolrObj, mContext, position);
+                break;
+            case TYPE_COMMUNITY:
+                CommunityFlatViewHolder communityFlatViewHolder = (CommunityFlatViewHolder) holder;
+                CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetailList.get(position);
+                communityFlatViewHolder.bindData(communityFeedSolrObj, mContext, position);
                 break;
             case TYPE_LEADER:
                 LeaderViewHolder leaderViewHolder = (LeaderViewHolder) holder;
@@ -166,6 +174,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_MENTOR_SUGGESTION_CAROSEL = 9;
     private static final int TYPE_MENTOR_COMPACT = 10;
     private static final int TYPE_LEADER = 11;
+    private static final int TYPE_COMMUNITY = 12;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -201,12 +210,16 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.APP_INTRO_SUB_TYPE)) {
                 return TYPE_INRO;
             }
-            if (feedDetail instanceof MentorDataObj) {
+            if (feedDetail instanceof CarouselDataObj) {
                 return TYPE_MENTOR_SUGGESTION_CAROSEL;
             }
 
             if (feedDetail instanceof UserSolrObj) {
                 return TYPE_MENTOR_COMPACT;
+            }
+
+            if (feedDetail instanceof CommunityFeedSolrObj) {
+                return TYPE_COMMUNITY;
             }
 
             if (feedDetail instanceof LeaderObj) {
@@ -283,6 +296,17 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     public void setData(int position, FeedDetail feedDetail) {
         mFeedDetailList.set(position, feedDetail);
         notifyItemChanged(position);
+    }
+
+    public void setData(int outerPosition, int innerPosition,  FeedDetail updatedInnerFeedItem) {
+        FeedDetail feedDetail = mFeedDetailList.get(outerPosition);
+        if (feedDetail instanceof CarouselDataObj) {
+            FeedDetail innerFeedItem = ((CarouselDataObj) feedDetail).getFeedDetails().get(innerPosition);
+            innerFeedItem = updatedInnerFeedItem;
+            ((CarouselDataObj) feedDetail).getFeedDetails().set(innerPosition, updatedInnerFeedItem);
+        }
+        mFeedDetailList.set(outerPosition, feedDetail);
+        notifyItemChanged(outerPosition);
     }
 
     public void removeItem(int position) {

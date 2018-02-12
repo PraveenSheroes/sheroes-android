@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -165,18 +166,12 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
 
     @Override
     public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
-
     }
 
     @Override
-    public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
-
+    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
     }
 
-    @Override
-    public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
-
-    }
 
     @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
@@ -210,11 +205,6 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
                 // mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
             }
         }
-    }
-
-    @Override
-    public void getUsersPostCount(int totalPost) {
-
     }
 
     public List<CommunityFeedSolrObj> getUsersCommunity(ProfileCommunitiesResponsePojo userCommunities, int mPageNo) {

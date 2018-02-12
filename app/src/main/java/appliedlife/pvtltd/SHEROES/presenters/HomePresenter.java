@@ -832,4 +832,8 @@ public class HomePresenter extends BasePresenter<HomeView> {
     public void onStop() {
         detachView();
     }
+
+    public void fetchAllCommunity() {
+
+    }
 }

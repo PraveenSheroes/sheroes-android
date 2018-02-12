@@ -54,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -76,13 +75,11 @@ import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
 
@@ -381,13 +378,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     } else {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
                     }
-                    if (null != mViewPagerAdapter) {
-                        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            mFeedDetail.setScreenName(AppConstants.FEATURE_FRAGMENT);
-                            ((FeaturedFragment) fragment).joinRequestForOpenCommunity(mFeedDetail);
-                        }
-                    }
                 }
                 break;
 
@@ -520,9 +510,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 String sourceScreen = "";
                 ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
 
-                break;
-            case R.id.li_community_images:
-                CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);

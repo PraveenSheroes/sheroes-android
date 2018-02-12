@@ -66,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
@@ -257,6 +258,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         clHomeFooterList.setVisibility(View.GONE);
 
         loaderGif.setVisibility(View.VISIBLE);
+        loaderGif.bringToFront();
 
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
@@ -280,7 +282,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
             mUserSolarObject.setIdOfEntityOrParticipant(mChampionId);
         }
-        String feedSubType = isMentor ? AppConstants.MENTOR_SUB_TYPE : AppConstants.USER_SUB_TYPE;
+        String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
         setConfigurableShareOption(isWhatsAppShare());
@@ -755,7 +757,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void stopProgressBar() {
-        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -765,6 +766,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -789,12 +791,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             if (isMentorQARefresh) {
                 profileActivitiesRefresh();
             } else {
-
                 setProfileNameData(mUserSolarObject);
             }
 
+            if(isMentor) {
+                loaderGif.setVisibility(View.GONE);
+            }
         }
-        loaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -866,7 +869,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getPostShortBranchUrls())) {
             branchPostDeepLink = mUserSolarObject.getPostShortBranchUrls();
         } else {
-            branchPostDeepLink = mUserSolarObject.getDeepLinkUrl();
+            if(isMentor) {
+                branchPostDeepLink = mUserSolarObject.getMentorDeepLinkUrl();
+            } else {
+                branchPostDeepLink = mUserSolarObject.getDeepLinkUrl();
+            }
         }
 
         HashMap<String, Object> properties =
@@ -880,8 +887,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        String deepLink = isMentor ? mUserSolarObject.getMentorDeepLinkUrl() : branchPostDeepLink;
-        intent.putExtra(Intent.EXTRA_TEXT, deepLink);
+        intent.putExtra(Intent.EXTRA_TEXT, branchPostDeepLink);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
@@ -970,7 +976,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                             } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                                 isMentorQARefresh = true;
-                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.MENTOR_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
+                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
                             }
                         }
                     }
@@ -985,10 +991,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
-        userName.setText(name);
-        tvMentorToolbarName.setText(name);
-        tvLoc.setText(location);
-        userDescription.setText(userBio);
+        if(StringUtil.isNotNullOrEmptyString(name)) {
+            userName.setText(name);
+            tvMentorToolbarName.setText(name);
+        }
+
+        if(StringUtil.isNotNullOrEmptyString(location)) {
+            tvLoc.setText(location);
+        }
+
+        if(StringUtil.isNotNullOrEmptyString(userBio)) {
+            userDescription.setText(userBio);
+        }
 
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
@@ -1023,14 +1037,24 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         return SCREEN_LABEL;
     }
 
-    public void setUsersFollowingCount(int numFound) {
+
+    public void setProfileTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCount) {
+        if(profileTopSectionCount.getStatus().equals(AppConstants.SUCCESS)) {
+            setUsersPostCount(profileTopSectionCount.getPostCount());
+            setUsersFollowerCount(profileTopSectionCount.getFollowerCount());
+            setUsersFollowingCount(profileTopSectionCount.getFollowingCount());
+        }
+        loaderGif.setVisibility(View.GONE);
+    }
+
+    private void setUsersFollowingCount(int numFound) {
         followingTitle.setText(getResources().getString(R.string.following));
         mUserSolarObject.setUserFollowing(numFound);
         followingCount.setText(String.valueOf(numFound));
         liFollowing.setVisibility(View.VISIBLE);
     }
 
-    public void setUsersFollowerCount(int numFound) {
+    private void setUsersFollowerCount(int numFound) {
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
         mUserSolarObject.setSolrIgnoreNoOfMentorFollowers(numFound);
         userFollowerCount.setText(String.valueOf(numericToThousand(numFound)));
@@ -1039,7 +1063,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     }
 
-    public void setUsersPostCount(int postCount) {
+    private void setUsersPostCount(int postCount) {
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, postCount);
         mUserSolarObject.setSolrIgnoreNoOfMentorPosts(postCount);
         userTotalPostCount.setText(String.valueOf(numericToThousand(postCount)));

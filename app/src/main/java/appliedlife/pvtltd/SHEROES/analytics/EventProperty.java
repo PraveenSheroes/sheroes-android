@@ -45,7 +45,10 @@ public enum EventProperty {
     POSITION_IN_SEQUENCE("Position In Sequence"),
     IS_MENTOR("Is Mentor"),
     IS_OWN_PROFILE("Is Own Profile"),
-    DESCRIPTION("Description");
+    DESCRIPTION("Description"),
+    COMMUNITY_CATEGORY("Community Category"),
+    POSITION_IN_CAROUSEL("Position In Carousel"),
+    POSITION_OF_CAROUSEL("Position Of Carousel");
 
     private final String string;
 
@@ -161,6 +164,21 @@ public enum EventProperty {
 
         public Builder communityName(String value) {
             put(COMMUNITY_NAME, value);
+            return this;
+        }
+
+        public Builder communityCategory(String value) {
+            put(COMMUNITY_CATEGORY, value);
+            return this;
+        }
+
+        public Builder positionInCarousel(String value) {
+            put(POSITION_IN_CAROUSEL, value);
+            return this;
+        }
+
+        public Builder positionOfCarousel(String value) {
+            put(POSITION_OF_CAROUSEL, value);
             return this;
         }
 

@@ -15,8 +15,8 @@
         android:layout_marginTop="@dimen/dp_size_12" />
 
     <TextView
-        android:layout_toRightOf="@+id/tv_drawer_image"
-        android:layout_toEndOf="@+id/tv_drawer_image"
+        android:layout_toRightOf="@id/tv_drawer_image"
+        android:layout_toEndOf="@id/tv_drawer_image"
         android:id="@+id/tv_drawer_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,8 +34,8 @@
     <TextView
         android:id="@+id/new_feature"
         android:layout_margin="@dimen/dp_size_10"
-        android:layout_toEndOf="@+id/tv_drawer_item"
-        android:layout_toRightOf="@+id/tv_drawer_item"
+        android:layout_toEndOf="@id/tv_drawer_item"
+        android:layout_toRightOf="@id/tv_drawer_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"

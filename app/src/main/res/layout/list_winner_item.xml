@@ -26,7 +26,7 @@
             android:id="@+id/winner_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/profile_pic"
+            android:layout_alignTop="@id/profile_pic"
             android:layout_toLeftOf="@id/trophy_image"
             android:layout_toRightOf="@id/profile_pic"
             android:orientation="vertical">

@@ -15,7 +15,7 @@
             android:id="@+id/iv_mentor_full_view_icon"
             android:layout_width="@dimen/mentor_profile_icon"
             android:layout_height="@dimen/mentor_profile_icon"
-            android:layout_marginTop="@dimen/dp_size_48"
+            android:layout_marginTop="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/sp_size_16" />
 
         <ImageView
@@ -32,8 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_48"
-        android:layout_toRightOf="@+id/fl_profile_icon"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_toRightOf="@id/fl_profile_icon"
         android:orientation="vertical"
         android:id="@+id/linearLayout">
 
