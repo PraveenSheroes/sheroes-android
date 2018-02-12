@@ -1418,17 +1418,21 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    protected void
+    onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
+        if(requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL){
+            CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+            if (currentFragment != null && currentFragment.isVisible()) {
+                currentFragment.refreshList();
+            }
+        }
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
                     articleDetailActivityResponse(intent);
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
-                    communityDetailActivityResponse(intent);
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
@@ -1559,20 +1563,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
             }
 
-        }
-    }
-
-    private void communityDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras()) {
-            CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-
-            if (currentFragment != null && currentFragment.isVisible()) {
-                Bundle bundle = intent.getExtras();
-                List<FeedDetail> communitiesData = Parcels.unwrap(bundle.getParcelable(AppConstants.COMMUNITIES_DETAIL));
-                if (communitiesData.size() > 0) {
-                    currentFragment.updateCommunityCarousel(communitiesData);
-                }
-            }
         }
     }
 

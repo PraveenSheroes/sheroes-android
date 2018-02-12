@@ -69,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -605,6 +606,7 @@ public class HomeFragment extends BaseFragment {
                 for (int j = 0; j < carouselFeedDetail.size(); j++) {
                     if (carouselFeedDetail.get(j).getIdOfEntityOrParticipant() == id) {
                         userSolrObj.setItemPosition(j);
+                        userSolrObj.setSuggested(true);
                         carouselFeedDetail.set(j, userSolrObj);
                         position[0] = i;
                         position[1] = j;

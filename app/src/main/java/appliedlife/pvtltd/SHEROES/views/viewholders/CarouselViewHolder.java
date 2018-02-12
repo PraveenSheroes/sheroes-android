@@ -104,15 +104,16 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());
             mAdapter.setData(item.getFeedDetails());
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i) instanceof UserSolrObj) {
                     boolean isSuggested = ((UserSolrObj) list.get(i)).isSuggested();
                     if (isSuggested) {
-                        isUpdateFromProfile = isSuggested;
+                        isUpdateFromProfile = true;
                         UserSolrObj userSolrObj = ((UserSolrObj) list.get(i));
                         mAdapter.notifyItemChanged(i, userSolrObj);
+                        mRecyclerView.scrollToPosition(userSolrObj.getItemPosition());
+                        break;
                     }
                 }
             }

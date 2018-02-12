@@ -81,7 +81,6 @@ public class MyCommunitiesAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void setData(List<FeedDetail> communities) {
         if(!CommonUtil.isEmpty(communities)) {
             this.mCommunities = communities;
-            notifyDataSetChanged();
         }
     }
     //endregion

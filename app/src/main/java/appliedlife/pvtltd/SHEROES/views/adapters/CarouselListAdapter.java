@@ -82,8 +82,10 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case TYPE_USER:
                     MentorCard mentorCard = (MentorCard) holder;
                     UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
+                    userSolrObj.setCompactView(true);
                     mentorCard.bindData(userSolrObj, mContext, position);
                     break;
+
                 case TYPE_SEE_MORE:
                     SeeMoreCompactViewHolder seeMoreCompactViewHolder = (SeeMoreCompactViewHolder) holder;
                     seeMoreCompactViewHolder.bindData();
@@ -127,12 +129,6 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setData(final List<FeedDetail> feedList) {
         mFeedDetails = null;
         mFeedDetails = feedList;
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        });
     }
 
     public void setData(final FeedDetail feedDetail) {
