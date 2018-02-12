@@ -48,6 +48,7 @@ import butterknife.OnClick;
 
 public class ChallengeGratificationActivity extends BaseActivity {
     private static final String SCREEN_LABEL = "Challenge Completed Screen";
+    //region View variables
     @Bind(R.id.tv_challenge_response_text_header)
     TextView tvChallengeResponseTextHeader;
     @Bind(R.id.iv_challenge_response)
@@ -61,11 +62,14 @@ public class ChallengeGratificationActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbarView;
     private Contest mContest;
+    //endregion
+
+    //region Activity method
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        setContentView(R.layout.challenge_graticfication_layout);
+        setContentView(R.layout.activity_challenge_graticfication_layout);
         ButterKnife.bind(this);
         init();
         setupToolbar();
@@ -121,11 +125,9 @@ public class ChallengeGratificationActivity extends BaseActivity {
         if (mContest != null) {
             String shareText="Yay! I just completed the #"+mContest.tag+" challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: "+mContest.shortUrl;
             ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false);
-            //  Bitmap bitmap = createShareImage();
-         //   ShareBottomSheetFragment.showDialog(this, mContest, bitmap, SCREEN_LABEL);
         }
     }
-
+//TODO: Will work on Challenge gratification next part where this code will be use
     private Bitmap createShareImage() {
         View view;
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -168,4 +170,5 @@ public class ChallengeGratificationActivity extends BaseActivity {
     protected boolean trackScreenTime() {
         return true;
     }
+    //endregion
 }

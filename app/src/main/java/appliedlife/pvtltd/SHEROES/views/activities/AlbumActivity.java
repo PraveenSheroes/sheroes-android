@@ -242,6 +242,8 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
                 CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
+                //Not removed because we have added whatsapp share feature for experiment and if in future we want roll back then we can use this code.
+
                 //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
             }
         }
@@ -307,14 +309,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     }
 
     //endregion
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (popupWindowTooTip != null && popupWindowTooTip.isShowing()) {
-            popupWindowTooTip.dismiss();
-
-        }
-    }
 
     //region public helper methods
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties) {

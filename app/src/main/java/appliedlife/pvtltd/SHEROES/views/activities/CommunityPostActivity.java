@@ -310,7 +310,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //Do something after 100ms
                         toolTip();
                     }
                 }, 1500);
