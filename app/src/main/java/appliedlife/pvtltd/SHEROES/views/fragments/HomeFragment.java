@@ -466,7 +466,9 @@ public class HomeFragment extends BaseFragment {
                         stringBuilder.append(notification);
                         ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
                     } else {
-                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                        if(getActivity() instanceof HomeActivity){
+                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                        }
                     }
                 }
                 break;

@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.StrictMode;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -33,6 +34,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +52,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.appevents.AppEventsConstants;
@@ -59,6 +62,7 @@ import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,13 +98,18 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
@@ -112,7 +121,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -135,6 +146,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -150,8 +162,10 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPIO
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
@@ -185,6 +199,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private static final int ANIMATION_DURATION_TIME = 5000;
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    HomePresenter mHomePresenter;
+
     @Bind(R.id.iv_drawer_profile_circle_icon)
     CircleImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -266,6 +284,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
+    private String mGcmId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -286,9 +305,40 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 isMentor = true;
             }
         }
-        renderHomeFragmentView();
-        assignNavigationRecyclerListView();
-        sheUserInit();
+
+        mHomePresenter.attachView(this);
+
+        if (null == mUserPreference) {
+            logOut();
+        } else if (null != mUserPreference.get()) {
+
+            if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+                logOut();
+            } else {
+                long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
+                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                    mHomePresenter.getAuthTokenRefreshPresenter();
+                } else {
+                    renderHomeFragmentView();
+                    assignNavigationRecyclerListView();
+                    sheUserInit();
+                }
+            }
+            if (null != mUserPreference.get().getUserSummary()) {
+                mUserId = mUserPreference.get().getUserSummary().getUserId();
+                AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
+                AppsFlyerLib.getInstance().startTracking(SheroesApplication.mContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
+                ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(mUserId));
+            }
+            }else {
+            mHomePresenter.getAuthTokenRefreshPresenter();
+        }
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        try {
+            getGcmId();
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 
     private void sheUserInit() {
@@ -1857,6 +1907,157 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
+    }
+
+    private void getGcmId() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+            GCMClientManager pushClientManager = new GCMClientManager(this, getString(R.string.ID_PROJECT_ID));
+            pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+                @Override
+                public void onSuccess(String registrationId, boolean isNewRegistration) {
+                    mGcmId = registrationId;
+                    PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
+                    if (StringUtil.isNotNullOrEmptyString(registrationId)) {
+                        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+                            if (mInstallUpdatePreference.get().isFirstOpen()) {
+                                LoginRequest loginRequest = loginRequestBuilder();
+                                loginRequest.setGcmorapnsid(registrationId);
+                                if (mInstallUpdatePreference.get().isWelcome()) {
+                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                    installUpdateForMoEngage.setWelcome(false);
+                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                }
+                                mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                            } else {
+                                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                                    String mOldGcmId = mUserPreference.get().getGcmId();
+                                    if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
+                                        if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                                            LoginRequest loginRequest = loginRequestBuilder();
+                                            loginRequest.setGcmorapnsid(registrationId);
+                                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                                        }
+                                    }
+                                }
+                                if (mInstallUpdatePreference.get().isWelcome()) {
+                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                    installUpdateForMoEngage.setWelcome(false);
+                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                }
+                            }
+                        }
+                    } else {
+                        getGcmId();
+                    }
+                }
+
+                @Override
+                public void onFailure(String ex) {
+
+                }
+            });
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+        if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+            loginResponse.setTokenTime(System.currentTimeMillis());
+            loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.set(loginResponse);
+            renderHomeFragmentView();
+            assignNavigationRecyclerListView();
+            sheUserInit();
+        }
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case NOTIFICATION_COUNT:
+                unReadNotificationCount(baseResponse);
+                break;
+            case GCM_ID:
+                gcmIdResponse(baseResponse);
+                break;
+            case USER_CONTACTS_ACCESS_SUCCESS:
+                getAppContactsListSuccess(baseResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    private void unReadNotificationCount(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof NotificationReadCountResponse) {
+                    NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
+                    if (notificationReadCountResponse.getUnread_notification_count() > 0) {
+                        flNotificationReadCount.setVisibility(View.VISIBLE);
+                        String notification = String.valueOf(notificationCount);
+                        stringBuilder.append(notification);
+                        mTvNotificationReadCount.setText(stringBuilder.toString());
+                    } else {
+                        flNotificationReadCount.setVisibility(View.GONE);
+                    }
+                }
+                break;
+            case AppConstants.FAILED:
+                flNotificationReadCount.setVisibility(View.GONE);
+                break;
+            default:
+                flNotificationReadCount.setVisibility(View.GONE);
+        }
+    }
+
+    private void gcmIdResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof GcmIdResponse) {
+                    LoginResponse loginResponse = mUserPreference.get();
+                    loginResponse.setGcmId(mGcmId);
+                    mUserPreference.set(loginResponse);
+                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                    installUpdateForMoEngage.setFirstOpen(false);
+                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                }
+                break;
+            case AppConstants.FAILED:
+                break;
+            default:
+        }
+    }
+
+    private void getAppContactsListSuccess(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                LoginResponse loginResponse = mUserPreference.get();
+                loginResponse.setAppContactAccessed(true);
+                mUserPreference.set(loginResponse);
+        }
     }
 
 }

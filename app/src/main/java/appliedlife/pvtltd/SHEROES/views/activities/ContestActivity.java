@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -62,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
@@ -128,6 +130,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     //region private member variable
     private HomeFragment mHomeFragment;
+    private FeedFragment mFeedFragment;
     private Contest mContest;
     private String mContestId;
     private long mUserId = -1L;
@@ -326,15 +329,15 @@ public class ContestActivity extends BaseActivity implements IContestView {
     //region private methods
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        mHomeFragment = new HomeFragment();
+        mFeedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Contest.CONTEST_OBJ, Parcels.wrap(mContest));
-        bundle.putBoolean(IS_CHALLENGE, true);
-        mHomeFragment.setArguments(bundle);
+        String endPointUrl = "participant/feed/v2?sub_type=P&source_entity_id=" + mContest.remote_id;
+        bundle.putString(AppConstants.END_POINT_URL, endPointUrl);
+        mFeedFragment.setArguments(bundle);
         mContestInfoFragment = (ContestInfoFragment) ContestInfoFragment.instance();
         mContestInfoFragment.setArguments(bundle);
         adapter.addFragment(mContestInfoFragment, "Overview");
-        adapter.addFragment(mHomeFragment, "Responses");
+        adapter.addFragment(mFeedFragment, "Responses");
         if (mContest.hasWinner) {
             ContestWinnerFragment mContestWinnerFragment = new ContestWinnerFragment();
             mContestWinnerFragment.setArguments(bundle);

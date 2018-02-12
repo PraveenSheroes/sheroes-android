@@ -86,6 +86,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 import io.reactivex.Observable;
 
@@ -291,4 +292,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/feed/community_category_home")
     Observable<FeedResponsePojo> fetchAllCommunity(@Body BaseRequest baseRequest);
+
+    @GET("participant/feed/v2?")
+    Observable<FeedResponsePojo> getChallengeResponse(@Query("sub_type") String subType, @Query("source_entity_id") String sourceEntityId);
 }
