@@ -558,7 +558,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void toolTip() {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        popupView = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
+        popupView = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAsDropDown(viewToolTipAnony, 0, 30);

@@ -255,8 +255,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private boolean isMentorQARefresh = false;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    private View popupViewToolTip;
-    private PopupWindow popupWindowTooTip;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -464,21 +462,20 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private void toolTipForAskQuestion() {
         try {
             toolTipProfile.setVisibility(View.INVISIBLE);
-            final View popupViewToolTip;
-            final PopupWindow popupWindowTooTip;
+            final View askQuesToolTip;
+            final PopupWindow popupWindowAnswerQuestionTooTip;
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            popupViewToolTip = layoutInflater.inflate(R.layout.tool_tip_center, null);
-            popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            popupWindowTooTip.setOutsideTouchable(true);
-            popupWindowTooTip.showAsDropDown(toolTipProfile, 0, 0);
-            // popupWindowTooTip.showAtLocation(tvMentorAskQuestion, Gravity.BOTTOM, 0, 70);
-            final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
-            final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
+            askQuesToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+            popupWindowAnswerQuestionTooTip = new PopupWindow(askQuesToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindowAnswerQuestionTooTip.setOutsideTouchable(true);
+            popupWindowAnswerQuestionTooTip.showAsDropDown(toolTipProfile, 0, 0);
+            final TextView tvGotIt = (TextView) askQuesToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle = (TextView) askQuesToolTip.findViewById(R.id.title);
             tvTitle.setText(getString(R.string.tool_tip_ask_question));
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popupWindowTooTip.dismiss();
+                    popupWindowAnswerQuestionTooTip.dismiss();
                     toolTipProfile.setVisibility(View.GONE);
                 }
             });
@@ -490,19 +487,30 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private void toolTipForFollowUser() {
         try {
             viewToolTipFollow.setVisibility(View.INVISIBLE);
+            final View popupFollowToolTip;
+            final PopupWindow popupWindowFollowTooTip;
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
-            popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            popupWindowTooTip.setOutsideTouchable(true);
-            popupWindowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
-            // popupWindowTooTip.showAtLocation(tvMentorDashBoardFollow,0, 0, 300);
-            final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
-            final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+            popupFollowToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+            popupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindowFollowTooTip.setOutsideTouchable(true);
+            popupWindowFollowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
+            final ImageView ivArrow = popupFollowToolTip.findViewById(R.id.iv_arrow);
+            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            ivArrow.setLayoutParams(imageParams);
+            final LinearLayout llToolTipBg = popupFollowToolTip.findViewById(R.id.ll_tool_tip_bg);
+            RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, ProfileActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
+            llParams.setMargins(CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0,0,0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
+            llToolTipBg.setLayoutParams(llParams);
+            final TextView tvGotIt =  popupFollowToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle =  popupFollowToolTip.findViewById(R.id.title);
             tvTitle.setText(getString(R.string.tool_tip_follower));
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popupWindowTooTip.dismiss();
+                    popupWindowFollowTooTip.dismiss();
                     viewToolTipFollow.setVisibility(View.GONE);
                 }
             });
@@ -535,9 +543,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         secondImageLayout.weight = 1;
         if (isMentor) {
             if (CommonUtil.forGivenCountOnly(AppConstants.ASK_QUESTION_SESSION_SHARE_PREF, AppConstants.ASK_QUESTION_SESSION) == AppConstants.ASK_QUESTION_SESSION) {
-                if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
+               if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
                     toolTipForAskQuestion();
-                }
+               }
             }
         }
         if (CommonUtil.ensureFirstTime(AppConstants.FOLLOWER_SHARE_PREF)) {
@@ -824,10 +832,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (popupWindowTooTip != null && popupWindowTooTip.isShowing()) {
-            popupWindowTooTip.dismiss();
 
-        }
         mHomePresenter.detachView();
     }
 
@@ -917,17 +922,21 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private void showToolTip() {
         if (CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
             LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
-            final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+            final View view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
             RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
             lps.setMargins(40, 70, 0, 0);
-
-            TextView title = (TextView) view.findViewById(R.id.title);
+            final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            ivArrow.setLayoutParams(imageParams);
+            TextView title =  view.findViewById(R.id.title);
             title.setText(R.string.tool_tip_user_share);
             rootLayout.addView(view, lps);
-            TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+            TextView gotIt = view.findViewById(R.id.got_it);
             gotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

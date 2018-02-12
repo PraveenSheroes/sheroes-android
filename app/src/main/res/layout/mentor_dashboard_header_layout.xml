@@ -33,7 +33,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_48"
-        android:layout_toRightOf="@+id/fl_profile_icon"
+        android:layout_toRightOf="@id/fl_profile_icon"
         android:orientation="vertical"
         android:id="@+id/ll_profile">
 
@@ -189,7 +189,7 @@
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_20"
         android:textStyle="bold"
-        android:layout_below="@+id/ll_profile"
+        android:layout_below="@id/ll_profile"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textColor="@color/feed_article_label"
         android:textSize="@dimen/sp_size_18" />

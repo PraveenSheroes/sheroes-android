@@ -49,6 +49,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -309,26 +310,32 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     @Override
                     public void run() {
                         try {
-                            final View popupViewToolTip;
-                            final PopupWindow popupWindowTooTip;
+                            final View popupViewNotificationToolTip;
+                            final PopupWindow popUpNotificationWindow;
                             int width = AppUtils.getWindowWidth(HomeActivity.this);
                             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                            popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
-                            popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            popupWindowTooTip.setOutsideTouchable(true);
+                            popupViewNotificationToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                            popUpNotificationWindow = new PopupWindow(popupViewNotificationToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            popUpNotificationWindow.setOutsideTouchable(true);
                             if(width<750) {
-                                popupWindowTooTip.showAsDropDown(viewtoolTipNotification, -100, 30);
+                                popUpNotificationWindow.showAsDropDown(viewtoolTipNotification, -100, 30);
                             }else
                             {
-                                popupWindowTooTip.showAsDropDown(viewtoolTipNotification, -150, 30);
+                                popUpNotificationWindow.showAsDropDown(viewtoolTipNotification, -150, 30);
                             }
-                            final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
-                            final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
+
+                            final ImageView ivArrow = popupViewNotificationToolTip.findViewById(R.id.iv_arrow);
+                            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, HomeActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                            ivArrow.setLayoutParams(imageParams);
+                            final TextView tvGotIt = popupViewNotificationToolTip.findViewById(R.id.got_it);
+                            final TextView tvTitle = popupViewNotificationToolTip.findViewById(R.id.title);
                             tvTitle.setText(getString(R.string.tool_tip_notification));
                             tvGotIt.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    popupWindowTooTip.dismiss();
+                                    popUpNotificationWindow.dismiss();
                                 }
                             });
                         } catch (WindowManager.BadTokenException e) {
@@ -337,7 +344,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     }
                 }, 2000);
 
-            }
+           }
         }
 
     }
@@ -348,20 +355,24 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             @Override
             public void run() {
                 try {
-                    final View popupViewToolTip;
-                    final PopupWindow popupWindowTooTip;
+                    final View navToolTip;
+                    final PopupWindow popupWindowNavTooTip;
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_nav, null);
-                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowTooTip.setOutsideTouchable(true);
-                    popupWindowTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
-                    final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
+                    navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                    popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowNavTooTip.setOutsideTouchable(true);
+                    popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
+                    final ImageView ivArrow = navToolTip.findViewById(R.id.iv_arrow);
+                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    imageParams.setMargins(CommonUtil.convertDpToPixel(10, HomeActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    ivArrow.setLayoutParams(imageParams);
+                    final TextView tvGotIt = navToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = navToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.tool_tip_nav));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupWindowTooTip.dismiss();
+                            popupWindowNavTooTip.dismiss();
                         }
                     });
                 } catch (WindowManager.BadTokenException e) {

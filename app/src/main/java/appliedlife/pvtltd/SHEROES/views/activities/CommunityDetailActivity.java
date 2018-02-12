@@ -33,8 +33,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -152,8 +155,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private String mCommunityTitleTextColor = "#ffffff";
 
     private int mFromNotification;
-    private View popupViewToolTip;
-    private PopupWindow popupWindowTooTip;
+    private View inviteFriendToolTip;
+    private PopupWindow popupWindowInviteFriendTooTip;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -189,9 +192,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             initializeLayout();
         }
         if (CommonUtil.forGivenCountOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, AppConstants.INVITE_FRIEND_SESSION) == AppConstants.INVITE_FRIEND_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
+           if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
                 toolTipForInviteFriends();
-            }
+           }
         }
     }
 
@@ -204,30 +207,39 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     int width = AppUtils.getWindowWidth(CommunityDetailActivity.this);
                     if (width < 600) {
                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right_small, null);
-                        popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        popupWindowTooTip.setOutsideTouchable(false);
-                        popupWindowTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
+                        inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                        popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindowInviteFriendTooTip.setOutsideTouchable(false);
+                        popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
+                        final LinearLayout llToolTipBg = inviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
+                        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
+                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0,0,0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                        llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
+                        llToolTipBg.setLayoutParams(llParams);
                     } else {
                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
-                        popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        popupWindowTooTip.setOutsideTouchable(false);
+                        inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                        popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindowInviteFriendTooTip.setOutsideTouchable(false);
                         if (width < 750) {
-                            popupWindowTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
+                            popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         } else {
-                            popupWindowTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
+                            popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
                         }
                     }
 
-                    // popupWindowTooTip.showAtLocation(mToolbar, Gravity.TOP, -50, 150);
-                    final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+                    final ImageView ivArrow = inviteFriendToolTip.findViewById(R.id.iv_arrow);
+                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, CommunityDetailActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                    ivArrow.setLayoutParams(imageParams);
+                    final TextView tvGotIt =  inviteFriendToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle =  inviteFriendToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.tool_tip_invite_friend));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupWindowTooTip.dismiss();
+                            popupWindowInviteFriendTooTip.dismiss();
                         }
                     });
                 } catch (WindowManager.BadTokenException e) {

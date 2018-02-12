@@ -96,7 +96,7 @@ public class CircleImageView extends AppCompatImageView {
     }else{
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.ic_women_error_dilog;
+          errorPlaceHolderDrawableId = R.drawable.default_img;
         }
         if(placeHolderDrawableId == 0){
           placeHolderDrawableId = R.drawable.default_img;

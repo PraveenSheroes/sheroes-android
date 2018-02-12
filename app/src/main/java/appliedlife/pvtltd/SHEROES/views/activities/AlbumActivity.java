@@ -24,8 +24,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,8 +75,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     private AlbumCarouselAdapter mAlbumCarouselAdapter;
     private int mMainItemPosition;
     private String mAlbumId;
-    private View popupViewToolTip;
-    private PopupWindow popupWindowTooTip;
 
     @Inject
     AlbumPresenter mAlbumPresenter;
@@ -139,11 +140,11 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         } */ else {
             return;
         }
-        if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
-           if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
+       // if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
+       //    if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
                 toolTipForPictureShare();
-            }
-        }
+        //    }
+       // }
     }
 
    /* @Override
@@ -278,25 +279,31 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             @Override
             public void run() {
                 try {
+                    final View albumToolTip;
+                    final PopupWindow popupWindowAlbumTooTip;
                     int width = AppUtils.getWindowWidth(AlbumActivity.this);
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    popupViewToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_right, null);
-                    popupWindowTooTip = new PopupWindow(popupViewToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowTooTip.setOutsideTouchable(false);
+                    albumToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                    popupWindowAlbumTooTip = new PopupWindow(albumToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowAlbumTooTip.setOutsideTouchable(false);
                     if(width<750) {
-                        popupWindowTooTip.showAsDropDown(mToolbar, 40, -10);
+                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, 40, -10);
                     }else
                     {
-                        popupWindowTooTip.showAsDropDown(mToolbar, width-200, -10);
+                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, width-200, -10);
                     }
-
-                    final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
+                    final ImageView ivArrow = albumToolTip.findViewById(R.id.iv_arrow);
+                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, AlbumActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                    ivArrow.setLayoutParams(imageParams);
+                    final TextView tvGotIt = albumToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = albumToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.tool_tip_picture_share));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupWindowTooTip.dismiss();
+                            popupWindowAlbumTooTip.dismiss();
                         }
                     });
                 } catch (WindowManager.BadTokenException e) {

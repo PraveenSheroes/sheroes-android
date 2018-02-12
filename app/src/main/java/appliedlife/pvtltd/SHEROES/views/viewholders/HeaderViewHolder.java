@@ -6,8 +6,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -145,19 +147,27 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private void toolTipForHeaderFeed(Context context) {
         LayoutInflater inflater = null;
         inflater = LayoutInflater.from(context);
-        final View view  = inflater.inflate(R.layout.too_tip_left_arrow, null);
+        final View view  = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
         FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
         lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
         imageParams.gravity = Gravity.START;
         imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
-        TextView text = (TextView) view.findViewById(R.id.title);
+        final LinearLayout llToolTipBg = view.findViewById(R.id.ll_tool_tip_bg);
+        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, context), LinearLayout.LayoutParams.WRAP_CONTENT);
+        llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
+        llToolTipBg.setLayoutParams(llParams);
+        final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+        RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        arrowParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+        ivArrow.setLayoutParams(arrowParams);
+        TextView text =  view.findViewById(R.id.title);
         text.setText(R.string.tool_tip_feed_header_profile);
-        TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+        TextView gotIt =  view.findViewById(R.id.got_it);
         gotIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isToolTip=false;
+                    isToolTip=false;
                     rootLayout.removeView(view);
             }
         });
