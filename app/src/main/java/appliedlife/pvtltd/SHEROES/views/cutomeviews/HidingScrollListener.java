@@ -236,10 +236,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
 
                     case AppConstants.PROFILE_COMMUNITY_LISTING:
-                        if (mFragmentListRefreshData.isSelfProfile()) {
-                            profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
-                        } else {
-                            profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+                        if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
+                            if (mFragmentListRefreshData.isSelfProfile()) {
+                                profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+                            } else {
+                                profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+                            }
                         }
                         break;
 
