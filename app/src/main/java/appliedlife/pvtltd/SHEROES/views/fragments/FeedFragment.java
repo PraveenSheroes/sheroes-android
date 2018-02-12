@@ -31,6 +31,7 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,9 +66,11 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
@@ -76,17 +79,19 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
  */
 
 public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
-    public static final String SCREEN_LABEL = "Community Screen Activity";
+    public static String SCREEN_LABEL = "Community Screen Activity";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
 
@@ -152,16 +157,29 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             mPrimaryColor = getArguments().getString(PRIMARY_COLOR);
             mTitleTextColor = getArguments().getString(TITLE_TEXT_COLOR);
         }
-        if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
-            mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
-        } else {
+        if(mCommunityTab == null){
+            if(getArguments() !=null) {
+                String dataUrl = getArguments().getString(AppConstants.END_POINT_URL);
+                String screenName = getArguments().getString(AppConstants.SCREEN_NAME);
 
+                if(CommonUtil.isNotEmpty(screenName)) {
+                    SCREEN_LABEL = screenName;
+                }
+
+                if (CommonUtil.isNotEmpty(dataUrl)) {
+                    mFeedPresenter.setEndpointUrl(dataUrl);
+                }
+            }
+        }else {
+            if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
+                mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
+            }
+            mScreenProperties = new EventProperty.Builder()
+                    .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                    .sourceTabKey(mCommunityTab.key)
+                    .sourceTabTitle(mCommunityTab.title)
+                    .build();
         }
-        mScreenProperties = new EventProperty.Builder()
-                .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
-                .sourceTabKey(mCommunityTab.key)
-                .sourceTabTitle(mCommunityTab.title)
-                .build();
         // Initialize recycler view
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
@@ -279,7 +297,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void addAllFeed(List<FeedDetail> feedList) {
         mAdapter.addAll(feedList);
     }
-
+    
     @Override
     public void setFeedEnded(boolean feedEnded) {
         this.hasFeedEnded = feedEnded;
@@ -591,6 +609,34 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    @Override
+    public void onCommunityJoinOrLeave(CommunityFeedSolrObj mCommunityFeedObj) {
+        if (mCommunityFeedObj.isMember()) {
+            mCommunityFeedObj.setMember(false);
+            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
+
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                mFeedPresenter.leaveCommunity(removeMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), mCommunityFeedObj);
+            }
+        } else {
+            mCommunityFeedObj.setMember(true);
+            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
+
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                List<Long> userIdList = new ArrayList();
+                userIdList.add(mUserPreference.get().getUserSummary().getUserId());
+                mFeedPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), mCommunityFeedObj);
+            }
+        }
+    }
+
+    @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             if (null != userPostObj) {
@@ -846,7 +892,27 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    public int findPositionById(long id) {
+    @Override
+    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
+        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (position == RecyclerView.NO_POSITION) {
+            return;
+        }
+        mAdapter.setItem(position, communityFeedSolrObj);
+        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
+    }
+
+    @Override
+    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
+        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (position == RecyclerView.NO_POSITION) {
+            return;
+        }
+        mAdapter.setItem(position, communityFeedSolrObj);
+        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
+    }
+
+    public int findPositionById(long id) { //TODO - move to presenter
         if (mAdapter == null) {
             return -1;
         }

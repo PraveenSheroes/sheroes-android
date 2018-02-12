@@ -15,6 +15,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
@@ -68,7 +69,12 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }
-
+    public void setSuggestedDataOnPosition(CarouselDataObj carouselDataObj, int position) {
+        if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
+            this.filterListData.remove(position);
+            this.filterListData.add(position, (T) carouselDataObj);
+        }
+    }
     public void setDataOnPosition(FeedDetail feedDetail, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);

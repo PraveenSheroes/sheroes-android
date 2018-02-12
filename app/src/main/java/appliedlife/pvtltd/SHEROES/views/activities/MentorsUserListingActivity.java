@@ -125,7 +125,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             public void dismissReactions() {
             }
         });
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -138,7 +138,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
-        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.MENTOR_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {

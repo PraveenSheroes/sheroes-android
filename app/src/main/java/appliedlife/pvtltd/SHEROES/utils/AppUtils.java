@@ -98,8 +98,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -1525,6 +1525,19 @@ public class AppUtils {
         return profileFollowedMentor;
     }
 
+    public ProfileTopCountRequest profileTopSectionCount(long id) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ProfileTopCountRequest profileTopCountRequest = new ProfileTopCountRequest();
+        profileTopCountRequest.setPageNo(AppConstants.ONE_CONSTANT);
+        profileTopCountRequest.setAppVersion(appUtils.getAppVersionName());
+        profileTopCountRequest.setUserId(id);
+        profileTopCountRequest.setMentorId(id);
+        profileTopCountRequest.setUsersFollower(true);
+        profileTopCountRequest.setUsersFollowing(true);
+        profileTopCountRequest.setPageSize(AppConstants.PAGE_SIZE);
+        return profileTopCountRequest;
+    }
+
     public FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
         feedRequestPojo.setCategoryIds(categoryIds);
@@ -1540,18 +1553,6 @@ public class AppUtils {
         feedRequestPojo.setOpportunityTypes(opportunityTypes);
         feedRequestPojo.setSkills(skills);
         return feedRequestPojo;
-    }
-
-
-    public UserFollowerOrFollowingRequest countUserFollowersOrFollowing(Long mentorId, boolean isAFollower) {
-        AppUtils appUtils = AppUtils.getInstance();
-        UserFollowerOrFollowingRequest userFollowerOrFollowingRequest = new UserFollowerOrFollowingRequest();
-        userFollowerOrFollowingRequest.setAppVersion(appUtils.getAppVersionName());
-        userFollowerOrFollowingRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        userFollowerOrFollowingRequest.setMentorId(mentorId);
-        userFollowerOrFollowingRequest.setIsUserAFollower(isAFollower);
-        userFollowerOrFollowingRequest.setPageSize(AppConstants.PAGE_SIZE);
-        return userFollowerOrFollowingRequest;
     }
 
     public FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {

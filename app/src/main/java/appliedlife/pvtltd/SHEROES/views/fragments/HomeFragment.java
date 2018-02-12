@@ -1,30 +1,20 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +28,7 @@ import com.moengage.push.PushManager;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -49,16 +40,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.MentorDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -83,14 +72,10 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-
-import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
@@ -577,36 +562,56 @@ public class HomeFragment extends BaseFragment {
                 if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
                     return;
 
-                List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
-                MentorDataObj mentorDataObj=(MentorDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
-                if(((UserSolrObj) baseResponse).isSuggested())
-                {
-                    mentorDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
-                    List<UserSolrObj> mentorDataObjList=new ArrayList<>();
-                    for(UserSolrObj userSolrObjLocal:mentorDataObj.getMentorParticipantModel())
-                    {
-                        if(userPassedObject.getItemPosition()==userSolrObjLocal.getItemPosition())
-                        {
-                            mentorDataObjList.add(userPassedObject);
-                        }else
-                        {
-                            mentorDataObjList.add(userSolrObjLocal);
-                        }
-                    }
-                    mentorDataObj.setMentorParticipantModel(mentorDataObjList);
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition,mentorDataObj );
-                }else
-                {
-                    mentorDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition,mentorDataObj );
+                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                List<Object> dataItems = findPositionById(userSolrObj.getIdOfEntityOrParticipant(),userSolrObj);
+                int pos[] = (int[]) dataItems.get(0);
+                if (pos!=null  && pos[0] == RecyclerView.NO_POSITION ) {
+                    return;
+                }
+                if(null!=dataItems&&dataItems.size()>1) {
+                        CarouselDataObj carouselDataObj= (CarouselDataObj) dataItems.get(1);
+                        int positions = pos != null ? pos[0] : 0;
+                        mAdapter.notifyItemChanged(positions,carouselDataObj);
                 }
                 break;
             default:
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
     }
+    public List<Object> findPositionById(long id, UserSolrObj userSolrObj) {
+        ArrayList<Object> arrayList = new ArrayList<>();
+        int position[] = new int[2];
+        if (mAdapter == null) {
+            return null;
+        }
+        List<FeedDetail> feedDetails = mPullRefreshList.getFeedResponses();
 
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return null;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail instanceof CarouselDataObj) {
+                CarouselDataObj carouselDataObj = (CarouselDataObj) feedDetails.get(i);
+                List<FeedDetail> carouselFeedDetail = carouselDataObj.getFeedDetails();
+                for (int j = 0; j < carouselFeedDetail.size(); j++) {
+                    if (carouselFeedDetail.get(j).getIdOfEntityOrParticipant() == id) {
+                        userSolrObj.setItemPosition(j);
+                        carouselFeedDetail.set(j, userSolrObj);
+                        position[0] = i;
+                        position[1] = j;
+                        arrayList.add(position);
+                        carouselDataObj.setFeedDetails(carouselFeedDetail);
+                        arrayList.add(carouselDataObj);
+                        break;
+                    }
+                }
+            }
+
+        }
+        return arrayList;
+    }
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);
     }

@@ -16,16 +16,16 @@
         android:visibility="visible" />
 
     <TextView
-        android:layout_toEndOf="@+id/tv_drawer_navigation"
-        android:layout_toRightOf="@+id/tv_drawer_navigation"
         android:id="@+id/title_text"
+        style="@style/TextAppearance.Toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_drawer_navigation"
+        android:layout_toRightOf="@id/tv_drawer_navigation"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:paddingTop="@dimen/dp_size_8"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_17"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/ic_sheroes"
@@ -36,37 +36,6 @@
         android:layout_marginTop="@dimen/dp_size_16"
         android:background="@drawable/ic_sheroes_header" />
 
-    <TextView
-        android:id="@+id/tv_search_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_toLeftOf="@+id/fl_notification"
-        android:layout_toRightOf="@+id/tv_drawer_navigation"
-        android:background="@drawable/rectangle_search_bar"
-        android:drawableLeft="@drawable/ic_search_box_icon"
-        android:drawablePadding="@dimen/dp_size_12"
-        android:visibility="gone"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:layerType="software"
-        android:padding="@dimen/dp_size_12"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_12" />
-
-    <TextView
-        android:id="@+id/tv_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_toLeftOf="@+id/fl_notification"
-        android:layout_toRightOf="@+id/tv_drawer_navigation"
-        android:gravity="center"
-        android:text="@string/ID_BOOKMARKS"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_19"
-        android:visibility="gone" />
     <FrameLayout
         android:id="@+id/fl_notification"
         android:layout_width="wrap_content"
@@ -91,30 +60,67 @@
             android:layout_width="@dimen/dp_size_25"
             android:layout_height="@dimen/dp_size_25"
             android:layout_gravity="top|right"
-            android:visibility="gone"
-            android:layout_marginRight="5dp"
             android:layout_marginBottom="@dimen/dp_size_10"
+            android:layout_marginRight="5dp"
             android:background="@drawable/ic_red_circle"
-            android:backgroundTint="@color/footer_icon_text">
+            android:backgroundTint="@color/footer_icon_text"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tv_notification_read_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:layout_gravity="center"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_9" />
         </FrameLayout>
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/tv_search_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_toLeftOf="@id/fl_notification"
+        android:layout_toStartOf="@id/fl_notification"
+        android:layout_toEndOf="@id/tv_drawer_navigation"
+        android:layout_toRightOf="@id/tv_drawer_navigation"
+        android:background="@drawable/rectangle_search_bar"
+        android:drawableLeft="@drawable/ic_search_box_icon"
+        android:drawablePadding="@dimen/dp_size_12"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:layerType="software"
+        android:padding="@dimen/dp_size_12"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_toLeftOf="@id/fl_notification"
+        android:layout_toStartOf="@id/fl_notification"
+        android:layout_toEndOf="@id/tv_drawer_navigation"
+        android:layout_toRightOf="@id/tv_drawer_navigation"
+        android:gravity="center"
+        android:text="@string/ID_BOOKMARKS"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_19"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/vector_invite_24dp"
+        android:layout_gravity="center"
         android:layout_toLeftOf="@id/fl_notification"
         android:padding="@dimen/dp_size_10"
-        android:layout_gravity="center"/>
+        android:src="@drawable/vector_invite_24dp" />
 
 </RelativeLayout>

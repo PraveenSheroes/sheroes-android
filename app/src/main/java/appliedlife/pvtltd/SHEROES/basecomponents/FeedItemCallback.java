@@ -6,6 +6,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -80,4 +81,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onSpamPostApprove(UserPostSolrObj userPostObj);
 
     void onSpamPostDelete(UserPostSolrObj userPostObj);
+
+    void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
+
+    void onCommunityJoinOrLeave(CommunityFeedSolrObj communityFeedSolrObj);
 }
