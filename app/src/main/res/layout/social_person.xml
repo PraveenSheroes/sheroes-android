@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_social_user"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_size_5"
+    android:layout_marginBottom="@dimen/dp_size_5"
+    android:orientation="horizontal">
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+        android:id="@+id/iv_user_pic"
+        android:layout_width="@dimen/feed_profile_icon_size"
+        android:layout_height="@dimen/feed_profile_icon_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_12"/>
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="0dp"
+        android:layout_weight="@integer/int_value_for_line_1"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textColor="@color/comment_text"
+        android:textSize="@dimen/sp_size_14"/>
+
+</LinearLayout>

@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
@@ -29,14 +31,18 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +50,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -84,12 +89,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -104,6 +109,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
@@ -145,6 +151,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.share_on_fb)
     SwitchCompat mShareToFacebook;
+
+    @Bind(R.id.view_tooltip_anony)
+    View viewToolTipAnony;
+
 
     @Bind(R.id.user_pic)
     ImageView mUserPicView;
@@ -215,6 +225,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
+    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
+    private View anonymousToolTip;
+    private PopupWindow popupWindowToolTip;
     //endregion
 
     //region Activity methods
@@ -309,23 +322,35 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupAnonymousSlelectListener();
         setViewByCreatePostCall();
         setupToolbarItemsColor();
+        if(!mIsChallengePost) {
+           if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toolTip();
+                    }
+                }, 1500);
+            }
+        }
     }
-
-    private void setViewByCreatePostCall() {
-        if (null != mCommunityPost) {
-            switch (mCommunityPost.createPostRequestFrom) {
+    private void setViewByCreatePostCall()
+    {
+        if(null!=mCommunityPost)
+        {
+            switch (mCommunityPost.createPostRequestFrom)
+            {
                 case AppConstants.CREATE_POST:
                     mTitleToolbar.setText(R.string.title_create_post);
                     break;
                 case AppConstants.MENTOR_CREATE_QUESTION:
                     mTitleToolbar.setText(R.string.title_ask_question);
                     break;
-                default:
-                    mTitleToolbar.setText(R.string.title_create_post);
+                    default:
+                        mTitleToolbar.setText(R.string.title_create_post);
             }
         }
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -479,7 +504,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_create_post, menu);
         MenuItem menuItem = menu.findItem(R.id.post);
-        switch (mCommunityPost.createPostRequestFrom) {
+        switch (mCommunityPost.createPostRequestFrom)
+        {
             case AppConstants.CREATE_POST:
                 SpannableString actionPost = new SpannableString(getResources().getString(R.string.action_post));
                 actionPost.setSpan(new ForegroundColorSpan(Color.parseColor(mTitleTextColor)), 0, actionPost.length(), 0);
@@ -629,6 +655,28 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
     }
 
+    private void toolTip() {
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        anonymousToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+        popupWindowToolTip = new PopupWindow(anonymousToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindowToolTip.setOutsideTouchable(true);
+        popupWindowToolTip.showAsDropDown(viewToolTipAnony, 0, 30);
+        final ImageView ivArrow = anonymousToolTip.findViewById(R.id.iv_arrow);
+        RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, CommunityPostActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+        imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+        ivArrow.setLayoutParams(imageParams);
+        final TextView tvGotIt =  anonymousToolTip.findViewById(R.id.got_it);
+        final TextView tvTitle = anonymousToolTip.findViewById(R.id.title);
+        tvTitle.setText(getString(R.string.tool_tip_create_post));
+        tvGotIt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowToolTip.dismiss();
+            }
+        });
+    }
+
     private void setupCommunityNameListener() {
         mCommunityName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -683,6 +731,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
 
                 } else {
+                }
+                if(popupWindowToolTip !=null)
+                {
+                    popupWindowToolTip.dismiss();
                 }
             }
         });

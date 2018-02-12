@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -27,11 +28,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
@@ -122,7 +126,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     boolean isFollowEvent;
     private String mSourceName;
     private String userNameTitle;
-    private boolean isProfileClicked=false;
+    private boolean isProfileClicked = false;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -169,6 +173,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
 
+    @Bind(R.id.ll_profile)
+    LinearLayout llProfile;
     @Bind(R.id.li_post)
     LinearLayout liPost;
 
@@ -241,6 +247,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
 
+    @Bind(R.id.view_profile)
+    View toolTipProfile;
+    @Bind(R.id.view_tool_follow)
+    View viewToolTipFollow;
+
+
     private boolean isMentorQARefresh = false;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -276,7 +288,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             itemPosition = mFeedDetail.getItemPosition();
         }
         if (mChampionId > 0 && null == mUserSolarObject) {
-            isProfileClicked=true;
+            isProfileClicked = true;
             mUserSolarObject = new UserSolrObj();
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
@@ -288,6 +300,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
+
+    public void onResume() {
+        super.onResume();
+    }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
@@ -301,6 +318,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
         return isWhatsappShare;
     }
+
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -310,7 +328,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     public void profileActivitiesRefresh() {
-       String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
+        String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
         tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
         tvMentorAnswer.setText(pluralAnswer);
     }
@@ -443,6 +461,66 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
+    private void toolTipForAskQuestion() {
+        try {
+            toolTipProfile.setVisibility(View.INVISIBLE);
+            final View askQuesToolTip;
+            final PopupWindow popupWindowAnswerQuestionTooTip;
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            askQuesToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+            popupWindowAnswerQuestionTooTip = new PopupWindow(askQuesToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindowAnswerQuestionTooTip.setOutsideTouchable(true);
+            popupWindowAnswerQuestionTooTip.showAsDropDown(toolTipProfile, 0, 0);
+            final TextView tvGotIt = (TextView) askQuesToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle = (TextView) askQuesToolTip.findViewById(R.id.title);
+            tvTitle.setText(getString(R.string.tool_tip_ask_question));
+            tvGotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindowAnswerQuestionTooTip.dismiss();
+                    toolTipProfile.setVisibility(View.GONE);
+                }
+            });
+        } catch (WindowManager.BadTokenException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+    }
+
+    private void toolTipForFollowUser() {
+        try {
+            viewToolTipFollow.setVisibility(View.INVISIBLE);
+            final View popupFollowToolTip;
+            final PopupWindow popupWindowFollowTooTip;
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            popupFollowToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+            popupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindowFollowTooTip.setOutsideTouchable(true);
+            popupWindowFollowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
+            final ImageView ivArrow = popupFollowToolTip.findViewById(R.id.iv_arrow);
+            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            ivArrow.setLayoutParams(imageParams);
+            final LinearLayout llToolTipBg = popupFollowToolTip.findViewById(R.id.ll_tool_tip_bg);
+            RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, ProfileActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
+            llParams.setMargins(CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0,0,0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
+            llToolTipBg.setLayoutParams(llParams);
+            final TextView tvGotIt =  popupFollowToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle =  popupFollowToolTip.findViewById(R.id.title);
+            tvTitle.setText(getString(R.string.tool_tip_follower));
+            tvGotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindowFollowTooTip.dismiss();
+                    viewToolTipFollow.setVisibility(View.GONE);
+                }
+            });
+        } catch (WindowManager.BadTokenException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+    }
+
     private void followUnFollowMentor() {
 
         if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
@@ -465,6 +543,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         tvMentorAskQuestion.setLayoutParams(ask);
         LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) tvMentorAskQuestion.getLayoutParams();
         secondImageLayout.weight = 1;
+        if (isMentor) {
+            if (CommonUtil.forGivenCountOnly(AppConstants.ASK_QUESTION_SESSION_SHARE_PREF, AppConstants.ASK_QUESTION_SESSION) == AppConstants.ASK_QUESTION_SESSION) {
+               if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
+                    toolTipForAskQuestion();
+               }
+            }
+        }
+        if (CommonUtil.ensureFirstTime(AppConstants.FOLLOWER_SHARE_PREF)) {
+            toolTipForFollowUser();
+        }
     }
 
     private void setPagerAndLayouts() {
@@ -664,14 +752,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
-        }else {
+        } else {
             if (mFromNotification > 0) {
                 TaskStackBuilder.create(this)
                         .addNextIntentWithParentStack(upIntent)
                         .startActivities();
-            }else
-            {
-                if(!isProfileClicked) {
+            } else {
+                if (!isProfileClicked) {
                     onActivtyResultOfParentRefresh();
                 }
             }
@@ -747,6 +834,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Override
     public void onDestroy() {
         super.onDestroy();
+
         mHomePresenter.detachView();
     }
 
@@ -835,19 +923,23 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     private void showToolTip() {
-        if(CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
+        if (CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
             LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
-            final View view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+            final View view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
             RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
             lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
-            lps.setMargins(70, 50, 0, 0);
-
-            TextView title = (TextView) view.findViewById(R.id.title);
+            lps.setMargins(40, 70, 0, 0);
+            final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            ivArrow.setLayoutParams(imageParams);
+            TextView title =  view.findViewById(R.id.title);
             title.setText(R.string.tool_tip_user_share);
             rootLayout.addView(view, lps);
-            TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+            TextView gotIt = view.findViewById(R.id.got_it);
             gotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -895,7 +987,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
-            if(!comment.isAnonymous()) {
+            if (!comment.isAnonymous()) {
                 championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
             }
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {

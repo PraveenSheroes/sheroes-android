@@ -521,5 +521,23 @@
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
     <string name="my_communities">My Communities</string>
 
+    <string name="got_it">Got It</string>
+
+    <string name="tool_tip_create_post">Use this button to hide your identity on the post.</string>
+    <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
+    <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.</string>
+    <string name="tool_tip_follower">Follow her to see what she shares!</string>
+    <string name="tool_tip_picture_share">Like this picture? Share it with friends.</string>
+    <string name="tool_tip_invite_friend">Invite your friends to this community by tapping here.</string>
+    <string name="tool_tip_article_share">Share this article with a friend who will love reading it.</string>
+    <string name="tool_tip_feed_header_profile">Check out your profile to see your posts, communities, followers &amp; more.</string>
+    <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.</string>
+    <string name="share_with_friends">Share with friends</string>
+    <string name="share_with_friend_text">Share the happiness with your friends &amp; invite them to take up this challenge</string>
+    <string name="challenge_done">Wohoo!</string>
+    <string name="challenge_completed">Challenge Completed</string>
+
+
+
 
 </resources>

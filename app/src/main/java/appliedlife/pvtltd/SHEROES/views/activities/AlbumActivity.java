@@ -1,10 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -14,13 +16,23 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.parceler.Parcels;
 
@@ -30,26 +42,21 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Album;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.presenters.AlbumPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumCarouselAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumGalleryAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAlbumView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -133,6 +140,11 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         } */ else {
             return;
         }
+       // if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
+       //    if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
+                toolTipForPictureShare();
+        //    }
+       // }
     }
 
    /* @Override
@@ -231,7 +243,9 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
                 CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
-              //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
+                //Not removed because we have added whatsapp share feature for experiment and if in future we want roll back then we can use this code.
+
+                //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
             }
         }
         return true;
@@ -256,6 +270,51 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         MenuItem itemShare = menu.findItem(R.id.share);
         itemShare.setVisible(true);
     }
+
+    //endregion
+//region public helper methods
+    private void toolTipForPictureShare() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final View albumToolTip;
+                    final PopupWindow popupWindowAlbumTooTip;
+                    int width = AppUtils.getWindowWidth(AlbumActivity.this);
+                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    albumToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                    popupWindowAlbumTooTip = new PopupWindow(albumToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowAlbumTooTip.setOutsideTouchable(false);
+                    if(width<750) {
+                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, 40, -10);
+                    }else
+                    {
+                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, width-200, -10);
+                    }
+                    final ImageView ivArrow = albumToolTip.findViewById(R.id.iv_arrow);
+                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, AlbumActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                    ivArrow.setLayoutParams(imageParams);
+                    final TextView tvGotIt = albumToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = albumToolTip.findViewById(R.id.title);
+                    tvTitle.setText(getString(R.string.tool_tip_picture_share));
+                    tvGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindowAlbumTooTip.dismiss();
+                        }
+                    });
+                } catch (WindowManager.BadTokenException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
+            }
+        }, 1000);
+
+
+    }
+
     //endregion
 
     //region public helper methods
@@ -270,11 +329,9 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             photo.url = url;
             album.photos.add(photo);
         }
-        if(StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls()))
-        {
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
             album.deepLinkUrl = feedDetail.getPostShortBranchUrls();
-        }else
-        {
+        } else {
             album.deepLinkUrl = feedDetail.getDeepLinkUrl();
         }
         Intent intent = new Intent(fromActivity, AlbumActivity.class);

@@ -1,11 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -29,9 +31,11 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -39,6 +43,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -72,7 +78,6 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -228,6 +233,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @BindDimen(R.dimen.article_image_height_tmp)
     int articleImageHeight;
 
+    private   View articleToolTip;
+    private PopupWindow popupWindowArticleTooTip;
     //endregion
 
     //region Activity methods
@@ -303,6 +310,52 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         });
 
         applyPalette();
+        if (CommonUtil.forGivenCountOnly(AppConstants.ARTICLE_SHARE_SESSION_PREF, AppConstants.ARTICLE_SESSION) == AppConstants.ARTICLE_SESSION) {
+            if (CommonUtil.ensureFirstTime(AppConstants.ARTICLE_SHARE_PREF)) {
+                toolTipForShareArticle();
+            }
+        }
+    }
+
+    private void toolTipForShareArticle() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    int width = AppUtils.getWindowWidth(ArticleActivity.this);
+                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    articleToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+                    popupWindowArticleTooTip = new PopupWindow(articleToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindowArticleTooTip.setOutsideTouchable(true);
+                    if (width < 750) {
+                        popupWindowArticleTooTip.showAsDropDown(fab, -450, -300);
+                    } else {
+                        popupWindowArticleTooTip.showAsDropDown(fab, -700, -400);
+                    }
+                    final ImageView ivArrow = articleToolTip.findViewById(R.id.iv_arrow);
+                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ArticleActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                    imageParams.addRule(RelativeLayout.BELOW, R.id.ll_tool_tip_bg);
+                    ivArrow.setLayoutParams(imageParams);
+
+                    final TextView tvGotIt = articleToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = articleToolTip.findViewById(R.id.title);
+                    tvTitle.setText(getString(R.string.tool_tip_article_share));
+                    tvGotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindowArticleTooTip.dismiss();
+                        }
+                    });
+                } catch (WindowManager.BadTokenException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
+            }
+        }, 1000);
+
+
     }
 
     @Override
@@ -380,7 +433,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
         }
-        if (webChromeClient != null && !webChromeClient.onBackPressed()){
+        if (webChromeClient != null && !webChromeClient.onBackPressed()) {
             if (webViewText.canGoBack()) {
                 webViewText.goBack();
             } else {
@@ -447,7 +500,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     case R.id.author:
 
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if(!comment.isAnonymous()) {
+                        if (!comment.isAnonymous()) {
                             openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
                         break;
@@ -801,6 +854,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region OnScroll methods
     @Override
     public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        if (popupWindowArticleTooTip != null) {
+            popupWindowArticleTooTip.dismiss();
+        }
         int totalHeight = mArticleLayout.getChildAt(0).getHeight();
         int articleHeight = totalHeight;
 
@@ -819,7 +875,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             int uiOptions = View.SYSTEM_UI_FLAG_LOW_PROFILE;
             getWindow().getDecorView().setSystemUiVisibility(uiOptions);
         } else {
-            if(!mHasFocus){
+            if (!mHasFocus) {
                 fab.show();
             }
             getSupportActionBar().show();
@@ -911,7 +967,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @OnClick(R.id.like_count)
-    public void onLikeCountClicked(){
+    public void onLikeCountClicked() {
         LikeListBottomSheetFragment.showDialog(this, "", mArticle.entityId);
     }
     //endregion

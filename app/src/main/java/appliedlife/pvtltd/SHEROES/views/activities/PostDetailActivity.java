@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +39,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
+
 
 import org.parceler.Parcels;
 
@@ -66,7 +68,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -80,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 /**
  * Created by ujjwal on 07/12/17.
@@ -146,6 +149,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private String mTitleTextColor = "#ffffff";
 
     private int mFromNotification;
+
+
+    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     //endregion
 
     //region activity methods
@@ -196,7 +202,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mTitleToolbar.setText(R.string.ID_COMMENTS);
         setupEditInputText();
         setupToolbarItemsColor();
+      //  postCommentSocialTagging();
     }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
@@ -210,6 +218,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         return isWhatsappShare;
     }
+
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
         mIsAnonymous = false;
@@ -337,6 +346,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (comment != null) {
             onDeleteMenuClicked(comment);
         }
+    }
+
+    @Override
+    public void showListOfParticipate(List<UserTaggingPerson> participantLists) {
+        customSocialUserAdapter.addAll(participantLists);
+        customSocialUserAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -498,7 +513,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             Menu menu = popup.getMenu();
             menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
             menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
@@ -518,8 +533,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     popup.getMenu().findItem(R.id.edit).setVisible(true);
                 }
 
-            }else
-            {
+            } else {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
             }
@@ -540,7 +554,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             } else {
                 popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
-            if(userPostObj.communityId == 0){
+            if (userPostObj.communityId == 0) {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
             if (userPostObj.isSpamPost()) {
@@ -562,7 +576,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             return true;
                         case R.id.share:
                             shareWithMultipleOption(userPostObj);
-                            default:
+                        default:
                             return false;
                     }
                 }
@@ -585,6 +599,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
     }
+
     private CharSequence menuIconWithText(Drawable r, String title) {
         r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
         SpannableString sb = new SpannableString("    " + title);
@@ -592,10 +607,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
     }
+
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
         if (userPostSolrObj.isAnonymous()) {
             return AppConstants.ANONYMOUS;
-        }else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
+        } else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
             return AppConstants.COMMUNITY_OWNER;
         } else {
             return AppConstants.USER;
@@ -804,7 +820,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void userProfileNameClick(Comment comment, View view) {
-        if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
+        if (!comment.isAnonymous() && comment.getParticipantUserId() != null) {
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
