@@ -399,7 +399,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if(mIsChallengePost){
             mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(),mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
         }else if (!mIsEditPost) {
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, AccessToken.getCurrentAccessToken().getToken()));
+            String accessToken = "";
+            if(AccessToken.getCurrentAccessToken()!=null){
+                accessToken = AccessToken.getCurrentAccessToken().getToken();
+            }
+
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken));
         } else {
             mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
         }

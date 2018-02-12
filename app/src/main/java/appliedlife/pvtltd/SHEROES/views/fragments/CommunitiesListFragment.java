@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -77,6 +78,9 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Inject
     CommunitiesListPresenter mCommunitiesListPresenter;
 
+    @Bind(R.id.container)
+    LinearLayout communitiesContainer;
+
     @Bind(R.id.title)
     TextView mMyCommunitiesLabel;
 
@@ -126,8 +130,8 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mMyCommunitiesListView.setVisibility(View.GONE);
         mMyCommunitiesLabel.setVisibility(View.GONE);
 
+        communitiesContainer.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
-        loaderGif.bringToFront();
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
 
@@ -204,6 +208,11 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
             mMyCommunitiesAdapter.notifyDataSetChanged();
+        }else
+        {
+            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            data.remove(data.size()-1);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
         }
     }
 
@@ -221,8 +230,8 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     public void showAllCommunity(ArrayList<FeedDetail> feedDetails) {
         mFeedAdapter.setData(feedDetails);
         mFeedAdapter.notifyDataSetChanged();
-
         loaderGif.setVisibility(View.GONE);
+        communitiesContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -267,7 +276,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void onMyCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
-        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL);
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }
 
     @Override
@@ -320,49 +329,15 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     }
 
-    //Update on Community Category changes
-    public void updateCommunityCarousel(List<FeedDetail> updatedFeedDetail) { //todo - move to presenter
-        if (mFeedAdapter == null) {
-            return;
-        }
-        List<FeedDetail> feedDetails = mFeedAdapter.getDataList();
-        if (CommonUtil.isEmpty(feedDetails) && CommonUtil.isEmpty(updatedFeedDetail)) {
-            return;
-        }
-
-        if (updatedFeedDetail.size() > MAX_COMMUNITIES_LIMIT) {
-            List<FeedDetail> newList = new ArrayList<>();
-            for (int k = 0; k < MAX_COMMUNITIES_LIMIT; k++) {
-                newList.add(updatedFeedDetail.get(k));
-            }
-            updatedFeedDetail = newList;
-        }
-
-        CommunityFeedSolrObj community = (CommunityFeedSolrObj) updatedFeedDetail.get(0);
-        String type = community.getCommunityType();
-
-        for (int i = 0; i < feedDetails.size(); i++) {
-            FeedDetail feedDetail = feedDetails.get(i);
-            if (feedDetail instanceof CarouselDataObj) {
-
-                List<FeedDetail> data = ((CarouselDataObj) feedDetail).getFeedDetails();
-                int size = data.size() - 1;
-                for (int j = 0; j < size; ++j) {
-
-                    CommunityFeedSolrObj innerFeedDetail = (CommunityFeedSolrObj) (data.get(j));
-                    String names = innerFeedDetail.getCommunityType();
-                    if (type.equalsIgnoreCase(names)) {
-                        data = updatedFeedDetail;
-                        ((CarouselDataObj) feedDetail).setFeedDetails(data);
-                        break;
-                    }
-                    ((CarouselDataObj) feedDetail).setFeedDetails(data);
-                }
-            }
-            feedDetails.set(i, feedDetail);
-        }
-        mFeedAdapter.setData(feedDetails);
-        mFeedAdapter.notifyDataSetChanged();
+    public void refreshList(){
+        communitiesContainer.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.VISIBLE);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        setRefreshList(mPullRefreshList);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mCommunitiesListPresenter.fetchAllCommunities();
     }
 
     public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {

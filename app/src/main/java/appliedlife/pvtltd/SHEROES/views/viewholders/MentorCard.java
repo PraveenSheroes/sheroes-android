@@ -90,7 +90,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         dataItem.setItemPosition(position);
         tvMentorFollow.setEnabled(true);
         LogUtils.info(TAG, "########Metor data " + item.isSuggested());
-        if (item.isSuggested()) {
+        if (item.isCompactView()) {
             int width = AppUtils.getWindowWidth(mContext);
             FrameLayout.LayoutParams liHolderLayout = (FrameLayout.LayoutParams) liMentor.getLayoutParams();
             liHolderLayout.width = (width - 100);
