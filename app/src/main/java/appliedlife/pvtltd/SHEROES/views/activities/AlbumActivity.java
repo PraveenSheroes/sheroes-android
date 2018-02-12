@@ -140,11 +140,11 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         } */ else {
             return;
         }
-       // if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
-       //    if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
+       if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
+          if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
                 toolTipForPictureShare();
-        //    }
-       // }
+           }
+        }
     }
 
    /* @Override

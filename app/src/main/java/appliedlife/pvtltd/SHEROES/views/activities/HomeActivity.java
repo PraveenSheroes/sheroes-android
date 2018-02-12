@@ -1424,82 +1424,90 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
         if(requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL){
-            CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-            if (currentFragment != null && currentFragment.isVisible()) {
-                currentFragment.refreshList();
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+            if(fragment instanceof HomeFragment) {
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    ((HomeFragment) fragment).onRefreshClick();
+                }
+            } else if(fragment instanceof CommunitiesListFragment) {
+                CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+                if (currentFragment != null && currentFragment.isVisible()) {
+                    currentFragment.refreshList();
+                }
             }
-        }
-        if (null != intent) {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
-                    articleDetailActivityResponse(intent);
-                    break;
+        }else {
+            if (null != intent) {
+                switch (requestCode) {
+                    case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
+                        articleDetailActivityResponse(intent);
+                        break;
 
-                case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                    if (resultCode == Activity.RESULT_OK) {
+                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                        if (resultCode == Activity.RESULT_OK) {
+                            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                            if (AppUtils.isFragmentUIActive(fragment)) {
+                                ((HomeFragment) fragment).onRefreshClick();
+                            }
+                        }
+                        break;
+                    case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                        boolean isPostDeleted = false;
                         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                         if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((HomeFragment) fragment).onRefreshClick();
-                        }
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
-                    boolean isPostDeleted = false;
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelable != null) {
-                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
-                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                            mFeedDetail = userPostSolrObj;
-                        }
-                        if (isPostDeleted) {
-                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                        } else {
-                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                        }
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    editCommunityPostResponse(intent);
-                    break;
-                case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
-                    if (null != intent.getExtras()) {
-                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                        if (null != userSolrObj) {
-                            Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                            if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                                userSolrObj.setSuggested(true);
-                                ((HomeFragment) fragmentMentor).getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+                            Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                            if (parcelable != null) {
+                                UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
+                                isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                                mFeedDetail = userPostSolrObj;
                             }
-                        } else {
-                            homeOnClick();
+                            if (isPostDeleted) {
+                                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                            } else {
+                                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                            }
                         }
-                    }
-                    break;
-                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            File file = new File(result.getUri().getPath());
-                            Bitmap photo = decodeFile(file);
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
-                            e.printStackTrace();
+                        break;
+                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                        editCommunityPostResponse(intent);
+                        break;
+                    case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                        if (null != intent.getExtras()) {
+                            UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                            if (null != userSolrObj) {
+                                Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                                if (AppUtils.isFragmentUIActive(fragmentMentor)) {
+                                    userSolrObj.setSuggested(true);
+                                    ((HomeFragment) fragmentMentor).getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+                                }
+                            } else {
+                                homeOnClick();
+                            }
                         }
+                        break;
+                    case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                        CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                        if (resultCode == RESULT_OK) {
+                            try {
+                                File file = new File(result.getUri().getPath());
+                                Bitmap photo = decodeFile(file);
+                            } catch (Exception e) {
+                                Crashlytics.getInstance().core.logException(e);
+                                e.printStackTrace();
+                            }
 
-                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
-                    Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                        ((HomeFragment) fragmentMentor).onRefreshClick();
-                    }
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
+                        Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragmentMentor)) {
+                            ((HomeFragment) fragmentMentor).onRefreshClick();
+                        }
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                }
             }
         }
         if (null != mProgressDialog) {

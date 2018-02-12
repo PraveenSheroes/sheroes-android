@@ -92,7 +92,12 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.filterListData.remove(position);
         this.filterListData.add(position, (T) faqs);
     }
-
+    public void setMentoreDataOnPosition(CarouselDataObj carouselDataObj, int position) {
+        if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
+            this.filterListData.remove(position);
+            this.filterListData.add(position, (T) carouselDataObj);
+        }
+    }
     public void addDataOnPosition(FeedDetail feedDetail, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.add(position, (T) feedDetail);

@@ -152,10 +152,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.share_on_fb)
     SwitchCompat mShareToFacebook;
 
-    @Bind(R.id.view_tooltip_anony)
-    View viewToolTipAnony;
-
-
     @Bind(R.id.user_pic)
     ImageView mUserPicView;
 
@@ -662,14 +658,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void toolTip() {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        anonymousToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+        anonymousToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
         popupWindowToolTip = new PopupWindow(anonymousToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindowToolTip.setOutsideTouchable(true);
-        popupWindowToolTip.showAsDropDown(viewToolTipAnony, 0, 30);
+        popupWindowToolTip.setOutsideTouchable(false);
+        popupWindowToolTip.showAsDropDown(mAnonymousSelect, 0, -200);
         final ImageView ivArrow = anonymousToolTip.findViewById(R.id.iv_arrow);
         RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, CommunityPostActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-        imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+        imageParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityPostActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+        imageParams.addRule(RelativeLayout.BELOW, R.id.ll_tool_tip_bg);
         ivArrow.setLayoutParams(imageParams);
         final TextView tvGotIt =  anonymousToolTip.findViewById(R.id.got_it);
         final TextView tvTitle = anonymousToolTip.findViewById(R.id.title);
@@ -737,10 +733,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
                 } else {
                 }
-                if(popupWindowToolTip !=null)
-                {
-                    popupWindowToolTip.dismiss();
-                }
+
             }
         });
     }

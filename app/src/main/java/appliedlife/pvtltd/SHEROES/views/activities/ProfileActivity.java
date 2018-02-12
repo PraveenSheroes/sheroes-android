@@ -498,7 +498,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             popupWindowFollowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
             final ImageView ivArrow = popupFollowToolTip.findViewById(R.id.iv_arrow);
             RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
             ivArrow.setLayoutParams(imageParams);
             final LinearLayout llToolTipBg = popupFollowToolTip.findViewById(R.id.ll_tool_tip_bg);
@@ -930,7 +930,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
             lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
-            lps.setMargins(40, 70, 0, 0);
+            lps.setMargins(40, 90, 0, 0);
             final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
             RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)

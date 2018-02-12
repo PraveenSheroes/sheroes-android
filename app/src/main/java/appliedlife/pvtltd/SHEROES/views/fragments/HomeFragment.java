@@ -566,21 +566,21 @@ public class HomeFragment extends BaseFragment {
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
+                    if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
+                        return;
 
-                if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
-                    return;
-
-                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-                List<Object> dataItems = findPositionById(userSolrObj.getIdOfEntityOrParticipant(),userSolrObj);
-                int pos[] = (int[]) dataItems.get(0);
-                if (pos!=null  && pos[0] == RecyclerView.NO_POSITION ) {
-                    return;
-                }
-                if(null!=dataItems&&dataItems.size()>1) {
+                    UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                    List<Object> dataItems = findPositionById(userSolrObj.getIdOfEntityOrParticipant(),userSolrObj);
+                    int pos[] = (int[]) dataItems.get(0);
+                    if (pos!=null  && pos[0] == RecyclerView.NO_POSITION ) {
+                        return;
+                    }
+                    if(dataItems.size()>1) {
                         CarouselDataObj carouselDataObj= (CarouselDataObj) dataItems.get(1);
                         int positions = pos != null ? pos[0] : 0;
-                        mAdapter.notifyItemChanged(positions,carouselDataObj);
-                }
+                        mAdapter.setMentoreDataOnPosition(carouselDataObj,positions);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 break;
             default:
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
