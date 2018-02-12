@@ -115,8 +115,13 @@ public enum Event {
     ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
     USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
     WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " Started"),
-    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed");
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
     // endregion
+
+    //region publish related events
+    FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
+    FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, "");
+    //endregion
 
     public final AnalyticsEventType type;
     public String name;
