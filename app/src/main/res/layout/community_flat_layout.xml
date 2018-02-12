@@ -18,16 +18,19 @@
             android:id="@+id/feature_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp_community_image_background_width"
+            android:scaleType="centerCrop"
             tools:src="@drawable/vector_empty_winner" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_marginBottom="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_12">
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_size_10"
+            android:paddingStart="@dimen/dp_size_10"
+            android:paddingRight="@dimen/dp_size_1"
+            android:paddingEnd="@dimen/dp_size_1"
+            android:paddingBottom="@dimen/dp_size_12"
+            android:paddingTop="@dimen/dp_size_12">
 
             <TextView
                 android:id="@+id/community_join"

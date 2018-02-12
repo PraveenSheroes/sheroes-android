@@ -2,31 +2,32 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/community_card_view"
-    android:layout_width="@dimen/community_compact_card_width"
-    android:layout_height="@dimen/community_compact_card_height"
-    android:layout_margin="@dimen/dp_size_12"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_size_8"
     android:elevation="@dimen/dp_size_5">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/community_compact_card_width"
+        android:layout_height="@dimen/community_compact_card_height"
         android:background="@color/carousel_card_bg"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/feature_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp_size_150"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
             tools:src="@drawable/vector_empty_winner" />
 
         <RelativeLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_size_8"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_marginTop="@dimen/dp_size_12">
+            android:paddingBottom="@dimen/dp_size_8"
+            android:paddingLeft="@dimen/dp_size_8"
+            android:paddingStart="@dimen/dp_size_10"
+            android:paddingTop="@dimen/dp_size_12">
 
             <TextView
                 android:id="@+id/community_join"
@@ -58,8 +59,8 @@
                     android:id="@+id/community_icon"
                     android:layout_width="@dimen/dp_community_icon_width"
                     android:layout_height="@dimen/dp_community_icon_height"
-                    android:layout_marginLeft="@dimen/dp_size_9"
-                    android:layout_marginStart="@dimen/dp_size_9"
+                    android:layout_marginLeft="@dimen/dp_size_2"
+                    android:layout_marginStart="@dimen/dp_size_2"
                     tools:src="@drawable/ic_champion_avatar" />
 
                 <LinearLayout

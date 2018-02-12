@@ -80,6 +80,7 @@
             android:id="@+id/rv_suggested_mentor_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_8"
             android:layout_below="@id/top_section"
             android:divider="@color/fully_transparent" />
 </RelativeLayout>

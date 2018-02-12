@@ -78,6 +78,12 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @BindDimen(R.dimen.dp_size_40)
     int mCommunityIconSize;
+
+    @BindDimen(R.dimen.dp_size_150)
+    int mFeatureImageHeight;
+
+    @BindDimen(R.dimen.dp_size_300)
+    int mFeatureImageWidth;
     //endregion
 
     //region constructor
@@ -108,9 +114,10 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
+            String featureImageUrl = CommonUtil.getImgKitUri(mCommunityFeedObj.getImageUrl(), mFeatureImageWidth, mFeatureImageHeight);
             Glide.with(context)
                     .asBitmap()
-                    .load(mCommunityFeedObj.getImageUrl())
+                    .load(featureImageUrl)
                     .into(mFeatureImage);
         }
 

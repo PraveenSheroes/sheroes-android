@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -84,10 +85,14 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         }
 
+
+        int imageHeight = (int) (((float) 1 / (float) 2) * CommonUtil.getWindowWidth(mContext));
+        mFeatureImage.getLayoutParams().height = imageHeight;
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
+            String finalImageUri = CommonUtil.getImgKitUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
             Glide.with(context)
                     .asBitmap()
-                    .load(mCommunityFeedObj.getImageUrl())
+                    .load(finalImageUri)
                     .into(mFeatureImage);
         }
 
