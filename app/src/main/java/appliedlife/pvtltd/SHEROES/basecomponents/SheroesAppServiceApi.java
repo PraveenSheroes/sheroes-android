@@ -85,6 +85,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import io.reactivex.Observable;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -181,6 +183,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
+
+    @POST("entity/master/get_tagging_list")
+    Observable<SearchUserDataResponse> getUserTaggingResponse(@Body SearchUserDataRequest searchUserDataRequest);
 
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);

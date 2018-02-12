@@ -137,6 +137,13 @@
         android:layout_below="@id/toolbar"
         android:background="#ebebeb">
 
+        <View
+            android:id="@+id/view_tooltip_anony"
+            android:layout_width="@dimen/dp_size_10"
+            android:layout_height="@dimen/dp_size_10"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/share_on_fb"
             android:layout_width="match_parent"

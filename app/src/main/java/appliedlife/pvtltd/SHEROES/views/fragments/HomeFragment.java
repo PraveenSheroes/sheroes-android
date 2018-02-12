@@ -224,6 +224,7 @@ public class HomeFragment extends BaseFragment {
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
+                    mHomePresenter.getAuthTokenRefreshPresenter();
                     if(isChallenge){
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
@@ -456,31 +457,37 @@ public class HomeFragment extends BaseFragment {
     }
     
     private void unReadNotificationCount(BaseResponse baseResponse) {
-        try {
-            switch (baseResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    if (baseResponse instanceof NotificationReadCountResponse) {
-                        NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
-                        StringBuilder stringBuilder = new StringBuilder();
-                        int notificationCount = notificationReadCountResponse.getUnread_notification_count();
-                        if (notificationReadCountResponse.getUnread_notification_count() > 0) {
-                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
-                            String notification = String.valueOf(notificationCount);
-                            stringBuilder.append(notification);
-                            ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
-                        } else {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof NotificationReadCountResponse) {
+                    NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
+                    StringBuilder stringBuilder = new StringBuilder();
+                  int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
+                    if (notificationReadCountResponse.getUnread_notification_count() > 0) {
+                        if(getActivity() instanceof HomeActivity) {
+                            if (((HomeActivity) getActivity()).flNotificationReadCount != null) {
+                                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
+                                String notification = String.valueOf(notificationCount);
+                                stringBuilder.append(notification);
+                                ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
+                            }
+                        }
+                    } else {
+                        if(getActivity() instanceof HomeActivity) {
                             ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
                         }
                     }
-                    break;
-                case AppConstants.FAILED:
-                    ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-                    break;
-                default:
-                    ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-            }
-        }catch (Exception e) {
-            LogUtils.info(TAG, e.getMessage());
+                }
+                break;
+            case AppConstants.FAILED:
+                if(getActivity() instanceof HomeActivity) {
+                    if (((HomeActivity) getActivity()).flNotificationReadCount != null) {
+                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                    }
+                }
+                break;
+            default:
+
         }
     }
 
@@ -652,6 +659,7 @@ public class HomeFragment extends BaseFragment {
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.delete();
             mUserPreference.set(loginResponse);
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }

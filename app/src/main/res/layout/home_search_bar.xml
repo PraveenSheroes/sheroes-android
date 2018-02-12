@@ -26,6 +26,13 @@
         android:maxLines="2"
         android:paddingTop="@dimen/dp_size_8"
         android:visibility="gone" />
+    <View
+        android:id="@+id/view_tool_tip_notification"
+        android:layout_width="@dimen/dp_size_10"
+        android:layout_height="@dimen/dp_size_1"
+        android:layout_gravity="center|bottom"
+        android:layout_marginLeft="@dimen/dp_size_60"
+        android:layout_marginTop="@dimen/dp_size_30"/>
 
     <ImageView
         android:id="@+id/ic_sheroes"
