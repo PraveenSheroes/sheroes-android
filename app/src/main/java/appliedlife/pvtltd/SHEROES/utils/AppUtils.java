@@ -1595,12 +1595,12 @@ public class AppUtils {
     public  SearchUserDataRequest searchUserDataRequest(String query,String listType,long entityOrParticipantId) {
         AppUtils appUtils = AppUtils.getInstance();
         SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
-        searchUserDataRequest.setParticipatingEntityParticipantId(entityOrParticipantId);
+        searchUserDataRequest.setParticipatingEntityOrParticipantId(entityOrParticipantId);
         searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
         searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
         searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        searchUserDataRequest.setListType(listType);
-        searchUserDataRequest.setSearchText(query);
+        searchUserDataRequest.setListTypeForUserTagging(listType);
+        searchUserDataRequest.setSearchNameOfUserForTagging(query);
         return searchUserDataRequest;
     }
 

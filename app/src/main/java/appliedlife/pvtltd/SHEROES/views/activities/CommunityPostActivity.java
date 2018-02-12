@@ -565,7 +565,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         popupWindow.showAsDropDown(viewToolTipAnony, 0, 30);
         final TextView tvGotIt = (TextView) popupView.findViewById(R.id.got_it);
         final TextView tvTitle = (TextView) popupView.findViewById(R.id.title);
-        tvTitle.setText(getString(R.string.ID_TOOL_TIP_CREATE_POST));
+        tvTitle.setText(getString(R.string.tool_tip_create_post));
         tvGotIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

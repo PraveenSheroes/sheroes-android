@@ -100,7 +100,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
         getSupportActionBar().setTitle("");
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        toolbarTitle.setText(getString(R.string.ID_CHALLENGE_COMPLETED));
+        toolbarTitle.setText(getString(R.string.challenge_completed));
     }
 
     public static void navigateTo(Activity fromActivity, Contest contest, String sourceScreen, HashMap<String, Object> properties, int requestCode) {

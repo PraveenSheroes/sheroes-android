@@ -223,7 +223,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     // popupWindowTooTip.showAtLocation(mToolbar, Gravity.TOP, -50, 150);
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
-                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_INVITE_FRIEND));
+                    tvTitle.setText(getString(R.string.tool_tip_invite_friend));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

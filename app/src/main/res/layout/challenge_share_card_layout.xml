@@ -23,7 +23,7 @@
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_12"
         android:gravity="center"
-        android:text="@string/ID_CHALLENGE_DONE"
+        android:text="@string/challenge_done"
         android:textColor="@color/comment_text"
         android:textSize="@dimen/sp_size_16"
         android:textStyle="bold" />
@@ -37,7 +37,7 @@
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_8"
         android:gravity="center"
-        android:text="@string/ID_SHARE_WITH_FRIENDS"
+        android:text="@string/share_with_friends"
         android:textColor="@color/email"
         android:textSize="@dimen/sp_size_16"
         android:textStyle="bold" />

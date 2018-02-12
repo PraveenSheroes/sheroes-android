@@ -21,7 +21,7 @@
             android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="left"
-            android:text="@string/ID_TOOL_TIP_FEED_HEADER_PROFILE"
+            android:text="@string/tool_tip_feed_header_profile"
             android:lineSpacingExtra="@dimen/dp_size_5"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_14" />
@@ -33,7 +33,7 @@
             android:layout_gravity="bottom"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:padding="@dimen/dp_size_5"
-            android:text="@string/ID_GOT_IT"
+            android:text="@string/got_it"
             android:layout_marginBottom="@dimen/dp_size_4"
             android:textAllCaps="true"
             android:textColor="@color/white"

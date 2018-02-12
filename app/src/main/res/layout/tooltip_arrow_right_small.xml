@@ -33,7 +33,7 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:layout_gravity="bottom"
             android:padding="@dimen/dp_size_10"
-            android:text="@string/ID_GOT_IT"
+            android:text="@string/got_it"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_14" />

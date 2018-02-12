@@ -54,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumCarouselAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumGalleryAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAlbumView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -291,7 +290,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
                     final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
-                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_PICTURE_SHARE));
+                    tvTitle.setText(getString(R.string.tool_tip_picture_share));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

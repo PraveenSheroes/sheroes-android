@@ -35,7 +35,7 @@
                 android:layout_marginTop="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
-                android:text="@string/ID_CHALLENGE_DONE"
+                android:text="@string/challenge_done"
                 android:textColor="@color/comment_text"
                 android:textSize="@dimen/sp_size_18" />
 
@@ -79,13 +79,13 @@
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
                     android:lineSpacingExtra="@dimen/dp_size_5"
-                    android:text="@string/ID_SHARE_WITH_FRIENDS_TEXT"
+                    android:text="@string/share_with_friend_text"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_size_14" />
 
                 <LinearLayout
                     android:id="@+id/ll_share"
-                    android:layout_width="@dimen/challenge_width"
+                    android:layout_width="@dimen/challenge_share_btn_width"
                     android:layout_height="@dimen/dp_size_36"
                     android:layout_below="@+id/tv_gratification"
                     android:layout_centerHorizontal="true"
@@ -116,7 +116,7 @@
                         android:layout_marginLeft="@dimen/dp_size_16"
                         android:layout_marginRight="@dimen/dp_size_5"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                        android:text="@string/ID_SHARE_WITH_FRIENDS"
+                        android:text="@string/share_with_friends"
                         android:textAllCaps="true"
                         android:textColor="@color/email"
                         android:textSize="@dimen/sp_size_14" />

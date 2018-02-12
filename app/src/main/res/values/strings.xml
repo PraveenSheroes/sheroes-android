@@ -515,29 +515,23 @@
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
 
-    <string name="ID_GOT_IT">Got It</string>
+    <string name="got_it">Got It</string>
 
-    <string name="ID_TOOL_TIP_CREATE_POST">Use this button to hide your identity on the post.</string>
-    <string name="ID_TOOL_TIP_ASK_QUESTION">Tap here to ask a question to this champion.</string>
-    <string name="ID_TOOL_TIP_NOTIFICATION">Your personalized notifications for likes and comments will appear here.</string>
-    <string name="ID_TOOL_TIP_FOLLOWER">Follow her to see what she shares!</string>
-    <string name="ID_TOOL_TIP_PICTURE_SHARE">Like this picture? Share it with friends.</string>
-    <string name="ID_TOOL_TIP_INVITE_FRIEND">Invite your friends to this community by tapping here.</string>
-    <string name="ID_TOOL_TIP_ARTICLE_SHARE">Share this article with a friend who will love reading it.</string>
-    <string name="ID_TOOL_TIP_FEED_HEADER_PROFILE">Check out your profile to see your posts, communities, followers &amp; more.</string>
-    <string name="ID_TOOL_TIP_NAV">Check out experts, read stories, view your profile activity and much more. Tap here.</string>
-    <string name="ID_SHARE_WITH_FRIENDS">Share with friends</string>
-    <string name="ID_SHARE_WITH_FRIENDS_TEXT">Share the happiness with your friends &amp; invite them to take up this challenge</string>
-    <string name="ID_CHALLENGE_DONE">Wohoo!</string>
-    <string name="ID_CHALLENGE_COMPLETED">Challenge Completed</string>
-
-
+    <string name="tool_tip_create_post">Use this button to hide your identity on the post.</string>
+    <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
+    <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.</string>
+    <string name="tool_tip_follower">Follow her to see what she shares!</string>
+    <string name="tool_tip_picture_share">Like this picture? Share it with friends.</string>
+    <string name="tool_tip_invite_friend">Invite your friends to this community by tapping here.</string>
+    <string name="tool_tip_article_share">Share this article with a friend who will love reading it.</string>
+    <string name="tool_tip_feed_header_profile">Check out your profile to see your posts, communities, followers &amp; more.</string>
+    <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.</string>
+    <string name="share_with_friends">Share with friends</string>
+    <string name="share_with_friend_text">Share the happiness with your friends &amp; invite them to take up this challenge</string>
+    <string name="challenge_done">Wohoo!</string>
+    <string name="challenge_completed">Challenge Completed</string>
 
 
-
-    <string name="mention1_username">dirtyhobo</string>
-    <string name="mention2_username">hobo</string>
-    <string name="mention3_username">hendraanggrian</string>
 
 
 </resources>

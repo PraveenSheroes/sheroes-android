@@ -335,7 +335,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     // popupWindowTooTip.showAtLocation(fab, Gravity.BOTTOM, 0, 250);
                     final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
-                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_ARTICLE_SHARE));
+                    tvTitle.setText(getString(R.string.tool_tip_article_share));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

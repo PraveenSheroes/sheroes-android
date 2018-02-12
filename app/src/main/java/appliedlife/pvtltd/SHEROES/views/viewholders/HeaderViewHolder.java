@@ -1,19 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
@@ -156,7 +152,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         imageParams.gravity = Gravity.START;
         imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
         TextView text = (TextView) view.findViewById(R.id.title);
-        text.setText(R.string.ID_TOOL_TIP_FEED_HEADER_PROFILE);
+        text.setText(R.string.tool_tip_feed_header_profile);
         TextView gotIt = (TextView) view.findViewById(R.id.got_it);
         gotIt.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -12,35 +12,35 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 public class SearchUserDataRequest extends BaseRequest {
     @SerializedName("participating_entity_or_participant_id")
     @Expose
-    private long participatingEntityParticipantId;
+    private long participatingEntityOrParticipantId;
     @SerializedName("list_type")
     @Expose
-    private String listType;
+    private String listTypeForUserTagging;
     @SerializedName("search_text")
     @Expose
-    private String searchText;
+    private String searchNameOfUserForTagging;
 
-    public long getParticipatingEntityParticipantId() {
-        return participatingEntityParticipantId;
+    public long getParticipatingEntityOrParticipantId() {
+        return participatingEntityOrParticipantId;
     }
 
-    public void setParticipatingEntityParticipantId(long participatingEntityParticipantId) {
-        this.participatingEntityParticipantId = participatingEntityParticipantId;
+    public void setParticipatingEntityOrParticipantId(long participatingEntityOrParticipantId) {
+        this.participatingEntityOrParticipantId = participatingEntityOrParticipantId;
     }
 
-    public String getListType() {
-        return listType;
+    public String getListTypeForUserTagging() {
+        return listTypeForUserTagging;
     }
 
-    public void setListType(String listType) {
-        this.listType = listType;
+    public void setListTypeForUserTagging(String listTypeForUserTagging) {
+        this.listTypeForUserTagging = listTypeForUserTagging;
     }
 
-    public String getSearchText() {
-        return searchText;
+    public String getSearchNameOfUserForTagging() {
+        return searchNameOfUserForTagging;
     }
 
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
+    public void setSearchNameOfUserForTagging(String searchNameOfUserForTagging) {
+        this.searchNameOfUserForTagging = searchNameOfUserForTagging;
     }
 }

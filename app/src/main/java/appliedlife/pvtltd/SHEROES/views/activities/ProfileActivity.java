@@ -474,7 +474,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             // popupWindowTooTip.showAtLocation(tvMentorAskQuestion, Gravity.BOTTOM, 0, 70);
             final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.tv_got_it);
             final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.tv_tool_tip_desc);
-            tvTitle.setText(getString(R.string.ID_TOOL_TIP_ASK_QUESTION));
+            tvTitle.setText(getString(R.string.tool_tip_ask_question));
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -498,7 +498,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             // popupWindowTooTip.showAtLocation(tvMentorDashBoardFollow,0, 0, 300);
             final TextView tvGotIt = (TextView) popupViewToolTip.findViewById(R.id.got_it);
             final TextView tvTitle = (TextView) popupViewToolTip.findViewById(R.id.title);
-            tvTitle.setText(getString(R.string.ID_TOOL_TIP_FOLLOWER));
+            tvTitle.setText(getString(R.string.tool_tip_follower));
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

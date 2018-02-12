@@ -324,7 +324,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             }
                             final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                             final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
-                            tvTitle.setText(getString(R.string.ID_TOOL_TIP_NOTIFICATION));
+                            tvTitle.setText(getString(R.string.tool_tip_notification));
                             tvGotIt.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -357,7 +357,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     popupWindowTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
                     final TextView tvGotIt = popupViewToolTip.findViewById(R.id.got_it);
                     final TextView tvTitle = popupViewToolTip.findViewById(R.id.title);
-                    tvTitle.setText(getString(R.string.ID_TOOL_TIP_NAV));
+                    tvTitle.setText(getString(R.string.tool_tip_nav));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
