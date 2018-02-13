@@ -109,6 +109,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     MasterDataModel mMasterDataModel;
     private String mEndpointUrl;
+    private boolean mIsHomeFeed;
     private String mNextToken = "";
     private boolean mIsFeedLoading;
     private int mFeedState;
@@ -198,6 +199,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         switch (mFeedState) {
                             case NORMAL_REQUEST:
                                 getMvpView().stopProgressBar();
+                                if(mIsHomeFeed){
+                                    FeedDetail homeFeedHeader = new FeedDetail();
+                                    homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                    feedList.add(0, homeFeedHeader);
+                                }
                                 mFeedDetailList = feedList;
                                 getMvpView().setFeedEnded(false);
                                 List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
@@ -1109,6 +1115,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     public void setEndpointUrl(String endpointUrl) {
         this.mEndpointUrl = endpointUrl;
+    }
+    public void setIsHomeFeed(boolean isHomeFeed) {
+        this.mIsHomeFeed = isHomeFeed;
     }
 
     public void joinCommunity(CommunityRequest communityRequest, final CommunityFeedSolrObj communityFeedSolrObj) {

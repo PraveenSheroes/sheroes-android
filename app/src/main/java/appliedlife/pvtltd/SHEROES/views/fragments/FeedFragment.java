@@ -94,6 +94,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static String SCREEN_LABEL = "Community Screen Activity";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
+    public static final String IS_HOME_FEED = "Is Home Feed";
 
     @Inject
     AppUtils mAppUtils;
@@ -138,6 +139,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private String mTitleTextColor = "#ffffff";
     HashMap<String, Object> mScreenProperties;
     private boolean isWhatsappShare = false;
+    private boolean isHomeFeed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,6 +171,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
                 }
+                isHomeFeed = getArguments().getBoolean(IS_HOME_FEED, false);
+                mFeedPresenter.setIsHomeFeed(isHomeFeed);
             }
         }else {
             if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
@@ -634,6 +638,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 mFeedPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), mCommunityFeedObj);
             }
         }
+    }
+
+    @Override
+    public void onAskQuestionClicked() {
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
     }
 
     @Override

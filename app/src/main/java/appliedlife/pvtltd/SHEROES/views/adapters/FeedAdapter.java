@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
@@ -93,6 +94,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new LeaderViewHolder(mInflater.inflate(R.layout.list_leader_item, parent, false), mBaseHolderInterface);
             case TYPE_COMMUNITY:
                 return new CommunityFlatViewHolder(mInflater.inflate(R.layout.community_flat_layout, parent, false), mBaseHolderInterface);
+            case TYPE_HOME_FEED_HEADER:
+                return new HomeHeaderViewHolder(mInflater.inflate(R.layout.header_view_layout, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -160,6 +163,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 LeaderObj leaderObj = (LeaderObj) mFeedDetailList.get(position);
                 leaderViewHolder.bindData(leaderObj, mContext, position);
                 break;
+
+            case TYPE_HOME_FEED_HEADER:
+                HomeHeaderViewHolder homeHeaderViewHolder = (HomeHeaderViewHolder) holder;
+                FeedDetail feedDetail1 = mFeedDetailList.get(position);
+                homeHeaderViewHolder.bindData(feedDetail1, mContext, position);
         }
     }
 
@@ -175,6 +183,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_MENTOR_COMPACT = 10;
     private static final int TYPE_LEADER = 11;
     private static final int TYPE_COMMUNITY = 12;
+    private static final int TYPE_HOME_FEED_HEADER = 13;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -224,6 +233,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
             if (feedDetail instanceof LeaderObj) {
                 return TYPE_LEADER;
+            }
+            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)){
+                return TYPE_HOME_FEED_HEADER;
             }
         }
         return TYPE_LOADER;
