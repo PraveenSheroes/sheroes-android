@@ -423,8 +423,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
-            mProfileIcon.setCircularImage(true);
-            mProfileIcon.bindImage(mUserSolarObject.getImageUrl());
+            if(!isFinishing()) {
+                mProfileIcon.setCircularImage(true);
+                mProfileIcon.bindImage(mUserSolarObject.getImageUrl());
+            }
         }
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) {
