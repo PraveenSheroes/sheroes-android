@@ -17,7 +17,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginBottom="@dimen/dp_size_16"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/choose_community"
             android:textColor="#89000000"
             android:textSize="18sp" />

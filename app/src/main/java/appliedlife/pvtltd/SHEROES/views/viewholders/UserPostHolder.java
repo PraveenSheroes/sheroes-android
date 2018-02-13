@@ -63,6 +63,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
  */
 public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(UserPostHolder.class);
+    private static final int COMMUNITY_TYPE_ID = 15;
     @Inject
     DateUtil mDateUtil;
     @Inject
@@ -688,7 +689,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if (!mUserPostObj.isAnonymous()) {
+        if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+            mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+        }
+        else if (!mUserPostObj.isAnonymous()) {
             mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
@@ -701,7 +705,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if (!mUserPostObj.isAnonymous()) {
+                if(mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+                    mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+                }
+                else if (!mUserPostObj.isAnonymous()) {
                     mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
@@ -822,9 +829,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
-                // TODO : ujjwal
-                // viewInterface.handleOnClick(mUserPostObj, mTitle);
+                if(mUserPostObj!=null && !mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID)
+                mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
             }
 
             @Override

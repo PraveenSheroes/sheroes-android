@@ -65,11 +65,6 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeatureCardHolder(view, viewInterface);
         }
-    }, MY_COMMUNITIES_CARD(R.layout.my_communities_card_item) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new MyCommunitiesCardHolder(view, viewInterface);
-        }
     }, ARTICLE_CARD_HOLDER(R.layout.article_card_list_item) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
@@ -288,8 +283,6 @@ public enum HolderMapping {
                                 boolean isFeatured = feedDetail.isFeatured();
                                 if (isFeatured && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
-                                } else {
-                                    returnView = MY_COMMUNITIES_CARD.ordinal();
                                 }
                                 break;
                             case AppConstants.FEED_JOB:

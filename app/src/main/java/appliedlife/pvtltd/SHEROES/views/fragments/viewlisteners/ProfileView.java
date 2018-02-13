@@ -5,6 +5,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 
 /**
  * Created by ravi on 01/01/18.
@@ -16,12 +17,9 @@ public interface ProfileView extends BaseMvpView {
 
     void getFeedListSuccess(FeedResponsePojo feedResponsePojo);
 
-    void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse);
-
-    void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse);
+    void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse);
 
     void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities);
 
-    void getUsersPostCount(int totalPost);
 
 }

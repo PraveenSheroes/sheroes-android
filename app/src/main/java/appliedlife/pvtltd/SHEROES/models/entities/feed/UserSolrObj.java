@@ -14,6 +14,8 @@ import java.util.List;
 public class UserSolrObj extends FeedDetail {
     public int currentItemPosition;
     private boolean isSuggested;
+    private boolean isCompactView;
+
     @SerializedName(value = "total_exp_i")
     private int totalExperience;
 
@@ -570,5 +572,13 @@ public class UserSolrObj extends FeedDetail {
 
     public void setUserFollowing(int userFollowing) {
         this.userFollowing = userFollowing;
+    }
+
+    public boolean isCompactView() {
+        return isCompactView;
+    }
+
+    public void setCompactView(boolean compactView) {
+        isCompactView = compactView;
     }
 }

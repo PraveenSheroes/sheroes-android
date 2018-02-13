@@ -6,25 +6,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 
+import org.parceler.Parcels;
+
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -35,13 +39,15 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -86,6 +92,10 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
 
     @Bind(R.id.title)
     TextView title;
+
+    private Contest mContest;
+    private boolean isUserShareBitmap;
+    private Bitmap userShareBitmap;
     // endregion
 
     //region Fragment LifeCycle Methods
@@ -94,7 +104,15 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         myClipboard = (android.content.ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        if(getArguments()!=null){
+        if (getArguments() != null) {
+            Parcelable parcelable;
+            if (getArguments().getParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ) != null) {
+                parcelable = getArguments().getParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ);
+                mContest = Parcels.unwrap(parcelable);
+                byte[] byteArray = getArguments().getByteArray("image");
+                userShareBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                isUserShareBitmap = true;
+            }
             mShareDeepLinkUrl = getArguments().getString(SHARE_DEEPLINK);
             mShareImageUrl = getArguments().getString(SHARE_IMAGE);
             mShareText = getArguments().getString(SHARE_TEXT);
@@ -114,9 +132,9 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         View containerView = View.inflate(getContext(), R.layout.dialog_share, null);
         dialog.setContentView(containerView);
         ButterKnife.bind(this, containerView);
-        if(mShowTitle){
+        if (mShowTitle) {
             title.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             title.setVisibility(View.GONE);
         }
     }
@@ -126,6 +144,21 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         super.onDestroyView();
     }
 
+    //endregion
+
+    //region Public Static methods
+    public static void showDialog(AppCompatActivity activity, Contest contest, Bitmap bitmap, String sourceScreen) {
+        ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(AppConstants.CHALLENGE_GRATIFICATION_OBJ, Parcels.wrap(contest));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        args.putByteArray("image", byteArray);
+        args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        shareBottomSheetFragment.setArguments(args);
+        shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
+    }
     //endregion
 
     //region Public Static methods
@@ -165,10 +198,21 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //region OnClicks
     @OnClick({R.id.layout_whatsapp, R.id.image_whatsapp, R.id.text_whatsapp})
     public void onWhatsAppClick() {
-        if(mIsImageShare){
-            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, "Album Screen", true);
-        }else {
-            if(mShowTitle && mIsAppLink){
+        if (isUserShareBitmap) {
+            Config config = Config.getConfig();
+            String whatsAppShareText = mContest.shortUrl;
+           // CommonUtil.shareBitmapWhatsApp(getContext(), userShareBitmap, mSourceScreen, mContest.thumbImage, whatsAppShareText, Event.CHALLENGE_GRATIFICATION_WHATS);
+            return;
+        }
+        if (mIsImageShare) {
+            String shareScreen="Album Screen";
+            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+            {
+                shareScreen=mSourceScreen;
+            }
+            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, shareScreen, true);
+        } else {
+            if (mShowTitle && mIsAppLink) {
                 String shareWhatsappAppLink = "";
                 if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_WHATSAPP"))) {
                     shareWhatsappAppLink = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_WHATSAPP").get(0).getLabel();
@@ -191,18 +235,40 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         }
         myClip = ClipData.newPlainText("copy_link", mShareCopyLink);
         myClipboard.setPrimaryClip(myClip);
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(mShareImageUrl)
-                        .build();
-        AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
+        if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+        {
+            HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Copy Link").build();
+            properties.put(EventProperty.URL.getString(), mShareImageUrl);
+            AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
+        }else {
+            HashMap<String, Object> properties =new EventProperty.Builder().id(mShareImageUrl).build();
+            AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
+        }
         dismiss();
         Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick({R.id.layout_facebook, R.id.image_facebook, R.id.text_facebook})
     public void onFacebookClick() {
-        if(mIsImageShare && !mIsChallenge){
+        if (isUserShareBitmap) {
+            SharePhoto photo = new SharePhoto.Builder()
+                    .setBitmap(userShareBitmap)
+                    .build();
+            SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                    .addPhoto(photo)
+                    .build();
+            ShareDialog shareDialog = new ShareDialog(getActivity());
+            shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
+            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+            {
+                HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Facebook").build();
+                properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
+            }
+            dismiss();
+            return;
+        }
+        if (mIsImageShare && !mIsChallenge) {
             CompressImageUtil.createBitmap(SheroesApplication.mContext, mShareImageUrl, 816, 816)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -227,21 +293,28 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                                     .build();
                             ShareDialog shareDialog = new ShareDialog(getActivity());
                             shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
-                            EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
-                            final HashMap<String, Object> properties = builder.build();
-                            properties.put(EventProperty.URL.getString(), mShareImageUrl);
-                            AnalyticsManager.trackEvent(Event.IMAGE_SHARED, SCREEN_LABEL, properties);
+                            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+                            {
+                                HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Facebook").build();
+                                properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                                AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
+                            }else {
+                                EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
+                                final HashMap<String, Object> properties = builder.build();
+                                properties.put(EventProperty.URL.getString(), mShareImageUrl);
+                                AnalyticsManager.trackEvent(Event.IMAGE_SHARED, SCREEN_LABEL, properties);
+                            }
                         }
                     });
-        }else {
+        } else {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(AppConstants.SHARE_MENU_TYPE);
             String shareText = mShareDeepLinkUrl;
-            if(mShowTitle && mIsAppLink){
-                    String shareFacebookAppLink = "";
-                    if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB"))) {
-                        shareFacebookAppLink = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB").get(0).getLabel();
-                    }
+            if (mShowTitle && mIsAppLink) {
+                String shareFacebookAppLink = "";
+                if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB"))) {
+                    shareFacebookAppLink = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_FB").get(0).getLabel();
+                }
                 shareText = shareFacebookAppLink + mShareDeepLinkUrl;
             }
             EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
@@ -249,7 +322,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
             properties.put(EventProperty.URL.getString(), shareText);
             AnalyticsManager.trackEvent(Event.LINK_SHARED, SCREEN_LABEL, properties);
-            
+
             intent.putExtra(Intent.EXTRA_TEXT, shareText);
             // See if official Facebook app is found
             boolean facebookAppFound = false;

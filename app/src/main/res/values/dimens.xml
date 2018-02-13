@@ -17,6 +17,7 @@
     <dimen name="dp_size_65">65dp</dimen>
     <dimen name="dp_size_70">70dp</dimen>
     <dimen name="dp_size_72">72dp</dimen>
+    <dimen name="dp_size_78">78dp</dimen>
     <dimen name="dp_size_54">54dp</dimen>
     <dimen name="dp_size_52">52dp</dimen>
     <dimen name="dp_size_14">14dp</dimen>
@@ -121,8 +122,29 @@
     <dimen name="mentor_profile_icon">87dp</dimen>
     <dimen name="on_boarding_girl_height">172dp</dimen>
     <dimen name="on_boarding_girl_width">84dp</dimen>
+    <dimen name="challenge_share_btn_width">225dp</dimen>
+    <dimen name="challenge_completed_height">180dp</dimen>
+    <dimen name="challenge_girl_height">151dp</dimen>
+    <dimen name="challenge_girl_width">156dp</dimen>
+
 
     <!--Text sizes for SHEROES-->
     <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <dimen name="community_compact_card_width">300dp</dimen>
+    <dimen name="community_compact_card_height">212dp</dimen>
+    <dimen name="community_join_width">78dp</dimen>
+    <dimen name="community_join_height">30dp</dimen>
+    <dimen name="my_community_container_width">111dp</dimen>
+    <dimen name="my_community_container_height">94dp</dimen>
+    <dimen name="my_community_icon_width">50dp</dimen>
+    <dimen name="my_community_icon_height">50dp</dimen>
+    <dimen name="dp_community_icon_width">40dp</dimen>
+    <dimen name="dp_community_icon_height">40dp</dimen>
+    <dimen name="progressbar_size">30dp</dimen>
+    <dimen name="dp_community_image_background_width">150dp</dimen>
+    <dimen name="see_more_width">130dp</dimen>
+    <dimen name="see_more_height">205dp</dimen>
+    <dimen name="communities_compact_card_radius">4dp</dimen>
 </resources>
 

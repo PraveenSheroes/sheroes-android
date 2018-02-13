@@ -1,6 +1,6 @@
-def versionMajor = 5
-def versionMinor = 9
-def versionPatch = 3
+def versionMajor = 6
+def versionMinor = 0
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -8,7 +8,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 buildscript {
     repositories {
         jcenter()
-        maven { url 'https://maven.fabric.io/public'}
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
@@ -45,10 +45,11 @@ android {
     }
     buildTypes {
         debug {
-            //buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-            buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
+            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
-            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+           //  buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+            //buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
@@ -89,9 +90,9 @@ dexcount {
 }
 repositories {
     mavenCentral()
-    google()
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
+    maven { url 'https://maven.google.com'}
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -116,14 +117,15 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-scalars:2.3.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     compile 'com.facebook.stetho:stetho:1.5.0'
-    compile'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile'io.reactivex.rxjava2:rxjava:2.0.6'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.6'
     compile 'com.google.dagger:dagger:2.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:customtabs:27.0.2'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     compile 'io.branch.sdk.android:library:2.8.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'
     //compile 'org.jsoup:jsoup:1.7.3'
@@ -142,6 +144,7 @@ dependencies {
     compile 'org.parceler:parceler-api:1.1.6'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+    compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'

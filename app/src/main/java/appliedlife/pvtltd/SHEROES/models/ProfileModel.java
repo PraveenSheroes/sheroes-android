@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
@@ -13,8 +12,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -39,12 +39,12 @@ public class ProfileModel {
         this.gson = gson;
       }
 
-    public Observable<BaseResponse> getFollowerOrFollowing(UserFollowerOrFollowingRequest userFollowerOrFollowingRequest) {
-          return sheroesAppServiceApi.getUsersFollowerOrFollowing(userFollowerOrFollowingRequest)
+    public Observable<ProfileTopSectionCountsResponse> getProfileTopSectionCount(ProfileTopCountRequest userFollowerOrFollowingRequest) {
+          return sheroesAppServiceApi.getProfileTopSectionCounts(userFollowerOrFollowingRequest)
 
-                .map(new Function<BaseResponse, BaseResponse>() {
+                .map(new Function<ProfileTopSectionCountsResponse, ProfileTopSectionCountsResponse>() {
                     @Override
-                    public BaseResponse apply(BaseResponse followerOrFollowingCount) {
+                    public ProfileTopSectionCountsResponse apply(ProfileTopSectionCountsResponse followerOrFollowingCount) {
                         return followerOrFollowingCount;
                     }
                 })

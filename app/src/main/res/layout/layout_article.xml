@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_alignTop="@+id/author_description__pic"
+                android:layout_alignTop="@id/author_description__pic"
                 android:layout_toRightOf="@id/author_description__pic"
                 android:gravity="center_vertical"
                 android:textColor="@color/light_grey"

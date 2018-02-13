@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -33,12 +34,21 @@ import butterknife.OnClick;
  */
 
 public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
+    //region private variable
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
-    private CarouselListAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private BaseHolderInterface viewInterface;
+    private CarouselDataObj carouselDataObj;
+    private boolean isUpdateFromProfile;
+    //endregion
 
+    //region public variable
+    public CarouselListAdapter mAdapter = null;
+    //endregion
+
+
+    //region bind variable
     @Bind(R.id.icon)
-    ImageView mIcon;
+    TextView mIcon;
 
     @Bind(R.id.title)
     TextView mTitle;
@@ -48,25 +58,26 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
+    //endregion
 
-    BaseHolderInterface viewInterface;
-    private CarouselDataObj carouselDataObj;
-
+    //region constructor
     public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
+    //endregion
+
+    //region public method
     @Override
     public void bindData(CarouselDataObj item, final Context context, int position) {
         this.carouselDataObj = item;
-
         if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             mTitle.setVisibility(View.VISIBLE);
             mTitle.setText(item.getTitle());
         } else {
-            mTitle.setVisibility(View.GONE);
+            //  mTitle.setVisibility(View.GONE); //TODO - Enable it once title coming for champion cards
         }
 
         if (StringUtil.isNotNullOrEmptyString(item.getBody())) {
@@ -78,37 +89,52 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         if (CommonUtil.isNotEmpty(item.getIconUrl())) {
             mIcon.setVisibility(View.VISIBLE);
-            Glide.with(context)
+           /* Glide.with(context)        //TODO - Enable it once title coming for champion cards
                     .asBitmap()
                     .load(item.getIconUrl())
-                    .into(mIcon);
+                    .into(mIcon);*/
         } else {
-            mIcon.setVisibility(View.GONE);
+            //   mIcon.setVisibility(View.GONE); //TODO - Enable it once title coming for champion cards
         }
 
-        List<FeedDetail> list=item.getFeedDetails();
-        if(StringUtil.isNotEmptyCollection(list)) {
-            mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        List<FeedDetail> list = item.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(list)) {
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new CarouselListAdapter(context, viewInterface, item);
+            mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.scrollToPosition(carouselDataObj.getItemPosition());
             mAdapter.setData(item.getFeedDetails());
-            mAdapter.notifyDataSetChanged();
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) instanceof UserSolrObj) {
+                    boolean isSuggested = ((UserSolrObj) list.get(i)).isSuggested();
+                    if (isSuggested) {
+                        isUpdateFromProfile = true;
+                        UserSolrObj userSolrObj = ((UserSolrObj) list.get(i));
+                        mAdapter.notifyItemChanged(i, userSolrObj);
+                        mRecyclerView.scrollToPosition(userSolrObj.getItemPosition());
+                        break;
+                    }
+                }
+            }
+            if (!isUpdateFromProfile) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
+    //endregion
 
-    @OnClick(R.id.icon)
+    //region onclick method
+    @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        if (CommonUtil.isNotEmpty(carouselDataObj.getEndPointUrl()) && CommonUtil.isNotEmpty(carouselDataObj.getScreenTitle())) {
-            if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
+        if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null && carouselDataObj.getFeedDetails().get(0) != null) {
+            if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);
                 } else {
                     viewInterface.handleOnClick(carouselDataObj, mIcon);
                 }
-            }else {
+            } else {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
                 } else {
@@ -122,9 +148,11 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public void viewRecycled() {
 
     }
+
     @Override
     public void onClick(View view) {
     }
+    //endregion
 
 }
 

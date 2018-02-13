@@ -7,8 +7,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 
 /**
  * Created by ujjwal on 28/04/17.
@@ -45,4 +44,5 @@ public interface IPostDetailView extends BaseMvpView {
     void editLastComment();
 
     void deleteLastComment();
+    void showListOfParticipate(List<UserTaggingPerson>participantLists);
 }

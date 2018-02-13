@@ -17,6 +17,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
@@ -31,12 +33,15 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<FeedDetail> mFeedDetails;
     private BaseHolderInterface mBaseHolderInterface;
     private CarouselDataObj mCarouselDataObj;
+    private CarouselViewHolder carouselViewHolder;
+
     //region Constructor
-    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj) {
+    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj, CarouselViewHolder carouselViewHolder) {
         mContext = context;
         this.mFeedDetails = new ArrayList<>();
         this.mBaseHolderInterface = baseHolderInterface;
         this.mCarouselDataObj = carouselDataObj;
+        this.carouselViewHolder = carouselViewHolder;
     }
     //endregion
 
@@ -46,7 +51,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (viewType) {
             case TYPE_COMMUNITY:
                 View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_layout, parent, false);
-                return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface);
+                return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
             case TYPE_USER:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_mentor_card, parent, false);
                 return new MentorCard(view, mBaseHolderInterface);
@@ -63,30 +68,40 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
+        if (holder == null) {
+            return;
+        }
 
-            case TYPE_COMMUNITY:
-                CommunityCompactViewHolder communityCompactViewHolder = (CommunityCompactViewHolder) holder;
-                CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetails.get(position);
-                communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
-                break;
+        if(holder.getItemViewType() == -1) {
+            return;
+        }
 
-            case TYPE_USER:
-                MentorCard mentorCard = (MentorCard) holder;
-                UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
-                mentorCard.bindData(userSolrObj, mContext,position);
-                break;
-            case TYPE_USER_POST:
+            switch (holder.getItemViewType()) {
+
+                case TYPE_COMMUNITY:
+                    CommunityCompactViewHolder communityCompactViewHolder = (CommunityCompactViewHolder) holder;
+                    CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetails.get(position);
+                    communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
+                    break;
+
+                case TYPE_USER:
+                    MentorCard mentorCard = (MentorCard) holder;
+                    UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
+                    userSolrObj.setCompactView(true);
+                    mentorCard.bindData(userSolrObj, mContext, position);
+                    break;
+
+                case TYPE_USER_POST:
                 UserPostCompactViewHolder userPostCompactViewHolder = (UserPostCompactViewHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetails.get(position);
                 userPostCompactViewHolder.bindData(userPostSolrObj, mContext);
                 break;
             case TYPE_SEE_MORE:
-                SeeMoreCompactViewHolder seeMoreCompactViewHolder = (SeeMoreCompactViewHolder) holder;
-                seeMoreCompactViewHolder.bindData();
-                break;
+                    SeeMoreCompactViewHolder seeMoreCompactViewHolder = (SeeMoreCompactViewHolder) holder;
+                    seeMoreCompactViewHolder.bindData();
+                    break;
 
-        }
+            }
 
     }
 
@@ -102,21 +117,24 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (feedDetail instanceof CommunityFeedSolrObj) {
                 return TYPE_COMMUNITY;
             }
-            if (feedDetail instanceof UserSolrObj) {
+            else if (feedDetail instanceof UserSolrObj) {
                 return TYPE_USER;
             }
             if (feedDetail instanceof UserPostSolrObj) {
                 return TYPE_USER_POST;
             }
         }
-        if(position == mFeedDetails.size()){
+        if(position == getDataItemCount() && !(mFeedDetails.get(getDataItemCount() -1) instanceof UserSolrObj)){
             return TYPE_SEE_MORE;
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public int getItemCount() {
+        if(getDataItemCount()>0 && mFeedDetails.get(getDataItemCount() -1) instanceof UserSolrObj) {
+            return mFeedDetails == null ? 0 : mFeedDetails.size();
+        }
         return mFeedDetails == null ? 0 : mFeedDetails.size() + 1;
     }
     //endregion
@@ -125,12 +143,28 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setData(final List<FeedDetail> feedList) {
         mFeedDetails = null;
         mFeedDetails = feedList;
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
+    }
+
+    public void setData(final FeedDetail feedDetail) {
+        int pos = findPositionById(feedDetail.getIdOfEntityOrParticipant());
+        if(pos!=RecyclerView.NO_POSITION){
+            mFeedDetails.set(pos, feedDetail);
+            notifyItemChanged(pos);
+        }
+    }
+
+    public int findPositionById(long id) {
+        if (CommonUtil.isEmpty(mFeedDetails)) {
+            return -1;
+        }
+
+        for (int i = 0; i < mFeedDetails.size(); ++i) {
+            FeedDetail feedDetail = mFeedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                return i;
             }
-        });
+        }
+        return -1;
     }
     //endregion
 

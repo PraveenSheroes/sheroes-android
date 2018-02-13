@@ -226,6 +226,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
         mLoginPresenter.getMasterDataToPresenter();
+        //
+
     }
 
     private void loginSetUp() {
@@ -577,6 +579,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         return isFirstTimeUser;
     }
 
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
 
     private void googlePlusLogin() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

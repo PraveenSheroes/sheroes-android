@@ -4,10 +4,12 @@
     android:id="@+id/community_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_size_4"
+    android:layout_marginTop="@dimen/dp_size_4"
+    android:layout_marginBottom="@dimen/dp_size_4"
     android:elevation="@dimen/dp_size_5">
 
     <LinearLayout
+        android:background="@color/carousel_card_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -16,51 +18,69 @@
             android:id="@+id/feature_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp_size_150"
-            android:adjustViewBounds="false"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             tools:src="@drawable/vector_empty_winner" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_marginTop="@dimen/dp_size_12">
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_size_10"
+            android:paddingStart="@dimen/dp_size_10"
+            android:paddingRight="@dimen/dp_size_1"
+            android:paddingEnd="@dimen/dp_size_1"
+            android:paddingBottom="@dimen/dp_size_12"
+            android:paddingTop="@dimen/dp_size_12">
+
+            <TextView
+                android:id="@+id/community_join"
+                android:layout_width="@dimen/community_join_width"
+                android:layout_height="@dimen/community_join_height"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginStart="@dimen/dp_size_16"
+                android:gravity="center"
+                android:letterSpacing="0.07"
+                android:textAllCaps="true"
+                android:textColor="@color/footer_icon_text"
+                android:textSize="@dimen/sp_size_14"
+                tools:text="@string/ID_JOIN" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/community_join"
-                android:layout_toStartOf="@+id/community_join">
+                android:layout_toLeftOf="@id/community_join"
+                android:layout_toStartOf="@id/community_join">
 
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/community_icon"
-                    android:layout_width="@dimen/dp_size_40"
-                    android:layout_height="@dimen/dp_size_40"
+                    android:layout_width="@dimen/dp_community_icon_width"
+                    android:layout_height="@dimen/dp_community_icon_height"
                     tools:src="@drawable/ic_champion_avatar" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_size_2"
-                    android:layout_marginLeft="@dimen/dp_size_2"
-                    android:layout_marginRight="@dimen/dp_size_2"
-                    android:layout_marginStart="@dimen/dp_size_2"
+                    android:layout_marginEnd="@dimen/dp_size_7"
+                    android:layout_marginLeft="@dimen/dp_size_7"
+                    android:layout_marginRight="@dimen/dp_size_7"
+                    android:layout_marginStart="@dimen/dp_size_7"
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_marginLeft="@dimen/dp_size_7"
-                        android:layout_marginStart="@dimen/dp_size_7"
                         android:id="@+id/community_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_size_1"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:letterSpacing="0.04"
                         android:maxLines="@integer/int_value_for_line_1"
+                        android:ellipsize="end"
                         android:textColor="@color/comment_text"
                         android:textSize="@dimen/sp_size_15"
                         tools:text="Health Tips" />
@@ -68,10 +88,7 @@
                     <TextView
                         android:id="@+id/community_member_count"
                         android:layout_width="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_7"
-                        android:layout_marginStart="@dimen/dp_size_7"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_size_1"
                         android:drawableLeft="@drawable/ic_member_icon"
                         android:drawableStart="@drawable/ic_member_icon"
                         android:drawablePadding="@dimen/dp_size_5"
@@ -82,23 +99,6 @@
                         tools:text="47889 Members" />
                 </LinearLayout>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/community_join"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dp_size_16"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginRight="@dimen/dp_size_16"
-                android:layout_marginStart="@dimen/dp_size_16"
-                android:gravity="center"
-                android:letterSpacing="0.07"
-                android:textColor="@color/footer_icon_text"
-                android:textSize="@dimen/sp_size_14"
-                tools:text="@string/ID_JOIN" />
         </RelativeLayout>
 
     </LinearLayout>

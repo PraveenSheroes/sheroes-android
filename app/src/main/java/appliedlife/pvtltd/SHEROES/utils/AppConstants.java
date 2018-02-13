@@ -96,6 +96,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CHALLENGE_DETAIL = 1901;
     public static final int REQUEST_CODE_FOR_POST_DETAIL = 1902;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
+    public static final int REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL = 2002;
     public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
     public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
@@ -154,6 +155,7 @@ public class AppConstants {
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
+    public static final String CHALLENGE_GRATIFICATION = "challenge_gratification";
 
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
@@ -186,6 +188,23 @@ public class AppConstants {
 
     public static final String HOME_USER_NAME_PREF= "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF= "PROFILE_SHARE";
+    public static final String CREATE_POST_SHARE_PREF= "CREATE_POST_ANONYMOUS";
+    public static final String ASK_QUESTION_SHARE_PREF= "ASK_QUESTION_ANONYMOUS";
+    public static final String ASK_QUESTION_SESSION_SHARE_PREF= "ASK_QUESTION_SESSION_ANONYMOUS";
+    public static final String NOTIFICATION_SESSION_SHARE_PREF= "BELL_NOTIFICATION_SESSION";
+    public static final String NOTIFICATION_SHARE_PREF= "BELL_NOTIFICATION";
+    public static final String FOLLOWER_SHARE_PREF= "FOLLOW_USER";
+    public static final String PICTURE_SHARE_PREF= "PICTURE_SHARE_PREF";
+    public static final String PICTURE_SHARE_SESSION_PREF= "PICTURE_SHARE_SESSION_PREF";
+    public static final String INVITE_FRIEND_SESSION_PREF= "INVITE_FRIEND_SESSION_PREF";
+    public static final String INVITE_FRIEND_PREF= "INVITE_FRIEND_PREF";
+    public static final String ARTICLE_SHARE_SESSION_PREF= "ARTICLE_SHARE_SESSION_PREF";
+    public static final String ARTICLE_SHARE_PREF= "ARTICLE_SHARE_PREF";
+    public static final String HEADER_PROFILE_SESSION_PREF= "HEADER_PROFILE_SESSION_PREF";
+    public static final String HEADER_PROFILE_PREF= "HEADER_PROFILE_PREF";
+    public static final String NAV_SESSION_PREF= "NAV_SESSION_PREF";
+    public static final String NAV_PREF= "NAV_PREF";
+    public static final int MIN_QUESTION_SEARCH_LENGTH=3;
 
 
     /*Master data keys for pages*/
@@ -253,6 +272,7 @@ public class AppConstants {
     public static final String CHALLENGE_ID = "challenge_id";
     public static final String END_POINT_URL = "end_point_url";
     public static final String TOOLBAR_TITTE = "toolbar_title";
+    public static final String SCREEN_NAME = "screen_name";
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
@@ -314,5 +334,15 @@ public class AppConstants {
     public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
     public static final String APP_SHARE_LINK = "https://shrs.me/m/3AICGHn1KJ";
+    public static final int DRAWER_SESSION = 3;
+    public static final int NOTIFICATION_SESSION = 4;
+    public static final int ALBUM_SESSION = 2;
+    public static final int ARTICLE_SESSION = 2;
+    public static final int HEADER_SESSION = 2;
+    public static final int INVITE_FRIEND_SESSION = 2;
+    public static final int ASK_QUESTION_SESSION = 2;
+    public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
+    public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Completed Screen";
+    public static final String LIST_TYPE_TAGGING = "COMMENT";
 
 }

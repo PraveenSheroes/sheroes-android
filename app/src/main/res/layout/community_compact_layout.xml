@@ -1,92 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/community_card_view"
-    android:layout_width="@dimen/dp_size_300"
-    android:layout_height="212dp"
-    android:layout_margin="@dimen/dp_size_12"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_size_8"
+    card_view:cardCornerRadius="@dimen/communities_compact_card_radius"
     android:elevation="@dimen/dp_size_5">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/community_compact_card_width"
+        android:layout_height="@dimen/community_compact_card_height"
+        android:background="@color/carousel_card_bg"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/feature_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="@dimen/dp_size_150"
-            android:adjustViewBounds="false"
-            android:scaleType="fitXY"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
             tools:src="@drawable/vector_empty_winner" />
 
         <RelativeLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_marginTop="@dimen/dp_size_12">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@+id/community_join"
-                android:layout_toStartOf="@+id/community_join">
-
-                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                    android:id="@+id/community_icon"
-                    android:layout_width="@dimen/dp_size_40"
-                    android:layout_height="@dimen/dp_size_40"
-                    tools:src="@drawable/ic_champion_avatar" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_size_2"
-                    android:layout_marginLeft="@dimen/dp_size_2"
-                    android:layout_marginRight="@dimen/dp_size_2"
-                    android:layout_marginStart="@dimen/dp_size_2"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_marginLeft="@dimen/dp_size_7"
-                        android:layout_marginStart="@dimen/dp_size_7"
-                        android:id="@+id/community_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_size_1"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:letterSpacing="0.04"
-                        android:maxLines="@integer/int_value_for_line_1"
-                        android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_15"
-                        tools:text="Health Tips" />
-
-                    <TextView
-                        android:id="@+id/community_member_count"
-                        android:layout_width="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_7"
-                        android:layout_marginStart="@dimen/dp_size_7"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dp_size_1"
-                        android:drawableLeft="@drawable/ic_member_icon"
-                        android:drawableStart="@drawable/ic_member_icon"
-                        android:drawablePadding="@dimen/dp_size_5"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:maxLines="@integer/int_value_for_line_1"
-                        android:textColor="@color/recent_post_comment"
-                        android:textSize="@dimen/sp_size_14"
-                        tools:text="47889 Members" />
-                </LinearLayout>
-            </LinearLayout>
+            android:paddingBottom="@dimen/dp_size_8"
+            android:paddingLeft="@dimen/dp_size_8"
+            android:paddingStart="@dimen/dp_size_10"
+            android:paddingTop="@dimen/dp_size_12">
 
             <TextView
                 android:id="@+id/community_join"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/community_join_width"
+                android:layout_height="@dimen/community_join_height"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -96,9 +44,77 @@
                 android:layout_marginStart="@dimen/dp_size_16"
                 android:gravity="center"
                 android:letterSpacing="0.07"
+                android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_14"
                 tools:text="@string/ID_JOIN" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_toLeftOf="@id/community_join"
+                android:layout_toStartOf="@id/community_join">
+
+                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                    android:id="@+id/community_icon"
+                    android:layout_width="@dimen/dp_community_icon_width"
+                    android:layout_height="@dimen/dp_community_icon_height"
+                    android:layout_marginLeft="@dimen/dp_size_2"
+                    android:layout_marginStart="@dimen/dp_size_2"
+                    tools:src="@drawable/ic_champion_avatar" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_size_5"
+                    android:layout_marginLeft="@dimen/dp_size_5"
+                    android:layout_marginRight="@dimen/dp_size_5"
+                    android:layout_marginStart="@dimen/dp_size_5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/community_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:letterSpacing="0.04"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_15"
+                        tools:text="Health Tips" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_member_icon" />
+
+                        <TextView
+                            android:id="@+id/community_member_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dp_size_8"
+                            android:layout_marginStart="@dimen/dp_size_8"
+                            android:layout_marginTop="@dimen/dp_size_1"
+                            android:layout_toEndOf="@id/icon"
+                            android:layout_toRightOf="@id/icon"
+                            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                            android:gravity="center"
+                            android:maxLines="@integer/int_value_for_line_1"
+                            android:textColor="@color/recent_post_comment"
+                            android:textSize="@dimen/sp_size_14"
+                            tools:text="47889 Members" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+
         </RelativeLayout>
 
     </LinearLayout>
