@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -54,7 +55,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     DateUtil mDateUtil;
 
     // region ButterKnife Bindings
-    @Bind(R.id.user_compact_card)
+    @Bind(R.id.user_post_compact_card)
     CardView mUserCompactCard;
 
     @Bind(R.id.author_image)
@@ -103,6 +104,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(UserPostSolrObj userPostSolrObj, Context context) {
+        if (mDateUtil == null) {
+            mDateUtil = DateUtil.getInstance();
+        }
         mUserPostObj = userPostSolrObj;
         if (CommonUtil.isNotEmpty(userPostSolrObj.getAuthorImageUrl())) {
             mAuthorImage.setCircularImage(true);
@@ -132,6 +136,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         }
         linkifyURLs(mPostDescription);
 
+        allTextViewStringOperations(mContext);
+        setLinkData();
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)

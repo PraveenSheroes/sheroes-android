@@ -74,11 +74,11 @@
             android:layout_below="@id/post_relative_time"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:maxLines="2"
+            android:maxLines="5"
             android:ellipsize="end"
             android:textColor="#3c3c3c"
             android:lineSpacingExtra="6sp"
-            tools:text="I love the way I smile......In fact, I love my smile most.....I am a pretty girl…View More" />
+            tools:text="It's taken me a long time to get to a point where I didn't feel broken and incomplete. I searched for love outside of myself, in partners, in jobs, in someone's touch and validation" />
         <RelativeLayout
             android:id="@+id/middle_content"
             android:layout_width="match_parent"
@@ -109,6 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginLeft="16dp"
+            android:visibility="gone"
             android:layout_marginRight="16dp">
 
             <FrameLayout
@@ -119,8 +120,7 @@
             <ImageView
                 android:id="@+id/link_image"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@color/email" />
+                android:layout_height="100dp" />
 
             <ImageView
                 android:id="@+id/play_icon"
