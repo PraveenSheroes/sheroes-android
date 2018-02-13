@@ -171,6 +171,12 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         populateUserProfileDetails();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        profilePresenter.detachView();
+    }
+
     private void populateUserProfileDetails() {
         profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
 
@@ -315,7 +321,10 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         if(feedResponsePojo.getNumFound() ==0) {
             //empty view
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
-            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            String name = "User";
+            if(getActivity()!=null && !getActivity().isFinishing()) {
+                name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            }
             String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
             emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_public_business_woman,0,0);
