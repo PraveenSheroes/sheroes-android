@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -288,7 +289,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             if (mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
                 mEtDefaultHintText.requestFocus();
-                fbShareContainer.setVisibility(View.VISIBLE);
+                if(!mIsChallengePost) {
+                    fbShareContainer.setVisibility(View.VISIBLE);
+                }
                 if (!mIsFromCommunity && !mIsChallengePost) {
                     PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
                 }
@@ -332,7 +335,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        try {
                         toolTipForAnonymous(CommunityPostActivity.this);
+                        } catch (WindowManager.BadTokenException e) {
+                            Crashlytics.getInstance().core.logException(e);
+                        }
                     }
                 }, 1500);
             }
@@ -348,6 +355,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mTitleToolbar.setText(R.string.title_create_post);
                     break;
                 case AppConstants.MENTOR_CREATE_QUESTION:
+                    fbShareContainer.setVisibility(View.GONE);
                     mTitleToolbar.setText(R.string.title_ask_question);
                     break;
                     default:
@@ -668,7 +676,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         inflater = LayoutInflater.from(context);
         final View view  = inflater.inflate(R.layout.tool_tip_arrow_down_side, null);
         FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        lps.setMargins(CommonUtil.convertDpToPixel(10, context), 0, CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(130, context));
+        lps.setMargins(CommonUtil.convertDpToPixel(10, context), 0, CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(160, context));
         final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
         RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
