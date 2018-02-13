@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.RemoteConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
@@ -297,4 +298,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/feed/community_category_home")
     Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
+
+    @POST("participant/remote_config/?config_type=APP_FEED_CONFIGURATION")
+    Observable<RemoteConfig> getConfig(@Body BaseRequest baseRequest);
 }

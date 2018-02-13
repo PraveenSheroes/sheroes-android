@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
@@ -83,6 +84,19 @@ public class OnBoardingModel {
                     public MemberListResponse apply(MemberListResponse memberListResponse) {
                         LogUtils.error("Community Member list res: ", gson.toJson(memberListResponse));
                         return memberListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<RemoteConfig> getConfig() {
+        BaseRequest baseRequest = new BaseRequest();
+        return sheroesAppServiceApi.getConfig(baseRequest)
+                .map(new Function<RemoteConfig, RemoteConfig>() {
+                    @Override
+                    public RemoteConfig apply(RemoteConfig config) {
+                        return config;
                     }
                 })
                 .subscribeOn(Schedulers.io())

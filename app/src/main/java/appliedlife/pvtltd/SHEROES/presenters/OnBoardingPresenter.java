@@ -1,5 +1,8 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -7,9 +10,11 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.OnBoardingModel;
+import appliedlife.pvtltd.SHEROES.models.RemoteConfig;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
@@ -20,12 +25,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
-
+import io.reactivex.schedulers.Schedulers;
 
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -188,4 +197,38 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
 
     }
 
+    public void queryConfig() {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        onBoardingModel.getConfig().subscribe(new DisposableObserver<RemoteConfig>() {
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(RemoteConfig config) {
+                if (config != null) {
+
+                    SharedPreferences.Editor editor = SheroesApplication.mContext.getSharedPreferences(AppConstants.SHARED_PREFS, Context.MODE_PRIVATE).edit();
+
+                    String jsonConfig = SheroesAppModule.ensureGson().toJson(config);
+
+                    editor.putString(AppConstants.CONFIG_KEY, jsonConfig);
+                    editor.apply();
+                }
+                getMvpView().stopProgressBar();
+            }
+        });
+    }
 }

@@ -109,6 +109,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         View view = inflater.inflate(R.layout.on_boarding_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         mOnBoardingPresenter.attachView(this);
+        mOnBoardingPresenter.queryConfig();
         initializeAllOnBoarding();
         return view;
     }
