@@ -188,6 +188,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     try {
 
                         if(getActivity() instanceof ProfileActivity) {
+                            if((getActivity()) == null || getActivity().isFinishing()) return;
                             ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
                         }
 
