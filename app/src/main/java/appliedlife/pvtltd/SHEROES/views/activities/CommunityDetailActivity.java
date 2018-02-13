@@ -831,7 +831,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     public String getCommunityId() {
-        if (mCommunityFeedSolrObj != null) {
+        if (mCommunityFeedSolrObj == null) {
             return "";
         } else {
             return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
