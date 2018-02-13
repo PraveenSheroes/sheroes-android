@@ -186,8 +186,10 @@ public class HomeFragment extends BaseFragment {
             public void onHide() {
                 if(!isChallenge){
                     mListLoad = false;
-                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-                    ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.GONE);
+                    if(getActivity() instanceof HomeActivity){
+                        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+                        ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.GONE);
+                    }
                 }
 
             }
@@ -196,8 +198,10 @@ public class HomeFragment extends BaseFragment {
             public void onShow() {
                 if(!isChallenge){
                     mListLoad = false;
-                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                    ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.VISIBLE);
+                    if(getActivity() instanceof HomeActivity){
+                        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                        ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.VISIBLE);
+                    }
                 }
 
             }
@@ -214,17 +218,25 @@ public class HomeFragment extends BaseFragment {
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
-            ((HomeActivity) getActivity()).logOut();
+            if(getActivity() instanceof HomeActivity){
+                ((HomeActivity) getActivity()).logOut();
+            }
         } else if (null != mUserPreference.get()) {
 
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                ((HomeActivity) getActivity()).logOut();
+                if(getActivity() instanceof HomeActivity){
+                    ((HomeActivity) getActivity()).logOut();
+                }
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
-                    mHomePresenter.getAuthTokenRefreshPresenter();
+                    if(!isChallenge){
+                        mHomePresenter.getAuthTokenRefreshPresenter();
+                    }
                 } else {
-                    mHomePresenter.getAuthTokenRefreshPresenter();
+                    if(!isChallenge){
+                        mHomePresenter.getAuthTokenRefreshPresenter();
+                    }
                     if(isChallenge){
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
@@ -287,12 +299,14 @@ public class HomeFragment extends BaseFragment {
         mAdapter.notifyDataSetChanged();
     }
     public void showCaseDesign() {
-        ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
-        showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
-        showcaseManager.showFirstMainActivityShowcase();
-        InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-        installUpdateForMoEngage.setAppInstallFirstTime(true);
-        mInstallUpdatePreference.set(installUpdateForMoEngage);
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).mIsFirstTimeOpen = false;
+            showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
+            showcaseManager.showFirstMainActivityShowcase();
+            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+            installUpdateForMoEngage.setAppInstallFirstTime(true);
+            mInstallUpdatePreference.set(installUpdateForMoEngage);
+        }
     }
 
     private void getGcmId() {
