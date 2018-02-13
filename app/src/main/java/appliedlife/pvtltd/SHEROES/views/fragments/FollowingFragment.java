@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -181,24 +182,13 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
     }
 
     @Override
-    public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
-
-    }
-
-    @Override
-    public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
-
+    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
     }
 
     @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
-
     }
 
-    @Override
-    public void getUsersPostCount(int totalPost) {
-
-    }
 
     @Override
     public void onItemClick(UserSolrObj mentor) {

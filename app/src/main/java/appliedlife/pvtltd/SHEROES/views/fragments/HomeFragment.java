@@ -28,6 +28,7 @@ import com.moengage.push.PushManager;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -68,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -184,8 +186,10 @@ public class HomeFragment extends BaseFragment {
             public void onHide() {
                 if(!isChallenge){
                     mListLoad = false;
-                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-                    ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.GONE);
+                    if(getActivity() instanceof HomeActivity){
+                        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+                        ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.GONE);
+                    }
                 }
 
             }
@@ -194,8 +198,10 @@ public class HomeFragment extends BaseFragment {
             public void onShow() {
                 if(!isChallenge){
                     mListLoad = false;
-                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                    ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.VISIBLE);
+                    if(getActivity() instanceof HomeActivity){
+                        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                        ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.VISIBLE);
+                    }
                 }
 
             }
@@ -212,16 +218,25 @@ public class HomeFragment extends BaseFragment {
         });
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mFeedDetail, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         if (null == mUserPreference) {
-            ((HomeActivity) getActivity()).logOut();
+            if(getActivity() instanceof HomeActivity){
+                ((HomeActivity) getActivity()).logOut();
+            }
         } else if (null != mUserPreference.get()) {
 
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                ((HomeActivity) getActivity()).logOut();
+                if(getActivity() instanceof HomeActivity){
+                    ((HomeActivity) getActivity()).logOut();
+                }
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
-                    mHomePresenter.getAuthTokenRefreshPresenter();
+                    if(!isChallenge){
+                        mHomePresenter.getAuthTokenRefreshPresenter();
+                    }
                 } else {
+                    if(!isChallenge){
+                        mHomePresenter.getAuthTokenRefreshPresenter();
+                    }
                     if(isChallenge){
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
@@ -284,12 +299,14 @@ public class HomeFragment extends BaseFragment {
         mAdapter.notifyDataSetChanged();
     }
     public void showCaseDesign() {
-        ((HomeActivity)getActivity()).mIsFirstTimeOpen=false;
-        showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
-        showcaseManager.showFirstMainActivityShowcase();
-        InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-        installUpdateForMoEngage.setAppInstallFirstTime(true);
-        mInstallUpdatePreference.set(installUpdateForMoEngage);
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).mIsFirstTimeOpen = false;
+            showcaseManager = new ShowcaseManager(getActivity(),((HomeActivity)getActivity()).mFloatActionBtn,((HomeActivity)getActivity()).mTvHome,((HomeActivity)getActivity()).mTvCommunities,((HomeActivity)getActivity()).tvDrawerNavigation,mRecyclerView);
+            showcaseManager.showFirstMainActivityShowcase();
+            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+            installUpdateForMoEngage.setAppInstallFirstTime(true);
+            mInstallUpdatePreference.set(installUpdateForMoEngage);
+        }
     }
 
     private void getGcmId() {
@@ -461,22 +478,28 @@ public class HomeFragment extends BaseFragment {
                     StringBuilder stringBuilder = new StringBuilder();
                   int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
                     if (notificationReadCountResponse.getUnread_notification_count() > 0) {
-                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
-                        String notification = String.valueOf(notificationCount);
-                        stringBuilder.append(notification);
-                        ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
-                    } else {
-                        if(getActivity() instanceof HomeActivity){
-                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                        if(getActivity() instanceof HomeActivity) {
+                            if (((HomeActivity) getActivity()).flNotificationReadCount != null) {
+                                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.VISIBLE);
+                                String notification = String.valueOf(notificationCount);
+                                stringBuilder.append(notification);
+                                ((HomeActivity) getActivity()).mTvNotificationReadCount.setText(stringBuilder.toString());
+                            }
                         }
+                    } else {
+                        if(getActivity() instanceof HomeActivity){((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);}
                     }
                 }
                 break;
             case AppConstants.FAILED:
-                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                if(getActivity() instanceof HomeActivity) {
+                    if (((HomeActivity) getActivity()).flNotificationReadCount != null) {
+                        ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+                    }
+                }
                 break;
             default:
-                ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
+
         }
     }
 
@@ -555,40 +578,61 @@ public class HomeFragment extends BaseFragment {
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
+                    if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
+                        return;
 
-                if(mPullRefreshList == null || mPullRefreshList.getFeedResponses() == null || mPullRefreshList.getFeedResponses().size()<=0)  //fix for crash
-                    return;
-
-                List<FeedDetail> feedDetailList=mPullRefreshList.getFeedResponses();
-                CarouselDataObj carouselDataObj =(CarouselDataObj) feedDetailList.get(((UserSolrObj)baseResponse).currentItemPosition);
-                if(((UserSolrObj) baseResponse).isSuggested())
-                {
-                    carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    UserSolrObj userPassedObject=(UserSolrObj)baseResponse;
-                    List<FeedDetail> mentorDataObjList=new ArrayList<>();
-                    for(FeedDetail userSolrObjLocal: carouselDataObj.getFeedDetails())
-                    {
-                        if(userPassedObject.getItemPosition()==userSolrObjLocal.getItemPosition())
-                        {
-                            mentorDataObjList.add(userPassedObject);
-                        }else
-                        {
-                            mentorDataObjList.add(userSolrObjLocal);
-                        }
+                    UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                    List<Object> dataItems = findPositionById(userSolrObj.getIdOfEntityOrParticipant(),userSolrObj);
+                    int pos[] = (int[]) dataItems.get(0);
+                    if (pos!=null  && pos[0] == RecyclerView.NO_POSITION ) {
+                        return;
                     }
-                    carouselDataObj.setFeedDetails(mentorDataObjList);
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
-                }else
-                {
-                    carouselDataObj.setItemPosition(((UserSolrObj)baseResponse).getItemPosition());
-                    mAdapter.notifyItemChanged(((UserSolrObj)baseResponse).currentItemPosition, carouselDataObj);
-                }
+                    if(dataItems.size()>1) {
+                        CarouselDataObj carouselDataObj= (CarouselDataObj) dataItems.get(1);
+                        int positions = pos != null ? pos[0] : 0;
+                        mAdapter.setMentoreDataOnPosition(carouselDataObj,positions);
+                        mAdapter.notifyDataSetChanged();
+                    }
                 break;
             default:
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
     }
+    public List<Object> findPositionById(long id, UserSolrObj userSolrObj) {
+        ArrayList<Object> arrayList = new ArrayList<>();
+        int position[] = new int[2];
+        if (mAdapter == null) {
+            return null;
+        }
+        List<FeedDetail> feedDetails = mPullRefreshList.getFeedResponses();
 
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return null;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail instanceof CarouselDataObj) {
+                CarouselDataObj carouselDataObj = (CarouselDataObj) feedDetails.get(i);
+                List<FeedDetail> carouselFeedDetail = carouselDataObj.getFeedDetails();
+                for (int j = 0; j < carouselFeedDetail.size(); j++) {
+                    if (carouselFeedDetail.get(j).getIdOfEntityOrParticipant() == id) {
+                        userSolrObj.setItemPosition(j);
+                        userSolrObj.setSuggested(true);
+                        carouselFeedDetail.set(j, userSolrObj);
+                        position[0] = i;
+                        position[1] = j;
+                        arrayList.add(position);
+                        carouselDataObj.setFeedDetails(carouselFeedDetail);
+                        arrayList.add(carouselDataObj);
+                        break;
+                    }
+                }
+            }
+
+        }
+        return arrayList;
+    }
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
         super.commentListRefresh(feedDetail, feedParticipationEnum);
     }
@@ -627,6 +671,7 @@ public class HomeFragment extends BaseFragment {
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.delete();
             mUserPreference.set(loginResponse);
             mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
         }

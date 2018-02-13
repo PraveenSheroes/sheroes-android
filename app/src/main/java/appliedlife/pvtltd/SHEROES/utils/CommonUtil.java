@@ -71,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -541,13 +542,21 @@ public class CommonUtil {
             if (eventName == null) {
                 return;
             }
-            EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Whatsapp");
-            final HashMap<String, Object> properties = builder.build();
-            properties.put(EventProperty.SOURCE.getString(), sourceScreen);
-            if (eventName.equals(Event.IMAGE_SHARED)) {
+            if(StringUtil.isNotNullOrEmptyString(sourceScreen)&&sourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
+            {
+                HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Whatsapp").build();
                 properties.put(EventProperty.URL.getString(), url);
+                AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, sourceScreen, properties);
+            }else
+            {
+                EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Whatsapp");
+                final HashMap<String, Object> properties = builder.build();
+                properties.put(EventProperty.SOURCE.getString(), sourceScreen);
+                if (eventName.equals(Event.IMAGE_SHARED)) {
+                    properties.put(EventProperty.URL.getString(), url);
+                }
+                AnalyticsManager.trackEvent(eventName, sourceScreen, properties);
             }
-            AnalyticsManager.trackEvent(eventName, sourceScreen, properties);
 
         }
     }
@@ -920,6 +929,42 @@ public class CommonUtil {
         return !shown;
     }
 
+   /* public static boolean fromNthTimeOnly(String key, int n) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return false;
+        }
+        int count = prefs.getInt(key, 1);
+        if ((count >= n)) {
+            if (count <= n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return true;
+        } else {
+            if (count < n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return false;
+        }
+    }*/
+    public static int forGivenCountOnly(String key, int n) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return 0;
+        }
+        int count = prefs.getInt(key, 1);
+        if ((count >= n)) {
+            if (count <= n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return count;
+        } else {
+            if (count < n) {
+                prefs.edit().putInt(key, (count + 1)).apply();
+            }
+            return count;
+        }
+    }
     public  static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {
             super(context);

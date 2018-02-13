@@ -73,8 +73,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserFollowerOrFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
@@ -83,12 +84,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
+import io.reactivex.Observable;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
-import io.reactivex.Observable;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -103,11 +106,11 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
+    @POST("participant/user/get_user_profile_top_section_count")
+    Observable<ProfileTopSectionCountsResponse> getProfileTopSectionCounts(@Body ProfileTopCountRequest profileTopCountRequest);
+
     @POST("participant/feed/followed_mentor_list")
     Observable<UserFollowedMentorsResponse> getFollowedMentorFromApiTest(@Body ProfileFollowedMentor profileFollowedMentor);
-
-    @POST("participant/user/get_number_of_followers")
-    Observable<BaseResponse> getUsersFollowerOrFollowing(@Body UserFollowerOrFollowingRequest userFollowerOrFollowingRequest);
 
     @POST("participant/feed/mutual_communities")
     Observable<ProfileCommunitiesResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
@@ -181,6 +184,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
+
+    @POST("entity/master/get_tagging_list")
+    Observable<SearchUserDataResponse> getUserTaggingResponse(@Body SearchUserDataRequest searchUserDataRequest);
 
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
@@ -291,7 +297,7 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 
     @POST("participant/feed/community_category_home")
-    Observable<FeedResponsePojo> fetchAllCommunity(@Body BaseRequest baseRequest);
+    Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
 
     @GET("participant/feed/v2?")
     Observable<FeedResponsePojo> getChallengeResponse(@Query("sub_type") String subType, @Query("source_entity_id") String sourceEntityId);

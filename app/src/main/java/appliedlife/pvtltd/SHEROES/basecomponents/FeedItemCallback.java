@@ -85,4 +85,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
 
     void onAskQuestionClicked();
+
+    void onCommunityJoinOrLeave(CommunityFeedSolrObj communityFeedSolrObj);
 }

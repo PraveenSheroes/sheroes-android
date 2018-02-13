@@ -34,15 +34,15 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="?attr/actionBarSize">
+                android:layout_height="wrap_content">
 
                 <include
+                    android:layout_marginTop="?attr/actionBarSize"
                     android:id="@+id/rl_mentor_full_view_header"
                     layout="@layout/mentor_dashboard_header_layout"
                     android:layout_width="match_parent"
                     android:visibility="invisible"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
@@ -101,7 +101,13 @@
     <include
         android:visibility="gone"
         layout="@layout/gif_loader"/>
-
+    <View
+        android:id="@+id/view_profile"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/dp_size_150"
+        android:visibility="invisible"
+        android:layout_gravity="end|bottom"/>
     <include
         layout="@layout/mentor_dashboard_footer_layout"
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.app.DialogFragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -54,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -68,21 +69,19 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeaturedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
 
@@ -126,7 +125,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0)==1) {
+            if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0) == 1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
@@ -358,7 +357,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
         }
         if (!handled) {
-            super.startActivity(intent);
+            try {
+                super.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Crashlytics.getInstance().core.logException(e);
+            }
+
         }
     }
 
@@ -380,13 +384,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
                     } else {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
-                    }
-                    if (null != mViewPagerAdapter) {
-                        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            mFeedDetail.setScreenName(AppConstants.FEATURE_FRAGMENT);
-                            ((FeaturedFragment) fragment).joinRequestForOpenCommunity(mFeedDetail);
-                        }
                     }
                 }
                 break;
@@ -521,9 +518,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
 
                 break;
-            case R.id.li_community_images:
-                CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(this, (CommunityFeedSolrObj) mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 /*Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
@@ -583,16 +577,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
 
-//Open profile from last comment user profile or name click
+    //Open profile from last comment user profile or name click
     public void openUserProfileLastComment(View view, BaseResponse baseResponse) {
         Comment comment = (Comment) baseResponse;
-        if(!comment.isAnonymous() && comment.getParticipantUserId()!=null) {
+        if (!comment.isAnonymous() && comment.getParticipantUserId() != null) {
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
             ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
+
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof CommunitiesDetailFragment) {
@@ -600,8 +595,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
-        }else
-        {
+        } else {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
             if (AppUtils.isFragmentUIActive(fragment)) {
                 ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
@@ -631,7 +625,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT+deepLinkUrl);
+        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         if (feedDetail.getSubType().equals(AppConstants.FEED_JOB)) {
@@ -710,7 +704,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT+Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());

@@ -25,7 +25,7 @@ public class CarouselDataObj extends FeedDetail {
     @SerializedName("body")
     private String body;
 
-    @SerializedName("icon_url")
+    @SerializedName("iconUrl")
     private String iconUrl;
 
     @SerializedName("solr_ignore_list_of_base_or_participant_model")

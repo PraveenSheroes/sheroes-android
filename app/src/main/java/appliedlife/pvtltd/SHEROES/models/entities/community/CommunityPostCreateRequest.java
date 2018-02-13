@@ -76,6 +76,15 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @Expose
     private boolean isTopPost;
 
+    @SerializedName("is_post_to_facebook")
+    @Expose
+    private boolean isPostToFacebook;
+
+    @SerializedName("user_fb_access_token")
+    @Expose
+    private String userFbAccessToken;
+
+
     public String getmSourceType() {
         return mSourceType;
     }
@@ -286,4 +295,20 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
             return new CommunityPostCreateRequest[size];
         }
     };
+
+    public boolean isPostToFacebook() {
+        return isPostToFacebook;
+    }
+
+    public void setPostToFacebook(boolean postToFacebook) {
+        isPostToFacebook = postToFacebook;
+    }
+
+    public String isUserFbAccessToken() {
+        return userFbAccessToken;
+    }
+
+    public void setUserFbAccessToken(String userFbAccessToken) {
+        this.userFbAccessToken = userFbAccessToken;
+    }
 }

@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 
@@ -153,6 +154,22 @@ public class AnalyticsManager {
         }
         MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName);
     }
+
+    //------------TODO- fix with ujjwal
+    public static void trackCommunityAction(Event event, CommunityFeedSolrObj feedDetail, String screenName, String positionInCarousel, String positionOfCarousel) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackCommunityEvent(event, feedDetail, screenName, positionInCarousel, positionOfCarousel);
+    }
+
+    public static void trackCommunityAction(Event event, CommunityFeedSolrObj feedDetail, String screenName) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackCommunityEvent(event, feedDetail, screenName);
+    }
+    //--------
 
     public static void timeEvent(Event event) {
         MixpanelHelper.timeEvent(sAppContext,  event.getFullName());

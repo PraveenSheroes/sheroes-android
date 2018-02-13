@@ -9,8 +9,7 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
             style="@style/TextAppearance.Toolbar"
             android:layout_width="match_parent"
@@ -24,16 +23,21 @@
                 style="@style/TextAppearance.Toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:maxLines="2" />
         </android.support.v7.widget.Toolbar>
-
+        <View
+            android:id="@+id/view_tool_tip_invite"
+            android:layout_width="@dimen/dp_size_10"
+            android:layout_height="0dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="@dimen/dp_size_40"/>
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="wrap_content"
-            app:tabIndicatorColor="@color/white"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_height="wrap_content" />
+            app:tabIndicatorColor="@color/white" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -41,57 +45,58 @@
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:layout_centerInParent="true" />
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/bottom_view"
-        android:layout_gravity="bottom">
-
-        <FrameLayout
-            android:id="@+id/bottom_bar"
-            style="?android:buttonBarStyle"
+        <LinearLayout
+            android:id="@+id/bottom_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:clickable="true">
+            android:layout_gravity="bottom">
 
-            <Button
-                android:id="@+id/btn_bottom_bar"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:id="@+id/bottom_bar"
+                style="?android:buttonBarStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:clickable="true"
-                android:drawablePadding="8dp"
-                android:gravity="center"
-                android:text="@string/ID_JOIN"
-                android:textColor="@color/white"
-                android:visibility="visible" />
-        </FrameLayout>
-    </LinearLayout>
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:clickable="true">
+
+                <Button
+                    android:id="@+id/btn_bottom_bar"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:clickable="true"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:text="@string/ID_JOIN"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+            </FrameLayout>
+        </LinearLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
-            android:layout_above="@id/bottom_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_view" />
     </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         style="@style/FabStyle"
         android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_pencil"
+        android:tint="@color/white"
         android:visibility="gone"
-        android:tint="@color/white"/>
+        app:srcCompat="@drawable/ic_pencil" />
 </android.support.design.widget.CoordinatorLayout>

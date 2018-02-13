@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/image_container"
-        android:layout_toLeftOf="@+id/tv_list_user_comment_time"
+        android:layout_toLeftOf="@id/tv_list_user_comment_time"
         android:layout_marginTop="16dp"
         android:textSize="14sp"
         android:fontFamily="sans-serif"

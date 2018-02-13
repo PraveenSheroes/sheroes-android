@@ -244,8 +244,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                            .show();
+                   // Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     mContest.submissionCount++;
                     mContest.hasMyPost = true;
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
@@ -256,11 +255,11 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     Parcelable parcelable = Parcels.wrap(mContest);
                     intent.putExtra(Contest.CONTEST_OBJ, parcelable);
                     setResult(RESULT_OK, intent);
+                    ChallengeGratificationActivity.navigateTo(this, mContest, getScreenName(), null, requestCode);
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_ADDRESS:
-                    Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                            .show();
+                    Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     mContest.mWinnerAddress = "not empty";
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                     mContestInfoFragment.setContest(mContest);
@@ -403,7 +402,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 onBackPressed();
                 break;
             case R.id.share:
-
                 String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + mContest.shortUrl;
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()

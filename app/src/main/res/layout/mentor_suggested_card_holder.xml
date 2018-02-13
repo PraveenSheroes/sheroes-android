@@ -3,58 +3,85 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginBottom="@dimen/dp_size_10">
+    android:layout_marginBottom="@dimen/dp_size_8">
 
     <RelativeLayout
+        android:background="@color/carousel_card_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:background="@color/white">
+        android:layout_marginBottom="@dimen/dp_size_1">
 
+        <RelativeLayout
+            android:id="@+id/top_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <FrameLayout
+            android:id="@+id/icon_container"
             android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:layout_margin="16dp"
-            android:textAllCaps="true"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:visibility="visible" />
-
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
         <TextView
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/more"
+            android:textAllCaps="true"
+            android:layout_marginEnd="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:letterSpacing="0.07"
+            android:padding="@dimen/dp_size_2"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_14"
+            tools:text="More" />
+        </FrameLayout>
+
+            <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:fontFamily="sans-serif"
-            android:layout_toLeftOf="@+id/icon"
+            android:layout_toLeftOf="@id/icon_container"
+            android:layout_toStartOf="@id/icon_container"
             android:layout_marginTop="16dp"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
             android:textStyle="normal"
             android:textColor="#3c3c3c"
+            android:text="@string/ID_GET_EXPERT_ADVICE"
             android:letterSpacing="0.04"
-            tools:text="Trending Posts" />
+            />
 
         <TextView
             android:id="@+id/body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
+            android:layout_marginTop="@dimen/dp_size_4"
+            android:textSize="@dimen/sp_size_14"
+            android:maxLines="@integer/int_value_for_line_1"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_LIGHT"
             android:textStyle="normal"
-            android:textColor="#878787"
-            tools:text="Here are some trending posts on SHEROES"
-            />
+            android:textColor="@color/gray_light"
+            tools:text="Here are some trending posts on SHEROES" />
+
+        </RelativeLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_suggested_mentor_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/body"
-            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_size_8"
+            android:layout_below="@id/top_section"
             android:divider="@color/fully_transparent" />
 </RelativeLayout>
 </android.support.v7.widget.CardView>

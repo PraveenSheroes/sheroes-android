@@ -125,18 +125,9 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                mCommunityFeedObj.setRequestPending(true);
-                mCommunityFeedObj.setOwner(false);
-                if (mCommunityFeedObj.isFromHome()) {
-                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getStatus(), mCommunityFeedObj);
-                }
-                entityMoEngageJoinedCommunity(mCommunityFeedObj.getNameOrTitle(), mCommunityFeedObj.getIdOfEntityOrParticipant(), mCommunityFeedObj.isClosedCommunity(), MoEngageConstants.COMMUNITY_TAG,TAG,mCommunityFeedObj.getItemPosition());
                 dismiss();
                 break;
             case AppConstants.FAILED:
-                if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getScreenName()) && mCommunityFeedObj.getScreenName().equalsIgnoreCase(AppConstants.FEATURE_FRAGMENT)) {
-                    ((HomeActivity) getActivity()).onJoinEventSuccessResult(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), mCommunityFeedObj);
-                }
                 dismiss();
                 break;
             default:

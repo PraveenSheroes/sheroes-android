@@ -45,7 +45,11 @@ public enum EventProperty {
     POSITION_IN_SEQUENCE("Position In Sequence"),
     IS_MENTOR("Is Mentor"),
     IS_OWN_PROFILE("Is Own Profile"),
-    DESCRIPTION("Description");
+    DESCRIPTION("Description"),
+    COMMUNITY_CATEGORY("Community Category"),
+    POSITION_IN_CAROUSEL("Position In Carousel"),
+    IS_CHECKED("Is Checked"),
+    POSITION_OF_CAROUSEL("Position Of Carousel");
 
     private final String string;
 
@@ -164,6 +168,21 @@ public enum EventProperty {
             return this;
         }
 
+        public Builder communityCategory(String value) {
+            put(COMMUNITY_CATEGORY, value);
+            return this;
+        }
+
+        public Builder positionInCarousel(String value) {
+            put(POSITION_IN_CAROUSEL, value);
+            return this;
+        }
+
+        public Builder positionOfCarousel(String value) {
+            put(POSITION_OF_CAROUSEL, value);
+            return this;
+        }
+
         public Builder isMonengage(boolean value) {
             put(IS_MOENGAGE, value);
             return this;
@@ -232,6 +251,12 @@ public enum EventProperty {
             put(IS_MENTOR, isMentor);
             return this;
         }
+
+        public Builder isChecked(final boolean isChecked){
+            put(IS_CHECKED, isChecked);
+            return this;
+        }
+
         public Builder isOwnProfile(final boolean isOwnProfile){
             put(IS_OWN_PROFILE, isOwnProfile);
             return this;

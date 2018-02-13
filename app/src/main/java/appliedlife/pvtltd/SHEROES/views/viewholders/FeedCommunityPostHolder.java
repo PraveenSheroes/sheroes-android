@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -19,11 +18,9 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,7 +60,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
-import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -289,17 +285,19 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void showToolTip(Context context) {
         if (isToolTipForUser) {
-            if (!mUserPostObj.isAnonymous()) {
+            if (!mUserPostObj.isAnonymous() && !mUserPostObj.isAuthorMentor()) {
                 isToolTipForUser = false;
                 inflater = LayoutInflater.from(context);
-                view = inflater.inflate(R.layout.tooltip_arrow_right, null);
+                view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
                 FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(52, context), 0, 0);
+                lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
                 LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
                 imageParams.gravity = Gravity.START;
                 imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
-                TextView textView = (TextView) view.findViewById(R.id.tooltip_arrow);
-                textView.setLayoutParams(imageParams);
+                final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+                RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                ivArrow.setLayoutParams(arrowParams);
                 TextView text = (TextView) view.findViewById(R.id.title);
                 text.setText(R.string.tool_tip_user_profile);
                 TextView gotIt = (TextView) view.findViewById(R.id.got_it);

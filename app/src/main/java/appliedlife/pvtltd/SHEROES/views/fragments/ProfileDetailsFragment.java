@@ -23,12 +23,12 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -77,7 +77,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @Bind(R.id.mutual_community_container)
     LinearLayout mutualCommunityContainer;
 
-    @Bind(R.id.followed_mentor_container)
+    @Bind(R.id.container)
     LinearLayout followedMentor;
 
     @Bind(R.id.progress_bar)
@@ -148,7 +148,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.profile_community_champion_layout, container, false);
         profilePresenter.attachView(this);
         ButterKnife.bind(this, view);
@@ -172,12 +172,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     private void populateUserProfileDetails() {
-        boolean hideAnnonymousPost = !isSelfProfile;
-        profilePresenter.getUserPostCountFromPresenter(mAppUtils.usersFeedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, AppConstants.ONE_CONSTANT, userId, hideAnnonymousPost));
-
-        profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, true)); //to get follower count
-
-        profilePresenter.getUsersFollowerOrFollowingCount(mAppUtils.countUserFollowersOrFollowing(userId, false)); //to get follower count
+        profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
 
         profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
 
@@ -223,6 +218,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
+        if((getActivity()) == null || getActivity().isFinishing()) return;
+
         String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
         String mutualCommunityText = getResources().getString(R.string.PLACEHOLDER_MUTUAL_COMMUNITY, name, String.valueOf(mutualCommunitySize));
         mutualCommunityLabel.setText(mutualCommunityText);
@@ -231,7 +228,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_mutual_community, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.profile_mutual_community, null);
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
@@ -275,13 +272,14 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
-        int screenWidth = CommonUtil.getWindowWidth(getContext());
-        float aspectRatio = (float) 150 / 160;
+        if((getActivity()) == null || getActivity().isFinishing()) return;
+
+        int screenWidth = CommonUtil.getWindowWidth(getActivity());
         int columnSize = screenWidth / 2 - mImageMargin;
         userCommunityLayout.removeAllViews();
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_communities_items, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.profile_communities_items, null);
             LinearLayout container = ButterKnife.findById(view, R.id.profile_community_container);
             CircleImageView communityImage = ButterKnife.findById(view, R.id.community_icon);
             TextView communityName = ButterKnife.findById(view, R.id.community_name);
@@ -320,6 +318,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
+            emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_public_business_woman,0,0);
+
             followedMentorsListContainer.setVisibility(View.GONE);
 
             if(isSelfProfile) {
@@ -345,17 +345,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void getUsersFollowerCount(BaseResponse userFollowerOrFollowingCountResponse) {
-        LogUtils.info(TAG, "Follower count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((ProfileActivity) getActivity()).setUsersFollowerCount(userFollowerOrFollowingCountResponse.getNumFound());
-
-    }
-
-    @Override
-    public void getUsersFollowingCount(BaseResponse userFollowerOrFollowingCountResponse) {
-        LogUtils.info(TAG, "Following count:" + userFollowerOrFollowingCountResponse.getNumFound());
-        ((ProfileActivity) getActivity()).setUsersFollowingCount(userFollowerOrFollowingCountResponse.getNumFound());
-
+    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
+        ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
     @Override
@@ -411,6 +402,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             communityListContainer.setVisibility(View.GONE);
             String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_community, name);
+            emptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_community_member_public,0,0);
             emptyViewCommunities.setText(message);
 
             if(isSelfProfile) {
@@ -422,19 +414,14 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         }
     }
 
-    @Override
-    public void getUsersPostCount(int totalPost) {
-        LogUtils.info(TAG, "Post count:" + totalPost);
-        ((ProfileActivity) getActivity()).setUsersPostCount(totalPost);
-    }
-
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
+        if((getActivity()) == null || getActivity().isFinishing()) return;
 
         int counter = 0;
         followedMentor.removeAllViewsInLayout();
 
         for (final UserSolrObj userSolrObj : followedMentors) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.followed_mentor_list_item, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.followed_mentor_list_item, null);
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.iv_mentor_full_view_icon);
             TextView mentorName = ButterKnife.findById(view, R.id.user_name);
             TextView expertAt = ButterKnife.findById(view, R.id.expert_at);
