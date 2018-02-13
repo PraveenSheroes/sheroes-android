@@ -148,7 +148,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.profile_community_champion_layout, container, false);
         profilePresenter.attachView(this);
         ButterKnife.bind(this, view);
@@ -218,7 +218,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
-        if(((ProfileActivity)getActivity()) == null) return;
+        if((getActivity()) == null || getActivity().isFinishing()) return;
+
         String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
         String mutualCommunityText = getResources().getString(R.string.PLACEHOLDER_MUTUAL_COMMUNITY, name, String.valueOf(mutualCommunitySize));
         mutualCommunityLabel.setText(mutualCommunityText);
@@ -227,7 +228,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_mutual_community, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.profile_mutual_community, null);
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
@@ -271,13 +272,14 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
-        if(getActivity() ==null) return;
+        if((getActivity()) == null || getActivity().isFinishing()) return;
+
         int screenWidth = CommonUtil.getWindowWidth(getActivity());
         int columnSize = screenWidth / 2 - mImageMargin;
         userCommunityLayout.removeAllViews();
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.profile_communities_items, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.profile_communities_items, null);
             LinearLayout container = ButterKnife.findById(view, R.id.profile_community_container);
             CircleImageView communityImage = ButterKnife.findById(view, R.id.community_icon);
             TextView communityName = ButterKnife.findById(view, R.id.community_name);
@@ -413,12 +415,13 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
+        if((getActivity()) == null || getActivity().isFinishing()) return;
 
         int counter = 0;
         followedMentor.removeAllViewsInLayout();
 
         for (final UserSolrObj userSolrObj : followedMentors) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.followed_mentor_list_item, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.followed_mentor_list_item, null);
             CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.iv_mentor_full_view_icon);
             TextView mentorName = ButterKnife.findById(view, R.id.user_name);
             TextView expertAt = ButterKnife.findById(view, R.id.expert_at);
