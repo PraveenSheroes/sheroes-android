@@ -31,6 +31,7 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -324,7 +326,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        toolTip();
+                        toolTipForAnonymous(CommunityPostActivity.this);
                     }
                 }, 1500);
             }
@@ -655,34 +657,28 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         });
     }
-
-    private void toolTip() {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        anonymousToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
-        popupWindowToolTip = new PopupWindow(anonymousToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindowToolTip.setOutsideTouchable(false);
-        int width = AppUtils.getWindowWidth(CommunityPostActivity.this);
-        if (width < 750) {
-
-            popupWindowToolTip.showAsDropDown(mAnonymousSelect, 0, -250);
-        } else {
-
-            popupWindowToolTip.showAsDropDown(mAnonymousSelect, 0, -350);
-        }
-        final ImageView ivArrow = anonymousToolTip.findViewById(R.id.iv_arrow);
-        RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        imageParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityPostActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-        imageParams.addRule(RelativeLayout.BELOW, R.id.ll_tool_tip_bg);
-        ivArrow.setLayoutParams(imageParams);
-        final TextView tvGotIt =  anonymousToolTip.findViewById(R.id.got_it);
-        final TextView tvTitle = anonymousToolTip.findViewById(R.id.title);
-        tvTitle.setText(getString(R.string.tool_tip_create_post));
-        tvGotIt.setOnClickListener(new View.OnClickListener() {
+    private void toolTipForAnonymous(Context context) {
+        LayoutInflater inflater = null;
+        inflater = LayoutInflater.from(context);
+        final View view  = inflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+        FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        lps.setMargins(CommonUtil.convertDpToPixel(10, context), 0, CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(130, context));
+        final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+        RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+        arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+        arrowParams.addRule(RelativeLayout.BELOW,R.id.ll_tool_tip_bg);
+        ivArrow.setLayoutParams(arrowParams);
+        TextView text =  view.findViewById(R.id.title);
+        text.setText(R.string.tool_tip_create_post);
+        TextView gotIt =  view.findViewById(R.id.got_it);
+        gotIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindowToolTip.dismiss();
+                mAnonymousView.removeView(view);
             }
         });
+        mAnonymousView.addView(view, lps);
     }
 
     private void setupCommunityNameListener() {
