@@ -346,6 +346,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
+        if((getActivity()) == null || getActivity().isFinishing()) return;
+
         ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
@@ -468,6 +470,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
+        if((getActivity()) == null || getActivity().isFinishing()) return;
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 

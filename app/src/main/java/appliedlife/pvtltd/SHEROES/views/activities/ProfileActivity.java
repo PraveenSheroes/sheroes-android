@@ -238,12 +238,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Inject
     HomePresenter mHomePresenter;
 
-    @Inject
-    ProfilePresenterImpl profilePresenter;
-
-    @Inject
-    EditProfilePresenterImpl editProfilePresenter;
-
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
 
