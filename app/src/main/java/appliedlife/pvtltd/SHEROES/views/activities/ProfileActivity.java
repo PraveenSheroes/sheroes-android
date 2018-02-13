@@ -1122,6 +1122,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    @Override
     protected boolean trackScreenTime() {
         return true;
     }

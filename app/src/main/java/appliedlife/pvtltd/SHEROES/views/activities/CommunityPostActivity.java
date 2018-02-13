@@ -151,6 +151,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.anonymous_select)
     CheckBox mAnonymousSelect;
 
+    @Bind(R.id.fb_share_container)
+    RelativeLayout fbShareContainer;
+
     @Bind(R.id.share_on_fb)
     SwitchCompat mShareToFacebook;
 
@@ -254,6 +257,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mIsChallengePost = mCommunityPost.isChallengeType;
         }
         if (mIsChallengePost) {
+            fbShareContainer.setVisibility(View.GONE);
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
             if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
@@ -267,6 +271,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mUserName.setLayoutParams(layoutParams);
         }
         if (mIsEditPost) {
+            fbShareContainer.setVisibility(View.GONE);
             mPostAsCommunitySelected = mCommunityPost.isPostByCommunity;
             mIsAnonymous = mCommunityPost.isAnonymous;
             mEtDefaultHintText.setText(mCommunityPost.body);
@@ -283,6 +288,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             if (mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
                 mEtDefaultHintText.requestFocus();
+                fbShareContainer.setVisibility(View.VISIBLE);
                 if (!mIsFromCommunity && !mIsChallengePost) {
                     PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
                 }
