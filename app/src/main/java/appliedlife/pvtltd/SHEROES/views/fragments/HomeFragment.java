@@ -222,9 +222,13 @@ public class HomeFragment extends BaseFragment {
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
-                    mHomePresenter.getAuthTokenRefreshPresenter();
+                    if(!isChallenge){
+                        mHomePresenter.getAuthTokenRefreshPresenter();
+                    }
                 } else {
-                    mHomePresenter.getAuthTokenRefreshPresenter();
+                    if(!isChallenge){
+                        mHomePresenter.getAuthTokenRefreshPresenter();
+                    }
                     if(isChallenge){
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
