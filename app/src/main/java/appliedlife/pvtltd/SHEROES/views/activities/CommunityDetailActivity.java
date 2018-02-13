@@ -461,7 +461,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 onBackPressed();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void onLeaveClicked() {
