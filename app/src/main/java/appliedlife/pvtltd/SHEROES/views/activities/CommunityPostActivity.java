@@ -661,7 +661,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         anonymousToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
         popupWindowToolTip = new PopupWindow(anonymousToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindowToolTip.setOutsideTouchable(false);
-        popupWindowToolTip.showAsDropDown(mAnonymousSelect, 0, -200);
+        int width = AppUtils.getWindowWidth(CommunityPostActivity.this);
+        if (width < 750) {
+
+            popupWindowToolTip.showAsDropDown(mAnonymousSelect, 0, -250);
+        } else {
+
+            popupWindowToolTip.showAsDropDown(mAnonymousSelect, 0, -350);
+        }
         final ImageView ivArrow = anonymousToolTip.findViewById(R.id.iv_arrow);
         RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         imageParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityPostActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
