@@ -18,31 +18,45 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title"
+            <android.support.v7.widget.CardView
+                android:id="@+id/community_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/carousel_card_bg"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:paddingEnd="@dimen/dp_size_1"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:paddingRight="@dimen/dp_size_1"
-                android:paddingStart="@dimen/dp_size_16"
-                android:paddingTop="@dimen/dp_size_8"
-                android:text="@string/my_communities"
-                android:textColor="@color/comment_text"
-                android:textSize="@dimen/sp_size_14" />
+                android:layout_marginBottom="@dimen/dp_size_8"
+                android:elevation="@dimen/dp_size_5">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/my_communities"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_size_5"
-                android:background="@color/carousel_card_bg"
-                android:minHeight="@dimen/dp_size_100"
-                android:paddingLeft="@dimen/dp_size_16"
-                android:paddingRight="@dimen/dp_size_1"
-                android:paddingStart="@dimen/dp_size_16" />
+                <LinearLayout
+                    android:background="@color/carousel_card_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:paddingEnd="@dimen/dp_size_1"
+                        android:paddingLeft="@dimen/dp_size_16"
+                        android:paddingRight="@dimen/dp_size_1"
+                        android:paddingStart="@dimen/dp_size_16"
+                        android:paddingTop="@dimen/dp_size_8"
+                        android:text="@string/my_communities"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_14" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/my_communities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_size_5"
+                        android:minHeight="@dimen/dp_size_100"
+                        android:paddingLeft="@dimen/dp_size_16"
+                        android:paddingRight="@dimen/dp_size_1"
+                        android:paddingStart="@dimen/dp_size_16" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/all_communities"

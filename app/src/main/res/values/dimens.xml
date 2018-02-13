@@ -145,5 +145,6 @@
     <dimen name="dp_community_image_background_width">150dp</dimen>
     <dimen name="see_more_width">130dp</dimen>
     <dimen name="see_more_height">205dp</dimen>
+    <dimen name="communities_compact_card_radius">4dp</dimen>
 </resources>
 
