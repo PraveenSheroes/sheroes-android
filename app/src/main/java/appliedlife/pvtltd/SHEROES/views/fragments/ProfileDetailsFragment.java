@@ -177,6 +177,12 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         profilePresenter.detachView();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        profilePresenter.detachView();
+    }
+
     private void populateUserProfileDetails() {
         profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
 
@@ -317,7 +323,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getFollowedMentors(UserFollowedMentorsResponse feedResponsePojo) {
-
+        if (getActivity() == null || getActivity().isFinishing()) {
+            return;
+        }
         if(feedResponsePojo.getNumFound() ==0) {
             //empty view
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
@@ -362,6 +370,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
+        if (getActivity() == null || getActivity().isFinishing()) {
+            return;
+        }
         LogUtils.info(TAG, "Community count:" + userCommunities.getStatus());
 
         List<CommunityFeedSolrObj> mutualCommunity = userCommunities.getMutualCommunities();
