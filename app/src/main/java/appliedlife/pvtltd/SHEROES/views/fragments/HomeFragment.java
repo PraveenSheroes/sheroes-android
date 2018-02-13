@@ -234,9 +234,6 @@ public class HomeFragment extends BaseFragment {
                         mHomePresenter.getAuthTokenRefreshPresenter();
                     }
                 } else {
-                    if(!isChallenge){
-                        mHomePresenter.getAuthTokenRefreshPresenter();
-                    }
                     if(isChallenge){
                         mFragmentListRefreshData.setChallenge(true);
                         mFragmentListRefreshData.setSourceEntity(mContest.remote_id);
