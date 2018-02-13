@@ -129,7 +129,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
     //endregion
 
     //region private member variable
-    private HomeFragment mHomeFragment;
     private FeedFragment mFeedFragment;
     private Contest mContest;
     private String mContestId;
@@ -251,7 +250,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     mContest.hasMyPost = true;
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                     mContestInfoFragment.setContest(mContest);
-                    mHomeFragment.onRefreshClick();
+                    mFeedFragment.refreshList();
                     invalidateBottomBar(FRAGMENT_RESPONSES);
                     Intent intent = new Intent();
                     Parcelable parcelable = Parcels.wrap(mContest);
@@ -265,7 +264,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     mContest.mWinnerAddress = "not empty";
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                     mContestInfoFragment.setContest(mContest);
-                    mHomeFragment.onRefreshClick();
+                    mFeedFragment.refreshList();
                     invalidateBottomBar(FRAGMENT_WINNER);
                     Intent intentContest = new Intent();
                     Parcelable parcelableContest = Parcels.wrap(mContest);
@@ -275,20 +274,21 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (mHomeFragment != null) {
-                        Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelableUserPost != null) {
-                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelableUserPost);
-                            isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                            mFeedDetail = userPostSolrObj;
-                        }
-                        if (isPostDeleted) {
-                            mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                        } else {
-                            mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                        }
+                    UserPostSolrObj userPostSolrObj = null;
+                    Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                    if (parcelableUserPost != null) {
+                        userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                        isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                     }
+                    if (userPostSolrObj == null) {
+                        break;
+                    }
+                    if (isPostDeleted) {
+                        mFeedFragment.removeItem(userPostSolrObj);
+                    } else {
+                        mFeedFragment.updateItem(userPostSolrObj);
+                    }
+                    break;
             }
         }
     }
@@ -296,14 +296,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-        if (mViewPager.getCurrentItem() == 1) {
-            mHomeFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-        }
     }
 
     @Override
