@@ -323,6 +323,8 @@ public class ContestActivity extends BaseActivity implements IContestView {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         mFeedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
+        bundle.putParcelable(Contest.CONTEST_OBJ, Parcels.wrap(mContest));
+        bundle.putBoolean(IS_CHALLENGE, true);
         String endPointUrl = "participant/feed/v2?sub_type=P&source_entity_id=" + mContest.remote_id;
         bundle.putString(AppConstants.END_POINT_URL, endPointUrl);
         mFeedFragment.setArguments(bundle);
