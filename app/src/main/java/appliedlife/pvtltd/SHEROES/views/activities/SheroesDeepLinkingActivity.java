@@ -14,6 +14,8 @@ import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
+import java.net.URISyntaxException;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -22,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -97,7 +100,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         return null;
     }
 
-    private void callDeepLinkingData() {
+    private void callDeepLinkingData() throws URISyntaxException {
         String notificationId = "";
         String url = "";
         String deepLink = "";
@@ -109,13 +112,14 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
             if (null != intent.getData()) {
                 mData = intent.getData();
-                deepLink = mData.toString();
-                getDeeplinkUrlFromNotification(mData.toString(), intent);
+                String trimUrl = CommonUtil.trimBranchIdQuery(mData.toString());
+                getDeeplinkUrlFromNotification(trimUrl, intent);
             } else {
                 if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
                     notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
-                    getDeeplinkUrlFromNotification(deepLink, intent);
+                    String trimUrl = CommonUtil.trimBranchIdQuery(deepLink.toString());
+                    getDeeplinkUrlFromNotification(trimUrl, intent);
                 }
             }
 
