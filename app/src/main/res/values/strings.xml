@@ -536,6 +536,12 @@
     <string name="share_with_friend_text">Share the happiness with your friends &amp; invite them to take up this challenge</string>
     <string name="challenge_done">Wohoo!</string>
     <string name="challenge_completed">Challenge Completed</string>
+    <string name="invite_friend"> Find  &amp;  Invite Friends</string>
+    <string name="suggested_friend">Suggested</string>
+    <string name="contact_list_friend">Contacts</string>
+    <string name="contact_invite_friend">Invite</string>
+
+
 
 
 

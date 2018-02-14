@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
-import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
@@ -31,8 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
@@ -394,18 +391,5 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<UserPhoneContactsListResponse> getAppContactsResponseInModel(UserPhoneContactsListRequest userPhoneContactsListRequest) {
-        LogUtils.info(TAG, "*******************" + new Gson().toJson(userPhoneContactsListRequest));
-        return sheroesAppServiceApi.getPhoneContactListResponse(userPhoneContactsListRequest)
-                .map(new Function<UserPhoneContactsListResponse, UserPhoneContactsListResponse>() {
-                    @Override
-                    public UserPhoneContactsListResponse apply(UserPhoneContactsListResponse userPhoneContactsListResponse) {
-                        return userPhoneContactsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
 
-    }
-    
 }

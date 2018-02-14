@@ -195,6 +195,10 @@
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".views.activities.InviteFriendActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -247,6 +251,7 @@
                 <data android:pathPrefix="/sheroes-challenge" />
                 <data android:pathPrefix="/my-challenges" />
                 <data android:pathPrefix="/faq" />
+                <data android:pathPrefix="/invite-friends" />
             </intent-filter>
         </activity>
         <activity

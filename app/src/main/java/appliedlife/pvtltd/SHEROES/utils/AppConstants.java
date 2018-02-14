@@ -111,6 +111,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS = 1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
+    public static final int REQUEST_CODE_FOR_INVITE_FRIEND = 1601;
     public static final int REQUEST_CODE_FOR_SELF_PROFILE_DETAIL = 1502;
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
@@ -156,6 +157,7 @@ public class AppConstants {
     public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String CHALLENGE_GRATIFICATION = "challenge_gratification";
+    public static final String INVITE_FRIEND = "invite_friend";
 
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
@@ -237,6 +239,8 @@ public class AppConstants {
     public static final String JOB_URL_COM = "https://sheroes.com/jobs";
     public static final String COMMUNITY_POST_URL_COM = "https://sheroes.com/community-post";
     public static final String COMMUNITY_POST_URL = "https://sheroes.in/community-post";
+    public static final String INVITE_FRIEND_URL = "https://sheroes.in/invite-friends";
+    public static final String INVITE_FRIEND_URL_COM = "https://sheroes.com/invite-friends";
     public static final String CHAMPION_URL = "https://sheroes.in/champions";
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
@@ -260,6 +264,7 @@ public class AppConstants {
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
+
 
     public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";

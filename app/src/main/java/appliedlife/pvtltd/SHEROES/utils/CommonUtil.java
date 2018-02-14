@@ -345,7 +345,7 @@ public class CommonUtil {
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in") ))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") ||  url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") ||  url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members")||url.getPath().startsWith("/invite-friends")) {
                 return true;
             }
         }
