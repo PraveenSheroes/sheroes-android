@@ -1,10 +1,13 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
+import android.support.v4.app.Fragment;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -35,11 +38,13 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
     private final String TAG = LogUtils.makeLogTag(BasePresenter.class);
     private CompositeDisposable compositeDisposables;
     private T mMvpView;
-    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+    private BehaviorSubject<ActivityEvent> lifecycleSubject = null;
+    private BehaviorSubject<FragmentEvent> lifecycleFragmentSubject = null;
+
 
 
     public final <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycleAndroid.<T>bindActivity(lifecycleSubject);
+        return  lifecycleSubject != null ? RxLifecycleAndroid.<T>bindActivity(lifecycleSubject) : RxLifecycleAndroid.<T>bindFragment(lifecycleFragmentSubject) ;
     }
 
     public final <T> LifecycleTransformer<T> bindUntilDestroy() {
@@ -56,36 +61,64 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
     @Override
     public void onCreate() {
-        lifecycleSubject.onNext(ActivityEvent.CREATE);
+        sendLifecycleEvent(ActivityEvent.CREATE, FragmentEvent.CREATE);
+    }
+
+    private void sendLifecycleEvent(ActivityEvent activityEvent, FragmentEvent fragmentEvent) {
+        if (lifecycleSubject != null) {
+            lifecycleSubject.onNext(activityEvent);
+        } else {
+            lifecycleFragmentSubject.onNext(fragmentEvent);
+        }
     }
 
     @Override
     public void onDestroy() {
-        lifecycleSubject.onNext(ActivityEvent.DESTROY);
+        sendLifecycleEvent(ActivityEvent.DESTROY, FragmentEvent.DESTROY);
     }
 
     @Override
     public void onStart() {
-        lifecycleSubject.onNext(ActivityEvent.START);
+        sendLifecycleEvent(ActivityEvent.START, FragmentEvent.START);
     }
 
     @Override
     public void onStop() {
-        lifecycleSubject.onNext(ActivityEvent.STOP);
+        sendLifecycleEvent(ActivityEvent.STOP, FragmentEvent.STOP);
     }
 
     @Override
     public void onPause() {
-        lifecycleSubject.onNext(ActivityEvent.PAUSE);
+        sendLifecycleEvent(ActivityEvent.PAUSE, FragmentEvent.PAUSE);
     }
 
     @Override
     public void onResume() {
-        lifecycleSubject.onNext(ActivityEvent.RESUME);
+        sendLifecycleEvent(ActivityEvent.RESUME, FragmentEvent.RESUME);
     }
+
+    @Override
+    public void onAttach() {
+        sendLifecycleEvent(null, FragmentEvent.ATTACH);
+    }
+
+    @Override
+    public void onDetach() {
+        sendLifecycleEvent(null, FragmentEvent.DETACH);
+    }
+
+
     @Override
     public void attachView(T mvpView) {
         mMvpView = mvpView;
+        if(mMvpView instanceof Fragment){
+            lifecycleFragmentSubject = BehaviorSubject.create();
+            onCreate();
+            onAttach();
+        } else{
+            lifecycleSubject = BehaviorSubject.create();
+            onCreate();
+        }
     }
 
     @Override

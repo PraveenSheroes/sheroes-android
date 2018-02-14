@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -102,6 +103,11 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
         followedListPagination(mFragmentListRefreshData);
 
         return view;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return profilePresenter;
     }
 
     private void followedListPagination(FragmentListRefreshData mFragmentListRefreshData) {

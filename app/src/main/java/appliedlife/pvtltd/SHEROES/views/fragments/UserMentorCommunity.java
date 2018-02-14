@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
@@ -106,6 +107,11 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
         mentorSearchInListPagination(mFragmentListRefreshData);
 
         return view;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return profilePresenter;
     }
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -148,6 +149,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.profile_community_champion_layout, container, false);
         profilePresenter.attachView(this);
@@ -163,6 +165,11 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         }
 
         return view;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return profilePresenter;
     }
 
     @Override

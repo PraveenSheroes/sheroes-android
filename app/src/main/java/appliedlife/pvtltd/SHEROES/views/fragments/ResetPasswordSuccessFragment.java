@@ -9,6 +9,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import butterknife.Bind;
@@ -38,6 +39,11 @@ public class ResetPasswordSuccessFragment extends BaseFragment {
         }
 
         return view;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
     }
 
     @Override

@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
@@ -127,6 +128,11 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.vector_clear);
         getSupportActionBar().setTitle(R.string.title_send_address);
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mAddressPresenter;
     }
 
     @Override

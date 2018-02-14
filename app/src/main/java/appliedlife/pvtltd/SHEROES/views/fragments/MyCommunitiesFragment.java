@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -130,6 +131,11 @@ public class MyCommunitiesFragment extends BaseFragment implements HomeView {
     public void onResume() {
         super.onResume();
         DrawerViewHolder.selectedOptionName = null;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHomePresenter;
     }
 
     public void swipeAndRefreshList() {

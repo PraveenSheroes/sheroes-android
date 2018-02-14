@@ -25,4 +25,9 @@ public interface SheroesPresenter<V extends BaseMvpView> {
     void onPause();
 
     void onResume();
+
+    void onAttach();
+
+    void onDetach();
+
 }

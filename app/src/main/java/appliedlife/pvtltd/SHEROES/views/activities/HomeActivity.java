@@ -1360,6 +1360,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
     }
 
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return activityDataPresenter;
+    }
+
     @OnClick(R.id.fl_notification)
     public void notificationClick() {
         // mDrawer.openDrawer(Gravity.LEFT);
