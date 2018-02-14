@@ -68,7 +68,9 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
         if (lifecycleSubject != null) {
             lifecycleSubject.onNext(activityEvent);
         } else {
-            lifecycleFragmentSubject.onNext(fragmentEvent);
+            if(lifecycleFragmentSubject!=null){
+                lifecycleFragmentSubject.onNext(fragmentEvent);
+            }
         }
     }
 

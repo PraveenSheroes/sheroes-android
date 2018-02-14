@@ -50,9 +50,6 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     @Inject
     AppUtils mAppUtils;
 
-    @Inject
-    ProfilePresenterImpl profilePresenter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +78,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
 
     @Override
     protected SheroesPresenter getPresenter() {
-        return profilePresenter;
+        return null;
     }
 
     @Override
