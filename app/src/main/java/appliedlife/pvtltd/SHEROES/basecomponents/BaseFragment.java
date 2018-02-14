@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -451,13 +452,23 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             mFeedDetail = (FeedDetail) baseResponse;
             this.mPosition = position;
             this.mPressedEmoji = reactionValue;
-            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
-                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-            } else {
-                if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                    mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
-                } else {
-                    mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+            if(mFeedDetail instanceof UserPostSolrObj){
+                if(((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID){
+                    if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
+                    } else {
+                        mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+                    }
+                }else {
+                    if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+                        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+                    } else {
+                        if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+                        } else {
+                            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+                        }
+                    }
                 }
             }
         }

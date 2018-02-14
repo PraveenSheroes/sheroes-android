@@ -220,12 +220,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbarView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Challenge");
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        if (mContest != null) {
-            toolbarTitle.setText("Challenge");
-        }
     }
 
     @Override

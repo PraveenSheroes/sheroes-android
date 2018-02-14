@@ -201,7 +201,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
                 @Override
                 public void onShow() {
+                    try {
 
+                        if(getActivity() instanceof ProfileActivity) {
+                            if((getActivity()) == null || getActivity().isFinishing()) return;
+                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                        }
+
+                    } catch (ClassCastException ex) {
+                        LogUtils.error(TAG, ex.getMessage());
+                    }
                 }
 
                 @Override
