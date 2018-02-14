@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -76,6 +77,11 @@ public class ProfileCommunitiesActivity extends BaseActivity {
                 fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, followingFragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return profilePresenter;
     }
 
     @Override

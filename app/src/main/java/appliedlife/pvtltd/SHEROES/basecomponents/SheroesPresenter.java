@@ -13,4 +13,21 @@ public interface SheroesPresenter<V extends BaseMvpView> {
     void attachView(V mvpView);
 
     void detachView();
+
+    void onCreate();
+
+    void onDestroy();
+
+    void onStart();
+
+    void onStop();
+
+    void onPause();
+
+    void onResume();
+
+    void onAttach();
+
+    void onDetach();
+
 }

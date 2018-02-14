@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
@@ -206,6 +207,11 @@ public class HelplineFragment extends BaseFragment {
             AppUtils.hideKeyboard(getView(), TAG);
             refreshChatMethod();
         }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHelplinePresenter;
     }
 
     public void getSpeechText(String questionBySpeech) {

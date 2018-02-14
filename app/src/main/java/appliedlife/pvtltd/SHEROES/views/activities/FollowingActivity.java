@@ -16,6 +16,7 @@ import java.util.HashMap;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -67,6 +68,11 @@ public class FollowingActivity extends BaseActivity {
     public void onBackPressed() {
         setResult();
         super.onBackPressed();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -101,6 +102,11 @@ public class CollectionActivity extends BaseActivity {
             setResult(REQUEST_CODE_FOR_COMMUNITY_LISTING, intent);
         }
         finish();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
     }
 
     @Override

@@ -71,7 +71,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        getFeedFromModel(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 //getMvpView().stopProgressBar();
@@ -152,7 +154,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        editCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
+        editCommentListFromModel(commentReactionRequestPojo)
+                .compose(this.<CommentAddDelete>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
                 // getMvpView().stopProgressBar();
@@ -190,7 +194,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        editCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
+        editCommentListFromModel(commentReactionRequestPojo)
+                .compose(this.<CommentAddDelete>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
                 //getMvpView().stopProgressBar();
@@ -228,7 +234,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         // getMvpView().startProgressBar();
-        addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
+        addCommentListFromModel(commentReactionRequestPojo)
+                .compose(this.<CommentAddDelete>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
                 // getMvpView().stopProgressBar();
@@ -319,7 +327,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
         }
-        addBookmarkFromModel(bookmarkRequestPojo, isBookMarked).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
+        addBookmarkFromModel(bookmarkRequestPojo, isBookMarked)
+                .compose(this.<BookmarkResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
             public void onComplete() {
             }
@@ -367,7 +377,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         //  getMvpView().startProgressBar();
-        addLikeFromModel(likeRequestPojo, isLiked).subscribe(new DisposableObserver<LikeResponse>() {
+        addLikeFromModel(likeRequestPojo, isLiked)
+                .compose(this.<LikeResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LikeResponse>() {
             @Override
             public void onComplete() {
                 //  getMvpView().stopProgressBar();
@@ -434,7 +446,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     }
 
     public void fetchAllComments(CommentReactionRequestPojo commentRequestBuilder) {
-        getAllCommentListFromModel(commentRequestBuilder).subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
+        getAllCommentListFromModel(commentRequestBuilder)
+                .compose(this.<CommentReactionResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
             @Override
             public void onComplete() {
                 // getMvpView().stopProgressBar();

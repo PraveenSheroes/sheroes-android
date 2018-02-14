@@ -142,6 +142,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
+
+        if (getPresenter() != null) {
+            getPresenter().onCreate();
+        }
+
     }
 
     public void setSource(String source) {
@@ -157,6 +162,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         super.onStart();
         if (null != mMoEHelper) {
             mMoEHelper.onStart(this);
+        }
+        if (getPresenter() != null) {
+            getPresenter().onStart();
         }
     }
 
@@ -236,6 +244,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
         }
 
+        if (getPresenter() != null) {
+            getPresenter().onDestroy();
+        }
+
     }
 
     @Override
@@ -252,6 +264,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         if (trackScreenTime()) {
             AnalyticsManager.timeScreenView(getScreenName());
         }
+        if (getPresenter() != null) {
+            getPresenter().onResume();
+        }
     }
 
     @Override
@@ -265,6 +280,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
+        if (getPresenter() != null) {
+            getPresenter().onPause();
+        }
         super.onPause();
     }
 
@@ -274,6 +292,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         if (mSheroesApplication != null) {
             mMoEHelper.onStop(this);
             mSheroesApplication.notifyIfAppInBackground();
+        }
+        if (getPresenter() != null) {
+            getPresenter().onStop();
         }
         clearReferences();
     }
@@ -984,4 +1005,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
         return sourceScreen;
     }
+
+    protected abstract SheroesPresenter getPresenter();
 }

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -89,6 +90,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mMoEHelper.onResume(this);
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
     }
 
     private void callDeepLinkingData() {

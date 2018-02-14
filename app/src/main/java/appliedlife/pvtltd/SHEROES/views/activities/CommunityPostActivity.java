@@ -84,6 +84,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
@@ -564,6 +565,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void onBackPressed() {
         onBackPress();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mCreatePostPresenter;
     }
 
     @Override
