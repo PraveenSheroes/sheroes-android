@@ -1012,6 +1012,9 @@ public class CommonUtil {
         } catch (URISyntaxException e) {
             return url;
         }
+        if(!CommonUtil.isNotEmpty(uri.getQuery())){
+            return url;
+        }
         if (uri.getQuery().contains("branch_match_id")) {
             try {
                 return new URI(uri.getScheme(),
