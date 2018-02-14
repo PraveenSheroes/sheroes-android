@@ -11,10 +11,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,6 +57,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     @Bind(R.id.rv_suggested_friend_list)
     EmptyRecyclerView recyclerView;
+    @Bind(R.id.progress_bar)
+    ProgressBar progressBar;
     private InviteFriendAdapter inviteFriendAdapter;
     @Inject
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
@@ -85,7 +90,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         recyclerView.setLayoutManager(linearLayoutManager);
         inviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
         recyclerView.setAdapter(inviteFriendAdapter);
-        getUserContacts(getContext());
+         getUserContacts(getContext());
     }
     private void getUserContacts(Context context) {
         {
@@ -96,42 +101,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             }
         }
     }
-  /*  private Observable<Void> getUserPhoneContactsAndSend() {
-
-        return Observable.create(new Observable.OnSubscribe<Void>() {
-
-            @Override
-            public void call(Subscriber<? super Void> subscriber) {
-                UserPhoneContactsListRequest userPhoneContactsListRequest = new UserPhoneContactsListRequest();
-                List<UserContactDetail> userContactDetailsList = new ArrayList<>();
-                UserContactDetail userContactDetail = null;
-                Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                Cursor cursor = ((HomeActivity) getActivity()).getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone._ID}, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-                if (cursor != null && cursor.getCount() > 0) {
-                    try {
-                        cursor.moveToFirst();
-                        while (cursor.isAfterLast() == false) {
-                            String contactNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-                            userContactDetail = new UserContactDetail(contactName, contactNumber);
-                            if (userContactDetail != null) {
-                                userContactDetailsList.add(userContactDetail);
-                            }
-                            userContactDetail = null;
-                            cursor.moveToNext();
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, e.getMessage());
-                    } finally {
-                        cursor.close();
-                    }
-                }
-                userPhoneContactsListRequest.setContactDetailList(userContactDetailsList);
-                subscriber.onCompleted();
-            }
-        });
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -141,7 +110,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mInviteFriendViewPresenterImp.getContactsFromMobile(getContext());
                 }
-                return;
+                break;
             }
         }
     }
@@ -160,6 +129,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
+        progressBar.setVisibility(View.GONE);
         inviteFriendAdapter.setData(userContactDetailList);
         inviteFriendAdapter.notifyDataSetChanged();
     }
