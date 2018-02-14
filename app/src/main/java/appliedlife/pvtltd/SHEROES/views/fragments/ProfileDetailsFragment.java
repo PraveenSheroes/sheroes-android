@@ -363,16 +363,11 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-        if((getActivity()) == null || getActivity().isFinishing()) return;
-
         ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
     @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
-        if (getActivity() == null || getActivity().isFinishing()) {
-            return;
-        }
         LogUtils.info(TAG, "Community count:" + userCommunities.getStatus());
 
         List<CommunityFeedSolrObj> mutualCommunity = userCommunities.getMutualCommunities();

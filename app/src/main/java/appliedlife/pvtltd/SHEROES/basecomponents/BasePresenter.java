@@ -2,6 +2,10 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -10,7 +14,10 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.subjects.BehaviorSubject;
 
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MASTER_DATA;
@@ -26,15 +33,56 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MASTE
  */
 public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T> {
     private final String TAG = LogUtils.makeLogTag(BasePresenter.class);
-    //private CompositeSubscription subscriptions;
+    private CompositeDisposable compositeDisposables;
     private T mMvpView;
-    /*protected void registerSubscription(Subscription subscription) {
-        if (subscriptions == null) {
-            subscriptions = new CompositeSubscription();
-        }
-        subscriptions.add(subscription);
-    }*/
+    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
 
+
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
+        return RxLifecycleAndroid.<T>bindActivity(lifecycleSubject);
+    }
+
+    public final <T> LifecycleTransformer<T> bindUntilDestroy() {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, ActivityEvent.DESTROY);
+    }
+
+    public final <T> LifecycleTransformer<T> bindUntilStop() {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, ActivityEvent.STOP);
+    }
+
+    public final <T> LifecycleTransformer<T> bindUntilPause() {
+        return RxLifecycle.bindUntilEvent(lifecycleSubject, ActivityEvent.PAUSE);
+    }
+
+    @Override
+    public void onCreate() {
+        lifecycleSubject.onNext(ActivityEvent.CREATE);
+    }
+
+    @Override
+    public void onDestroy() {
+        lifecycleSubject.onNext(ActivityEvent.DESTROY);
+    }
+
+    @Override
+    public void onStart() {
+        lifecycleSubject.onNext(ActivityEvent.START);
+    }
+
+    @Override
+    public void onStop() {
+        lifecycleSubject.onNext(ActivityEvent.STOP);
+    }
+
+    @Override
+    public void onPause() {
+        lifecycleSubject.onNext(ActivityEvent.PAUSE);
+    }
+
+    @Override
+    public void onResume() {
+        lifecycleSubject.onNext(ActivityEvent.RESUME);
+    }
     @Override
     public void attachView(T mvpView) {
         mMvpView = mvpView;
@@ -42,9 +90,9 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
     @Override
     public void detachView() {
-/*        mMvpView = null;
-        if (subscriptions != null && !subscriptions.isUnsubscribed()) {
-            subscriptions.unsubscribe();
+       /* mMvpView = null;
+        if (compositeDisposables != null && !compositeDisposables.isDisposed()) {
+            compositeDisposables.dispose();
         }*/
     }
 
