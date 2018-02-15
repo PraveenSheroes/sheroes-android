@@ -19,5 +19,5 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:visibility="visible" />
-
+    <include layout="@layout/empty_list_view" />
 </FrameLayout>
