@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -37,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
@@ -69,6 +71,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     EmptyRecyclerView recyclerView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
+    @Bind(R.id.empty_view)
+    View emptyView;
     private InviteFriendAdapter inviteFriendAdapter;
     @Inject
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
@@ -110,13 +114,14 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         recyclerView.setLayoutManager(linearLayoutManager);
         inviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
         recyclerView.setAdapter(inviteFriendAdapter);
+        recyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
         getUserContacts(getContext());
 
         if (null != mUserPreference && mUserPreference.isSet()) {
             BranchUniversalObject mSmsBranchUniversalObject = new BranchUniversalObject()
                     .setCanonicalIdentifier("invite/sms")
-                    .setTitle(getString(R.string.invite_friend))
-                    .setContentDescription(getString(R.string.invite_friend))
+                    .setTitle(getString(R.string.invite_friend_url_title))
+                    .setContentDescription(getString(R.string.invite_friend_url_description))
                     .addContentMetadata("userId", String.valueOf(mUserPreference.get().getUserSummary().getUserId()));
 
             LinkProperties mSmsLinkProperties = new LinkProperties()
@@ -132,6 +137,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 }
             });
         }
+        setProgressBar(progressBar);
     }
 
     private void getUserContacts(Context context) {
@@ -174,9 +180,13 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
                     if (isWhatsappInstalled) {
                         Intent sendIntent = new Intent("android.intent.action.MAIN");
-                        sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
+                        //when user want only conversation
+                       // sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.setPackage(AppConstants.WHATS_APP);
+                        sendIntent.setType("text/plain");
                         sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(whatsAppNumber) + "@s.whatsapp.net");//phone number without "+" prefix
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + mSmsShareLink);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friend_request_to_join) + mSmsShareLink);
                         startActivity(sendIntent);
                         // moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", MoEngageConstants.COMMUNITY, feedDetail.getEntityOrParticipantId(), feedDetail.getNameOrTitle(), MoEngageConstants.COMMUNITY_CATEGORY, getCardTag(feedDetail), feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
                         // AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
@@ -206,8 +216,18 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
+        if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
+            emptyView.setVisibility(View.GONE);
+            inviteFriendAdapter.setData(userContactDetailList);
+            inviteFriendAdapter.notifyDataSetChanged();
+        }else
+        {
+            emptyView.setVisibility(View.VISIBLE);
+        }
         progressBar.setVisibility(View.GONE);
-        inviteFriendAdapter.setData(userContactDetailList);
-        inviteFriendAdapter.notifyDataSetChanged();
+    }
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mInviteFriendViewPresenterImp;
     }
 }

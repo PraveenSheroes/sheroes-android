@@ -26,6 +26,7 @@ import java.util.HashMap;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -215,5 +216,8 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
     //endregion
-
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
 }

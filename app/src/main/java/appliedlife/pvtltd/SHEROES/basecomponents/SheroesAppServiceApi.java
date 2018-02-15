@@ -145,6 +145,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/reaction/unlike")
     Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
+    @POST("participation/reaction/get_comments")
+    Observable<CommentReactionResponsePojo> getFriendsFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
 
     @POST("participation/reaction/get_comments")
     Observable<CommentReactionResponsePojo> getCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);

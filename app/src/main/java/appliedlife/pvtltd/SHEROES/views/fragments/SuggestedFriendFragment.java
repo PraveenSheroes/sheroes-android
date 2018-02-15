@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -36,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
@@ -63,6 +65,8 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     @Bind(R.id.rv_suggested_friend_list)
     EmptyRecyclerView recyclerView;
+    @Bind(R.id.empty_view)
+    View emptyView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private InviteFriendAdapter inviteFriendAdapter;
@@ -84,7 +88,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         ButterKnife.bind(this, view);
 
         Bundle bundle = getArguments();
-
+        initViews();
         return view;
     }
 
@@ -94,8 +98,11 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.suggested_list_blank), R.drawable.ic_suggested_blank, "");
         inviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
         recyclerView.setAdapter(inviteFriendAdapter);
+        setProgressBar(progressBar);
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     //endregion
@@ -117,7 +124,19 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
 
     @Override
-    public void showContacts(List<UserContactDetail> contactDetails) {
-
+    public void showContacts(List<UserContactDetail> userContactDetailList) {
+        if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
+            emptyView.setVisibility(View.GONE);
+            inviteFriendAdapter.setData(userContactDetailList);
+            inviteFriendAdapter.notifyDataSetChanged();
+        }else
+        {
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        progressBar.setVisibility(View.GONE);
+    }
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mInviteFriendViewPresenterImp;
     }
 }
