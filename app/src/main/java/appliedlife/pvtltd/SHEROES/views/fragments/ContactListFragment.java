@@ -1,23 +1,27 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,7 +32,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendAdapter;
@@ -36,6 +42,10 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.branch.indexing.BranchUniversalObject;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
+import io.branch.referral.util.LinkProperties;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_READ_CONTACTS;
 
@@ -43,7 +53,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_
  * Created by Praveen on 13/02/18.
  */
 
-public class ContactListFragment extends BaseFragment implements ContactDetailCallBack,IInviteFriendView{
+public class ContactListFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
     private static final String SCREEN_LABEL = "Contact List Screen";
     private final String TAG = LogUtils.makeLogTag(ContactListFragment.class);
 
@@ -55,7 +65,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     AppUtils mAppUtils;
     //endregion
 
-    @Bind(R.id.rv_suggested_friend_list)
+    @Bind(R.id.rv_contact_friend_list)
     EmptyRecyclerView recyclerView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
@@ -63,10 +73,17 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     @Inject
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
 
-    public static ContactListFragment createInstance( String name) {
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
+
+    //region Member variables
+    private String mSmsShareLink;
+    //endregion
+
+    public static ContactListFragment createInstance(String name) {
         ContactListFragment contactListFragment = new ContactListFragment();
         Bundle bundle = new Bundle();
-
         contactListFragment.setArguments(bundle);
         return contactListFragment;
     }
@@ -74,24 +91,49 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        View view = inflater.inflate(R.layout.suggested_friend_layout, container, false);
+        View view = inflater.inflate(R.layout.contact_list_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         mInviteFriendViewPresenterImp.attachView(this);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
         Bundle bundle = getArguments();
 
         initViews();
 
         return view;
     }
-    private void initViews()
-    {
+
+    private void initViews() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         inviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
         recyclerView.setAdapter(inviteFriendAdapter);
-         getUserContacts(getContext());
+        getUserContacts(getContext());
+
+        if (null != mUserPreference && mUserPreference.isSet()) {
+            BranchUniversalObject mSmsBranchUniversalObject = new BranchUniversalObject()
+                    .setCanonicalIdentifier("invite/sms")
+                    .setTitle(getString(R.string.invite_friend))
+                    .setContentDescription(getString(R.string.invite_friend))
+                    .addContentMetadata("userId", String.valueOf(mUserPreference.get().getUserSummary().getUserId()));
+
+            LinkProperties mSmsLinkProperties = new LinkProperties()
+                    .setChannel("sms")
+                    .setFeature("sharing");
+
+            mSmsBranchUniversalObject.generateShortUrl(getActivity(), mSmsLinkProperties, new Branch.BranchLinkCreateListener() {
+                @Override
+                public void onLinkCreate(String url, BranchError error) {
+                    if (error == null) {
+                        mSmsShareLink = url;
+                    }
+                }
+            });
+        }
     }
+
     private void getUserContacts(Context context) {
         {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -116,15 +158,50 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     }
 
 
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
 
     @Override
-    public void onContactClicked(UserContactDetail contactDetail) {
+    public void onContactClicked(UserContactDetail contactDetail, View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.btn_invite_friend:
+                if (contactDetail.getPhoneNumber().size() > 0) {
+                    String whatsAppNumber = contactDetail.getPhoneNumber().get(0);
+                    whatsAppNumber = whatsAppNumber.replace("+", "").replace(" ", "");
+                    boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
+                    if (isWhatsappInstalled) {
+                        Intent sendIntent = new Intent("android.intent.action.MAIN");
+                        sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
+                        sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(whatsAppNumber) + "@s.whatsapp.net");//phone number without "+" prefix
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + mSmsShareLink);
+                        startActivity(sendIntent);
+                        // moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", MoEngageConstants.COMMUNITY, feedDetail.getEntityOrParticipantId(), feedDetail.getNameOrTitle(), MoEngageConstants.COMMUNITY_CATEGORY, getCardTag(feedDetail), feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
+                        // AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
+                    } else {
+                        Uri uri = Uri.parse("market://details?id=com.whatsapp");
+                        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                        Toast.makeText(getContext(), getString(R.string.whats_app_not_installed), Toast.LENGTH_SHORT).show();
+                        startActivity(goToMarket);
+                    }
+                }
+                break;
+            default:
+        }
+    }
 
+    private boolean whatsAppInstalledOrNot(String uri) {
+        PackageManager pm = getContext().getPackageManager();
+        boolean app_installed = false;
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        return app_installed;
     }
 
     @Override

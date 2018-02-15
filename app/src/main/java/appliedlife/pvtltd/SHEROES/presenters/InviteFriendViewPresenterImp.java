@@ -77,7 +77,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                 final Set<UserContactDetail> userContactDetailHashSet = new TreeSet<>(new Comparator<UserContactDetail>() {
                     @Override
                     public int compare(UserContactDetail userContactObj1, UserContactDetail userContactObj2) {
-                        if(userContactObj2.getPhoneNumber().equalsIgnoreCase(userContactObj1.getPhoneNumber())){
+                        if(userContactObj2.getPhoneNumber().get(0).equalsIgnoreCase(userContactObj1.getPhoneNumber().get(0))){
                             return 0;
                         }
                         return userContactObj1.getName().compareTo(userContactObj2.getName());
@@ -94,7 +94,9 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                             String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                             userContactDetail = new UserContactDetail();
                             userContactDetail.setName(contactName);
-                            userContactDetail.setPhoneNumber(contactNumber);
+                            List<String> phone=new ArrayList<>();
+                            phone.add(contactNumber);
+                            userContactDetail.setPhoneNumber(phone);
                             userContactDetailHashSet.add(userContactDetail);
                             cursor.moveToNext();
                         }
@@ -107,4 +109,5 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
             }
         });
     }
+    
 }

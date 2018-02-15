@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 /**
@@ -12,19 +14,17 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  */
 @Parcel(analyze = {UserContactDetail.class,BaseResponse.class})
 public class UserContactDetail extends BaseResponse {
-    @SerializedName("id")
-    @Expose
-    private int id;
+    private int itemPosition;
     @SerializedName("contact_name")
     @Expose
     private String name;
 
-    @SerializedName("contact_email_id")
+    @SerializedName("emails_list")
     @Expose
-    private String emailId;
-    @SerializedName("contact_phone_number")
+    private List<String> emailId;
+    @SerializedName("mobile_numbers_list")
     @Expose
-    private String phoneNumber;
+    private List<String> phoneNumber;
 
     public String getName() {
         return name;
@@ -34,37 +34,27 @@ public class UserContactDetail extends BaseResponse {
         this.name = name;
     }
 
-    public String getEmailId() {
+    public List<String> getEmailId() {
         return emailId;
     }
 
-    public void setEmailId(String emailId) {
+    public void setEmailId(List<String> emailId) {
         this.emailId = emailId;
     }
 
-
-    public String getPhoneNumber() {
+    public List<String> getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(List<String> phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId() {
-        return id;
+    public int getItemPosition() {
+        return itemPosition;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean equals(Object obj){
-        if (obj instanceof UserContactDetail) {
-            UserContactDetail userContactDetail = (UserContactDetail) obj;
-            return (userContactDetail.getPhoneNumber().equals(this.getPhoneNumber()));
-        } else {
-            return false;
-        }
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
     }
 }

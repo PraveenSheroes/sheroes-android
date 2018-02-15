@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
+import android.view.View;
+
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 
 /**
@@ -7,5 +9,5 @@ import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetai
  */
 
 public interface ContactDetailCallBack {
-    void onContactClicked(UserContactDetail contactDetail);
+    void onContactClicked(UserContactDetail contactDetail,View view);
 }

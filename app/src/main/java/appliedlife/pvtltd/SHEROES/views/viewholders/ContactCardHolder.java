@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -24,6 +25,8 @@ import butterknife.OnClick;
 public class ContactCardHolder extends BaseViewHolder<UserContactDetail> {
     @Bind(R.id.tv_contact_name)
     TextView tvContactName;
+    @Bind(R.id.btn_invite_friend)
+    Button btnInviteFriend;
     private ContactDetailCallBack mPostDetailCallback;
     private UserContactDetail contactDetail;
     public ContactCardHolder(View itemView, ContactDetailCallBack postDetailCallBack) {
@@ -37,6 +40,7 @@ public class ContactCardHolder extends BaseViewHolder<UserContactDetail> {
     @Override
     public void bindData(UserContactDetail contactDetail, Context context, int position) {
         this.contactDetail=contactDetail;
+        contactDetail.setItemPosition(position);
         if(StringUtil.isNotNullOrEmptyString(contactDetail.getName()))
         {
             String str=contactDetail.getName();
@@ -45,7 +49,7 @@ public class ContactCardHolder extends BaseViewHolder<UserContactDetail> {
     }
     @OnClick( R.id.btn_invite_friend)
     public void inviteFriendClicked() {
-        mPostDetailCallback.onContactClicked(contactDetail);
+        mPostDetailCallback.onContactClicked(contactDetail,btnInviteFriend);
     }
 
     @Override
