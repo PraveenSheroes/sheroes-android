@@ -242,7 +242,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-                if (null != feedResponsePojo) {
+                if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
                     mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
                     mBaseResponseList.add(mUserPostObj);
                     getMvpView().addData(0, mUserPostObj);

@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.ResponseStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
@@ -111,6 +112,11 @@ public class EmailVerificationFragment extends BaseFragment implements LoginView
                 Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_FAILURE_TEXT), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mLoginPresenter;
     }
 
     @OnClick(R.id.iv_login_back)

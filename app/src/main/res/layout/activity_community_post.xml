@@ -52,7 +52,7 @@
             android:layout_below="@id/image_list_view"
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:layout_height="wrap_content">
             <CheckBox
                 android:id="@+id/anonymous_select"
                 android:layout_width="match_parent"

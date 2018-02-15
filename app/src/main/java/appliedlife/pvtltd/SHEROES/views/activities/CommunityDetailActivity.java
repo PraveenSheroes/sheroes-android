@@ -59,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -268,6 +269,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         finish();
     }
 
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mCommunityDetailPresenter;
+    }
+
     private void initializeLayout() {
         setAllColor();
         setupToolbarItemsColor();
@@ -461,7 +467,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 onBackPressed();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void onLeaveClicked() {
@@ -831,7 +837,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     public String getCommunityId() {
-        if (mCommunityFeedSolrObj != null) {
+        if (mCommunityFeedSolrObj == null) {
             return "";
         } else {
             return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());

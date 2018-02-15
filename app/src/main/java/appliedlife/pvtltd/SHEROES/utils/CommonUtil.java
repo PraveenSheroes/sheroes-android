@@ -1004,4 +1004,29 @@ public class CommonUtil {
 
         }
     }
+
+    public static String trimBranchIdQuery(String url){
+        URI uri = null;
+        try {
+            uri = new URI(url);
+        } catch (URISyntaxException e) {
+            return url;
+        }
+        if(!CommonUtil.isNotEmpty(uri.getQuery())){
+            return url;
+        }
+        if (uri.getQuery().contains("branch_match_id")) {
+            try {
+                return new URI(uri.getScheme(),
+                        uri.getAuthority(),
+                        uri.getPath(),
+                        null, // Ignore the query part of the input url
+                        uri.getFragment()).toString();
+            } catch (URISyntaxException e) {
+                return url;
+            }
+        } else {
+            return url;
+        }
+    }
 }

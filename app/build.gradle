@@ -1,5 +1,5 @@
-def versionMajor = 5
-def versionMinor = 10
+def versionMajor = 6
+def versionMinor = 1
 def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
@@ -145,6 +145,8 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
     compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
+    compile('com.trello.rxlifecycle2:rxlifecycle:2.0.1')
+    compile('com.trello.rxlifecycle2:rxlifecycle-android:2.0.1')
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'

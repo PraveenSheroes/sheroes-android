@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.List;
@@ -284,44 +285,48 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void showToolTip(Context context) {
-        if (isToolTipForUser) {
-            if (!mUserPostObj.isAnonymous() && !mUserPostObj.isAuthorMentor()) {
-                isToolTipForUser = false;
-                inflater = LayoutInflater.from(context);
-                view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
-                FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
-                LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
-                imageParams.gravity = Gravity.START;
-                imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
-                final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
-                RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-                ivArrow.setLayoutParams(arrowParams);
-                TextView text = (TextView) view.findViewById(R.id.title);
-                text.setText(R.string.tool_tip_user_profile);
-                TextView gotIt = (TextView) view.findViewById(R.id.got_it);
-                gotIt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (view != null) {
-                            rootLayout.removeView(view);
-                            view = null;
+        try {
+            if (isToolTipForUser) {
+                if (!mUserPostObj.isAnonymous() && !mUserPostObj.isAuthorMentor()) {
+                    isToolTipForUser = false;
+                    inflater = LayoutInflater.from(context);
+                    view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                    FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                    lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
+                    LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
+                    imageParams.gravity = Gravity.START;
+                    imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
+                    final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+                    RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    ivArrow.setLayoutParams(arrowParams);
+                    TextView text = (TextView) view.findViewById(R.id.title);
+                    text.setText(R.string.tool_tip_user_profile);
+                    TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+                    gotIt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (view != null) {
+                                rootLayout.removeView(view);
+                                view = null;
+                            }
                         }
+                    });
+                    rootLayout.addView(view, lps);
+                } else {
+                    if (view != null) {
+                        rootLayout.removeView(view);
+                        view = null;
                     }
-                });
-                rootLayout.addView(view, lps);
+                }
             } else {
-                if(view!=null) {
+                if (view != null) {
                     rootLayout.removeView(view);
                     view = null;
                 }
             }
-        } else {
-            if(view!=null) {
-                rootLayout.removeView(view);
-                view = null;
-            }
+        } catch (IllegalArgumentException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
     }
 
