@@ -100,6 +100,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
                 }
                     final HashMap<String, Object> properties =
                             new EventProperty.Builder()
+                                    .id(Long.toString(communityPostCreateResponse.getId()))
                                     .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
                                     .type(MoEngageConstants.CHALLENGE_POST)
                                     .build();

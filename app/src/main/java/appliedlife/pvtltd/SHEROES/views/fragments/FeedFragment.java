@@ -34,6 +34,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -248,6 +249,28 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        if(mCommunityTab!=null){
+            HashMap<String, Object> properties = new EventProperty.Builder()
+                    .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                    .sourceTabKey(mCommunityTab.key)
+                    .sourceTabTitle(mCommunityTab.title)
+                    .build();
+            return properties;
+        }else {
+            return null;
+        }
     }
 
     private void loadEmptyView() {
