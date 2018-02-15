@@ -200,6 +200,28 @@ public class MixpanelHelper {
         }
     }
 
+    public static HashMap<String, Object> getPostProperties(FeedDetail feedDetail, String screenName) {
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+            UserPostSolrObj userPostSolrObj = null;
+            if(feedDetail instanceof UserPostSolrObj){
+                userPostSolrObj = (UserPostSolrObj) feedDetail;
+            }
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(feedDetail.getEntityOrParticipantId()))
+                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
+                            .title(feedDetail.getNameOrTitle())
+                            .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .positionInList(feedDetail.getItemPosition())
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+            return properties;
+        }else {
+            return null;
+        }
+    }
+
     //TODO - Fix this with ujjwal
     public static void trackCommunityEvent(Event event, CommunityFeedSolrObj communityDetails, String screenName, String positionInCarousel, String positionOfCarousel) {
         if (StringUtil.isNotNullOrEmptyString(communityDetails.getSubType())) {

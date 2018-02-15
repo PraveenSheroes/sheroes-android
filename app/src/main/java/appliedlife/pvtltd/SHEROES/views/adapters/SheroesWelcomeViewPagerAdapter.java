@@ -66,13 +66,6 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                     textView.setText(spannableString, TextView.BufferType.SPANNABLE);
                     textView.setSelected(true);
                 }
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .title(context.getString(R.string.ID_FIRST_WELCOME))
-                                .description(text)
-                                .positionInSequence(String.valueOf(position))
-                                .build();
-                AnalyticsManager.trackScreenView(WelcomeActivity.SCREEN_LABEL, null, properties);
                 break;
             case AppConstants.ONE_CONSTANT:
                 ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_SECOND_WELCOME));
@@ -84,13 +77,6 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                     textView.setText(spannableSecond, TextView.BufferType.SPANNABLE);
                     textView.setSelected(true);
                 }
-                HashMap<String, Object> propertiesSecond =
-                        new EventProperty.Builder()
-                                .title(context.getString(R.string.ID_SECOND_WELCOME))
-                                .description(text)
-                                .positionInSequence(String.valueOf(position))
-                                .build();
-                AnalyticsManager.trackScreenView(WelcomeActivity.SCREEN_LABEL, null, propertiesSecond);
                 break;
             case AppConstants.TWO_CONSTANT:
                 ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_THIRD_WELCOME));
@@ -102,13 +88,6 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
                     textView.setText(spannableThird, TextView.BufferType.SPANNABLE);
                     textView.setSelected(true);
                 }
-                HashMap<String, Object> propertiesThird =
-                        new EventProperty.Builder()
-                                .title(context.getString(R.string.ID_THIRD_WELCOME))
-                                .description(text)
-                                .positionInSequence(String.valueOf(position))
-                                .build();
-                AnalyticsManager.trackScreenView(WelcomeActivity.SCREEN_LABEL, null, propertiesThird);
                 break;
         }
         container.addView(itemView);

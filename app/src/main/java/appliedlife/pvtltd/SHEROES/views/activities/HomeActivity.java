@@ -77,6 +77,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -732,8 +733,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else {
             appShareUrl = AppConstants.APP_SHARE_LINK;
         }
-        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true);
-        AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
+        HashMap<String, Object> properties = new EventProperty.Builder().url(appShareUrl).build();
+        AnalyticsManager.trackEvent(Event.APP_INVITE_CLICKED, getScreenName(), properties);
+        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, Event.APP_INVITE, properties);
     }
 
 
@@ -937,8 +939,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         new EventProperty.Builder()
                                 .id(sourceId)
                                 .build();
-                trackEvent(Event.CHALLENGE_SHARED, properties);
-                ShareBottomSheetFragment.showDialog(this, shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
+                trackEvent(Event.CHALLENGE_SHARED_CLICKED, properties);
+                ShareBottomSheetFragment.showDialog(this, shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
                 break;
             case R.id.tv_event_detail_interested_btn:
                 if (null != eventDetailDialogFragment) {

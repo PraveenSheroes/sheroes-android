@@ -981,6 +981,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .isMentor(isMentor)
                         .sourceScreenId(SCREEN_LABEL)
                         .isOwnProfile(isOwnProfile)
+                        .sharedTo(AppConstants.SHARE_CHOOSER)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);

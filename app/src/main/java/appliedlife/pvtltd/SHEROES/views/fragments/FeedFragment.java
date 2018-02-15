@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -93,7 +94,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  */
 
 public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
-    public static String SCREEN_LABEL = "Community Screen Activity";
+    public static String SCREEN_LABEL = "Generic Feed Fragment";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
 
@@ -251,13 +252,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mAdapter.notifyDataSetChanged();
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
         }
-    }
+    }*/
 
     @Override
     protected Map<String, Object> getExtraProperties() {
@@ -412,9 +413,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .build();
             trackEvent(Event.JOBS_SHARED, properties);
         } else {
-            AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
+            if(!isWhatsappShare){
+                HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+                properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+                AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
+            }else {
+                HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+                properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+                AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
+            }
         }
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
     }
 
     private void shareCardDetail(UserPostSolrObj userPostObj) {
@@ -428,7 +436,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, userPostObj, getScreenName());
+
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
+        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
     @Override
@@ -733,7 +744,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .id(sourceId)
                         .build();
         AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, getScreenName(), properties);
-        ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), getScreenName(), true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
+        ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), getScreenName(), true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

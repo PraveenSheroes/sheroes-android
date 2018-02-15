@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
@@ -655,6 +656,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                             .title(mFeedDetail.getNameOrTitle())
                             .companyId(Long.toString(((JobFeedSolrObj) mFeedDetail).getCompanyMasterId()))
+                            .sharedTo(AppConstants.WHATSAPP_ICON)
                             .location(mFeedDetail.getAuthorCityName())
                             .build();
             trackEvent(Event.JOBS_SHARED, properties);
@@ -728,7 +730,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
     private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {

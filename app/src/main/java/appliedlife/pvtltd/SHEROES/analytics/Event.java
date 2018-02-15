@@ -21,6 +21,7 @@ public enum Event {
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
     POST_SHARED(AnalyticsEventType.POST, "Shared"),
+    POST_SHARED_CLICKED(AnalyticsEventType.POST, "Shared Clicked"),
     PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
     POST_BOOKMARKED(AnalyticsEventType.POST, "Bookmarked"),
     POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
@@ -60,6 +61,7 @@ public enum Event {
     //region Challenge related events
     CHALLENGE_ACCEPTED(AnalyticsEventType.CHALLENGE, "Accepted"),
     CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared"),
+    CHALLENGE_SHARED_CLICKED(AnalyticsEventType.CHALLENGE, "Shared Clicked"),
     CHALLENGE_COMPLETED(AnalyticsEventType.CHALLENGE, "Completed"),
     CHALLENGE_SUBMIT_CLICKED(AnalyticsEventType.CHALLENGE, "Submit Clicked"),
     SEND_ADDRESS_CLICKED(AnalyticsEventType.CHALLENGE, "Send Address Clicked"),
@@ -73,8 +75,10 @@ public enum Event {
     COMMUNITY_REMOVE_OWNER(AnalyticsEventType.COMMUNITY, "Removed Owner"),
     COMMUNITY_ADDED_MEMBER(AnalyticsEventType.COMMUNITY, "Added Member"),
     COMMUNITY_REMOVED_MEMBER(AnalyticsEventType.COMMUNITY, "Removed Member"),
-    COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
-    APP_INVITE(AnalyticsEventType.APP, " Invite Clicked"),
+    COMMUNITY_INVITE_CLICKED(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
+    COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite"),
+    APP_INVITE_CLICKED(AnalyticsEventType.APP, " Invite Clicked"),
+    APP_INVITE(AnalyticsEventType.APP, " Invite"),
     //endregion
 
     //region Organization related event
