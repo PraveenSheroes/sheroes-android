@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -168,6 +169,11 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 default:
             }
         }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHomePresenter;
     }
 
     private void openMentorProfileDetail(BaseResponse baseResponse) { //form mentor card in feed only for mentor

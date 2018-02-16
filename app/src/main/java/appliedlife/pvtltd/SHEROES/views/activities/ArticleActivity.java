@@ -67,6 +67,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -444,6 +445,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mArticlePresenter;
     }
 
     private void setResult() {

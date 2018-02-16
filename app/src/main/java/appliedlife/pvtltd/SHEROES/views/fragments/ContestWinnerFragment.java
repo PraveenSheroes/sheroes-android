@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
@@ -158,6 +159,11 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
             mProgressBar.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mContestWinnerPresenter;
     }
     //endregion
 

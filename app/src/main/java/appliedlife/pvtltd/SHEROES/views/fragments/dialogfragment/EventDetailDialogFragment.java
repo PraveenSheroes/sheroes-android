@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -80,6 +81,7 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     private boolean isOperationPerformed;
     private FeedDetail feedDetailCard;
     private boolean isFromCommunityScreen;
+    private EventSolrObj mEventSolrObj;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -161,8 +163,8 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
             eventDetailPojo = new EventDetailPojo();
             eventDetailPojo.setId(AppConstants.ONE_CONSTANT);
             FeedDetail feedDetail = feedDetailList.get(0);
-            mUserPostObj = (UserPostSolrObj)feedDetail;
-            feedDetail.setItemPosition(mUserPostObj.getItemPosition());
+            mEventSolrObj = (EventSolrObj) feedDetail;
+            feedDetail.setItemPosition(mEventSolrObj.getItemPosition());
             setImageBackground(feedDetail);
             eventDetailPojo.setFeedDetail(feedDetail);
             eventList.add(eventDetailPojo);
@@ -172,17 +174,17 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     }
 
     public void eventInterestedListData(FeedDetail feedDetail) {
-        mUserPostObj.setReactionValue(feedDetail.getReactionValue());
-        if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mUserPostObj.getEntityOrParticipantId()));
+        mEventSolrObj.setReactionValue(feedDetail.getReactionValue());
+        if (mEventSolrObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mEventSolrObj.getEntityOrParticipantId()));
         } else {
-            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mUserPostObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
+            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mEventSolrObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
         }
     }
 
     public void eventGoingListData(FeedDetail feedDetail) {
-        mUserPostObj.setBookmarked(feedDetail.isBookmarked());
-        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(mUserPostObj.getEntityOrParticipantId()), mUserPostObj.isBookmarked());
+        mEventSolrObj.setBookmarked(feedDetail.isBookmarked());
+        mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(mEventSolrObj.getEntityOrParticipantId()), mUserPostObj.isBookmarked());
     }
 
 
@@ -201,24 +203,24 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     }
 
     protected void going(BaseResponse baseResponse) {
-        if (null != mUserPostObj) {
+        if (null != mEventSolrObj) {
             if (baseResponse instanceof BookmarkResponsePojo) {
                 switch (baseResponse.getStatus()) {
                     case AppConstants.SUCCESS:
                         isOperationPerformed = true;
-                        feedDetailCard.setBookmarked(mUserPostObj.isBookmarked());
-                        eventDetailPojo.setFeedDetail(mUserPostObj);
+                        feedDetailCard.setBookmarked(mEventSolrObj.isBookmarked());
+                        eventDetailPojo.setFeedDetail(mEventSolrObj);
                         eventList.clear();
                         eventList.add(eventDetailPojo);
                         mAdapter.notifyDataSetChanged();
                         break;
                     case AppConstants.FAILED:
-                        if (!mUserPostObj.isBookmarked()) {
-                            mUserPostObj.setBookmarked(true);
-                            eventDetailPojo.setFeedDetail(mUserPostObj);
+                        if (!mEventSolrObj.isBookmarked()) {
+                            mEventSolrObj.setBookmarked(true);
+                            eventDetailPojo.setFeedDetail(mEventSolrObj);
                         } else {
-                            mUserPostObj.setBookmarked(false);
-                            eventDetailPojo.setFeedDetail(mUserPostObj);
+                            mEventSolrObj.setBookmarked(false);
+                            eventDetailPojo.setFeedDetail(mEventSolrObj);
                         }
                         eventList.clear();
                         eventList.add(eventDetailPojo);
@@ -235,21 +237,21 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
     protected void interested(BaseResponse baseResponse) {
         if (StringUtil.isNotNullOrEmptyString(baseResponse.getStatus()) && baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && null != mUserPostObj) {
             isOperationPerformed = true;
-            feedDetailCard.setReactionValue(mUserPostObj.getReactionValue());
-            eventDetailPojo.setFeedDetail(mUserPostObj);
+            feedDetailCard.setReactionValue(mEventSolrObj.getReactionValue());
+            eventDetailPojo.setFeedDetail(mEventSolrObj);
             eventList.clear();
             eventList.add(eventDetailPojo);
             mAdapter.notifyDataSetChanged();
 
         } else {
-            if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-                mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            if (mEventSolrObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mEventSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mEventSolrObj.setNoOfLikes(mEventSolrObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
             } else {
-                mUserPostObj.setReactionValue(AppConstants.EVENT_CONSTANT);
-                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mEventSolrObj.setReactionValue(AppConstants.EVENT_CONSTANT);
+                mEventSolrObj.setNoOfLikes(mEventSolrObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
             }
-            eventDetailPojo.setFeedDetail(mUserPostObj);
+            eventDetailPojo.setFeedDetail(mEventSolrObj);
             eventList.clear();
             eventList.add(eventDetailPojo);
             mAdapter.notifyDataSetChanged();

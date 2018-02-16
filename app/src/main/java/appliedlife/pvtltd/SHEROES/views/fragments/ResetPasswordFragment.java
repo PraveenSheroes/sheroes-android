@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.ResponseStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
@@ -116,6 +117,11 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
                 tvPwdStatus.setText(getString(R.string.ID_RESET_PASSWORD_FAILURE_TEXT));
             }
         }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mLogInPresenter;
     }
 
     @OnClick(R.id.iv_login_back)

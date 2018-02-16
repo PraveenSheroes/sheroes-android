@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -522,6 +523,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public boolean shouldTrackScreen() {
         return false;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mFeedPresenter;
     }
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {

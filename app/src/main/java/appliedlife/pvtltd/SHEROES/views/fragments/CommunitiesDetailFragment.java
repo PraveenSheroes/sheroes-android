@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -188,6 +189,7 @@ public class CommunitiesDetailFragment extends BaseFragment {
                     try {
 
                         if(getActivity() instanceof ProfileActivity) {
+                            if((getActivity()) == null || getActivity().isFinishing()) return;
                             ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
                         }
 
@@ -199,7 +201,16 @@ public class CommunitiesDetailFragment extends BaseFragment {
 
                 @Override
                 public void onShow() {
+                    try {
 
+                        if(getActivity() instanceof ProfileActivity) {
+                            if((getActivity()) == null || getActivity().isFinishing()) return;
+                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                        }
+
+                    } catch (ClassCastException ex) {
+                        LogUtils.error(TAG, ex.getMessage());
+                    }
                 }
 
                 @Override
@@ -502,5 +513,10 @@ public class CommunitiesDetailFragment extends BaseFragment {
             return properties;
         }
         return null;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHomePresenter;
     }
 }

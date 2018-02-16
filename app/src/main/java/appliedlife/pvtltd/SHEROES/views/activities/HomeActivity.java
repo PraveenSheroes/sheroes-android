@@ -95,6 +95,7 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
@@ -1421,6 +1422,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         resetHamburgerSelectedItems();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return activityDataPresenter;
     }
 
     @OnClick(R.id.fl_notification)

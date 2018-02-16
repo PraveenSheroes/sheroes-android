@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -183,6 +184,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
 
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mLoginPresenter;
     }
 
 
