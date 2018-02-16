@@ -77,7 +77,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
@@ -612,8 +612,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
-                ((CommunitiesDetailFragment) mFragment).bookMarkForCard(mFeedDetail);
+            if (mFragment instanceof UserPostFragment) {
+                ((UserPostFragment) mFragment).bookMarkForCard(mFeedDetail);
             } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
@@ -879,9 +879,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                     } else {
-                        if (mFragment instanceof CommunitiesDetailFragment) {
+                        if (mFragment instanceof UserPostFragment) {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
-                                ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                                ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
                             }
                         } else {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
