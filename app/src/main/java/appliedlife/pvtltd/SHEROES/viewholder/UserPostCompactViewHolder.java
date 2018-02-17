@@ -5,9 +5,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.media.Image;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -23,16 +25,22 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.f2prateek.rx.preferences2.Preference;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -54,12 +62,15 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Inject
     DateUtil mDateUtil;
 
+    @Inject
+    Preference<LoginResponse> userPreference;
+
     // region ButterKnife Bindings
     @Bind(R.id.user_post_compact_card)
     CardView mUserCompactCard;
 
-    @Bind(R.id.author_image)
-    CircleImageView mAuthorImage;
+    @Bind(R.id.post_author_image)
+    CircleImageView mPostAuthorImage;
 
     @Bind(R.id.author_verified_icon)
     ImageView mAuthorVerifiedIcon;
@@ -73,6 +84,15 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.post_description)
     TextView mPostDescription;
 
+    @Bind(R.id.image_container)
+    RelativeLayout mImageContainer;
+
+    @Bind(R.id.image_first)
+    ImageView mImageFirst;
+
+    @Bind(R.id.image_second)
+    ImageView mImageSecond;
+
     @Bind(R.id.link_detail_container)
     RelativeLayout mLinkContainer;
 
@@ -85,11 +105,63 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.link_description)
     TextView mLinkDescription;
 
-    @Bind(R.id.like_count)
-    TextView mLikeCount;
+    @Bind(R.id.link_sub_title)
+    TextView mLinkSubTitle;
 
-    @Bind(R.id.comments_count)
-    TextView mCommentsCount;
+    @Bind(R.id.post_like_count)
+    TextView mPostLikeCount;
+
+    @Bind(R.id.post_comments_count)
+    TextView mPostCommentsCount;
+
+    @Bind(R.id.comment_container)
+    RelativeLayout mCommentContainer;
+
+    @Bind(R.id.post_like_button)
+    TextView mPostLikeButton;
+
+    @Bind(R.id.post_comment_button)
+    TextView mPostCommentButton;
+
+    @Bind(R.id.post_share_button)
+    TextView mPostShareButton;
+
+    @Bind(R.id.last_comment_container)
+    RelativeLayout mLastCommentContainer;
+
+    @Bind(R.id.comment_author_image)
+    CircleImageView mCommentAuthorImage;
+
+    @Bind(R.id.comment_author_verified_icon)
+    ImageView mCommentAuthorVerifiedIcon;
+
+    @Bind(R.id.comment_author_name)
+    TextView mCommentAuthorName;
+
+    @Bind(R.id.comment_description)
+    TextView mCommentDescription;
+
+    @Bind(R.id.comment_relative_time)
+    TextView mCommentRelativeTime;
+
+    @Bind(R.id.comment_like)
+    TextView mCommentLike;
+
+    @Bind(R.id.join_conversation_container)
+    RelativeLayout mJoinConversationContainer;
+
+    @Bind(R.id.conversation_author_image_conversation)
+    CircleImageView mConversationAuthorImageConversation;
+
+    @Bind(R.id.conversation_author_verified_icon)
+    ImageView mConversationAuthorVerifiedIcon;
+
+    @Bind(R.id.join_conversation)
+    TextView mJoinConversation;
+
+    @BindDimen(R.dimen.dp_size_150)
+    int mAuthorPicSize;
+
 
     private BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
@@ -99,6 +171,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     public UserPostCompactViewHolder(View itemView, Context context, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         this.mContext = context;
         this.viewInterface = baseHolderInterface;
     }
@@ -109,13 +182,13 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         }
         mUserPostObj = userPostSolrObj;
         if (CommonUtil.isNotEmpty(userPostSolrObj.getAuthorImageUrl())) {
-            mAuthorImage.setCircularImage(true);
-            mAuthorImage.bindImage(userPostSolrObj.getAuthorImageUrl());
+            mPostAuthorImage.setCircularImage(true);
+            mPostAuthorImage.bindImage(userPostSolrObj.getAuthorImageUrl());
         }
 
 
         String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, userPostSolrObj.getNoOfLikes());
-        mLikeCount.setText(String.valueOf(userPostSolrObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
+        mPostLikeCount.setText(String.valueOf(userPostSolrObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
 
         String pluralComments;
         if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
@@ -123,7 +196,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         } else {
             pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfComments, userPostSolrObj.getNoOfComments());
         }
-        mCommentsCount.setText(String.valueOf(userPostSolrObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
+        mPostCommentsCount.setText(String.valueOf(userPostSolrObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
 
         final String listDescription = userPostSolrObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
@@ -137,7 +210,60 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         linkifyURLs(mPostDescription);
 
         allTextViewStringOperations(mContext);
-        setLinkData();
+
+        if (!CommonUtil.isEmpty(mUserPostObj.getImageUrls())) {
+            mLinkContainer.setVisibility(View.GONE);
+            mImageContainer.setVisibility(View.VISIBLE);
+            mCommentContainer.setVisibility(View.GONE);
+            mPostDescription.setMaxLines(1);
+            setImage();
+        } else if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
+            mLinkContainer.setVisibility(View.VISIBLE);
+            mImageContainer.setVisibility(View.GONE);
+            mCommentContainer.setVisibility(View.GONE);
+            mPostDescription.setMaxLines(1);
+            setLinkData();
+        } else {
+            mPostDescription.setMaxLines(2);
+            mLinkContainer.setVisibility(View.GONE);
+            mImageContainer.setVisibility(View.GONE);
+            mCommentContainer.setVisibility(View.VISIBLE);
+            userComments();
+
+        }
+
+    }
+
+    private void setImage() {
+        mPostDescription.setLines(1);
+        if (!CommonUtil.isEmpty(mUserPostObj.getImageUrls())) {
+            mImageContainer.setVisibility(View.VISIBLE);
+            if (mUserPostObj.getImageUrls().size() >= 2) {
+                mImageFirst.setVisibility(View.VISIBLE);
+                mImageSecond.setVisibility(View.VISIBLE);
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(mUserPostObj.getImageUrls().get(0))
+                        .into(mImageFirst);
+
+                mImageFirst.setVisibility(View.VISIBLE);
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(mUserPostObj.getImageUrls().get(0))
+                        .into(mImageSecond);
+            } else {
+                mImageSecond.setVisibility(View.GONE);
+                mImageFirst.setVisibility(View.VISIBLE);
+                String imageKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext), mAuthorPicSize);
+                Glide.with(mContext)
+                        .asBitmap()
+                        .load(imageKitUrl)
+                        .into(mImageFirst);
+            }
+        } else {
+            mImageContainer.setVisibility(View.GONE);
+            mCommentContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -145,8 +271,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
             String feedTitle = mUserPostObj.getAuthorName();
-            String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS()==null ? "" :mUserPostObj.getChallengeAcceptPostTextS();
-            String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" :mUserPostObj.getPostCommunityName();
+            String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS() == null ? "" : mUserPostObj.getChallengeAcceptPostTextS();
+            String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" : mUserPostObj.getPostCommunityName();
             if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                 if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                     if (mUserPostObj.isAuthorMentor()) {
@@ -219,7 +345,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View textView) {
 
                 if (!mUserPostObj.isAnonymous()) {
-                   // mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    // mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
 
@@ -244,7 +370,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-              //  mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+                //  mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
             }
 
             @Override
@@ -287,7 +413,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View textView) {
                 if (!mUserPostObj.isAnonymous()) {
-                   // mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    // mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
 
@@ -381,9 +507,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgTitleS())) {
             mLinkDescription.setText(mUserPostObj.getOgTitleS());
         }
-    /*    if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgDescriptionS())) {
-            tvLinkSubTitle.setText(mUserPostObj.getOgDescriptionS());
-        }*/
+        mPostDescription.setLines(1);
+        if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgDescriptionS())) {
+            mLinkSubTitle.setText(mUserPostObj.getOgDescriptionS());
+        }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgImageUrlS())) {
             Glide.with(mContext)
                     .asBitmap()
@@ -395,7 +522,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                             //fmImageThumb.setLayoutParams(params);
                             mLinkImage.setVisibility(View.VISIBLE);
                             mLinkImage.setImageBitmap(profileImage);
-                          //  pbLink.setVisibility(View.GONE);
+                            //  pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
                                 mPlayIcon.getBackground().setAlpha(75);
                                 mPlayIcon.setVisibility(View.VISIBLE);
@@ -410,8 +537,130 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    private void userComments() {
+        List<Comment> lastCommentList = mUserPostObj.getLastComments();
+        Comment lastComment;
+        mPostDescription.setLines(2);
+        if (StringUtil.isNotEmptyCollection(lastCommentList)) {
+            mLastCommentContainer.setVisibility(View.VISIBLE);
+            mJoinConversationContainer.setVisibility(View.GONE);
+            int mItemPosition = lastCommentList.size() - 1;
+            lastComment = lastCommentList.get(mItemPosition);
+            mCommentAuthorImage.setCircularImage(true);
+            invalidateCommentLike(lastComment);
+            if (lastComment.isAnonymous()) {
+                if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
+                    mCommentAuthorImage.bindImage(lastComment.getParticipantImageUrl());
+                    mCommentAuthorName.setText(lastComment.getParticipantName());
+                    mCommentDescription.setText(hashTagColorInString(lastComment.getComment()));
+                    mCommentAuthorVerifiedIcon.setVisibility(View.GONE);
+                    invalidateCommentLike(lastComment);
+                }
+            } else {
+                if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
+                    mCommentAuthorImage.bindImage(lastComment.getParticipantImageUrl());
+                    mCommentAuthorName.setText(lastComment.getParticipantName());
+                    mCommentDescription.setText(hashTagColorInString(lastComment.getComment()));
+                    if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                        if (lastComment.isVerifiedMentor()) {
+                            mCommentAuthorVerifiedIcon.setVisibility(View.VISIBLE);
+                        } else {
+                            mCommentAuthorVerifiedIcon.setVisibility(View.GONE);
+                        }
+                    } else {
+                        mCommentAuthorVerifiedIcon.setVisibility(View.GONE);
+                    }
+
+                }
+            }
+            linkifyURLs(mCommentDescription);
+            if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
+                long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
+                mCommentRelativeTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            } else {
+                mCommentRelativeTime.setText(mContext.getString(R.string.ID_JUST_NOW));
+            }
+            if (lastComment.isMyOwnParticipation()) {
+                mCommentRelativeTime.setVisibility(View.VISIBLE);
+            } else {
+                mCommentRelativeTime.setVisibility(View.GONE);
+            }
+        } else {
+            mLastCommentContainer.setVisibility(View.GONE);
+            mJoinConversationContainer.setVisibility(View.VISIBLE);
+            if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+                mConversationAuthorImageConversation.setCircularImage(true);
+                mConversationAuthorImageConversation.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
+            }
+        }
+
+    }
+
+
+    private void invalidateCommentLike(Comment lastComment) {
+            mCommentLike.setVisibility(View.VISIBLE);
+            mCommentLike.setText(Integer.toString(lastComment.likeCount));
+        if (lastComment.isLiked) {
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+        } else {
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+        }
+    }
+
     @OnClick(R.id.user_post_compact_card)
     public void onUserCardClicked() {
-        ((FeedItemCallback)viewInterface).onUserPostClicked(mUserPostObj);
+        ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
+    }
+
+    @OnClick(R.id.post_like_button)
+    public void userReactionClick() {
+        if (viewInterface instanceof FeedItemCallback) {
+            if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                ((FeedItemCallback) viewInterface).onUserPostUnLiked(mUserPostObj);
+            } else {
+                mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                ((FeedItemCallback) viewInterface).onUserPostLiked(mUserPostObj);
+            }
+            String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, mUserPostObj.getNoOfLikes());
+            mPostLikeCount.setText(String.valueOf(mUserPostObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
+        }
+    }
+
+    @OnClick(R.id.comment_like)
+    public void onCommentLikeClicked() {
+        List<Comment> lastCommentList = mUserPostObj.getLastComments();
+        Comment lastComment;
+        if (StringUtil.isNotEmptyCollection(lastCommentList)) {
+            int mItemPosition = lastCommentList.size() - 1;
+            lastComment = lastCommentList.get(mItemPosition);
+            lastComment.setItemPosition(mUserPostObj.getItemPosition());
+            if (lastComment.isLiked) {
+                lastComment.isLiked = false;
+                lastComment.likeCount--;
+            } else {
+                lastComment.isLiked = true;
+                lastComment.likeCount++;
+            }
+            invalidateCommentLike(lastComment);
+            if (viewInterface instanceof FeedItemCallback) {
+                if (lastComment.isLiked) {
+                    ((FeedItemCallback) viewInterface).userCommentLikeRequest(mUserPostObj, true, getAdapterPosition());
+                } else {
+                    ((FeedItemCallback) viewInterface).userCommentLikeRequest(mUserPostObj, false, getAdapterPosition());
+                }
+            } else {
+                if (!lastComment.isLiked) {
+                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+                } else {
+                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+                }
+            }
+
+        }
     }
 }
