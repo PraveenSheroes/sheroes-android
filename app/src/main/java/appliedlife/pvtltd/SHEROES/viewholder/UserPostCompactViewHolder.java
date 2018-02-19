@@ -232,7 +232,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         }
 
+        invalidatePostLike(userPostSolrObj);
+
     }
+
 
     private void setImage() {
         mPostDescription.setLines(1);
@@ -605,6 +608,16 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         } else {
             mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
         }
+    }
+
+
+    private void invalidatePostLike(UserPostSolrObj userPostSolrObj) {
+        if(mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT){
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+        }else {
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+        }
+
     }
 
     @OnClick(R.id.user_post_compact_card)
