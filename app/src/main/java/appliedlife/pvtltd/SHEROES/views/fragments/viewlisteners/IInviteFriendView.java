@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -20,4 +22,5 @@ public interface IInviteFriendView extends BaseMvpView {
     void addAllUserData(List<UserSolrObj> userSolrObjList);
     void addAllUserContactData(List<UserContactDetail> userContactDetailList);
     void contactsFromServerAfterSyncFromPhoneData(AllContactListResponse allContactListResponse);
+    void getFollowUnfollowResponse(UserSolrObj userSolrObj);
 }

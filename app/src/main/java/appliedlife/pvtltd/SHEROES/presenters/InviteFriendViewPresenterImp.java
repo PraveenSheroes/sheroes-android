@@ -19,12 +19,15 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
 import io.reactivex.Observable;
@@ -38,6 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 
 /**
  * Created by Praveen on 14/02/18.
@@ -134,6 +138,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
     }
 
     public void fetchSuggestedUserDetailFromServer(final int feedState) {
+        LogUtils.info("suggestd","######### Suggested detail");
         if (mIsSuggestedLoading) {
             return;
         }
@@ -223,6 +228,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
     }
 
     public void fetchUserDetailFromServer(final int feedState) {
+        LogUtils.info("userdetail","######### User detail");
         if (mIsContactLoading) {
             return;
         }
@@ -376,6 +382,106 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     @Override
                     public AllContactListResponse apply(AllContactListResponse allContactListResponse) {
                         return allContactListResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
+            return;
+        }
+        getMvpView().startProgressBar();
+        getFollowFromModel(publicProfileListRequest)
+                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                    }
+
+                    @Override
+                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        getMvpView().stopProgressBar();
+                        if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                        }else {
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                        }
+                        getMvpView().getFollowUnfollowResponse(userSolrObj);
+                    }
+                });
+
+    }
+    public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest,final UserSolrObj userSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
+            return;
+        }
+        getMvpView().startProgressBar();
+        getUnFollowFromModel(publicProfileListRequest)
+                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                    }
+
+                    @Override
+                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        getMvpView().stopProgressBar();
+                        if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                        }else  {
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                        }
+                        getMvpView().getFollowUnfollowResponse(userSolrObj);
+                    }
+                });
+
+    }
+
+
+    private Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
+        return mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    private Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
+        return mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

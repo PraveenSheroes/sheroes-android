@@ -612,7 +612,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-               // //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+               // //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
 
@@ -641,7 +641,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
+                //getMvpView().getFollowUnfollowResponse(communityResponse, JOIN_INVITE);
             }
         });
 
@@ -671,7 +671,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().notifyAllItemRemoved(userPostObj);
-                //getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
+                //getMvpView().getFollowUnfollowResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
             }
         });
 
@@ -700,7 +700,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo1) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
+                //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
             }
         });
 
@@ -816,7 +816,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+                //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
 

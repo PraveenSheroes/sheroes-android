@@ -22,8 +22,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
@@ -44,6 +46,7 @@ import butterknife.ButterKnife;
 public class SuggestedFriendFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
     private static final String SCREEN_LABEL = "Suggested Friend Screen";
     private final String TAG = LogUtils.makeLogTag(SuggestedFriendFragment.class);
+    private final String SUGGESTED_LIST_URL ="http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES";
 
     //region Static variables
     @Inject
@@ -87,7 +90,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     //region Private methods
     private void initViews() {
-        mInviteFriendViewPresenterImp.setEndpointUrl("http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES");
+        mInviteFriendViewPresenterImp.setEndpointUrl(SUGGESTED_LIST_URL);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
@@ -160,9 +163,22 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
     @Override
     public void onSuggestedContactClicked(UserSolrObj userSolrObj, View view) {
-
+        int id = view.getId();
+            switch (id) {
+                case R.id.btn_follow_friend:
+                    followUnFollowRequest(userSolrObj);
+                    break;
+            }
     }
-
+    public void followUnFollowRequest(UserSolrObj userSolrObj) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
+        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
+            mInviteFriendViewPresenterImp.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
+        } else {
+            mInviteFriendViewPresenterImp.getFollowFromPresenter(publicProfileListRequest,userSolrObj);
+        }
+    }
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
 
@@ -201,6 +217,11 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     @Override
     public void contactsFromServerAfterSyncFromPhoneData(AllContactListResponse allContactListResponse) {
 
+    }
+
+    @Override
+    public void getFollowUnfollowResponse(UserSolrObj userSolrObj) {
+        mInviteFriendSuggestedAdapter.notifyItemChanged(userSolrObj.getItemPosition(), userSolrObj);
     }
 
     @Override

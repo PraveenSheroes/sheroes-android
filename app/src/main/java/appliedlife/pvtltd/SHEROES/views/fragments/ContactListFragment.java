@@ -65,6 +65,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_
 public class ContactListFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
     private static final String SCREEN_LABEL = "Contact List Screen";
     private final String TAG = LogUtils.makeLogTag(ContactListFragment.class);
+    private final String CONTACT_LIST_URL = "http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=NON_SHEROES";
 
     //region Static variables
     @Inject
@@ -131,7 +132,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
             syncContact = true;
         }
-        mInviteFriendViewPresenterImp.setEndpointUrl("http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=NON_SHEROES");
+        mInviteFriendViewPresenterImp.setEndpointUrl(CONTACT_LIST_URL);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mFeedRecyclerView.setLayoutManager(linearLayoutManager);
@@ -345,6 +346,11 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         {
             ((InviteFriendActivity)getActivity()).dataRequestForFragment(allContactListResponse);
         }
+    }
+
+    @Override
+    public void getFollowUnfollowResponse(UserSolrObj userSolrObj) {
+
     }
 
     @Override

@@ -582,7 +582,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 }
                 getMvpView().stopProgressBar();
                 getMvpView().invalidateLikeUnlike(comment);
-               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+               // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
             }
         });
 
@@ -623,7 +623,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     comment.likeCount++;
                 }
                 getMvpView().invalidateLikeUnlike(comment);
-               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+               // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
             }
         });
 
