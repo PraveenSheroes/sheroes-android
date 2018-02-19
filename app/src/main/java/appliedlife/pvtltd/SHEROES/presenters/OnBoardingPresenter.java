@@ -132,7 +132,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        onBoardingModel.communityJoinFromModel(communityRequest).subscribe(new DisposableObserver<CommunityResponse>() {
+        onBoardingModel.communityJoinFromModel(communityRequest)
+                .compose(this.<CommunityResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommunityResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
