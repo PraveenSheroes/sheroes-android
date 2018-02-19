@@ -6,6 +6,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
@@ -87,4 +88,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onAskQuestionClicked();
 
     void onCommunityJoinOrLeave(CommunityFeedSolrObj communityFeedSolrObj);
+
+    void onSeeMoreClicked(CarouselDataObj carouselDataObj);
 }
