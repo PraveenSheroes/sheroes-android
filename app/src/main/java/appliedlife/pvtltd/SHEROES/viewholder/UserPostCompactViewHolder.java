@@ -663,4 +663,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         }
     }
+
+    @OnClick(R.id.post_share_button)
+    public void onPostShareClicked(){
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
+        }
+    }
 }

@@ -894,8 +894,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
-    public void updateItem(FeedDetail feedDetail) {
-        findPositionAndUpdateItem(feedDetail.getIdOfEntityOrParticipant());
+    public void updateItem(FeedDetail updatedFeedDetail) {
+        findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
         /*int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
         if (position == RecyclerView.NO_POSITION) {
             return;
@@ -950,7 +950,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return -1;
     }
 
-    public void findPositionAndUpdateItem(long id) { //TODO - move to presenter
+    public void findPositionAndUpdateItem(FeedDetail updatedFeedDetail, long id) { //TODO - move to presenter
         if (mAdapter == null) {
             return;
         }
@@ -963,13 +963,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         for (int i = 0; i < feedDetails.size(); ++i) {
             FeedDetail feedDetail = feedDetails.get(i);
             if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
-                mAdapter.setData(i, feedDetail);
+                mAdapter.setData(i, updatedFeedDetail);
             }
             if(feedDetail instanceof CarouselDataObj){
                 for (int j = 0; j < ((CarouselDataObj)feedDetail).getFeedDetails().size() ; j++){
                     FeedDetail innerFeedDetail = ((CarouselDataObj)feedDetail).getFeedDetails().get(j);
-                    ((CarouselDataObj)feedDetail).getFeedDetails().set(j, innerFeedDetail);
-                    mAdapter.setData(i, feedDetail);
+                    if(innerFeedDetail!=null && innerFeedDetail.getIdOfEntityOrParticipant() == id){
+                        ((CarouselDataObj)feedDetail).getFeedDetails().set(j, updatedFeedDetail);
+                        mAdapter.setData(i, feedDetail);
+                    }
                 }
             }
         }
