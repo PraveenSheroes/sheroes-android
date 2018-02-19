@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.viewholder.UserProfileCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCompactViewHolder;
@@ -52,9 +53,12 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_COMMUNITY:
                 View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_layout, parent, false);
                 return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
-            case TYPE_USER:
+            case TYPE_MENTOR:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_mentor_card, parent, false);
                 return new MentorCard(view, mBaseHolderInterface);
+            case TYPE_USER:
+                View viewUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_user_profile_compact_item, parent, false);
+                return new UserProfileCompactViewHolder(viewUser, mContext, mBaseHolderInterface);
             case TYPE_USER_POST:
                 View viewPost = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_user_post_compact_item, parent, false);
                 return new UserPostCompactViewHolder(viewPost,mContext, mBaseHolderInterface);
@@ -84,11 +88,18 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
                     break;
 
-                case TYPE_USER:
+                case TYPE_MENTOR:
                     MentorCard mentorCard = (MentorCard) holder;
                     UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
                     userSolrObj.setCompactView(true);
                     mentorCard.bindData(userSolrObj, mContext, position);
+                    break;
+
+                case TYPE_USER:
+                    UserProfileCompactViewHolder userProfileCompactViewHolder = (UserProfileCompactViewHolder) holder;
+                    UserSolrObj userProfileSolrObj = (UserSolrObj) mFeedDetails.get(position);
+                    userProfileSolrObj.setCompactView(true);
+                    userProfileCompactViewHolder.bindData(userProfileSolrObj, mContext);
                     break;
 
                 case TYPE_USER_POST:
@@ -107,6 +118,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static final int TYPE_COMMUNITY = 1;
     private static final int TYPE_USER = 2;
+    private static final int TYPE_MENTOR = 5;
     private static final int TYPE_SEE_MORE = 3;
     private static final int TYPE_USER_POST = 4;
 
@@ -118,7 +130,11 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return TYPE_COMMUNITY;
             }
             else if (feedDetail instanceof UserSolrObj) {
-                return TYPE_USER;
+                if(((UserSolrObj)feedDetail).getEntityOrParticipantTypeId() == 7){
+                    return TYPE_MENTOR;
+                }else {
+                    return TYPE_USER;
+                }
             }
             if (feedDetail instanceof UserPostSolrObj) {
                 return TYPE_USER_POST;

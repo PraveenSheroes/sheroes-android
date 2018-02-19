@@ -74,23 +74,24 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindData(UserSolrObj userSolrObj, Context context) {
+        mUserSolrObj = userSolrObj;
         if (CommonUtil.isNotEmpty(userSolrObj.getThumbnailImageUrl())) {
             mImage.setCircularImage(true);
             mImage.bindImage(userSolrObj.getThumbnailImageUrl());
         }
         String pluralPosts = context.getResources().getQuantityString(R.plurals.numberOfPosts, userSolrObj.getSolrIgnoreNoOfMentorPosts());
-        mPostCount.setText(userSolrObj.getSolrIgnoreNoOfMentorPosts());
+        /*mPostCount.setText(userSolrObj.getSolrIgnoreNoOfMentorPosts());
         mPostCountTitle.setText(pluralPosts);
 
-        String pluralAnswers = context.getResources().getQuantityString(R.plurals.numberOfAnswers, userSolrObj.getSolrIgnoreNoOfMentorAnswers());
+        String pluralAnswers = context.getResources().getQuantityString(R.plurals.numberOfComments, userSolrObj.getSolrIgnoreNoOfMentorAnswers());
         mCommentsCount.setText(userSolrObj.getSolrIgnoreNoOfMentorAnswers());
         mCommentsCountTitle.setText(pluralAnswers);
 
         String pluralFollowers = context.getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getSolrIgnoreNoOfMentorFollowers());
         mFollowerCount.setText(userSolrObj.getSolrIgnoreNoOfMentorFollowers());
-        mFollowerCountTitle.setText(pluralFollowers);
+        mFollowerCountTitle.setText(pluralFollowers);*/
 
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed() || userSolrObj.isSolrIgnoreIsUserFollowed()) {
+        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
             mFollowButton.setText(context.getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
