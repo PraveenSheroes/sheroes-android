@@ -2,9 +2,12 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.media.Image;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +42,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private BaseHolderInterface viewInterface;
     private CarouselDataObj carouselDataObj;
     private boolean isUpdateFromProfile;
+    private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
     //endregion
 
     //region public variable
@@ -58,6 +62,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
+
+    private int position;
     //endregion
 
     //region constructor
@@ -66,13 +72,24 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE) {
+                    scrollStatePositionsMap.put(position, recyclerView.getLayoutManager().onSaveInstanceState());
+                }
+            }
+        });
     }
     //endregion
 
     //region public method
     @Override
-    public void bindData(CarouselDataObj item, final Context context, int position) {
+    public void bindData(CarouselDataObj item, final Context context, final int position) {
         this.carouselDataObj = item;
+        this.position = position;
         if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             mTitle.setVisibility(View.VISIBLE);
             mTitle.setText(item.getTitle());
@@ -119,6 +136,16 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             }
             if (!isUpdateFromProfile) {
                 mAdapter.notifyDataSetChanged();
+            }
+            if (scrollStatePositionsMap.get(position) != null) {
+                mRecyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        mRecyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mRecyclerView.getLayoutManager().onRestoreInstanceState(scrollStatePositionsMap.get(position));
+                        return false;
+                    }
+                });
             }
         }
     }
