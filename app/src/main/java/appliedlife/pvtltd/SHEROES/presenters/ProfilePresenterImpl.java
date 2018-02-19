@@ -66,7 +66,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getFollowedMentor(profileFollowedMentor).subscribe(new DisposableObserver<UserFollowedMentorsResponse>() {
+        profileModel.getFollowedMentor(profileFollowedMentor)
+                .compose(this.<UserFollowedMentorsResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<UserFollowedMentorsResponse>() {
             @Override
             public void onComplete() {
 
@@ -99,7 +101,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getProfileTopSectionCount(profileTopCountRequest).subscribe(new DisposableObserver<ProfileTopSectionCountsResponse>() {
+        profileModel.getProfileTopSectionCount(profileTopCountRequest)
+                .compose(this.<ProfileTopSectionCountsResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ProfileTopSectionCountsResponse>() {
             @Override
             public void onComplete() {
 
@@ -132,7 +136,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getUserCommunity(profileUsersCommunityRequest).subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
+        profileModel.getUserCommunity(profileUsersCommunityRequest)
+                .compose(this.<ProfileCommunitiesResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
             @Override
             public void onComplete() {
 
@@ -166,7 +172,9 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest).subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
+        profileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest)
+                .compose(this.<ProfileCommunitiesResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
             @Override
             public void onComplete() {
 

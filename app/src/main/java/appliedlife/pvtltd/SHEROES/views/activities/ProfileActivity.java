@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -237,12 +238,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Inject
     HomePresenter mHomePresenter;
-
-    @Inject
-    ProfilePresenterImpl profilePresenter;
-
-    @Inject
-    EditProfilePresenterImpl editProfilePresenter;
 
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
@@ -832,6 +827,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         onBackClick();
     }
 
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHomePresenter;
+    }
+
 
     @Override
     public void onDestroy() {
@@ -926,28 +926,32 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private void showToolTip() {
         if (CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
-            LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
-            final View view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
-            RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            try {
+                LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
+                final View view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
-            lps.setMargins(40, 90, 0, 0);
-            final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
-            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
-            ivArrow.setLayoutParams(imageParams);
-            TextView title =  view.findViewById(R.id.title);
-            title.setText(R.string.tool_tip_user_share);
-            rootLayout.addView(view, lps);
-            TextView gotIt = view.findViewById(R.id.got_it);
-            gotIt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    rootLayout.removeView(view);
-                }
-            });
+                lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
+                lps.setMargins(40, 90, 0, 0);
+                final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+                RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);
+                imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                ivArrow.setLayoutParams(imageParams);
+                TextView title = view.findViewById(R.id.title);
+                title.setText(R.string.tool_tip_user_share);
+                rootLayout.addView(view, lps);
+                TextView gotIt = view.findViewById(R.id.got_it);
+                gotIt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rootLayout.removeView(view);
+                    }
+                });
+            } catch (IllegalArgumentException e) {
+                Crashlytics.getInstance().core.logException(e);
+            }
         }
     }
 
@@ -1119,6 +1123,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 .isOwnProfile(isOwnProfile)
                 .build();
         return properties;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -186,6 +188,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getPresenter() != null) {
+            getPresenter().onCreate();
+        }
 
     }
 
@@ -201,6 +206,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             }
         } catch (Fragment.InstantiationException exception) {
             LogUtils.error(TAG, AppConstants.EXCEPTION_MUST_IMPLEMENT + AppConstants.SPACE + TAG + AppConstants.SPACE + exception.getMessage());
+        }
+        if (getPresenter() != null) {
+            getPresenter().onAttach();
         }
     }
 
@@ -444,13 +452,23 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             mFeedDetail = (FeedDetail) baseResponse;
             this.mPosition = position;
             this.mPressedEmoji = reactionValue;
-            if (null != mFeedDetail && mFeedDetail.isLongPress()) {
-                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-            } else {
-                if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                    mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
-                } else {
-                    mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+            if(mFeedDetail instanceof UserPostSolrObj){
+                if(((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID){
+                    if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
+                    } else {
+                        mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+                    }
+                }else {
+                    if (null != mFeedDetail && mFeedDetail.isLongPress()) {
+                        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+                    } else {
+                        if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
+                            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
+                        } else {
+                            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
+                        }
+                    }
                 }
             }
         }
@@ -538,6 +556,18 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (trackScreenTime()) {
             AnalyticsManager.timeScreenView(getScreenName());
         }
+        if (getPresenter() != null) {
+            getPresenter().onResume();
+        }
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (getPresenter() != null) {
+            getPresenter().onDetach();
+        }
     }
 
     @Override
@@ -560,6 +590,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         super.onPause();
         if (shouldTrackScreen()) {
             AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+        if (getPresenter() != null) {
+            getPresenter().onResume();
         }
     }
 
@@ -638,4 +671,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
 
     }
+
+    protected abstract SheroesPresenter getPresenter();
 }

@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
@@ -86,7 +87,11 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                     mContest.hasMyPost = challengeSolrObj.isChallengeAccepted();
                     mContest.tag = challengeSolrObj.getChallengeAcceptPostText();
                     mContest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
-                    mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
+                    if (StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls())) {
+                        mContest.shortUrl = challengeSolrObj.getPostShortBranchUrls();
+                    } else {
+                        mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
+                    }
                     mContest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
                     mContest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
                     mContest.winnerAnnouncementDate = challengeSolrObj.getChallengeAnnouncementDate(); //Fix for winner announcement

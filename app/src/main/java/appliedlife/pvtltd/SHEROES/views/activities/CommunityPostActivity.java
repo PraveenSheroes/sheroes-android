@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -83,6 +84,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
@@ -150,6 +152,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.anonymous_select)
     CheckBox mAnonymousSelect;
+
+    @Bind(R.id.fb_share_container)
+    RelativeLayout fbShareContainer;
 
     @Bind(R.id.share_on_fb)
     SwitchCompat mShareToFacebook;
@@ -254,6 +259,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mIsChallengePost = mCommunityPost.isChallengeType;
         }
         if (mIsChallengePost) {
+            fbShareContainer.setVisibility(View.GONE);
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
             if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
@@ -267,6 +273,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mUserName.setLayoutParams(layoutParams);
         }
         if (mIsEditPost) {
+            fbShareContainer.setVisibility(View.GONE);
             mPostAsCommunitySelected = mCommunityPost.isPostByCommunity;
             mIsAnonymous = mCommunityPost.isAnonymous;
             mEtDefaultHintText.setText(mCommunityPost.body);
@@ -283,6 +290,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             if (mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
                 mEtDefaultHintText.requestFocus();
+                if(!mIsChallengePost) {
+                    fbShareContainer.setVisibility(View.VISIBLE);
+                }
                 if (!mIsFromCommunity && !mIsChallengePost) {
                     PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
                 }
@@ -326,7 +336,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        try {
                         toolTipForAnonymous(CommunityPostActivity.this);
+                        } catch (WindowManager.BadTokenException e) {
+                            Crashlytics.getInstance().core.logException(e);
+                        }
                     }
                 }, 1500);
             }
@@ -342,6 +356,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mTitleToolbar.setText(R.string.title_create_post);
                     break;
                 case AppConstants.MENTOR_CREATE_QUESTION:
+                    fbShareContainer.setVisibility(View.GONE);
                     mTitleToolbar.setText(R.string.title_ask_question);
                     break;
                     default:
@@ -553,6 +568,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
+    protected SheroesPresenter getPresenter() {
+        return mCreatePostPresenter;
+    }
+
+    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         switch (errorMsg) {
             case AppConstants.CHECK_NETWORK_CONNECTION:
@@ -658,27 +678,31 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
     }
     private void toolTipForAnonymous(Context context) {
-        LayoutInflater inflater = null;
-        inflater = LayoutInflater.from(context);
-        final View view  = inflater.inflate(R.layout.tool_tip_arrow_down_side, null);
-        FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        lps.setMargins(CommonUtil.convertDpToPixel(10, context), 0, CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(130, context));
-        final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
-        RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-        arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-        arrowParams.addRule(RelativeLayout.BELOW,R.id.ll_tool_tip_bg);
-        ivArrow.setLayoutParams(arrowParams);
-        TextView text =  view.findViewById(R.id.title);
-        text.setText(R.string.tool_tip_create_post);
-        TextView gotIt =  view.findViewById(R.id.got_it);
-        gotIt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAnonymousView.removeView(view);
-            }
-        });
-        mAnonymousView.addView(view, lps);
+        try {
+            LayoutInflater inflater = null;
+            inflater = LayoutInflater.from(context);
+            final View view = inflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            lps.setMargins(CommonUtil.convertDpToPixel(10, context), 0, CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(160, context));
+            final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+            RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            arrowParams.addRule(RelativeLayout.BELOW, R.id.ll_tool_tip_bg);
+            ivArrow.setLayoutParams(arrowParams);
+            TextView text = view.findViewById(R.id.title);
+            text.setText(R.string.tool_tip_create_post);
+            TextView gotIt = view.findViewById(R.id.got_it);
+            gotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAnonymousView.removeView(view);
+                }
+            });
+            mAnonymousView.addView(view, lps);
+        } catch (IllegalArgumentException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 
     private void setupCommunityNameListener() {

@@ -59,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -271,6 +272,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setResult();
         super.onBackPressed();
 
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mPostDetailPresenter;
     }
 
     @Override

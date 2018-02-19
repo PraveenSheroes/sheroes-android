@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -221,12 +222,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbarView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Challenge");
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        if (mContest != null) {
-            toolbarTitle.setText("Challenge");
-        }
     }
 
     @Override
@@ -395,6 +393,12 @@ public class ContestActivity extends BaseActivity implements IContestView {
         }
 
     }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mContestPresenter;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

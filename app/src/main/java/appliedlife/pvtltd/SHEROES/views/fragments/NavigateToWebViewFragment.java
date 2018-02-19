@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -191,6 +192,11 @@ public class NavigateToWebViewFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         DrawerViewHolder.selectedOptionName = currentSelectedItemName;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
     }
 
     @Override
