@@ -1014,7 +1014,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        //intent.putExtra(Intent.EXTRA_TEXT, branchPostDeepLink);
         intent.putExtra(Intent.EXTRA_TEXT, Config.PROFILE_SHARE + "\n\nLink : " + branchPostDeepLink);
 
         Bitmap bitmap = createShareImage();
@@ -1044,53 +1043,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             TextView followersCountNo = ButterKnife.findById(view, R.id.followers_count);
             TextView answerCountNo = ButterKnife.findById(view, R.id.answers_count);
             TextView followingCountNo = ButterKnife.findById(view, R.id.following_count);
-
-           /* TextView postCount = ButterKnife.findById(view, R.id.tv_mentor_post_count);
-            TextView postCountLabel = ButterKnife.findById(view, R.id.tv_mentor_post);
-
-            TextView answerCount = ButterKnife.findById(view, R.id.tv_mentor_answer_count);
-            TextView answerCountLabel = ButterKnife.findById(view, R.id.tv_mentor_answer);
-
-            TextView followerCount = ButterKnife.findById(view, R.id.tv_mentor_follower_count);
-            TextView followerCountLabel = ButterKnife.findById(view, R.id.tv_mentor_follower);
-
-            TextView followingCount = ButterKnife.findById(view, R.id.tv_mentor_following_count);
-            TextView followingCountLabel = ButterKnife.findById(view, R.id.tv_mentor_following_title);
-
-            TextView location = ButterKnife.findById(view, R.id.tv_loc);
-            TextView skills = ButterKnife.findById(view, R.id.tv_profession);
-            TextView bio = ButterKnife.findById(view, R.id.tv_mentor_description);
-
-            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
-                location.setText(mUserSolarObject.getCityName());
-                location.setVisibility(View.VISIBLE);
-            } else {
-                if (isOwnProfile) {
-                    location.setVisibility(View.VISIBLE);
-                    location.setText(R.string.add_location);
-                } else {
-                    location.setVisibility(View.GONE);
-                }
-            }
-            if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) {
-                skills.setText(mUserSolarObject.getCanHelpIns().get(0)); //skills
-                skills.setVisibility(View.VISIBLE);
-            } else {
-                if (isOwnProfile && isMentor) {
-                    skills.setText(R.string.add_skills);
-                    skills.setVisibility(View.VISIBLE);
-                } else {
-                    skills.setVisibility(View.GONE);
-                }
-            }
-            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
-                Spanned description = StringUtil.fromHtml(mUserSolarObject.getDescription());
-                bio.setText(description);
-            } else {
-                if (isOwnProfile) {
-                    bio.setText(R.string.add_desc);
-                }
-            }*/
+            TextView location = ButterKnife.findById(view, R.id.location);
+            TextView description = ButterKnife.findById(view, R.id.description);
 
             if(isMentor) {
                 verifiedMentorIcon.setVisibility(View.VISIBLE);
@@ -1109,34 +1063,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 name.setText(mUserSolarObject.getNameOrTitle());
             }
 
-          /*  String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
-            postCountLabel.setText(pluralAnswer);
-            if (isMentor) {
-                userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
-            }
-            liPost.setVisibility(View.VISIBLE);
-
-            followerCountLabel.setText(userFollower.getText());
-            followerCount.setText(userFollowerCount.getText());
-
-            postCountNo.setText(tvMentorPost.getText());
-            postCount.setText(userTotalPostCount.getText());
-
-            if (isMentor) {
-                liFollowing.setVisibility(View.GONE);
-                answerCount.setText(tvMentorAnswerCount.getText());
-                answerCountLabel.setText(tvMentorAnswer.getText());
-                liAnswer.setVisibility(View.VISIBLE);
-            } else {
-                liAnswer.setVisibility(View.GONE);
-                followingTitle.setText(getResources().getString(R.string.following));
-                //followerCount.setText(mUserSolarObject.gettex);
-                //mUserSolarObject.setUserFollowing(numFound);
-                //followingCount.setText(String.valueOf(numFound));
-                liFollowing.setVisibility(View.VISIBLE);
-            }*/
-
-            followersCountNo.setText(followingCount.getText());
+            followersCountNo.setText(userFollowerCount.getText());
             postCountNo.setText(userTotalPostCount.getText());
 
             if (isMentor) {
@@ -1146,7 +1073,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             } else {
                 answerCountContainer.setVisibility(View.GONE);
                 followingContainer.setVisibility(View.VISIBLE);
-                followingCountNo.setText(userFollowerCount.getText());
+                followingCountNo.setText(followingCount.getText());
+            }
+
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
+                Spanned descriptionSpan = StringUtil.fromHtml(mUserSolarObject.getDescription());
+                description.setText(descriptionSpan);
+            }
+
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
+                location.setText(mUserSolarObject.getCityName());
             }
 
             return CommonUtil.getViewBitmap(userDetailContainer);
@@ -1268,11 +1204,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
         if(StringUtil.isNotNullOrEmptyString(userBio)) {
             userDescription.setText(userBio);
+            mUserSolarObject.setDescription(userBio);
         }
 
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
             mProfileIcon.bindImage(imageUrl);
+            mUserSolarObject.setImageUrl(imageUrl);
         }
     }
 

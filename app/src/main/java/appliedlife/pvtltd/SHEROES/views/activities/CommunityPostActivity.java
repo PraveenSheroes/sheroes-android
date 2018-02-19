@@ -212,6 +212,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private LinkRenderResponse mLinkRenderResponse = null;
     private CommunityPost mCommunityPost;
     private boolean mIsEditPost;
+    private boolean isSharedContent = false;
     private boolean mIsFromCommunity;
     private MyCommunities mMyCommunities;
     private int mFeedPosition;
@@ -288,13 +289,34 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mOldText = mCommunityPost.body;
             invalidateUserDropDownView();
         } else {
-            if (mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
+            if (mCommunityPost!=null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
                 mEtDefaultHintText.requestFocus();
                 if(!mIsChallengePost) {
                     fbShareContainer.setVisibility(View.VISIBLE);
                 }
                 if (!mIsFromCommunity && !mIsChallengePost) {
                     PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+                }
+            } else {
+                //For share link
+
+                // Get intent, action and MIME type
+                Intent intent = getIntent();
+                String action = intent.getAction();
+                String type = intent.getType();
+
+                if (Intent.ACTION_SEND.equals(action) && type != null) {
+                    if ("text/plain".equals(type)) {
+                        handleSendText(intent); // Handle text being sent
+                    } else if (type.startsWith("image/")) {
+                        // handleSendImage(intent); // Handle single image being sent
+                    }
+                } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+                    if (type.startsWith("image/")) {
+                        //handleSendMultipleImages(intent); // Handle multiple images being sent
+                    }
+                } else {
+                    // Handle other intents, such as being started from the home screen
                 }
             }
         }
@@ -346,6 +368,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
     }
+
+    private void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            // Update UI to reflect text being shared
+            mIsEditPost = false;
+            isSharedContent = true;
+           // mIsFromCommunity = false;
+            mEtDefaultHintText.setText(sharedText);
+            //sendPost();
+            //PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, mMyCommunities);
+
+            PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+        }
+    }
+
     private void setViewByCreatePostCall()
     {
         if(null!=mCommunityPost)
@@ -376,10 +414,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (!validateFields()) {
                 return true;
             }
-            if (mCommunityPost == null) {
-                finish();
-                return true;
-            }
+           // if (mCommunityPost == null) { //todo - commented by ravi
+           //     finish();
+           //     return true;
+           // }
             if (mIsProgressBarVisible) {
                 return true;
             }
@@ -522,6 +560,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_create_post, menu);
         MenuItem menuItem = menu.findItem(R.id.post);
+        if(mCommunityPost ==null) return true;
+
         switch (mCommunityPost.createPostRequestFrom)
         {
             case AppConstants.CREATE_POST:
@@ -804,7 +844,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setCommunityName() {
-        if (mCommunityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
+        if (mCommunityPost!=null && mCommunityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
             mCommunityName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             String fullString = getString(R.string.ID_ASKING) + AppConstants.SPACE + mCommunityPost.community.name;
             SpannableString SpanString = new SpannableString(fullString);
@@ -1068,6 +1108,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mMyCommunities = myCommunities;
             setCommunityName();
             invalidateUserDropDownView();
+        } else{ //todo -ravi
+            mCommunityPost = new CommunityPost();
+            mCommunityPost.community = community;
+            mCommunityPost.createPostRequestFrom = -1;
+            mCommunityPost.isChallengeType = false;
+            mCommunityPost.community.id = community.id;
+            mCommunityPost.community.name = community.name;
+            mCommunityPost.community.isOwner = community.isOwner;
+            mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
+            mMyCommunities = myCommunities;
+            setCommunityName();
+            invalidateUserDropDownView();
+        }
+
+        if(isSharedContent) {
+            sendPost();
         }
     }
 

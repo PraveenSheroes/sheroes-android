@@ -123,19 +123,23 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
                     mentorName.setText(mentor.getNameOrTitle());
                 }
 
-                List<String> canHelpInArea = mentor.getCanHelpIns();
-                if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
-                    StringBuilder expertFields = new StringBuilder();
-                    for (int i = 0; i < canHelpInArea.size(); i++) {
-                        if (i > 0) {
-                            expertFields.append(AppConstants.COMMA);
+                if(mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID ) {
+                    List<String> canHelpInArea = mentor.getCanHelpIns();
+                    if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
+                        StringBuilder expertFields = new StringBuilder();
+                        for (int i = 0; i < canHelpInArea.size(); i++) {
+                            if (i > 0) {
+                                expertFields.append(AppConstants.COMMA);
+                            }
+                            expertFields.append(canHelpInArea.get(i));
                         }
-                        expertFields.append(canHelpInArea.get(i));
+                        expertAt.setVisibility(View.VISIBLE);
+                        expertAt.setText(expertFields.toString());
+                    } else {
+                        expertAt.setVisibility(View.GONE);
                     }
-                    expertAt.setVisibility(View.VISIBLE);
-                    expertAt.setText(expertFields.toString());
                 } else{
-                    expertAt.setVisibility(View.GONE);
+                    expertAt.setText(mentor.getCityName());
                 }
 
                 if (follower != null) {
