@@ -121,7 +121,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     private void setMyCommunityList() {
         mMyCommunities = new MyCommunities();
         boolean isFirstOtherSet = false;
-        if (mAllCommunities.isSet() && mAllCommunities.get() != null && !CommonUtil.isEmpty(mAllCommunities.get().feedDetails)) {
+        if (mAllCommunities!=null && mAllCommunities.isSet() && mAllCommunities.get() != null && !CommonUtil.isEmpty(mAllCommunities.get().feedDetails)) {
             for (FeedDetail feedDetail : mAllCommunities.get().feedDetails) {
                 Community community = new Community();
                 community.id = feedDetail.getIdOfEntityOrParticipant();

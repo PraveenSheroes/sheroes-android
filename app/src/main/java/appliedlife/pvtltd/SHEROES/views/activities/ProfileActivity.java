@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -57,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -71,10 +75,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
-import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
-import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -226,6 +229,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
+
+    @Bind(R.id.fab_post)
+    FloatingActionButton createPost;
 
     @Bind(R.id.view_footer)
     View viewFooter;
@@ -384,8 +390,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         } else {
             verifiedIcon.setVisibility(View.INVISIBLE);
         }
+        updateProfileInfo();
         setPagerAndLayouts();
 
+        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
+    }
+
+    private void updateProfileInfo() {
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
             tvLoc.setText(mUserSolarObject.getCityName());
             tvLoc.setVisibility(View.VISIBLE);
@@ -454,9 +465,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             followingTitle.setText(getResources().getString(R.string.following));
             liFollowing.setVisibility(View.VISIBLE);
         }
-
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
+
 
     private void toolTipForAskQuestion() {
         try {
@@ -574,6 +584,20 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
     }
 
+    @OnClick(R.id.fab_post)
+    public void createNewPost() {
+
+        if (mFeedDetail instanceof UserSolrObj) {
+            UserSolrObj userPostSolrObj = (UserSolrObj) mFeedDetail;
+            CommunityPost mentorPost = new CommunityPost();
+            mentorPost.community = new Community();
+            mentorPost.community.id = userPostSolrObj.getSolrIgnoreMentorCommunityId();
+            mentorPost.community.name = userPostSolrObj.getNameOrTitle();
+            mentorPost.isEdit = false;
+            CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+        }
+    }
+
     @OnClick(R.id.li_follower)
     public void followerClick() {
         HashMap<String, Object> properties =
@@ -586,6 +610,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
+        FollowingActivity.navigateTo(this, mChampionId, isOwnProfile,  getScreenName(), FollowingEnum.FOLLOWERS,  null );
     }
 
     @OnClick(R.id.li_following)
@@ -594,10 +619,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
+                        .name("Following Count Click")
                         .isMentor(isMentor)
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
+        FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING,null );
     }
 
     public void addAnalyticsEvents(Event event) {
@@ -731,9 +758,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof CommunitiesDetailFragment) {
+            createPost.setVisibility(View.VISIBLE);
 
         } else if (fragment instanceof MentorQADetailFragment) {
-
+            createPost.setVisibility(View.GONE);
         }
 
     }
@@ -875,6 +903,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mUserSolarObject = (UserSolrObj) feedDetailList.get(0);
             mUserSolarObject.setCallFromName(screenName);
+
             if (isMentor) {
                 clHomeFooterList.setVisibility(View.VISIBLE);
             }
@@ -985,8 +1014,145 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, branchPostDeepLink);
-        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        //intent.putExtra(Intent.EXTRA_TEXT, branchPostDeepLink);
+        intent.putExtra(Intent.EXTRA_TEXT, Config.PROFILE_SHARE + "\n\nLink : " + branchPostDeepLink);
+
+        Bitmap bitmap = createShareImage();
+        if(bitmap ==null) return;
+        Uri contentUri = CommonUtil.getContentUriFromBitmap(this, bitmap);
+        if (contentUri != null) {
+            intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            intent.setType("image/*");
+            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        }
+    }
+
+    private Bitmap createShareImage() {
+
+        if(mUserSolarObject !=null) {
+            View view;
+            view = LayoutInflater.from(this).inflate(R.layout.layout_user_share, null, false);
+
+            LinearLayout userDetailContainer = ButterKnife.findById(view, R.id.user_share_container);
+            LinearLayout answerCountContainer = ButterKnife.findById(view, R.id.answers_count_container);
+            LinearLayout followingContainer = ButterKnife.findById(view, R.id.followings_count_view);
+            CircleImageView imageIcon = ButterKnife.findById(view, R.id.profile_pic);
+            ImageView verifiedMentorIcon = ButterKnife.findById(view, R.id.badge);
+
+            TextView name = ButterKnife.findById(view, R.id.user_name);
+            TextView postCountNo = ButterKnife.findById(view, R.id.post_count);
+            TextView followersCountNo = ButterKnife.findById(view, R.id.followers_count);
+            TextView answerCountNo = ButterKnife.findById(view, R.id.answers_count);
+            TextView followingCountNo = ButterKnife.findById(view, R.id.following_count);
+
+           /* TextView postCount = ButterKnife.findById(view, R.id.tv_mentor_post_count);
+            TextView postCountLabel = ButterKnife.findById(view, R.id.tv_mentor_post);
+
+            TextView answerCount = ButterKnife.findById(view, R.id.tv_mentor_answer_count);
+            TextView answerCountLabel = ButterKnife.findById(view, R.id.tv_mentor_answer);
+
+            TextView followerCount = ButterKnife.findById(view, R.id.tv_mentor_follower_count);
+            TextView followerCountLabel = ButterKnife.findById(view, R.id.tv_mentor_follower);
+
+            TextView followingCount = ButterKnife.findById(view, R.id.tv_mentor_following_count);
+            TextView followingCountLabel = ButterKnife.findById(view, R.id.tv_mentor_following_title);
+
+            TextView location = ButterKnife.findById(view, R.id.tv_loc);
+            TextView skills = ButterKnife.findById(view, R.id.tv_profession);
+            TextView bio = ButterKnife.findById(view, R.id.tv_mentor_description);
+
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
+                location.setText(mUserSolarObject.getCityName());
+                location.setVisibility(View.VISIBLE);
+            } else {
+                if (isOwnProfile) {
+                    location.setVisibility(View.VISIBLE);
+                    location.setText(R.string.add_location);
+                } else {
+                    location.setVisibility(View.GONE);
+                }
+            }
+            if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) {
+                skills.setText(mUserSolarObject.getCanHelpIns().get(0)); //skills
+                skills.setVisibility(View.VISIBLE);
+            } else {
+                if (isOwnProfile && isMentor) {
+                    skills.setText(R.string.add_skills);
+                    skills.setVisibility(View.VISIBLE);
+                } else {
+                    skills.setVisibility(View.GONE);
+                }
+            }
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
+                Spanned description = StringUtil.fromHtml(mUserSolarObject.getDescription());
+                bio.setText(description);
+            } else {
+                if (isOwnProfile) {
+                    bio.setText(R.string.add_desc);
+                }
+            }*/
+
+            if(isMentor) {
+                verifiedMentorIcon.setVisibility(View.VISIBLE);
+            } else{
+                verifiedMentorIcon.setVisibility(View.GONE);
+            }
+
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
+                if(!isFinishing()) {
+                    imageIcon.setCircularImage(true);
+                    imageIcon.bindImage(mUserSolarObject.getImageUrl());
+                }
+            }
+
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) {
+                name.setText(mUserSolarObject.getNameOrTitle());
+            }
+
+          /*  String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
+            postCountLabel.setText(pluralAnswer);
+            if (isMentor) {
+                userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
+            }
+            liPost.setVisibility(View.VISIBLE);
+
+            followerCountLabel.setText(userFollower.getText());
+            followerCount.setText(userFollowerCount.getText());
+
+            postCountNo.setText(tvMentorPost.getText());
+            postCount.setText(userTotalPostCount.getText());
+
+            if (isMentor) {
+                liFollowing.setVisibility(View.GONE);
+                answerCount.setText(tvMentorAnswerCount.getText());
+                answerCountLabel.setText(tvMentorAnswer.getText());
+                liAnswer.setVisibility(View.VISIBLE);
+            } else {
+                liAnswer.setVisibility(View.GONE);
+                followingTitle.setText(getResources().getString(R.string.following));
+                //followerCount.setText(mUserSolarObject.gettex);
+                //mUserSolarObject.setUserFollowing(numFound);
+                //followingCount.setText(String.valueOf(numFound));
+                liFollowing.setVisibility(View.VISIBLE);
+            }*/
+
+            followersCountNo.setText(followingCount.getText());
+            postCountNo.setText(userTotalPostCount.getText());
+
+            if (isMentor) {
+                answerCountContainer.setVisibility(View.VISIBLE);
+                followingContainer.setVisibility(View.GONE);
+                answerCountNo.setText(tvMentorAnswerCount.getText());
+            } else {
+                answerCountContainer.setVisibility(View.GONE);
+                followingContainer.setVisibility(View.VISIBLE);
+                followingCountNo.setText(userFollowerCount.getText());
+            }
+
+            return CommonUtil.getViewBitmap(userDetailContainer);
+
+        }
+        return null;
     }
 
     @Override
@@ -1049,6 +1215,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                     if (AppUtils.isFragmentUIActive(activeFragment)) {
                         if (activeFragment instanceof MentorQADetailFragment) {
                             ((MentorQADetailFragment) activeFragment).swipeToRefreshList();
+                        } else if(activeFragment instanceof CommunitiesDetailFragment) {
+                            ((CommunitiesDetailFragment) activeFragment).swipeToRefreshList();
                         }
                     }
                     break;

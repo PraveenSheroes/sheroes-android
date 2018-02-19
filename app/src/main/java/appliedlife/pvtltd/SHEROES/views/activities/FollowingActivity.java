@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -32,6 +33,8 @@ public class FollowingActivity extends BaseActivity {
 
     private static final String SCREEN_LABEL = "Followed Champions Screen";
     private long userMentorId;
+    private boolean isSelfProfile;
+    private FollowingEnum myEnum;
 
     @Bind(R.id.toolbar_name)
     TextView titleName;
@@ -48,6 +51,9 @@ public class FollowingActivity extends BaseActivity {
 
         if (getIntent().getExtras() != null) {
             userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
+            isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
+           // enumValue = getIntent().getStringExtra("TYPE");
+             myEnum = (FollowingEnum)getIntent().getSerializableExtra("TYPE");
         }
 
         setSupportActionBar(mToolbar);
@@ -56,7 +62,7 @@ public class FollowingActivity extends BaseActivity {
 
         titleName.setText(R.string.champions_followed);
 
-        Fragment followingFragment = FollowingFragment.createInstance(userMentorId, "");
+        Fragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, myEnum.name());
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
@@ -96,13 +102,15 @@ public class FollowingActivity extends BaseActivity {
     }
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, long mentorID, String sourceScreen, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, FollowingEnum followingEnum, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, FollowingActivity.class);
         intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
+        intent.putExtra(ProfileDetailsFragment.SELF_PROFILE, isOwnProfile);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
+        intent.putExtra("TYPE", followingEnum);
         ActivityCompat.startActivityForResult(fromActivity, intent, 1, null);
     }
 

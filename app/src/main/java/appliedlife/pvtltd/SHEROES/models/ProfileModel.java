@@ -9,9 +9,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
@@ -52,10 +52,8 @@ public class ProfileModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<UserFollowedMentorsResponse> getFollowedMentor(ProfileFollowedMentor profileFollowedMentor) {
-
-        //LogUtils.error("user_get_preference_request req: ",gson.toJson(profileAddEditEducationRequest));
-        return sheroesAppServiceApi.getFollowedMentorFromApiTest(profileFollowedMentor)
+    public Observable<UserFollowedMentorsResponse> getFollowerFollowing(FollowersFollowingRequest followersFollowingRequest) {
+        return sheroesAppServiceApi.getFollowerFollowing(followersFollowingRequest)
 
                 .map(new Function<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
                     @Override

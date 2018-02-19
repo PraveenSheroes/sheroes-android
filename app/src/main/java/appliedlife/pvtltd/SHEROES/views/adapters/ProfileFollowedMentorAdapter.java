@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.MENTOR_TYPE_ID;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
 
 /**
@@ -82,6 +84,9 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
         @Bind(R.id.expert_at)
         TextView expertAt;
 
+        @Bind(R.id.iv_mentor_verified)
+        ImageView verifiedChampionsIcon;
+
         @Bind(R.id.follower)
         TextView follower;
 
@@ -96,11 +101,6 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
         public void bindData(final UserSolrObj mentor, final int position) {
 
             if (null != mentor) {
-
-                if (mentor.getSubType().equalsIgnoreCase(AppConstants.FEED_PROGRESS_BAR)) {
-
-                }
-
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -108,10 +108,14 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
                     }
                 });
 
+                if(mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID ) {
+                    verifiedChampionsIcon.setVisibility(View.VISIBLE);
+                } else{
+                    verifiedChampionsIcon.setVisibility(View.GONE);
+                }
+
                 if (mentor.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
-                    mentorIcon.setPlaceHolderId(R.drawable.default_img);
-                    mentorIcon.setErrorPlaceHolderId(R.drawable.default_img);
                     mentorIcon.bindImage(mentor.getThumbnailImageUrl());
                 }
 
@@ -128,7 +132,10 @@ public class ProfileFollowedMentorAdapter extends RecyclerView.Adapter<RecyclerV
                         }
                         expertFields.append(canHelpInArea.get(i));
                     }
+                    expertAt.setVisibility(View.VISIBLE);
                     expertAt.setText(expertFields.toString());
+                } else{
+                    expertAt.setVisibility(View.GONE);
                 }
 
                 if (follower != null) {

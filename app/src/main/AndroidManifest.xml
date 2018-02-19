@@ -187,9 +187,27 @@
             android:name=".views.activities.HomeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".views.activities.CommunityPostActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"

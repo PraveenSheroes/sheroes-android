@@ -16,8 +16,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesRespon
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
@@ -58,15 +58,15 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
 
     }
 
-    //followed mentor
-    public void getFollowedMentors(ProfileFollowedMentor profileFollowedMentor) {
+    //Get followers or following of users/champions
+    public void getFollowedMentors(FollowersFollowingRequest profileFollowedMentor) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
             return;
         }
         getMvpView().startProgressBar();
 
-        profileModel.getFollowedMentor(profileFollowedMentor)
+        profileModel.getFollowerFollowing(profileFollowedMentor)
                 .compose(this.<UserFollowedMentorsResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<UserFollowedMentorsResponse>() {
             @Override

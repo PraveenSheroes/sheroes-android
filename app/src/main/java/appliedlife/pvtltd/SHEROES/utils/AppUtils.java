@@ -97,7 +97,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
@@ -1516,14 +1516,28 @@ public class AppUtils {
         return publicProfileListRequest;
     }
 
-    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId) {
+    /*public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId, String isUser, String isListing) {
         AppUtils appUtils = AppUtils.getInstance();
         ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
         profileFollowedMentor.setPageNo(pageNo);
         profileFollowedMentor.setAppVersion(appUtils.getAppVersionName());
-        profileFollowedMentor.setIdOfEntityParticipant(userId);
+        profileFollowedMentor.setUserId(userId);
+        profileFollowedMentor.setListing(is_listing);
+        profileFollowedMentor.setUser(is_user);
         profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
         return profileFollowedMentor;
+    }*/
+
+    public FollowersFollowingRequest followerFollowingRequestBuilder(int pageNo, long userId, boolean is_user, boolean is_listing) {
+        AppUtils appUtils = AppUtils.getInstance();
+        FollowersFollowingRequest followersFollowingRequest = new FollowersFollowingRequest();
+        followersFollowingRequest.setPageNo(pageNo);
+        followersFollowingRequest.setAppVersion(appUtils.getAppVersionName());
+        followersFollowingRequest.setUserId(userId);
+        followersFollowingRequest.setIsListing(is_listing);
+        followersFollowingRequest.setIsUser(is_user);
+        followersFollowingRequest.setPageSize(AppConstants.PAGE_SIZE);
+        return followersFollowingRequest;
     }
 
     public ProfileTopCountRequest profileTopSectionCount(long id) {

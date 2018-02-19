@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,15 +22,18 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileFollowedMentorAdapter;
@@ -49,6 +53,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
 public class FollowingFragment extends BaseFragment implements ProfileView, ProfileFollowedMentorAdapter.OnItemClicked {
 
     private static final String SCREEN_LABEL = "Followed Champions Screen";
+    private static final int MENTOR_TYPE_ID = 7;
 
     private long userMentorId;
     private boolean isSelfProfile;
@@ -57,6 +62,9 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
     private FragmentListRefreshData mFragmentListRefreshData;
     private ProfileFollowedMentorAdapter mAdapter;
     private SwipPullRefreshList mPullRefreshList;
+    private FollowingEnum mode;
+    private String listTypeName;
+    private FollowersFollowingRequest profileFollowedMentor;
 
     @Bind(R.id.communities)
     RecyclerView mRecyclerView;
@@ -76,10 +84,12 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static FollowingFragment createInstance(long userId, String name) {
+    public static FollowingFragment createInstance(long userId, boolean isSelfProfile, String enumValue) {
         FollowingFragment followingFragment = new FollowingFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
+        bundle.putBoolean(SELF_PROFILE, isSelfProfile);
+        bundle.putString("TYPE", enumValue);
         followingFragment.setArguments(bundle);
         return followingFragment;
     }
@@ -94,11 +104,38 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
         if (getArguments() != null) {
             userMentorId = getArguments().getLong(USER_MENTOR_ID);
             isSelfProfile = getArguments().getBoolean(SELF_PROFILE);
+            mode = FollowingEnum.valueOf(getArguments().getString("TYPE"));
         }
 
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.PROFILE_FOLLOWING, AppConstants.NO_REACTION_CONSTANT);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, listTypeName, AppConstants.NO_REACTION_CONSTANT);
         mFragmentListRefreshData.setSelfProfile(isSelfProfile);
         mFragmentListRefreshData.setMentorUserId(userMentorId);
+
+        switch (mode) {
+            case FOLLOWED_CHAMPIONS:
+                Toast.makeText(getContext(), "Followed champ,"+ listTypeName, Toast.LENGTH_SHORT).show();
+                listTypeName = FollowingEnum.FOLLOWED_CHAMPIONS.name();
+                profileFollowedMentor = mAppUtils.followerFollowingRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), false, false);
+                break;
+            case FOLLOWERS:
+                listTypeName = mode.name();
+                Toast.makeText(getContext(), "Follower,"+ listTypeName, Toast.LENGTH_SHORT).show();
+                profileFollowedMentor = mAppUtils.followerFollowingRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), false, true);
+
+                break;
+            case FOLLOWING:
+                listTypeName = mode.name();
+                Toast.makeText(getContext(), "Following,"+listTypeName, Toast.LENGTH_SHORT).show();
+                profileFollowedMentor = mAppUtils.followerFollowingRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), true, true);
+
+                break;
+            default:
+                listTypeName = null;
+                profileFollowedMentor = null;
+                LogUtils.info("Following Fragment", "No value matched");
+        }
+
+        if(listTypeName == null) return null;
 
         followedListPagination(mFragmentListRefreshData);
 
@@ -130,7 +167,7 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
             public void dismissReactions() {
             }
     });
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+        profilePresenter.getFollowedMentors(profileFollowedMentor);
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -146,7 +183,8 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+       // profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId()));
+        profilePresenter.getFollowedMentors(profileFollowedMentor);
     }
 
     @Override
@@ -198,6 +236,8 @@ public class FollowingFragment extends BaseFragment implements ProfileView, Prof
 
     @Override
     public void onItemClick(UserSolrObj mentor) {
-        ProfileActivity.navigateTo(getActivity(), mentor.getIdOfEntityOrParticipant(), true, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        boolean isChampion = mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID;
+        long id = mentor.getIdOfEntityOrParticipant();
+        ProfileActivity.navigateTo(getActivity(), id, isChampion, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 }
