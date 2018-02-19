@@ -148,6 +148,19 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             getPresenter().onCreate();
         }
 
+        boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
+        if(isShareDeeplink){
+            String shareText = getIntent().getExtras().getString(AppConstants.SHARE_TEXT);
+            String shareImage = getIntent().getExtras().getString(AppConstants.SHARE_IMAGE);
+            String shareDeeplLink = getIntent().getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
+            String shareDialog = getIntent().getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
+            Boolean isShareImage = false;
+            if(CommonUtil.isNotEmpty(shareImage)){
+                isShareImage = true;
+            }
+            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false);
+        }
+
     }
 
     public void setSource(String source) {
@@ -385,19 +398,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 Crashlytics.getInstance().core.logException(e);
             }
 
-        }
-
-        boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
-        if(isShareDeeplink){
-            String shareText = getIntent().getExtras().getString(AppConstants.SHARE_TEXT);
-            String shareImage = getIntent().getExtras().getString(AppConstants.SHARE_IMAGE);
-            String shareDeeplLink = getIntent().getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
-            String shareDialog = getIntent().getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
-            Boolean isShareImage = false;
-            if(CommonUtil.isNotEmpty(shareImage)){
-                isShareImage = true;
-            }
-            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false);
         }
     }
 
