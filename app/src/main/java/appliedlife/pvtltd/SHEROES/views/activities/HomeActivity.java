@@ -1176,7 +1176,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
+        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/v2?sub_type=F");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
         feedFragment.setArguments(bundle);
 
