@@ -932,7 +932,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return;
         }
         mAdapter.setItem(position, communityFeedSolrObj);
-        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
+        if(getActivity()!=null && getActivity() instanceof CollectionActivity){
+            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
+        }
     }
 
     @Override
@@ -942,7 +944,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return;
         }
         mAdapter.setItem(position, communityFeedSolrObj);
-        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
+        if(getActivity()!=null && getActivity() instanceof  CollectionActivity){
+            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
+        }
     }
 
     public int findPositionById(long id) { //TODO - move to presenter
