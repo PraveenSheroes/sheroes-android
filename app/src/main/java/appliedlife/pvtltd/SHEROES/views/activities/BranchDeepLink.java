@@ -65,11 +65,25 @@ public class BranchDeepLink extends BaseActivity {
     {
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
+        boolean isShareDeepLink = false;
         Intent intent = new Intent();
         JSONObject sessionParams = Branch.getInstance().getLatestReferringParams();
+        String shareText = "";
+        String shareImage = "";
+        String shareDeepLink = "";
+        String shareDialogTitle = "";
         try {
             String url = sessionParams.has(AppConstants.DEEP_LINK_URL) ? sessionParams.getString(AppConstants.DEEP_LINK_URL) : "";
             String openWebViewFlag = sessionParams.has(AppConstants.OPEN_IN_WEBVIEW) ? sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW) : "";
+
+            if(sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) && sessionParams.has(AppConstants.SHARE_TEXT)){
+                shareText = sessionParams.has(AppConstants.SHARE_TEXT) ? sessionParams.getString(AppConstants.SHARE_TEXT) : "";
+                shareImage = sessionParams.has(AppConstants.SHARE_IMAGE) ? sessionParams.getString(AppConstants.SHARE_IMAGE) : "";
+                shareDeepLink = sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) ? sessionParams.getString(AppConstants.SHARE_DEEP_LINK_URL) : "";
+                shareDialogTitle = sessionParams.has(AppConstants.SHARE_DIALOG_TITLE) ? sessionParams.getString(AppConstants.SHARE_DIALOG_TITLE) : "";
+                isShareDeepLink = true;
+            }
+
             if (TextUtils.isEmpty(url)) {
                 startMainActivity();
             } else {
@@ -106,6 +120,7 @@ public class BranchDeepLink extends BaseActivity {
                 } catch (JSONException e) {
                 }
             }
+            intent.putExtra(AppConstants.IS_SHARE_DEEP_LINK , isShareDeepLink);
             if (isIntentAvailable(BranchDeepLink.this, intent)) {
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
                 if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {

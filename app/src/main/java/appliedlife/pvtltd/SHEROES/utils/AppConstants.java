@@ -345,4 +345,11 @@ public class AppConstants {
     public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Completed Screen";
     public static final String LIST_TYPE_TAGGING = "COMMENT";
 
+    public static final String SHARE_TEXT = "share_text";
+    public static final String SHARE_IMAGE = "share_image";
+    public static final String SHARE_DEEP_LINK_URL = "share_deep_link_url";
+    public static final String SHARE_DIALOG_TITLE = "share_dialog_title";
+    public static final String IS_SHARE_DEEP_LINK = "is share deep link";
+
+
 }
