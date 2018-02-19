@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.Manifest;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +33,19 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.InviteFriendActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
@@ -67,15 +74,19 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     AppUtils mAppUtils;
     //endregion
 
+    @Bind(R.id.swipe_contact_friend)
+    SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.rv_contact_friend_list)
-    EmptyRecyclerView recyclerView;
+    EmptyRecyclerView mFeedRecyclerView;
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     @Bind(R.id.empty_view)
     View emptyView;
-    private InviteFriendAdapter inviteFriendAdapter;
+    public InviteFriendAdapter mInviteFriendAdapter;
     @Inject
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
+    private boolean hasFeedEnded;
 
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
@@ -83,6 +94,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     //region Member variables
     private String mSmsShareLink;
+    private boolean syncContact;
     //endregion
 
     public static ContactListFragment createInstance(String name) {
@@ -102,21 +114,52 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         Bundle bundle = getArguments();
-
         initViews();
-
         return view;
     }
 
     private void initViews() {
+        if (CommonUtil.getTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF) > 0) {
+            long daysDifference = System.currentTimeMillis() - CommonUtil.getTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF);
+            if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                syncContact = true;
+                long syncTime = System.currentTimeMillis();
+                CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
+            }
+        } else {
+            long syncTime = System.currentTimeMillis();
+            CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
+            syncContact = true;
+        }
+        mInviteFriendViewPresenterImp.setEndpointUrl("http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=NON_SHEROES");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        inviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
-        recyclerView.setAdapter(inviteFriendAdapter);
-        recyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
-        getUserContacts(getContext());
-
+        mFeedRecyclerView.setLayoutManager(linearLayoutManager);
+        ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mInviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
+        mFeedRecyclerView.setAdapter(mInviteFriendAdapter);
+        mFeedRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (!syncContact) {
+                    if (mInviteFriendViewPresenterImp.isContactLoading() || hasFeedEnded) {
+                        return;
+                    }
+                    mInviteFriendAdapter.contactStartedLoading();
+                    mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
+                }
+            }
+        };
+        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!syncContact) {
+                    mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+                }
+            }
+        });
         if (null != mUserPreference && mUserPreference.isSet()) {
             BranchUniversalObject mSmsBranchUniversalObject = new BranchUniversalObject()
                     .setCanonicalIdentifier("invite/sms")
@@ -137,7 +180,43 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 }
             });
         }
-        setProgressBar(progressBar);
+        if (!syncContact) {
+            mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+        } else {
+            getUserContacts(getContext());
+        }
+        // if(StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getAppShareUrl())&&!mSmsShareLink.equalsIgnoreCase(mUserPreference.get().getUserSummary().getAppShareUrl()))
+        {
+
+        }
+    }
+
+    @Override
+    public void startProgressBar() {
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!syncContact) {
+                    if (mSwipeRefresh != null) {
+                        mSwipeRefresh.setRefreshing(true);
+                        mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mEndlessRecyclerViewScrollListener.finishLoading();
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.setRefreshing(false);
+        mInviteFriendAdapter.contactsFinishedLoading();
     }
 
     private void getUserContacts(Context context) {
@@ -181,7 +260,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     if (isWhatsappInstalled) {
                         Intent sendIntent = new Intent("android.intent.action.MAIN");
                         //when user want only conversation
-                       // sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
+                        // sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
                         sendIntent.setAction(Intent.ACTION_SEND);
                         sendIntent.setPackage(AppConstants.WHATS_APP);
                         sendIntent.setType("text/plain");
@@ -202,6 +281,11 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         }
     }
 
+    @Override
+    public void onSuggestedContactClicked(UserSolrObj userSolrObj, View view) {
+
+    }
+
     private boolean whatsAppInstalledOrNot(String uri) {
         PackageManager pm = getContext().getPackageManager();
         boolean app_installed = false;
@@ -214,18 +298,55 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         return app_installed;
     }
 
+    public void searchContactInList(String contactName) {
+        mInviteFriendAdapter.getFilter().filter(contactName);
+    }
+
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
         if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
             emptyView.setVisibility(View.GONE);
-            inviteFriendAdapter.setData(userContactDetailList);
-            inviteFriendAdapter.notifyDataSetChanged();
-        }else
-        {
+            mInviteFriendAdapter.setData(userContactDetailList);
+            mInviteFriendAdapter.notifyDataSetChanged();
+        } else {
             emptyView.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);
+        if (syncContact) {
+            syncContact=false;
+            mInviteFriendViewPresenterImp.syncFriendsToServer(userContactDetailList);
+        }
     }
+
+    @Override
+    public void showUserDetail(List<UserSolrObj> userSolrObjList) {
+
+    }
+
+    @Override
+    public void setContactUserListEnded(boolean contactUserListEnded) {
+        this.hasFeedEnded = contactUserListEnded;
+    }
+
+    @Override
+    public void addAllUserData(List<UserSolrObj> userSolrObjList) {
+
+    }
+
+    @Override
+    public void addAllUserContactData(List<UserContactDetail> userContactDetailList) {
+        mInviteFriendAdapter.addAll(userContactDetailList);
+    }
+
+    @Override
+    public void contactsFromServerAfterSyncFromPhoneData(AllContactListResponse allContactListResponse) {
+        mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+        if(null!=getActivity()&&getActivity() instanceof InviteFriendActivity)
+        {
+            ((InviteFriendActivity)getActivity()).dataRequestForFragment(allContactListResponse);
+        }
+    }
+
     @Override
     protected SheroesPresenter getPresenter() {
         return mInviteFriendViewPresenterImp;

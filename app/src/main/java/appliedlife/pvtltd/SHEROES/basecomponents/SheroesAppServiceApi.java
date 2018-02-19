@@ -32,6 +32,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -145,8 +147,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/reaction/unlike")
     Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
-    @POST("participation/reaction/get_comments")
-    Observable<CommentReactionResponsePojo> getFriendsFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
+
+    @POST("participant/user/sync_app_user_contacts")
+    Observable<AllContactListResponse> getAllFriendsInSyncResponseFromApi(@Body ContactListSyncRequest contactListSyncRequest);
 
     @POST("participation/reaction/get_comments")
     Observable<CommentReactionResponsePojo> getCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
@@ -288,7 +291,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/add/winner/address")
     Observable<BaseResponse> updateAddress(@Body Address address);
-
+    @POST()
+    Observable<AllContactListResponse> getUserDetailList(@Url String url, @Body ContactListSyncRequest co);
     @POST()
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 

@@ -1,21 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.ComponentName;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.telephony.PhoneNumberUtils;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -28,23 +22,19 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
-import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendAdapter;
-import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendSuggestedAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
-import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 /**
@@ -62,18 +52,22 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     @Inject
     AppUtils mAppUtils;
     //endregion
-
+    @Bind(R.id.swipe_suggested_friend)
+    SwipeRefreshLayout mSwipeRefresh;
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     @Bind(R.id.rv_suggested_friend_list)
-    EmptyRecyclerView recyclerView;
+    EmptyRecyclerView mFeedRecyclerView;
     @Bind(R.id.empty_view)
     View emptyView;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    private InviteFriendAdapter inviteFriendAdapter;
+    private InviteFriendSuggestedAdapter mInviteFriendSuggestedAdapter;
     @Inject
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
 
-    public static SuggestedFriendFragment createInstance( String name) {
+    private boolean hasFeedEnded;
+
+    public static SuggestedFriendFragment createInstance(String name) {
         SuggestedFriendFragment suggestedFriendFragment = new SuggestedFriendFragment();
         Bundle bundle = new Bundle();
         suggestedFriendFragment.setArguments(bundle);
@@ -84,25 +78,42 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.suggested_friend_layout, container, false);
-
         ButterKnife.bind(this, view);
-
+        mInviteFriendViewPresenterImp.attachView(this);
         Bundle bundle = getArguments();
         initViews();
         return view;
     }
 
     //region Private methods
-    private void initViews()
-    {
+    private void initViews() {
+        mInviteFriendViewPresenterImp.setEndpointUrl("http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.suggested_list_blank), R.drawable.ic_suggested_blank, "");
-        inviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
-        recyclerView.setAdapter(inviteFriendAdapter);
-        setProgressBar(progressBar);
-        emptyView.setVisibility(View.VISIBLE);
+        mFeedRecyclerView.setLayoutManager(linearLayoutManager);
+        ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mInviteFriendSuggestedAdapter = new InviteFriendSuggestedAdapter(getContext(), this);
+        mFeedRecyclerView.setAdapter(mInviteFriendSuggestedAdapter);
+        mFeedRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (mInviteFriendViewPresenterImp.isSuggestedLoading() || hasFeedEnded) {
+                    return;
+                }
+                mInviteFriendSuggestedAdapter.contactStartedLoading();
+                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
+            }
+
+        };
+        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+            }
+        });
+       getAllSuggestedContacts();
     }
 
     //endregion
@@ -122,19 +133,76 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             default:
         }
     }
+    @Override
+    public void startProgressBar() {
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                    if (mSwipeRefresh != null) {
+                        mSwipeRefresh.setRefreshing(true);
+                        mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+                    }
+            }
+        });
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mEndlessRecyclerViewScrollListener.finishLoading();
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.setRefreshing(false);
+        mInviteFriendSuggestedAdapter.contactsFinishedLoading();
+    }
+    @Override
+    public void onSuggestedContactClicked(UserSolrObj userSolrObj, View view) {
+
+    }
 
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
-        if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
+
+    }
+    public void getAllSuggestedContacts()
+    {
+        mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+    }
+    @Override
+    public void showUserDetail(List<UserSolrObj> userSolrObjList) {
+        if (StringUtil.isNotEmptyCollection(userSolrObjList)) {
             emptyView.setVisibility(View.GONE);
-            inviteFriendAdapter.setData(userContactDetailList);
-            inviteFriendAdapter.notifyDataSetChanged();
-        }else
-        {
+            mInviteFriendSuggestedAdapter.setData(userSolrObjList);
+            mInviteFriendSuggestedAdapter.notifyDataSetChanged();
+        } else {
             emptyView.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);
     }
+
+    @Override
+    public void setContactUserListEnded(boolean contactUserListEnded) {
+        this.hasFeedEnded = contactUserListEnded;
+    }
+
+    @Override
+    public void addAllUserData(List<UserSolrObj> userSolrObjList) {
+        mInviteFriendSuggestedAdapter.addAll(userSolrObjList);
+    }
+
+    @Override
+    public void addAllUserContactData(List<UserContactDetail> userContactDetailList) {
+
+    }
+
+    @Override
+    public void contactsFromServerAfterSyncFromPhoneData(AllContactListResponse allContactListResponse) {
+
+    }
+
     @Override
     protected SheroesPresenter getPresenter() {
         return mInviteFriendViewPresenterImp;

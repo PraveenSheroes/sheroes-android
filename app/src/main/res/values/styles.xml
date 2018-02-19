@@ -159,5 +159,4 @@
         <item name="android:gravity">bottom</item>
         <item name="android:layout_gravity">bottom</item>
     </style>
-
 </resources>

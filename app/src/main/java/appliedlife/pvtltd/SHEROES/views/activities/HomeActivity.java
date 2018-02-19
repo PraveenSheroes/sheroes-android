@@ -1087,7 +1087,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void changeFragmentWithCommunities() {
-
         mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);

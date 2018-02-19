@@ -92,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 import dagger.Component;
 
@@ -285,6 +286,8 @@ public interface SheroesAppComponent {
     void inject(ContactListFragment contactListFragment);
 
     void inject(ContactCardHolder contactCardHolder);
+
+    void inject(SuggestedContactCardHolder suggestedContactCardHolder);
 
 }
 

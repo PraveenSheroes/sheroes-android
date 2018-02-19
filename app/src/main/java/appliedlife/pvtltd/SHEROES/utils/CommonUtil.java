@@ -929,24 +929,21 @@ public class CommonUtil {
         return !shown;
     }
 
-   /* public static boolean fromNthTimeOnly(String key, int n) {
+   public static void setTimeForContacts(String key,long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        if (prefs == null) {
-            return false;
+        if(null==prefs) {
+            return;
         }
-        int count = prefs.getInt(key, 1);
-        if ((count >= n)) {
-            if (count <= n) {
-                prefs.edit().putInt(key, (count + 1)).apply();
-            }
-            return true;
-        } else {
-            if (count < n) {
-                prefs.edit().putInt(key, (count + 1)).apply();
-            }
-            return false;
+       prefs.edit().putLong(key, contactSyncTime).apply();
+    }
+    public static long getTimeForContacts(String key) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if(null==prefs)
+        {
+            return 0;
         }
-    }*/
+       return prefs.getLong(key, 0);
+    }
     public static int forGivenCountOnly(String key, int n) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (prefs == null) {

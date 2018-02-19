@@ -159,8 +159,8 @@
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
     <string name="ID_SUBMIT">SUBMIT</string>
-    <string name="ID_GROWTH_BUDDIES_FOLLOW">Follow</string>
-    <string name="ID_GROWTH_BUDDIES_FOLLOWING">Following</string>
+    <string name="follow_user">Follow</string>
+    <string name="following_user">Following</string>
     <!--String Related personal contact details edit page-->
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
     <string name="ID_LOCATION_HINT">LOCATION</string>

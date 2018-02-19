@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,11 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
  * Created by Praveen on 14/02/18.
  */
 
-public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private final Context mContext;
-    private List<UserContactDetail> mContactDetail;
+    private List<UserContactDetail> mContactDetailList;
+    List<UserContactDetail> mUserContactListForFilter = new ArrayList<>();
     private final ContactDetailCallBack mContactDetailCallBack;
 
     private static final int TYPE_PROGRESS_LOADER = -1;
@@ -39,7 +42,7 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     //region Constructor
     public InviteFriendAdapter(Context context, ContactDetailCallBack mContactDetailCallBack) {
         this.mContext = context;
-        mContactDetail = new ArrayList<>();
+        mContactDetailList = new ArrayList<>();
         this.mContactDetailCallBack = mContactDetailCallBack;
     }
     //endregion
@@ -52,8 +55,8 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_card_holder_layout, parent, false);
                 return new ContactCardHolder(view, mContactDetailCallBack);
-              case TYPE_PROGRESS_LOADER:
-                  return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
+            case TYPE_PROGRESS_LOADER:
+                return new LoaderViewHolder(mInflater.inflate(R.layout.loading_progress_layout, parent, false));
         }
         return null;
     }
@@ -66,7 +69,7 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (holder.getItemViewType()) {
             case TYPE_CONTACT:
                 ContactCardHolder contactCardHolder = (ContactCardHolder) holder;
-                UserContactDetail feedDetail = (UserContactDetail) mContactDetail.get(position);
+                UserContactDetail feedDetail = (UserContactDetail) mContactDetailList.get(position);
                 contactCardHolder.bindData(feedDetail, mContext, position);
                 break;
 
@@ -79,76 +82,88 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return mContactDetail == null ? 0 : mContactDetail.size();
+        return getDataItemCount() + (showLoader ? 1 : 0);
     }
 
     public void setData(final List<UserContactDetail> contactDetails) {
-        mContactDetail = contactDetails;
+        this.mUserContactListForFilter = contactDetails;
+        mContactDetailList = contactDetails;
         notifyDataSetChanged();
     }
 
-
     @Override
     public int getItemViewType(int position) {
-        BaseResponse feedDetail = mContactDetail.get(position);
-        if (feedDetail instanceof UserContactDetail) {
+        if (position < getDataItemCount() && getDataItemCount() > 0) {
             return TYPE_CONTACT;
         }
         return TYPE_PROGRESS_LOADER;
     }
 
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mContactDetailList = (List<UserContactDetail>) results.values;
+                InviteFriendAdapter.this.notifyDataSetChanged();
+            }
 
-
-
-    public void commentStartedLoading() {
-        if (showLoader) return;
-        showLoader = true;
-        int loadingPos = getLoaderPostion();
-        if (loadingPos != RecyclerView.NO_POSITION) {
-            notifyItemChanged(loadingPos);
-        }
-    }
-
-    public void commentFinishedLoading() {
-        if (!showLoader) return;
-        final int loadingPos = getLoaderPostion();
-        showLoader = false;
-        if (loadingPos != RecyclerView.NO_POSITION) {
-            notifyItemChanged(loadingPos);
-        }
-    }
-
-    public int getLoaderPostion() {
-        int pos = RecyclerView.NO_POSITION;
-        if(hasMoreItem){
-            if(!CommonUtil.isEmpty(mContactDetail)){
-                BaseResponse baseResponse = mContactDetail.get(0);
-                if(baseResponse instanceof UserPostSolrObj){
-                    pos = 1;
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<UserContactDetail> filteredResults = null;
+                if (constraint.length() == 0) {
+                    filteredResults = mUserContactListForFilter;
+                } else {
+                    filteredResults = getFilteredResults(constraint.toString().toLowerCase());
                 }
+                FilterResults results = new FilterResults();
+                results.values = filteredResults;
+                return results;
+            }
+        };
+    }
+
+    private List<UserContactDetail> getFilteredResults(String constraint) {
+        List<UserContactDetail> results = new ArrayList<>();
+        for (UserContactDetail item : mUserContactListForFilter) {
+            if (item.getName().toLowerCase().contains(constraint)) {
+                results.add(item);
             }
         }
-        return pos;
+        return results;
     }
 
-    public void setHasMoreComments(boolean hasMoreComments) {
-        if(!hasMoreComments){
-            int lodPos = getLoaderPostion();
-            mContactDetail.remove(lodPos);
-            notifyItemRemoved(lodPos);
-        }
-        this.hasMoreItem = hasMoreComments;
+    public void addAll(List<UserContactDetail> userContactDetailList) {
+        int startPosition = mContactDetailList.size();
+        mContactDetailList.addAll(userContactDetailList);
+        this.mUserContactListForFilter = mContactDetailList;
+        notifyItemRangeChanged(startPosition, mContactDetailList.size());
     }
 
-
-
-    public void removeData(int index) {
-        mContactDetail.remove(index);
-        notifyItemRemoved(index);
+    //endregion
+    //region Public methods
+    public void contactStartedLoading() {
+        if (showLoader) return;
+        showLoader = true;
+        notifyItemInserted(getLoaderPosition());
     }
 
+    public void contactsFinishedLoading() {
+        if (!showLoader) return;
+        final int loadingPos = getLoaderPosition();
+        showLoader = false;
+        notifyItemRemoved(loadingPos);
+    }
 
+    //region Private Helper methods
+    private int getLoaderPosition() {
+        return showLoader ? getItemCount() - 1 : RecyclerView.NO_POSITION;
+    }
 
+    private int getDataItemCount() {
+        return mContactDetailList == null ? 0 : mContactDetailList.size();
+    }
     //endregion
 }

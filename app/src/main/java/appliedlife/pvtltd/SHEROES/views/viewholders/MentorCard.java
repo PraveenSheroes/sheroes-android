@@ -172,11 +172,11 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         tvMentorAskQuestion.setText(mContext.getString(R.string.ID_ASK_QUESTION));
         if (dataItem.isSolrIgnoreIsMentorFollowed()) {
             tvMentorFollow.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            tvMentorFollow.setText(mContext.getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
+            tvMentorFollow.setText(mContext.getString(R.string.following_user));
             tvMentorFollow.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         } else {
             tvMentorFollow.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-            tvMentorFollow.setText(mContext.getString(R.string.ID_GROWTH_BUDDIES_FOLLOW));
+            tvMentorFollow.setText(mContext.getString(R.string.follow_user));
             tvMentorFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
