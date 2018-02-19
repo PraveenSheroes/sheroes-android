@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
@@ -893,12 +894,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
-    public void updateItem(FeedDetail feedDetail) {
-        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
+    public void updateItem(FeedDetail updatedFeedDetail) {
+        findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
+        /*int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
         if (position == RecyclerView.NO_POSITION) {
             return;
         }
-        mAdapter.setData(position, feedDetail);
+        mAdapter.setData(position, feedDetail);*/
     }
 
     @Override
@@ -946,6 +948,34 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         }
         return -1;
+    }
+
+    public void findPositionAndUpdateItem(FeedDetail updatedFeedDetail, long id) { //TODO - move to presenter
+        if (mAdapter == null) {
+            return;
+        }
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                mAdapter.setData(i, updatedFeedDetail);
+            }
+            if(feedDetail instanceof CarouselDataObj){
+                for (int j = 0; j < ((CarouselDataObj)feedDetail).getFeedDetails().size() ; j++){
+                    FeedDetail innerFeedDetail = ((CarouselDataObj)feedDetail).getFeedDetails().get(j);
+                    if(innerFeedDetail!=null && innerFeedDetail.getIdOfEntityOrParticipant() == id){
+                        ((CarouselDataObj)feedDetail).getFeedDetails().set(j, updatedFeedDetail);
+                        mAdapter.setData(i, feedDetail);
+                    }
+                }
+            }
+        }
+        return;
     }
 
     public void refreshList() {

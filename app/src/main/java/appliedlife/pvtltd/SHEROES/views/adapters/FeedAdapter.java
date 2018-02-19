@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
+import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
@@ -73,6 +74,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_ARTICLE:
                 return new FeedArticleHolder(mInflater.inflate(R.layout.feed_article_card_normal, parent, false), mBaseHolderInterface);
             case TYPE_USER_POST:
+                View viewPost = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_user_post_compact_item, parent, false);
+                //return new UserPostCompactViewHolder(viewPost,mContext, mBaseHolderInterface);
+
                 return new FeedCommunityPostHolder(mInflater.inflate(R.layout.feed_comunity_user_post_normal, parent, false), mBaseHolderInterface);
             case TYPE_LOADER:
                 return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
@@ -110,6 +114,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 articleViewHolder.bindData(articleSolrObj, mContext, position);
                 break;
             case TYPE_USER_POST:
+                /*UserPostCompactViewHolder userPostCompactViewHolder = (UserPostCompactViewHolder) holder;
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetailList.get(position);
+                userPostCompactViewHolder.bindData(userPostSolrObj, mContext);*/
+
                 FeedCommunityPostHolder feedCommunityPostHolder = (FeedCommunityPostHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetailList.get(position);
                 feedCommunityPostHolder.bindData(userPostSolrObj, mContext, position);

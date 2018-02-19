@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_post_compact_card"
+    android:layout_width="300dp"
+    android:layout_height="280dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    card_view:cardCornerRadius="3dp"
+    card_view:cardElevation="2dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:id="@+id/author_image_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/post_author_image"
+                android:layout_width="@dimen/feed_profile_icon_size"
+                android:layout_height="@dimen/feed_profile_icon_size" />
+
+            <ImageView
+                android:id="@+id/author_verified_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/ic_verified"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/post_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_toRightOf="@id/author_image_container"
+            android:fontFamily="sans-serif-medium"
+            android:lines="2"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            tools:text="Yashmita Singh posted inHealth Tips" />
+
+        <TextView
+            android:id="@+id/post_relative_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/post_title"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/author_image_container"
+            android:fontFamily="sans-serif"
+            android:textColor="#90949c"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            tools:text="25 min ago" />
+
+        <RelativeLayout
+            android:id="@+id/middle_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/post_relative_time"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/post_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:lineSpacingExtra="6sp"
+                android:lines="2"
+                android:maxLines="2"
+                android:textColor="#3c3c3c"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                tools:text="It's taken me a long time to get to a point where I didn't feel broken and incomplete. I searched for love outside of myself, in partners, in jobs, in someone's touch and validation" />
+
+            <RelativeLayout
+                android:id="@+id/image_container"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:layout_below="@id/post_description">
+
+                <ImageView
+                    android:id="@+id/image_second"
+                    android:layout_width="150dp"
+                    android:layout_alignParentRight="true"
+                    android:scaleType="fitXY"
+                    android:layout_height="match_parent"
+                    android:src="@color/email" />
+
+                <ImageView
+                    android:id="@+id/image_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/image_second"
+                    android:scaleType="fitXY"
+                    android:src="@color/colorPrimaryDark" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/link_detail_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_description"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp">
+
+                <FrameLayout
+                    android:id="@+id/link_image_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <ImageView
+                        android:id="@+id/link_image"
+                        android:layout_width="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_height="100dp" />
+
+                    <ImageView
+                        android:id="@+id/play_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/circular_view"
+                        android:src="@drawable/ic_media_play_dark" />/>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/link_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_below="@id/link_image_container"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#3c3c3c"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+
+                <TextView
+                    android:id="@+id/link_sub_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_below="@id/link_description"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="#3c3c3c"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/post_like_comment_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/middle_content">
+
+            <TextView
+                android:id="@+id/post_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#90949c"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                tools:text="124 Likes" />
+
+            <TextView
+                android:id="@+id/post_comments_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#90949c"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                tools:text="25 Comments" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/comment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@+id/post_like_comment_count"
+            android:layout_marginTop="8dp">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="#90949c" />
+
+            <RelativeLayout
+                android:id="@+id/post_like_comment_share_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider"
+                android:layout_marginTop="18dp"
+                android:clickable="false">
+
+                <TextView
+                    android:id="@+id/post_like_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:drawableLeft="@drawable/ic_heart_in_active"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Like"
+                    android:textColor="#878787"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/post_comment_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30.5dp"
+                    android:layout_toRightOf="@+id/post_like_button"
+                    android:drawableLeft="@drawable/ic_comment_icon"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Comment"
+                    android:textColor="#878787"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/post_share_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30.5dp"
+                    android:layout_toRightOf="@+id/post_comment_button"
+                    android:drawableLeft="@drawable/ic_share_card"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Share"
+                    android:textColor="#878787"
+                    android:textSize="14sp"
+                    android:textStyle="normal" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/last_comment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/post_like_comment_share_container"
+                android:layout_marginTop="15dp">
+
+                <FrameLayout
+                    android:id="@+id/comment_author_image_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp">
+                    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                        android:id="@+id/comment_author_image"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:src="@color/email" />
+                    <ImageView
+                        android:id="@+id/comment_author_verified_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:background="@drawable/ic_verified"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/comment_relative_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="4dp"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#90949c"
+                    tools:text="2 min" />
+
+                <TextView
+                    android:id="@+id/comment_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/comment_author_image_container"
+                    android:layout_toLeftOf="@+id/comment_relative_time"
+                    android:fontFamily="sans-serif"
+                    android:textColor="#3c3c3c"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="Champa Roy Loved reading" />
+
+                <TextView
+                    android:id="@+id/comment_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/comment_author_name"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@+id/comment_author_image_container"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:textColor="#3c3c3c"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    tools:text="Loved reading" />
+
+                <TextView
+                    android:id="@id/comment_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/comment_description"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/comment_author_image_container"
+                    android:drawableLeft="@drawable/ic_heart_in_active"
+                    android:drawablePadding="4dp"
+                    android:text="like" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/join_conversation_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/post_like_comment_share_container"
+                android:layout_marginTop="15dp"
+                android:visibility="gone"
+                android:background="@color/join_conversation"
+                android:gravity="center">
+
+                <FrameLayout
+                    android:id="@+id/conversation_author_image_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp">
+
+                    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                        android:id="@+id/conversation_author_image_conversation"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp" />
+
+                    <ImageView
+                        android:id="@+id/conversation_author_verified_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:background="@drawable/ic_verified"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/join_conversation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="13dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_toRightOf="@id/conversation_author_image_container"
+                    android:background="@drawable/rectangle_comment_background"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:lineSpacingExtra="@dimen/dp_size_3"
+                    android:maxLines="@integer/int_value_for_line_3"
+                    android:padding="@dimen/dp_size_11"
+                    android:text="@string/ID_JOIN_CONVERSATION"
+                    android:textColor="@color/feed_card_time"
+                    android:textSize="@dimen/sp_size_14" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
