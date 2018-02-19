@@ -90,12 +90,12 @@ public class OnBoardingModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<RemoteConfig> getConfig() {
+    public Observable<ConfigurationResponse> getConfig() {
         BaseRequest baseRequest = new BaseRequest();
         return sheroesAppServiceApi.getConfig(baseRequest)
-                .map(new Function<RemoteConfig, RemoteConfig>() {
+                .map(new Function<ConfigurationResponse, ConfigurationResponse>() {
                     @Override
-                    public RemoteConfig apply(RemoteConfig config) {
+                    public ConfigurationResponse apply(ConfigurationResponse config) {
                         return config;
                     }
                 })

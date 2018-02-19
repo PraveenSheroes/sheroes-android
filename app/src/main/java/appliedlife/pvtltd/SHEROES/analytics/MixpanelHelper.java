@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -79,6 +80,8 @@ public class MixpanelHelper {
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
+                    .configType(Configuration.getConfig()!=null ? Configuration.getConfig().configType : "")
+                    .configVersion(Configuration.getConfig()!=null ? Configuration.getConfig().configVersion : "")
                     .emailId(userSummary.getEmailId());
 
         /*int year = YearClass.get(CareApplication.getAppContext());

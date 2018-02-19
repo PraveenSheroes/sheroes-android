@@ -12,9 +12,10 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.OnBoardingModel;
-import appliedlife.pvtltd.SHEROES.models.RemoteConfig;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
@@ -25,16 +26,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
-import io.reactivex.schedulers.Schedulers;
 
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
@@ -203,7 +199,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        onBoardingModel.getConfig().subscribe(new DisposableObserver<RemoteConfig>() {
+        onBoardingModel.getConfig().subscribe(new DisposableObserver<ConfigurationResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -217,12 +213,12 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             }
 
             @Override
-            public void onNext(RemoteConfig config) {
-                if (config != null) {
+            public void onNext(ConfigurationResponse configurationResponse) {
+                if (configurationResponse != null) {
 
                     SharedPreferences.Editor editor = SheroesApplication.mContext.getSharedPreferences(AppConstants.SHARED_PREFS, Context.MODE_PRIVATE).edit();
 
-                    String jsonConfig = SheroesAppModule.ensureGson().toJson(config);
+                    String jsonConfig = SheroesAppModule.ensureGson().toJson(configurationResponse.configuration);
 
                     editor.putString(AppConstants.CONFIG_KEY, jsonConfig);
                     editor.apply();
