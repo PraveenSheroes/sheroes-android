@@ -54,6 +54,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -658,6 +659,22 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .build();
 
             CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        }
+    }
+
+    @Override
+    public void onImagePostClicked(ImageSolrObj imageSolrObj) {
+        if (CommonUtil.isNotEmpty(imageSolrObj.getDeepLinkUrl())) {
+            Uri url = Uri.parse(imageSolrObj.getDeepLinkUrl());
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(url);
+            startActivity(intent);
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(String.valueOf(imageSolrObj.getIdOfEntityOrParticipant()))
+                            .url(imageSolrObj.getDeepLinkUrl())
+                            .build();
+            AnalyticsManager.trackEvent(Event.IMAGE_CARD, null, properties);
         }
     }
 

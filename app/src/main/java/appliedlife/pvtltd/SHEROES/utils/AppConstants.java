@@ -64,6 +64,7 @@ public class AppConstants {
     public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
+    public static final String IMAGE_SUBTYPE = "I";
 
     public static final String FEED_SCREEN = "feed";
     public static final String COMMUNITIES_ONBOARDING_SCREEN = "community_onboarding";

@@ -83,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
@@ -276,6 +277,8 @@ public interface SheroesAppComponent {
     void inject(ChallengeGratificationActivity challengeGratificationActivity);
 
     void inject(UserPostCompactViewHolder userPostCompactViewHolder);
+
+    void inject(ImageViewHolder imageViewHolder);
 
 }
 

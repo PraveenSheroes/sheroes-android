@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -19,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
@@ -36,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
@@ -100,6 +103,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new CommunityFlatViewHolder(mInflater.inflate(R.layout.community_flat_layout, parent, false), mBaseHolderInterface);
             case TYPE_HOME_FEED_HEADER:
                 return new HomeHeaderViewHolder(mInflater.inflate(R.layout.header_view_layout, parent, false), mBaseHolderInterface);
+            case TYPE_IMAGE:
+                return new ImageViewHolder(mInflater.inflate(R.layout.image_item, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -176,6 +181,12 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 HomeHeaderViewHolder homeHeaderViewHolder = (HomeHeaderViewHolder) holder;
                 FeedDetail feedDetail1 = mFeedDetailList.get(position);
                 homeHeaderViewHolder.bindData(feedDetail1, mContext, position);
+                break;
+
+            case TYPE_IMAGE:
+                ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
+                FeedDetail feedDetail2 = mFeedDetailList.get(position);
+                imageViewHolder.bindData(feedDetail2, mContext, position);
         }
     }
 
@@ -192,6 +203,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_LEADER = 11;
     private static final int TYPE_COMMUNITY = 12;
     private static final int TYPE_HOME_FEED_HEADER = 13;
+    private static final int TYPE_IMAGE = 14;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -242,6 +254,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail instanceof LeaderObj) {
                 return TYPE_LEADER;
             }
+
+            if (feedDetail instanceof ImageSolrObj) {
+                return TYPE_IMAGE;
+            }
+
             if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)){
                 return TYPE_HOME_FEED_HEADER;
             }
