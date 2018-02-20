@@ -57,7 +57,6 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
         imageView.setImageResource(screen);
         switch (position) {
             case AppConstants.NO_REACTION_CONSTANT:
-                ((SheroesApplication) context.getApplicationContext()).trackScreenView(context.getString(R.string.ID_FIRST_WELCOME));
                 SpannableString spannableString = new SpannableString(text);
                 if (StringUtil.isNotNullOrEmptyString(text)) {
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.feed_article_label)), 32, 61, 0);
