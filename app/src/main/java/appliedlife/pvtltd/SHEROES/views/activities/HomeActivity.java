@@ -262,6 +262,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
+    public PopupWindow popupWindowNavTooTip;
+    public PopupWindow popUpNotificationWindow;
 
 
     @Override
@@ -302,7 +304,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     public void run() {
                         try {
                             final View popupViewNotificationToolTip;
-                            final PopupWindow popUpNotificationWindow;
                             int width = AppUtils.getWindowWidth(HomeActivity.this);
                             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             popupViewNotificationToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
@@ -347,7 +348,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             public void run() {
                 try {
                     final View navToolTip;
-                    final PopupWindow popupWindowNavTooTip;
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -377,6 +377,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onDestroy() {
+        if (popupWindowNavTooTip != null && popupWindowNavTooTip.isShowing()) {
+            popupWindowNavTooTip.dismiss();
+        }
+
+        if (popUpNotificationWindow != null && popUpNotificationWindow.isShowing()) {
+            popUpNotificationWindow.dismiss();
+        }
         super.onDestroy();
         activityDataPresenter.detachView();
     }
@@ -826,7 +833,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
-
 
     private void openNativeViews(String url) {
         if (null != url && StringUtil.isNotNullOrEmptyString(url)) {

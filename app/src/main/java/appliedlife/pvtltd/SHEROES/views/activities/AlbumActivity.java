@@ -76,6 +76,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     private AlbumCarouselAdapter mAlbumCarouselAdapter;
     private int mMainItemPosition;
     private String mAlbumId;
+    private PopupWindow popupWindowAlbumTooTip;
 
     @Inject
     AlbumPresenter mAlbumPresenter;
@@ -281,7 +282,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             public void run() {
                 try {
                     final View albumToolTip;
-                    final PopupWindow popupWindowAlbumTooTip;
                     int width = AppUtils.getWindowWidth(AlbumActivity.this);
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     albumToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
@@ -425,5 +425,14 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         properties.put(EventProperty.URL.getString(), fullPath);
         AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);*/
     }
+
+    @Override
+    protected void onDestroy() {
+        if (popupWindowAlbumTooTip != null && popupWindowAlbumTooTip.isShowing()) {
+            popupWindowAlbumTooTip.dismiss();
+        }
+        super.onDestroy();
+    }
+
     //endregion
 }
