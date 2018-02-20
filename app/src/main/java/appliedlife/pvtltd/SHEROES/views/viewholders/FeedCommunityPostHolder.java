@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -742,6 +743,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
+                    tvFeedCommunityPostUserName.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
                     invalidateCommentLike(lastComment);
@@ -750,6 +752,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
+                    tvFeedCommunityPostUserName.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (lastComment.isVerifiedMentor()) {
@@ -1217,9 +1220,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
             if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                 if (mUserPostObj.isAuthorMentor()) {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), 0, feedTitle.length(), 0);
                 } else {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), 0, feedTitle.length(), 0);
                 }
             } else {
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);

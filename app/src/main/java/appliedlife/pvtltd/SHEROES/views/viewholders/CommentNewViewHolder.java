@@ -108,8 +108,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                 mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
                 StringBuilder stringBuilder = new StringBuilder();
-                // stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
-                //Spannable getCommentString = new SpannableString(stringBuilder.toString());
+
+                stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
+                Spannable getCommentString = new SpannableString(stringBuilder.toString());
                 //int size = mComment.getParticipantName().length() + 1;
                 //getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);

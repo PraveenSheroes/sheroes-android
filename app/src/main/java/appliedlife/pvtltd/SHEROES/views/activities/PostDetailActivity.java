@@ -223,7 +223,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
         mIsAnonymous = false;
-        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.blue));
+        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.red));
         tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
     }
 
@@ -231,7 +231,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void anonymousPostForComment() {
         mIsAnonymous = true;
         tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
-        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.blue));
+        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.red));
     }
 
     @Override

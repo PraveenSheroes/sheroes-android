@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -111,7 +110,6 @@ public class FollowingFragment extends BaseFragment implements FollowerFollowing
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, mode.name(), AppConstants.NO_REACTION_CONSTANT);
         mFragmentListRefreshData.setSelfProfile(isSelfProfile);
         mFragmentListRefreshData.setMentorUserId(userMentorId);
-        mFragmentListRefreshData.setFollowerFollowingType(mode);
 
         profileFollowedMentor = mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), mode.name());
 
