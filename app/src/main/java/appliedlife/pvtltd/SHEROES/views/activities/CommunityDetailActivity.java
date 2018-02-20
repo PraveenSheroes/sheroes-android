@@ -452,7 +452,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 } else {
                     deepLinkUrl = mCommunityFeedSolrObj.getDeepLinkUrl();
                 }
-                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false);
+                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, "");
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, getScreenName(), properties);
                 /*Intent intent = new Intent(Intent.ACTION_SEND);

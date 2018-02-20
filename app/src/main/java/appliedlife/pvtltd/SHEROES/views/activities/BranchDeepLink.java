@@ -18,12 +18,15 @@ import org.json.JSONObject;
 import java.util.Iterator;
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
@@ -43,6 +46,7 @@ public class BranchDeepLink extends BaseActivity {
         } else {
             routeDeepLink();
         }
+        setContentView(R.layout.activity_branch_deeplink);
     }
     //region Private Helper methods
     private void routeDeepLink() {
@@ -82,6 +86,17 @@ public class BranchDeepLink extends BaseActivity {
                 shareDeepLink = sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) ? sessionParams.getString(AppConstants.SHARE_DEEP_LINK_URL) : "";
                 shareDialogTitle = sessionParams.has(AppConstants.SHARE_DIALOG_TITLE) ? sessionParams.getString(AppConstants.SHARE_DIALOG_TITLE) : "";
                 isShareDeepLink = true;
+                if(!CommonUtil.isNotEmpty(url) && isShareDeepLink){
+                    Intent intentResult = new Intent();
+                    intentResult.putExtra(AppConstants.SHARE_TEXT, shareText);
+                    intentResult.putExtra(AppConstants.SHARE_IMAGE, shareImage);
+                    intentResult.putExtra(AppConstants.SHARE_DEEP_LINK_URL, shareDeepLink);
+                    intentResult.putExtra(AppConstants.SHARE_DIALOG_TITLE, shareDialogTitle);
+                    intentResult.putExtra(AppConstants.IS_SHARE_DEEP_LINK, isShareDeepLink);
+                    setResult(RESULT_OK, intentResult);
+                    finish();
+                    return;
+                }
             }
 
             if (TextUtils.isEmpty(url)) {

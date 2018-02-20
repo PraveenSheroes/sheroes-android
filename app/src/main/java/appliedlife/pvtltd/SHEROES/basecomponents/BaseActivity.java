@@ -97,6 +97,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
 public abstract class BaseActivity extends AppCompatActivity implements EventInterface, BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
     public static final String SOURCE_SCREEN = "SOURCE_SCREEN";
     public static final String SOURCE_PROPERTIES = "SOURCE_PROPERTIES";
+    public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -158,7 +159,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if(CommonUtil.isNotEmpty(shareImage)){
                 isShareImage = true;
             }
-            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false);
+            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
         }
 
     }
@@ -372,6 +373,27 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(requestCode == BRANCH_REQUEST_CODE){
+            if(intent!=null && intent.getExtras()!=null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)){
+                boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
+                if(isShareDeeplink){
+                    String shareText = intent.getExtras().getString(AppConstants.SHARE_TEXT);
+                    String shareImage = intent.getExtras().getString(AppConstants.SHARE_IMAGE);
+                    String shareDeeplLink = intent.getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
+                    String shareDialog = intent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
+                    Boolean isShareImage = false;
+                    if(CommonUtil.isNotEmpty(shareImage)){
+                        isShareImage = true;
+                    }
+                    ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+                }
+            }
+        }
+    }
+
+    @Override
     public void startActivity(Intent intent) {
         boolean handled = false;
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_VIEW)) {
@@ -380,15 +402,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 super.startActivity(intent);
                 return;
             }
+            if (CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))) {
+                intent.setClass(this, BranchDeepLink.class);
+                super.startActivityForResult(intent, BRANCH_REQUEST_CODE);
+                return;
+            }
             if (AppUtils.matchesWebsiteURLPattern(intent.getDataString())) {
                 Uri url = Uri.parse(intent.getDataString());
                 AppUtils.openChromeTab(this, url);
                 handled = true;
-            }
-            if (CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))) {
-                intent.setClass(this, BranchDeepLink.class);
-                super.startActivity(intent);
-                return;
             }
         }
         if (!handled) {

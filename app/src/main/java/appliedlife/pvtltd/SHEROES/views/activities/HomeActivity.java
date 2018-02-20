@@ -786,7 +786,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else {
             appShareUrl = AppConstants.APP_SHARE_LINK;
         }
-        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true);
+        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, "");
         AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
     }
 
