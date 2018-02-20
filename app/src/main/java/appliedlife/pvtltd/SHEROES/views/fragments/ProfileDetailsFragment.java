@@ -188,7 +188,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateUserProfileDetails() {
         profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
 
-        profilePresenter.getFollowedMentors(mAppUtils.followerFollowingRequestBuilder(1, userId, false, false));
+        profilePresenter.getFollowedMentors(mAppUtils.followerFollowingRequest(1, userId, FollowingEnum.FOLLOWED_CHAMPIONS.name()));
 
         if(isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));

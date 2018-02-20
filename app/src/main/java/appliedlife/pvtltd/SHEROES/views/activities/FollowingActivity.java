@@ -52,8 +52,7 @@ public class FollowingActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
             isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
-           // enumValue = getIntent().getStringExtra("TYPE");
-             myEnum = (FollowingEnum)getIntent().getSerializableExtra("TYPE");
+            myEnum = (FollowingEnum)getIntent().getSerializableExtra("TYPE");
         }
 
         setSupportActionBar(mToolbar);

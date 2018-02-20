@@ -594,6 +594,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mentorPost.community.id = userPostSolrObj.getSolrIgnoreMentorCommunityId();
             mentorPost.community.name = userPostSolrObj.getNameOrTitle();
             mentorPost.isEdit = false;
+            mentorPost.isCompanyAdmin =  mUserSolarObject.getCompanyAdmin();
             CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
         }
     }
@@ -677,6 +678,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 mentorPost.community.name = mUserSolarObject.getNameOrTitle();
                 mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                 mentorPost.isEdit = false;
+                mentorPost.isCompanyAdmin =  mUserSolarObject.getCompanyAdmin();
                 CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         }

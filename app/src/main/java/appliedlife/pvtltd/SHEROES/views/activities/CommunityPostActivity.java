@@ -206,6 +206,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private UserSummary mUserSummary;
     private boolean mIsAnonymous;
     private boolean mIsCommunityOwner;
+    private boolean mIsCompanyAdmin;
     private PostPhotoAdapter mPostPhotoAdapter;
     private List<Photo> mImageList = new ArrayList<>();
     private boolean isLinkRendered;
@@ -332,6 +333,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
         if (mUserPreference.isSet() && mUserPreference.get() != null && mUserPreference.get().getUserSummary() != null) {
             mUserSummary = mUserPreference.get().getUserSummary();
+            mIsCompanyAdmin = mUserPreference.get().getUserSummary().getUserBO().getIsCompanyAdmin();
         }
         if (mUserSummary == null) {
             return;
@@ -472,6 +474,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
             }
         }
+
+        //mCommunityPost.community.isOwner
+
         if(mIsChallengePost){
             mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(),mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
         }else if (!mIsEditPost) {
@@ -480,7 +485,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
 
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken));
+        //    mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder((mCommunityPost.community.id), getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken, mCommunityPost.community.isOwner, schedulePostTime));
         } else {
             mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
         }
@@ -933,6 +938,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+//            communityPost.isCompanyAdmin =  userPostObj.grt();
             if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
                 for (String imageUrl : userPostObj.getImageUrls()) {
                     Photo photo = new Photo();

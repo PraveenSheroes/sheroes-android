@@ -71,6 +71,7 @@ import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -1516,19 +1517,20 @@ public class AppUtils {
         return publicProfileListRequest;
     }
 
-    /*public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId, String isUser, String isListing) {
-        AppUtils appUtils = AppUtils.getInstance();
-        ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
-        profileFollowedMentor.setPageNo(pageNo);
-        profileFollowedMentor.setAppVersion(appUtils.getAppVersionName());
-        profileFollowedMentor.setUserId(userId);
-        profileFollowedMentor.setListing(is_listing);
-        profileFollowedMentor.setUser(is_user);
-        profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
-        return profileFollowedMentor;
-    }*/
+    public FollowersFollowingRequest followerFollowingRequest(int pageNo, long userId, String followerFollowingType) {
+        switch (followerFollowingType) {
+            case AppConstants.FOLLOWED_CHAMPION:
+               return followerFollowingRequestBuilder(pageNo, userId, false, false);
+            case AppConstants.FOLLOWERS:
+                return followerFollowingRequestBuilder(pageNo, userId, false, true);
+            case AppConstants.FOLLOWING:
+                return followerFollowingRequestBuilder(pageNo, userId, true, true);
+             default:
+                 return null;
+        }
+    }
 
-    public FollowersFollowingRequest followerFollowingRequestBuilder(int pageNo, long userId, boolean is_user, boolean is_listing) {
+    private FollowersFollowingRequest followerFollowingRequestBuilder(int pageNo, long userId, boolean is_user, boolean is_listing) {
         AppUtils appUtils = AppUtils.getInstance();
         FollowersFollowingRequest followersFollowingRequest = new FollowersFollowingRequest();
         followersFollowingRequest.setPageNo(pageNo);
@@ -1828,7 +1830,7 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean isAdmin, Date schedulePostTime) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1841,6 +1843,7 @@ public class AppUtils {
         communityPostCreateRequest.setPostToFacebook(hasPermission);
         communityPostCreateRequest.setUserFbAccessToken(accessToken);
         communityPostCreateRequest.setId(mIdForEditPost);
+        communityPostCreateRequest.setSchedulePost(schedulePostTime);
         if (null != linkRenderResponse) {
             communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
             communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());

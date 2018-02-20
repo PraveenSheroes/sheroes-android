@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommunitiesListPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
@@ -39,6 +40,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     HomePresenter mHomePresenter;
     HelplinePresenter mHelplinePresenter;
     CommunitiesListPresenter mCommunitiesListPresenter;
+    FollowingPresenterImpl mFollowingPresenter;
     RecyclerView mRecyclerView;
     ProfilePresenterImpl profilePresenter;
     private LinearLayoutManager mManager;
@@ -93,6 +95,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
 
     public HidingScrollListener(CommunitiesListPresenter communitiesListPresenter, RecyclerView recyclerView, LinearLayoutManager mLayoutManager, FragmentListRefreshData mFragmentListRefreshData) {
         mCommunitiesListPresenter = communitiesListPresenter;
+        mRecyclerView = recyclerView;
+        mManager = mLayoutManager;
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+    }
+
+    public HidingScrollListener(FollowingPresenterImpl followingPresenter, RecyclerView recyclerView, LinearLayoutManager mLayoutManager, FragmentListRefreshData mFragmentListRefreshData) {
+        mFollowingPresenter = followingPresenter;
         mRecyclerView = recyclerView;
         mManager = mLayoutManager;
         this.mFragmentListRefreshData = mFragmentListRefreshData;
@@ -247,10 +256,15 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         }
                         break;
 
-                    case AppConstants.PROFILE_FOLLOWING:
-                        profilePresenter.getFollowedMentors(mAppUtils.followerFollowingRequestBuilder(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), false, false));
+                    case AppConstants.FOLLOWED_CHAMPION:
+                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), AppConstants.FOLLOWED_CHAMPION));
                         break;
-
+                    case AppConstants.FOLLOWERS:
+                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(),  AppConstants.FOLLOWERS));
+                        break;
+                    case AppConstants.FOLLOWING:
+                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(),  AppConstants.FOLLOWING));
+                        break;
 
                     case AppConstants.ON_BOARDING_COMMUNITIES:
                         FeedRequestPojo feedRequestPojo = makeFeedRequest(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo());

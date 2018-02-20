@@ -137,6 +137,10 @@ public class AppConstants {
     public static final String ALL_SEARCH = "search";
     public static final String IMAGE = "Img";
 
+    public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
+    public static final String FOLLOWERS = "FOLLOWERS";
+    public static final String FOLLOWING = "FOLLOWING";
+
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
