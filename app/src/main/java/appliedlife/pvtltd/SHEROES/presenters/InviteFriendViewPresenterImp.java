@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 import com.crashlytics.android.Crashlytics;
+import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,14 +22,19 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.ContactListSyncRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -62,12 +68,15 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
     private int mContactListState;
     private List<UserSolrObj> mUserDetalList = new ArrayList<>();
     private List<UserContactDetail> mContactDetailList = new ArrayList<>();
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     //region Constructor
 
     @Inject
     public InviteFriendViewPresenterImp(SheroesAppServiceApi mSheroesApplication, SheroesApplication sheroesApplication) {
         this.mSheroesAppServiceApi = mSheroesApplication;
         this.mSheroesApplication = sheroesApplication;
+
     }
 
     //endregion
@@ -482,6 +491,56 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     @Override
                     public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    public void updateInviteUrlFromPresenter(String inviteAppUrl) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
+            return;
+        }
+        getMvpView().startProgressBar();
+        final UpdateInviteUrlRequest updateInviteUrlRequest=new UpdateInviteUrlRequest();
+        updateInviteUrlRequest.setAppInviteUrl(inviteAppUrl);
+        getUpdatedInviteAppUrlFromModel(updateInviteUrlRequest)
+                .compose(this.<UpdateInviteUrlResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<UpdateInviteUrlResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                    }
+
+                    @Override
+                    public void onNext(UpdateInviteUrlResponse updateInviteUrlResponse) {
+                        getMvpView().stopProgressBar();
+                        if(updateInviteUrlResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)&&StringUtil.isNotNullOrEmptyString(updateInviteUrlResponse.getUpdatedAppInviteUrl()))
+                        {
+                            if(null!=mUserPreference&&mUserPreference.isSet()) {
+                                LoginResponse loginResponse = mUserPreference.get();
+                                UserSummary userSummary=mUserPreference.get().getUserSummary();
+                                userSummary.setAppShareUrl(updateInviteUrlResponse.getUpdatedAppInviteUrl());
+                                mUserPreference.set(loginResponse);
+                            }
+                        }
+                    }
+                });
+
+    }
+    private Observable<UpdateInviteUrlResponse> getUpdatedInviteAppUrlFromModel(UpdateInviteUrlRequest updateInviteUrlRequest) {
+        return mSheroesAppServiceApi.updateInviteUrl(updateInviteUrlRequest)
+                .map(new Function<UpdateInviteUrlResponse, UpdateInviteUrlResponse>() {
+                    @Override
+                    public UpdateInviteUrlResponse apply(UpdateInviteUrlResponse updateInviteUrlResponse) {
+                        return updateInviteUrlResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

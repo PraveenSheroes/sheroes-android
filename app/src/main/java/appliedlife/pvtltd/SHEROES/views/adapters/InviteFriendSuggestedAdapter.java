@@ -11,13 +11,8 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 
 /**

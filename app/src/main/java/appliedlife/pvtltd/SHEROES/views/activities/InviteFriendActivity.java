@@ -32,7 +32,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.parceler.Parcels;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,15 +41,12 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
@@ -160,11 +156,26 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
             searchIcon.setImageDrawable(null);
             View v = etInviteSearchBox.findViewById(R.id.search_plate);
             v.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.fully_transparent));
+            searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem item) {
+                    // Do whatever you need
+                    return true; // KEEP IT TO TRUE OR IT DOESN'T OPEN !!
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem item) {
+                    // Do whatever you need
+                    return true; // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
+                }
+            });
         }
         if (etInviteSearchBox != null) {
             etInviteSearchBox.setSearchableInfo(searchManager.getSearchableInfo(InviteFriendActivity.this.getComponentName()));
             editTextWatcher();
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 

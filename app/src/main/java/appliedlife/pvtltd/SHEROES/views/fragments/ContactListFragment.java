@@ -33,9 +33,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
@@ -161,6 +161,11 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 }
             }
         });
+        if (!syncContact) {
+            mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+        } else {
+            getUserContacts(getContext());
+        }
         if (null != mUserPreference && mUserPreference.isSet()) {
             BranchUniversalObject mSmsBranchUniversalObject = new BranchUniversalObject()
                     .setCanonicalIdentifier("invite/sms")
@@ -180,15 +185,9 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     }
                 }
             });
-        }
-        if (!syncContact) {
-            mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
-        } else {
-            getUserContacts(getContext());
-        }
-        // if(StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getAppShareUrl())&&!mSmsShareLink.equalsIgnoreCase(mUserPreference.get().getUserSummary().getAppShareUrl()))
-        {
-
+            if (StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getAppShareUrl()) && !mSmsShareLink.equalsIgnoreCase(mUserPreference.get().getUserSummary().getAppShareUrl())) {
+                mInviteFriendViewPresenterImp.updateInviteUrlFromPresenter(mSmsShareLink);
+            }
         }
     }
 
@@ -256,6 +255,9 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             case R.id.btn_invite_friend:
                 if (contactDetail.getPhoneNumber().size() > 0) {
                     String whatsAppNumber = contactDetail.getPhoneNumber().get(0);
+                    if (!whatsAppNumber.contains("91")) {
+                        whatsAppNumber = "91" + whatsAppNumber;
+                    }
                     whatsAppNumber = whatsAppNumber.replace("+", "").replace(" ", "");
                     boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
                     if (isWhatsappInstalled) {
@@ -314,7 +316,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         }
         progressBar.setVisibility(View.GONE);
         if (syncContact) {
-            syncContact=false;
+            syncContact = false;
             mInviteFriendViewPresenterImp.syncFriendsToServer(userContactDetailList);
         }
     }
@@ -342,9 +344,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     @Override
     public void contactsFromServerAfterSyncFromPhoneData(AllContactListResponse allContactListResponse) {
         mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
-        if(null!=getActivity()&&getActivity() instanceof InviteFriendActivity)
-        {
-            ((InviteFriendActivity)getActivity()).dataRequestForFragment(allContactListResponse);
+        if (null != getActivity() && getActivity() instanceof InviteFriendActivity) {
+            ((InviteFriendActivity) getActivity()).dataRequestForFragment(allContactListResponse);
         }
     }
 

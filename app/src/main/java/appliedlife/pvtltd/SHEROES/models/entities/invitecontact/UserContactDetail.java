@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.models.entities.contactdetail;
+package appliedlife.pvtltd.SHEROES.models.entities.invitecontact;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

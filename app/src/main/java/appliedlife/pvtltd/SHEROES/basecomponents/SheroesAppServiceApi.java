@@ -32,8 +32,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.AllContactListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.contactdetail.ContactListSyncRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -48,6 +48,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
@@ -298,4 +300,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/feed/community_category_home")
     Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
+
+    @POST("participant/user/refresh_user_app_invite_url")
+    Observable<UpdateInviteUrlResponse> updateInviteUrl(@Body UpdateInviteUrlRequest updateInviteUrlRequest);
 }

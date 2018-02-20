@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.models.entities.contactdetail;
+package appliedlife.pvtltd.SHEROES.models.entities.invitecontact;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +9,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.User;
 
 /**
  * Created by Praveen on 16/02/18.
