@@ -927,11 +927,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
-        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
-        }
-        mAdapter.setItem(position, communityFeedSolrObj);
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
         if(getActivity()!=null && getActivity() instanceof CollectionActivity){
             ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
         }
@@ -939,11 +935,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
-        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
-        }
-        mAdapter.setItem(position, communityFeedSolrObj);
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
         if(getActivity()!=null && getActivity() instanceof  CollectionActivity){
             ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
         }
