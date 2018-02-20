@@ -23,9 +23,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -45,15 +45,18 @@ import butterknife.ButterKnife;
 public class SuggestedFriendFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
     private static final String SCREEN_LABEL = "Suggested Friend Screen";
     private final String TAG = LogUtils.makeLogTag(SuggestedFriendFragment.class);
-    private final String SUGGESTED_LIST_URL ="http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES";
+    private final String SUGGESTED_LIST_URL = "http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES";
 
-    //region Static variables
+    //region Singleton variables
     @Inject
     Preference<LoginResponse> mUserPreference;
-
+    @Inject
+    InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
     @Inject
     AppUtils mAppUtils;
     //endregion
+
+    //region View variables
     @Bind(R.id.swipe_suggested_friend)
     SwipeRefreshLayout mSwipeRefresh;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
@@ -64,18 +67,22 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private InviteFriendSuggestedAdapter mInviteFriendSuggestedAdapter;
-    @Inject
-    InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
+    //endregion
 
+    //region Member variables
     private boolean hasFeedEnded;
+    //endregion
 
+    //region Static methods
     public static SuggestedFriendFragment createInstance(String name) {
         SuggestedFriendFragment suggestedFriendFragment = new SuggestedFriendFragment();
         Bundle bundle = new Bundle();
         suggestedFriendFragment.setArguments(bundle);
         return suggestedFriendFragment;
     }
+//endregion
 
+    //region Public methods
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -87,38 +94,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         return view;
     }
 
-    //region Private methods
-    private void initViews() {
-        mInviteFriendViewPresenterImp.setEndpointUrl(SUGGESTED_LIST_URL);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mFeedRecyclerView.setLayoutManager(linearLayoutManager);
-        ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mInviteFriendSuggestedAdapter = new InviteFriendSuggestedAdapter(getContext(), this);
-        mFeedRecyclerView.setAdapter(mInviteFriendSuggestedAdapter);
-        mFeedRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
-        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (mInviteFriendViewPresenterImp.isSuggestedLoading() || hasFeedEnded) {
-                    return;
-                }
-                mInviteFriendSuggestedAdapter.contactStartedLoading();
-                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
-            }
-
-        };
-        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
-            }
-        });
-       getAllSuggestedContacts();
-    }
-
-    //endregion
 
     @Override
     public String getScreenName() {
@@ -135,6 +110,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             default:
         }
     }
+
     @Override
     public void startProgressBar() {
         if (mSwipeRefresh == null) {
@@ -143,10 +119,10 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         mSwipeRefresh.post(new Runnable() {
             @Override
             public void run() {
-                    if (mSwipeRefresh != null) {
-                        mSwipeRefresh.setRefreshing(true);
-                        mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
-                    }
+                if (mSwipeRefresh != null) {
+                    mSwipeRefresh.setRefreshing(true);
+                    mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+                }
             }
         });
     }
@@ -160,32 +136,36 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         mSwipeRefresh.setRefreshing(false);
         mInviteFriendSuggestedAdapter.contactsFinishedLoading();
     }
+
     @Override
     public void onSuggestedContactClicked(UserSolrObj userSolrObj, View view) {
         int id = view.getId();
-            switch (id) {
-                case R.id.btn_follow_friend:
-                    followUnFollowRequest(userSolrObj);
-                    break;
-            }
+        switch (id) {
+            case R.id.btn_follow_friend:
+                followUnFollowRequest(userSolrObj);
+                break;
+        }
     }
+
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
         if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
-            mInviteFriendViewPresenterImp.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
+            mInviteFriendViewPresenterImp.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
         } else {
-            mInviteFriendViewPresenterImp.getFollowFromPresenter(publicProfileListRequest,userSolrObj);
+            mInviteFriendViewPresenterImp.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
         }
     }
+
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
 
     }
-    public void getAllSuggestedContacts()
-    {
+
+    public void getAllSuggestedContacts() {
         mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
     }
+
     @Override
     public void showUserDetail(List<UserSolrObj> userSolrObjList) {
         if (StringUtil.isNotEmptyCollection(userSolrObjList)) {
@@ -223,8 +203,43 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         mInviteFriendSuggestedAdapter.notifyItemChanged(userSolrObj.getItemPosition(), userSolrObj);
     }
 
+    //endregion
     @Override
     protected SheroesPresenter getPresenter() {
         return mInviteFriendViewPresenterImp;
     }
+
+
+    //region Private methods
+    private void initViews() {
+        mInviteFriendViewPresenterImp.setEndpointUrl(SUGGESTED_LIST_URL);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mFeedRecyclerView.setLayoutManager(linearLayoutManager);
+        ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mInviteFriendSuggestedAdapter = new InviteFriendSuggestedAdapter(getContext(), this);
+        mFeedRecyclerView.setAdapter(mInviteFriendSuggestedAdapter);
+        mFeedRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (mInviteFriendViewPresenterImp.isSuggestedLoading() || hasFeedEnded) {
+                    return;
+                }
+                mInviteFriendSuggestedAdapter.contactStartedLoading();
+                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
+            }
+
+        };
+        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+            }
+        });
+        getAllSuggestedContacts();
+    }
+
+    //endregion
 }

@@ -97,29 +97,11 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         ButterKnife.bind(this);
         initViews();
     }
-
-    public void dataRequestForFragment(AllContactListResponse allContactListResponse) {
-            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((SuggestedFriendFragment) fragment).getAllSuggestedContacts();
-            }
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    protected boolean trackScreenTime() {
-        return true;
-    }
     //endregion
 
     //region private methods
     private void initViews() {
         if (null != getIntent() && null != getIntent().getExtras()) {
-            Contest mContest = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.INVITE_FRIEND));
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
         }
         setPagerAndLayouts();
@@ -136,7 +118,36 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         toolbarTitle.setText(getString(R.string.invite_friend));
     }
+    private void setPagerAndLayouts() {
+        ViewCompat.setTransitionName(mAppBarLayout, SCREEN_LABEL);
+        supportPostponeEnterTransition();
+        setSupportActionBar(mToolbarView);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPagerAdapter.addFragment(SuggestedFriendFragment.createInstance(getString(R.string.suggested_friend)), getString(R.string.suggested_friend));
+        mViewPagerAdapter.addFragment(ContactListFragment.createInstance(getString(R.string.contact_list_friend)), getString(R.string.contact_list_friend));
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setCurrentItem(1);
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
 
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        mViewPager.addOnPageChangeListener(this);
+    }
+    //endregion
+
+    //region Public methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -242,33 +253,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         finish();
     }
 
-    private void setPagerAndLayouts() {
-        ViewCompat.setTransitionName(mAppBarLayout, SCREEN_LABEL);
-        supportPostponeEnterTransition();
-        setSupportActionBar(mToolbarView);
-        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPagerAdapter.addFragment(SuggestedFriendFragment.createInstance(getString(R.string.suggested_friend)), getString(R.string.suggested_friend));
-        mViewPagerAdapter.addFragment(ContactListFragment.createInstance(getString(R.string.contact_list_friend)), getString(R.string.contact_list_friend));
-        mViewPager.setAdapter(mViewPagerAdapter);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setCurrentItem(1);
-        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mViewPager.setCurrentItem(tab.getPosition());
-            }
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        mViewPager.addOnPageChangeListener(this);
-    }
 
     @Override
     public void onPageScrolled(int i, float v, int i1) {
@@ -283,6 +268,23 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
     @Override
     public void onPageScrollStateChanged(int i) {
 
+    }
+
+    public void dataRequestForFragment(AllContactListResponse allContactListResponse) {
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
+        if (AppUtils.isFragmentUIActive(fragment)) {
+            ((SuggestedFriendFragment) fragment).getAllSuggestedContacts();
+        }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
     }
 
     //endregion

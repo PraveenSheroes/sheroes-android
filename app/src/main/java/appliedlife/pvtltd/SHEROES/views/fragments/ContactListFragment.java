@@ -29,6 +29,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -37,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -70,11 +73,14 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     //region Static variables
     @Inject
     Preference<LoginResponse> mUserPreference;
-
+    public InviteFriendAdapter mInviteFriendAdapter;
+    @Inject
+    InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
     @Inject
     AppUtils mAppUtils;
     //endregion
 
+   //region View variables
     @Bind(R.id.swipe_contact_friend)
     SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.rv_contact_friend_list)
@@ -84,9 +90,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     ProgressBar progressBar;
     @Bind(R.id.empty_view)
     View emptyView;
-    public InviteFriendAdapter mInviteFriendAdapter;
-    @Inject
-    InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
+    //endregion
+
     private boolean hasFeedEnded;
 
     private MoEHelper mMoEHelper;
@@ -118,7 +123,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         initViews();
         return view;
     }
-
+    //region Private methods
     private void initViews() {
         if (CommonUtil.getTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF) > 0) {
             long daysDifference = System.currentTimeMillis() - CommonUtil.getTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF);
@@ -191,33 +196,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         }
     }
 
-    @Override
-    public void startProgressBar() {
-        if (mSwipeRefresh == null) {
-            return;
-        }
-        mSwipeRefresh.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!syncContact) {
-                    if (mSwipeRefresh != null) {
-                        mSwipeRefresh.setRefreshing(true);
-                        mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mEndlessRecyclerViewScrollListener.finishLoading();
-        if (mSwipeRefresh == null) {
-            return;
-        }
-        mSwipeRefresh.setRefreshing(false);
-        mInviteFriendAdapter.contactsFinishedLoading();
-    }
 
     private void getUserContacts(Context context) {
         {
@@ -229,6 +207,21 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         }
     }
 
+    private boolean whatsAppInstalledOrNot(String uri) {
+        PackageManager pm = getContext().getPackageManager();
+        boolean app_installed = false;
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        return app_installed;
+    }
+
+    //endregion
+
+    //region Public methods
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -270,8 +263,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                         sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(whatsAppNumber) + "@s.whatsapp.net");//phone number without "+" prefix
                         sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.invite_friend_request_to_join) + mSmsShareLink);
                         startActivity(sendIntent);
-                        // moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", MoEngageConstants.COMMUNITY, feedDetail.getEntityOrParticipantId(), feedDetail.getNameOrTitle(), MoEngageConstants.COMMUNITY_CATEGORY, getCardTag(feedDetail), feedDetail.getAuthorName(), AppConstants.FEED_SCREEN, feedDetail.getItemPosition());
-                        // AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
+                         moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", "Invite Friend", Long.parseLong(whatsAppNumber), contactDetail.getName(), getScreenName(), "", contactDetail.getName(), getScreenName(), contactDetail.getItemPosition());
+                       //  AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
                     } else {
                         Uri uri = Uri.parse("market://details?id=com.whatsapp");
                         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -289,17 +282,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     }
 
-    private boolean whatsAppInstalledOrNot(String uri) {
-        PackageManager pm = getContext().getPackageManager();
-        boolean app_installed = false;
-        try {
-            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
-            app_installed = true;
-        } catch (PackageManager.NameNotFoundException e) {
-            app_installed = false;
-        }
-        return app_installed;
-    }
 
     public void searchContactInList(String contactName) {
         mInviteFriendAdapter.getFilter().filter(contactName);
@@ -354,6 +336,34 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     }
 
+    @Override
+    public void startProgressBar() {
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!syncContact) {
+                    if (mSwipeRefresh != null) {
+                        mSwipeRefresh.setRefreshing(true);
+                        mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mEndlessRecyclerViewScrollListener.finishLoading();
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.setRefreshing(false);
+        mInviteFriendAdapter.contactsFinishedLoading();
+    }
+    //endregion
     @Override
     protected SheroesPresenter getPresenter() {
         return mInviteFriendViewPresenterImp;
