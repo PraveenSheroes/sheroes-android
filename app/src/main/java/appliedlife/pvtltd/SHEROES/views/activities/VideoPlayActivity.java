@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.facebook.common.Common;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -17,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -87,7 +89,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
                         String youtubeIdSet=youTubeUrl[youTubeUrl.length - 1];
                         if (StringUtil.isNotNullOrEmptyString(youtubeIdSet)) {
                             String[] youTubeId = youtubeIdSet.split(AppConstants.EQUAL_SIGN);
-                            if(StringUtil.isNotNullOrEmptyString(youTubeId[1]))
+                            if(youTubeId!=null && youTubeId.length > 0 && StringUtil.isNotNullOrEmptyString(youTubeId[1]))
                             {
                                 if(youTubeId[1].contains(AppConstants.AND_SIGN)) {
                                     String[] id = youTubeId[1].split(AppConstants.AND_SIGN);

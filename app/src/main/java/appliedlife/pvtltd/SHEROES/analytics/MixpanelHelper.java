@@ -180,6 +180,9 @@ public class MixpanelHelper {
     }
 
     public static void trackPostActionEvent(Event event, FeedDetail feedDetail, String screenName) {
+        if (feedDetail == null) {
+            return;
+        }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()

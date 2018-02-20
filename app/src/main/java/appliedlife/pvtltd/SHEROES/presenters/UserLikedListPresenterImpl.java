@@ -54,7 +54,9 @@ public class UserLikedListPresenterImpl extends BasePresenter<IUserLikedListView
             return;
         }
         getMvpView().startProgressBar();
-        getAllCommentListFromModel(commentReactionRequestPojo,isReaction).subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
+        getAllCommentListFromModel(commentReactionRequestPojo,isReaction)
+                .compose(this.<CommentReactionResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
