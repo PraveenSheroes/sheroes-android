@@ -1830,7 +1830,14 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean isAdmin, Date schedulePostTime) {
+    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, Date mDateTime) {
+        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken);
+        communityPostCreateRequest.setSchedulePost(mDateTime);
+        return communityPostCreateRequest;
+    }
+
+
+        public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1843,7 +1850,6 @@ public class AppUtils {
         communityPostCreateRequest.setPostToFacebook(hasPermission);
         communityPostCreateRequest.setUserFbAccessToken(accessToken);
         communityPostCreateRequest.setId(mIdForEditPost);
-        communityPostCreateRequest.setSchedulePost(schedulePostTime);
         if (null != linkRenderResponse) {
             communityPostCreateRequest.setOgTitleS(linkRenderResponse.getOgTitleS());
             communityPostCreateRequest.setOgDescriptionS(linkRenderResponse.getOgDescriptionS());

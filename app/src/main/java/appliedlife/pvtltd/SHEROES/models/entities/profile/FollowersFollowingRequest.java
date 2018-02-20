@@ -15,8 +15,8 @@ public class FollowersFollowingRequest extends BaseRequest {
     @Expose
     protected Long userId;
 
-    @SerializedName("is_user")
-    private  boolean isUser;
+    @SerializedName("is_fetch_following")
+    private  boolean isFetchFollowing;
 
     @SerializedName("is_listing")
     private  boolean isListing;
@@ -30,11 +30,11 @@ public class FollowersFollowingRequest extends BaseRequest {
     }
 
     public boolean getIsUser() {
-        return isUser;
+        return isFetchFollowing;
     }
 
     public void setIsUser(boolean isUser) {
-        this.isUser = isUser;
+        this.isFetchFollowing = isUser;
     }
 
     public boolean getIsListing() {

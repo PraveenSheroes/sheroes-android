@@ -65,7 +65,8 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                //todo - chk with ujjwal  -  Caused by: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.String appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail.getSubType()' on
+             //   AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
             }
 
         });
