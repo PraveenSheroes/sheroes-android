@@ -609,7 +609,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mentorPost.community.id = userPostSolrObj.getSolrIgnoreMentorCommunityId();
             mentorPost.community.name = userPostSolrObj.getNameOrTitle();
             mentorPost.isEdit = false;
-            mentorPost.isCompanyAdmin =  mUserSolarObject.getCompanyAdmin();
+            mentorPost.isCompanyAdmin =  userPostSolrObj.getCompanyAdmin(); //todo - ravi get typeid
             CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
         }
     }
@@ -772,10 +772,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 .build();
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
-        if (fragment instanceof CommunitiesDetailFragment) {
-            createPost.setVisibility(View.VISIBLE);
 
+        if (tabName.equalsIgnoreCase("Profile - Posts")) {
+            createPost.setVisibility(View.VISIBLE);
         } else if (fragment instanceof MentorQADetailFragment) {
+            createPost.setVisibility(View.GONE);
+        } else {
             createPost.setVisibility(View.GONE);
         }
 

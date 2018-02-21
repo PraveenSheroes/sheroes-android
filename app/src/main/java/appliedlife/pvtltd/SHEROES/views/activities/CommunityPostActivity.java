@@ -1002,6 +1002,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void invalidateUserDropDownView() {
         if (mCommunityPost.community.isOwner) {
+            mIsCompanyAdmin = true;
             mUserDropDownView.setVisibility(View.VISIBLE);
         } else {
             mUserDropDownView.setVisibility(View.GONE);
