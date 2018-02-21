@@ -527,10 +527,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setLinkData() {
+        mPostDescription.setLines(1);
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgTitleS())) {
             mLinkDescription.setText(mUserPostObj.getOgTitleS());
         }
-        mPostDescription.setLines(1);
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgDescriptionS())) {
             mLinkSubTitle.setText(mUserPostObj.getOgDescriptionS());
         }

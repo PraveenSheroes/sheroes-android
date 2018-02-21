@@ -5,10 +5,10 @@
     android:id="@+id/user_post_compact_card"
     android:layout_width="300dp"
     android:layout_height="280dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginLeft="4dp"
     android:layout_marginRight="4dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginTop="10dp"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
@@ -82,42 +82,43 @@
                 android:ellipsize="end"
                 android:fontFamily="sans-serif"
                 android:lineSpacingExtra="6sp"
-                android:lines="2"
+                android:lines="1"
                 android:maxLines="2"
                 android:textColor="#3c3c3c"
                 android:textSize="14sp"
                 android:textStyle="normal"
-                tools:text="It's taken me a long time to get to a point where I didn't feel broken and incomplete. I searched for love outside of myself, in partners, in jobs, in someone's touch and validation" />
+                tools:text="It's taken me a long time to get to" />
 
             <RelativeLayout
                 android:id="@+id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="8dp"
-                android:layout_below="@id/post_description">
+                android:layout_below="@id/post_description"
+                android:layout_marginTop="8dp">
 
                 <RelativeLayout
                     android:id="@+id/second_image_container"
                     android:layout_width="150dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/image_second"
-                    android:layout_width="150dp"
-                    android:layout_alignParentRight="true"
-                    android:scaleType="fitXY"
                     android:layout_height="match_parent"
-                    android:src="@color/email" />
+                    android:layout_alignParentRight="true">
+
+                    <ImageView
+                        android:id="@+id/image_second"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:scaleType="fitXY"
+                        android:src="@color/email" />
 
                     <TextView
                         android:id="@+id/more_image_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:layout_centerInParent="true"
                         android:fontFamily="sans-serif-medium"
-                        android:textStyle="normal"
                         android:textColor="#ffffff"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
                         tools:text="4+" />
 
                 </RelativeLayout>
@@ -139,7 +140,7 @@
                 android:layout_below="@id/post_description"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:visibility="gone"
+                android:background="@drawable/rectangle_border"
                 android:layout_marginTop="8dp">
 
                 <FrameLayout
@@ -150,8 +151,8 @@
                     <ImageView
                         android:id="@+id/link_image"
                         android:layout_width="match_parent"
-                        android:scaleType="fitXY"
-                        android:layout_height="100dp" />
+                        android:layout_height="100dp"
+                        android:scaleType="fitXY" />
 
                     <ImageView
                         android:id="@+id/play_icon"
@@ -162,35 +163,38 @@
                         android:src="@drawable/ic_media_play_dark" />/>
                 </FrameLayout>
 
-                <TextView
-                    android:id="@+id/link_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_below="@id/link_image_container"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="#3c3c3c"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/link_image_container"
+                        android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/link_sub_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_below="@id/link_description"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="#3c3c3c"
-                    android:textSize="12sp"
-                    android:textStyle="normal"
-                    tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+                        <TextView
+                            android:id="@+id/link_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif-medium"
+                            android:maxLines="1"
+                            android:textColor="#3c3c3c"
+                            android:textSize="12sp"
+                            android:textStyle="normal"
+                            tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+
+                        <TextView
+                            android:id="@+id/link_sub_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/link_description"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:fontFamily="sans-serif-medium"
+                            android:maxLines="1"
+                            android:textColor="#3c3c3c"
+                            android:textSize="12sp"
+                            android:textStyle="normal"
+                            tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+                    </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -230,9 +234,9 @@
             android:id="@+id/comment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_below="@+id/post_like_comment_count"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:visibility="gone">
 
             <View
                 android:id="@+id/divider"
@@ -305,12 +309,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp">
+
                     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                         android:id="@+id/comment_author_image"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginLeft="16dp"
                         android:src="@color/email" />
+
                     <ImageView
                         android:id="@+id/comment_author_verified_icon"
                         android:layout_width="wrap_content"
@@ -325,12 +331,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="16dp"
                     android:layout_marginLeft="4dp"
-                    android:textSize="12sp"
+                    android:layout_marginRight="16dp"
                     android:fontFamily="sans-serif"
-                    android:textStyle="normal"
                     android:textColor="#90949c"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
                     tools:text="2 min" />
 
                 <TextView
@@ -338,8 +344,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/comment_author_image_container"
                     android:layout_toLeftOf="@+id/comment_relative_time"
+                    android:layout_toRightOf="@+id/comment_author_image_container"
                     android:fontFamily="sans-serif"
                     android:textColor="#3c3c3c"
                     android:textSize="14sp"
@@ -381,9 +387,9 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/post_like_comment_share_container"
                 android:layout_marginTop="15dp"
-                android:visibility="gone"
                 android:background="@color/join_conversation"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <FrameLayout
                     android:id="@+id/conversation_author_image_container"

@@ -58,9 +58,6 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.location)
     TextView mLocation;
 
-    @Bind(R.id.bio)
-    TextView mBio;
-
     private BaseHolderInterface viewInterface;
     private UserSolrObj mUserSolrObj;
 
@@ -108,13 +105,6 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
             mLocation.setText(userSolrObj.getCityName());
         } else {
             mLocation.setVisibility(View.GONE);
-        }
-
-        if(CommonUtil.isNotEmpty(userSolrObj.getDescription())){
-            mBio.setVisibility(View.VISIBLE);
-            mBio.setText(userSolrObj.getDescription());
-        }else {
-            mBio.setVisibility(View.GONE);
         }
 
     }
