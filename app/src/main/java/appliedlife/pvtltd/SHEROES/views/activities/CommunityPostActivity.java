@@ -428,7 +428,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 return true;
             }
 
-            if(mIsCompanyAdmin || mCommunityPost.community.isOwner) {
+            if((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
                 selectPostNowOrLater();
             } else {
                 sendPost();
@@ -445,11 +445,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        if(!loginResult.getAccessToken().getPermissions().contains("publish_actions")){
-                            hasPermission = false;
-                        }else {
-                            hasPermission = true;
-                        }
+                        hasPermission = loginResult.getAccessToken().getPermissions().contains("publish_actions");
                     }
 
                     @Override
@@ -498,7 +494,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
 
     private void selectPostNowOrLater() {
-
         if (postNowOrLaterDialog != null) {
             postNowOrLaterDialog.dismiss();
         }
@@ -534,7 +529,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
 
     private void datePicker(){
-
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,

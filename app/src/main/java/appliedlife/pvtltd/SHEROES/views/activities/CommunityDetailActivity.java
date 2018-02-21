@@ -820,6 +820,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             communityPost.community = new Community();
             communityPost.community.id = mCommunityFeedSolrObj.getIdOfEntityOrParticipant();
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
+            communityPost.isMyPost = mCommunityFeedSolrObj.isOwner();
             HashMap<String, Object> screenProperties = new EventProperty.Builder()
                     .sourceScreenId(getCommunityId())
                     .sourceTabKey(communityTab.key)
