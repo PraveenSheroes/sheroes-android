@@ -87,7 +87,7 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
 
     @SerializedName("crdt")
     @Expose
-    private Date schedulePost;
+    private String schedulePost;
 
     public String getmSourceType() {
         return mSourceType;
@@ -316,11 +316,11 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         this.userFbAccessToken = userFbAccessToken;
     }
 
-    public Date getSchedulePost() {
+    public String getSchedulePost() {
         return schedulePost;
     }
 
-    public void setSchedulePost(Date schedulePost) {
+    public void setSchedulePost(String schedulePost) {
         this.schedulePost = schedulePost;
     }
 }

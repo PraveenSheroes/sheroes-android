@@ -25,6 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -221,6 +222,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.tv_mentor_dashboard_follow)
     TextView tvMentorDashBoardFollow;
 
+    @Bind(R.id.edit_overlay_container)
+    LinearLayout editProfileOverlayContainer;
+
+    @Bind(R.id.share_profile)
+    TextView shareProfile;
+
     @Bind(R.id.tv_mentor_see_insight)
     TextView tvMentorSeeInsight;
 
@@ -344,9 +351,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (isOwnProfile) {
-            getMenuInflater().inflate(R.menu.menu_share, menu);
-        }
         return true;
     }
 
@@ -390,6 +394,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         } else {
             verifiedIcon.setVisibility(View.INVISIBLE);
         }
+
+        invalidateProfileButton();
+
+        if(isOwnProfile) {
+            verifiedIcon.setVisibility(View.GONE);
+            editProfileOverlayContainer.setVisibility(View.VISIBLE);
+        } else {
+            editProfileOverlayContainer.setVisibility(View.GONE);
+        }
+
         updateProfileInfo();
         setPagerAndLayouts();
 
@@ -397,7 +411,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     private void updateProfileInfo() {
-        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
+
+        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
             tvLoc.setText(mUserSolarObject.getCityName());
             tvLoc.setVisibility(View.VISIBLE);
         } else {
@@ -665,6 +680,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         startActivityForResult(intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
+    @OnClick(R.id.share_profile)
+    public void shareProfile() {
+        shareCardViaSocial();
+    }
+
     @OnClick(R.id.tv_mentor_ask_question)
     public void mentorAskQuestionClick() {
         if (tvMentorAskQuestion.getText().toString().equalsIgnoreCase(getString(R.string.ID_ANSWER_QUESTION))) {
@@ -702,16 +722,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
     }
 
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.share);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     @OnClick(R.id.tv_mentor_dashboard_follow)
     public void mentorFollowClick() {
-        if (tvMentorDashBoardFollow.getText().toString().equalsIgnoreCase(getString(R.string.ID_EDIT_PROFILE))) {
+        if (isOwnProfile) {
             navigateToProfileEditing();
         } else {
             tvMentorDashBoardFollow.setEnabled(false);
@@ -842,9 +855,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.share:
-                shareCardViaSocial();
-                break;
             case android.R.id.home:
                 onBackPressed();
                 break;
@@ -1535,4 +1545,57 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             setUsersPostCount(postNumbers);
         }
     }
+
+    private void invalidateProfileButton() {
+        if(isOwnProfile) {
+            shareProfile.setVisibility(View.VISIBLE);
+            if (isUserOrChampionDetailsFilled()) {
+
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(160, this),
+                        CommonUtil.convertDpToPixel(40, this));
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+
+                shareProfile.setLayoutParams(params);
+                shareProfile.setText("Share profile");
+
+                RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(40, this),
+                        CommonUtil.convertDpToPixel(40, this));
+                params1.addRule(RelativeLayout.RIGHT_OF, R.id.share_profile);
+                params1.setMargins(10, 0, 0, 0);
+                tvMentorDashBoardFollow.setText("");
+                tvMentorDashBoardFollow.setLayoutParams(params1);
+                tvMentorDashBoardFollow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_profile_edit_icon, 0, 0, 0);
+
+            } else {
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(160, this),
+                        CommonUtil.convertDpToPixel(40, this));
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+
+                tvMentorDashBoardFollow.setLayoutParams(params);
+                tvMentorDashBoardFollow.setText("Edit profile");
+
+                RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(40, this),
+                        CommonUtil.convertDpToPixel(40, this));
+                params1.addRule(RelativeLayout.RIGHT_OF, R.id.tv_mentor_dashboard_follow);
+                params1.setMargins(10, 0, 0, 0);
+                shareProfile.setText("");
+                shareProfile.setLayoutParams(params1);
+                shareProfile.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_profile, 0, 0, 0);
+            }
+        } else {
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    CommonUtil.convertDpToPixel(40, this));
+            params.setMargins(0, 0, 20, 0);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            tvMentorDashBoardFollow.setLayoutParams(params);
+            shareProfile.setVisibility(View.GONE);
+        }
+    }
+
+    //Check if user have filled its details
+    private boolean isUserOrChampionDetailsFilled() {
+        return StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription()) &&
+                StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle());
+    }
+
 }

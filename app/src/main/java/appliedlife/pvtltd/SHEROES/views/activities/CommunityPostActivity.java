@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,7 +29,10 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -37,6 +41,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -46,7 +51,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -73,14 +77,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -133,6 +136,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
     public static final String IS_FROM_COMMUNITY = "Is from community";
     public static final int MAX_IMAGE = 5;
+    private boolean isPostScheduled = false;
+    private Dialog scheduledConfirmationDialog;
+    private Dialog postNowOrLaterDialog;
 
     //region View variables
     @Inject
@@ -233,20 +239,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean hasPermission = false;
     CallbackManager callbackManager;
     private AccessToken mAccessToken;
-    String date_time = "";
-    int mYear;
-    int mMonth;
-    int mDay;
-
-    int mHour;
-    int mMinute;
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
     private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     private View anonymousToolTip;
-    private PopupWindow popupWindowToolTip;
     //endregion
 
     //region Activity methods
@@ -430,7 +428,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 return true;
             }
 
-            sendPost();
+            if(mIsCompanyAdmin || mCommunityPost.community.isOwner) {
+                selectPostNowOrLater();
+            } else {
+                sendPost();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -478,24 +480,56 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
 
-
-        if(mIsCompanyAdmin) {
-            //Give access to schedule the post
-            datePicker();
-        } else {
-            if (mIsChallengePost) {
-                mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
-            } else if (!mIsEditPost) {
-                String accessToken = "";
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    accessToken = AccessToken.getCurrentAccessToken().getToken();
-                }
-
-                mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken));
-            } else {
-                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
+        if (mIsChallengePost) {
+            mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultHintText.getText().toString(), getImageUrls(), mLinkRenderResponse));
+        } else if (!mIsEditPost) {
+            String accessToken = "";
+            if (AccessToken.getCurrentAccessToken() != null) {
+                accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
+
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken));
+        } else {
+            mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
         }
+
+    }
+
+
+
+    private void selectPostNowOrLater() {
+
+        if (postNowOrLaterDialog != null) {
+            postNowOrLaterDialog.dismiss();
+        }
+
+        postNowOrLaterDialog = new Dialog(CommunityPostActivity.this);
+        postNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        postNowOrLaterDialog.setCancelable(false);
+        postNowOrLaterDialog.setContentView(R.layout.dialog_post_type_confirmation);
+
+        TextView postNow = postNowOrLaterDialog.findViewById(R.id.post_now);
+        postNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPostScheduled = false;
+                sendPost();
+                postNowOrLaterDialog.dismiss();
+            }
+        });
+
+        TextView scheduledPost = postNowOrLaterDialog.findViewById(R.id.schedule_post);
+        scheduledPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPostScheduled = true;
+                mShareToFacebook.setChecked(false);
+                datePicker();
+                postNowOrLaterDialog.dismiss();
+            }
+        });
+
+        postNowOrLaterDialog.show();
     }
 
 
@@ -503,65 +537,47 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         // Get Current Date
         final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-                        date_time =  checkDigit(year)  + "-" + checkDigit(monthOfYear + 1) + "-" + checkDigit(dayOfMonth);
-                        //*************Call Time Picker Here ********************
-                        timePicker();
+                        timePicker(year, monthOfYear, dayOfMonth);
                     }
-                }, mYear, mMonth, mDay);
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
         datePickerDialog.show();
     }
 
-    private void timePicker(){
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
-
+    private void timePicker(final int year, final int month, final int dayOfMonth){
+        final Calendar calendar = Calendar.getInstance();
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        mHour = hourOfDay;
-                        mMinute = minute;
+                        SimpleDateFormat formatter = new SimpleDateFormat(AppConstants.DATE_FORMAT);
+                        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                        calendar.set(year, month, dayOfMonth,
+                                hourOfDay, minute, 0);
+                        String formattedDateTime = formatter.format(calendar.getTime());
 
-                        date_time = date_time+" "+checkDigit(mHour) + ":" + checkDigit(mMinute);
-                        postForAdmin(date_time);
+                        SimpleDateFormat timeFormatter = new SimpleDateFormat("dd MMM yyyy hh.mm a");
+                        String dateMessage = timeFormatter.format(calendar.getTime());
+                        scheduleConfirmation(formattedDateTime, dateMessage);
                     }
-                }, c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)+1,false);
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)+1,false);
 
         timePickerDialog.show();
     }
 
-    public String checkDigit(int number) {
-        return number<=9?"0"+number:String.valueOf(number);
-    }
-
-    private void postForAdmin(String date_time) {
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        try {
-            Date d = dateFormat.parse(date_time);
-            String accessToken = "";
-            if (AccessToken.getCurrentAccessToken() != null) {
-                accessToken = AccessToken.getCurrentAccessToken().getToken();
-            }
-            mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken, d));
-        } catch (ParseException e) {
-            e.printStackTrace();
+    private void postForAdmin(String scheduledTime) {
+        String accessToken = "";
+        if (AccessToken.getCurrentAccessToken() != null) {
+            accessToken = AccessToken.getCurrentAccessToken().getToken();
         }
+        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), mEtDefaultHintText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, hasPermission, accessToken, scheduledTime));
     }
-
 
     private boolean validateFields() {
         if (!isDirty() && !mIsEditPost) {
@@ -630,6 +646,19 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(postNowOrLaterDialog!=null) {
+            postNowOrLaterDialog.dismiss();
+        }
+
+        if(scheduledConfirmationDialog!=null) {
+            scheduledConfirmationDialog.dismiss();
+        }
     }
 
     @Override
@@ -702,9 +731,44 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
+    protected final void scheduleConfirmation(final String formattedDate, String formattedMessage) {
+
+        if (scheduledConfirmationDialog != null) {
+            scheduledConfirmationDialog.dismiss();
+        }
+
+        scheduledConfirmationDialog = new Dialog(CommunityPostActivity.this);
+        scheduledConfirmationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        scheduledConfirmationDialog.setCancelable(false);
+        scheduledConfirmationDialog.setContentView(R.layout.dialog_schedule_post_confirmation);
+
+        TextView messageText = (TextView) scheduledConfirmationDialog.findViewById(R.id.message);
+        String scheduledMessage = getResources().getString(R.string.post_schedule_message, mCommunityPost.community.name, formattedMessage);
+        Spanned message  = StringUtil.fromHtml(scheduledMessage);
+        messageText.setText(message);
+        TextView confirmedOk = (TextView) scheduledConfirmationDialog.findViewById(R.id.ok);
+        confirmedOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postForAdmin(formattedDate);
+                scheduledConfirmationDialog.dismiss();
+            }
+        });
+
+        TextView editPost = (TextView) scheduledConfirmationDialog.findViewById(R.id.edit);
+        editPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker();
+                scheduledConfirmationDialog.dismiss();
+            }
+        });
+
+        scheduledConfirmationDialog.show();
+    }
+
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
@@ -768,14 +832,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                     .build();
                     AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED_CLICKED, getScreenName(), properties);
                 }
-                if(!mIsAnonymous) {
+                if(!mIsAnonymous && !isPostScheduled) {
                     compoundButton.setChecked(isChecked);
                 }
-                //mIsAnonymous = isChecked;
-                //mPostAsCommunitySelected = false;
                 setupUserView();
                 if(!mIsAnonymous && isChecked) {
                     askFacebookPublishPermission();
+                } else if(isPostScheduled) {
+                    hasPermission = false;
                 } else {
                     hasPermission = false;
                 }

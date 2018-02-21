@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -111,10 +112,10 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
 
                 stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
                 Spannable getCommentString = new SpannableString(stringBuilder.toString());
-                //int size = mComment.getParticipantName().length() + 1;
-                //getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                int size = mComment.getParticipantName().length() + 1;
+                getCommentString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                mUserComment.setText(hashTagColorInString(mComment.getComment()));
+                //mUserComment.setText(hashTagColorInString(mComment.getComment()));
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);
             } else {

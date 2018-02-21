@@ -37,12 +37,12 @@
                 android:layout_height="wrap_content">
 
                 <include
-                    android:layout_marginTop="?attr/actionBarSize"
                     android:id="@+id/rl_mentor_full_view_header"
                     layout="@layout/mentor_dashboard_header_layout"
                     android:layout_width="match_parent"
-                    android:visibility="invisible"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    android:visibility="invisible" />
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
@@ -50,9 +50,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/challenge_header"
-                app:layout_collapseMode="pin"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/AppTheme.Toolbar"
+                app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupMenu">
 
                 <RelativeLayout
@@ -66,15 +66,14 @@
                         android:id="@+id/tv_mentor_toolbar_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center|bottom"
-                        android:layout_marginTop="@dimen/dp_size_10"
-                        android:maxLines="@integer/int_value_for_line_1"
-                        android:layout_marginLeft="@dimen/dp_size_5"
                         android:layout_alignParentLeft="true"
+                        android:layout_gravity="center|bottom"
+                        android:layout_marginLeft="@dimen/dp_size_5"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:maxLines="@integer/int_value_for_line_1"
                         android:textColor="@color/white"
                         android:textSize="@dimen/sp_size_20" />
-       </RelativeLayout>
+                </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -100,25 +99,27 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_post"
-        android:layout_marginBottom="@dimen/dp_size_65"
-        android:layout_marginRight="@dimen/dp_size_16"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:backgroundTint="@color/email"
-        android:src="@drawable/ic_pencil" />
+        android:layout_marginBottom="@dimen/dp_size_65"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:src="@drawable/ic_pencil"
+        android:visibility="gone"
+        app:backgroundTint="@color/email" />
 
     <include
-        android:visibility="gone"
-        layout="@layout/gif_loader"/>
+        layout="@layout/gif_loader"
+        android:visibility="gone" />
+
     <View
         android:id="@+id/view_profile"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_gravity="end|bottom"
         android:layout_marginBottom="@dimen/dp_size_150"
-        android:visibility="invisible"
-        android:layout_gravity="end|bottom"/>
+        android:visibility="invisible" />
+
     <include
         layout="@layout/mentor_dashboard_footer_layout"
         android:layout_width="match_parent"

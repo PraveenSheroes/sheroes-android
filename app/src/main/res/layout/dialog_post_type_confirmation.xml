@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_border"
+    android:minHeight="@dimen/communities_admin_post_type_dialog_height"
+    android:minWidth="@dimen/dp_size_280"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/post_now"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_48"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:text="@string/post_now"
+        android:textColor="@color/footer_icon_text"
+        android:textSize="@dimen/sp_size_14"
+        android:textStyle="normal"
+        tools:text="POST NOW" />
+
+    <TextView
+        android:id="@+id/schedule_post"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_48"
+        android:background="@color/footer_icon_text"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:text="@string/schedule_post"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_14"
+        android:textStyle="normal"
+        tools:text="SCHEDULE POST" />
+
+</LinearLayout>

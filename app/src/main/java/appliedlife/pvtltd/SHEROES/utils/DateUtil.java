@@ -22,6 +22,7 @@
      public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z";
      private static final String CONTEST_TIME = "d MMM, h aaa";
      public static final Locale LOCALE = Locale.US;
+     public static final String LOCALE_UTC = "UTC";
      public static final String PRETTY_DATE_WITHOUT_TIME = "d MMM yyyy";
      public static final String DATE_ONLY_FORMAT = "yyyy-MM-dd";
      /**
