@@ -169,6 +169,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @BindDimen(R.dimen.dp_size_150)
     int mAuthorPicSize;
 
+    @BindDimen(R.dimen.dp_size_100)
+    int mLinkImageHeight;
+
 
     private BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
@@ -208,7 +211,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         final String listDescription = userPostSolrObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
-            mPostDescription.setVisibility(View.GONE);
+            mPostDescription.setVisibility(View.VISIBLE);
         } else {
             mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
@@ -532,9 +535,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mLinkSubTitle.setText(mUserPostObj.getOgDescriptionS());
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgImageUrlS())) {
+            String linkImageUrl = CommonUtil.getImgKitUri(mUserPostObj.getOgImageUrlS(), CommonUtil.getWindowWidth(mContext), mLinkImageHeight);
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mUserPostObj.getOgImageUrlS())
+                    .load(linkImageUrl)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
