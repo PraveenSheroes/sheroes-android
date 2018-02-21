@@ -133,8 +133,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
             }
         } else {
-            long syncTime = System.currentTimeMillis();
-            CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
             syncContact = true;
         }
         mInviteFriendViewPresenterImp.setEndpointUrl(CONTACT_LIST_URL);
@@ -190,7 +188,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     }
                 }
             });
-            if (StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getAppShareUrl()) && !mSmsShareLink.equalsIgnoreCase(mUserPreference.get().getUserSummary().getAppShareUrl())) {
+            if (StringUtil.isNotNullOrEmptyString(mSmsShareLink)&&StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getAppShareUrl()) && !mSmsShareLink.equalsIgnoreCase(mUserPreference.get().getUserSummary().getAppShareUrl())) {
                 mInviteFriendViewPresenterImp.updateInviteUrlFromPresenter(mSmsShareLink);
             }
         }
@@ -202,6 +200,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
             } else {
+                long syncTime = System.currentTimeMillis();
+                CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
                 mInviteFriendViewPresenterImp.getContactsFromMobile(getContext());
             }
         }
@@ -228,6 +228,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             case PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    long syncTime = System.currentTimeMillis();
+                    CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
                     mInviteFriendViewPresenterImp.getContactsFromMobile(getContext());
                 }
                 break;

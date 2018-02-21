@@ -22,12 +22,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -147,7 +147,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
     }
 
     public void fetchSuggestedUserDetailFromServer(final int feedState) {
-        LogUtils.info("suggestd","######### Suggested detail");
+        LogUtils.info("suggestd", "######### Suggested detail");
         if (mIsSuggestedLoading) {
             return;
         }
@@ -200,26 +200,27 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                 if (allContactListResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     //User detail means :- Sheroes user
                     List<UserSolrObj> userSolrObjList = allContactListResponse.getSheroesContacts();
-                    mNextTokenForSuggested = allContactListResponse.getNextToken();
-                    switch (mContactListState) {
-                        case NORMAL_REQUEST:
-                            getMvpView().stopProgressBar();
-                            mUserDetalList = userSolrObjList;
-                            getMvpView().setContactUserListEnded(false);
-                            List<UserSolrObj> userSolrObjs = new ArrayList<>(mUserDetalList);
-                            getMvpView().showUserDetail(userSolrObjs);
-                            break;
-                        case LOAD_MORE_REQUEST:
-                            // append in case of load more
-                            if (!CommonUtil.isEmpty(userSolrObjList)) {
-                                mUserDetalList.addAll(userSolrObjList);
-                                getMvpView().addAllUserData(userSolrObjList);
-                            } else {
-                                getMvpView().setContactUserListEnded(true);
-                            }
-                            break;
+                    if(StringUtil.isNotEmptyCollection(userSolrObjList)) {
+                        mNextTokenForSuggested = allContactListResponse.getNextToken();
+                        switch (mContactListState) {
+                            case NORMAL_REQUEST:
+                                getMvpView().stopProgressBar();
+                                mUserDetalList = userSolrObjList;
+                                getMvpView().setContactUserListEnded(false);
+                                List<UserSolrObj> userSolrObjs = new ArrayList<>(mUserDetalList);
+                                getMvpView().showUserDetail(userSolrObjs);
+                                break;
+                            case LOAD_MORE_REQUEST:
+                                // append in case of load more
+                                if (!CommonUtil.isEmpty(userSolrObjList)) {
+                                    mUserDetalList.addAll(userSolrObjList);
+                                    getMvpView().addAllUserData(userSolrObjList);
+                                } else {
+                                    getMvpView().setContactUserListEnded(true);
+                                }
+                                break;
+                        }
                     }
-
 
                 } else {
                     if (allContactListResponse.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
@@ -237,7 +238,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
     }
 
     public void fetchUserDetailFromServer(final int feedState) {
-        LogUtils.info("userdetail","######### User detail");
+        LogUtils.info("userdetail", "######### User detail");
         if (mIsContactLoading) {
             return;
         }
@@ -292,26 +293,27 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     //Contact detail :- User personnel contacts
 
                     List<UserContactDetail> userContactDetailList = allContactListResponse.getNonSheroesContacts();
-                    mNextToken = allContactListResponse.getNextToken();
-                    switch (mContactListState) {
-                        case NORMAL_REQUEST:
-                            getMvpView().stopProgressBar();
-                            mContactDetailList = userContactDetailList;
-                            getMvpView().setContactUserListEnded(false);
-                            List<UserContactDetail> contactDetails = new ArrayList<>(mContactDetailList);
-                            getMvpView().showContacts(contactDetails);
-                            break;
-                        case LOAD_MORE_REQUEST:
-                            // append in case of load more
-                            if (!CommonUtil.isEmpty(userContactDetailList)) {
-                                mContactDetailList.addAll(userContactDetailList);
-                                getMvpView().addAllUserContactData(userContactDetailList);
-                            } else {
-                                getMvpView().setContactUserListEnded(true);
-                            }
-                            break;
+                    if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
+                        mNextToken = allContactListResponse.getNextToken();
+                        switch (mContactListState) {
+                            case NORMAL_REQUEST:
+                                getMvpView().stopProgressBar();
+                                mContactDetailList = userContactDetailList;
+                                getMvpView().setContactUserListEnded(false);
+                                List<UserContactDetail> contactDetails = new ArrayList<>(mContactDetailList);
+                                getMvpView().showContacts(contactDetails);
+                                break;
+                            case LOAD_MORE_REQUEST:
+                                // append in case of load more
+                                if (!CommonUtil.isEmpty(userContactDetailList)) {
+                                    mContactDetailList.addAll(userContactDetailList);
+                                    getMvpView().addAllUserContactData(userContactDetailList);
+                                } else {
+                                    getMvpView().setContactUserListEnded(true);
+                                }
+                                break;
+                        }
                     }
-
                 } else {
                     if (allContactListResponse.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
                         getMvpView().setContactUserListEnded(true);
@@ -325,9 +327,11 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
         });
 
     }
+
     public boolean isSuggestedLoading() {
         return mIsSuggestedLoading;
     }
+
     public boolean isContactLoading() {
         return mIsContactLoading;
     }
@@ -396,6 +400,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
@@ -421,11 +426,11 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     @Override
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
-                        if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
+                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                        }else {
+                        } else {
                             userSolrObj.setSolrIgnoreIsUserFollowed(false);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                         }
@@ -434,7 +439,8 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                 });
 
     }
-    public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest,final UserSolrObj userSolrObj) {
+
+    public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
             return;
@@ -458,11 +464,11 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     @Override
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
-                        if(mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
+                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             userSolrObj.setSolrIgnoreIsUserFollowed(false);
-                        }else  {
+                        } else {
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         }
@@ -496,13 +502,14 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
     public void updateInviteUrlFromPresenter(String inviteAppUrl) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
             return;
         }
         getMvpView().startProgressBar();
-        final UpdateInviteUrlRequest updateInviteUrlRequest=new UpdateInviteUrlRequest();
+        final UpdateInviteUrlRequest updateInviteUrlRequest = new UpdateInviteUrlRequest();
         updateInviteUrlRequest.setAppInviteUrl(inviteAppUrl);
         getUpdatedInviteAppUrlFromModel(updateInviteUrlRequest)
                 .compose(this.<UpdateInviteUrlResponse>bindToLifecycle())
@@ -522,11 +529,10 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     @Override
                     public void onNext(UpdateInviteUrlResponse updateInviteUrlResponse) {
                         getMvpView().stopProgressBar();
-                        if(updateInviteUrlResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)&&StringUtil.isNotNullOrEmptyString(updateInviteUrlResponse.getUpdatedAppInviteUrl()))
-                        {
-                            if(null!=mUserPreference&&mUserPreference.isSet()) {
+                        if (updateInviteUrlResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && StringUtil.isNotNullOrEmptyString(updateInviteUrlResponse.getUpdatedAppInviteUrl())) {
+                            if (null != mUserPreference && mUserPreference.isSet()) {
                                 LoginResponse loginResponse = mUserPreference.get();
-                                UserSummary userSummary=mUserPreference.get().getUserSummary();
+                                UserSummary userSummary = mUserPreference.get().getUserSummary();
                                 userSummary.setAppShareUrl(updateInviteUrlResponse.getUpdatedAppInviteUrl());
                                 mUserPreference.set(loginResponse);
                             }
@@ -535,6 +541,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                 });
 
     }
+
     private Observable<UpdateInviteUrlResponse> getUpdatedInviteAppUrlFromModel(UpdateInviteUrlRequest updateInviteUrlRequest) {
         return mSheroesAppServiceApi.updateInviteUrl(updateInviteUrlRequest)
                 .map(new Function<UpdateInviteUrlResponse, UpdateInviteUrlResponse>() {
