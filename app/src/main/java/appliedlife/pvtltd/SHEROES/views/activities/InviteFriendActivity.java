@@ -71,7 +71,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
     ProgressBar mProgressBar;
 
     @Bind(R.id.viewpager_invite_friend)
-    ViewPager mViewPager;
+    public ViewPager mViewPager;
 
     @Bind(R.id.tabs_invite_friend)
     TabLayout mTabLayout;
@@ -124,10 +124,9 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         setSupportActionBar(mToolbarView);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPagerAdapter.addFragment(SuggestedFriendFragment.createInstance(getString(R.string.suggested_friend)), getString(R.string.suggested_friend));
-        mViewPagerAdapter.addFragment(ContactListFragment.createInstance(getString(R.string.contact_list_friend)), getString(R.string.contact_list_friend));
+        mViewPagerAdapter.addFragment(ContactListFragment.createInstance(getString(R.string.contact_invite_friend)), getString(R.string.contact_invite_friend));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        mViewPager.setCurrentItem(1);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

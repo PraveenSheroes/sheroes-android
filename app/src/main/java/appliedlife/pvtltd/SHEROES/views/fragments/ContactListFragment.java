@@ -145,6 +145,10 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             }
         } else {
             syncContact = true;
+            if(getActivity()!=null&&getActivity() instanceof InviteFriendActivity)
+            {
+                ((InviteFriendActivity)getActivity()).mViewPager.setCurrentItem(1);
+            }
         }
         mInviteFriendViewPresenterImp.setEndpointUrl(CONTACT_LIST_URL);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
