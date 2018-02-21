@@ -24,6 +24,7 @@ import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -66,7 +68,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PERMISSIONS_REQUEST_
  */
 
 public class ContactListFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
-    private static final String SCREEN_LABEL = "Contact List Screen";
+    private static final String SCREEN_LABEL = "Invite Friends Screen";
     private final String TAG = LogUtils.makeLogTag(ContactListFragment.class);
     private final String CONTACT_LIST_URL = "http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=NON_SHEROES";
 
@@ -123,6 +125,15 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         initViews();
         return view;
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
     //region Private methods
     private void initViews() {
         if (CommonUtil.getTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF) > 0) {
@@ -231,13 +242,24 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     long syncTime = System.currentTimeMillis();
                     CommonUtil.setTimeForContacts(AppConstants.CONTACT_SYNC_TIME_PREF, syncTime);
                     mInviteFriendViewPresenterImp.getContactsFromMobile(getContext());
+                    allowedContactSynEvent();
+                }else
+                {
+                    deniedContactSyncEvent();
                 }
                 break;
             }
         }
     }
 
-
+    private void allowedContactSynEvent() {
+        Event event =  Event.CONTACT_SYNC_ALLOWED ;
+        AnalyticsManager.trackEvent(event,getScreenName(), null);
+    }
+    private void deniedContactSyncEvent() {
+        Event event = Event.CONTACT_SYNC_DENIED;
+        AnalyticsManager.trackEvent(event,getScreenName(), null);
+    }
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -354,6 +376,11 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 }
             }
         });
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     @Override

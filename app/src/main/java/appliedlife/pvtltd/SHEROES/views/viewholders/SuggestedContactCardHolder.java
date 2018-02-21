@@ -4,9 +4,14 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -28,6 +33,8 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
     Button btnFollowFriend;
     @Bind(R.id.iv_suggested_contact_card_circle_icon)
     CircleImageView ivSuggestedContactCardCircleIcon;
+    @Bind(R.id.ll_suggested_contact)
+    LinearLayout llSuggestedContact;
     private ContactDetailCallBack mPostDetailCallback;
     private UserSolrObj mUseSolarObj;
     private Context mContext;
@@ -42,7 +49,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
 
     @Override
     public void bindData(UserSolrObj userSolrObj, Context context, int position) {
-        this.mContext=context;
+        this.mContext = context;
         this.mUseSolarObj = userSolrObj;
         btnFollowFriend.setEnabled(true);
         mUseSolarObj.setItemPosition(position);
@@ -55,6 +62,11 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
             tvContactName.setText(str);
         }
         setFollowUnFollow();
+    }
+
+    @OnClick({R.id.ll_suggested_contact, R.id.iv_suggested_contact_card_circle_icon, R.id.tv_suggested_contact_name})
+    public void suggestedCardClick() {
+        mPostDetailCallback.onSuggestedContactClicked(mUseSolarObj, llSuggestedContact);
     }
 
     @OnClick(R.id.btn_follow_friend)
@@ -80,6 +92,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
             btnFollowFriend.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
+
     @Override
     public void viewRecycled() {
 

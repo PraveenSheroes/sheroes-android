@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,25 +14,34 @@ import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import org.parceler.Parcels;
+
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendSuggestedAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
@@ -43,7 +53,7 @@ import butterknife.ButterKnife;
  */
 
 public class SuggestedFriendFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
-    private static final String SCREEN_LABEL = "Suggested Friend Screen";
+    private static final String SCREEN_LABEL = "Suggested Friends Screen";
     private final String TAG = LogUtils.makeLogTag(SuggestedFriendFragment.class);
     private final String SUGGESTED_LIST_URL = "http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES";
 
@@ -93,13 +103,22 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         initViews();
         return view;
     }
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
 
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
     @Override
     public void onContactClicked(UserContactDetail contactDetail, View view) {
         int id = view.getId();
@@ -144,19 +163,65 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             case R.id.btn_follow_friend:
                 followUnFollowRequest(userSolrObj);
                 break;
+            case R.id.ll_suggested_contact:
+                openMentorProfileDetail(userSolrObj);
+                break;
+                default:
         }
     }
+    private void openMentorProfileDetail(UserSolrObj userSolrObj) {
+        ProfileActivity.navigateTo(getActivity(),userSolrObj.getIdOfEntityOrParticipant(), true, 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                    if (null != intent.getExtras()) {
+                        UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        if(null!=userSolrObj) {
+                            mInviteFriendSuggestedAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                        }
+                    }
+                    break;
+                default:
+            }
+        }
 
+    }
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
         if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             mInviteFriendViewPresenterImp.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
+            unFollowUserEvent(userSolrObj);
         } else {
             mInviteFriendViewPresenterImp.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
+            followUserEvent(userSolrObj);
         }
     }
-
+    private void followUserEvent(UserSolrObj mUserSolarObject) {
+        Event event =  Event.PROFILE_FOLLOWED ;
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+    }
+    private void unFollowUserEvent(UserSolrObj mUserSolarObject) {
+        Event event = Event.PROFILE_UNFOLLOWED;
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+    }
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
 

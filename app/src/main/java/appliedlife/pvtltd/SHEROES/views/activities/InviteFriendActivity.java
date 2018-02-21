@@ -59,7 +59,7 @@ import butterknife.ButterKnife;
  */
 
 public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
-    private static final String SCREEN_LABEL = "Invite Friend Screen";
+    private static final String SCREEN_LABEL = "All Contact Activity";
     //region View variables
     @Bind(R.id.title_toolbar)
     TextView toolbarTitle;

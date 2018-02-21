@@ -118,6 +118,11 @@ public enum Event {
     WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
     // endregion
 
+    //region Contact events
+    CONTACT_SYNC_ALLOWED(AnalyticsEventType.ALLOWED_CONTACT_SYNC, ""),
+    CONTACT_SYNC_DENIED(AnalyticsEventType.DENIED_CONTACT_SYNC, ""),
+    //endregion
+
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
     FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, "");
