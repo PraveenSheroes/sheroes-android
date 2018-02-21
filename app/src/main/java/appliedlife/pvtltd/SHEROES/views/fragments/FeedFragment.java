@@ -938,11 +938,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     public void updateItem(FeedDetail updatedFeedDetail) {
         findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
-        /*int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
-        }
-        mAdapter.setData(position, feedDetail);*/
     }
 
     @Override
