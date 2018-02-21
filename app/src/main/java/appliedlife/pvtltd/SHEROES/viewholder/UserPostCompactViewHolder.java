@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.viewholder;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.os.Build;
@@ -92,6 +93,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.image_second)
     ImageView mImageSecond;
+
+    @Bind(R.id.second_image_container)
+    RelativeLayout mSecondImageContainer;
+
+    @Bind(R.id.more_image_count)
+    TextView mMoreImageCount;
 
     @Bind(R.id.link_detail_container)
     RelativeLayout mLinkContainer;
@@ -202,7 +209,6 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);
-            return;
         } else {
             mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
@@ -244,6 +250,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.getImageUrls().size() >= 2) {
                 mImageFirst.setVisibility(View.VISIBLE);
                 mImageSecond.setVisibility(View.VISIBLE);
+                mImageContainer.setVisibility(View.VISIBLE);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(mUserPostObj.getImageUrls().get(0))
@@ -252,10 +259,20 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 mImageFirst.setVisibility(View.VISIBLE);
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(mUserPostObj.getImageUrls().get(0))
+                        .load(mUserPostObj.getImageUrls().get(1))
                         .into(mImageSecond);
+
+                if(mUserPostObj.getImageUrls().size() > 2){
+                    mMoreImageCount.setVisibility(View.VISIBLE);
+                    mMoreImageCount.setText("+ " + Integer.toString(mUserPostObj.getImageUrls().size() - 2));
+                    mImageSecond.setBackgroundColor(mContext.getResources().getColor(R.color.feed_article_label));
+                }else {
+                    mMoreImageCount.setVisibility(View.GONE);
+                    mImageSecond.setBackgroundColor(Color.TRANSPARENT);
+                }
             } else {
                 mImageSecond.setVisibility(View.GONE);
+                mImageContainer.setVisibility(View.GONE);
                 mImageFirst.setVisibility(View.VISIBLE);
                 String imageKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext), mAuthorPicSize);
                 Glide.with(mContext)

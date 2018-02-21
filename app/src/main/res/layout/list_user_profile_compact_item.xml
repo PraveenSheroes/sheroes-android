@@ -7,6 +7,7 @@
     android:layout_height="220dp"
     android:layout_marginLeft="4dp"
     android:layout_marginRight="4dp"
+    android:layout_marginBottom="8dp"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
@@ -44,119 +45,97 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_toRightOf="@id/image"
-            android:weightSum="@integer/int_value_for_line_1">
+            android:layout_toRightOf="@id/image">
 
             <LinearLayout
                 android:id="@+id/post_count_container"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight=".33">
+                android:layout_marginLeft="8dp"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/post_count_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textStyle="bold"
-                    android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_18" />
 
                 <TextView
                     android:id="@+id/post_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:layout_gravity="center"
-                    android:textColor="@color/recent_post_comment"
-                    android:textSize="@dimen/sp_size_14" />
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#3c3c3c"
+                    tools:text="200" />
+
+                <TextView
+                    android:id="@+id/post_count_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:lines="1"
+                    android:textColor="#878787"
+                    tools:text="Posts" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/comments_count_container"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/dp_size_6"
-                android:layout_weight=".3">
-
-                <TextView
-                    android:id="@+id/comments_count_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_18" />
+                android:layout_marginLeft="8dp"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/comments_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:textColor="@color/recent_post_comment"
-                    android:textSize="@dimen/sp_size_14" />
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#3c3c3c"
+                    tools:text="480" />
+
+                <TextView
+                    android:id="@+id/comments_count_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:lines="1"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#878787"
+                    tools:text="Comments"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/followers_count_container"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/dp_size_6"
-                android:layout_weight=".33">
-
-                <TextView
-                    android:id="@+id/follower_count_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_18" />
+                android:layout_marginLeft="8dp"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/follower_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:layout_gravity="center"
-                    android:textColor="@color/recent_post_comment"
-                    android:textSize="@dimen/sp_size_14" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/li_following"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="@dimen/dp_size_6"
-                android:layout_weight=".33">
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#3c3c3c"
+                    tools:text="480" />
 
                 <TextView
-                    android:id="@+id/tv_mentor_following_count"
+                    android:id="@+id/follower_count_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:layout_gravity="center"
-                    android:textColor="@color/feed_article_label"
-                    android:textSize="@dimen/sp_size_18" />
-
-                <TextView
-                    android:id="@+id/tv_mentor_following_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:layout_gravity="center"
-                    android:textColor="@color/recent_post_comment"
-                    android:textSize="@dimen/sp_size_14" />
+                    android:textSize="14sp"
+                    android:lines="1"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#878787"
+                    tools:text="Followers"/>
             </LinearLayout>
 
         </LinearLayout>

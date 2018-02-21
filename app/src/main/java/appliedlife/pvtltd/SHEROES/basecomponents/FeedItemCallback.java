@@ -93,4 +93,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onSeeMoreClicked(CarouselDataObj carouselDataObj);
 
     void onImagePostClicked(ImageSolrObj imageSolrObj);
+
+    void onUserFollowedUnFollowed(UserSolrObj userSolrObj);
 }

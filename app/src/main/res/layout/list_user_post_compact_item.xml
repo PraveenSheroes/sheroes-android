@@ -93,9 +93,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginTop="8dp"
-                android:visibility="gone"
                 android:layout_below="@id/post_description">
 
+                <RelativeLayout
+                    android:id="@+id/second_image_container"
+                    android:layout_width="150dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/image_second"
                     android:layout_width="150dp"
@@ -104,11 +108,24 @@
                     android:layout_height="match_parent"
                     android:src="@color/email" />
 
+                    <TextView
+                        android:id="@+id/more_image_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:textStyle="normal"
+                        android:textColor="#ffffff"
+                        tools:text="4+" />
+
+                </RelativeLayout>
+
                 <ImageView
                     android:id="@+id/image_first"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toLeftOf="@+id/image_second"
+                    android:layout_toLeftOf="@+id/second_image_container"
                     android:scaleType="fitXY"
                     android:src="@color/colorPrimaryDark" />
 
@@ -121,6 +138,7 @@
                 android:layout_below="@id/post_description"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:visibility="gone"
                 android:layout_marginTop="8dp">
 
                 <FrameLayout

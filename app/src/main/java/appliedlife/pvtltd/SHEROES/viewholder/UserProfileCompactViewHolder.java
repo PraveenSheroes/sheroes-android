@@ -80,16 +80,16 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
             mImage.bindImage(userSolrObj.getThumbnailImageUrl());
         }
         String pluralPosts = context.getResources().getQuantityString(R.plurals.numberOfPosts, userSolrObj.getSolrIgnoreNoOfMentorPosts());
-        /*mPostCount.setText(userSolrObj.getSolrIgnoreNoOfMentorPosts());
+        mPostCount.setText(Integer.toString(userSolrObj.getSolrIgnoreNoOfMentorPosts()));
         mPostCountTitle.setText(pluralPosts);
 
-        String pluralAnswers = context.getResources().getQuantityString(R.plurals.numberOfComments, userSolrObj.getSolrIgnoreNoOfMentorAnswers());
-        mCommentsCount.setText(userSolrObj.getSolrIgnoreNoOfMentorAnswers());
+        String pluralAnswers = context.getResources().getQuantityString(R.plurals.numberOfComments, userSolrObj.getUserCommentsCount());
+        mCommentsCount.setText(Integer.toString(userSolrObj.getUserCommentsCount()));
         mCommentsCountTitle.setText(pluralAnswers);
 
-        String pluralFollowers = context.getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getSolrIgnoreNoOfMentorFollowers());
-        mFollowerCount.setText(userSolrObj.getSolrIgnoreNoOfMentorFollowers());
-        mFollowerCountTitle.setText(pluralFollowers);*/
+        String pluralFollowers = context.getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getUserFollowersCount());
+        mFollowerCount.setText(Integer.toString(userSolrObj.getUserFollowersCount()));
+        mFollowerCountTitle.setText(pluralFollowers);
 
         if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
@@ -121,7 +121,7 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.follow_button)
     public void onFollowClicked() {
-        ((FeedItemCallback)viewInterface).onMentorFollowClicked(mUserSolrObj);
+        ((FeedItemCallback)viewInterface).onUserFollowedUnFollowed(mUserSolrObj);
     }
 
     @OnClick(R.id.user_compact_card)
