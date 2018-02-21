@@ -250,7 +250,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.getImageUrls().size() >= 2) {
                 mImageFirst.setVisibility(View.VISIBLE);
                 mImageSecond.setVisibility(View.VISIBLE);
-                mImageContainer.setVisibility(View.VISIBLE);
+                mSecondImageContainer.setVisibility(View.VISIBLE);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(mUserPostObj.getImageUrls().get(0))
@@ -272,7 +272,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 }
             } else {
                 mImageSecond.setVisibility(View.GONE);
-                mImageContainer.setVisibility(View.GONE);
+                mSecondImageContainer.setVisibility(View.GONE);
                 mImageFirst.setVisibility(View.VISIBLE);
                 String imageKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext), mAuthorPicSize);
                 Glide.with(mContext)
