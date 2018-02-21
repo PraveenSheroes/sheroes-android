@@ -75,6 +75,8 @@
     <dimen name="sp_size_8">8sp</dimen>
     <dimen name="sp_size_9">9sp</dimen>
     <dimen name="sp_size_7">7sp</dimen>
+    <dimen name="sp_size_6">6sp</dimen>
+    <dimen name="sp_size_5">5sp</dimen>
     <dimen name="sp_size_15">15sp</dimen>
     <dimen name="sp_size_19">19sp</dimen>
     <dimen name="sp_size_22">22sp</dimen>

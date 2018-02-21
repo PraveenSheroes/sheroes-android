@@ -540,6 +540,9 @@
     <string name="challenge_completed">Challenge Completed</string>
     <string name="post_now">POST NOW</string>
     <string name="schedule_post">SCHEDULE POST</string>
+    <string name="follow_me">follow</string>
+    <string name="answers">Answers</string>
+    <string name="followers">Followers</string>
 
 
 </resources>
