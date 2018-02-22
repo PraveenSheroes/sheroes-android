@@ -1294,6 +1294,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
                 SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
             } else {
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
             }
 

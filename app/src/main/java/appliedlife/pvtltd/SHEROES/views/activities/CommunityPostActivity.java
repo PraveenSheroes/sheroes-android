@@ -20,6 +20,8 @@ import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -353,6 +355,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupToolbarItemsColor();
 
         if(isSharedFromOtherApp) {
+            mTitleToolbar.setText(R.string.title_create_post);
+
             Intent intent = getIntent();
             String action = intent.getAction();
             String type = intent.getType();
@@ -435,7 +439,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void askFacebookPublishPermission() {
@@ -777,7 +781,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
-            CommunityPostActivity.this.finish();
+            navigateToParentActivity();
         }
     }
 
@@ -1121,7 +1125,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void onBackPress() {
-        if (isDirty()) {
+
+        if (isDirty() && !isSharedFromOtherApp) {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(CommunityPostActivity.this);
 
@@ -1139,9 +1144,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             builder.create();
             builder.show();
         } else {
-            CommunityPostActivity.this.finish();
+            navigateToParentActivity();
         }
+    }
 
+    private void navigateToParentActivity() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        } else if(isSharedFromOtherApp) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        }
+        CommunityPostActivity.this.finish();
     }
 
     private boolean isDirty() {

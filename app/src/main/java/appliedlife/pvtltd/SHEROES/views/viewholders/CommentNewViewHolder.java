@@ -10,6 +10,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -113,9 +114,13 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
                 Spannable getCommentString = new SpannableString(stringBuilder.toString());
                 int size = mComment.getParticipantName().length() + 1;
-                getCommentString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                getCommentString.setSpan(typefaceSpan, 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                getCommentString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
                 //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 //mUserComment.setText(hashTagColorInString(mComment.getComment()));
+
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);
             } else {
