@@ -75,6 +75,7 @@ public enum Event {
     COMMUNITY_REMOVED_MEMBER(AnalyticsEventType.COMMUNITY, "Removed Member"),
     COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
     APP_INVITE(AnalyticsEventType.APP, " Invite Clicked"),
+    FRIEND_INVITED(AnalyticsEventType.FRIEND, "Invited"),
     //endregion
 
     //region Organization related event

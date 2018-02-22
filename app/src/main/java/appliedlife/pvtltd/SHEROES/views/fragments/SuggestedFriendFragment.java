@@ -170,7 +170,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         }
     }
     private void openMentorProfileDetail(UserSolrObj userSolrObj) {
-        ProfileActivity.navigateTo(getActivity(),userSolrObj.getIdOfEntityOrParticipant(), true, 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
+        ProfileActivity.navigateTo(getActivity(), userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -178,7 +178,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
                     if (null != intent.getExtras()) {
                         UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if(null!=userSolrObj) {
