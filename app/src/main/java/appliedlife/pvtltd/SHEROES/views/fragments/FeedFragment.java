@@ -49,10 +49,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -95,6 +97,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static String SCREEN_LABEL = "Community Screen Activity";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
+    public static final String IS_HOME_FEED = "Is Home Feed";
 
     @Inject
     AppUtils mAppUtils;
@@ -139,6 +142,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private String mTitleTextColor = "#ffffff";
     HashMap<String, Object> mScreenProperties;
     private boolean isWhatsappShare = false;
+    private boolean isHomeFeed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -170,6 +174,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
                 }
+                isHomeFeed = getArguments().getBoolean(IS_HOME_FEED, false);
+                mFeedPresenter.setIsHomeFeed(isHomeFeed);
             }
         }else {
             if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
@@ -643,6 +649,54 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
+        if (carouselDataObj != null && carouselDataObj.getEndPointUrl() != null) {
+
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .name(getString(R.string.ID_CAROUSEL_SEE_MORE))
+                            .communityCategory(carouselDataObj.getScreenTitle())
+                            .build();
+
+            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), SCREEN_LABEL, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        }
+    }
+
+    @Override
+    public void onImagePostClicked(ImageSolrObj imageSolrObj) {
+        if (CommonUtil.isNotEmpty(imageSolrObj.getDeepLinkUrl())) {
+            Uri url = Uri.parse(imageSolrObj.getDeepLinkUrl());
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(url);
+            startActivity(intent);
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(String.valueOf(imageSolrObj.getIdOfEntityOrParticipant()))
+                            .url(imageSolrObj.getDeepLinkUrl())
+                            .build();
+            AnalyticsManager.trackEvent(Event.IMAGE_CARD, null, properties);
+        }
+    }
+
+    @Override
+    public void onUserFollowedUnFollowed(UserSolrObj userSolrObj) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
+        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
+            mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        } else {
+            mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        }
+    }
+
+    @Override
+    public void onAskQuestionClicked() {
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+    }
+
+    @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
             if (null != userPostObj) {
@@ -882,12 +936,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
-    public void updateItem(FeedDetail feedDetail) {
-        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
-        }
-        mAdapter.setData(position, feedDetail);
+    public void updateItem(FeedDetail updatedFeedDetail) {
+        findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
     }
 
     @Override
@@ -900,22 +950,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
-        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if(getActivity()!=null && getActivity() instanceof CollectionActivity){
+            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
         }
-        mAdapter.setItem(position, communityFeedSolrObj);
-        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
     }
 
     @Override
     public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
-        int position = findPositionById(communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (position == RecyclerView.NO_POSITION) {
-            return;
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if(getActivity()!=null && getActivity() instanceof  CollectionActivity){
+            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
         }
-        mAdapter.setItem(position, communityFeedSolrObj);
-        ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
     }
 
     public int findPositionById(long id) { //TODO - move to presenter
@@ -935,6 +981,34 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         }
         return -1;
+    }
+
+    public void findPositionAndUpdateItem(FeedDetail updatedFeedDetail, long id) { //TODO - move to presenter
+        if (mAdapter == null) {
+            return;
+        }
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                mAdapter.setData(i, updatedFeedDetail);
+            }
+            if(feedDetail instanceof CarouselDataObj){
+                for (int j = 0; j < ((CarouselDataObj)feedDetail).getFeedDetails().size() ; j++){
+                    FeedDetail innerFeedDetail = ((CarouselDataObj)feedDetail).getFeedDetails().get(j);
+                    if(innerFeedDetail!=null && innerFeedDetail.getIdOfEntityOrParticipant() == id){
+                        ((CarouselDataObj)feedDetail).getFeedDetails().set(j, updatedFeedDetail);
+                        mAdapter.setData(i, feedDetail);
+                    }
+                }
+            }
+        }
+        return;
     }
 
     public void refreshList() {

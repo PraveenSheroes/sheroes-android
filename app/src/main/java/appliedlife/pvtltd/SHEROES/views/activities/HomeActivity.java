@@ -20,6 +20,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.StrictMode;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -28,9 +30,11 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -53,6 +57,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.appevents.AppEventsConstants;
@@ -62,6 +67,7 @@ import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,12 +105,18 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
@@ -116,7 +128,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -130,6 +144,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
@@ -138,6 +153,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -154,8 +170,10 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
@@ -189,6 +207,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private static final int ANIMATION_DURATION_TIME = 5000;
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    HomePresenter mHomePresenter;
+
     @Bind(R.id.iv_drawer_profile_circle_icon)
     CircleImageView ivDrawerProfileCircleIcon;
     @Bind(R.id.tv_user_name)
@@ -262,6 +284,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
+    private String mGcmId;
 
 
     @Override
@@ -283,9 +306,40 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 isMentor = true;
             }
         }
-        renderHomeFragmentView();
-        assignNavigationRecyclerListView();
-        sheUserInit();
+
+        mHomePresenter.attachView(this);
+
+        if (null == mUserPreference) {
+            logOut();
+        } else if (null != mUserPreference.get()) {
+
+            if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+                logOut();
+            } else {
+                long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
+                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                    mHomePresenter.getAuthTokenRefreshPresenter();
+                } else {
+                    renderHomeFragmentView();
+                    assignNavigationRecyclerListView();
+                    sheUserInit();
+                }
+            }
+            if (null != mUserPreference.get().getUserSummary()) {
+                mUserId = mUserPreference.get().getUserSummary().getUserId();
+                AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
+                AppsFlyerLib.getInstance().startTracking(SheroesApplication.mContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
+                ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(mUserId));
+            }
+            }else {
+            mHomePresenter.getAuthTokenRefreshPresenter();
+        }
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
+        try {
+            getGcmId();
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
         toolTipForNotification();
         if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION)== AppConstants.DRAWER_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
@@ -335,7 +389,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     }
                 }, 2000);
 
-           }
+            }
         }
 
     }
@@ -1112,12 +1166,22 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             fm.popBackStack();
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        Bundle bundle = new Bundle();
+        /*Bundle bundle = new Bundle();
         Parcelable parcelable = Parcels.wrap(mFeedDetail);
         bundle.putParcelable(AppConstants.HOME_FRAGMENT, parcelable);
         bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
         homeFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();*/
+
+
+        FeedFragment feedFragment = new FeedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
+        bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
+        feedFragment.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, feedFragment, FeedFragment.class.getName()).commitAllowingStateLoss();
+
     }
 
     private void initCommunityViewPagerAndTabs() {
@@ -1425,8 +1489,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
     @Override
-    protected void
-    onActivityResult(int requestCode, int resultCode, Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
@@ -1445,52 +1508,131 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }else {
             if (null != intent) {
                 switch (requestCode) {
-                    case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
-                        articleDetailActivityResponse(intent);
+                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                        Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
+                                .show();
+                        refreshCurrentFragment();
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+                        ((FeedFragment) fragment).refreshList();
                         break;
 
-                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                        if (resultCode == Activity.RESULT_OK) {
-                            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                            if (AppUtils.isFragmentUIActive(fragment)) {
-                                ((HomeFragment) fragment).onRefreshClick();
-                            }
-                        }
-                        break;
-                    case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
-                        boolean isPostDeleted = false;
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                            if (parcelable != null) {
-                                UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
-                                isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                                mFeedDetail = userPostSolrObj;
-                            }
-                            if (isPostDeleted) {
-                                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                            } else {
-                                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                            }
-                        }
-                        break;
-                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                        editCommunityPostResponse(intent);
-                        break;
-                    case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                    case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
                         if (null != intent.getExtras()) {
                             UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                             if (null != userSolrObj) {
                                 Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
                                 if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                                    userSolrObj.setSuggested(true);
-                                    ((HomeFragment) fragmentMentor).getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+                                    invalidateItem(userSolrObj);
                                 }
-                            } else {
-                                homeOnClick();
                             }
                         }
                         break;
+
+                    case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
+                        if (null != intent && null != intent.getExtras()) {
+                            JobFeedSolrObj jobFeedSolrObj = null;
+                            jobFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+                            invalidateItem(jobFeedSolrObj);
+                        }
+                        break;
+
+                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                        if (resultCode == Activity.RESULT_OK) {
+                            refreshCurrentFragment();
+                        }
+                        break;
+
+                    case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
+                        Parcelable parcelableArticlePost = intent.getParcelableExtra(AppConstants.HOME_FRAGMENT);
+                        ArticleSolrObj articleSolrObj = null;
+                        if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
+                            articleSolrObj = Parcels.unwrap(parcelableArticlePost);
+                        }
+                        if (articleSolrObj != null) {
+                            invalidateItem(articleSolrObj);
+                        }
+                        break;
+
+                    case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                        boolean isPostDeleted = false;
+                        UserPostSolrObj userPostSolrObj = null;
+                        Parcelable parcelableUserPost = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        if (parcelableUserPost != null) {
+                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                        }
+                        if (userPostSolrObj == null) {
+                            break;
+                        }
+                        if (isPostDeleted) {
+                            removeItem(userPostSolrObj);
+                        } else {
+                            invalidateItem(userPostSolrObj);
+                        }
+
+
+
+
+
+
+                /*case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
+                    articleDetailActivityResponse(intent);
+                    break;*/
+                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
+                        //communityDetailActivityResponse(intent);
+                        break;
+
+                /*case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                    if (resultCode == Activity.RESULT_OK) {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            ((HomeFragment) fragment).onRefreshClick();
+                        }
+                    }
+                    break;*/
+               /* case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        if (parcelable != null) {
+                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
+                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                            mFeedDetail = userPostSolrObj;
+                        }
+                        if (isPostDeleted) {
+                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                        } else {
+                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                        }
+                    }
+                    break;*/
+
+                    case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
+                       // createCommunityActivityResponse(intent);
+                        break;
+                /*case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    editCommunityPostResponse(intent);
+                    break;*/
+                    case AppConstants.REQ_CODE_SPEECH_INPUT:
+                        //  helplineSpeechActivityResponse(intent, resultCode);
+                        break;
+              /*  case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                    if (null != intent.getExtras()) {
+                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        if (null != userSolrObj) {
+                            Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+                            if (AppUtils.isFragmentUIActive(fragmentMentor)) {
+                                userSolrObj.currentItemPosition = mSuggestionItemPosition;
+                                userSolrObj.setItemPosition(mMentorCardPosition);
+                                userSolrObj.setSuggested(true);
+                                ((HomeFragment) fragmentMentor).getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+                            }
+                        } else {
+                            homeOnClick();
+                        }
+                    }
+                    break;*/
                     case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                         CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                         if (resultCode == RESULT_OK) {
@@ -1520,6 +1662,21 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (null != mProgressDialog) {
             mProgressDialog.dismiss();
         }
+    }
+
+    private void removeItem(FeedDetail feedDetail) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+        ((FeedFragment) fragment).removeItem(feedDetail);
+    }
+
+    private void invalidateItem(FeedDetail feedDetail) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+        ((FeedFragment) fragment).updateItem(feedDetail);
+    }
+
+    private void refreshCurrentFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+        ((FeedFragment) fragment).refreshList();
     }
 
     private Bitmap decodeFile(File f) {
@@ -1784,6 +1941,157 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
+    }
+
+    private void getGcmId() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+            GCMClientManager pushClientManager = new GCMClientManager(this, getString(R.string.ID_PROJECT_ID));
+            pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+                @Override
+                public void onSuccess(String registrationId, boolean isNewRegistration) {
+                    mGcmId = registrationId;
+                    PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
+                    if (StringUtil.isNotNullOrEmptyString(registrationId)) {
+                        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+                            if (mInstallUpdatePreference.get().isFirstOpen()) {
+                                LoginRequest loginRequest = loginRequestBuilder();
+                                loginRequest.setGcmorapnsid(registrationId);
+                                if (mInstallUpdatePreference.get().isWelcome()) {
+                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                    installUpdateForMoEngage.setWelcome(false);
+                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                }
+                                mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                            } else {
+                                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                                    String mOldGcmId = mUserPreference.get().getGcmId();
+                                    if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
+                                        if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                                            LoginRequest loginRequest = loginRequestBuilder();
+                                            loginRequest.setGcmorapnsid(registrationId);
+                                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                                        }
+                                    }
+                                }
+                                if (mInstallUpdatePreference.get().isWelcome()) {
+                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                    installUpdateForMoEngage.setWelcome(false);
+                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                }
+                            }
+                        }
+                    } else {
+                        getGcmId();
+                    }
+                }
+
+                @Override
+                public void onFailure(String ex) {
+
+                }
+            });
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+        if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+            loginResponse.setTokenTime(System.currentTimeMillis());
+            loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserPreference.set(loginResponse);
+            renderHomeFragmentView();
+            assignNavigationRecyclerListView();
+            sheUserInit();
+        }
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case NOTIFICATION_COUNT:
+                unReadNotificationCount(baseResponse);
+                break;
+            case GCM_ID:
+                gcmIdResponse(baseResponse);
+                break;
+            case USER_CONTACTS_ACCESS_SUCCESS:
+                getAppContactsListSuccess(baseResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    private void unReadNotificationCount(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof NotificationReadCountResponse) {
+                    NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
+                    if (notificationReadCountResponse.getUnread_notification_count() > 0) {
+                        flNotificationReadCount.setVisibility(View.VISIBLE);
+                        String notification = String.valueOf(notificationCount);
+                        stringBuilder.append(notification);
+                        mTvNotificationReadCount.setText(stringBuilder.toString());
+                    } else {
+                        flNotificationReadCount.setVisibility(View.GONE);
+                    }
+                }
+                break;
+            case AppConstants.FAILED:
+                flNotificationReadCount.setVisibility(View.GONE);
+                break;
+            default:
+                flNotificationReadCount.setVisibility(View.GONE);
+        }
+    }
+
+    private void gcmIdResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof GcmIdResponse) {
+                    LoginResponse loginResponse = mUserPreference.get();
+                    loginResponse.setGcmId(mGcmId);
+                    mUserPreference.set(loginResponse);
+                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                    installUpdateForMoEngage.setFirstOpen(false);
+                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                }
+                break;
+            case AppConstants.FAILED:
+                break;
+            default:
+        }
+    }
+
+    private void getAppContactsListSuccess(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                LoginResponse loginResponse = mUserPreference.get();
+                loginResponse.setAppContactAccessed(true);
+                mUserPreference.set(loginResponse);
+        }
     }
 
 }
