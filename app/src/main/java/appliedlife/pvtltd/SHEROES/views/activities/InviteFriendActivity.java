@@ -179,7 +179,6 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
                 @Override
                 public boolean onMenuItemActionCollapse(MenuItem item) {
                     // Do whatever you need
-                     AppUtils.hideKeyboard(etInviteSearchBox, SCREEN_LABEL);
                     return true; // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
                 }
             });
@@ -228,10 +227,6 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
             @Override
             public boolean onQueryTextChange(String inputSearch) {
-                if(!StringUtil.isNotNullOrEmptyString(inputSearch))
-                {
-                    AppUtils.hideKeyboard(etInviteSearchBox, SCREEN_LABEL);
-                }
                 if(mViewPager.getCurrentItem()==0) {
                     Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
                     if (AppUtils.isFragmentUIActive(suggestedFragment)) {

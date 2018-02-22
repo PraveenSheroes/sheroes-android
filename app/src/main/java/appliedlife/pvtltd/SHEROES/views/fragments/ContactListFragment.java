@@ -252,6 +252,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     allowedContactSynEvent();
                 } else {
                     deniedContactSyncEvent();
+                    if(null!=getActivity())
+                    (getActivity()).onBackPressed();
                 }
                 break;
             }
