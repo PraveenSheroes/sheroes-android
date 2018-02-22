@@ -105,6 +105,7 @@ public enum Event {
     IMAGE_COPY_LINK(AnalyticsEventType.IMAGE, "Copy Link"),
     LOOKING_FOR(AnalyticsEventType.LOOKING_FOR, "Clicked"),
     PROMO_CARD(AnalyticsEventType.PROMO_CARD, "Clicked"),
+    IMAGE_CARD(AnalyticsEventType.IMAGE_CARD, "Clicked"),
     // endregion
 
     PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),

@@ -14,6 +14,8 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
@@ -65,6 +67,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
@@ -96,6 +99,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     MasterDataModel mMasterDataModel;
     @Inject
@@ -872,6 +878,35 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     }
 
+    public void queryConfig() {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mHomeModel.getConfig().subscribe(new DisposableObserver<ConfigurationResponse>() {
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onNext(ConfigurationResponse configurationResponse) {
+                if (configurationResponse != null) {
+                    mConfiguration.set(configurationResponse.configuration);
+                }
+                getMvpView().onConfigFetched();
+                getMvpView().stopProgressBar();
+            }
+        });
+    }
 
     public void onStop() {
         detachView();

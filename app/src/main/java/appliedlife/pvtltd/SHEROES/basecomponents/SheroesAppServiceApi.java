@@ -3,6 +3,8 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
@@ -90,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResp
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
@@ -297,4 +300,10 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/feed/community_category_home")
     Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
+
+    @GET("participant/remote_config/?config_type=AppConfig")
+    Observable<ConfigurationResponse> getConfig();
+
+    @GET("participant/feed/v2?")
+    Observable<FeedResponsePojo> getChallengeResponse(@Query("sub_type") String subType, @Query("source_entity_id") String sourceEntityId);
 }

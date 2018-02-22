@@ -993,6 +993,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     }
 
+    public void onConfigFetched() {
+
+    }
     public String screenName() {
         String sourceScreen = "";
         if (getSupportFragmentManager() != null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())) {

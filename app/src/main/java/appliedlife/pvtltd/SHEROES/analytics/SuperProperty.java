@@ -18,6 +18,8 @@ public enum SuperProperty {
     MOBILE_NUMBER("Mobile Number"),
     USER_NAME("User Name"),
     EMAIL_ID("Email Id"),
+    CONFIG_TYPE("Config Type"),
+    CONFIG_VERSION("Config Version"),
     APPSFLYER_ID("Appsflyer_id");
 
     private final String string;
@@ -88,6 +90,16 @@ public enum SuperProperty {
 
         public Builder appsflyerID(String value){
             put(APPSFLYER_ID, value);
+            return this;
+        }
+
+        public Builder configType(String value){
+            put(CONFIG_TYPE, value);
+            return this;
+        }
+
+        public Builder configVersion(String value){
+            put(CONFIG_VERSION, value);
             return this;
         }
 
