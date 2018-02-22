@@ -801,7 +801,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         HashMap<String, Object> properties = new EventProperty.Builder().url(appShareUrl).build();
         AnalyticsManager.trackEvent(Event.APP_INVITE_CLICKED, getScreenName(), properties);
-        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, "");
+        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, Event.APP_INVITE, properties);
     }
 
 
