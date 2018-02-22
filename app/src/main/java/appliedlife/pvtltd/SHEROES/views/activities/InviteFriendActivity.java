@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -47,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
@@ -177,6 +179,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
                 @Override
                 public boolean onMenuItemActionCollapse(MenuItem item) {
                     // Do whatever you need
+                     AppUtils.hideKeyboard(etInviteSearchBox, SCREEN_LABEL);
                     return true; // OR FALSE IF YOU DIDN'T WANT IT TO CLOSE!
                 }
             });
@@ -225,10 +228,23 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
             @Override
             public boolean onQueryTextChange(String inputSearch) {
-                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 1);
-                mViewPager.setCurrentItem(1);
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((ContactListFragment) fragment).searchContactInList(inputSearch);
+                if(!StringUtil.isNotNullOrEmptyString(inputSearch))
+                {
+                    AppUtils.hideKeyboard(etInviteSearchBox, SCREEN_LABEL);
+                }
+                if(mViewPager.getCurrentItem()==0) {
+                    Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
+                    if (AppUtils.isFragmentUIActive(suggestedFragment)) {
+                        mViewPager.setCurrentItem(0);
+                        ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(inputSearch);
+                    }
+                }else
+                {
+                    Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 1);
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        mViewPager.setCurrentItem(1);
+                        ((ContactListFragment) fragment).searchContactInList(inputSearch);
+                    }
                 }
                 return true;
             }

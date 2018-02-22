@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +21,12 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
  * Created by Praveen on 19/02/18.
  */
 
-public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
     private final Context mContext;
     private List<UserSolrObj> mUserSolrObjList;
     private final ContactDetailCallBack mContactDetailCallBack;
-
+    List<UserSolrObj> mUserSolrObjListForFilter = new ArrayList<>();
     private static final int TYPE_PROGRESS_LOADER = -1;
     private static final int TYPE_CONTACT = 1;
 
@@ -80,6 +82,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     public void setData(final List<UserSolrObj> userSolrObjList) {
+        this.mUserSolrObjListForFilter = userSolrObjList;
         mUserSolrObjList = userSolrObjList;
         notifyDataSetChanged();
     }
@@ -91,6 +94,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
     public void addAll(List<UserSolrObj> userContactDetailList) {
         int startPosition = userContactDetailList.size();
         mUserSolrObjList.addAll(userContactDetailList);
+        this.mUserSolrObjListForFilter = mUserSolrObjList;
         notifyItemRangeChanged(startPosition, mUserSolrObjList.size());
     }
     @Override
@@ -118,4 +122,37 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
         return mUserSolrObjList == null ? 0 : mUserSolrObjList.size();
     }
     //endregion
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mUserSolrObjList = (List<UserSolrObj>) results.values;
+                InviteFriendSuggestedAdapter.this.notifyDataSetChanged();
+            }
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<UserSolrObj> filteredResults = null;
+                if (constraint.length() == 0) {
+                    filteredResults = mUserSolrObjListForFilter;
+                } else {
+                    filteredResults = getFilteredResults(constraint.toString().toLowerCase());
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredResults;
+                return results;
+            }
+        };
+    }
+    private List<UserSolrObj> getFilteredResults(String constraint) {
+        List<UserSolrObj> results = new ArrayList<>();
+        for (UserSolrObj item : mUserSolrObjListForFilter) {
+            if (item.getNameOrTitle().toLowerCase().contains(constraint)) {
+                results.add(item);
+            }
+        }
+        return results;
+    }
 }

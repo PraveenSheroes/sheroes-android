@@ -541,8 +541,8 @@
     <string name="contact_list_friend">Contacts</string>
     <string name="contact_invite_friend">Invite</string>
     <string name="whats_app_not_installed">WhatsApp not Installed</string>
-    <string name="suggested_list_blank">No friends to follow, invite friends to SHEROES</string>
-    <string name="contact_list_blank">No friends in contact</string>
+    <string name="suggested_list_blank">No friends to follow. Invite your friends to SHEROES</string>
+    <string name="contact_list_blank">Find friends from your contacts</string>
     <string name="invite_friend_request_to_join">Hey i am on SHEROES \n</string>
     <string name="invite_friend_url_title">Inviting you on SHEROES</string>
     <string name="invite_friend_url_description">Explore your SHEROES</string>

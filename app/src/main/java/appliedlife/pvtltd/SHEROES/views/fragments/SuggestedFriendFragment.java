@@ -230,6 +230,9 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     public void getAllSuggestedContacts() {
         mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
     }
+    public void searchSuggestedContactInList(String contactName) {
+        mInviteFriendSuggestedAdapter.getFilter().filter(contactName);
+    }
 
     @Override
     public void showUserDetail(List<UserSolrObj> userSolrObjList) {
