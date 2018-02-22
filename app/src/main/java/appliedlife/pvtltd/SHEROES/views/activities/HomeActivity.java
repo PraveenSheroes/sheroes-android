@@ -142,6 +142,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
@@ -292,6 +293,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public PopupWindow popupWindowNavTooTip;
     public PopupWindow popUpNotificationWindow;
     private String mGcmId;
+    private ShowcaseManager showcaseManager;
 
 
     @Override
@@ -594,6 +596,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         setConfigurableShareOption(isWhatsAppShare());
+    }
+
+    public void showCaseDesign() {
+        if(mIsFirstTimeOpen){
+            this.mIsFirstTimeOpen = false;
+            showcaseManager = new ShowcaseManager(this,mFloatActionBtn,mTvHome,mTvCommunities,tvDrawerNavigation,mRecyclerView);
+            showcaseManager.showFirstMainActivityShowcase();
+            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+            installUpdateForMoEngage.setAppInstallFirstTime(true);
+            mInstallUpdatePreference.set(installUpdateForMoEngage);
+        }
     }
 
     private void deepLinkingRedirection() {

@@ -79,6 +79,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
@@ -256,6 +257,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
+        if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
+            ((HomeActivity)getActivity()).showCaseDesign();
+        }
     }
 
     /*@Override
