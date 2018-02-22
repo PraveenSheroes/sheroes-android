@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -287,7 +288,7 @@ public class HomeFragment extends BaseFragment {
     {
         List<FeedDetail> data=new ArrayList<>();
         FeedDetail header = new FeedDetail();
-        header.setSubType(AppConstants.HEADER);
+        header.setSubType(AppConstants.HOME_FEED_HEADER);
         data.add(0, header);
         mPullRefreshList.allListData(data);
         mAdapter.setSheroesGenericListData(data);
@@ -383,7 +384,7 @@ public class HomeFragment extends BaseFragment {
         }else {
             List<FeedDetail> data=new ArrayList<>();
             FeedDetail header = new FeedDetail();
-            header.setSubType(AppConstants.HEADER);
+            header.setSubType(AppConstants.HOME_FEED_HEADER);
             data.add(0, header);
             mPullRefreshList.allListData(data);
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
@@ -484,9 +485,7 @@ public class HomeFragment extends BaseFragment {
                             }
                         }
                     } else {
-                        if(getActivity() instanceof HomeActivity) {
-                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-                        }
+                        if(getActivity() instanceof HomeActivity){((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);}
                     }
                 }
                 break;
@@ -696,6 +695,11 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected boolean trackScreenTime() {
         return true;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHomePresenter;
     }
 
     @Override

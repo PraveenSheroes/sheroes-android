@@ -39,7 +39,9 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -62,6 +64,7 @@ import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
@@ -127,7 +130,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     //endregion
 
     //region private member variable
-    private HomeFragment mHomeFragment;
+    private FeedFragment mFeedFragment;
     private Contest mContest;
     private String mContestId;
     private long mUserId = -1L;
@@ -219,12 +222,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbarView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Challenge");
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        if (mContest != null) {
-            toolbarTitle.setText("Challenge");
-        }
     }
 
     @Override
@@ -247,7 +247,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     mContest.hasMyPost = true;
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                     mContestInfoFragment.setContest(mContest);
-                    mHomeFragment.onRefreshClick();
+                    mFeedFragment.refreshList();
                     invalidateBottomBar(FRAGMENT_RESPONSES);
                     Intent intent = new Intent();
                     Parcelable parcelable = Parcels.wrap(mContest);
@@ -261,7 +261,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     mContest.mWinnerAddress = "not empty";
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                     mContestInfoFragment.setContest(mContest);
-                    mHomeFragment.onRefreshClick();
+                    mFeedFragment.refreshList();
                     invalidateBottomBar(FRAGMENT_WINNER);
                     Intent intentContest = new Intent();
                     Parcelable parcelableContest = Parcels.wrap(mContest);
@@ -271,20 +271,21 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (mHomeFragment != null) {
-                        Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelableUserPost != null) {
-                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelableUserPost);
-                            isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                            mFeedDetail = userPostSolrObj;
-                        }
-                        if (isPostDeleted) {
-                            mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                        } else {
-                            mHomeFragment.commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                        }
+                    UserPostSolrObj userPostSolrObj = null;
+                    Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                    if (parcelableUserPost != null) {
+                        userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                        isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                     }
+                    if (userPostSolrObj == null) {
+                        break;
+                    }
+                    if (isPostDeleted) {
+                        mFeedFragment.removeItem(userPostSolrObj);
+                    } else {
+                        mFeedFragment.updateItem(userPostSolrObj);
+                    }
+                    break;
             }
         }
     }
@@ -292,14 +293,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-        if (mViewPager.getCurrentItem() == 1) {
-            mHomeFragment.likeAndUnlikeRequest(baseResponse, reactionValue, position);
-        }
     }
 
     @Override
@@ -325,15 +318,17 @@ public class ContestActivity extends BaseActivity implements IContestView {
     //region private methods
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        mHomeFragment = new HomeFragment();
+        mFeedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(Contest.CONTEST_OBJ, Parcels.wrap(mContest));
         bundle.putBoolean(IS_CHALLENGE, true);
-        mHomeFragment.setArguments(bundle);
+        String endPointUrl = "participant/feed/v2?sub_type=P&source_entity_id=" + mContest.remote_id;
+        bundle.putString(AppConstants.END_POINT_URL, endPointUrl);
+        mFeedFragment.setArguments(bundle);
         mContestInfoFragment = (ContestInfoFragment) ContestInfoFragment.instance();
         mContestInfoFragment.setArguments(bundle);
         adapter.addFragment(mContestInfoFragment, "Overview");
-        adapter.addFragment(mHomeFragment, "Responses");
+        adapter.addFragment(mFeedFragment, "Responses");
         if (mContest.hasWinner) {
             ContestWinnerFragment mContestWinnerFragment = new ContestWinnerFragment();
             mContestWinnerFragment.setArguments(bundle);
@@ -398,6 +393,12 @@ public class ContestActivity extends BaseActivity implements IContestView {
         }
 
     }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mContestPresenter;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

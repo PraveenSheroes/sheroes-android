@@ -126,7 +126,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
         return super.isViewAttached();
     }
     public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
-        mHomeModel.getNewGCMidFromModel(loginRequest).subscribe(new DisposableObserver<GcmIdResponse>() {
+        mHomeModel.getNewGCMidFromModel(loginRequest)
+                .compose(this.<GcmIdResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<GcmIdResponse>() {
             @Override
             public void onComplete() {
             }
@@ -153,7 +155,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getAuthTokenRefreshFromModel().subscribe(new DisposableObserver<LoginResponse>() {
+        mHomeModel.getAuthTokenRefreshFromModel().
+                compose(this.<LoginResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LoginResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -182,7 +186,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        mHomeModel.getFeedFromModel(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -215,7 +221,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getFeedFromModelForTestProfile(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        profileModel.getFeedFromModelForTestProfile(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -246,7 +254,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest,fragmentListRefreshData).subscribe(new DisposableObserver<List<FeedDetail>>() {
+        mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest,fragmentListRefreshData)
+                .compose(this.<List<FeedDetail>>bindToLifecycle())
+                .subscribe(new DisposableObserver<List<FeedDetail>>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -277,7 +287,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        mHomeModel.getFeedFromModel(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -310,7 +322,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getMyCommunityFromModel(myCommunityRequest).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        mHomeModel.getMyCommunityFromModel(myCommunityRequest)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -341,7 +355,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getAllCommunityFromModel(myCommunityRequest).subscribe(new DisposableObserver<AllCommunitiesResponse>() {
+        mHomeModel.getAllCommunityFromModel(myCommunityRequest)
+                .compose(this.<AllCommunitiesResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<AllCommunitiesResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -372,7 +388,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getBookMarkFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        mHomeModel.getBookMarkFromModel(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -402,7 +420,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getFollowFromModel(publicProfileListRequest).subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+        mHomeModel.getFollowFromModel(publicProfileListRequest)
+                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -438,7 +458,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getUnFollowFromModel(publicProfileListRequest).subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+        mHomeModel.getUnFollowFromModel(publicProfileListRequest)
+                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -473,7 +495,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
+        mHomeModel.getLikesFromModel(likeRequestPojo)
+                .compose(this.<LikeResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LikeResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -502,7 +526,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
+        mHomeModel.getUnLikesFromModel(likeRequestPojo)
+                .compose(this.<LikeResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LikeResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -534,7 +560,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
+        mHomeModel.getLikesFromModel(likeRequestPojo)
+                .compose(this.<LikeResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LikeResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -574,7 +602,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getUnLikesFromModel(likeRequestPojo).subscribe(new DisposableObserver<LikeResponse>() {
+        mHomeModel.getUnLikesFromModel(likeRequestPojo)
+                .compose(this.<LikeResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LikeResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -611,7 +641,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
+        mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked)
+                .compose(this.<BookmarkResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -640,7 +672,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.communityJoinFromModel(communityRequest).subscribe(new DisposableObserver<CommunityResponse>() {
+        mHomeModel.communityJoinFromModel(communityRequest)
+                .compose(this.<CommunityResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommunityResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -669,7 +703,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.deleteCommunityPostFromModel(deleteCommunityPostRequest).subscribe(new DisposableObserver<DeleteCommunityPostResponse>() {
+        mHomeModel.deleteCommunityPostFromModel(deleteCommunityPostRequest)
+                .compose(this.<DeleteCommunityPostResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<DeleteCommunityPostResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -698,7 +734,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.markAsSpamFromModel(bookmarkResponsePojo).subscribe(new DisposableObserver<BookmarkResponsePojo>() {
+        mHomeModel.markAsSpamFromModel(bookmarkResponsePojo)
+                .compose(this.<BookmarkResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -727,7 +765,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getNotificationFromModel(bellNotificationRequest).subscribe(new DisposableObserver<BelNotificationListResponse>() {
+        mHomeModel.getNotificationFromModel(bellNotificationRequest)
+                .compose(this.<BelNotificationListResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BelNotificationListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -752,7 +792,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     }
     public void getNotificationCountFromPresenter(NotificationReadCount notificationReadCount) {
-        mHomeModel.getNotificationReadCountFromModel(notificationReadCount).subscribe(new DisposableObserver<NotificationReadCountResponse>() {
+        mHomeModel.getNotificationReadCountFromModel(notificationReadCount)
+                .compose(this.<NotificationReadCountResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<NotificationReadCountResponse>() {
 
             @Override
             public void onComplete() {
@@ -774,7 +816,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
     public void getSpamPostApproveFromPresenter(ApproveSpamPostRequest approveSpamPostRequest) {
         getMvpView().startProgressBar();
-        mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
+        mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest)
+                .compose(this.<ApproveSpamPostResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
 
             @Override
             public void onComplete() {

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -148,6 +149,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.profile_community_champion_layout, container, false);
         profilePresenter.attachView(this);
@@ -166,9 +168,26 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
+    protected SheroesPresenter getPresenter() {
+        return profilePresenter;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         populateUserProfileDetails();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        profilePresenter.detachView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        profilePresenter.detachView();
     }
 
     private void populateUserProfileDetails() {
@@ -311,11 +330,16 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getFollowedMentors(UserFollowedMentorsResponse feedResponsePojo) {
-
+        if (getActivity() == null || getActivity().isFinishing()) {
+            return;
+        }
         if(feedResponsePojo.getNumFound() ==0) {
             //empty view
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
-            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            String name = "User";
+            if(getActivity()!=null && !getActivity().isFinishing()) {
+                name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            }
             String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
             emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_public_business_woman,0,0);
@@ -346,8 +370,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-        if((getActivity()) == null || getActivity().isFinishing()) return;
-
         ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 

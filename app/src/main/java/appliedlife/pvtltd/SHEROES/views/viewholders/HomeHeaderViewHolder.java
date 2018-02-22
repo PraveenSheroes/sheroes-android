@@ -12,6 +12,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -35,7 +37,7 @@ import butterknife.OnClick;
  * Created by Praveen on 06/11/17.
  */
 
-public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
+public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.card_header_view)
     CardView rootLayout;
     BaseHolderInterface viewInterface;
@@ -58,7 +60,7 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private PopupWindow popupWindowTooTip;
     private boolean isToolTip;
 
-    public HeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public HomeHeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
@@ -128,7 +130,11 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                viewInterface.handleOnClick(dataItem, headerMsg);
+                if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onAskQuestionClicked();
+                }else {
+                    viewInterface.handleOnClick(dataItem, headerMsg);
+                }
             }
         });
 
@@ -145,32 +151,36 @@ public class HeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void toolTipForHeaderFeed(Context context) {
-        LayoutInflater inflater = null;
-        inflater = LayoutInflater.from(context);
-        final View view  = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
-        FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
-        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
-        imageParams.gravity = Gravity.START;
-        imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
-        final LinearLayout llToolTipBg = view.findViewById(R.id.ll_tool_tip_bg);
-        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, context), LinearLayout.LayoutParams.WRAP_CONTENT);
-        llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
-        llToolTipBg.setLayoutParams(llParams);
-        final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
-        RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        arrowParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-        ivArrow.setLayoutParams(arrowParams);
-        TextView text =  view.findViewById(R.id.title);
-        text.setText(R.string.tool_tip_feed_header_profile);
-        TextView gotIt =  view.findViewById(R.id.got_it);
-        gotIt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    isToolTip=false;
+        try {
+            LayoutInflater inflater = null;
+            inflater = LayoutInflater.from(context);
+            final View view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
+            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            lps.setMargins(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(60, context), 0, 0);
+            LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(18, context));
+            imageParams.gravity = Gravity.START;
+            imageParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);
+            final LinearLayout llToolTipBg = view.findViewById(R.id.ll_tool_tip_bg);
+            RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, context), LinearLayout.LayoutParams.WRAP_CONTENT);
+            llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
+            llToolTipBg.setLayoutParams(llParams);
+            final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
+            RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            arrowParams.setMargins(CommonUtil.convertDpToPixel(10, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            ivArrow.setLayoutParams(arrowParams);
+            TextView text = view.findViewById(R.id.title);
+            text.setText(R.string.tool_tip_feed_header_profile);
+            TextView gotIt = view.findViewById(R.id.got_it);
+            gotIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    isToolTip = false;
                     rootLayout.removeView(view);
-            }
-        });
-        rootLayout.addView(view, lps);
+                }
+            });
+            rootLayout.addView(view, lps);
+        } catch (IllegalArgumentException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 }

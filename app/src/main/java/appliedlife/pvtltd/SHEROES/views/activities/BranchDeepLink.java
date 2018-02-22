@@ -20,6 +20,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -140,5 +141,10 @@ public class BranchDeepLink extends BaseActivity {
     @Override
     public boolean shouldTrackScreen() {
         return false;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
     }
 }
