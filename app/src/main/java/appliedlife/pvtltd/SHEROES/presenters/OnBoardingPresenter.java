@@ -220,11 +220,13 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
 
             @Override
             public void onNext(ConfigurationResponse configurationResponse) {
-                if (configurationResponse != null) {
-                    mConfiguration.set(configurationResponse.configuration);
+                if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
+                    if(configurationResponse.configuration!=null){
+                        mConfiguration.set(configurationResponse.configuration);
+                        getMvpView().onConfigFetched();
+                    }
                 }
                 getMvpView().stopProgressBar();
-                getMvpView().onConfigFetched();
             }
         });
     }
