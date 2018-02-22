@@ -424,14 +424,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         isMentor = true;
                     }
                     Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);
-                    intent.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
-                    // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+                    intent.putExtra(AppConstants.CHAMPION_ID, userId);
+                    intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
                     intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
-                    intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
                     addShareLink(sourceIntent, intent);
                     ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
-
-                    //ProfileActivity.navigateTo(this, userId, isMentor, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     finish();
                     if (mFromNotification > 0) {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);

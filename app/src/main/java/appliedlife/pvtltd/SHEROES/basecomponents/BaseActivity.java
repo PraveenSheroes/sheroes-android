@@ -150,6 +150,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
             mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
+
+            boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
+            if(isShareDeeplink){
+                initShare(getIntent());
+            }
         }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
@@ -162,11 +167,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
         if (getPresenter() != null) {
             getPresenter().onCreate();
-        }
-
-        boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
-        if(isShareDeeplink){
-            initShare(getIntent());
         }
 
     }
