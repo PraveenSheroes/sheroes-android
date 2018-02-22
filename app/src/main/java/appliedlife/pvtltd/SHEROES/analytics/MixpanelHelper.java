@@ -37,6 +37,9 @@ public class MixpanelHelper {
     @Inject
     Preference<LoginResponse> mUserPreference;
 
+    @Inject
+    Preference<Configuration> mConfiguration;
+
     /**
      * Should be run on login or app open
      *
@@ -80,8 +83,8 @@ public class MixpanelHelper {
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
-                    .configType(Configuration.getConfig()!=null ? Configuration.getConfig().configType : "")
-                    .configVersion(Configuration.getConfig()!=null ? Configuration.getConfig().configVersion : "")
+                    .configType(mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
+                    .configVersion(mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
                     .emailId(userSummary.getEmailId());
 
         /*int year = YearClass.get(CareApplication.getAppContext());

@@ -24,13 +24,4 @@ public class Configuration extends BaseRequest {
 
     @SerializedName("config_version")
     public String configVersion;
-
-    public static Configuration getConfig() {
-        SharedPreferences prefs = SheroesApplication.mContext.getSharedPreferences(AppConstants.SHARED_PREFS, Context.MODE_PRIVATE);
-        String restoredText = prefs.getString(AppConstants.CONFIG_KEY, null);
-        if (restoredText != null) {
-            return SheroesAppModule.ensureGson().fromJson(restoredText, Configuration.class);
-        }
-        return null;
-    }
 }
