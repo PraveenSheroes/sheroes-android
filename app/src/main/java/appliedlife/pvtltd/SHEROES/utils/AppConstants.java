@@ -345,5 +345,6 @@ public class AppConstants {
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
     public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Completed Screen";
     public static final String LIST_TYPE_TAGGING = "COMMENT";
+    public static final String CONFIG_KEY = "appliedlife.pvtltd.SHEROES.sharedprefs.CONFIG_KEY";
 
 }

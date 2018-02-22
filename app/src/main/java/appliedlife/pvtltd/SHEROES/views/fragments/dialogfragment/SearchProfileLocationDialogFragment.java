@@ -289,6 +289,11 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     }
 
     @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
     public void startProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.bringToFront();

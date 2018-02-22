@@ -407,5 +407,16 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
+    public Observable<ConfigurationResponse> getConfig() {
+        return sheroesAppServiceApi.getConfig()
+                .map(new Function<ConfigurationResponse, ConfigurationResponse>() {
+                    @Override
+                    public ConfigurationResponse apply(ConfigurationResponse config) {
+                        return config;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
     
 }
