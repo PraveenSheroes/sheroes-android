@@ -76,6 +76,7 @@ public class BranchDeepLink extends BaseActivity {
         String shareImage = "";
         String shareDeepLink = "";
         String shareDialogTitle = "";
+        String shareChannel = "";
         try {
             String url = sessionParams.has(AppConstants.DEEP_LINK_URL) ? sessionParams.getString(AppConstants.DEEP_LINK_URL) : "";
             String openWebViewFlag = sessionParams.has(AppConstants.OPEN_IN_WEBVIEW) ? sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW) : "";
@@ -85,6 +86,8 @@ public class BranchDeepLink extends BaseActivity {
                 shareImage = sessionParams.has(AppConstants.SHARE_IMAGE) ? sessionParams.getString(AppConstants.SHARE_IMAGE) : "";
                 shareDeepLink = sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) ? sessionParams.getString(AppConstants.SHARE_DEEP_LINK_URL) : "";
                 shareDialogTitle = sessionParams.has(AppConstants.SHARE_DIALOG_TITLE) ? sessionParams.getString(AppConstants.SHARE_DIALOG_TITLE) : "";
+                shareChannel = sessionParams.has(AppConstants.SHARE_CHANNEL) ? sessionParams.getString(AppConstants.SHARE_CHANNEL) : "";
+
                 isShareDeepLink = true;
                 if(!CommonUtil.isNotEmpty(url) && isShareDeepLink){
                     Intent intentResult = new Intent();
@@ -93,6 +96,7 @@ public class BranchDeepLink extends BaseActivity {
                     intentResult.putExtra(AppConstants.SHARE_DEEP_LINK_URL, shareDeepLink);
                     intentResult.putExtra(AppConstants.SHARE_DIALOG_TITLE, shareDialogTitle);
                     intentResult.putExtra(AppConstants.IS_SHARE_DEEP_LINK, isShareDeepLink);
+                    intentResult.putExtra(AppConstants.SHARE_CHANNEL, shareChannel);
                     setResult(RESULT_OK, intentResult);
                     finish();
                     return;

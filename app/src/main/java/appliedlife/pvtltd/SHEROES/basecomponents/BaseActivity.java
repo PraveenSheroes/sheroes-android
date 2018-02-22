@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +29,9 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -61,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -83,6 +89,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -98,6 +107,11 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
 public abstract class BaseActivity extends AppCompatActivity implements EventInterface, BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
     public static final String SOURCE_SCREEN = "SOURCE_SCREEN";
     public static final String SOURCE_PROPERTIES = "SOURCE_PROPERTIES";
+    public static final String SHARE_WHATSAPP = "Whatsapp";
+    public static final String SHARE_FACEBOOK = "Facebook";
+    public static final String ANDROID_DEFAULT = "Android Default";
+    public static final String BOTTOM_SHEET = "Bottom Sheet";
+
     public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
@@ -152,17 +166,46 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
         boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
         if(isShareDeeplink){
-            String shareText = getIntent().getExtras().getString(AppConstants.SHARE_TEXT);
-            String shareImage = getIntent().getExtras().getString(AppConstants.SHARE_IMAGE);
-            String shareDeeplLink = getIntent().getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
-            String shareDialog = getIntent().getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
-            Boolean isShareImage = false;
-            if(CommonUtil.isNotEmpty(shareImage)){
-                isShareImage = true;
-            }
-            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+            initShare(getIntent());
         }
 
+    }
+
+    private void initShare(Intent intent) {
+        String shareText = intent.getExtras().getString(AppConstants.SHARE_TEXT);
+        String shareImage = intent.getExtras().getString(AppConstants.SHARE_IMAGE);
+        String shareDeeplLink = intent.getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
+        String shareDialog = intent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
+        String shareChannel = intent.getExtras().getString(AppConstants.SHARE_CHANNEL);
+        Boolean isShareImage = false;
+        if(CommonUtil.isNotEmpty(shareImage)){
+            isShareImage = true;
+        }
+        if(CommonUtil.isNotEmpty(shareChannel)){
+            if(shareChannel.equalsIgnoreCase(ANDROID_DEFAULT)){
+                if(isShareImage){
+                    CommonUtil.shareImageChooser(this, shareText, shareImage);
+                }else {
+                    CommonUtil.shareCardViaSocial(this, shareDeeplLink);
+                }
+            }else if(shareChannel.equalsIgnoreCase(SHARE_WHATSAPP)){
+                if (isShareImage) {
+                    CommonUtil.shareImageWhatsApp(this, shareText, shareImage, getScreenName(), true, null, null);
+                }else {
+                    CommonUtil.shareLinkToWhatsApp(this, shareText);
+                }
+            }else if(shareChannel.equalsIgnoreCase(SHARE_FACEBOOK)){
+                if(isShareImage){
+                    CommonUtil.facebookImageShare(this, shareImage);
+                }else {
+                    CommonUtil.shareFacebookLink(this, shareText);
+                }
+            }else {
+                ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+            }
+        }else {
+            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+        }
     }
 
     public void setSource(String source) {
@@ -380,15 +423,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if(intent!=null && intent.getExtras()!=null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)){
                 boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
                 if(isShareDeeplink){
-                    String shareText = intent.getExtras().getString(AppConstants.SHARE_TEXT);
-                    String shareImage = intent.getExtras().getString(AppConstants.SHARE_IMAGE);
-                    String shareDeeplLink = intent.getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
-                    String shareDialog = intent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
-                    Boolean isShareImage = false;
-                    if(CommonUtil.isNotEmpty(shareImage)){
-                        isShareImage = true;
-                    }
-                    ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+                    initShare(intent);
                 }
             }
         }

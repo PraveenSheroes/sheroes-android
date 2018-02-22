@@ -354,6 +354,7 @@ public class AppConstants {
     public static final String SHARE_DEEP_LINK_URL = "share_deep_link_url";
     public static final String SHARE_DIALOG_TITLE = "share_dialog_title";
     public static final String IS_SHARE_DEEP_LINK = "is share deep link";
+    public static final String SHARE_CHANNEL = "channel";
 
 
 }

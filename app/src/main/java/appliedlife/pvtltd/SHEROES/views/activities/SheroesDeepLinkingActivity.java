@@ -273,6 +273,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             destinationIntent.putExtra(AppConstants.SHARE_DIALOG_TITLE, sourceIntent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE));
             destinationIntent.putExtra(AppConstants.SHARE_IMAGE, sourceIntent.getExtras().getString(AppConstants.SHARE_IMAGE));
             destinationIntent.putExtra(AppConstants.IS_SHARE_DEEP_LINK, sourceIntent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK));
+            destinationIntent.putExtra(AppConstants.SHARE_CHANNEL, sourceIntent.getExtras().getBoolean(AppConstants.SHARE_CHANNEL));
         }
     }
 
