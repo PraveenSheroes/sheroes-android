@@ -298,6 +298,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        if(getActivity() ==null || !isAdded()){
+            return;
+        }
         GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override

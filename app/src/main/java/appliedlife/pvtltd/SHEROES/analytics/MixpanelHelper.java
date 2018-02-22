@@ -198,6 +198,9 @@ public class MixpanelHelper {
     }
 
     public static void trackPostActionEvent(Event event, FeedDetail feedDetail, String screenName) {
+        if (feedDetail == null) {
+            return;
+        }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             UserPostSolrObj userPostSolrObj = null;
             if(feedDetail instanceof UserPostSolrObj){

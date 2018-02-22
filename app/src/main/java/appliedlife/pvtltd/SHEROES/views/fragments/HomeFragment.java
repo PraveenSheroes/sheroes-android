@@ -510,6 +510,9 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
         loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {

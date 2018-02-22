@@ -148,13 +148,15 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
 
     @Override
     public void showUserLikedList(List<Comment> commentList) {
-        mRecyclerView.setAdapter(mLikeListAdapter = new LikeListAdapter(getActivity(), commentList, this));
+        if(getActivity()!=null && isAdded()){
+            mRecyclerView.setAdapter(mLikeListAdapter = new LikeListAdapter(getActivity(), commentList, this));
 
-        if (mLikeListAdapter != null) {
-            mLikeListAdapter.notifyDataSetChanged();
+            if (mLikeListAdapter != null) {
+                mLikeListAdapter.notifyDataSetChanged();
+            }
+            String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, commentList.size());
+            mLikeCount.setText(CommonUtil.getRoundedMetricFormat(commentList.size()) + " " + pluralLikes);
         }
-        String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, commentList.size());
-        mLikeCount.setText(CommonUtil.getRoundedMetricFormat(commentList.size()) + " " + pluralLikes);
     }
 
     @Override

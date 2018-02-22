@@ -247,6 +247,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
 
     private boolean isMentorQARefresh = false;
+    private PopupWindow popupWindowFollowTooTip;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
 
@@ -485,7 +486,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         try {
             viewToolTipFollow.setVisibility(View.INVISIBLE);
             final View popupFollowToolTip;
-            final PopupWindow popupWindowFollowTooTip;
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupFollowToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
             popupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -834,7 +834,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        if (popupWindowFollowTooTip != null && popupWindowFollowTooTip.isShowing()) {
+            popupWindowFollowTooTip.dismiss();
+        }
         mHomePresenter.detachView();
     }
 

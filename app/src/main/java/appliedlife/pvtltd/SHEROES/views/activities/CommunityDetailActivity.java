@@ -709,6 +709,14 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         initializeLayout();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (popupWindowInviteFriendTooTip != null && popupWindowInviteFriendTooTip.isShowing()) {
+            popupWindowInviteFriendTooTip.dismiss();
+        }
+        super.onDestroy();
+    }
+
     public void invalidateItem(FeedDetail feedDetail) {
         for (int i = 0; i < mAdapter.getCount(); i++) {
             Fragment fragment = mAdapter.getItem(i);
