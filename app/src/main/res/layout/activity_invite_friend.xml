@@ -24,6 +24,7 @@
                 style="@style/TextAppearance.Toolbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:ellipsize="end"
                 android:maxLines="2" />
 

@@ -10,6 +10,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -74,6 +75,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     EmptyRecyclerView mFeedRecyclerView;
     @Bind(R.id.empty_view)
     View emptyView;
+
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private InviteFriendSuggestedAdapter mInviteFriendSuggestedAdapter;
@@ -139,7 +141,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             @Override
             public void run() {
                 if (mSwipeRefresh != null) {
-                    mSwipeRefresh.setRefreshing(true);
+                    mSwipeRefresh.setRefreshing(false);
                     mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
                 }
             }
@@ -170,27 +172,9 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         }
     }
     private void openMentorProfileDetail(UserSolrObj userSolrObj) {
-        ProfileActivity.navigateTo(getActivity(), userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(),userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL,userSolrObj);
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
-        if (null != intent) {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
-                    if (null != intent.getExtras()) {
-                        UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                        if(null!=userSolrObj) {
-                            mInviteFriendSuggestedAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
-                        }
-                    }
-                    break;
-                default:
-            }
-        }
 
-    }
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
@@ -232,6 +216,9 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
     public void searchSuggestedContactInList(String contactName) {
         mInviteFriendSuggestedAdapter.getFilter().filter(contactName);
+    }
+    public void refreshSuggestedList(UserSolrObj userSolrObj) {
+        mInviteFriendSuggestedAdapter.setDataOnItemPosition(userSolrObj);
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
@@ -83,8 +84,8 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setData(final List<UserContactDetail> contactDetails) {
-        this.mUserContactListForFilter = contactDetails;
-        mContactDetailList = contactDetails;
+        mUserContactListForFilter.addAll(contactDetails);
+        mContactDetailList.addAll(contactDetails);
         notifyDataSetChanged();
     }
 
@@ -135,7 +136,7 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void addAll(List<UserContactDetail> userContactDetailList) {
         int startPosition = mContactDetailList.size();
         mContactDetailList.addAll(userContactDetailList);
-        this.mUserContactListForFilter = mContactDetailList;
+        mUserContactListForFilter.addAll(userContactDetailList);
         notifyItemRangeChanged(startPosition, mContactDetailList.size());
     }
 

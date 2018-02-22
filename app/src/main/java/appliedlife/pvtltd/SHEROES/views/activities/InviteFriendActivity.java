@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -190,7 +191,32 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
         return super.onCreateOptionsMenu(menu);
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
+                    Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
+                    if (AppUtils.isFragmentUIActive(suggestedFragment)) {
+                        mViewPager.setCurrentItem(0);
+                        if (null != intent.getExtras()) {
+                            UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                            if(null!=userSolrObj) {
+                                userSolrObj.setItemPosition(userSolrObj.currentItemPosition);
+                                ((SuggestedFriendFragment) suggestedFragment).refreshSuggestedList(userSolrObj);
 
+                            }
+                        }
+
+                    }
+                    break;
+                default:
+            }
+        }
+
+    }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
@@ -272,7 +298,20 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int i) {
-
+        if(mViewPager.getCurrentItem()==0) {
+            Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
+            if (AppUtils.isFragmentUIActive(suggestedFragment)) {
+                mViewPager.setCurrentItem(0);
+                ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(etInviteSearchBox.getQuery().toString());
+            }
+        }else
+        {
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 1);
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                mViewPager.setCurrentItem(1);
+                ((ContactListFragment) fragment).searchContactInList(etInviteSearchBox.getQuery().toString());
+            }
+        }
     }
 
     @Override

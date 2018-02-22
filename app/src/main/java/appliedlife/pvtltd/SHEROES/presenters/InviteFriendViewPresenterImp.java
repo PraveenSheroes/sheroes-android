@@ -220,6 +220,10 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                                 }
                                 break;
                         }
+                    }else if(!StringUtil.isNotEmptyCollection(mUserDetalList))
+                    {
+                        getMvpView().stopProgressBar();
+                        getMvpView().showUserDetail(userSolrObjList);
                     }
 
                 } else {
@@ -314,6 +318,12 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                                 break;
                         }
                     }
+                    else if(!StringUtil.isNotEmptyCollection(mContactDetailList))
+                    {
+                        getMvpView().stopProgressBar();
+                        getMvpView().showContacts(userContactDetailList);
+                    }
+
                 } else {
                     if (allContactListResponse.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
                         getMvpView().setContactUserListEnded(true);

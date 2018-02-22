@@ -17,6 +17,7 @@ import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
@@ -90,8 +92,9 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
-    @Bind(R.id.empty_view)
-    View emptyView;
+
+    @Bind(R.id.ll_sync_contact)
+    LinearLayout llSyncContact;
     //endregion
 
     private boolean hasFeedEnded;
@@ -150,6 +153,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 ((InviteFriendActivity) getActivity()).mViewPager.setCurrentItem(1);
             }
         }
+        llSyncContact.setVisibility(View.GONE);
         mInviteFriendViewPresenterImp.setEndpointUrl(CONTACT_LIST_URL);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -157,7 +161,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mInviteFriendAdapter = new InviteFriendAdapter(getContext(), this);
         mFeedRecyclerView.setAdapter(mInviteFriendAdapter);
-        mFeedRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -205,13 +208,17 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     }
                 });
                 mInviteFriendViewPresenterImp.updateInviteUrlFromPresenter(mSmsShareLink);
-            }else
-            {
-                mSmsShareLink=mUserPreference.get().getUserSummary().getAppShareUrl();
+            } else {
+                mSmsShareLink = mUserPreference.get().getUserSummary().getAppShareUrl();
             }
         }
     }
 
+    @OnClick(R.id.btn_sync_contact)
+    public void btnSyncContactClick() {
+        syncContact = true;
+        getUserContacts(getActivity());
+    }
 
     private void getUserContacts(Context context) {
         {
@@ -252,8 +259,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     allowedContactSynEvent();
                 } else {
                     deniedContactSyncEvent();
-                    if(null!=getActivity())
-                    (getActivity()).onBackPressed();
+                    if (null != getActivity())
+                        (getActivity()).onBackPressed();
                 }
                 break;
             }
@@ -295,12 +302,12 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                         sendIntent.setPackage(AppConstants.WHATS_APP);
                         sendIntent.setType("text/plain");
                         sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(isWhatsAppNumber) + "@s.whatsapp.net");//phone number without "+" prefix
-                        sendIntent.putExtra(Intent.EXTRA_TEXT,  mSmsShareLink);
-                        startActivityForResult(sendIntent,1);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, mSmsShareLink);
+                        startActivityForResult(sendIntent, 1);
                         //startActivity(sendIntent);
                         moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", "Invite Friend", Long.parseLong(isWhatsAppNumber), contactDetail.getName(), getScreenName(), "", contactDetail.getName(), getScreenName(), contactDetail.getItemPosition());
                         HashMap<String, Object> properties = new EventProperty.Builder().id(isWhatsAppNumber).build();
-                        AnalyticsManager.trackEvent(Event.FRIEND_INVITED, getScreenName(),properties);
+                        AnalyticsManager.trackEvent(Event.FRIEND_INVITED, getScreenName(), properties);
 
                     } else {
                         Uri uri = Uri.parse("market://details?id=com.whatsapp");
@@ -314,21 +321,22 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             default:
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-            switch (resultCode) {
-                case 0:
-                    Toast.makeText(getActivity(),"This contact is not on Whatsapp",Toast.LENGTH_SHORT).show();
+        switch (resultCode) {
+            case 0:
+                Toast.makeText(getActivity(), "This contact is not on Whatsapp", Toast.LENGTH_SHORT).show();
 
-                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-                    smsIntent.addCategory(Intent.CATEGORY_DEFAULT);
-                    smsIntent.putExtra("sms_body",mSmsShareLink);
-                    smsIntent.setType("vnd.android-dir/mms-sms");
-                    smsIntent.setData(Uri.parse("sms:" + isWhatsAppNumber));
-                    startActivity(smsIntent);
-                    break;
-                default:
-            }
+                Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                smsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                smsIntent.putExtra("sms_body", mSmsShareLink);
+                smsIntent.setType("vnd.android-dir/mms-sms");
+                smsIntent.setData(Uri.parse("sms:" + isWhatsAppNumber));
+                startActivity(smsIntent);
+                break;
+            default:
+        }
     }
 
     @Override
@@ -344,11 +352,11 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
         if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
-            emptyView.setVisibility(View.GONE);
+            llSyncContact.setVisibility(View.GONE);
             mInviteFriendAdapter.setData(userContactDetailList);
             mInviteFriendAdapter.notifyDataSetChanged();
         } else {
-            emptyView.setVisibility(View.VISIBLE);
+            llSyncContact.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);
         if (syncContact) {
@@ -400,7 +408,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             public void run() {
                 if (!syncContact) {
                     if (mSwipeRefresh != null) {
-                        mSwipeRefresh.setRefreshing(true);
+                        mSwipeRefresh.setRefreshing(false);
                         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
                     }
                 }

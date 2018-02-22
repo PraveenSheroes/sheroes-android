@@ -14,6 +14,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 
@@ -80,7 +81,11 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
     public int getItemCount() {
         return getDataItemCount() + (showLoader ? 1 : 0);
     }
-
+    public void setDataOnItemPosition(UserSolrObj userSolrObj) {
+        mUserSolrObjList.remove(userSolrObj.getItemPosition());
+        mUserSolrObjList.add(userSolrObj.getItemPosition(),userSolrObj);
+        notifyDataSetChanged();
+    }
     public void setData(final List<UserSolrObj> userSolrObjList) {
         this.mUserSolrObjListForFilter = userSolrObjList;
         mUserSolrObjList = userSolrObjList;

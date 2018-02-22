@@ -546,6 +546,8 @@
     <string name="invite_friend_request_to_join">Hey i am on SHEROES \n</string>
     <string name="invite_friend_url_title">Inviting you on SHEROES</string>
     <string name="invite_friend_url_description">Explore your SHEROES</string>
+    <string name="invite_sync_contact">No contacts to show, sync your contacts with SHEROES</string>
+    <string name="sync_contact">Sync contacts</string>
 
 
 
