@@ -1233,6 +1233,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         flFeedFullView.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
+        homeButtonUi();
         initHomeViewPagerAndTabs();
     }
 
