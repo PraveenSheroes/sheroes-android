@@ -304,6 +304,6 @@ public interface SheroesAppServiceApi {
     @GET("participant/remote_config/?config_type=AppConfig")
     Observable<ConfigurationResponse> getConfig();
 
-    @GET("participant/feed/v2?")
+    @GET("participant/feed/community_feed?")
     Observable<FeedResponsePojo> getChallengeResponse(@Query("sub_type") String subType, @Query("source_entity_id") String sourceEntityId);
 }
