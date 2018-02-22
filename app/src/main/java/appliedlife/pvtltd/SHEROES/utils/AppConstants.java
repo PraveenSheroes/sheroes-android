@@ -141,6 +141,10 @@ public class AppConstants {
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
     public static final String FOLLOWERS = "FOLLOWERS";
     public static final String FOLLOWING = "FOLLOWING";
+    public static final String FOLLOWING_COUNT_CLICK = "Following Count Click";
+    public static final String FOLLOWERS_COUNT_CLICK = "Followers Count Click";
+    public static final String SHARE_PROFILE = "Share profile";
+    public static final String EDIT_PROFILE = "Edit profile";
 
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";

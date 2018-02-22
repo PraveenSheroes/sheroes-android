@@ -45,8 +45,8 @@ android {
     }
     buildTypes {
         debug {
-            //buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
-            buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
+            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
            //  buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
            // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""

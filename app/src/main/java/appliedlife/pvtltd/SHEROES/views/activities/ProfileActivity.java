@@ -25,7 +25,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -86,9 +85,9 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -96,6 +95,10 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS_COUNT_CLICK;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
@@ -613,7 +616,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mentorPost.community.id = userPostSolrObj.getSolrIgnoreMentorCommunityId();
             mentorPost.community.name = userPostSolrObj.getNameOrTitle();
             mentorPost.isEdit = false;
-            mentorPost.isCompanyAdmin =  userPostSolrObj.getCompanyAdmin(); //todo - ravi get typeid
+            mentorPost.isCompanyAdmin =  userPostSolrObj.getCompanyAdmin();
             CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
         }
     }
@@ -625,12 +628,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .name("Followers Count Click")
+                        .name(FOLLOWERS_COUNT_CLICK)
                         .sourceScreenId(mSourceName)
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
-        FollowingActivity.navigateTo(this, mChampionId, isOwnProfile,  getScreenName(), "Followers", FollowingEnum.FOLLOWERS,  null );
+
+        if(StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
+            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FOLLOWERS, FollowingEnum.FOLLOWERS, null);
+        }
     }
 
     @OnClick(R.id.li_following)
@@ -639,12 +645,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .name("Following Count Click")
+                        .name(FOLLOWING_COUNT_CLICK)
                         .isMentor(isMentor)
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
-        FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), "Following", FollowingEnum.FOLLOWING,null );
+        if(StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
+            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FOLLOWING, FollowingEnum.FOLLOWING, null);
+        }
     }
 
     public void addAnalyticsEvents(Event event) {
@@ -984,11 +992,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
                 lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.toolbar_mentor);
-                lps.setMargins(40, 90, 0, 0);
+                lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.share_profile);
+                lps.setMargins(CommonUtil.convertDpToPixel(40, ProfileActivity.this), CommonUtil.convertDpToPixel(160, ProfileActivity.this), 0, 0);
                 final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
                 RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0);
+
+                if(isUserOrChampionDetailsFilled()) {
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(150, ProfileActivity.this), 0);
+                } else {
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(18, ProfileActivity.this), 0);
+                }
                 imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
                 ivArrow.setLayoutParams(imageParams);
                 TextView title = view.findViewById(R.id.title);
@@ -1566,7 +1579,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
                 shareProfile.setLayoutParams(params);
-                shareProfile.setText("Share profile");
+                shareProfile.setText(AppConstants.SHARE_PROFILE);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
@@ -1582,7 +1595,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
                 tvMentorDashBoardFollow.setLayoutParams(params);
-                tvMentorDashBoardFollow.setText("Edit profile");
+                tvMentorDashBoardFollow.setText(AppConstants.EDIT_PROFILE);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
