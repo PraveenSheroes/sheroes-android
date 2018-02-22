@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -42,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
@@ -147,7 +149,8 @@ public class SheroesAppModule {
                 .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
-                .registerSubtype(LeaderObj.class, AppConstants.LEADER_SUB_TYPE);
+                .registerSubtype(LeaderObj.class, AppConstants.LEADER_SUB_TYPE)
+                .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE);
 
         return new GsonBuilder()
                 .setDateFormat(DATE_FORMATS[0])
@@ -224,6 +227,12 @@ public class SheroesAppModule {
     @Provides
     public Preference<AllCommunitiesResponse> provideAllCommunities(RxSharedPreferences rxSharedPreferences, Gson gson) {
         return rxSharedPreferences.getObject(AppConstants.ALL_COMMUNITY_LIST, new AllCommunitiesResponse(), new GsonConverter<AllCommunitiesResponse>(gson, AllCommunitiesResponse.class));
+    }
+
+    @Singleton
+    @Provides
+    public Preference<Configuration> provideConfiguration(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.CONFIG_KEY, new Configuration(), new GsonConverter<Configuration>(gson, Configuration.class));
     }
 
 

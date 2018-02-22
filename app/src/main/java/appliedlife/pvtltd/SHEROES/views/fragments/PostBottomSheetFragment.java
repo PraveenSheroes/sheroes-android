@@ -262,5 +262,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     public void invalidateLikeUnlike(Comment comment) {
 
     }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
     //endregion
 }

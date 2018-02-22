@@ -86,7 +86,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -265,6 +265,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
 
     private boolean isMentorQARefresh = false;
+    private PopupWindow popupWindowFollowTooTip;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
 
@@ -483,8 +484,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             followingTitle.setText(getResources().getString(R.string.following));
             liFollowing.setVisibility(View.VISIBLE);
         }
-    }
 
+        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
+    }
 
     private void toolTipForAskQuestion() {
         try {
@@ -515,7 +517,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         try {
             viewToolTipFollow.setVisibility(View.INVISIBLE);
             final View popupFollowToolTip;
-            final PopupWindow popupWindowFollowTooTip;
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupFollowToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
             popupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -586,11 +587,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
+            mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
-            mViewPagerAdapter.addFragment(CommunitiesDetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
+            mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
         }
 
         mViewPager.setAdapter(mViewPagerAdapter);
@@ -775,9 +776,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 .build();
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
-
+        if (fragment instanceof UserPostFragment) {
         if (tabName.equalsIgnoreCase("Profile - Posts")) {
             createPost.setVisibility(View.VISIBLE);
+        } else {
+            createPost.setVisibility(View.GONE);
+        }
         } else if (fragment instanceof MentorQADetailFragment) {
             createPost.setVisibility(View.GONE);
         } else {
@@ -853,8 +857,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         int fragmentPosition = isMentor ? AppConstants.NO_REACTION_CONSTANT : AppConstants.ONE_CONSTANT;
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, fragmentPosition);
-        if (fragment instanceof CommunitiesDetailFragment)
-            ((CommunitiesDetailFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
+        if (fragment instanceof UserPostFragment)
+            ((UserPostFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
     @Override
@@ -881,7 +885,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        if (popupWindowFollowTooTip != null && popupWindowFollowTooTip.isShowing()) {
+            popupWindowFollowTooTip.dismiss();
+        }
         mHomePresenter.detachView();
     }
 
@@ -1027,6 +1033,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .isMentor(isMentor)
                         .sourceScreenId(SCREEN_LABEL)
                         .isOwnProfile(isOwnProfile)
+                        .sharedTo(AppConstants.SHARE_CHOOSER)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -1158,8 +1165,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                     if (AppUtils.isFragmentUIActive(fragment)) {
-                        if (fragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) fragment).swipeToRefreshList();
+                        if (fragment instanceof UserPostFragment) {
+                            ((UserPostFragment) fragment).swipeToRefreshList();
                         }
                     }
                     break;
@@ -1168,8 +1175,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                     if (AppUtils.isFragmentUIActive(activeFragment)) {
                         if (activeFragment instanceof MentorQADetailFragment) {
                             ((MentorQADetailFragment) activeFragment).swipeToRefreshList();
-                        } else if(activeFragment instanceof CommunitiesDetailFragment) {
-                            ((CommunitiesDetailFragment) activeFragment).swipeToRefreshList();
                         }
                     }
                     break;
@@ -1183,15 +1188,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                             mFeedDetail = userPostSolrObj;
                         }
                         if (isPostDeleted) {
-                            if (mFragment instanceof CommunitiesDetailFragment) {
-                                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                            if (mFragment instanceof UserPostFragment) {
+                                ((UserPostFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
                             } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
                             }
                         } else {
-                            if (mFragment instanceof CommunitiesDetailFragment) {
-                                ((CommunitiesDetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                            if (mFragment instanceof UserPostFragment) {
+                                ((UserPostFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                             } else {
                                 ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
                                 isMentorQARefresh = true;

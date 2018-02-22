@@ -365,6 +365,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
+        if((getActivity()) == null || getActivity().isFinishing()) return;
         ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
@@ -419,6 +420,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             //current scenrio - other hv all so change if future other don't hv mutual - empty view
             emptyViewCommunitiesContainer.setVisibility(View.VISIBLE);
             communityListContainer.setVisibility(View.GONE);
+            if (getActivity() == null) {
+                return;
+            }
             String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_community, name);
             emptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_community_member_public,0,0);

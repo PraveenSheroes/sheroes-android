@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
@@ -603,7 +604,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, feedDetail, getScreenName());
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
     private CharSequence menuIconWithText(Drawable r, String title) {
@@ -649,7 +652,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
 
         }
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, userPostObj, getScreenName());
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
+        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
     @Override

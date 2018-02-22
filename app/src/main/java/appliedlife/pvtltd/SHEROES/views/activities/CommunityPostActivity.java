@@ -767,16 +767,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void onPostSend(FeedDetail feedDetail) {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        if (mIsEditPost) {
-            feedDetail.setItemPosition(mFeedPosition);
-            Parcelable parcelable = Parcels.wrap(feedDetail);
-            bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, parcelable);
+        if(feedDetail!=null){
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            if (mIsEditPost) {
+                feedDetail.setItemPosition(mFeedPosition);
+                Parcelable parcelable = Parcels.wrap(feedDetail);
+                bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, parcelable);
+            }
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            CommunityPostActivity.this.finish();
         }
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-        CommunityPostActivity.this.finish();
     }
 
     //endregion

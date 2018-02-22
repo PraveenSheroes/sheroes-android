@@ -155,8 +155,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <FrameLayout
                 android:id="@+id/fm_image_thumb"
