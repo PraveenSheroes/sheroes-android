@@ -15,11 +15,15 @@ import android.widget.RelativeLayout;
 import org.parceler.Parcels;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -118,6 +122,31 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         winner.isHeader = true;
         winners.add(0, winner);
         mWinnerListAdapter.setData(winners);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        final EventProperty.Builder builder = new EventProperty.Builder();
+        if (mContest != null) {
+            builder.title(mContest.title)
+                    .id(Integer.toString(mContest.remote_id));
+
+        }
+        HashMap<String, Object> properties = builder.build();
+        return properties;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     //endregion

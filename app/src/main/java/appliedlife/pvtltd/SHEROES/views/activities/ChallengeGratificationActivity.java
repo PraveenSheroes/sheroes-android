@@ -31,6 +31,9 @@ import org.parceler.Parcels;
 import java.util.HashMap;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -125,7 +128,13 @@ public class ChallengeGratificationActivity extends BaseActivity {
     public void shareClick() {
         if (mContest != null) {
             String shareText="Yay! I just completed the #"+mContest.tag+" challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: "+mContest.shortUrl;
-            ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false);
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .challengeId(Integer.toString(mContest.remote_id))
+                            .url(shareText)
+                            .build();
+            AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, properties);
+            ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false, Event.CHALLENGE_SHARED, properties);
         }
     }
 //TODO: Will work on Challenge gratification next part where this code will be use

@@ -32,7 +32,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
@@ -152,7 +152,7 @@ public interface SheroesAppComponent {
 
     void inject(NoCommunityHolder noCommunityHolder);
 
-    void inject(CommunitiesDetailFragment communitiesDetailFragment);
+    void inject(UserPostFragment communitiesDetailFragment);
 
     void inject(OnBoardingActivity onBoardingActivity);
 

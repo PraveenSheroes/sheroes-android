@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
@@ -198,16 +199,43 @@ public class MixpanelHelper {
 
     public static void trackPostActionEvent(Event event, FeedDetail feedDetail, String screenName) {
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+            UserPostSolrObj userPostSolrObj = null;
+            if(feedDetail instanceof UserPostSolrObj){
+                userPostSolrObj = (UserPostSolrObj) feedDetail;
+            }
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
                             .title(feedDetail.getNameOrTitle())
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
+        }
+    }
+
+    public static HashMap<String, Object> getPostProperties(FeedDetail feedDetail, String screenName) {
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+            UserPostSolrObj userPostSolrObj = null;
+            if(feedDetail instanceof UserPostSolrObj){
+                userPostSolrObj = (UserPostSolrObj) feedDetail;
+            }
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(feedDetail.getEntityOrParticipantId()))
+                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
+                            .title(feedDetail.getNameOrTitle())
+                            .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .positionInList(feedDetail.getItemPosition())
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+            return properties;
+        }else {
+            return null;
         }
     }
 
