@@ -500,7 +500,7 @@ public class CommonUtil {
         return true;
     }
 
-    public static void shareImageWhatsApp(final Context context, final String imageShareText, final String url, final String sourceScreen, final boolean trackEvent) {
+    public static void shareImageWhatsApp(final Context context, final String imageShareText, final String url, final String sourceScreen, final boolean trackEvent, final Event eventName, final HashMap<String, Object> properties) {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -517,14 +517,14 @@ public class CommonUtil {
 
                     @Override
                     public void onNext(Bitmap bmp) {
-                        Event event = trackEvent ? Event.IMAGE_SHARED : null;
-                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event);
+                        Event event = trackEvent ? eventName : null;
+                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event, properties);
                     }
                 });
 
     }
 
-    public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName) {
+    public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName, HashMap<String, Object> eventProperties) {
         Uri contentUri = CommonUtil.getContentUriFromBitmap(context, bmp);
         if (contentUri != null) {
             Intent sharingIntent = new Intent((Intent.ACTION_SEND));
@@ -555,7 +555,8 @@ public class CommonUtil {
                 if (eventName.equals(Event.IMAGE_SHARED)) {
                     properties.put(EventProperty.URL.getString(), url);
                 }
-                AnalyticsManager.trackEvent(eventName, sourceScreen, properties);
+                eventProperties.put(EventProperty.SHARED_TO.getString(), "Whatsapp");
+                AnalyticsManager.trackEvent(eventName, sourceScreen, eventProperties);
             }
 
         }

@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -164,6 +165,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             } else {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
+                }else if(viewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
                 } else {
                     viewInterface.handleOnClick(carouselDataObj, mIcon);
                 }

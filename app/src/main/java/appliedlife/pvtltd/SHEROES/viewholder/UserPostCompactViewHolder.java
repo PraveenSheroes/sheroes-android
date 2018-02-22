@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.viewholder;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.Image;
 import android.os.Build;
@@ -93,6 +94,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.image_second)
     ImageView mImageSecond;
 
+    @Bind(R.id.second_image_container)
+    RelativeLayout mSecondImageContainer;
+
+    @Bind(R.id.more_image_count)
+    TextView mMoreImageCount;
+
     @Bind(R.id.link_detail_container)
     RelativeLayout mLinkContainer;
 
@@ -162,6 +169,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @BindDimen(R.dimen.dp_size_150)
     int mAuthorPicSize;
 
+    @BindDimen(R.dimen.dp_size_100)
+    int mLinkImageHeight;
+
 
     private BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
@@ -201,8 +211,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         final String listDescription = userPostSolrObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
-            mPostDescription.setVisibility(View.GONE);
-            return;
+            mPostDescription.setVisibility(View.VISIBLE);
         } else {
             mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
@@ -232,7 +241,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         }
 
+        invalidatePostLike(userPostSolrObj);
+
     }
+
 
     private void setImage() {
         mPostDescription.setLines(1);
@@ -241,6 +253,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.getImageUrls().size() >= 2) {
                 mImageFirst.setVisibility(View.VISIBLE);
                 mImageSecond.setVisibility(View.VISIBLE);
+                mSecondImageContainer.setVisibility(View.VISIBLE);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(mUserPostObj.getImageUrls().get(0))
@@ -249,10 +262,20 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 mImageFirst.setVisibility(View.VISIBLE);
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(mUserPostObj.getImageUrls().get(0))
+                        .load(mUserPostObj.getImageUrls().get(1))
                         .into(mImageSecond);
+
+                if(mUserPostObj.getImageUrls().size() > 2){
+                    mMoreImageCount.setVisibility(View.VISIBLE);
+                    mMoreImageCount.setText("+ " + Integer.toString(mUserPostObj.getImageUrls().size() - 2));
+                    mImageSecond.setBackgroundColor(mContext.getResources().getColor(R.color.feed_article_label));
+                }else {
+                    mMoreImageCount.setVisibility(View.GONE);
+                    mImageSecond.setBackgroundColor(Color.TRANSPARENT);
+                }
             } else {
                 mImageSecond.setVisibility(View.GONE);
+                mSecondImageContainer.setVisibility(View.GONE);
                 mImageFirst.setVisibility(View.VISIBLE);
                 String imageKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext), mAuthorPicSize);
                 Glide.with(mContext)
@@ -504,17 +527,18 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setLinkData() {
+        mPostDescription.setLines(1);
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgTitleS())) {
             mLinkDescription.setText(mUserPostObj.getOgTitleS());
         }
-        mPostDescription.setLines(1);
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgDescriptionS())) {
             mLinkSubTitle.setText(mUserPostObj.getOgDescriptionS());
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgImageUrlS())) {
+            String linkImageUrl = CommonUtil.getImgKitUri(mUserPostObj.getOgImageUrlS(), CommonUtil.getWindowWidth(mContext), mLinkImageHeight);
             Glide.with(mContext)
                     .asBitmap()
-                    .load(mUserPostObj.getOgImageUrlS())
+                    .load(linkImageUrl)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
@@ -605,6 +629,16 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         } else {
             mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
         }
+    }
+
+
+    private void invalidatePostLike(UserPostSolrObj userPostSolrObj) {
+        if(mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT){
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+        }else {
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+        }
+
     }
 
     @OnClick(R.id.user_post_compact_card)

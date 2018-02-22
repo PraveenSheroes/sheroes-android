@@ -39,7 +39,12 @@ import com.bumptech.glide.request.RequestOptions;
 import org.parceler.Parcels;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -135,6 +140,31 @@ public class ContestInfoFragment extends BaseFragment {
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+        final EventProperty.Builder builder = new EventProperty.Builder();
+        if (mContest != null) {
+            builder.title(mContest.title)
+                    .id(Integer.toString(mContest.remote_id));
+
+        }
+        HashMap<String, Object> properties = builder.build();
+        return properties;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     private void showContest(Contest contest) {

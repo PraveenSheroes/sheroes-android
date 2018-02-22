@@ -42,6 +42,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -76,6 +77,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     private AlbumCarouselAdapter mAlbumCarouselAdapter;
     private int mMainItemPosition;
     private String mAlbumId;
+    private PopupWindow popupWindowAlbumTooTip;
 
     @Inject
     AlbumPresenter mAlbumPresenter;
@@ -243,7 +245,11 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             if (CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)) {
 
                 String shareText = Config.COMMUNITY_POST_IMAGE_SHARE + System.getProperty("line.separator") + mAlbum.deepLinkUrl;
-                CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true);
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .url(shareText)
+                                .build();
+                CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true, Event.IMAGE_SHARED, properties);
                 //Not removed because we have added whatsapp share feature for experiment and if in future we want roll back then we can use this code.
 
                 //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
@@ -281,7 +287,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             public void run() {
                 try {
                     final View albumToolTip;
-                    final PopupWindow popupWindowAlbumTooTip;
                     int width = AppUtils.getWindowWidth(AlbumActivity.this);
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     albumToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
@@ -425,5 +430,14 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         properties.put(EventProperty.URL.getString(), fullPath);
         AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);*/
     }
+
+    @Override
+    protected void onDestroy() {
+        if (popupWindowAlbumTooTip != null && popupWindowAlbumTooTip.isShowing()) {
+            popupWindowAlbumTooTip.dismiss();
+        }
+        super.onDestroy();
+    }
+
     //endregion
 }

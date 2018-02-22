@@ -140,7 +140,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return TYPE_USER_POST;
             }
         }
-        if(position == getDataItemCount() && !(mFeedDetails.get(getDataItemCount() -1) instanceof UserSolrObj)){
+        if(position == getDataItemCount() && CommonUtil.isNotEmpty(mCarouselDataObj.getEndPointUrl())){
             return TYPE_SEE_MORE;
         }
         return -1;
@@ -148,7 +148,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        if(getDataItemCount()>0 && mFeedDetails.get(getDataItemCount() -1) instanceof UserSolrObj) {
+        if(getDataItemCount()>0 && !CommonUtil.isNotEmpty(mCarouselDataObj.getEndPointUrl())) {
             return mFeedDetails == null ? 0 : mFeedDetails.size();
         }
         return mFeedDetails == null ? 0 : mFeedDetails.size() + 1;

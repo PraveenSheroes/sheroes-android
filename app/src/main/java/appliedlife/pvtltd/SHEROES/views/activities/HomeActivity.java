@@ -83,6 +83,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -99,6 +100,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -203,6 +205,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
 
+    @Inject
+    Preference<Configuration> mConfiguration;
+
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
     @Inject
@@ -284,6 +289,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
+    public PopupWindow popupWindowNavTooTip;
+    public PopupWindow popUpNotificationWindow;
     private String mGcmId;
 
 
@@ -308,6 +315,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
 
         mHomePresenter.attachView(this);
+        mHomePresenter.queryConfig();
 
         if (null == mUserPreference) {
             logOut();
@@ -356,7 +364,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     public void run() {
                         try {
                             final View popupViewNotificationToolTip;
-                            final PopupWindow popUpNotificationWindow;
                             int width = AppUtils.getWindowWidth(HomeActivity.this);
                             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             popupViewNotificationToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
@@ -401,7 +408,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             public void run() {
                 try {
                     final View navToolTip;
-                    final PopupWindow popupWindowNavTooTip;
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -431,6 +437,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onDestroy() {
+        if (popupWindowNavTooTip != null && popupWindowNavTooTip.isShowing()) {
+            popupWindowNavTooTip.dismiss();
+        }
+
+        if (popUpNotificationWindow != null && popUpNotificationWindow.isShowing()) {
+            popUpNotificationWindow.dismiss();
+        }
         super.onDestroy();
         activityDataPresenter.detachView();
     }
@@ -786,8 +799,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else {
             appShareUrl = AppConstants.APP_SHARE_LINK;
         }
+        HashMap<String, Object> properties = new EventProperty.Builder().url(appShareUrl).build();
+        AnalyticsManager.trackEvent(Event.APP_INVITE_CLICKED, getScreenName(), properties);
         ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, "");
-        AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
     }
 
 
@@ -880,7 +894,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
-
 
     private void openNativeViews(String url) {
         if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
@@ -991,8 +1004,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         new EventProperty.Builder()
                                 .id(sourceId)
                                 .build();
-                trackEvent(Event.CHALLENGE_SHARED, properties);
-                ShareBottomSheetFragment.showDialog(this, shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true);
+                trackEvent(Event.CHALLENGE_SHARED_CLICKED, properties);
+                ShareBottomSheetFragment.showDialog(this, shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
                 break;
             case R.id.tv_event_detail_interested_btn:
                 if (null != eventDetailDialogFragment) {
@@ -1176,7 +1189,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/v2?sub_type=F");
+        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
         feedFragment.setArguments(bundle);
 
@@ -2040,6 +2053,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void onConfigFetched() {
+        AnalyticsManager.initializeMixpanel(this, false);
     }
 
     private void unReadNotificationCount(BaseResponse baseResponse) {

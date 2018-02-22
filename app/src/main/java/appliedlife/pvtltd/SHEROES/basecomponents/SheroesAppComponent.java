@@ -32,7 +32,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
@@ -83,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
@@ -151,7 +152,7 @@ public interface SheroesAppComponent {
 
     void inject(NoCommunityHolder noCommunityHolder);
 
-    void inject(CommunitiesDetailFragment communitiesDetailFragment);
+    void inject(UserPostFragment communitiesDetailFragment);
 
     void inject(OnBoardingActivity onBoardingActivity);
 
@@ -276,6 +277,8 @@ public interface SheroesAppComponent {
     void inject(ChallengeGratificationActivity challengeGratificationActivity);
 
     void inject(UserPostCompactViewHolder userPostCompactViewHolder);
+
+    void inject(ImageViewHolder imageViewHolder);
 
 }
 

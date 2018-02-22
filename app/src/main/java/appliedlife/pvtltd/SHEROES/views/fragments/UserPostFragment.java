@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -67,9 +68,9 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
  */
 
 
-public class CommunitiesDetailFragment extends BaseFragment {
-    private static String SCREEN_LABEL = "Community Screen";
-    private final String TAG = LogUtils.makeLogTag(CommunitiesDetailFragment.class);
+public class UserPostFragment extends BaseFragment {
+    private static String SCREEN_LABEL = "User Post Screen";
+    private final String TAG = LogUtils.makeLogTag(UserPostFragment.class);
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_communities_detail_list)
@@ -107,8 +108,8 @@ public class CommunitiesDetailFragment extends BaseFragment {
     private Comment mComment;
     private boolean hideAnonymousPost = true;
 
-    public static CommunitiesDetailFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId, String sourceName) {
-        CommunitiesDetailFragment communitiesDetailFragment = new CommunitiesDetailFragment();
+    public static UserPostFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId, String sourceName) {
+        UserPostFragment communitiesDetailFragment = new UserPostFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(AppConstants.COMMUNITY_POST_ID, communityPostId);
         Parcelable parcelable = Parcels.wrap(feedDetail);
@@ -164,6 +165,15 @@ public class CommunitiesDetailFragment extends BaseFragment {
         networkAndListenerData();
 
         return view;
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
     }
 
     private void networkAndListenerData() {
@@ -501,6 +511,11 @@ public class CommunitiesDetailFragment extends BaseFragment {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     @Override

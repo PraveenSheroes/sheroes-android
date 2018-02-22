@@ -34,6 +34,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -509,6 +510,9 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
         loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
@@ -596,6 +600,15 @@ public class HomeFragment extends BaseFragment {
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
     public List<Object> findPositionById(long id, UserSolrObj userSolrObj) {
         ArrayList<Object> arrayList = new ArrayList<>();
         int position[] = new int[2];

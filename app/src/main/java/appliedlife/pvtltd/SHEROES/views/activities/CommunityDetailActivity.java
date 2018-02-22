@@ -454,7 +454,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 }
                 ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, "");
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE, getScreenName(), properties);
+                AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE_CLICKED, getScreenName(), properties);
+                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, Event.COMMUNITY_INVITE, properties);
                 /*Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                 intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
@@ -707,6 +708,14 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     public void setCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
         mCommunityFeedSolrObj = communityFeedSolrObj;
         initializeLayout();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (popupWindowInviteFriendTooTip != null && popupWindowInviteFriendTooTip.isShowing()) {
+            popupWindowInviteFriendTooTip.dismiss();
+        }
+        super.onDestroy();
     }
 
     public void invalidateItem(FeedDetail feedDetail) {
