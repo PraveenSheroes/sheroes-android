@@ -24,4 +24,6 @@ public interface HomeView extends BaseMvpView {
     void getNotificationReadCountSuccess(BaseResponse baseResponse,FeedParticipationEnum feedParticipationEnum);
 
     void invalidateLikeUnlike(Comment comment);
+
+    void onConfigFetched();
 }

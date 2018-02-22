@@ -163,6 +163,12 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_is_user_followed")
     private boolean solrIgnoreIsUserFollowed;
 
+    @SerializedName("solr_ignore_no_of_user_followers")
+    private int userFollowersCount;
+
+    @SerializedName("solr_ignore_total_no_of_comments_created")
+    private int userCommentsCount;
+
 
     public int getTotalExperience() {
         return totalExperience;
@@ -580,5 +586,21 @@ public class UserSolrObj extends FeedDetail {
 
     public void setCompactView(boolean compactView) {
         isCompactView = compactView;
+    }
+
+    public int getUserFollowersCount() {
+        return userFollowersCount;
+    }
+
+    public void setUserFollowersCount(int userFollowersCount) {
+        this.userFollowersCount = userFollowersCount;
+    }
+
+    public int getUserCommentsCount() {
+        return userCommentsCount;
+    }
+
+    public void setUserCommentsCount(int userCommentsCount) {
+        this.userCommentsCount = userCommentsCount;
     }
 }

@@ -49,7 +49,7 @@ android {
             //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
            //  buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-            //buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug

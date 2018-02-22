@@ -64,6 +64,7 @@ public class AppConstants {
     public static final String LEADER_SUB_TYPE = "L";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
+    public static final String IMAGE_SUBTYPE = "I";
 
     public static final String FEED_SCREEN = "feed";
     public static final String COMMUNITIES_ONBOARDING_SCREEN = "community_onboarding";
@@ -130,7 +131,7 @@ public class AppConstants {
     public static final String APP_INTRO_SUB_TYPE = "APP_INTRO_TYPE";
     public static final String ONCE_WELCOME = "ONCE_WELCOME";
     public static final String FEED_PROGRESS_BAR = "FEED_PROGRESS_BAR";
-    public static final String HEADER = "HEADER";
+    public static final String HOME_FEED_HEADER = "HEADER";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";
@@ -344,5 +345,6 @@ public class AppConstants {
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
     public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Completed Screen";
     public static final String LIST_TYPE_TAGGING = "COMMENT";
+    public static final String CONFIG_KEY = "appliedlife.pvtltd.SHEROES.sharedprefs.CONFIG_KEY";
 
 }

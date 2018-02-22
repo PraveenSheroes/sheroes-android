@@ -7,6 +7,7 @@ import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.mixpanel.android.mpmetrics.SuperPropertyUpdate;
 
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -35,6 +37,9 @@ public class MixpanelHelper {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     /**
      * Should be run on login or app open
@@ -72,13 +77,15 @@ public class MixpanelHelper {
             Crashlytics.getInstance().core.setUserEmail(userSummary.getEmailId());
             Crashlytics.getInstance().core.setUserName(userSummary.getFirstName() + " " + userSummary.getLastName());
 
-            SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
+            final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
                     .dateOfBirth(userSummary.getUserBO().getDob())
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
+                    .configType(mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
+                    .configVersion(mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
                     .emailId(userSummary.getEmailId());
 
         /*int year = YearClass.get(CareApplication.getAppContext());
@@ -90,7 +97,17 @@ public class MixpanelHelper {
                 superPropertiesBuilder.installId(EncryptionUtils.getInstance().getDeviceId(SheroesApplication.mContext));
             }*/
 
-            mixpanel.registerSuperPropertiesOnce(superPropertiesBuilder.build());
+            if (isNewUser) {
+                mixpanel.registerSuperPropertiesOnce(superPropertiesBuilder.build());
+            } else {
+                SuperPropertyUpdate superPropertyUpdate = new SuperPropertyUpdate() {
+                    @Override
+                    public JSONObject update(JSONObject jsonObject) {
+                        return superPropertiesBuilder.build();
+                    }
+                };
+                mixpanel.updateSuperProperties(superPropertyUpdate);
+            }
             if (userSummary.getUserBO().getInterestLabel() != null && !userSummary.getUserBO().getInterestLabel().isEmpty()) {
                 mixpanel.getPeople().set(PeopleProperty.INTEREST.getString(), userSummary.getUserBO().getInterestLabel());
             }
