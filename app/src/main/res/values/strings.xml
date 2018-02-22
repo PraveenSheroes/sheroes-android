@@ -52,6 +52,8 @@
     <string name="ID_FOLLOWING_LISTING">Following listing</string>
     <string name="follower_toolbar_title">People who follow me</string>
     <string name="following_toolbar_title">People I follow</string>
+    <string name="follower_public_profile_toolbar_title">People who follow her</string>
+    <string name="following_public_profile_toolbar_title">People she follows</string>
     <string name="ID_CHAMPION">Champion</string>
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>

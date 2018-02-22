@@ -66,12 +66,24 @@ public class FollowingActivity extends BaseActivity {
         if (mMembersType == null) return;
 
         String type = mMembersType.name();
-        if (type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION))
+        if (type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION)) {
             titleName.setText(R.string.champions_followed);
-        else if (type.equalsIgnoreCase(AppConstants.FOLLOWERS))
-            titleName.setText(R.string.follower_toolbar_title);
-        else if (type.equalsIgnoreCase(AppConstants.FOLLOWING))
+        } else if (type.equalsIgnoreCase(AppConstants.FOLLOWERS)) {
+            if(isSelfProfile) {
+                titleName.setText(R.string.follower_toolbar_title);
+            } else{
+                titleName.setText(R.string.follower_public_profile_toolbar_title);
+            }
+        }
+        else if (type.equalsIgnoreCase(AppConstants.FOLLOWING)) {
             titleName.setText(R.string.following_toolbar_title);
+
+            if(isSelfProfile) {
+                titleName.setText(R.string.following_toolbar_title);
+            } else{
+                titleName.setText(R.string.following_public_profile_toolbar_title);
+            }
+        }
 
         Fragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, mMembersType.name());
         FragmentManager fragmentManager = getSupportFragmentManager();
