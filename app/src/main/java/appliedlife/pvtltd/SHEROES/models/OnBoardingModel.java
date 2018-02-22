@@ -91,8 +91,7 @@ public class OnBoardingModel {
     }
 
     public Observable<ConfigurationResponse> getConfig() {
-        BaseRequest baseRequest = new BaseRequest();
-        return sheroesAppServiceApi.getConfig(baseRequest)
+        return sheroesAppServiceApi.getConfig()
                 .map(new Function<ConfigurationResponse, ConfigurationResponse>() {
                     @Override
                     public ConfigurationResponse apply(ConfigurationResponse config) {

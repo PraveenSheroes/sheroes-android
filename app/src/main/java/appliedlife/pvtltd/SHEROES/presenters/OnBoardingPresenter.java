@@ -9,6 +9,7 @@ import com.f2prateek.rx.preferences2.Preference;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -49,6 +50,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     MasterDataModel mMasterDataModel;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     @Inject
     public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData) {
@@ -215,15 +219,10 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onNext(ConfigurationResponse configurationResponse) {
                 if (configurationResponse != null) {
-
-                    SharedPreferences.Editor editor = SheroesApplication.mContext.getSharedPreferences(AppConstants.SHARED_PREFS, Context.MODE_PRIVATE).edit();
-
-                    String jsonConfig = SheroesAppModule.ensureGson().toJson(configurationResponse.configuration);
-
-                    editor.putString(AppConstants.CONFIG_KEY, jsonConfig);
-                    editor.apply();
+                    mConfiguration.set(configurationResponse.configuration);
                 }
                 getMvpView().stopProgressBar();
+                getMvpView().onConfigFetched();
             }
         });
     }

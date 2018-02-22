@@ -99,6 +99,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -202,6 +203,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     ImageView mInvite;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
@@ -308,6 +312,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
 
         mHomePresenter.attachView(this);
+        mHomePresenter.queryConfig();
 
         if (null == mUserPreference) {
             logOut();
@@ -2040,6 +2045,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void onConfigFetched() {
+        AnalyticsManager.initializeMixpanel(this, false);
     }
 
     private void unReadNotificationCount(BaseResponse baseResponse) {

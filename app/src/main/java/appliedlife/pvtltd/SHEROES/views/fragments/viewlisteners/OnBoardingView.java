@@ -20,5 +20,7 @@ public interface OnBoardingView extends BaseMvpView {
     void showDataList(List<FeedDetail> feedDetailList);
     void joinResponse(CommunityFeedSolrObj communityFeedSolrObj);
     void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj);
+
+    void onConfigFetched();
 }
 

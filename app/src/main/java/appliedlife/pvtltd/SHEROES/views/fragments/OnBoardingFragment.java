@@ -260,6 +260,11 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         mAdapter.notifyItemChanged(communityFeedSolrObj.getItemPosition(), communityFeedSolrObj);
     }
 
+    @Override
+    public void onConfigFetched() {
+        AnalyticsManager.initializeMixpanel(getContext(), false);
+    }
+
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
