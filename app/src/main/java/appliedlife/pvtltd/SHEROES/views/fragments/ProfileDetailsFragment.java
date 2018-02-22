@@ -218,7 +218,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @OnClick(R.id.followed_view_more)
     public void navigateToFollowedMentors() {
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
-            FollowingActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(), FollowingEnum.FOLLOWED_CHAMPIONS, null );
+            FollowingActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(), "Followed Champions Screen",  FollowingEnum.FOLLOWED_CHAMPIONS, null );
         }
     }
 

@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:id="@+id/image_background"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop">
 
@@ -60,9 +60,9 @@
 
                     <TextView
                         android:id="@+id/post_count"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/light_grey"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -146,8 +146,8 @@
                         android:id="@+id/following_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/light_grey"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:textColor="@color/light_grey"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -173,8 +173,8 @@
                     android:id="@+id/tv_mentor_dashboard_follow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:background="@drawable/rectangle_feed_commnity_join"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
                     android:text="@string/follow_me"
                     android:textAllCaps="true"
@@ -190,17 +190,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_size_8"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginBottom="@dimen/dp_size_8"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:layout_marginTop="5dp"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -212,9 +212,10 @@
             android:drawableLeft="@drawable/ic_loc"
             android:drawablePadding="@dimen/dp_size_7"
             android:ellipsize="end"
-            android:textSize="@dimen/sp_size_16"
             android:gravity="center"
-            android:maxLines="3" />
+            android:maxLines="3"
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/sp_size_16" />
 
         <TextView
             android:id="@+id/description"

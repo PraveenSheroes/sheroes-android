@@ -50,7 +50,7 @@
                     android:layout_marginStart="@dimen/dp_size_8"
                     android:fontFamily="sans-serif-medium"
                     android:padding="@dimen/dp_size_2"
-                    android:textColor="@color/footer_icon_text"
+                    android:textColor="@color/feed_article_label"
                     android:textSize="12sp"
                     android:textStyle="normal" />
 

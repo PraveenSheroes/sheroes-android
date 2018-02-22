@@ -16,8 +16,8 @@
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_mentor_full_view_icon"
-            android:layout_width="@dimen/drawer_profile_icon_size"
-            android:layout_height="@dimen/drawer_profile_icon_size"
+            android:layout_width="@dimen/profile_icon_size"
+            android:layout_height="@dimen/profile_icon_size"
             android:layout_marginTop="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/sp_size_16"/>
 
@@ -31,7 +31,7 @@
 
         <LinearLayout
             android:id="@+id/edit_overlay_container"
-            android:background="@drawable/ic_edit_profile"
+            android:background="@drawable/ic_profile_dashboard"
             android:layout_marginLeft="@dimen/sp_size_8"
             android:layout_gravity="bottom|center"
             android:layout_width="wrap_content"
@@ -39,8 +39,8 @@
 
             <TextView
                 android:layout_marginTop="@dimen/dp_size_3"
-                android:layout_marginLeft="@dimen/dp_size_20"
-                android:layout_marginStart="@dimen/dp_size_20"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:layout_marginStart="@dimen/dp_size_15"
                 android:text="@string/ID_EDIT"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
@@ -237,8 +237,9 @@
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
         android:textStyle="bold"
+        android:lineSpacingExtra="@dimen/sp_size_6"
         android:layout_below="@id/ll_profile"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/feed_article_label"
         android:textSize="@dimen/sp_size_18" />
 
@@ -260,7 +261,7 @@
             android:drawablePadding="@dimen/dp_size_6"
             android:maxLines="@integer/int_value_for_line_1"
             android:drawableLeft="@drawable/ic_loc"
-            android:textColor="@color/mentor_profession"
+            android:textColor="@color/gray_light"
             android:textSize="@dimen/sp_size_14" />
 
         <TextView

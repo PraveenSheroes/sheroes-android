@@ -12,12 +12,15 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -31,10 +34,11 @@ import butterknife.ButterKnife;
 
 public class FollowingActivity extends BaseActivity {
 
-    private static final String SCREEN_LABEL = "Followed Champions Screen";
+    private static String SCREEN_LABEL = "c";
+    public static final String MEMBERS_TYPE = "TYPE";
     private long userMentorId;
     private boolean isSelfProfile;
-    private FollowingEnum myEnum;
+    private FollowingEnum mMembersType;
 
     @Bind(R.id.toolbar_name)
     TextView titleName;
@@ -52,16 +56,24 @@ public class FollowingActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
             isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
-            myEnum = (FollowingEnum)getIntent().getSerializableExtra("TYPE");
+            mMembersType = (FollowingEnum)getIntent().getSerializableExtra(MEMBERS_TYPE);
         }
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        titleName.setText(R.string.champions_followed);
+        if (mMembersType == null) return;
 
-        Fragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, myEnum.name());
+        String type = mMembersType.name();
+        if (type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION))
+            titleName.setText(R.string.champions_followed);
+        else if (type.equalsIgnoreCase(AppConstants.FOLLOWERS))
+            titleName.setText(R.string.follower_toolbar_title);
+        else if (type.equalsIgnoreCase(AppConstants.FOLLOWING))
+            titleName.setText(R.string.following_toolbar_title);
+
+        Fragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, mMembersType.name());
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
@@ -96,12 +108,22 @@ public class FollowingActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean trackScreenTime() {
+        return super.trackScreenTime();
+    }
+
+    @Override
+    public void trackEvent(Event event, Map<String, Object> properties) {
+        super.trackEvent(event, properties);
+    }
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, FollowingEnum followingEnum, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, String screenName, FollowingEnum followingEnum, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, FollowingActivity.class);
         intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
         intent.putExtra(ProfileDetailsFragment.SELF_PROFILE, isOwnProfile);
@@ -109,7 +131,11 @@ public class FollowingActivity extends BaseActivity {
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
-        intent.putExtra("TYPE", followingEnum);
+
+        if (CommonUtil.isNotEmpty(screenName)) {
+            SCREEN_LABEL = screenName;
+        }
+        intent.putExtra(MEMBERS_TYPE, followingEnum);
         ActivityCompat.startActivityForResult(fromActivity, intent, 1, null);
     }
 

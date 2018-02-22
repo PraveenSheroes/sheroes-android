@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FollowerFollowingAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -87,7 +88,7 @@ public class FollowingFragment extends BaseFragment implements FollowerFollowing
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putBoolean(SELF_PROFILE, isSelfProfile);
-        bundle.putString("TYPE", enumValue);
+        bundle.putString(FollowingActivity.MEMBERS_TYPE, enumValue);
         followingFragment.setArguments(bundle);
         return followingFragment;
     }
@@ -102,7 +103,7 @@ public class FollowingFragment extends BaseFragment implements FollowerFollowing
         if (getArguments() != null) {
             userMentorId = getArguments().getLong(USER_MENTOR_ID);
             isSelfProfile = getArguments().getBoolean(SELF_PROFILE);
-            mode = FollowingEnum.valueOf(getArguments().getString("TYPE"));
+            mode = FollowingEnum.valueOf(getArguments().getString(FollowingActivity.MEMBERS_TYPE));
         }
 
         if (mode == null) return null;
@@ -153,7 +154,16 @@ public class FollowingFragment extends BaseFragment implements FollowerFollowing
                 refreshFeedMethod();
             }
         });
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWED_CHAMPION_LISTING));
+
+        if(mode!=null) {
+            String type = mode.name();
+             if(type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION))
+                ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWED_CHAMPION_LISTING));
+            else if(type.equalsIgnoreCase(AppConstants.FOLLOWERS))
+                ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWERS_LISTING));
+            else if(type.equalsIgnoreCase(AppConstants.FOLLOWING))
+                ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWING_LISTING));
+        }
 
     }
 

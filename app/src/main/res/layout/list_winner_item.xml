@@ -38,7 +38,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textColor="@color/footer_icon_text"
+                android:textColor="@color/light_grey"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

@@ -27,7 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/user_pic"
             android:lineSpacingExtra="2sp"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@color/comment_text"
             android:textSize="14sp"
             tools:text="Champa Roy" />
     </RelativeLayout>

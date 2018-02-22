@@ -51,7 +51,7 @@
             android:maxLines="@integer/int_value_for_line_1"
             android:textSize="14sp"
             android:fontFamily="sans-serif"
-            android:textStyle="bold"
+            android:textStyle="normal"
             android:textColor="#3c3c3c"
             android:text="@string/ID_LOCATION"
             tools:text="@string/ID_USER_NAME" />

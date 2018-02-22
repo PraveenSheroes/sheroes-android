@@ -48,6 +48,10 @@
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
+    <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
+    <string name="ID_FOLLOWING_LISTING">Following listing</string>
+    <string name="follower_toolbar_title">People who follow me</string>
+    <string name="following_toolbar_title">People I follow</string>
     <string name="ID_CHAMPION">Champion</string>
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
