@@ -169,7 +169,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                         return;
                     }
                     mInviteFriendAdapter.contactStartedLoading();
-                    mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
+                  //  mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
                 }
             }
         };

@@ -87,7 +87,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
         notifyDataSetChanged();
     }
     public void setData(final List<UserSolrObj> userSolrObjList) {
-        this.mUserSolrObjListForFilter = userSolrObjList;
+        mUserSolrObjListForFilter = userSolrObjList;
         mUserSolrObjList = userSolrObjList;
         notifyDataSetChanged();
     }
@@ -99,7 +99,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
     public void addAll(List<UserSolrObj> userContactDetailList) {
         int startPosition = userContactDetailList.size();
         mUserSolrObjList.addAll(userContactDetailList);
-        this.mUserSolrObjListForFilter = mUserSolrObjList;
+        mUserSolrObjListForFilter .addAll(userContactDetailList);
         notifyItemRangeChanged(startPosition, mUserSolrObjList.size());
     }
     @Override

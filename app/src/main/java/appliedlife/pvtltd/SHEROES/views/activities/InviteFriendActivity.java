@@ -298,18 +298,19 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int i) {
-        if(mViewPager.getCurrentItem()==0) {
-            Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
-            if (AppUtils.isFragmentUIActive(suggestedFragment)) {
-                mViewPager.setCurrentItem(0);
-                ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(etInviteSearchBox.getQuery().toString());
-            }
-        }else
-        {
-            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 1);
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                mViewPager.setCurrentItem(1);
-                ((ContactListFragment) fragment).searchContactInList(etInviteSearchBox.getQuery().toString());
+        if(null!=etInviteSearchBox&&StringUtil.isNotNullOrEmptyString(etInviteSearchBox.getQuery().toString())) {
+            if (mViewPager.getCurrentItem() == 0) {
+                Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
+                if (AppUtils.isFragmentUIActive(suggestedFragment)) {
+                    mViewPager.setCurrentItem(0);
+                    ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(etInviteSearchBox.getQuery().toString());
+                }
+            } else {
+                Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 1);
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    mViewPager.setCurrentItem(1);
+                    ((ContactListFragment) fragment).searchContactInList(etInviteSearchBox.getQuery().toString());
+                }
             }
         }
     }

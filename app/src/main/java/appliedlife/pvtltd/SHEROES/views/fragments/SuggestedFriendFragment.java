@@ -282,7 +282,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                     return;
                 }
                 mInviteFriendSuggestedAdapter.contactStartedLoading();
-                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
+               // mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
             }
 
         };
