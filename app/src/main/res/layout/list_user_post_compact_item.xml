@@ -244,7 +244,7 @@
                 android:layout_height="1dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:background="#90949c" />
+                android:background="#dcdcdc" />
 
             <RelativeLayout
                 android:id="@+id/post_like_comment_share_container"

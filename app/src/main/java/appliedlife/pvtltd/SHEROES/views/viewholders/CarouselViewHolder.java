@@ -155,7 +155,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region onclick method
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null && carouselDataObj.getFeedDetails().get(0) != null) {
+        /*if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null && carouselDataObj.getFeedDetails().get(0) != null) {
             if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);
@@ -170,6 +170,16 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
                 } else {
                     viewInterface.handleOnClick(carouselDataObj, mIcon);
                 }
+            }
+        }*/
+
+        if(carouselDataObj!=null && carouselDataObj.getFeedDetails()!=null){
+            if (viewInterface instanceof AllCommunityItemCallback) {
+                ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
+            }else if(viewInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
+            } else {
+                viewInterface.handleOnClick(carouselDataObj, mIcon);
             }
         }
     }
