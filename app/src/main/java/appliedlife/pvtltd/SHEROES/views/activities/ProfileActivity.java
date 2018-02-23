@@ -25,6 +25,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -113,9 +114,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
-    private final int mButtonSize = 33;
+    private final int mButtonSize = 31;
     private final int mButtonWidth = 177;
-
 
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
     private Long mChampionId;
@@ -175,6 +175,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Bind(R.id.tv_profession)
     TextView tvProfession;
+
+    @Bind(R.id.profession_container)
+    RelativeLayout skillContainer;
 
     @Bind(R.id.tv_loc)
     TextView tvLoc;
@@ -436,13 +439,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
         if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) {
             tvProfession.setText(mUserSolarObject.getCanHelpIns().get(0)); //skills
-            tvProfession.setVisibility(View.VISIBLE);
+            skillContainer.setVisibility(View.VISIBLE);
         } else {
             if (isOwnProfile && isMentor) {
                 tvProfession.setText(R.string.add_skills);
-                tvProfession.setVisibility(View.VISIBLE);
+                skillContainer.setVisibility(View.VISIBLE);
             } else {
-                tvProfession.setVisibility(View.GONE);
+                skillContainer.setVisibility(View.GONE);
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
@@ -1128,7 +1131,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
 
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
+                location.setText(View.VISIBLE);
                 location.setText(mUserSolarObject.getCityName());
+            } else {
+                location.setText(View.INVISIBLE);
             }
 
             return CommonUtil.getViewBitmap(userDetailContainer);
@@ -1586,8 +1592,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonWidth, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
                 shareProfile.setLayoutParams(params);
+                shareProfile.setPadding(0, 0, 0, 2);
                 shareProfile.setText(AppConstants.SHARE_PROFILE);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
@@ -1595,24 +1601,24 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 params1.addRule(RelativeLayout.RIGHT_OF, R.id.share_profile);
                 params1.setMargins(10, 0, 0, 0);
                 tvMentorDashBoardFollow.setText("");
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.ic_profile_edit_icon);
                 tvMentorDashBoardFollow.setLayoutParams(params1);
-                tvMentorDashBoardFollow.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_profile_edit_icon, 0, 0, 0);
-
             } else {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonWidth, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
+                params.addRule(RelativeLayout.CENTER_VERTICAL);
                 tvMentorDashBoardFollow.setLayoutParams(params);
+                tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
                 tvMentorDashBoardFollow.setText(AppConstants.EDIT_PROFILE);
 
+                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.addRule(RelativeLayout.RIGHT_OF, R.id.tv_mentor_dashboard_follow);
                 params1.setMargins(10, 0, 0, 0);
                 shareProfile.setText("");
                 shareProfile.setLayoutParams(params1);
-                shareProfile.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_share_profile, 0, 0, 0);
             }
         } else {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
