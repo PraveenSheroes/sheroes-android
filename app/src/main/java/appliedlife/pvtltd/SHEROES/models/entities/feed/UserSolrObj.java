@@ -128,7 +128,7 @@ public class UserSolrObj extends FeedDetail {
     private String mobileNo;
 
     @SerializedName(value = "p_is_company_admin_b")
-    private Boolean isCompanyAdmin;
+    private boolean isCompanyAdmin;
 
     @SerializedName(value = "mars_user_current_salary_i")
     private int marsUserCurrentSalary;
@@ -468,11 +468,11 @@ public class UserSolrObj extends FeedDetail {
         this.mobileNo = mobileNo;
     }
 
-    public Boolean getCompanyAdmin() {
+    public boolean getCompanyAdmin() {
         return isCompanyAdmin;
     }
 
-    public void setCompanyAdmin(Boolean companyAdmin) {
+    public void setCompanyAdmin(boolean companyAdmin) {
         isCompanyAdmin = companyAdmin;
     }
 

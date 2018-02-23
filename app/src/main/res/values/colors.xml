@@ -68,6 +68,7 @@
     <color name="requested_btn">#5d6d7d</color>
     <color name="suggested_text">#666666</color>
     <color name="comment_text">#3c3c3c</color>
+    <color name="feed_title">#3c3c3c</color>
 
     <!--colors set through priyanka-->
 

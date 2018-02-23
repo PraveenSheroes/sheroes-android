@@ -48,6 +48,12 @@
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
+    <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
+    <string name="ID_FOLLOWING_LISTING">Following listing</string>
+    <string name="follower_toolbar_title">People who follow me</string>
+    <string name="following_toolbar_title">People I follow</string>
+    <string name="follower_public_profile_toolbar_title">People who follow her</string>
+    <string name="following_public_profile_toolbar_title">People she follows</string>
     <string name="ID_CHAMPION">Champion</string>
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
@@ -508,6 +514,7 @@
     <string name="add_skills">Add Skills</string>
     <string name="add_desc">Add Description</string>
     <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
+    <string name="post_schedule_message">You are scheduling a post for &lt;b&gt;%1$s&lt;/b&gt; Community to be posted on &lt;b&gt;%2$s&lt;/b&gt;.</string>
     <string name="followed_communities">Communities Joined</string>
     <string name="champions_followed">Champions Followed</string>
     <string name="join_communities">Join Communities &amp; Connect></string>
@@ -534,10 +541,14 @@
     <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.</string>
     <string name="share_with_friends">Share with friends</string>
     <string name="share_with_friend_text">Share the happiness with your friends &amp; invite them to take up this challenge</string>
+    <string name="share_profile_text">Share the happiness with your friends &amp; invite them to join here</string>
     <string name="challenge_done">Wohoo!</string>
     <string name="challenge_completed">Challenge Completed</string>
-
-
+    <string name="post_now">POST NOW</string>
+    <string name="schedule_post">SCHEDULE POST</string>
+    <string name="follow_me">follow</string>
+    <string name="answers">Answers</string>
+    <string name="followers">Followers</string>
 
 
 </resources>

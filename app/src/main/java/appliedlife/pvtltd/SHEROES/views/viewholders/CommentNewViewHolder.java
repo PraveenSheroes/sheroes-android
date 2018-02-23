@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -108,12 +110,17 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                 mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
                 StringBuilder stringBuilder = new StringBuilder();
-                // stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
-                //Spannable getCommentString = new SpannableString(stringBuilder.toString());
-                //int size = mComment.getParticipantName().length() + 1;
-                //getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
+                Spannable getCommentString = new SpannableString(stringBuilder.toString());
+                int size = mComment.getParticipantName().length() + 1;
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                getCommentString.setSpan(typefaceSpan, 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                getCommentString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
                 //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 mUserComment.setText(hashTagColorInString(mComment.getComment()));
+
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);
             } else {

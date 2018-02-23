@@ -72,9 +72,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
@@ -112,7 +112,7 @@ public interface SheroesAppServiceApi {
     Observable<ProfileTopSectionCountsResponse> getProfileTopSectionCounts(@Body ProfileTopCountRequest profileTopCountRequest);
 
     @POST("participant/feed/followed_mentor_list")
-    Observable<UserFollowedMentorsResponse> getFollowedMentorFromApiTest(@Body ProfileFollowedMentor profileFollowedMentor);
+    Observable<UserFollowedMentorsResponse> getFollowerOrFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
 
     @POST("participant/feed/mutual_communities")
     Observable<ProfileCommunitiesResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);

@@ -71,6 +71,7 @@ import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -97,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileFollowedMentor;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
@@ -1516,14 +1517,29 @@ public class AppUtils {
         return publicProfileListRequest;
     }
 
-    public ProfileFollowedMentor followedMentorRequestBuilder(int pageNo, long userId) {
+    public FollowersFollowingRequest followerFollowingRequest(int pageNo, long userId, String followerFollowingType) {
+        switch (followerFollowingType) {
+            case AppConstants.FOLLOWED_CHAMPION:
+               return followerFollowingRequestBuilder(pageNo, userId, false, false);
+            case AppConstants.FOLLOWERS:
+                return followerFollowingRequestBuilder(pageNo, userId, false, true);
+            case AppConstants.FOLLOWING:
+                return followerFollowingRequestBuilder(pageNo, userId, true, true);
+             default:
+                 return null;
+        }
+    }
+
+    private FollowersFollowingRequest followerFollowingRequestBuilder(int pageNo, long userId, boolean is_user, boolean is_listing) {
         AppUtils appUtils = AppUtils.getInstance();
-        ProfileFollowedMentor profileFollowedMentor = new ProfileFollowedMentor();
-        profileFollowedMentor.setPageNo(pageNo);
-        profileFollowedMentor.setAppVersion(appUtils.getAppVersionName());
-        profileFollowedMentor.setIdOfEntityParticipant(userId);
-        profileFollowedMentor.setPageSize(AppConstants.PAGE_SIZE);
-        return profileFollowedMentor;
+        FollowersFollowingRequest followersFollowingRequest = new FollowersFollowingRequest();
+        followersFollowingRequest.setPageNo(pageNo);
+        followersFollowingRequest.setAppVersion(appUtils.getAppVersionName());
+        followersFollowingRequest.setUserId(userId);
+        followersFollowingRequest.setIsListing(is_listing);
+        followersFollowingRequest.setIsUser(is_user);
+        followersFollowingRequest.setPageSize(AppConstants.PAGE_SIZE);
+        return followersFollowingRequest;
     }
 
     public ProfileTopCountRequest profileTopSectionCount(long id) {
@@ -1814,7 +1830,14 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken) {
+    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime) {
+        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken);
+        communityPostCreateRequest.setSchedulePost(mDateTime);
+        return communityPostCreateRequest;
+    }
+
+
+        public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());

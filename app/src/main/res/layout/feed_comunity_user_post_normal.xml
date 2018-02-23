@@ -83,7 +83,6 @@
                     android:id="@+id/tv_feed_community_post_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textColor="@color/comment_text"
                     android:textSize="@dimen/sp_size_14" />
 

@@ -180,6 +180,12 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
 
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        profilePresenter.detachView();
+    }
+
+    @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
         if(userCommunities.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(0, 0);
