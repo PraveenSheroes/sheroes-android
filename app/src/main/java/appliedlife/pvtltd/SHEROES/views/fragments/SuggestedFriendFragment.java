@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,13 +9,9 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
-
-import org.parceler.Parcels;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +26,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
@@ -43,7 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.InviteFriendActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendSuggestedAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
@@ -58,7 +52,7 @@ import butterknife.ButterKnife;
 public class SuggestedFriendFragment extends BaseFragment implements ContactDetailCallBack, IInviteFriendView {
     private static final String SCREEN_LABEL = "Suggested Friends Screen";
     private final String TAG = LogUtils.makeLogTag(SuggestedFriendFragment.class);
-    private final String SUGGESTED_LIST_URL = "http://testservicesconf.sheroes.in/participant/user/app_user_contacts_details?fetch_type=SHEROES";
+    private final String SUGGESTED_LIST_URL = "participant/user/app_user_contacts_details?fetch_type=SHEROES";
 
     //region Singleton variables
     @Inject
@@ -232,8 +226,8 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             emptyView.setVisibility(View.GONE);
             mInviteFriendSuggestedAdapter.setData(userSolrObjList);
             mInviteFriendSuggestedAdapter.notifyDataSetChanged();
-            if(null!=getActivity()&&getActivity() instanceof InviteFriendActivity) {
-                ((InviteFriendActivity) getActivity()).etInviteSearchBox.setQuery("", true);
+            if(null!=getActivity()&&getActivity() instanceof AllContactActivity) {
+                ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
             }
         } else {
             emptyView.setVisibility(View.VISIBLE);

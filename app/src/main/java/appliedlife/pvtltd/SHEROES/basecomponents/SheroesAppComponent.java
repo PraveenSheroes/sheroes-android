@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -20,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.InviteFriendActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
@@ -285,7 +285,7 @@ public interface SheroesAppComponent {
 
     void inject(ImageViewHolder imageViewHolder);
 
-    void inject(InviteFriendActivity inviteFriendActivity);
+    void inject(AllContactActivity allContactActivity);
 
     void inject(SuggestedFriendFragment suggestedFriendFragment);
 

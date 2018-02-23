@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -45,11 +44,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
@@ -61,7 +58,7 @@ import butterknife.ButterKnife;
  * Created by Praveen on 13/02/18.
  */
 
-public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class AllContactActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private static final String SCREEN_LABEL = "All Contact Activity";
     //region View variables
     @Bind(R.id.title_toolbar)
@@ -90,6 +87,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
     private int mFromNotification;
     private ViewPagerAdapter mViewPagerAdapter;
     private boolean isFirstTime = true;
+    private boolean isFirstPagination = false;
     //endregion
 
     //region Activity method
@@ -97,7 +95,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        setContentView(R.layout.activity_invite_friend);
+        setContentView(R.layout.activity_all_contact);
         ButterKnife.bind(this);
         initViews();
     }
@@ -122,6 +120,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         toolbarTitle.setText(getString(R.string.invite_friend));
     }
+
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, SCREEN_LABEL);
         supportPostponeEnterTransition();
@@ -158,7 +157,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
         MenuItem searchItem = menu.findItem(R.id.search_contact);
 
-        SearchManager searchManager = (SearchManager) InviteFriendActivity.this.getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) AllContactActivity.this.getSystemService(Context.SEARCH_SERVICE);
         if (searchItem != null) {
             etInviteSearchBox = (SearchView) searchItem.getActionView();
             String LEFT_HTML_TAG = "<font color='#ffffff'>";
@@ -175,6 +174,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
                 @Override
                 public boolean onMenuItemActionExpand(MenuItem item) {
                     // Do whatever you need
+                    AnalyticsManager.trackEvent(Event.FRIEND_SEARCH, getScreenName(), null);
                     return true; // KEEP IT TO TRUE OR IT DOESN'T OPEN !!
                 }
 
@@ -186,12 +186,13 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
             });
         }
         if (etInviteSearchBox != null) {
-            etInviteSearchBox.setSearchableInfo(searchManager.getSearchableInfo(InviteFriendActivity.this.getComponentName()));
+            etInviteSearchBox.setSearchableInfo(searchManager.getSearchableInfo(AllContactActivity.this.getComponentName()));
             editTextWatcher();
         }
 
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -203,8 +204,8 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
                     if (AppUtils.isFragmentUIActive(suggestedFragment)) {
                         mViewPager.setCurrentItem(0);
                         if (null != intent.getExtras()) {
-                            UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                            if(null!=userSolrObj) {
+                            UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                            if (null != userSolrObj) {
                                 userSolrObj.setItemPosition(userSolrObj.currentItemPosition);
                                 ((SuggestedFriendFragment) suggestedFragment).refreshSuggestedList(userSolrObj);
 
@@ -218,6 +219,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
         }
 
     }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
@@ -234,7 +236,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
                 } else {
                     appShareUrl = AppConstants.APP_SHARE_LINK;
                 }
-                ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true);
+                ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, Event.FRIEND_INVITED);
                 AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
                 break;
             case android.R.id.home:
@@ -254,19 +256,17 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
             @Override
             public boolean onQueryTextChange(String inputSearch) {
-                if(mViewPager.getCurrentItem()==0) {
-                    if(!isFirstTime) {
+                if (mViewPager.getCurrentItem() == 0) {
+                    if (!isFirstTime) {
                         Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
                         if (AppUtils.isFragmentUIActive(suggestedFragment)) {
                             mViewPager.setCurrentItem(0);
                             ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(inputSearch);
                         }
-                    }else
-                    {
-                        isFirstTime=false;
+                    } else {
+                        isFirstTime = false;
                     }
-                }else
-                {
+                } else {
                     Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, 1);
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         mViewPager.setCurrentItem(1);
@@ -296,7 +296,6 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
     }
 
 
-
     @Override
     public void onPageScrolled(int i, float v, int i1) {
 
@@ -304,7 +303,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
     @Override
     public void onPageSelected(int i) {
-        if(null!=etInviteSearchBox&&StringUtil.isNotNullOrEmptyString(etInviteSearchBox.getQuery().toString())) {
+        if (null != etInviteSearchBox) {
             if (mViewPager.getCurrentItem() == 0) {
                 Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
                 if (AppUtils.isFragmentUIActive(suggestedFragment)) {
@@ -319,6 +318,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
                 }
             }
         }
+
     }
 
     @Override
@@ -347,7 +347,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
 
     //region Static methods
     public static void navigateTo(Activity fromActivity, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, InviteFriendActivity.class);
+        Intent intent = new Intent(fromActivity, AllContactActivity.class);
         Bundle bundle = new Bundle();
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);

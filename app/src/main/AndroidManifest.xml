@@ -195,7 +195,7 @@
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.activities.InviteFriendActivity"
+            android:name=".views.activities.AllContactActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait" >
             <intent-filter>

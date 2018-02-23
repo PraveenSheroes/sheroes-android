@@ -80,6 +80,7 @@ public enum Event {
     APP_INVITE_CLICKED(AnalyticsEventType.APP, " Invite Clicked"),
     APP_INVITE(AnalyticsEventType.APP, " Invite"),
     FRIEND_INVITED(AnalyticsEventType.FRIEND, "Invited"),
+    FRIEND_SEARCH(AnalyticsEventType.FRIEND, "Searched"),
 
     //endregion
 
