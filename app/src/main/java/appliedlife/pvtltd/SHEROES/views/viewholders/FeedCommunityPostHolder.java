@@ -18,6 +18,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -742,6 +743,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
+                    tvFeedCommunityPostUserName.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     ivFeedCommunityPostUserIconVerified.setVisibility(View.GONE);
                     invalidateCommentLike(lastComment);
@@ -750,6 +752,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
+                    tvFeedCommunityPostUserName.setTextColor(ContextCompat.getColor(mContext, R.color.feed_title));
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (lastComment.isVerifiedMentor()) {
@@ -1217,20 +1220,25 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
             if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                 if (mUserPostObj.isAuthorMentor()) {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, feedTitle.length(), 0);
                 } else {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, feedTitle.length(), 0);
                 }
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
             } else {
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, feedTitle.length(), 0);
             }
 
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
                 SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
-                SpanString.setSpan(new StyleSpan(Typeface.NORMAL), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
+                TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpanCommunity, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
             }
             tvFeedCommunityPostCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
             tvFeedCommunityPostCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
@@ -1283,14 +1291,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
                 }
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
             } else {
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
             }
 
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpan, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
             }
             tvFeedCommunityPostCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
             tvFeedCommunityPostCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);

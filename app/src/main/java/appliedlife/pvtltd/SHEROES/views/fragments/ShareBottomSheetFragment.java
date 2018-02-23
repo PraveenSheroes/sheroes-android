@@ -322,11 +322,11 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
         }else if(StringUtil.isNotNullOrEmptyString(mShareImageUrl)) {
             HashMap<String, Object> properties =new EventProperty.Builder().id(mShareImageUrl).build();
-            AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, SCREEN_LABEL, properties);
+            AnalyticsManager.trackEvent(Event.IMAGE_COPY_LINK, mSourceScreen, properties);
         }else
         {
             HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Copy Link").build();
-            AnalyticsManager.trackEvent(Event.FRIEND_INVITED, SCREEN_LABEL, properties);
+            AnalyticsManager.trackEvent(Event.FRIEND_INVITED, mSourceScreen, properties);
         }
         dismiss();
         Toast.makeText(getContext(), "Link Copied!", Toast.LENGTH_SHORT).show();

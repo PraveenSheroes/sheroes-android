@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -179,12 +180,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        profilePresenter.detachView();
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         profilePresenter.detachView();
@@ -193,7 +188,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateUserProfileDetails() {
         profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
 
-        profilePresenter.getFollowedMentors(mAppUtils.followedMentorRequestBuilder(1, userId));
+        profilePresenter.getFollowedMentors(mAppUtils.followerFollowingRequest(1, userId, FollowingEnum.FOLLOWED_CHAMPIONS.name()));
 
         if(isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
@@ -223,7 +218,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @OnClick(R.id.followed_view_more)
     public void navigateToFollowedMentors() {
         if(StringUtil.isNotEmptyCollection(followedChampions)) {
-            FollowingActivity.navigateTo(getActivity(), userId,  getScreenName(), null );
+            FollowingActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(),  FollowingEnum.FOLLOWED_CHAMPIONS, null );
         }
     }
 

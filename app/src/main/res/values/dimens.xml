@@ -75,6 +75,8 @@
     <dimen name="sp_size_8">8sp</dimen>
     <dimen name="sp_size_9">9sp</dimen>
     <dimen name="sp_size_7">7sp</dimen>
+    <dimen name="sp_size_6">6sp</dimen>
+    <dimen name="sp_size_5">5sp</dimen>
     <dimen name="sp_size_15">15sp</dimen>
     <dimen name="sp_size_19">19sp</dimen>
     <dimen name="sp_size_22">22sp</dimen>
@@ -144,8 +146,10 @@
     <dimen name="progressbar_size">30dp</dimen>
     <dimen name="dp_community_image_background_width">150dp</dimen>
     <dimen name="see_more_width">130dp</dimen>
+    <dimen name="profile_icon_size">90dp</dimen>
     <dimen name="see_more_height">205dp</dimen>
     <dimen name="communities_compact_card_radius">4dp</dimen>
+    <dimen name="communities_admin_post_type_dialog_height">96dp</dimen>
     <dimen name="contact_icon_circle">50dp</dimen>
     <dimen name="invite_btn_width">100dp</dimen>
     <dimen name="invite_btn_height">30dp</dimen>

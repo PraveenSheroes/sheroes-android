@@ -104,6 +104,7 @@ public class UserPostFragment extends BaseFragment {
     Preference<LoginResponse> mUserPreference;
     private FeedDetail mApprovePostFeedDetail;
     private boolean mIsSpam;
+    boolean isMentor=false;
     private long mUserId;
     private Comment mComment;
     private boolean hideAnonymousPost = true;
@@ -140,6 +141,10 @@ public class UserPostFragment extends BaseFragment {
             Parcelable parcelable = getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
+                int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                if (userType == AppConstants.MENTOR_TYPE_ID) {
+                    isMentor = true;
+                }
             }
 
             if (null != parcelable) {
@@ -215,7 +220,9 @@ public class UserPostFragment extends BaseFragment {
 
                         if(getActivity() instanceof ProfileActivity) {
                             if((getActivity()) == null || getActivity().isFinishing()) return;
-                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                            if(isMentor) {
+                                ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                            }
                         }
 
                     } catch (ClassCastException ex) {

@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
@@ -185,7 +186,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
             }
             mScreenProperties = new EventProperty.Builder()
-                    .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                    .sourceScreenId(getActivity() instanceof  CommunityDetailActivity ? ((CommunityDetailActivity)getActivity()).getCommunityId() : "")
                     .sourceTabKey(mCommunityTab.key)
                     .sourceTabTitle(mCommunityTab.title)
                     .build();
@@ -220,13 +221,20 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (mFeedPresenter.isFeedLoading() || hasFeedEnded) {
                     return;
                 }
-                mAdapter.feedStartedLoading();
+                mFeedRecyclerView.post(new Runnable() {
+                    public void run() {
+                        mAdapter.feedStartedLoading();
+                    }
+                });
                 mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST);
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
         isWhatsappShare = isWhatsAppShare();
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).fetchAllCommunity();
+        }
         return view;
     }
 
@@ -274,7 +282,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     protected Map<String, Object> getExtraProperties() {
         if(mCommunityTab!=null){
             HashMap<String, Object> properties = new EventProperty.Builder()
-                    .sourceScreenId(((CommunityDetailActivity)getActivity()).getCommunityId())
+                    .sourceScreenId(getActivity() instanceof  CommunityDetailActivity ? ((CommunityDetailActivity)getActivity()).getCommunityId() : "")
                     .sourceTabKey(mCommunityTab.key)
                     .sourceTabTitle(mCommunityTab.title)
                     .build();
@@ -318,14 +326,20 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void invalidateItem(FeedDetail feedDetail) {
-        if (getActivity() instanceof CommunityDetailActivity) {
+        if(getActivity()!=null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity){
             ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail);
+        }else {
+            updateItem(feedDetail);
         }
     }
 
     @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
-        ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
+        if(getActivity()!=null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity){
+            ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
+        }else {
+            removeItem(feedDetail);
+        }
     }
 
     @Override
@@ -406,9 +420,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         if (isWhatsappShare) {
-            intent.setPackage(AppConstants.WHATS_APP);
-            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-            startActivity(intent);
+            if (CommonUtil.isAppInstalled(getActivity(), "com.whatsapp")) {
+                intent.setPackage(AppConstants.WHATS_APP);
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+                startActivity(intent);
+            }
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
@@ -728,6 +744,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor) {
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant(), authorMentor, 0, SCREEN_LABEL, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    @Override
     public void onAskQuestionClicked() {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
@@ -790,7 +811,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onChallengePostShared(BaseResponse baseResponse) {
-        String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
+        String postShareUrl = "";
+        if(CommonUtil.isNotEmpty(((FeedDetail) baseResponse).getPostShortBranchUrls())){
+            postShareUrl  = ((FeedDetail)baseResponse).getPostShortBranchUrls();
+
+        }else {
+            postShareUrl = ((FeedDetail) baseResponse).getDeepLinkUrl();
+        }
+        String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + postShareUrl;
         String sourceId = "";
         if (baseResponse instanceof UserPostSolrObj) {
             sourceId = Long.toString(((UserPostSolrObj) baseResponse).getUserPostSourceEntityId());
@@ -802,7 +830,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .id(sourceId)
                         .build();
         AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, getScreenName(), properties);
-        ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), getScreenName(), true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
+        ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), postShareUrl, getScreenName(), true, postShareUrl, true, Event.CHALLENGE_SHARED, properties);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -869,6 +897,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         communityPost.community.name = userSolrObj.getNameOrTitle();
         communityPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
         communityPost.isEdit = false;
+        communityPost.isCompanyAdmin =  userSolrObj.getCompanyAdmin();
         CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, mPrimaryColor, mTitleTextColor, mScreenProperties);
     }
 
@@ -1051,5 +1080,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     public void refreshList() {
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
+        if(getActivity()!=null && getActivity() instanceof HomeActivity){
+            ((HomeActivity)getActivity()).fetchAllCommunity();
+        }
     }
 }

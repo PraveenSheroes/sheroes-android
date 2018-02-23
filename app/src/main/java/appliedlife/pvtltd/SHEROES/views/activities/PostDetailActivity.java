@@ -224,7 +224,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.tv_user_name_for_post)
     public void userNamePostForComment() {
         mIsAnonymous = false;
-        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.blue));
+        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.red));
         tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
     }
 
@@ -232,7 +232,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void anonymousPostForComment() {
         mIsAnonymous = true;
         tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
-        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.blue));
+        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.red));
     }
 
     @Override
@@ -644,9 +644,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         if (isWhatsAppShare()) {
-            intent.setPackage(AppConstants.WHATS_APP);
-            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-            startActivity(intent);
+            if (CommonUtil.isAppInstalled(this, "com.whatsapp")) {
+                intent.setPackage(AppConstants.WHATS_APP);
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+                startActivity(intent);
+            }
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));

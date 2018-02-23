@@ -17,6 +17,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -254,22 +255,24 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 mImageFirst.setVisibility(View.VISIBLE);
                 mImageSecond.setVisibility(View.VISIBLE);
                 mSecondImageContainer.setVisibility(View.VISIBLE);
+                String imageFirstKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(mUserPostObj.getImageUrls().get(0))
+                        .load(imageFirstKitUrl)
                         .into(mImageFirst);
 
                 mImageFirst.setVisibility(View.VISIBLE);
+                String imageSecondKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(1), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
-                        .load(mUserPostObj.getImageUrls().get(1))
+                        .load(imageSecondKitUrl)
                         .into(mImageSecond);
 
-                if(mUserPostObj.getImageUrls().size() > 2){
+                if (mUserPostObj.getImageUrls().size() > 2) {
                     mMoreImageCount.setVisibility(View.VISIBLE);
                     mMoreImageCount.setText("+ " + Integer.toString(mUserPostObj.getImageUrls().size() - 2));
                     mImageSecond.setBackgroundColor(mContext.getResources().getColor(R.color.feed_article_label));
-                }else {
+                } else {
                     mMoreImageCount.setVisibility(View.GONE);
                     mImageSecond.setBackgroundColor(Color.TRANSPARENT);
                 }
@@ -410,16 +413,24 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
                 }
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
             } else {
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, feedTitle.length(), 0);
             }
 
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
                 SpanString.setSpan(postedInClick, feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
-                SpanString.setSpan(new StyleSpan(Typeface.NORMAL), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
+                TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpanCommunity, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
@@ -464,15 +475,25 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
                 }
+                TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpanCommunity, 0, feedTitle.length(), 0);
             } else {
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
+                TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpanCommunity, 0, feedTitle.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, feedTitle.length(), 0);
             }
 
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
-                SpanString.setSpan(new StyleSpan(Typeface.NORMAL), feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, feedTitle.length(), feedTitle.length() + postedIn.length() + 3, 0);
+
+                TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpanCommunity, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
@@ -516,9 +537,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
                 SpanString.setSpan(postedInClick, feedTitle.length(), nameAndCommunity.length(), 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.posted_in)), feedTitle.length(), nameAndCommunity.length(), 0);
-                SpanString.setSpan(new StyleSpan(Typeface.NORMAL), feedTitle.length(), nameAndCommunity.length(), 0);
-
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), nameAndCommunity.length(), 0);
+                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
+                SpanString.setSpan(typefaceSpan, feedTitle.length(), nameAndCommunity.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
@@ -622,8 +643,13 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
 
     private void invalidateCommentLike(Comment lastComment) {
-            mCommentLike.setVisibility(View.VISIBLE);
+        mCommentLike.setVisibility(View.VISIBLE);
+        if (lastComment.likeCount == 0) {
+            mCommentLike.setText("");
+        } else {
             mCommentLike.setText(Integer.toString(lastComment.likeCount));
+        }
+
         if (lastComment.isLiked) {
             mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         } else {
@@ -633,9 +659,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
 
     private void invalidatePostLike(UserPostSolrObj userPostSolrObj) {
-        if(mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT){
+        if (mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT) {
             mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-        }else {
+        } else {
             mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
 
@@ -699,7 +725,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.post_share_button)
-    public void onPostShareClicked(){
+    public void onPostShareClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
         }

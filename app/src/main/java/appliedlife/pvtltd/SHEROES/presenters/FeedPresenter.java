@@ -417,8 +417,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().stopProgressBar();
                 if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
                 {
-                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
-                    userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                    if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
+                        userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                    }else {
+                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount()+1);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                    }
                     getMvpView().invalidateItem(userSolrObj);
                 }else
                 {
@@ -453,8 +458,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().stopProgressBar();
                 if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
                 {
-                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()-1);
-                    userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                    if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                        userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                    }else {
+                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                    }
                     getMvpView().invalidateItem(userSolrObj);
                 }else
                 {

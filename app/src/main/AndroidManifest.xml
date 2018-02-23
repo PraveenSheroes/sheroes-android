@@ -187,9 +187,18 @@
             android:name=".views.activities.HomeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".views.activities.CommunityPostActivity"
-            android:screenOrientation="portrait" />
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"

@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
@@ -84,6 +85,9 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @Expose
     private String userFbAccessToken;
 
+    @SerializedName("crdt")
+    @Expose
+    private String schedulePost;
 
     public String getmSourceType() {
         return mSourceType;
@@ -310,5 +314,13 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
 
     public void setUserFbAccessToken(String userFbAccessToken) {
         this.userFbAccessToken = userFbAccessToken;
+    }
+
+    public String getSchedulePost() {
+        return schedulePost;
+    }
+
+    public void setSchedulePost(String schedulePost) {
+        this.schedulePost = schedulePost;
     }
 }

@@ -15,8 +15,10 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 
@@ -138,7 +140,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
                 mUserSolrObjList = (List<UserSolrObj>) results.values;
                 String msg="";
                 if(!StringUtil.isNotEmptyCollection(mUserSolrObjList)) {
-                    AppUtils.keyboardToggle(mContext,"");
+                    CommonUtil.hideKeyboard(((AllContactActivity)mContext));
                     msg=mContext.getString(R.string.no_search_contact);
                 }
                 mContactDetailCallBack.showMsgOnSearch(msg);

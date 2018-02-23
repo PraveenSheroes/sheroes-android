@@ -9,14 +9,17 @@
     <FrameLayout
         android:id="@+id/fl_profile_icon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="parallax"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_mentor_full_view_icon"
-            android:layout_width="@dimen/mentor_profile_icon"
-            android:layout_height="@dimen/mentor_profile_icon"
+            android:layout_width="@dimen/profile_icon_size"
+            android:layout_height="@dimen/profile_icon_size"
             android:layout_marginTop="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/sp_size_16" />
+            android:layout_marginLeft="@dimen/sp_size_16"/>
 
         <ImageView
             android:id="@+id/iv_mentor_verified"
@@ -24,20 +27,49 @@
             android:layout_height="@dimen/dp_size_30"
             android:visibility="gone"
             android:layout_gravity="end|bottom"
-            android:background="@drawable/ic_verified" />
+            android:background="@drawable/ic_verified"/>
+
+        <LinearLayout
+            android:id="@+id/edit_overlay_container"
+            android:background="@drawable/ic_profile_dashboard"
+            android:layout_marginLeft="@dimen/sp_size_8"
+            android:layout_gravity="bottom|center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginTop="@dimen/dp_size_3"
+                android:layout_marginLeft="@dimen/dp_size_15"
+                android:layout_marginStart="@dimen/dp_size_15"
+                android:text="@string/ID_EDIT"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_marginTop="@dimen/dp_size_5"
+                android:layout_marginStart="@dimen/dp_size_5"
+                android:layout_marginLeft="@dimen/dp_size_5"
+                android:background="@drawable/ic_photo_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
         android:layout_toRightOf="@id/fl_profile_icon"
         android:orientation="vertical"
         android:id="@+id/ll_profile">
 
         <LinearLayout
+            android:layout_marginLeft="@dimen/dp_size_8"
             android:id="@+id/li_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,9 +84,9 @@
 
                 <TextView
                     android:id="@+id/tv_mentor_post_count"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:textStyle="bold"
                     android:textColor="@color/feed_article_label"
@@ -62,10 +94,10 @@
 
                 <TextView
                     android:id="@+id/tv_mentor_post"
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:layout_gravity="center"
                     android:textColor="@color/recent_post_comment"
                     android:textSize="@dimen/sp_size_14" />
             </LinearLayout>
@@ -156,23 +188,38 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_marginLeft="@dimen/dp_size_24"
+            android:layout_marginStart="@dimen/dp_size_24"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/tv_mentor_dashboard_follow"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_size_35"
             android:background="@drawable/rectangle_feed_commnity_join"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:paddingBottom="@dimen/dp_size_7"
-            android:layout_marginLeft="@dimen/dp_size_22"
-            android:layout_marginStart="@dimen/dp_size_22"
-            android:layout_marginTop="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginEnd="@dimen/dp_size_16"
-            android:paddingTop="@dimen/dp_size_7"
             android:textAllCaps="true"
             android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/sp_size_14" />
+
+            <TextView
+                android:id="@+id/share_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_size_35"
+                android:background="@drawable/rectangle_feed_commnity_join"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dp_size_7"
+                android:paddingTop="@dimen/dp_size_7"
+                android:textAllCaps="true"
+                android:textColor="@color/footer_icon_text"
+                android:textSize="@dimen/sp_size_14" />
+        </RelativeLayout>
     </LinearLayout>
     <View
         android:id="@+id/view_tool_follow"
@@ -180,6 +227,7 @@
         android:layout_height="10dp"
         android:layout_below="@+id/ll_profile"
         android:visibility="invisible"/>
+
     <TextView
         android:id="@+id/tv_mentor_name"
         android:layout_width="wrap_content"
@@ -187,10 +235,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_20"
+        android:layout_marginTop="@dimen/dp_size_16"
         android:textStyle="bold"
+        android:lineSpacingExtra="@dimen/sp_size_6"
         android:layout_below="@id/ll_profile"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/feed_article_label"
         android:textSize="@dimen/sp_size_18" />
 
@@ -200,20 +249,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_mentor_name"
         android:weightSum="@integer/int_value_for_line_1"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_marginTop="@dimen/dp_size_10">
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_8">
 
         <TextView
             android:id="@+id/tv_loc"
             android:layout_width="0dp"
             android:layout_weight=".5"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_5"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:drawablePadding="@dimen/dp_size_6"
             android:maxLines="@integer/int_value_for_line_1"
             android:drawableLeft="@drawable/ic_loc"
-            android:textColor="@color/mentor_profession"
+            android:textColor="@color/gray_light"
             android:textSize="@dimen/sp_size_14" />
 
         <TextView
@@ -239,7 +287,7 @@
         android:maxLines="@integer/int_value_for_line_4"
         android:maxLength="@integer/int_value_for_line_140"
         android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_8"
         android:lineSpacingExtra="@dimen/sp_size_8"
         android:layout_below="@+id/li_loc_profession"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"

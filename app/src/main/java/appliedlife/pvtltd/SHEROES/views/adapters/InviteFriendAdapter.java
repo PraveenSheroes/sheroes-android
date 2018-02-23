@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 
@@ -111,7 +112,7 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mContactDetailList = (List<UserContactDetail>) results.values;
                 String msg="";
                 if(!StringUtil.isNotEmptyCollection(mContactDetailList)) {
-                    AppUtils.keyboardToggle(mContext,"");
+                    CommonUtil.hideKeyboard(((AllContactActivity)mContext));
                     msg=mContext.getString(R.string.no_search_contact);
                 }
                 mContactDetailCallBack.showMsgOnSearch(msg);

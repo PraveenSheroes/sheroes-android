@@ -237,7 +237,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
                     appShareUrl = AppConstants.APP_SHARE_LINK;
                 }
                 ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, Event.FRIEND_INVITED);
-                AnalyticsManager.trackEvent(Event.APP_INVITE, getScreenName(), null);
+                AnalyticsManager.trackEvent(Event.APP_INVITE_CLICKED, SCREEN_LABEL, null);
                 break;
             case android.R.id.home:
                 onBackPressed();

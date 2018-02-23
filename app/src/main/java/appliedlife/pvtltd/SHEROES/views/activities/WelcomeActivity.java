@@ -379,6 +379,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mHandler.removeCallbacks(mRunnable);
         }
         mLoginPresenter.detachView();
+        dismissDialog();
         super.onDestroy();
     }
 
@@ -630,14 +631,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      */
     void showDialogInWelcome(int id) {
         try {
-            mProgressDialog = createCustomDialog(id);
+            createCustomDialog(id);
             if (mProgressDialog != null) {
                 mProgressDialog.show();
             }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-
     }
 
     /**
@@ -646,10 +646,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      * @param id id of dialog
      * @return dialog
      */
-    private ProgressDialog createCustomDialog(int id) {
-        ProgressDialog mProgressDialog = null;
+    private void createCustomDialog(int id) {
         try {
-            CustomSocialDialog dialogCreater = null;
             switch (id) {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
                     mProgressDialog = new ProgressDialog(WelcomeActivity.this);
@@ -661,11 +659,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 default:
                     break;
             }
-            return mProgressDialog;
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
             LogUtils.error(TAG, e);
-            return null;
         }
     }
 
@@ -834,7 +830,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
                 if (resultCode == Activity.RESULT_OK) {
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                    showDialogInWelcome(CustomSocialDialog.LOGGING_IN_DIALOG);
+                    if(this!=null && !isFinishing()){
+                        showDialogInWelcome(CustomSocialDialog.LOGGING_IN_DIALOG);
+                    }
                     handleSignInResult(result);
                 } else {
                     dismissDialog();

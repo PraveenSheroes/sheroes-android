@@ -24,4 +24,5 @@ public class CommunityPost extends Post {
     public String challengeType;
     public boolean isChallengeType;
     public String challengeHashTag;
+    public boolean isCompanyAdmin;
 }

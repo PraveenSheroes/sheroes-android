@@ -169,6 +169,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INV
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
@@ -313,6 +314,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         mHomePresenter.attachView(this);
         mHomePresenter.queryConfig();
+        fetchAllCommunity();
 
         if (null == mUserPreference) {
             logOut();
@@ -2124,4 +2126,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+    public void fetchAllCommunity() {
+        mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+    }
 }
