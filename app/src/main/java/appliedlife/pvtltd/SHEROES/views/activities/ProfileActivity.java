@@ -342,7 +342,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 

@@ -136,7 +136,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         ((EditUserProfileActivity)getActivity()).setSupportActionBar(mToolbar);
         ((EditUserProfileActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((EditUserProfileActivity)getActivity()).getSupportActionBar().setTitle("");
-        final Drawable upArrow = ContextCompat.getDrawable(getActivity(), R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         ((EditUserProfileActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
         toolbarTitle.setText(R.string.ID_SEARCH_LOCATION);
     }

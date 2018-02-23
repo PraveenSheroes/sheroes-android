@@ -116,7 +116,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setText(R.string.title_contest_list);
     }

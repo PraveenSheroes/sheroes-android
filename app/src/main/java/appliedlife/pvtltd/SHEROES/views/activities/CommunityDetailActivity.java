@@ -324,7 +324,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             DrawableCompat.setTint(drawable.mutate(), Color.parseColor(mCommunityTitleTextColor));
             mToolbar.setOverflowIcon(drawable);
         }
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.mutate();
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
 

@@ -103,7 +103,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.ID_MENTOR);
     }

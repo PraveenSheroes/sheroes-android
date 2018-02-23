@@ -1381,7 +1381,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //endregion
 
     private void setupToolbarItemsColor() {
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));

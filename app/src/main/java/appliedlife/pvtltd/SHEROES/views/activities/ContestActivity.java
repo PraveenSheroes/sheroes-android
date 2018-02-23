@@ -224,7 +224,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         setSupportActionBar(mToolbarView);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Challenge");
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
