@@ -818,6 +818,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentCount++;
         updateTitleCommentCountView();
         mCommentsAdapter.addDataAndNotify(comment);
+        if(mFeedDetail instanceof ArticleSolrObj){
+            ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+        }
     }
 
     @Override

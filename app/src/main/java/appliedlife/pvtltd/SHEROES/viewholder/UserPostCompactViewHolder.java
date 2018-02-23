@@ -266,11 +266,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                         .load(mUserPostObj.getImageUrls().get(1))
                         .into(mImageSecond);
 
-                if(mUserPostObj.getImageUrls().size() > 2){
+                if (mUserPostObj.getImageUrls().size() > 2) {
                     mMoreImageCount.setVisibility(View.VISIBLE);
                     mMoreImageCount.setText("+ " + Integer.toString(mUserPostObj.getImageUrls().size() - 2));
                     mImageSecond.setBackgroundColor(mContext.getResources().getColor(R.color.feed_article_label));
-                }else {
+                } else {
                     mMoreImageCount.setVisibility(View.GONE);
                     mImageSecond.setBackgroundColor(Color.TRANSPARENT);
                 }
@@ -641,8 +641,13 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
 
     private void invalidateCommentLike(Comment lastComment) {
-            mCommentLike.setVisibility(View.VISIBLE);
+        mCommentLike.setVisibility(View.VISIBLE);
+        if (lastComment.likeCount == 0) {
+            mCommentLike.setText("");
+        } else {
             mCommentLike.setText(Integer.toString(lastComment.likeCount));
+        }
+
         if (lastComment.isLiked) {
             mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         } else {
@@ -652,9 +657,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
 
     private void invalidatePostLike(UserPostSolrObj userPostSolrObj) {
-        if(mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT){
+        if (mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT) {
             mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-        }else {
+        } else {
             mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
 
@@ -718,7 +723,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.post_share_button)
-    public void onPostShareClicked(){
+    public void onPostShareClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
         }
