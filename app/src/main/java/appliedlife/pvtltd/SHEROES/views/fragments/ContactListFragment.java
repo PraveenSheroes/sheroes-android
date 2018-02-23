@@ -399,6 +399,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         progressBar.setVisibility(View.GONE);
         if (syncContact) {
             syncContact = false;
+            mInviteFriendAdapter.contactStartedLoading();
             mInviteFriendViewPresenterImp.syncFriendsToServer(userContactDetailList);
         }
     }

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -21,7 +22,7 @@ public class UserContactDetail extends BaseResponse {
 
     @SerializedName("emails_list")
     @Expose
-    private List<String> emailId;
+    private List<String> emailId=new ArrayList<>();
     @SerializedName("mobile_numbers_list")
     @Expose
     private List<String> phoneNumber;
