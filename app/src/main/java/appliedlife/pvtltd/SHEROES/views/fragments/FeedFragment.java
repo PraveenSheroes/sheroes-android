@@ -220,7 +220,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (mFeedPresenter.isFeedLoading() || hasFeedEnded) {
                     return;
                 }
-                mAdapter.feedStartedLoading();
+                mFeedRecyclerView.post(new Runnable() {
+                    public void run() {
+                        mAdapter.feedStartedLoading();
+                    }
+                });
                 mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST);
             }
         };

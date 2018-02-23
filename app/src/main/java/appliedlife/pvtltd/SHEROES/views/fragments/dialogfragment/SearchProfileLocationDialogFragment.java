@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -135,7 +136,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         ((EditUserProfileActivity)getActivity()).setSupportActionBar(mToolbar);
         ((EditUserProfileActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((EditUserProfileActivity)getActivity()).getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        final Drawable upArrow = ContextCompat.getDrawable(getActivity(), R.drawable.vector_back_arrow);
         ((EditUserProfileActivity)getActivity()).getSupportActionBar().setHomeAsUpIndicator(upArrow);
         toolbarTitle.setText(R.string.ID_SEARCH_LOCATION);
     }

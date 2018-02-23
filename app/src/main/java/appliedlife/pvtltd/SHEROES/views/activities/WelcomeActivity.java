@@ -383,6 +383,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mHandler.removeCallbacks(mRunnable);
         }
         mLoginPresenter.detachView();
+        dismissDialog();
         super.onDestroy();
     }
 
@@ -628,7 +629,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      * @param id id of dialog
      */
     void showDialogInWelcome(int id) {
-        mProgressDialog = createCustomDialog(id);
+        createCustomDialog(id);
         if (mProgressDialog != null) {
             mProgressDialog.show();
         }
@@ -640,10 +641,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      * @param id id of dialog
      * @return dialog
      */
-    private ProgressDialog createCustomDialog(int id) {
-        ProgressDialog mProgressDialog = null;
+    private void createCustomDialog(int id) {
         try {
-            CustomSocialDialog dialogCreater = null;
             switch (id) {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
                     mProgressDialog = new ProgressDialog(WelcomeActivity.this);
@@ -655,11 +654,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 default:
                     break;
             }
-            return mProgressDialog;
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
             LogUtils.error(TAG, e);
-            return null;
         }
     }
 
