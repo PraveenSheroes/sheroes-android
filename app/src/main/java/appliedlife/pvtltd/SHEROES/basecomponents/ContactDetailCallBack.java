@@ -12,4 +12,5 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 public interface ContactDetailCallBack {
     void onContactClicked(UserContactDetail contactDetail,View view);
     void onSuggestedContactClicked(UserSolrObj userSolrObj, View view);
+    void showMsgOnSearch(String string);
 }

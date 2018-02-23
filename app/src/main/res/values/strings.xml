@@ -543,11 +543,12 @@
     <string name="whats_app_not_installed">WhatsApp not Installed</string>
     <string name="suggested_list_blank">No friends to follow. Invite your friends to SHEROES</string>
     <string name="contact_list_blank">Find friends from your contacts</string>
-    <string name="invite_friend_request_to_join">Hey i am on SHEROES \n</string>
+    <string name="invite_friend_request_to_join">Join me on the women-only SHEROES app. You can participate (even anonymously) in discussions on women-related topics and help other women in the Indian community to make progress in their lives.</string>
     <string name="invite_friend_url_title">Inviting you on SHEROES</string>
     <string name="invite_friend_url_description">Explore your SHEROES</string>
-    <string name="invite_sync_contact">No contacts to show, sync your contacts with SHEROES</string>
+    <string name="invite_sync_contact">Allow us to sync your mobile contacts to make finding friends super easy!</string>
     <string name="sync_contact">Sync contacts</string>
+    <string name="no_search_contact">No contact found</string>
 
 
 

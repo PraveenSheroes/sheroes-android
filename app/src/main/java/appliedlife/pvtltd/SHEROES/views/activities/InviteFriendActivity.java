@@ -89,6 +89,7 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
     //region Member variables
     private int mFromNotification;
     private ViewPagerAdapter mViewPagerAdapter;
+    private boolean isFirstTime = true;
     //endregion
 
     //region Activity method
@@ -254,10 +255,15 @@ public class InviteFriendActivity extends BaseActivity implements ViewPager.OnPa
             @Override
             public boolean onQueryTextChange(String inputSearch) {
                 if(mViewPager.getCurrentItem()==0) {
-                    Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
-                    if (AppUtils.isFragmentUIActive(suggestedFragment)) {
-                        mViewPager.setCurrentItem(0);
-                        ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(inputSearch);
+                    if(!isFirstTime) {
+                        Fragment suggestedFragment = mViewPagerAdapter.getActiveFragment(mViewPager, 0);
+                        if (AppUtils.isFragmentUIActive(suggestedFragment)) {
+                            mViewPager.setCurrentItem(0);
+                            ((SuggestedFriendFragment) suggestedFragment).searchSuggestedContactInList(inputSearch);
+                        }
+                    }else
+                    {
+                        isFirstTime=false;
                     }
                 }else
                 {

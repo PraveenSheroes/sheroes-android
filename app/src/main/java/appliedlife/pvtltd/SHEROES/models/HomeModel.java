@@ -391,19 +391,6 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<UserPhoneContactsListResponse> getAppContactsResponseInModel(UserPhoneContactsListRequest userPhoneContactsListRequest) {
-        LogUtils.info(TAG, "*******************" + new Gson().toJson(userPhoneContactsListRequest));
-        return sheroesAppServiceApi.getPhoneContactListResponse(userPhoneContactsListRequest)
-                .map(new Function<UserPhoneContactsListResponse, UserPhoneContactsListResponse>() {
-                    @Override
-                    public UserPhoneContactsListResponse apply(UserPhoneContactsListResponse userPhoneContactsListResponse) {
-                        return userPhoneContactsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-    }
     public Observable<ConfigurationResponse> getConfig() {
         return sheroesAppServiceApi.getConfig()
                 .map(new Function<ConfigurationResponse, ConfigurationResponse>() {

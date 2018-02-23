@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -42,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.InviteFriendActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.InviteFriendSuggestedAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
@@ -75,7 +77,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     EmptyRecyclerView mFeedRecyclerView;
     @Bind(R.id.empty_view)
     View emptyView;
-
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     private InviteFriendSuggestedAdapter mInviteFriendSuggestedAdapter;
@@ -123,13 +124,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
     @Override
     public void onContactClicked(UserContactDetail contactDetail, View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.btn_invite_friend:
 
-                break;
-            default:
-        }
     }
 
     @Override
@@ -171,6 +166,16 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 default:
         }
     }
+
+    @Override
+    public void showMsgOnSearch(String string) {
+            if (StringUtil.isNotNullOrEmptyString(string)) {
+                emptyView.setVisibility(View.VISIBLE);
+            } else {
+                emptyView.setVisibility(View.GONE);
+            }
+    }
+
     private void openMentorProfileDetail(UserSolrObj userSolrObj) {
         ProfileActivity.navigateTo(getActivity(),userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL,userSolrObj);
     }
@@ -227,6 +232,9 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             emptyView.setVisibility(View.GONE);
             mInviteFriendSuggestedAdapter.setData(userSolrObjList);
             mInviteFriendSuggestedAdapter.notifyDataSetChanged();
+            if(null!=getActivity()&&getActivity() instanceof InviteFriendActivity) {
+                ((InviteFriendActivity) getActivity()).etInviteSearchBox.setQuery("", true);
+            }
         } else {
             emptyView.setVisibility(View.VISIBLE);
         }
@@ -281,7 +289,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 if (mInviteFriendViewPresenterImp.isSuggestedLoading() || hasFeedEnded) {
                     return;
                 }
-                mInviteFriendSuggestedAdapter.contactStartedLoading();
+               // mInviteFriendSuggestedAdapter.contactStartedLoading();
                // mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
             }
 

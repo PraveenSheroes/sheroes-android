@@ -14,8 +14,10 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 
 /**
@@ -98,8 +100,8 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
     }
     public void addAll(List<UserSolrObj> userContactDetailList) {
         int startPosition = userContactDetailList.size();
-        mUserSolrObjList.addAll(userContactDetailList);
-        mUserSolrObjListForFilter .addAll(userContactDetailList);
+        mUserSolrObjList=userContactDetailList;
+        mUserSolrObjListForFilter=userContactDetailList;
         notifyItemRangeChanged(startPosition, mUserSolrObjList.size());
     }
     @Override
@@ -134,9 +136,13 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mUserSolrObjList = (List<UserSolrObj>) results.values;
-                if(StringUtil.isNotEmptyCollection(mUserSolrObjList)) {
-                    InviteFriendSuggestedAdapter.this.notifyDataSetChanged();
+                String msg="";
+                if(!StringUtil.isNotEmptyCollection(mUserSolrObjList)) {
+                    AppUtils.keyboardToggle(mContext,"");
+                    msg=mContext.getString(R.string.no_search_contact);
                 }
+                mContactDetailCallBack.showMsgOnSearch(msg);
+                InviteFriendSuggestedAdapter.this.notifyDataSetChanged();
             }
 
             @Override

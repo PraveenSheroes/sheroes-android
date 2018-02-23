@@ -17,8 +17,10 @@ import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -42,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -76,6 +79,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     //region Static variables
     @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    @Inject
     Preference<LoginResponse> mUserPreference;
     public InviteFriendAdapter mInviteFriendAdapter;
     @Inject
@@ -95,6 +100,10 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     @Bind(R.id.ll_sync_contact)
     LinearLayout llSyncContact;
+    @Bind(R.id.tv_msg)
+    TextView tvMsg;
+    @Bind(R.id.btn_sync_contact)
+    Button btnSyncContact;
     //endregion
 
     private boolean hasFeedEnded;
@@ -168,7 +177,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     if (mInviteFriendViewPresenterImp.isContactLoading() || hasFeedEnded) {
                         return;
                     }
-                    mInviteFriendAdapter.contactStartedLoading();
+                   // mInviteFriendAdapter.contactStartedLoading();
                   //  mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
                 }
             }
@@ -259,8 +268,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     allowedContactSynEvent();
                 } else {
                     deniedContactSyncEvent();
-                    if (null != getActivity())
-                        (getActivity()).onBackPressed();
+                    syncContact=false;
+                    showContacts(null);
                 }
                 break;
             }
@@ -294,6 +303,13 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     }
                     isWhatsAppNumber = isWhatsAppNumber.replace("+", "").replace(" ", "");
                     boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
+
+                    if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_WHATSAPP"))) {
+                        mSmsShareLink = mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_WHATSAPP").get(0).getLabel() + mSmsShareLink;
+                    }else
+                    {
+                        mSmsShareLink = getString(R.string.invite_friend_request_to_join) + mSmsShareLink;
+                    }
                     if (isWhatsappInstalled) {
                         Intent sendIntent = new Intent("android.intent.action.MAIN");
                         //when user want only conversation
@@ -344,6 +360,18 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     }
 
+    @Override
+    public void showMsgOnSearch(String string) {
+        if(StringUtil.isNotNullOrEmptyString(string)) {
+            llSyncContact.setVisibility(View.VISIBLE);
+            btnSyncContact.setVisibility(View.GONE);
+            tvMsg.setText(string);
+        }else
+        {
+            llSyncContact.setVisibility(View.GONE);
+        }
+    }
+
 
     public void searchContactInList(String contactName) {
         mInviteFriendAdapter.getFilter().filter(contactName);
@@ -355,6 +383,9 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             llSyncContact.setVisibility(View.GONE);
             mInviteFriendAdapter.setData(userContactDetailList);
             mInviteFriendAdapter.notifyDataSetChanged();
+            if(null!=getActivity()&&getActivity() instanceof  InviteFriendActivity) {
+                ((InviteFriendActivity) getActivity()).etInviteSearchBox.setQuery("", true);
+            }
         } else {
             llSyncContact.setVisibility(View.VISIBLE);
         }
