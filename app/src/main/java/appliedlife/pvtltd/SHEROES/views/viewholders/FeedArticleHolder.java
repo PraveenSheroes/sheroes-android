@@ -461,7 +461,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_article_user_menu)
     public void menuItemClick() {
-        viewInterface.handleOnClick(articleObj , tvFeedArticleUserMenu);
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostShared(articleObj);
+        }else {
+            viewInterface.handleOnClick(articleObj , tvFeedArticleUserMenu);
+        }
     }
 
     @OnClick(R.id.tv_feed_article_user_comment_post_menu)
