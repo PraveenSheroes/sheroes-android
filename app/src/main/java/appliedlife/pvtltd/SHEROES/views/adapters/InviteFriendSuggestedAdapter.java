@@ -134,7 +134,9 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mUserSolrObjList = (List<UserSolrObj>) results.values;
-                InviteFriendSuggestedAdapter.this.notifyDataSetChanged();
+                if(StringUtil.isNotEmptyCollection(mUserSolrObjList)) {
+                    InviteFriendSuggestedAdapter.this.notifyDataSetChanged();
+                }
             }
 
             @Override

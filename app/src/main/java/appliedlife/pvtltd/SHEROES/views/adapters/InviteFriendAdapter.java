@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 
@@ -105,7 +106,9 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mContactDetailList = (List<UserContactDetail>) results.values;
-                InviteFriendAdapter.this.notifyDataSetChanged();
+                if(StringUtil.isNotEmptyCollection(mContactDetailList)) {
+                    InviteFriendAdapter.this.notifyDataSetChanged();
+                }
             }
 
             @Override

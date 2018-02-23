@@ -198,7 +198,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 LinkProperties mSmsLinkProperties = new LinkProperties()
                         .setChannel("sms")
                         .setFeature("sharing");
-
+            //TODO: Discuss with product for Url
                 mSmsBranchUniversalObject.generateShortUrl(getActivity(), mSmsLinkProperties, new Branch.BranchLinkCreateListener() {
                     @Override
                     public void onLinkCreate(String url, BranchError error) {
