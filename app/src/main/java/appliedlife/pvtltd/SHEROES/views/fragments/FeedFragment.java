@@ -796,7 +796,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onChallengePostShared(BaseResponse baseResponse) {
-        String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + ((FeedDetail) baseResponse).getDeepLinkUrl();
+        String postShareUrl = "";
+        if(CommonUtil.isNotEmpty(((FeedDetail) baseResponse).getPostShortBranchUrls())){
+            postShareUrl  = ((FeedDetail)baseResponse).getPostShortBranchUrls();
+
+        }else {
+            postShareUrl = ((FeedDetail) baseResponse).getDeepLinkUrl();
+        }
+        String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + postShareUrl;
         String sourceId = "";
         if (baseResponse instanceof UserPostSolrObj) {
             sourceId = Long.toString(((UserPostSolrObj) baseResponse).getUserPostSourceEntityId());
@@ -808,7 +815,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .id(sourceId)
                         .build();
         AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, getScreenName(), properties);
-        ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), getScreenName(), true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
+        ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), postShareUrl, getScreenName(), true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
