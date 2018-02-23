@@ -116,7 +116,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     private String mSmsShareLink;
     private String isWhatsAppNumber;
     private boolean syncContact;
-    private boolean isContactFirstTime=false;
+    private boolean isContactFirstTime = false;
     //endregion
 
     public static ContactListFragment createInstance(String name) {
@@ -200,25 +200,28 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         if (null != mUserPreference && mUserPreference.isSet()) {
             if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getAppShareUrl())) {
                 BranchUniversalObject mSmsBranchUniversalObject = new BranchUniversalObject()
-                        .setCanonicalIdentifier("invite/sms")
-                        .setTitle(getString(R.string.invite_friend_url_title))
-                        .setContentDescription(getString(R.string.invite_friend_url_description))
+                        .setCanonicalUrl("https://sheroes.com/feed")
+                        //.setTitle(getString(R.string.invite_friend_url_title))
+                        // .setContentDescription(getString(R.string.invite_friend_url_description))
                         .addContentMetadata("userId", String.valueOf(mUserPreference.get().getUserSummary().getUserId()));
 
                 LinkProperties mSmsLinkProperties = new LinkProperties()
-                        .setChannel("sms")
-                        .setFeature("sharing");
+                        .setCampaign("invite-friend")
+                        .setChannel("app")
+                        .setStage("invite-friend")
+                        .setFeature("invite-friend");
                 //TODO: Discuss with product for Url
                 mSmsBranchUniversalObject.generateShortUrl(getActivity(), mSmsLinkProperties, new Branch.BranchLinkCreateListener() {
                     @Override
                     public void onLinkCreate(String url, BranchError error) {
                         if (error == null) {
                             mSmsShareLink = url;
+                            mInviteFriendViewPresenterImp.updateInviteUrlFromPresenter(mSmsShareLink);
                         }
                     }
                 });
-                mInviteFriendViewPresenterImp.updateInviteUrlFromPresenter(mSmsShareLink);
-            } else {
+            }
+             {
                 mSmsShareLink = mUserPreference.get().getUserSummary().getAppShareUrl();
             }
             if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION") != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get("APP_CONFIGURATION").get("APP_INVITE_MESSAGES_WHATSAPP"))) {
