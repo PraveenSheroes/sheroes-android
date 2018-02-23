@@ -406,9 +406,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         if (isWhatsappShare) {
-            intent.setPackage(AppConstants.WHATS_APP);
-            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-            startActivity(intent);
+            if (CommonUtil.isAppInstalled(getActivity(), "com.whatsapp")) {
+                intent.setPackage(AppConstants.WHATS_APP);
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+                startActivity(intent);
+            }
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
