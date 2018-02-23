@@ -51,7 +51,8 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
         }
         getMvpView().startProgressBar();
         Observable<FeedResponsePojo> observable = getFeedFromModel(feedRequestPojo);
-        observable.subscribe(new DisposableObserver<FeedResponsePojo>() {
+        observable.compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);

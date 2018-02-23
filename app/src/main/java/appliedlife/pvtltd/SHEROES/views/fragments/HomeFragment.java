@@ -35,6 +35,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -291,7 +292,7 @@ public class HomeFragment extends BaseFragment {
     {
         List<FeedDetail> data=new ArrayList<>();
         FeedDetail header = new FeedDetail();
-        header.setSubType(AppConstants.HEADER);
+        header.setSubType(AppConstants.HOME_FEED_HEADER);
         data.add(0, header);
         mPullRefreshList.allListData(data);
         mAdapter.setSheroesGenericListData(data);
@@ -387,7 +388,7 @@ public class HomeFragment extends BaseFragment {
         }else {
             List<FeedDetail> data=new ArrayList<>();
             FeedDetail header = new FeedDetail();
-            header.setSubType(AppConstants.HEADER);
+            header.setSubType(AppConstants.HOME_FEED_HEADER);
             data.add(0, header);
             mPullRefreshList.allListData(data);
             FeedRequestPojo feedRequestPojo =mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, mFragmentListRefreshData.getPageNo());
@@ -488,9 +489,7 @@ public class HomeFragment extends BaseFragment {
                             }
                         }
                     } else {
-                        if(getActivity() instanceof HomeActivity) {
-                            ((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);
-                        }
+                        if(getActivity() instanceof HomeActivity){((HomeActivity) getActivity()).flNotificationReadCount.setVisibility(View.GONE);}
                     }
                 }
                 break;
@@ -514,6 +513,9 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+        if (getActivity() == null || !isAdded()) {
+            return;
+        }
         loaderGif.setVisibility(View.GONE);
         mLiNoResult.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
@@ -623,6 +625,15 @@ public class HomeFragment extends BaseFragment {
                 super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
         }
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
     public List<Object> findPositionById(long id, UserSolrObj userSolrObj) {
         ArrayList<Object> arrayList = new ArrayList<>();
         int position[] = new int[2];

@@ -157,16 +157,24 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.community_join)
     public void onCommunityJoinUnjoinedClicked() {
-        if (viewInterface instanceof AllCommunityItemCallback) {
+        if(viewInterface instanceof AllCommunityItemCallback){
             if (mCommunityFeedObj.isMember()) {
                 mCommunityFeedObj.setMember(false);
                 mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
-                ((AllCommunityItemCallback) viewInterface).unJoinCommunity(mCommunityFeedObj, mCarouselViewHolder);
+                if(viewInterface instanceof AllCommunityItemCallback){
+                    ((AllCommunityItemCallback) viewInterface).unJoinCommunity(mCommunityFeedObj, mCarouselViewHolder);
+                }
             } else {
                 mCommunityFeedObj.setMember(true);
                 mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
-                ((AllCommunityItemCallback) viewInterface).joinRequestForOpenCommunity(mCommunityFeedObj, mCarouselViewHolder);
+                if(viewInterface instanceof AllCommunityItemCallback){
+                    ((AllCommunityItemCallback) viewInterface).joinRequestForOpenCommunity(mCommunityFeedObj, mCarouselViewHolder);
+                }
             }
+        }
+
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
         }
     }
 
@@ -174,6 +182,9 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     public void onCardClicked() {
         if (viewInterface instanceof AllCommunityItemCallback) {
             ((AllCommunityItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
+        }
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onCommunityClicked(mCommunityFeedObj);
         }
     }
     //endregion

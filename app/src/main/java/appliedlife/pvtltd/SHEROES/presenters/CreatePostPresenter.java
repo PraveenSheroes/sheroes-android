@@ -64,8 +64,13 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                if(communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
+                    getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
+                    AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                }else {
+                    getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                    getMvpView().stopProgressBar();
+                }
             }
 
         });
@@ -100,6 +105,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
                 }
                     final HashMap<String, Object> properties =
                             new EventProperty.Builder()
+                                    .id(Long.toString(communityPostCreateResponse.getId()))
                                     .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
                                     .type(MoEngageConstants.CHALLENGE_POST)
                                     .build();

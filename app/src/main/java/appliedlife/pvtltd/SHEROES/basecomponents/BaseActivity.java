@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +29,9 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -42,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
@@ -60,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -76,11 +83,15 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesDetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -96,6 +107,12 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
 public abstract class BaseActivity extends AppCompatActivity implements EventInterface, BaseHolderInterface, FragmentIntractionWithActivityListner, View.OnTouchListener, View.OnClickListener {
     public static final String SOURCE_SCREEN = "SOURCE_SCREEN";
     public static final String SOURCE_PROPERTIES = "SOURCE_PROPERTIES";
+    public static final String SHARE_WHATSAPP = "Whatsapp";
+    public static final String SHARE_FACEBOOK = "Facebook";
+    public static final String ANDROID_DEFAULT = "Android Default";
+    public static final String BOTTOM_SHEET = "Bottom Sheet";
+
+    public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -133,6 +150,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
             mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
+
+            boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
+            if(isShareDeeplink){
+                initShare(getIntent());
+            }
         }
 
         if (!trackScreenTime() && shouldTrackScreen()) {
@@ -147,6 +169,43 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             getPresenter().onCreate();
         }
 
+    }
+
+    private void initShare(Intent intent) {
+        String shareText = intent.getExtras().getString(AppConstants.SHARE_TEXT);
+        String shareImage = intent.getExtras().getString(AppConstants.SHARE_IMAGE);
+        String shareDeeplLink = intent.getExtras().getString(AppConstants.SHARE_DEEP_LINK_URL);
+        String shareDialog = intent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
+        String shareChannel = intent.getExtras().getString(AppConstants.SHARE_CHANNEL);
+        Boolean isShareImage = false;
+        if(CommonUtil.isNotEmpty(shareImage)){
+            isShareImage = true;
+        }
+        if(CommonUtil.isNotEmpty(shareChannel)){
+            if(shareChannel.equalsIgnoreCase(ANDROID_DEFAULT)){
+                if(isShareImage){
+                    CommonUtil.shareImageChooser(this, shareText, shareImage);
+                }else {
+                    CommonUtil.shareCardViaSocial(this, shareDeeplLink);
+                }
+            }else if(shareChannel.equalsIgnoreCase(SHARE_WHATSAPP)){
+                if (isShareImage) {
+                    CommonUtil.shareImageWhatsApp(this, shareText, shareImage, getScreenName(), true, null, null);
+                }else {
+                    CommonUtil.shareLinkToWhatsApp(this, shareText);
+                }
+            }else if(shareChannel.equalsIgnoreCase(SHARE_FACEBOOK)){
+                if(isShareImage){
+                    CommonUtil.facebookImageShare(this, shareImage);
+                }else {
+                    CommonUtil.shareFacebookLink(this, shareText);
+                }
+            }else {
+                ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+            }
+        }else {
+            ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
+        }
     }
 
     public void setSource(String source) {
@@ -358,6 +417,19 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(requestCode == BRANCH_REQUEST_CODE){
+            if(intent!=null && intent.getExtras()!=null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)){
+                boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
+                if(isShareDeeplink){
+                    initShare(intent);
+                }
+            }
+        }
+    }
+
+    @Override
     public void startActivity(Intent intent) {
         boolean handled = false;
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_VIEW)) {
@@ -366,15 +438,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 super.startActivity(intent);
                 return;
             }
+            if (CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))) {
+                intent.setClass(this, BranchDeepLink.class);
+                super.startActivityForResult(intent, BRANCH_REQUEST_CODE);
+                return;
+            }
             if (AppUtils.matchesWebsiteURLPattern(intent.getDataString())) {
                 Uri url = Uri.parse(intent.getDataString());
                 AppUtils.openChromeTab(this, url);
                 handled = true;
-            }
-            if (CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))) {
-                intent.setClass(this, BranchDeepLink.class);
-                super.startActivity(intent);
-                return;
             }
         }
         if (!handled) {
@@ -611,8 +683,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void bookmarkCall() {
         if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof CommunitiesDetailFragment) {
-                ((CommunitiesDetailFragment) mFragment).bookMarkForCard(mFeedDetail);
+            if (mFragment instanceof UserPostFragment) {
+                ((UserPostFragment) mFragment).bookMarkForCard(mFeedDetail);
             } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
@@ -655,6 +727,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                             .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                             .title(mFeedDetail.getNameOrTitle())
                             .companyId(Long.toString(((JobFeedSolrObj) mFeedDetail).getCompanyMasterId()))
+                            .sharedTo(AppConstants.WHATSAPP_ICON)
                             .location(mFeedDetail.getAuthorCityName())
                             .build();
             trackEvent(Event.JOBS_SHARED, properties);
@@ -728,7 +801,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
     private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
@@ -875,9 +950,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     if (AppUtils.isFragmentUIActive(fragment)) {
                         ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
                     } else {
-                        if (mFragment instanceof CommunitiesDetailFragment) {
+                        if (mFragment instanceof UserPostFragment) {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
-                                ((CommunitiesDetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                                ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
                             }
                         } else {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
@@ -989,6 +1064,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     }
 
+    public void onConfigFetched() {
+
+    }
     public String screenName() {
         String sourceScreen = "";
         if (getSupportFragmentManager() != null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())) {

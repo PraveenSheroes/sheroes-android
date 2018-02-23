@@ -9,6 +9,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -44,6 +45,9 @@ public class SeeMoreCompactViewHolder extends RecyclerView.ViewHolder {
     public void showMoreClicked(){
         if(viewInterface instanceof AllCommunityItemCallback){
             ((AllCommunityItemCallback)viewInterface).onSeeMoreClicked(mCarouselDataObj);
+        }
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onSeeMoreClicked(mCarouselDataObj);
         }
     }
 

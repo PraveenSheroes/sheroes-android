@@ -60,6 +60,8 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //region Private Variables
     private static final String SCREEN_LABEL = "ShareBottomSheetFragment";
     private static final String SHARE_DEEPLINK = "share deep link";
+    private static final String PROPERTY = "Property";
+    private static final String EVENT_NAME = "Event name";
     private static final String SHARE_IMAGE = "share image";
     private static final String SHARE_TEXT = "share text";
     private static final String SHARE_COPYLINK = "copy link";
@@ -67,6 +69,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private static final String IS_CHALLENGE = "Is Challenge";
     private static final String SHOW_TITLE = "Show Title";
     private static final String IS_APP_LINK = "Is App Link";
+    private static final String SHARE_DIALOG_TITLE = "Share Dialog Title";
 
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -83,6 +86,9 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     private boolean mIsChallenge;
     private boolean mShowTitle;
     private boolean mIsAppLink;
+    private String mShareDialogTitle;
+    private Event mEventName;
+    private HashMap<String, Object> mProperties;
 
     //endregion
 
@@ -117,11 +123,22 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             mShareImageUrl = getArguments().getString(SHARE_IMAGE);
             mShareText = getArguments().getString(SHARE_TEXT);
             mShareCopyLink = getArguments().getString(SHARE_COPYLINK);
+            mShareDialogTitle = getArguments().getString(SHARE_DIALOG_TITLE);
             mSourceScreen = getArguments().getString(BaseActivity.SOURCE_SCREEN);
             mIsImageShare = getArguments().getBoolean(IS_IMAGE_SHARE, false);
             mIsChallenge = getArguments().getBoolean(IS_CHALLENGE, false);
             mShowTitle = getArguments().getBoolean(SHOW_TITLE, false);
             mIsAppLink = getArguments().getBoolean(IS_APP_LINK, false);
+            if(getArguments().getSerializable(PROPERTY)!=null){
+                mProperties = (HashMap<String, Object>) getArguments().getSerializable(PROPERTY);
+            }else {
+                mProperties = null;
+            }
+            if(getArguments().getSerializable(EVENT_NAME)!=null){
+                mEventName = (Event) getArguments().getSerializable(EVENT_NAME);
+            }else {
+                mEventName = null;
+            }
         }
         return super.onCreateDialog(savedInstanceState);
     }
@@ -135,6 +152,12 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         if (mShowTitle) {
             title.setVisibility(View.VISIBLE);
         } else {
+            title.setVisibility(View.GONE);
+        }
+        if(CommonUtil.isNotEmpty(mShareDialogTitle)){
+            title.setVisibility(View.VISIBLE);
+            title.setText(mShareDialogTitle);
+        }else {
             title.setVisibility(View.GONE);
         }
     }
@@ -162,7 +185,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
     //endregion
 
     //region Public Static methods
-    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink, boolean isChallenge) {
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink, boolean isChallenge, Event event,  HashMap<String, Object> properties) {
         ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
         Bundle args = new Bundle();
         args.putString(SHARE_TEXT, shareText);
@@ -171,6 +194,8 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         args.putString(SHARE_COPYLINK, shareCopyLink);
         args.putBoolean(IS_IMAGE_SHARE, isImage);
         args.putBoolean(IS_CHALLENGE, isChallenge);
+        args.putSerializable(PROPERTY, properties);
+        args.putSerializable(EVENT_NAME, event);
         shareBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
@@ -193,6 +218,43 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
         shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return shareBottomSheetFragment;
     }
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink, boolean isChallenge, boolean showTitle, boolean isAppLink, String shareDialogTitle) {
+        ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
+        Bundle args = new Bundle();
+        args.putString(SHARE_TEXT, shareText);
+        args.putString(SHARE_DEEPLINK, shareDeepLinkUrl);
+        args.putString(SHARE_IMAGE, shareImage);
+        args.putString(SHARE_COPYLINK, shareCopyLink);
+        args.putBoolean(IS_IMAGE_SHARE, isImage);
+        args.putBoolean(IS_CHALLENGE, isChallenge);
+        args.putBoolean(SHOW_TITLE, showTitle);
+        args.putBoolean(IS_APP_LINK, isAppLink);
+        args.putString(SHARE_DIALOG_TITLE, shareDialogTitle);
+        shareBottomSheetFragment.setArguments(args);
+        args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
+        return shareBottomSheetFragment;
+    }
+
+    public static ShareBottomSheetFragment showDialog(AppCompatActivity activity, String shareText, String shareImage, String shareDeepLinkUrl, String sourceScreen, boolean isImage, String shareCopyLink, boolean isChallenge, boolean showTitle, boolean isAppLink, Event event,  HashMap<String, Object> properties) {
+        ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
+        Bundle args = new Bundle();
+        args.putString(SHARE_TEXT, shareText);
+        args.putString(SHARE_DEEPLINK, shareDeepLinkUrl);
+        args.putString(SHARE_IMAGE, shareImage);
+        args.putString(SHARE_COPYLINK, shareCopyLink);
+        args.putBoolean(IS_IMAGE_SHARE, isImage);
+        args.putBoolean(IS_CHALLENGE, isChallenge);
+        args.putBoolean(SHOW_TITLE, showTitle);
+        args.putBoolean(IS_APP_LINK, isAppLink);
+        args.putSerializable(PROPERTY, properties);
+        args.putSerializable(EVENT_NAME, event);
+        shareBottomSheetFragment.setArguments(args);
+        args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        shareBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
+        return shareBottomSheetFragment;
+    }
+
     //endregion
 
     //region OnClicks
@@ -205,12 +267,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             return;
         }
         if (mIsImageShare) {
-            String shareScreen="Album Screen";
-            if(StringUtil.isNotNullOrEmptyString(mSourceScreen)&&mSourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
-            {
-                shareScreen=mSourceScreen;
-            }
-            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, shareScreen, true);
+            CommonUtil.shareImageWhatsApp(getContext(), mShareText, mShareImageUrl, mSourceScreen, true, mEventName, mProperties);
         } else {
             if (mShowTitle && mIsAppLink) {
                 String shareWhatsappAppLink = "";
@@ -221,10 +278,11 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             }
             CommonUtil.shareLinkToWhatsApp(getContext(), mShareText);
             EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Whatsapp");
-            final HashMap<String, Object> properties = builder.build();
+            /*final HashMap<String, Object> properties = builder.build();
             properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
-            properties.put(EventProperty.URL.getString(), mShareText);
-            AnalyticsManager.trackEvent(Event.LINK_SHARED, SCREEN_LABEL, properties);
+            properties.put(EventProperty.URL.getString(), mShareText);*/
+            mProperties.put(EventProperty.SHARED_TO.getString(), "Whatsapp");
+            AnalyticsManager.trackEvent(mEventName, mSourceScreen, mProperties);
         }
     }
 
@@ -300,9 +358,10 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                                 AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
                             }else {
                                 EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
-                                final HashMap<String, Object> properties = builder.build();
-                                properties.put(EventProperty.URL.getString(), mShareImageUrl);
-                                AnalyticsManager.trackEvent(Event.IMAGE_SHARED, SCREEN_LABEL, properties);
+                                /*final HashMap<String, Object> properties = builder.build();
+                                properties.put(EventProperty.URL.getString(), mShareImageUrl);*/
+                                mProperties.put(EventProperty.SHARED_TO.getString(), "Facebook");
+                                AnalyticsManager.trackEvent(mEventName, mSourceScreen, mProperties);
                             }
                         }
                     });
@@ -321,7 +380,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             final HashMap<String, Object> properties = builder.build();
             properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
             properties.put(EventProperty.URL.getString(), shareText);
-            AnalyticsManager.trackEvent(Event.LINK_SHARED, SCREEN_LABEL, properties);
+            AnalyticsManager.trackEvent(mEventName, mSourceScreen, properties);
 
             intent.putExtra(Intent.EXTRA_TEXT, shareText);
             // See if official Facebook app is found

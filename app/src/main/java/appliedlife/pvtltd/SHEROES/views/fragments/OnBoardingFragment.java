@@ -110,6 +110,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         View view = inflater.inflate(R.layout.on_boarding_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         mOnBoardingPresenter.attachView(this);
+        mOnBoardingPresenter.queryConfig();
         initializeAllOnBoarding();
         return view;
     }
@@ -257,6 +258,11 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
             AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
         }
         mAdapter.notifyItemChanged(communityFeedSolrObj.getItemPosition(), communityFeedSolrObj);
+    }
+
+    @Override
+    public void onConfigFetched() {
+        AnalyticsManager.initializeMixpanel(getContext(), false);
     }
 
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {

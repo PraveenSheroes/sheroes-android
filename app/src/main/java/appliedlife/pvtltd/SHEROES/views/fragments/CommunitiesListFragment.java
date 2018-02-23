@@ -154,8 +154,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             }
         });
 
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.communities_listing));
-
         return view;
     }
 
@@ -333,6 +331,20 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Override
     public void openChampionListingScreen(CarouselDataObj carouselDataObj) {
 
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     public void refreshList(){

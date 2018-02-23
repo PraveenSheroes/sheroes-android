@@ -32,7 +32,8 @@ public enum AnalyticsEventType {
     LOOKING_FOR("Looking For"),
     LINK("Link"),
     PROMO_CARD("Promo Card"),
-    FRIEND("Friend");
+    FRIEND("Friend"),
+    IMAGE_CARD("Image Card");
 
     // endregion
 

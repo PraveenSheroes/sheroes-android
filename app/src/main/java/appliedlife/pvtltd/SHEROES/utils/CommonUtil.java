@@ -37,6 +37,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -67,10 +70,15 @@ import javax.security.auth.x500.X500Principal;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -500,7 +508,7 @@ public class CommonUtil {
         return true;
     }
 
-    public static void shareImageWhatsApp(final Context context, final String imageShareText, final String url, final String sourceScreen, final boolean trackEvent) {
+    public static void shareImageWhatsApp(final Context context, final String imageShareText, final String url, final String sourceScreen, final boolean trackEvent, final Event eventName, final HashMap<String, Object> properties) {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -517,14 +525,37 @@ public class CommonUtil {
 
                     @Override
                     public void onNext(Bitmap bmp) {
-                        Event event = trackEvent ? Event.IMAGE_SHARED : null;
-                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event);
+                        Event event = trackEvent ? eventName : null;
+                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event, properties);
                     }
                 });
 
     }
 
-    public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName) {
+    public static void shareImageChooser(final Context context, final String imageShareText, final String url) {
+        CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<Bitmap>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Bitmap bmp) {
+                        shareCardViaSocial(context, bmp, imageShareText);
+                    }
+                });
+
+    }
+
+    public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName, HashMap<String, Object> eventProperties) {
         Uri contentUri = CommonUtil.getContentUriFromBitmap(context, bmp);
         if (contentUri != null) {
             Intent sharingIntent = new Intent((Intent.ACTION_SEND));
@@ -555,7 +586,8 @@ public class CommonUtil {
                 if (eventName.equals(Event.IMAGE_SHARED)) {
                     properties.put(EventProperty.URL.getString(), url);
                 }
-                AnalyticsManager.trackEvent(eventName, sourceScreen, properties);
+                eventProperties.put(EventProperty.SHARED_TO.getString(), "Whatsapp");
+                AnalyticsManager.trackEvent(eventName, sourceScreen, eventProperties);
             }
 
         }
@@ -1025,5 +1057,76 @@ public class CommonUtil {
         } else {
             return url;
         }
+    }
+
+    public static void shareCardViaSocial(Context context, String deepLinkUrl) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+        context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+    }
+
+
+    public static void shareCardViaSocial(Context context,Bitmap bmp, String deepLinkUrl) {
+        Uri contentUri = CommonUtil.getContentUriFromBitmap(context, bmp);
+        if (contentUri != null) {
+            Intent intent = new Intent((Intent.ACTION_SEND));
+            intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            intent.setType("image/jpeg");
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+            context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        }
+    }
+    public static void facebookImageShare(final Activity fromActivity, String shareImageUrl){
+        CompressImageUtil.createBitmap(SheroesApplication.mContext, shareImageUrl, 816, 816)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<Bitmap>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Bitmap bmp) {
+                        SharePhoto photo = new SharePhoto.Builder()
+                                .setBitmap(bmp)
+                                .build();
+                        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder()
+                                .addPhoto(photo)
+                                .build();
+                        ShareDialog shareDialog = new ShareDialog(fromActivity);
+                        shareDialog.show(sharePhotoContent, ShareDialog.Mode.AUTOMATIC);
+                    }
+                });
+    }
+
+    public static void shareFacebookLink(Activity fromActivity, String shareText){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, shareText);
+        // See if official Facebook app is found
+        boolean facebookAppFound = false;
+        List<ResolveInfo> matches = fromActivity.getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.FACEBOOK_SHARE)) {
+                intent.setPackage(info.activityInfo.packageName);
+                facebookAppFound = true;
+                break;
+            }
+        }
+        // As fallback, launch sharer.php in a browser
+        if (!facebookAppFound) {
+            String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + shareText;
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+        }
+        fromActivity.startActivity(intent);
     }
 }
