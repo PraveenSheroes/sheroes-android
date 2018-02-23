@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -680,6 +681,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onCommunityClicked(long communityId) {
+        CommunityDetailActivity.navigateTo(getActivity(), communityId, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    @Override
     public void onCommunityJoinOrLeave(CommunityFeedSolrObj mCommunityFeedObj) {
         if (mCommunityFeedObj.isMember()) {
             mCommunityFeedObj.setMember(false);
@@ -909,6 +915,29 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         else if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
             ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
+
+    @Override
+    public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
+        if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
+            boolean isMentor = userSolrObj.isAuthorMentor();
+            ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+
+    }
+
+    @Override
+    public void onFeedLastCommentUserClicked(UserPostSolrObj userSolrObj) {
+        if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
+            List<Comment> lastComments = userSolrObj.getLastComments();
+            if (lastComments.size() > 0) {
+                Comment comment = lastComments.get(0);
+                if (comment != null && !comment.isAnonymous()) {
+                    ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                }
+            }
+
         }
     }
 

@@ -370,8 +370,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View textView) {
 
-                if (!mUserPostObj.isAnonymous()) {
-                    // mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
+                    ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
+                } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
                 }
             }
 
@@ -396,7 +398,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                //  mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+                   if(!mUserPostObj.isAnonymous() && (mUserPostObj.getCommunityId()!=0 || mUserPostObj.getCommunityId()!=299)) {
+                       ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
+                   }
             }
 
             @Override
@@ -447,7 +451,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View textView) {
                 if (!mUserPostObj.isAnonymous()) {
-                    // mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
+                        ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
+                    } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                        ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
+                    }
                 }
             }
 
@@ -460,6 +468,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
+                if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
+                    ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
+                } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
+                }
             }
 
             @Override
@@ -510,8 +523,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View textView) {
 
-                // TODO : ujjwal
-                // viewInterface.handleOnClick(mUserPostObj, mTitle);
+                if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
+                }
             }
 
             @Override
@@ -665,6 +679,17 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
         }
 
+    }
+
+    @OnClick(R.id.post_author_image)
+    public void onUserPicClick() {
+        ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
+    }
+
+    //Last comment user name or user pic
+    @OnClick({R.id.comment_author_name, R.id.comment_author_image_container})
+    public void onLastCommentUserClick() {
+        ((FeedItemCallback) viewInterface).onFeedLastCommentUserClicked(mUserPostObj);
     }
 
     @OnClick(R.id.user_post_compact_card)
