@@ -112,7 +112,7 @@ public interface SheroesAppServiceApi {
     Observable<ProfileTopSectionCountsResponse> getProfileTopSectionCounts(@Body ProfileTopCountRequest profileTopCountRequest);
 
     @POST("participant/feed/followed_mentor_list")
-    Observable<UserFollowedMentorsResponse> getFollowerFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
+    Observable<UserFollowedMentorsResponse> getFollowerOrFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
 
     @POST("participant/feed/mutual_communities")
     Observable<ProfileCommunitiesResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);

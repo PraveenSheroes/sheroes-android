@@ -18,8 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequ
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.FollowerFollowingView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowingView;
 import io.reactivex.observers.DisposableObserver;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
@@ -29,7 +28,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
  * Created by ravi on 20/02/18.
  */
 
-public class FollowingPresenterImpl extends BasePresenter<FollowerFollowingView> {
+public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView> {
 
     //region private variables
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
@@ -82,7 +81,7 @@ public class FollowingPresenterImpl extends BasePresenter<FollowerFollowingView>
                         getMvpView().stopProgressBar();
                         if (null != profileFeedResponsePojo) {
                             Log.i(TAG, profileFeedResponsePojo.getStatus());
-                            getMvpView().getFollowedMentors(profileFeedResponsePojo);
+                            getMvpView().getFollowersOrFollowing(profileFeedResponsePojo);
                         }
                     }
                 });

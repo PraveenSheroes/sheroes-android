@@ -10,7 +10,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCount
  * Created by ravi on 01/01/18.
  */
 
-public interface FollowerFollowingView extends BaseMvpView {
+public interface IFollowerFollowingView extends BaseMvpView {
 
-    void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo);
+    void getFollowersOrFollowing(UserFollowedMentorsResponse profileFeedResponsePojo);
 }

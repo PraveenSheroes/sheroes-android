@@ -12,10 +12,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -27,6 +25,10 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWED_CHAMPION_LABEL;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING;
+
 /**
  * Created by ravi on 03/01/18.
  * Listing of Followed Champions
@@ -34,7 +36,6 @@ import butterknife.ButterKnife;
 
 public class FollowingActivity extends BaseActivity {
 
-    private static String SCREEN_LABEL = "c";
     public static final String MEMBERS_TYPE = "TYPE";
     private long userMentorId;
     private boolean isSelfProfile;
@@ -121,21 +122,27 @@ public class FollowingActivity extends BaseActivity {
 
     @Override
     protected boolean trackScreenTime() {
-        return super.trackScreenTime();
-    }
-
-    @Override
-    public void trackEvent(Event event, Map<String, Object> properties) {
-        super.trackEvent(event, properties);
+        return true;
     }
 
     @Override
     public String getScreenName() {
-        return SCREEN_LABEL;
+        String screenLabel = "";
+        if(mMembersType!=null) {
+            String type = mMembersType.name();
+            if (type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION)) {
+                screenLabel = FOLLOWED_CHAMPION_LABEL;
+            } else if (type.equalsIgnoreCase(AppConstants.FOLLOWERS)) {
+                screenLabel = FOLLOWERS;
+            } else {
+                screenLabel = FOLLOWING;
+            }
+        }
+        return screenLabel;
     }
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, String screenName, FollowingEnum followingEnum, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, FollowingEnum followingEnum, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, FollowingActivity.class);
         intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
         intent.putExtra(ProfileDetailsFragment.SELF_PROFILE, isOwnProfile);
@@ -144,9 +151,6 @@ public class FollowingActivity extends BaseActivity {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
 
-        if (CommonUtil.isNotEmpty(screenName)) {
-            SCREEN_LABEL = screenName;
-        }
         intent.putExtra(MEMBERS_TYPE, followingEnum);
         ActivityCompat.startActivityForResult(fromActivity, intent, 1, null);
     }

@@ -38,7 +38,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FollowerFollowingAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.FollowerFollowingView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -50,7 +50,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
  * Followed mentoring listing
  */
 
-public class FollowingFragment extends BaseFragment implements FollowerFollowingView, FollowerFollowingCallback{
+public class FollowingFragment extends BaseFragment implements IFollowerFollowingView, FollowerFollowingCallback{
 
     private static final String SCREEN_LABEL = "Followed Champions Screen";
     private static final int MENTOR_TYPE_ID = 7;
@@ -186,7 +186,7 @@ public class FollowingFragment extends BaseFragment implements FollowerFollowing
     }
 
     @Override
-    public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
+    public void getFollowersOrFollowing(UserFollowedMentorsResponse profileFeedResponsePojo) {
         List<UserSolrObj> feedDetailList = profileFeedResponsePojo.getFeedDetails();
         mProgressBar.setVisibility(View.GONE);
 
@@ -215,6 +215,11 @@ public class FollowingFragment extends BaseFragment implements FollowerFollowing
             // mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
         }
 
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     @Override

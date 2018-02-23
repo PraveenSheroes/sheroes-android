@@ -61,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -254,6 +255,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Inject
     AppUtils mAppUtils;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     @Inject
     HomePresenter mHomePresenter;
@@ -590,6 +594,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
+            if(isOwnProfile) {
+                createPost.setVisibility(View.VISIBLE);
+            } else {
+                createPost.setVisibility(View.GONE);
+            }
             mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
@@ -635,7 +644,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
 
         if(StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
-            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FOLLOWERS, FollowingEnum.FOLLOWERS, null);
+            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWERS, null);
         }
     }
 
@@ -651,7 +660,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
         if(StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
-            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FOLLOWING, FollowingEnum.FOLLOWING, null);
+            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING, null);
         }
     }
 
@@ -785,7 +794,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof UserPostFragment) {
-        if (tabName.equalsIgnoreCase("Profile - Posts")) {
+        if (tabName.equalsIgnoreCase("Profile - Posts") && isOwnProfile) {
             createPost.setVisibility(View.VISIBLE);
         } else {
             createPost.setVisibility(View.GONE);
@@ -1051,7 +1060,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         trackEvent(Event.PROFILE_SHARED, properties);
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, Config.PROFILE_SHARE + "\n\nLink : " + branchPostDeepLink);
+        intent.putExtra(Intent.EXTRA_TEXT, mConfiguration.get().configData.mProfileSharedText + "\n\nLink : " + branchPostDeepLink);
 
         Bitmap bitmap = createShareImage();
         if(bitmap ==null) return;

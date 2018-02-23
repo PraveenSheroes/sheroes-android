@@ -88,7 +88,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyDataSetChanged();
     }
 
-    // region Comment List Item ViewHolder
+    // region Followers or Following List Item ViewHolder
     public class FollowedUserListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings

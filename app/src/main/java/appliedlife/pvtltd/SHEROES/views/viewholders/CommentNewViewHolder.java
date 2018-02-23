@@ -119,7 +119,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 getCommentString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                //mUserComment.setText(hashTagColorInString(mComment.getComment()));
+                mUserComment.setText(hashTagColorInString(mComment.getComment()));
 
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);

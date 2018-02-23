@@ -53,7 +53,7 @@ public class ProfileModel {
     }
 
     public Observable<UserFollowedMentorsResponse> getFollowerFollowing(FollowersFollowingRequest followersFollowingRequest) {
-        return sheroesAppServiceApi.getFollowerFollowing(followersFollowingRequest)
+        return sheroesAppServiceApi.getFollowerOrFollowing(followersFollowingRequest)
 
                 .map(new Function<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
                     @Override
