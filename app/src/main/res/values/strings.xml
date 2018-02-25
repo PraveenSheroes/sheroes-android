@@ -165,8 +165,8 @@
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
     <string name="ID_SUBMIT">SUBMIT</string>
-    <string name="ID_GROWTH_BUDDIES_FOLLOW">Follow</string>
-    <string name="ID_GROWTH_BUDDIES_FOLLOWING">Following</string>
+    <string name="follow_user">Follow</string>
+    <string name="following_user">Following</string>
     <!--String Related personal contact details edit page-->
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
     <string name="ID_LOCATION_HINT">LOCATION</string>
@@ -427,7 +427,7 @@
     <string name="menu.post_as_community">Post as Community</string>
     <string name="menu.post_as_user">Post as %1$s</string>
 
-    <string name="ID_HEADER_TEXT">What\'s on your mind?</string>
+    <string name="ID_HEADER_TEXT">Share/ Ask Anything Without Hesitation</string>
 
 
     <string name="contest.status.ongoing">Live</string>
@@ -549,6 +549,23 @@
     <string name="follow_me">follow</string>
     <string name="answers">Answers</string>
     <string name="followers">Followers</string>
+    <string name="invite_friend"> Find  &amp;  Invite Friends</string>
+    <string name="suggested_friend">Suggested</string>
+    <string name="contact_list_friend">Contacts</string>
+    <string name="contact_invite_friend">Invite</string>
+    <string name="whats_app_not_installed">WhatsApp not Installed</string>
+    <string name="suggested_list_blank">No friends to follow. Invite your friends to SHEROES</string>
+    <string name="contact_list_blank">Find friends from your contacts</string>
+    <string name="invite_friend_request_to_join">Join me on the women-only SHEROES app. You can participate (even anonymously) in discussions on women-related topics and help other women in the Indian community to make progress in their lives.</string>
+    <string name="invite_sync_contact">Allow us to sync your mobile contacts to make finding friends super easy!</string>
+    <string name="sync_contact">Sync contacts</string>
+    <string name="no_search_contact">No contact found</string>
+
+
+
+
+
+
 
 
 </resources>

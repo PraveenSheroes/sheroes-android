@@ -19,6 +19,8 @@ public enum AnalyticsEventType {
     ON_BOARDING("Onboarding"),
     WALKTHROUGH("Walkthrough"),
     FACEBOOK_PUBLISH("Facebook Publish"),
+    ALLOWED_CONTACT_SYNC("Allowed Contact Sync"),
+    DENIED_CONTACT_SYNC("Denied Contact Sync"),
     ORGANIZATION("Organization"),
     ARTICLE("Article"),
     CHAT("Chat"),
@@ -30,6 +32,7 @@ public enum AnalyticsEventType {
     LOOKING_FOR("Looking For"),
     LINK("Link"),
     PROMO_CARD("Promo Card"),
+    FRIEND("Friend"),
     IMAGE_CARD("Image Card");
 
     // endregion

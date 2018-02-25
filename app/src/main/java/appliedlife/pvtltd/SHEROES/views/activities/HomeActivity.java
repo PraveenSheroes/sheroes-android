@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -30,11 +29,9 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -83,13 +80,11 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
@@ -166,11 +161,11 @@ import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INVITE_FRIEND;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
@@ -353,14 +348,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Crashlytics.getInstance().core.logException(e);
         }
         toolTipForNotification();
-        if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION)== AppConstants.DRAWER_SESSION) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION) == AppConstants.DRAWER_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
                 toolTipForNav();
             }
         }
     }
+
     private void toolTipForNotification() {
-        if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION)== AppConstants.NOTIFICATION_SESSION) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
             if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -373,10 +369,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             popupViewNotificationToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                             popUpNotificationWindow = new PopupWindow(popupViewNotificationToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             popUpNotificationWindow.setOutsideTouchable(true);
-                            if(width<750) {
+                            if (width < 750) {
                                 popUpNotificationWindow.showAsDropDown(viewtoolTipNotification, -100, 30);
-                            }else
-                            {
+                            } else {
                                 popUpNotificationWindow.showAsDropDown(viewtoolTipNotification, -150, 30);
                             }
 
@@ -491,7 +486,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent != null) {
+        if (intent != null && intent.getExtras() != null) {
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
@@ -503,7 +498,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")) {
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
 
                     communityOnClick();
                 }
@@ -529,7 +524,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     renderICCMemberListView();
                 }
             }
-
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.INVITE_FRIEND_URL)) {
+                    int notification = intent.getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+                    AllContactActivity.navigateTo(this, notification, null, null, REQUEST_CODE_FOR_INVITE_FRIEND);
+                }
+            }
         }
     }
 
@@ -949,16 +949,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
 
-
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
             case R.id.icon:  //TODO - Fix hardcoding
-                if(baseResponse instanceof CarouselDataObj){
+                if (baseResponse instanceof CarouselDataObj) {
                     CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
-                    if(carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj){
+                    if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
                         mentorListActivity();
-                    }else {
+                    } else {
                         navigateToCollectionScreen(carouselDataObj);
                     }
                 }
@@ -1049,8 +1048,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
                 setAllValues(mFragmentOpen);
-               // setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
-              //  setViewPagerAndViewAdapter();
+                // setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
+                //  setViewPagerAndViewAdapter();
                 super.feedCardsHandled(view, baseResponse);
 
         }
@@ -1058,13 +1057,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void navigateToCollectionScreen(CarouselDataObj carouselDataObj) {
-        if(carouselDataObj != null) {
+        if (carouselDataObj != null) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .name(getString(R.string.carousel_outer_seemore))
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.carousel_outer_seemore), getString(R.string.ID_COMMUNITIES_CATEGORY),  properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.carousel_outer_seemore), getString(R.string.ID_COMMUNITIES_CATEGORY), properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 
@@ -1164,7 +1163,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void changeFragmentWithCommunities() {
-
         mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
@@ -1522,19 +1520,19 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
-        if(requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL){
+        if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-            if(fragment instanceof HomeFragment) {
+            if (fragment instanceof HomeFragment) {
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     ((HomeFragment) fragment).onRefreshClick();
                 }
-            } else if(fragment instanceof CommunitiesListFragment) {
+            } else if (fragment instanceof CommunitiesListFragment) {
                 CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
                 if (currentFragment != null && currentFragment.isVisible()) {
                     currentFragment.refreshList();
                 }
             }
-        }else {
+        } else {
             if (null != intent) {
                 switch (requestCode) {
                     case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:

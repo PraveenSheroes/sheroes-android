@@ -224,12 +224,12 @@ public class AppUtils {
      *
      * @param view
      */
-    public static void keyboardToggle(View view, String TAG) {
+    public static void keyboardToggle(Context view, String TAG) {
         if (view == null) {
             return;
         }
         try {
-            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) view.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         } catch (Exception e) {
             LogUtils.error(TAG, e);

@@ -47,8 +47,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -630,7 +628,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-               // //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+               // //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
 
@@ -659,7 +657,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(CommunityResponse communityResponse) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
+                //getMvpView().getFollowUnfollowResponse(communityResponse, JOIN_INVITE);
             }
         });
 
@@ -689,7 +687,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                 getMvpView().stopProgressBar();
                 getMvpView().notifyAllItemRemoved(userPostObj);
-                //getMvpView().getSuccessForAllResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
+                //getMvpView().getFollowUnfollowResponse(deleteCommunityPostResponse, DELETE_COMMUNITY_POST);
             }
         });
 
@@ -718,7 +716,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo1) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
+                //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo1, MARK_AS_SPAM);
             }
         });
 
@@ -810,34 +808,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     }
 
 
-    public void getAppContactsResponseInPresenter(UserPhoneContactsListRequest userPhoneContactsListRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        mHomeModel.getAppContactsResponseInModel(userPhoneContactsListRequest).subscribe(new DisposableObserver<UserPhoneContactsListResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-
-                    }
-
-            @Override
-            public void onNext(UserPhoneContactsListResponse userPhoneContactsListResponse) {
-                getMvpView().stopProgressBar();
-                if (null != userPhoneContactsListResponse) {
-                    //getMvpView().getNotificationReadCountSuccess(userPhoneContactsListResponse,USER_CONTACTS_ACCESS_SUCCESS);
-                }
-            }
-        });
-
-    }
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -862,7 +832,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+                //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
 

@@ -22,6 +22,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -294,9 +297,31 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
+            unFollowUserEvent(userSolrObj);
         } else {
             mHomePresenter.getFollowFromPresenter(publicProfileListRequest,userSolrObj);
+            followUserEvent(userSolrObj);
         }
+    }
+    private void followUserEvent(UserSolrObj mUserSolarObject) {
+        Event event =  Event.PROFILE_FOLLOWED ;
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+    }
+    private void unFollowUserEvent(UserSolrObj mUserSolarObject) {
+        Event event = Event.PROFILE_UNFOLLOWED;
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(event,getScreenName(), properties);
     }
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {

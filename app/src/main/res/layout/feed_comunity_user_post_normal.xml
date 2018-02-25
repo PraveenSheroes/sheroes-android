@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_12"
             android:layout_marginTop="@dimen/dp_size_16"
             android:gravity="top"
             android:weightSum="1">

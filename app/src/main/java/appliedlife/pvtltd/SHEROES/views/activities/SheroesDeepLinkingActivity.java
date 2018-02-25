@@ -228,9 +228,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     } else if (urlOfSharedCard.equals(AppConstants.ICC_MEMBERS_URL) || urlOfSharedCard.equals(AppConstants.ICC_MEMBERS_URL_COM)) {
                         homeActivityCall(AppConstants.ICC_MEMBERS_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.COMMUNITY_URL) || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL_COM) || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL + "/") || urlOfSharedCard.equals(AppConstants.COMMUNITY_URL_COM + "/")) {
-                        homeActivityCall("Community List");
+                        homeActivityCall(AppConstants.COMMUNITY_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
+                    } else if (urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL) || urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL_COM) || urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL + "/") || urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL_COM + "/")) {
+                        homeActivityCall(AppConstants.INVITE_FRIEND_URL);
                     } else {
                         indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                         if (indexOfFourthBackSlace > 0) {

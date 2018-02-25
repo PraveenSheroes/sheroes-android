@@ -139,7 +139,7 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+                //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
 

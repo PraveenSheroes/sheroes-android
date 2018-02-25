@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -35,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
@@ -53,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
@@ -66,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.BlankHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
@@ -90,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 import dagger.Component;
 
@@ -279,6 +284,16 @@ public interface SheroesAppComponent {
     void inject(UserPostCompactViewHolder userPostCompactViewHolder);
 
     void inject(ImageViewHolder imageViewHolder);
+
+    void inject(AllContactActivity allContactActivity);
+
+    void inject(SuggestedFriendFragment suggestedFriendFragment);
+
+    void inject(ContactListFragment contactListFragment);
+
+    void inject(ContactCardHolder contactCardHolder);
+
+    void inject(SuggestedContactCardHolder suggestedContactCardHolder);
 
 }
 
