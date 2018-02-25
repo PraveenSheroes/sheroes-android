@@ -808,15 +808,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.invite)
     public void onInviteClicked() {
-        String appShareUrl;
-        if (CommonUtil.isNotEmpty(mUserPreference.get().getUserSummary().getAppShareUrl())) {
-            appShareUrl = mUserPreference.get().getUserSummary().getAppShareUrl();
-        } else {
-            appShareUrl = AppConstants.APP_SHARE_LINK;
-        }
-        HashMap<String, Object> properties = new EventProperty.Builder().url(appShareUrl).build();
-        AnalyticsManager.trackEvent(Event.APP_INVITE_CLICKED, getScreenName(), properties);
-        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, Event.APP_INVITE, properties);
+        AllContactActivity.navigateTo(this, getScreenName(), null);
     }
 
 
