@@ -156,11 +156,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         switch (mFeedState) {
             case NORMAL_REQUEST:
                 mNextToken = null;
-                List<FeedDetail> feedList = new ArrayList<>();
-                FeedDetail homeFeedHeader = new FeedDetail();
-                homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                feedList.add(0, homeFeedHeader);
-                getMvpView().showFeedList(feedList);
+                if(mIsHomeFeed){
+                    List<FeedDetail> feedList = new ArrayList<>();
+                    FeedDetail homeFeedHeader = new FeedDetail();
+                    homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                    feedList.add(0, homeFeedHeader);
+                    getMvpView().showFeedList(feedList);
+                }
                 getMvpView().startProgressBar();
                 break;
             case LOAD_MORE_REQUEST:
