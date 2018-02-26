@@ -1092,7 +1092,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             TextView followersCountNo = ButterKnife.findById(view, R.id.followers_count);
             TextView answerCountNo = ButterKnife.findById(view, R.id.answers_count);
             TextView followingCountNo = ButterKnife.findById(view, R.id.following_count);
-            TextView location = ButterKnife.findById(view, R.id.location);
+            TextView location = ButterKnife.findById(view, R.id.location_user);
             TextView description = ButterKnife.findById(view, R.id.description);
 
             if(isMentor) {
@@ -1131,7 +1131,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             }
 
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
-                location.setText(View.VISIBLE);
+                location.setVisibility(View.VISIBLE);
                 location.setText(mUserSolarObject.getCityName());
             } else {
                 location.setVisibility(View.INVISIBLE);
