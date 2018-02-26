@@ -1134,7 +1134,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 location.setText(View.VISIBLE);
                 location.setText(mUserSolarObject.getCityName());
             } else {
-                location.setText(View.INVISIBLE);
+                location.setVisibility(View.INVISIBLE);
             }
 
             return CommonUtil.getViewBitmap(userDetailContainer);

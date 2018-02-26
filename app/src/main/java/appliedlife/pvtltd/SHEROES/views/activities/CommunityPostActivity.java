@@ -941,6 +941,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
     }
 
+    //Disable the link editing and enable for others
+    private void disableEditTextForLinks() {
+        if(isLinkRendered) {
+            mEtDefaultText.setFocusable(false);
+            mEtDefaultText.setFocusableInTouchMode(false);
+            mEtDefaultText.setClickable(false);
+        }
+    }
+
     private Bitmap decodeFile(File f) {
         try {
             // decode image size
@@ -1283,6 +1292,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case AppConstants.SUCCESS:
                     isLinkRendered = true;
                     cardViewLinkRender.setVisibility(View.VISIBLE);
+                    disableEditTextForLinks();
                     mLinkRenderResponse = linkRenderResponse;
                     if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgTitleS())) {
                         tvLinkTitle.setText(linkRenderResponse.getOgTitleS());
