@@ -828,6 +828,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mFeedRecyclerView.setAdapter(null);
+    }
+
+    @Override
     public void onAskQuestionClicked() {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
