@@ -485,6 +485,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
+    private void shareCardDetail(ArticleSolrObj articleSolrObj) {
+        String deepLinkUrl;
+        if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getPostShortBranchUrls())) {
+            deepLinkUrl = articleSolrObj.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = articleSolrObj.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(articleSolrObj, getScreenName());
+        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
+    }
+
     @Override
     public void onUserPostClicked(UserPostSolrObj userPostSolrObj) {
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
@@ -787,6 +804,27 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor) {
         ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant(), authorMentor, 0, mScreenLabel, mScreenProperties, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    @Override
+    public void onPostMenuClicked(final ArticleSolrObj articleObj, View view) {
+        PopupMenu popup = new PopupMenu(getActivity(), view);
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.share:
+                            shareCardDetail(articleObj);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+        }
+        popup.show();
     }
 
     @Override

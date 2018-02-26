@@ -103,4 +103,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onUserFollowedUnFollowed(UserSolrObj userSolrObj);
 
     void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor);
+
+    void onPostMenuClicked(ArticleSolrObj articleObj, View view);
 }
