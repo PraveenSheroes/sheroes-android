@@ -333,18 +333,9 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     }
 
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
-        }
-    }
-
     @Override
     public boolean shouldTrackScreen() {
-        return false;
+        return true;
     }
 
     public void refreshList(){

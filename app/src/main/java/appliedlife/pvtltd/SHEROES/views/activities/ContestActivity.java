@@ -327,6 +327,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         String endPointUrl = "participant/feed/community_feed?sub_type=P&source_entity_id=" + mContest.remote_id;
         HashMap<String, Object>properties =
                 new EventProperty.Builder()
+                        .id(Integer.toString(mContest.remote_id))
                         .challengeId(Integer.toString(mContest.remote_id))
                         .title(mContest.title)
                         .url(endPointUrl)
