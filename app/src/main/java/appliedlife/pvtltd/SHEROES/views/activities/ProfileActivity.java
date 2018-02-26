@@ -1601,7 +1601,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params1.addRule(RelativeLayout.RIGHT_OF, R.id.share_profile);
                 params1.setMargins(10, 0, 16, 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 tvMentorDashBoardFollow.setText("");
