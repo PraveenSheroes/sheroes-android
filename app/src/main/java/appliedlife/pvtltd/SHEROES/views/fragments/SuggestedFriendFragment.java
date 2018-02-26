@@ -78,6 +78,8 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     //region Member variables
     private boolean hasFeedEnded;
+    private String msg;
+    private boolean isUserList;
     //endregion
 
     //region Static methods
@@ -100,10 +102,43 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         initViews();
         return view;
     }
+
+    //region Private methods
+    private void initViews() {
+        mInviteFriendViewPresenterImp.setEndpointUrl(SUGGESTED_LIST_URL);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mFeedRecyclerView.setLayoutManager(linearLayoutManager);
+        ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        mInviteFriendSuggestedAdapter = new InviteFriendSuggestedAdapter(getContext(), this);
+        mFeedRecyclerView.setAdapter(mInviteFriendSuggestedAdapter);
+        msg=getString(R.string.contact_list_blank);
+        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if (mInviteFriendViewPresenterImp.isSuggestedLoading() || hasFeedEnded) {
+                    return;
+                }
+                // mInviteFriendSuggestedAdapter.contactStartedLoading();
+                // mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
+            }
+
+        };
+        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+            }
+        });
+        getAllSuggestedContacts();
+    }
+
+    //endregion
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
+        if (isVisibleToUser) {
             AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
         }
     }
@@ -112,10 +147,12 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
     @Override
     public boolean shouldTrackScreen() {
         return false;
     }
+
     @Override
     public void onContactClicked(UserContactDetail contactDetail, View view) {
 
@@ -157,21 +194,31 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             case R.id.ll_suggested_contact:
                 openMentorProfileDetail(userSolrObj);
                 break;
-                default:
+            default:
         }
     }
 
     @Override
     public void showMsgOnSearch(String string) {
-            if (StringUtil.isNotNullOrEmptyString(string)) {
-                emptyView.setVisibility(View.VISIBLE);
-            } else {
-                emptyView.setVisibility(View.GONE);
+        if (StringUtil.isNotNullOrEmptyString(string)) {
+            emptyView.setVisibility(View.VISIBLE);
+            if (null != getActivity() && getActivity() instanceof AllContactActivity) {
+                if(isUserList)
+                {
+                    msg=getString(R.string.no_search_contact);
+                }else
+                {
+                    msg=getString(R.string.contact_list_blank);
+                }
             }
+            mFeedRecyclerView.setEmptyViewWithImage(emptyView, msg, R.drawable.ic_suggested_blank, "");
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     private void openMentorProfileDetail(UserSolrObj userSolrObj) {
-        ProfileActivity.navigateTo(getActivity(),userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL,userSolrObj);
+        ProfileActivity.navigateTo(getActivity(), userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, userSolrObj);
     }
 
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
@@ -185,16 +232,18 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             followUserEvent(userSolrObj);
         }
     }
+
     private void followUserEvent(UserSolrObj mUserSolarObject) {
-        Event event =  Event.PROFILE_FOLLOWED ;
+        Event event = Event.PROFILE_FOLLOWED;
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(mUserSolarObject.isAuthorMentor())
                         .build();
-        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
+
     private void unFollowUserEvent(UserSolrObj mUserSolarObject) {
         Event event = Event.PROFILE_UNFOLLOWED;
         HashMap<String, Object> properties =
@@ -203,19 +252,22 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(mUserSolarObject.isAuthorMentor())
                         .build();
-        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
+
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
 
     }
 
     public void getAllSuggestedContacts() {
-        mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
+           mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
     }
+
     public void searchSuggestedContactInList(String contactName) {
         mInviteFriendSuggestedAdapter.getFilter().filter(contactName);
     }
+
     public void refreshSuggestedList(UserSolrObj userSolrObj) {
         mInviteFriendSuggestedAdapter.setDataOnItemPosition(userSolrObj);
     }
@@ -226,10 +278,13 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             emptyView.setVisibility(View.GONE);
             mInviteFriendSuggestedAdapter.setData(userSolrObjList);
             mInviteFriendSuggestedAdapter.notifyDataSetChanged();
-            if(null!=getActivity()&&getActivity() instanceof AllContactActivity) {
+            if (null != getActivity() && getActivity() instanceof AllContactActivity) {
                 ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
+                ((AllContactActivity) getActivity()).mViewPager.setCurrentItem(0);
             }
+            isUserList=true;
         } else {
+            mFeedRecyclerView.setEmptyViewWithImage(emptyView,msg , R.drawable.ic_suggested_blank, "");
             emptyView.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);
@@ -267,36 +322,4 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
 
 
-    //region Private methods
-    private void initViews() {
-        mInviteFriendViewPresenterImp.setEndpointUrl(SUGGESTED_LIST_URL);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mFeedRecyclerView.setLayoutManager(linearLayoutManager);
-        ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mInviteFriendSuggestedAdapter = new InviteFriendSuggestedAdapter(getContext(), this);
-        mFeedRecyclerView.setAdapter(mInviteFriendSuggestedAdapter);
-        mFeedRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.contact_list_blank), R.drawable.ic_suggested_blank, "");
-        mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (mInviteFriendViewPresenterImp.isSuggestedLoading() || hasFeedEnded) {
-                    return;
-                }
-               // mInviteFriendSuggestedAdapter.contactStartedLoading();
-               // mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.LOAD_MORE_REQUEST);
-            }
-
-        };
-        mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mInviteFriendViewPresenterImp.fetchSuggestedUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
-            }
-        });
-        getAllSuggestedContacts();
-    }
-
-    //endregion
 }

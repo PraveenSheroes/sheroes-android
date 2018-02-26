@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true">
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            <ImageView
                 android:id="@+id/profile_pic"
                 android:layout_width="95dp"
                 android:layout_height="100dp"
