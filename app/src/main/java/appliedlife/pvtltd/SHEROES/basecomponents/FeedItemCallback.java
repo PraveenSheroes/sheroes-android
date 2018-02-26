@@ -74,6 +74,10 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onMentorProfileClicked(UserSolrObj userSolrObj);
 
+    void onMentorProfileClicked(UserPostSolrObj userSolrObj);
+
+    void onFeedLastCommentUserClicked(UserPostSolrObj userSolrObj);
+
     void onArticleCommentClicked(ArticleSolrObj articleObj);
 
     void onArticlePostLiked(ArticleSolrObj articleSolrObj);
@@ -85,6 +89,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onSpamPostDelete(UserPostSolrObj userPostObj);
 
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
+
+    void onCommunityClicked(long  communityId);
 
     void onAskQuestionClicked();
 

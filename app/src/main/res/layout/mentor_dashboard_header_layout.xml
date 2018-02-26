@@ -191,7 +191,7 @@
         <RelativeLayout
             android:layout_marginLeft="@dimen/dp_size_24"
             android:layout_marginStart="@dimen/dp_size_24"
-            android:layout_marginTop="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/dp_size_16"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -249,6 +249,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_mentor_name"
         android:weightSum="@integer/int_value_for_line_1"
+        android:orientation="horizontal"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_8">
 
@@ -261,20 +262,38 @@
             android:drawablePadding="@dimen/dp_size_6"
             android:maxLines="@integer/int_value_for_line_1"
             android:drawableLeft="@drawable/ic_loc"
+            android:drawableStart="@drawable/ic_loc"
             android:textColor="@color/gray_light"
             android:textSize="@dimen/sp_size_14" />
 
-        <TextView
-            android:id="@+id/tv_profession"
+        <RelativeLayout
+            android:id="@+id/profession_container"
             android:layout_width="0dp"
             android:layout_weight=".5"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_mentor_profession"
-            android:drawablePadding="@dimen/dp_size_6"
-            android:visibility="gone"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textColor="@color/mentor_profession"
-            android:textSize="@dimen/sp_size_14" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/skill"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:src="@drawable/ic_mentor_profession" />
+
+            <TextView
+                android:id="@+id/tv_profession"
+                android:layout_marginLeft="@dimen/dp_size_6"
+                android:layout_marginStart="@dimen/dp_size_6"
+                android:layout_toRightOf="@+id/skill"
+                android:layout_toEndOf="@+id/skill"
+                android:layout_width="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textColor="@color/gray_light"
+                android:textSize="@dimen/sp_size_14" />
+        </RelativeLayout>
     </LinearLayout>
 
     <TextView

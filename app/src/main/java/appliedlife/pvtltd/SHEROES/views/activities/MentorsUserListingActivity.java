@@ -203,7 +203,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     setResult(RESULT_OK, intent);
-                    finish();
+                   // finish();
                     break;
                 default:
             }
