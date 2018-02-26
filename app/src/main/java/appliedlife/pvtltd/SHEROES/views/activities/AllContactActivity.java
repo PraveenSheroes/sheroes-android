@@ -130,6 +130,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
         mViewPagerAdapter.addFragment(ContactListFragment.createInstance(getString(R.string.contact_invite_friend)), getString(R.string.contact_invite_friend));
         mViewPager.setAdapter(mViewPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setCurrentItem(1);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
