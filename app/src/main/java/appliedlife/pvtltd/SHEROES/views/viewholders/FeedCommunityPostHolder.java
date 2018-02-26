@@ -865,7 +865,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 secondImageLayoutDefault.weight = 1;
                 break;
             default:
-                int count = typeOfHolder - 3;
+                int count = typeOfHolder - 2;
                 tvMoreImage.setText(String.valueOf("+" + count));
                 tvMoreImage.setVisibility(View.VISIBLE);
         }

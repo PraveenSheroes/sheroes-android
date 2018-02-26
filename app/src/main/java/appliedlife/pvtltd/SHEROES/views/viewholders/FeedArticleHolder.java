@@ -525,7 +525,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
-    @OnClick({R.id.li_feed_article_images, R.id.tv_feed_article_header_lebel})
+    @OnClick({R.id.li_feed_article_images, R.id.tv_feed_article_header_lebel, R.id.tv_feed_article_header})
     public void articleImageClick() {
         if(viewInterface instanceof FeedItemCallback){
             ((FeedItemCallback)viewInterface).onArticleItemClicked(articleObj);

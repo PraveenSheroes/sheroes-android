@@ -270,7 +270,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
                 if (mUserPostObj.getImageUrls().size() > 2) {
                     mMoreImageCount.setVisibility(View.VISIBLE);
-                    mMoreImageCount.setText("+ " + Integer.toString(mUserPostObj.getImageUrls().size() - 2));
+                    mMoreImageCount.setText("+ " + Integer.toString(mUserPostObj.getImageUrls().size() - 1));
                     mImageSecond.setBackgroundColor(mContext.getResources().getColor(R.color.feed_article_label));
                 } else {
                     mMoreImageCount.setVisibility(View.GONE);
@@ -663,11 +663,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         } else {
             mCommentLike.setText(Integer.toString(lastComment.likeCount));
         }
-
         if (lastComment.isLiked) {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active_16dp, 0, 0, 0);
         } else {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_inactive_16dp, 0, 0, 0);
         }
     }
 
