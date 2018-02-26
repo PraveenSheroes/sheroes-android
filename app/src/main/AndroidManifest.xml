@@ -204,6 +204,17 @@
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".views.activities.AllContactActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -256,6 +267,7 @@
                 <data android:pathPrefix="/sheroes-challenge" />
                 <data android:pathPrefix="/my-challenges" />
                 <data android:pathPrefix="/faq" />
+                <data android:pathPrefix="/invite-friends" />
             </intent-filter>
         </activity>
         <activity

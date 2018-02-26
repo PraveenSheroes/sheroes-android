@@ -323,7 +323,15 @@ public class ContestActivity extends BaseActivity implements IContestView {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Contest.CONTEST_OBJ, Parcels.wrap(mContest));
         bundle.putBoolean(IS_CHALLENGE, true);
+        bundle.putString(AppConstants.SCREEN_NAME, "Challenge Responses");
         String endPointUrl = "participant/feed/community_feed?sub_type=P&source_entity_id=" + mContest.remote_id;
+        HashMap<String, Object>properties =
+                new EventProperty.Builder()
+                        .challengeId(Integer.toString(mContest.remote_id))
+                        .title(mContest.title)
+                        .url(endPointUrl)
+                        .build();
+        bundle.putSerializable(FeedFragment.SCREEN_PROPERTIES, properties);
         bundle.putString(AppConstants.END_POINT_URL, endPointUrl);
         mFeedFragment.setArguments(bundle);
         mContestInfoFragment = (ContestInfoFragment) ContestInfoFragment.instance();

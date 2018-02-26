@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_suggested_contact"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+        android:id="@+id/iv_suggested_contact_card_circle_icon"
+        android:layout_width="@dimen/contact_icon_circle"
+        android:layout_height="@dimen/contact_icon_circle"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginBottom="@dimen/dp_size_8"
+        android:layout_gravity="center"
+        android:src="@drawable/default_img"
+        android:layout_marginLeft="@dimen/dp_size_16"/>
+    <TextView
+        android:id="@+id/tv_suggested_contact_name"
+        android:layout_width="0dp"
+        android:layout_weight="@integer/int_value_for_line_1"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textColor="@color/comment_text"
+        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:textSize="@dimen/sp_size_16"/>
+    <Button
+        android:id="@+id/btn_follow_friend"
+        android:layout_width="@dimen/invite_btn_width"
+        android:layout_height="@dimen/invite_btn_height"
+        android:layout_marginLeft="@dimen/dp_size_8"
+        android:layout_marginRight="@dimen/sp_size_16"
+        android:background="@drawable/selecter_invite_friend"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/follow_user"
+        android:textAllCaps="true"
+        android:textColor="@drawable/selecter_contact_text_color"
+        android:textSize="@dimen/sp_size_14" />
+
+</LinearLayout>

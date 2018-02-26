@@ -79,6 +79,9 @@ public enum Event {
     COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite"),
     APP_INVITE_CLICKED(AnalyticsEventType.APP, " Invite Clicked"),
     APP_INVITE(AnalyticsEventType.APP, " Invite"),
+    FRIEND_INVITED(AnalyticsEventType.FRIEND, "Invited"),
+    FRIEND_SEARCH(AnalyticsEventType.FRIEND, "Searched"),
+
     //endregion
 
     //region Organization related event
@@ -122,6 +125,11 @@ public enum Event {
     WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " Started"),
     WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
     // endregion
+
+    //region Contact events
+    CONTACT_SYNC_ALLOWED(AnalyticsEventType.ALLOWED_CONTACT_SYNC, ""),
+    CONTACT_SYNC_DENIED(AnalyticsEventType.DENIED_CONTACT_SYNC, ""),
+    //endregion
 
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),

@@ -21,6 +21,7 @@ public enum EventProperty {
     TITLE("Title"),
     TYPE("Type"),
     URL("Url"),
+    SOURCE_URL("Source Url"),
     ACTION("Action"),
     POSITION_IN_LIST("Position in List"),
     POST_TYPE("Post Type"),
@@ -49,6 +50,8 @@ public enum EventProperty {
     COMMUNITY_CATEGORY("Community Category"),
     POSITION_IN_CAROUSEL("Position In Carousel"),
     IS_CHECKED("Is Checked"),
+    COLLECTION_NAME("Collection Name"),
+    SOURCE_COLLECTION_NAME("Source Collection Name"),
     POSITION_OF_CAROUSEL("Position Of Carousel");
 
     private final String string;
@@ -138,6 +141,12 @@ public enum EventProperty {
             put(URL, url);
             return this;
         }
+
+        public Builder sourceUrl(String url) {
+            put(SOURCE_URL, url);
+            return this;
+        }
+
         public Builder companyId(String value) {
             put(COMPANY_ID, value);
             return this;
@@ -261,5 +270,16 @@ public enum EventProperty {
             put(IS_OWN_PROFILE, isOwnProfile);
             return this;
         }
+
+        public Builder collectionName(String value){
+            put(COLLECTION_NAME, value);
+            return this;
+        }
+
+        public Builder sourceCollectionName(String value){
+            put(SOURCE_COLLECTION_NAME, value);
+            return this;
+        }
+
     }
 }

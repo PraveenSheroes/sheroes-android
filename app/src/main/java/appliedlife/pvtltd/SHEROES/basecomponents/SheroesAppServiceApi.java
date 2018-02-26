@@ -34,6 +34,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -48,8 +50,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
@@ -150,6 +152,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/reaction/unlike")
     Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
+
+    @POST("participant/user/sync_app_user_contacts")
+    Observable<AllContactListResponse> getAllFriendsInSyncResponseFromApi(@Body ContactListSyncRequest contactListSyncRequest);
 
     @POST("participation/reaction/get_comments")
     Observable<CommentReactionResponsePojo> getCommentFromApi(@Body CommentReactionRequestPojo commentReactionRequestPojo);
@@ -274,9 +279,6 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/reset_password")
     Observable<ForgotPasswordResponse> forgotPasswordResponse(@Body ForgotPasswordRequest forgotPasswordRequest);
 
-    @POST("participant/user/get_app_user_contact_list")
-    Observable<UserPhoneContactsListResponse> getPhoneContactListResponse(@Body UserPhoneContactsListRequest userPhoneContactsListRequest);
-
     @POST("participant/user/update_app_user_contact_referral")
     Observable<UserFromReferralResponse> updateUserReferral(@Body UserFromReferralRequest userFromReferralRequest);
 
@@ -294,7 +296,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/add/winner/address")
     Observable<BaseResponse> updateAddress(@Body Address address);
-
+    @POST()
+    Observable<AllContactListResponse> getUserDetailList(@Url String url, @Body ContactListSyncRequest co);
     @POST()
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 
@@ -306,4 +309,7 @@ public interface SheroesAppServiceApi {
 
     @GET("participant/feed/community_feed?")
     Observable<FeedResponsePojo> getChallengeResponse(@Query("sub_type") String subType, @Query("source_entity_id") String sourceEntityId);
+
+    @POST("participant/user/refresh_user_app_invite_url")
+    Observable<UpdateInviteUrlResponse> updateInviteUrl(@Body UpdateInviteUrlRequest updateInviteUrlRequest);
 }

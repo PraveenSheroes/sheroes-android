@@ -22,12 +22,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="18sp"/>
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textColor="@color/comment_text"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/empty_subtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:textColor="@color/comment_text"
         android:gravity="center" />
 
 </LinearLayout>

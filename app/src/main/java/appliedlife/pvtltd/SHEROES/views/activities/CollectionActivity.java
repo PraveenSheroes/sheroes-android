@@ -16,12 +16,15 @@ import org.parceler.Parcels;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -42,6 +45,7 @@ public class CollectionActivity extends BaseActivity {
     private String mEndPointUrl;
     private String mTitle;
     private List<FeedDetail> mFeedDetailList = null;
+    private HashMap<String, Object> properties = null;
     //endregion
 
     //region Bind view variables
@@ -64,6 +68,11 @@ public class CollectionActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             mEndPointUrl = getIntent().getExtras().getString(AppConstants.END_POINT_URL);
             mTitle = getIntent().getExtras().getString(AppConstants.TOOLBAR_TITTE);
+            properties =
+                    new EventProperty.Builder()
+                            .collectionName(mTitle)
+                            .url(mEndPointUrl)
+                            .build();
         }
 
         setupToolbar(mTitle);
@@ -71,7 +80,8 @@ public class CollectionActivity extends BaseActivity {
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, mEndPointUrl);
-        bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
+        bundle.putSerializable(FeedFragment.SCREEN_PROPERTIES, properties);
+        bundle.putString(AppConstants.SCREEN_NAME, mTitle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
@@ -79,8 +89,6 @@ public class CollectionActivity extends BaseActivity {
         feedFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.container, feedFragment);
         fragmentTransaction.commit();
-
-        ((SheroesApplication) getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     @Override
@@ -114,6 +122,17 @@ public class CollectionActivity extends BaseActivity {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return false;
+    }
+
     //endregion
 
     //region private method

@@ -90,11 +90,11 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
 
         if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
-            mFollowButton.setText(context.getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
+            mFollowButton.setText(context.getString(R.string.following_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         } else {
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
-            mFollowButton.setText(context.getString(R.string.ID_GROWTH_BUDDIES_FOLLOW));
+            mFollowButton.setText(context.getString(R.string.follow_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
 

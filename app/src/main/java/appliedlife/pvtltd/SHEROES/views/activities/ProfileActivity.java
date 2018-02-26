@@ -561,11 +561,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
         if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
             tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
-            tvMentorDashBoardFollow.setText(this.getString(R.string.ID_GROWTH_BUDDIES_FOLLOWING));
+            tvMentorDashBoardFollow.setText(this.getString(R.string.following_user));
             tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         } else {
             tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
-            tvMentorDashBoardFollow.setText(this.getString(R.string.ID_GROWTH_BUDDIES_FOLLOW));
+            tvMentorDashBoardFollow.setText(this.getString(R.string.follow_user));
             tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
         LinearLayout.LayoutParams insight = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);

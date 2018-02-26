@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -38,8 +36,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.UserPhoneContactsListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
@@ -593,7 +589,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 }
                 getMvpView().stopProgressBar();
                 getMvpView().invalidateLikeUnlike(comment);
-               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+               // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
             }
         });
 
@@ -634,7 +630,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     comment.likeCount++;
                 }
                 getMvpView().invalidateLikeUnlike(comment);
-               // getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
+               // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
             }
         });
 
@@ -849,34 +845,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
 
-    public void getAppContactsResponseInPresenter(UserPhoneContactsListRequest userPhoneContactsListRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        mHomeModel.getAppContactsResponseInModel(userPhoneContactsListRequest).subscribe(new DisposableObserver<UserPhoneContactsListResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-
-                    }
-
-            @Override
-            public void onNext(UserPhoneContactsListResponse userPhoneContactsListResponse) {
-                getMvpView().stopProgressBar();
-                if (null != userPhoneContactsListResponse) {
-                    getMvpView().getNotificationReadCountSuccess(userPhoneContactsListResponse,USER_CONTACTS_ACCESS_SUCCESS);
-                }
-            }
-        });
-
-    }
 
     public void queryConfig() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

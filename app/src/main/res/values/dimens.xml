@@ -150,5 +150,8 @@
     <dimen name="see_more_height">205dp</dimen>
     <dimen name="communities_compact_card_radius">4dp</dimen>
     <dimen name="communities_admin_post_type_dialog_height">96dp</dimen>
+    <dimen name="contact_icon_circle">50dp</dimen>
+    <dimen name="invite_btn_width">100dp</dimen>
+    <dimen name="invite_btn_height">30dp</dimen>
 </resources>
 
