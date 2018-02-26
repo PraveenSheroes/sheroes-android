@@ -137,13 +137,17 @@ public class MentorQADetailFragment extends BaseFragment {
             mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
                 @Override
                 public void onHide() {
-                    ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                    if (getActivity() != null) {
+                        ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                    }
 
                 }
 
                 @Override
                 public void onShow() {
-                    ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                    if (getActivity() != null) {
+                        ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 @Override

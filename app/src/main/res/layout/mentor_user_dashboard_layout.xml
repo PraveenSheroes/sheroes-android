@@ -102,7 +102,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/dp_size_65"
+        android:layout_marginBottom="@dimen/dp_size_45"
         android:layout_marginRight="@dimen/dp_size_16"
         android:src="@drawable/ic_pencil"
         android:visibility="gone"
