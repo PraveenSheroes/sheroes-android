@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -25,7 +27,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Spanned;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +40,10 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -77,7 +82,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -97,9 +101,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS_COUNT_CLICK;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -1061,30 +1063,22 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                         .sharedTo(AppConstants.SHARE_CHOOSER)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, mConfiguration.get().configData.mProfileSharedText + "\n\nLink : " + branchPostDeepLink);
 
-        Bitmap bitmap = createShareImage();
-        if(bitmap ==null) return;
-        Uri contentUri = CommonUtil.getContentUriFromBitmap(this, bitmap);
-        if (contentUri != null) {
-            intent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            intent.setType("image/*");
-            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        }
+        createShareImage(branchPostDeepLink);
+
     }
 
-    private Bitmap createShareImage() {
 
-        if(mUserSolarObject !=null) {
+    private void createShareImage(final String branchPostDeepLink) {
+
+        if (mUserSolarObject != null) {
             View view;
             view = LayoutInflater.from(this).inflate(R.layout.layout_user_share, null, false);
 
-            LinearLayout userDetailContainer = ButterKnife.findById(view, R.id.user_share_container);
+            final LinearLayout userDetailContainer = ButterKnife.findById(view, R.id.user_share_container);
             LinearLayout answerCountContainer = ButterKnife.findById(view, R.id.answers_count_container);
             LinearLayout followingContainer = ButterKnife.findById(view, R.id.followings_count_view);
-            CircleImageView imageIcon = ButterKnife.findById(view, R.id.profile_pic);
+            final ImageView imageIcon = ButterKnife.findById(view, R.id.profile_pic);
             ImageView verifiedMentorIcon = ButterKnife.findById(view, R.id.badge);
 
             TextView name = ButterKnife.findById(view, R.id.user_name);
@@ -1095,17 +1089,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             TextView location = ButterKnife.findById(view, R.id.location_user);
             TextView description = ButterKnife.findById(view, R.id.description);
 
-            if(isMentor) {
+            if (isMentor) {
                 verifiedMentorIcon.setVisibility(View.VISIBLE);
-            } else{
+            } else {
                 verifiedMentorIcon.setVisibility(View.GONE);
-            }
-
-            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
-                if(!isFinishing()) {
-                    imageIcon.setCircularImage(true);
-                    imageIcon.bindImage(mUserSolarObject.getImageUrl());
-                }
             }
 
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) {
@@ -1137,10 +1124,32 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 location.setVisibility(View.INVISIBLE);
             }
 
-            return CommonUtil.getViewBitmap(userDetailContainer);
 
+            if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
+                Glide.with(this)
+                        .asBitmap()
+                        .load(mUserSolarObject.getImageUrl())
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
+                        .into(new BitmapImageViewTarget(imageIcon) {
+
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                super.onResourceReady(resource, transition);
+                                imageIcon.setImageBitmap(resource);
+                                Bitmap bitmap = CommonUtil.getViewBitmap(userDetailContainer);
+                                Uri contentUri = CommonUtil.getContentUriFromBitmap(ProfileActivity.this, bitmap);
+                                if (contentUri != null) {
+                                    Intent intent = new Intent(Intent.ACTION_SEND);
+                                    intent.setType(AppConstants.SHARE_MENU_TYPE);
+                                    intent.putExtra(Intent.EXTRA_TEXT, mConfiguration.get().configData.mProfileSharedText + "\n\nLink : " + branchPostDeepLink);
+                                    intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                                    intent.setType("image/*");
+                                    startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+                                }
+                            }
+                        });
+            }
         }
-        return null;
     }
 
     @Override

@@ -454,7 +454,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                     if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
                         ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
                     } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
-                        ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
+                        ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                     }
                 }
             }
@@ -471,7 +471,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
                     ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
                 } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
-                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
+                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                 }
             }
 
@@ -524,7 +524,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View textView) {
 
                 if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
-                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
+                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                 }
             }
 
@@ -682,7 +682,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.post_author_image)
     public void onUserPicClick() {
-        ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
+        if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
+            ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
+        } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+            ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
+        }
     }
 
     //Last comment user name or user pic
