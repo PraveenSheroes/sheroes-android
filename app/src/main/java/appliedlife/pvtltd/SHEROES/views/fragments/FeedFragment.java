@@ -18,7 +18,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -85,7 +83,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
-import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -174,6 +171,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 String dataUrl = getArguments().getString(AppConstants.END_POINT_URL);
                 String screenName = getArguments().getString(AppConstants.SCREEN_NAME);
                 mProperties = (HashMap<String, Object>) getArguments().getSerializable(SCREEN_PROPERTIES);
+                String sourceScreenId = mProperties!=null && ((String) mProperties.get(EventProperty.ID.getString()))!=null ? ((String) mProperties.get(EventProperty.ID.getString())) : ""  ;
                 if(CommonUtil.isNotEmpty(screenName)) {
                     mScreenLabel = screenName;
                 }
@@ -187,6 +185,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 mScreenProperties = new EventProperty.Builder()
                         .sourceCollectionName(screenName)
                         .sourceUrl(dataUrl)
+                        .sourceScreenId(sourceScreenId)
                         .build();
             }
         }else {

@@ -473,7 +473,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void onResume() {
         super.onResume();
         if (isInviteReferral) {
-            if (null != mProgressDialog) {
+            if (this!=null && !this.isFinishing() && null != mProgressDialog) {
                 mProgressDialog.dismiss();
             }
             isInviteReferral = false;
@@ -1196,6 +1196,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
+        bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
         feedFragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, feedFragment, FeedFragment.class.getName()).commitAllowingStateLoss();
@@ -1678,7 +1679,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
         }
-        if (null != mProgressDialog) {
+        if (this!=null && !this.isFinishing() && null != mProgressDialog) {
             mProgressDialog.dismiss();
         }
     }
