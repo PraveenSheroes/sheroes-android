@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
@@ -1054,6 +1055,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
                 }
             }
+        }
+        else if (baseResponse instanceof UserPostSolrObj && mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            CommunityDetailActivity.navigateTo(getActivity(), postDetails.getCommunityId(), getScreenName(), null, 1);
         }else {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if(postDetails.getEntityOrParticipantTypeId() != 15) {
