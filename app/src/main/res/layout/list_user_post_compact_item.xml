@@ -93,6 +93,7 @@
                 android:id="@+id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
+                android:visibility="gone"
                 android:layout_below="@id/post_description"
                 android:layout_marginTop="8dp">
 
@@ -105,6 +106,7 @@
                     <ImageView
                         android:id="@+id/image_second"
                         android:layout_width="150dp"
+                        android:layout_marginLeft="1dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
                         android:scaleType="fitXY"
@@ -139,6 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post_description"
                 android:layout_marginLeft="16dp"
+                android:visibility="gone"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/rectangle_border"
                 android:layout_marginTop="8dp">
@@ -235,8 +238,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/post_like_comment_count"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
+            android:layout_marginTop="8dp">
 
             <View
                 android:id="@+id/divider"
@@ -307,8 +309,7 @@
                 <FrameLayout
                     android:id="@+id/comment_author_image_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp">
+                    android:layout_height="wrap_content">
 
                     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                         android:id="@+id/comment_author_image"
@@ -374,10 +375,10 @@
                     android:layout_below="@+id/comment_description"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:text="1"
                     android:layout_toRightOf="@+id/comment_author_image_container"
-                    android:drawableLeft="@drawable/ic_heart_in_active"
-                    android:drawablePadding="4dp"
-                    android:text="like" />
+                    android:drawablePadding="8dp" />
 
             </RelativeLayout>
 
