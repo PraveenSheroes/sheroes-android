@@ -361,6 +361,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if ("text/plain".equals(type)) {
                     handleSendText(intent); // Handle text being sent
                 }
+                if(mCommunityPost == null){
+                    mCommunityPost = new CommunityPost();
+                    mCommunityPost.isEdit = false;
+                }
             }
         }
 
@@ -579,7 +583,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             return false;
         }
 
-        if (mCommunityPost.community == null && !mCommunityPost.isChallengeType) {
+        if (mCommunityPost!=null && mCommunityPost.community == null && !mCommunityPost.isChallengeType) {
             showMessage(R.string.error_choose_community);
             return false;
         }
