@@ -116,7 +116,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
     private final int mButtonSize = 31;
-    private final int mButtonWidth = 177;
 
     private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
     private Long mChampionId;
@@ -1593,9 +1592,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             shareProfile.setVisibility(View.VISIBLE);
             if (isUserOrChampionDetailsFilled()) {
 
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonWidth, this),
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                params.addRule(RelativeLayout.LEFT_OF, R.id.tv_mentor_dashboard_follow);
                 shareProfile.setLayoutParams(params);
                 shareProfile.setPadding(0, 0, 0, 2);
                 shareProfile.setText(AppConstants.SHARE_PROFILE);
@@ -1603,14 +1602,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.addRule(RelativeLayout.RIGHT_OF, R.id.share_profile);
-                params1.setMargins(10, 0, 0, 0);
+                params1.setMargins(10, 0, 16, 0);
+                params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 tvMentorDashBoardFollow.setText("");
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.ic_profile_edit_icon);
                 tvMentorDashBoardFollow.setLayoutParams(params1);
             } else {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonWidth, this),
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                params.addRule(RelativeLayout.LEFT_OF, R.id.share_profile);
                 params.addRule(RelativeLayout.CENTER_VERTICAL);
                 tvMentorDashBoardFollow.setLayoutParams(params);
                 tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
@@ -1619,8 +1619,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params1.addRule(RelativeLayout.RIGHT_OF, R.id.tv_mentor_dashboard_follow);
-                params1.setMargins(10, 0, 0, 0);
+                params1.setMargins(10, 0, 16, 0);
+                params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 shareProfile.setText("");
                 shareProfile.setLayoutParams(params1);
             }
