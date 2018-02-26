@@ -198,7 +198,6 @@
                     android:layout_below="@id/user_name"
                     android:layout_toRightOf="@id/user_pic"
                     android:layout_gravity="center"
-                    android:gravity="center"
                     android:text="@string/choose_community_option"
                     android:drawableRight="@drawable/vector_down_arrow_red_14dp"
                     android:textColor="@color/red"

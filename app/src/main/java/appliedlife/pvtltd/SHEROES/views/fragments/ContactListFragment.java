@@ -373,6 +373,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 btnSyncContact.setVisibility(View.GONE);
                 tvMsg.setText(string);
             } else {
+                btnSyncContact.setVisibility(View.GONE);
                 llSyncContact.setVisibility(View.GONE);
             }
         }
@@ -387,21 +388,22 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     public void showContacts(List<UserContactDetail> userContactDetailList) {
         if (StringUtil.isNotEmptyCollection(userContactDetailList)) {
             llSyncContact.setVisibility(View.GONE);
+            btnSyncContact.setVisibility(View.GONE);
             mInviteFriendAdapter.setData(userContactDetailList);
             mInviteFriendAdapter.notifyDataSetChanged();
             if (null != getActivity() && getActivity() instanceof AllContactActivity) {
                 ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
             }
             isContactFirstTime = true;
+            if (syncContact) {
+                syncContact = false;
+                mInviteFriendAdapter.contactStartedLoading();
+                mInviteFriendViewPresenterImp.syncFriendsToServer(userContactDetailList);
+            }
         } else {
             llSyncContact.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);
-        if (syncContact) {
-            syncContact = false;
-            mInviteFriendAdapter.contactStartedLoading();
-            mInviteFriendViewPresenterImp.syncFriendsToServer(userContactDetailList);
-        }
     }
 
     @Override
