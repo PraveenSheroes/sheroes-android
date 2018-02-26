@@ -366,7 +366,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 // tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
                 // tvFeedCommunityPostUserBookmark.setVisibility(View.GONE);
-                if (mUserPostObj.communityId == 0) {
+             /*   if (mUserPostObj.communityId == 0) {
                     // tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
                 } else {
@@ -377,7 +377,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
                 } else {
                     tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
-                }
+                }*/
             }
         } else {
             // tvFeedCommunityPostUserBookmark.setVisibility(View.VISIBLE);
@@ -786,7 +786,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedCommunityPostUserCommentPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
             }
-            if (lastComment.isMyOwnParticipation()) {
+            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                if (null != userPreference.get().getUserSummary().getUserBO()) {
+                    mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                }
+            }
+            if (lastComment.isMyOwnParticipation() || mAdminId==AppConstants.TWO_CONSTANT) {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
