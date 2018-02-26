@@ -102,6 +102,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
     public static final String IS_HOME_FEED = "Is Home Feed";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
+    private static final int HIDE_THRESHOLD = 20;
 
     @Inject
     AppUtils mAppUtils;
@@ -149,6 +150,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private boolean isWhatsappShare = false;
     private boolean isHomeFeed;
     private String mScreenLabel;
+    private boolean mControlsVisible = true;
+    private int mScrolledDistance = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -223,7 +226,34 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.accent);
-
+        mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(getActivity()!=null && getActivity() instanceof  HomeActivity){
+                    int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                    if (firstVisibleItem == 0) {
+                        if (!mControlsVisible) {
+                            ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                            mControlsVisible = true;
+                        }
+                    } else {
+                        if (mScrolledDistance > HIDE_THRESHOLD && mControlsVisible) {
+                            ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+                            mControlsVisible = false;
+                            mScrolledDistance = 0;
+                        } else if (mScrolledDistance < -HIDE_THRESHOLD && !mControlsVisible) {
+                            ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                            mControlsVisible = true;
+                            mScrolledDistance = 0;
+                        }
+                    }
+                    if ((mControlsVisible && dy > 0) || (!mControlsVisible && dy < 0)) {
+                        mScrolledDistance += dy;
+                    }
+                }
+            }
+        });
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
