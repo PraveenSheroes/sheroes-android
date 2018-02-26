@@ -830,7 +830,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mFeedRecyclerView.setAdapter(null);
+        if(mFeedRecyclerView!=null){
+            mFeedRecyclerView.setAdapter(null);
+        }
     }
 
     @Override
