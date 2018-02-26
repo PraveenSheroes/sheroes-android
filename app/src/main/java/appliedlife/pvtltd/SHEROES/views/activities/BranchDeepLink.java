@@ -103,6 +103,14 @@ public class BranchDeepLink extends BaseActivity {
                 }
             }
 
+            if(url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL) || url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL_COM)){
+                String endPointUrl = sessionParams.has(AppConstants.END_POINT_URL) ? sessionParams.getString(AppConstants.END_POINT_URL) : "";
+                String screenName = sessionParams.has(AppConstants.SCREEN_NAME) ? sessionParams.getString(AppConstants.SCREEN_NAME) : "";
+                CollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                finish();
+                return;
+            }
+
             if (TextUtils.isEmpty(url)) {
                 startMainActivity();
             } else {

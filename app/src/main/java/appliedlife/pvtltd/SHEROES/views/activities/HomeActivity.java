@@ -473,7 +473,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void onResume() {
         super.onResume();
         if (isInviteReferral) {
-            if (null != mProgressDialog) {
+            if (this!=null && !this.isFinishing() && null != mProgressDialog) {
                 mProgressDialog.dismiss();
             }
             isInviteReferral = false;
@@ -808,15 +808,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.invite)
     public void onInviteClicked() {
-        String appShareUrl;
-        if (CommonUtil.isNotEmpty(mUserPreference.get().getUserSummary().getAppShareUrl())) {
-            appShareUrl = mUserPreference.get().getUserSummary().getAppShareUrl();
-        } else {
-            appShareUrl = AppConstants.APP_SHARE_LINK;
-        }
-        HashMap<String, Object> properties = new EventProperty.Builder().url(appShareUrl).build();
-        AnalyticsManager.trackEvent(Event.APP_INVITE_CLICKED, getScreenName(), properties);
-        ShareBottomSheetFragment.showDialog(this, appShareUrl, null, appShareUrl, SCREEN_LABEL, false, appShareUrl, false, true, true, Event.APP_INVITE, properties);
+        AllContactActivity.navigateTo(this, getScreenName(), null);
     }
 
 
@@ -1204,6 +1196,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
+        bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
         feedFragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, feedFragment, FeedFragment.class.getName()).commitAllowingStateLoss();
@@ -1686,7 +1679,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
             }
         }
-        if (null != mProgressDialog) {
+        if (this!=null && !this.isFinishing() && null != mProgressDialog) {
             mProgressDialog.dismiss();
         }
     }

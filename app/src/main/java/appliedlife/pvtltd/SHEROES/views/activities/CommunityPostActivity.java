@@ -312,9 +312,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (!mIsFromCommunity && !mIsChallengePost) {
                     PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
                 }
-            } else {
-                //For share link
-                isSharedFromOtherApp = true;
             }
         }
 
@@ -352,16 +349,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setViewByCreatePostCall();
         setupToolbarItemsColor();
 
-        if(isSharedFromOtherApp) {
+        Intent intent = getIntent();
+        if(intent!=null && intent.getType()!=null) {
             mTitleToolbar.setText(R.string.title_create_post);
 
-            Intent intent = getIntent();
             String action = intent.getAction();
             String type = intent.getType();
 
             if (Intent.ACTION_SEND.equals(action) && type != null) {
+                isSharedFromOtherApp = true;
                 if ("text/plain".equals(type)) {
                     handleSendText(intent); // Handle text being sent
+                }
+                if(mCommunityPost == null){
+                    mCommunityPost = new CommunityPost();
+                    mCommunityPost.isEdit = false;
                 }
             }
         }
@@ -581,7 +583,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             return false;
         }
 
-        if (mCommunityPost.community == null && !mCommunityPost.isChallengeType) {
+        if (mCommunityPost!=null && mCommunityPost.community == null && !mCommunityPost.isChallengeType) {
             showMessage(R.string.error_choose_community);
             return false;
         }
@@ -943,6 +945,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
     }
 
+    //Disable the link editing and enable for others
+    private void disableEditTextForLinks() {
+        if(isLinkRendered) {
+            mEtDefaultText.setFocusable(false);
+            mEtDefaultText.setFocusableInTouchMode(false);
+            mEtDefaultText.setClickable(false);
+        }
+    }
+
     private Bitmap decodeFile(File f) {
         try {
             // decode image size
@@ -1285,6 +1296,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case AppConstants.SUCCESS:
                     isLinkRendered = true;
                     cardViewLinkRender.setVisibility(View.VISIBLE);
+                    disableEditTextForLinks();
                     mLinkRenderResponse = linkRenderResponse;
                     if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgTitleS())) {
                         tvLinkTitle.setText(linkRenderResponse.getOgTitleS());

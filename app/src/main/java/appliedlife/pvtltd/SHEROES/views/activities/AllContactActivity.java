@@ -359,6 +359,17 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
+    public static void navigateTo(Activity fromActivity, String sourceScreen, HashMap<String, Object> properties) {
+        Intent intent = new Intent(fromActivity, AllContactActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtras(bundle);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivity(fromActivity, intent, null);
+    }
+
     //endregion
     @Override
     protected SheroesPresenter getPresenter() {
