@@ -560,12 +560,6 @@
     <string name="invite_sync_contact">Allow us to sync your mobile contacts to make finding friends super easy!</string>
     <string name="sync_contact">Sync contacts</string>
     <string name="no_search_contact">No contact found</string>
-
-
-
-
-
-
-
-
+    <string name="sheroesRelatedChannelID">sheroesRelatedChannelID</string>
+    <string name="sheroesRelatedChannelName">Related to you and your posts</string>
 </resources>
