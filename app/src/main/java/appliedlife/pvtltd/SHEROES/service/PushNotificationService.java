@@ -2,16 +2,19 @@ package appliedlife.pvtltd.SHEROES.service;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -144,6 +147,7 @@ public class PushNotificationService extends GcmListenerService {
         }
     }
 
+
     private void sendNotification(String title, String body, String urltext) {
         Context context = getBaseContext();
 
@@ -154,6 +158,19 @@ public class PushNotificationService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) PushNotificationService.this
                 .getSystemService(Activity.NOTIFICATION_SERVICE);
 
+        String relatedChannelId = getString(R.string.sheroesRelatedChannelID);
+        CharSequence channelName = getString(R.string.sheroesRelatedChannelName);
+        int importance = NotificationManagerCompat.IMPORTANCE_HIGH;
+        NotificationChannel notificationChannel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel(relatedChannelId, channelName, importance);
+            notificationChannel.enableLights(true);
+            notificationChannel.setShowBadge(true);
+            notificationChannel.setImportance(importance);
+            notificationChannel.enableVibration(true);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+
         notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
         notificationIntent.setData(url);
         notificationIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, 1);
@@ -163,7 +180,7 @@ public class PushNotificationService extends GcmListenerService {
         notificationIntent.setAction(AppConstants.SHEROES + mCount);
 
         PendingIntent pIntent = stackBuilder.getPendingIntent(AppConstants.NO_REACTION_CONSTANT,PendingIntent.FLAG_ONE_SHOT);
-        Notification notification = new NotificationCompat.Builder(PushNotificationService.this)
+        Notification notification = new NotificationCompat.Builder(PushNotificationService.this, relatedChannelId)
                 .setContentTitle(title)
                 .setTicker(AppConstants.TICKER)
                 .setWhen(System.currentTimeMillis() + AppConstants.NOT_TIME)
@@ -171,11 +188,13 @@ public class PushNotificationService extends GcmListenerService {
                 .setContentText(body)
                 .setContentIntent(pIntent)
                 .setDefaults(
-                        Notification.DEFAULT_SOUND
-                                | Notification.DEFAULT_VIBRATE)
+                        NotificationCompat.DEFAULT_SOUND
+                                | NotificationCompat.DEFAULT_VIBRATE)
                 .setContentIntent(pIntent).setAutoCancel(true)
                 .setColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text))
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_combined_shape))
+                .setChannelId(relatedChannelId)
+                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setSmallIcon(getNotificationIcon()).build();
         notificationManager.notify(Integer.parseInt(mCount + ""), notification);
     }
