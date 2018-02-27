@@ -35,6 +35,8 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INVITE_FRIEND;
+
 /**
  * Created by Ajit Kumar on 11-04-2017.
  */
@@ -231,8 +233,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         homeActivityCall(AppConstants.COMMUNITY_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
-                    } else if (urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL) || urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL_COM) || urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL + "/") || urlOfSharedCard.equals(AppConstants.INVITE_FRIEND_URL_COM + "/")) {
-                        homeActivityCall(AppConstants.INVITE_FRIEND_URL);
                     } else {
                         indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, 4);
                         if (indexOfFourthBackSlace > 0) {
@@ -493,7 +493,18 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
             }
 
-        } else {
+        } else if ((AppConstants.INVITE_FRIEND_URL).equalsIgnoreCase(baseUrl) || AppConstants.INVITE_FRIEND_URL_COM.equalsIgnoreCase(baseUrl)) {
+            AllContactActivity.navigateTo(this, mFromNotification, null, null, REQUEST_CODE_FOR_INVITE_FRIEND);
+            finish();
+            if (mFromNotification > 0) {
+                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
+
+            } else {
+                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_PROFILE, AppConstants.EMPTY_STRING);
+
+            }
+
+        }else {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
             finish();
             if (mFromNotification > 0) {

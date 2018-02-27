@@ -524,12 +524,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     renderICCMemberListView();
                 }
             }
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.INVITE_FRIEND_URL)) {
-                    int notification = intent.getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
-                    AllContactActivity.navigateTo(this, notification, null, null, REQUEST_CODE_FOR_INVITE_FRIEND);
-                }
-            }
         }
     }
 
