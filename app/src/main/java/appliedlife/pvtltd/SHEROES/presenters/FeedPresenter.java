@@ -206,7 +206,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         switch (mFeedState) {
                             case NORMAL_REQUEST:
                                 getMvpView().stopProgressBar();
-                                if(mIsHomeFeed && CommonUtil.isEmpty(mFeedDetailList)){
+                                if(mIsHomeFeed){
                                     FeedDetail homeFeedHeader = new FeedDetail();
                                     homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
                                     feedList.add(0, homeFeedHeader);
