@@ -677,6 +677,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
+            if (CommonUtil.isEmpty(userPostObj.getLastComments())) {
+                return;
+            }
             Comment comment = userPostObj.getLastComments().get(0);
             if (currentUserId != comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
