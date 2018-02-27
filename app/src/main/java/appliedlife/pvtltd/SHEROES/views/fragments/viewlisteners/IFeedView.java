@@ -32,4 +32,8 @@ public interface IFeedView extends BaseMvpView {
     void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj);
 
     void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj);
+
+    void showGifLoader();
+
+    void hideGifLoader();
 }
