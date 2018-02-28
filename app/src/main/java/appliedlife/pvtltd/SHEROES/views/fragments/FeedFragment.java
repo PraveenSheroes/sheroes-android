@@ -278,6 +278,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
+            ((HomeActivity) getActivity()).homeButtonUi();
         }
         return view;
     }
