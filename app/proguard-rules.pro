@@ -229,6 +229,7 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class com.flurry.android.FlurryAgent { *; }
 
 -keep class android.support.v7.widget.SearchView { *; }
+-dontwarn android.support.v7.widget.SearchView
 
 -keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior {
     public <init>(android.content.Context, android.util.AttributeSet);
