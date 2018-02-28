@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -153,6 +154,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             public void dismissReactions() {
             }
         });
+
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).communityButton();
+        }
 
         return view;
     }

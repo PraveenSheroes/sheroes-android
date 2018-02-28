@@ -1153,7 +1153,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void changeFragmentWithCommunities() {
-        mFragmentOpen.setCommunityOpen(false);
         mFragmentOpen.setFeedFragment(false);
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
@@ -1203,10 +1202,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void initCommunityViewPagerAndTabs() {
 
-        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
-        mTitleText.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
-        mInvite.setVisibility(View.GONE);
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         CommunitiesListFragment communitiesListFragment = new CommunitiesListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesListFragment, CommunitiesListFragment.class.getName()).commitAllowingStateLoss();
@@ -1296,7 +1296,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void communityButton() {
-        mFragmentOpen.setCommunityOpen(true);
 
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
@@ -1309,8 +1308,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvJob.setText(getString(R.string.ID_CARRIER));
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
+        mTitleText.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mInvite.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
-        mTvSearchBox.setVisibility(View.GONE);
     }
 
     public void createCommunityPostOnClick(CommunityPost communityPost) {
@@ -1415,7 +1417,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 getFragmentManager().popBackStack();
             }
         } else {
-            if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+            if (fragment!=null && fragment instanceof CommunitiesListFragment) {
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    homeOnClick();
+                }
+            }
+            else if (fragment!=null && fragment instanceof FeedFragment) {
                 if (doubleBackToExitPressedOnce) {
                     getSupportFragmentManager().popBackStackImmediate();
                     finish();
