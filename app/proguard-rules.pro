@@ -28,6 +28,7 @@
 -keep public class * extends android.preference.Preference
 -keep public class com.mobileapptracker.** { public *; }
 -keep public class com.google.android.gms.ads.identifier.** { *; }
+-keep class com.mmt.yipstay_consumer.utils.glide.** { *; }
 # ButterKnife 7
 
 -keep class butterknife.** { *; }
@@ -42,26 +43,54 @@
     @butterknife.* <methods>;
 }
 
-#Glide exceptions
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
+# RxJava 0.21
+
+-keep class rx.schedulers.Schedulers {
+    public static <methods>;
 }
+-keep class rx.schedulers.ImmediateScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.TestScheduler {
+    public <methods>;
+}
+-keep class rx.schedulers.Schedulers {
+    public static ** test();
+}
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+    long producerIndex;
+    long consumerIndex;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+-dontwarn sun.misc.Unsafe
 
 # Document
 
 -keep public class org.jsoup.** {
 public *;
 }
+# OkHttp
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
 
 # Retrofit 1.X
 
+-keep class okhttp3.** { *; }
 -keep class retrofit2.** { *; }
+-keep interface okhttp3.** { *; }
 
 -dontwarn okhttp3.**
 -dontwarn okio.**
 -dontwarn retrofit2.**
+-dontwarn rx.**
 
 -keepclasseswithmembers class * {
     @retrofit2.http.* <methods>;
@@ -136,11 +165,17 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.google.android.gms.gcm.**
 -dontwarn com.google.android.gms.iid.**
 
+#Moengage
+-dontwarn com.google.android.gms.location.**
+-dontwarn com.google.android.gms.gcm.**
+-dontwarn com.google.android.gms.iid.**
+
 -keep class com.google.android.gms.gcm.** { *; }
 -keep class com.google.android.gms.iid.** { *; }
 -keep class com.google.android.gms.location.** { *; }
 
 -keep class com.moe.pushlibrary.activities.** { *; }
+-keep class com.moe.pushlibrary.MoEHelper
 -keep class com.moengage.locationlibrary.GeofenceIntentService
 -keep class com.moe.pushlibrary.InstallReceiver
 -keep class com.moengage.push.MoEPushWorker
@@ -169,7 +204,19 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.moengage.inapp.ViewEngine
 
 -keep class com.delight.**  { *; }
+#endregion
 
+-keep class java.awt.** { *; }
+-keep class com.google.firebase.iid.** { *; }
+-keep class com.google.firebase.messaging.FirebaseMessagingService { *; }
+-keep class com.google.android.gms.measurement.AppMeasurement { *; }
+-keep class com.google.android.gms.common.internal.safeparcel.** { *; }
+-keep class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement { *; }
+-keep class java.nio.file.**
+-keep class java.lang.invoke.**
+
+-dontwarn com.moengage.firebase.**
+-dontwarn com.google.firebase.**
 
 -dontwarn com.flurry.**
 -dontwarn okio.**
@@ -198,9 +245,6 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class com.google.android.gms.analytics.Tracker { *; }
 -keep class com.google.analytics.tracking.android.Tracker { *; }
 -keep class com.flurry.android.FlurryAgent { *; }
-
--keep class android.support.v7.widget.SearchView { *; }
--dontwarn android.support.v7.**
 
 -keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior {
     public <init>(android.content.Context, android.util.AttributeSet);
