@@ -290,6 +290,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public PopupWindow popUpNotificationWindow;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
+    private boolean hasTokenExpired = false;
 
 
     @Override
@@ -325,6 +326,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
                 if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                    hasTokenExpired = true;
                     mHomePresenter.getAuthTokenRefreshPresenter();
                 } else {
                     renderHomeFragmentView();
@@ -478,7 +480,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
             isInviteReferral = false;
         } else {
-            setProfileImage();
+            if(!hasTokenExpired){
+                setProfileImage();
+            }
         }
         resetHamburgerSelectedItems();
     }
@@ -2011,6 +2015,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+            hasTokenExpired = false;
             loginResponse.setTokenTime(System.currentTimeMillis());
             loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
             mUserPreference.set(loginResponse);
