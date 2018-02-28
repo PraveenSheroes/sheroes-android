@@ -1172,7 +1172,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
-        HomeFragment homeFragment = new HomeFragment();
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
@@ -1192,6 +1191,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
         bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
         feedFragment.setArguments(bundle);
+        mFragmentOpen.setFeedFragment(true);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, feedFragment, FeedFragment.class.getName()).commitAllowingStateLoss();
 
@@ -1432,6 +1432,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }, 2000);
 
             } else {
+                resetUiSelectedOptions();
                 super.onBackPressed();
             }
         }
