@@ -112,7 +112,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         mInviteFriendSuggestedAdapter = new InviteFriendSuggestedAdapter(getContext(), this);
         mFeedRecyclerView.setAdapter(mInviteFriendSuggestedAdapter);
-        msg=getString(R.string.contact_list_blank);
+        msg=getString(R.string.suggested_list_blank);
         mEndlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -208,7 +208,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                     msg=getString(R.string.no_search_contact);
                 }else
                 {
-                    msg=getString(R.string.contact_list_blank);
+                    msg=getString(R.string.suggested_list_blank);
                 }
             }
             mFeedRecyclerView.setEmptyViewWithImage(emptyView, msg, R.drawable.ic_suggested_blank, "");
