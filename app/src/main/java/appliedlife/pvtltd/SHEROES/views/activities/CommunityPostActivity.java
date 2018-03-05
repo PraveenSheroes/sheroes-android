@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,6 +78,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,6 +137,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final String SCREEN_LABEL = "Create Communities Post Screen";
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
     public static final String IS_FROM_COMMUNITY = "Is from community";
+    public static final String TYPE_IMAGE = "image/";
+    public static final String TYPE_TEXT = "text/plain";
+    public static final String TYPE_FILE = "file";
     public static final int MAX_IMAGE = 5;
     private boolean mIsPostScheduled = false;
     private Dialog mScheduledConfirmationDialog;
@@ -304,9 +309,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mOldText = mCommunityPost.body;
             invalidateUserDropDownView();
         } else {
-            if (mCommunityPost!=null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
+            if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
                 mEtDefaultText.requestFocus();
-                if(!mIsChallengePost) {
+                if (!mIsChallengePost) {
                     fbShareContainer.setVisibility(View.VISIBLE);
                 }
                 if (!mIsFromCommunity && !mIsChallengePost) {
@@ -350,7 +355,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupToolbarItemsColor();
 
         Intent intent = getIntent();
-        if(intent!=null && intent.getType()!=null) {
+        if (intent != null && intent.getType() != null) {
             mTitleToolbar.setText(R.string.title_create_post);
 
             String action = intent.getAction();
@@ -358,24 +363,34 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
             if (Intent.ACTION_SEND.equals(action) && type != null) {
                 isSharedFromOtherApp = true;
-                if ("text/plain".equals(type)) {
-                    handleSendText(intent); // Handle text being sent
+                if (TYPE_TEXT.equals(type)) {
+                    handleSendText(intent);
+                } else if (type.startsWith(TYPE_IMAGE)) {
+                    handleSendImage((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM));
                 }
-                if(mCommunityPost == null){
-                    mCommunityPost = new CommunityPost();
-                    mCommunityPost.isEdit = false;
+            } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
+                isSharedFromOtherApp = true;
+                if (type.startsWith(TYPE_IMAGE)) {
+                    handleSendMultipleImages(intent);
                 }
             }
         }
 
-        if(!mIsChallengePost) {
-           if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
+        if (isSharedFromOtherApp) {
+            if (mCommunityPost == null) {
+                mCommunityPost = new CommunityPost();
+                mCommunityPost.isEdit = false;
+            }
+        }
+
+        if (!mIsChallengePost) {
+            if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                        toolTipForAnonymous(CommunityPostActivity.this);
+                            toolTipForAnonymous(CommunityPostActivity.this);
                         } catch (WindowManager.BadTokenException e) {
                             Crashlytics.getInstance().core.logException(e);
                         }
@@ -385,6 +400,58 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
+    // Handle multiple images being sent
+    void handleSendMultipleImages(Intent intent) {
+        ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+        if (imageUris != null) {
+            int size = imageUris.size();
+            if (imageUris.size() > MAX_IMAGE) { //display message if selected image more than 5
+                size = MAX_IMAGE;
+                showMessage(R.string.MAX_IMAGE_OVERFLOW_MESSAGE);
+            }
+            for (int i = 0; i < size; i++) {
+                handleSendImage(imageUris.get(i));
+            }
+        }
+    }
+
+    // Handle single image being sent
+    private void handleSendImage(Uri imageUri) {
+        try {
+            if (imageUri != null) {
+                File file;
+                Photo photo = new Photo();
+                String realURI = getFilePath(imageUri);
+                if (realURI == null) {
+                    InputStream is = getContentResolver().openInputStream(imageUri);
+                    Bitmap bmp = BitmapFactory.decodeStream(is);
+                    file = CommonUtil.getFilFromBitmap(this, bmp);
+                    bmp.recycle();
+                } else {
+                    file = new File(realURI);
+                }
+
+                photo.isNew = true;
+                photo.file = file;
+                mImageList.add(photo);
+                setImageCount();
+                mPostPhotoAdapter.addPhoto(photo);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //get path from Uri
+    private String getFilePath(Uri imageUri) {
+        if (imageUri.getScheme().equalsIgnoreCase(TYPE_FILE)) {
+            return imageUri.getPath();
+        } else {
+            return CommonUtil.getPathFromURI(this, imageUri);
+        }
+    }
+
+    // Handle text being sent
     private void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (sharedText != null) {
@@ -396,10 +463,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setViewByCreatePostCall() {
-        if(null!=mCommunityPost)
-        {
-            switch (mCommunityPost.createPostRequestFrom)
-            {
+        if (null != mCommunityPost) {
+            switch (mCommunityPost.createPostRequestFrom) {
                 case AppConstants.CREATE_POST:
                     mTitleToolbar.setText(R.string.title_create_post);
                     break;
@@ -407,11 +472,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     fbShareContainer.setVisibility(View.GONE);
                     mTitleToolbar.setText(R.string.title_ask_question);
                     break;
-                    default:
-                        mTitleToolbar.setText(R.string.title_create_post);
+                default:
+                    mTitleToolbar.setText(R.string.title_create_post);
             }
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -432,7 +498,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 return true;
             }
 
-            if((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
+            if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
                 selectPostNowOrLater();
             } else {
                 sendPost();
@@ -463,14 +529,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
                 });
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if(accessToken!=null && accessToken.getPermissions().contains("publish_actions")){
+        if (accessToken != null && accessToken.getPermissions().contains("publish_actions")) {
             mHasPermission = true;
         }
     }
 
-    public void sendPost(){
-        if(mHasPermission){
-            if(mCommunityPost!=null){
+    public void sendPost() {
+        if (mHasPermission) {
+            if (mCommunityPost != null) {
                 final HashMap<String, Object> properties =
                         new EventProperty.Builder()
                                 .id(Integer.toString(mCommunityPost.remote_id))
@@ -490,11 +556,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
             mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken));
         } else {
-            mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
+            if (mCommunityPost != null) {
+                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
+            }
         }
-
     }
-
 
 
     private void selectPostNowOrLater() {
@@ -532,7 +598,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
 
-    private void datePicker(){
+    private void datePicker() {
         // Get Current Date
         final Calendar c = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
@@ -547,7 +613,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         datePickerDialog.show();
     }
 
-    private void timePicker(final int year, final int month, final int dayOfMonth){
+    private void timePicker(final int year, final int month, final int dayOfMonth) {
         final Calendar calendar = Calendar.getInstance();
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
@@ -560,11 +626,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                 hourOfDay, minute, 0);
                         String formattedDateTime = formatter.format(calendar.getTime());
 
-                        SimpleDateFormat timeFormatter = new SimpleDateFormat("dd MMM yyyy hh.mm a");
-                        String dateMessage = timeFormatter.format(calendar.getTime());
-                        scheduleConfirmation(formattedDateTime, dateMessage);
+                        if (hourOfDay >= calendar.get(Calendar.HOUR_OF_DAY) && minute >= calendar.get(Calendar.MINUTE)) { //time picker check for passed time
+                            SimpleDateFormat timeFormatter = new SimpleDateFormat("dd MMM yyyy hh.mm a");
+                            String dateMessage = timeFormatter.format(calendar.getTime());
+                            scheduleConfirmation(formattedDateTime, dateMessage);
+                        } else
+                            Toast.makeText(getApplicationContext(), "Invalid Time", Toast.LENGTH_LONG).show();
                     }
-                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE)+1,false);
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE) + 1, false);
 
         timePickerDialog.show();
     }
@@ -583,7 +652,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             return false;
         }
 
-        if (mCommunityPost!=null && mCommunityPost.community == null && !mCommunityPost.isChallengeType) {
+        if (mCommunityPost != null && mCommunityPost.community == null && !mCommunityPost.isChallengeType) {
             showMessage(R.string.error_choose_community);
             return false;
         }
@@ -650,11 +719,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     protected void onStop() {
         super.onStop();
 
-        if(mPostNowOrLaterDialog !=null) {
+        if (mPostNowOrLaterDialog != null) {
             mPostNowOrLaterDialog.dismiss();
         }
 
-        if(mScheduledConfirmationDialog !=null) {
+        if (mScheduledConfirmationDialog != null) {
             mScheduledConfirmationDialog.dismiss();
         }
     }
@@ -663,10 +732,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_create_post, menu);
         MenuItem menuItem = menu.findItem(R.id.post);
-        if(mCommunityPost ==null) return true;
+        if (mCommunityPost == null) return true;
 
-        switch (mCommunityPost.createPostRequestFrom)
-        {
+        switch (mCommunityPost.createPostRequestFrom) {
             case AppConstants.CREATE_POST:
                 SpannableString actionPost = new SpannableString(getResources().getString(R.string.action_post));
                 actionPost.setSpan(new ForegroundColorSpan(Color.parseColor(mTitleTextColor)), 0, actionPost.length(), 0);
@@ -742,7 +810,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         TextView messageText = (TextView) mScheduledConfirmationDialog.findViewById(R.id.message);
         String scheduledMessage = getResources().getString(R.string.post_schedule_message, mCommunityPost.community.name, formattedMessage);
-        Spanned message  = StringUtil.fromHtml(scheduledMessage);
+        Spanned message = StringUtil.fromHtml(scheduledMessage);
         messageText.setText(message);
         TextView confirmedOk = (TextView) mScheduledConfirmationDialog.findViewById(R.id.ok);
         confirmedOk.setOnClickListener(new View.OnClickListener() {
@@ -771,7 +839,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void onPostSend(FeedDetail feedDetail) {
-        if(feedDetail!=null){
+        if (feedDetail != null) {
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
             if (mIsEditPost) {
@@ -823,7 +891,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(mCommunityPost!=null){
+                if (mCommunityPost != null) {
                     final HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .id(Integer.toString(mCommunityPost.remote_id))
@@ -832,13 +900,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                     .build();
                     AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED_CLICKED, getScreenName(), properties);
                 }
-                if(!mIsAnonymous && !mIsPostScheduled) {
+                if (!mIsAnonymous && !mIsPostScheduled) {
                     compoundButton.setChecked(isChecked);
                 }
                 setupUserView();
-                if(!mIsAnonymous && isChecked) {
+                if (!mIsAnonymous && isChecked) {
                     askFacebookPublishPermission();
-                } else if(mIsPostScheduled) {
+                } else if (mIsPostScheduled) {
                     mHasPermission = false;
                 } else {
                     mHasPermission = false;
@@ -857,6 +925,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         });
     }
+
     private void toolTipForAnonymous(Context context) {
         try {
             LayoutInflater inflater = null;
@@ -947,7 +1016,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     //Disable the link editing and enable for others
     private void disableEditTextForLinks() {
-        if(isLinkRendered) {
+        if (isLinkRendered) {
             mEtDefaultText.setFocusable(false);
             mEtDefaultText.setFocusableInTouchMode(false);
             mEtDefaultText.setClickable(false);
@@ -993,7 +1062,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setCommunityName() {
-        if (mCommunityPost!=null && mCommunityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
+        if (mCommunityPost != null && mCommunityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
             mCommunityName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             String fullString = getString(R.string.ID_ASKING) + AppConstants.SPACE + mCommunityPost.community.name;
             SpannableString SpanString = new SpannableString(fullString);
@@ -1163,7 +1232,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
-        } else if(isSharedFromOtherApp) {
+        } else if (isSharedFromOtherApp) {
             TaskStackBuilder.create(this)
                     .addNextIntentWithParentStack(upIntent)
                     .startActivities();
@@ -1273,8 +1342,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mMyCommunities = myCommunities;
             setCommunityName();
             invalidateUserDropDownView();
-        } else{
-            if(isSharedContent) {
+        } else {
+            if (isSharedContent) {
                 mCommunityPost = new CommunityPost();
                 mCommunityPost.community = community;
                 mCommunityPost.createPostRequestFrom = -1;

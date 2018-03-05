@@ -324,6 +324,7 @@
     <string name="ID_REVIEW_POST_NON_ZERO_UPVOTES">Upvotes</string>
 
     <string name="ID_YOU_TUBE_VIDEO_NOT_PLAYING">Sorry can not play video please check link</string>
+    <string name="MAX_IMAGE_OVERFLOW_MESSAGE">Max 5 images can be uploaded</string>
 
 
     <string name="crop_image_activity_title"></string>

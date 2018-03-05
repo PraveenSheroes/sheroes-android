@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -19,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -553,6 +555,42 @@ public class CommonUtil {
                     }
                 });
 
+    }
+
+    public static String getPathFromURI(Context context, Uri contentURI) {
+        String result = null;
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            if(idx!=-1) {
+                result = cursor.getString(idx);
+            }
+            cursor.close();
+        }
+        return result;
+    }
+
+    public static File getFilFromBitmap(Context context, Bitmap bmp) {
+        File cachePath = new File(context.getCacheDir(), "images");
+        cachePath.mkdirs();
+        FileOutputStream stream = null;
+        String fileName = "IMG_" + new Date().getTime() + ".png";
+        String imagePath = cachePath + "/" + fileName;
+        try {
+            stream = new FileOutputStream(imagePath);
+        } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return new File(cachePath, fileName);
     }
 
     public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName, HashMap<String, Object> eventProperties) {
