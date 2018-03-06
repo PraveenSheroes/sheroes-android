@@ -296,6 +296,7 @@ public class AppConstants {
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
     public static final String TITLE = "title";
+    public static final String BODY = "body";
     public static final String DEEP_LINK_URL = "deep_link_url";
     public static final String OPEN_IN_WEBVIEW = "open_in_webview";
     public static final String SHEROES = "SHEROES";
@@ -351,6 +352,7 @@ public class AppConstants {
     public static final String APP_SHARE_OPTION = "SHARE_OPTION";
 
     public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
+    public static final String IS_FROM_PUSH = "Is From Push";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
     public static final String APP_SHARE_LINK = "https://shrs.me/m/3AICGHn1KJ";
     public static final int DRAWER_SESSION = 3;
@@ -373,6 +375,7 @@ public class AppConstants {
     public static final String SHARE_DIALOG_TITLE = "share_dialog_title";
     public static final String IS_SHARE_DEEP_LINK = "is share deep link";
     public static final String SHARE_CHANNEL = "channel";
+    public static final String IS_MOENGAGE = "Is Moengage";
 
 
 }

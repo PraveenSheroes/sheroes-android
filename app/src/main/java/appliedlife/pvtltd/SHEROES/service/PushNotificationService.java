@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -107,9 +108,13 @@ public class PushNotificationService extends GcmListenerService {
                     .title(MoEngageNotificationUtils.getNotificationTitleIfAny(data))
                     .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
                     .build();
-            AnalyticsManager.trackNonInteractionEvent(Event.PUSH_NOTIFICATION_SHOWN, properties);
+            AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN,"", properties);
             data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+            data.putBoolean(AppConstants.IS_MOENGAGE, true);
+            data.putString(AppConstants.TITLE, MoEngageNotificationUtils.getNotificationTitleIfAny(data));
             data.putString(AppConstants.NOTIFICATION_ID, MoEngageNotificationUtils.getCampaignIdIfAny(data));
+            data.putString(BaseActivity.SOURCE_SCREEN, "From Push Notification");
+            data.putBoolean(AppConstants.IS_FROM_PUSH, true);
             PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
         }else {
             if (StringUtil.isNotNullOrEmptyString(url)) {
@@ -142,7 +147,7 @@ public class PushNotificationService extends GcmListenerService {
                         .isMonengage(false)
                         .body(message)
                         .build();
-                AnalyticsManager.trackNonInteractionEvent(Event.PUSH_NOTIFICATION_SHOWN, properties);
+                AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN,"", properties);
             }
         }
     }
@@ -173,7 +178,13 @@ public class PushNotificationService extends GcmListenerService {
 
         notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
         notificationIntent.setData(url);
+        notificationIntent.putExtra(AppConstants.IS_MOENGAGE, false);
+        notificationIntent.putExtra(BaseActivity.SOURCE_SCREEN, "From Push Notification");
+        notificationIntent.putExtra(AppConstants.TITLE, title);
+        notificationIntent.putExtra(AppConstants.BODY, body);
+
         notificationIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+        notificationIntent.putExtra(AppConstants.IS_FROM_PUSH, true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
         stackBuilder.addParentStack(HomeActivity.class);
         stackBuilder.addNextIntent(notificationIntent);

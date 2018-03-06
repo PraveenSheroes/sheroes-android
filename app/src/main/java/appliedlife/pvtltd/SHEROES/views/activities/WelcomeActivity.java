@@ -222,6 +222,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
         }
+        if (isFirstTimeUser) {
+            AnalyticsManager.trackScreenView(getScreenName());
+        }
         mLoginPresenter.getMasterDataToPresenter();
         //
 
@@ -584,7 +587,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public boolean shouldTrackScreen() {
-        return isFirstTimeUser;
+        return false;
     }
 
     @Override
