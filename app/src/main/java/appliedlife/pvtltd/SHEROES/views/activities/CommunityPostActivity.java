@@ -142,6 +142,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final String TYPE_FILE = "file";
     public static final int MAX_IMAGE = 5;
     private boolean mIsPostScheduled = false;
+    private boolean mStatusBarColorEmpty = true;
     private Dialog mScheduledConfirmationDialog;
     private Dialog mPostNowOrLaterDialog;
 
@@ -239,8 +240,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mPostAsCommunitySelected;
     private boolean mIsProgressBarVisible;
     private boolean mIsChallengePost;
-    private String mPrimaryColor = "#6e2f95";
-    private String mTitleTextColor = "#ffffff";
+    private String mPrimaryColor = "#ffffff";
+    private String mTitleTextColor = "#3c3c3c";
+    private String mStatusBarColor = "#aaaaaa";
+    private String mToolbarIconColor = "#90949C";
     private boolean mHasPermission = false;
     CallbackManager callbackManager;
     private AccessToken mAccessToken;
@@ -269,9 +272,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         if (null != getIntent() && getIntent().getExtras() != null) {
-            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, "#6e2f95");
-            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, "#ffffff");
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
+
+            if(getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
+                mStatusBarColorEmpty = true;
+            }
         }
+
 
         Parcelable parcelable = getIntent().getParcelableExtra(CommunityPost.COMMUNITY_POST_OBJ);
         if (parcelable != null) {
@@ -366,13 +374,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (TYPE_TEXT.equals(type)) {
                     handleSendText(intent);
                 } else if (type.startsWith(TYPE_IMAGE)) {
+                    String textLink = intent.getStringExtra(Intent.EXTRA_TEXT);
+                    if(StringUtil.isNotNullOrEmptyString(textLink)) {
+                        mEtDefaultText.setText(textLink);
+                        mEtDefaultText.requestFocus();
+                        mEtDefaultText.setSelection(0);
+                    }
                     handleSendImage((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM));
                 }
+                PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
             } else if (Intent.ACTION_SEND_MULTIPLE.equals(action) && type != null) {
                 isSharedFromOtherApp = true;
                 if (type.startsWith(TYPE_IMAGE)) {
                     handleSendMultipleImages(intent);
                 }
+                PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
             }
         }
 
@@ -458,7 +474,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mIsEditPost = false;
             isSharedContent = true;
             mEtDefaultText.setText(sharedText);
-            PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
         }
     }
 
@@ -1464,11 +1479,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void setupToolbarItemsColor() {
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+            if(mStatusBarColorEmpty) {
+                upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
+            } else {
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+            }
         }
+
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
     }
 }

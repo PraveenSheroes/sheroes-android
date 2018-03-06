@@ -151,13 +151,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
 
-    @Bind(R.id.toolbar_container)
-    RelativeLayout toolbarContainer;
-
     @Bind(R.id.view_pager_mentor)
     ViewPager mViewPager;
 
-    @Bind(R.id.toolbar_mentor)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Bind(R.id.loader_gif)
@@ -228,7 +225,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.tv_mentor_answer)
     TextView tvMentorAnswer;
 
-    @Bind(R.id.tv_mentor_toolbar_name)
+    @Bind(R.id.title_toolbar)
     TextView tvMentorToolbarName;
 
     @Bind(R.id.tv_mentor_dashboard_follow)

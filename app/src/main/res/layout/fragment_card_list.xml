@@ -35,8 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:background="@drawable/progress_dailog_shape"
-        android:indeterminateTint="@color/colorAccent" />
+        android:background="@drawable/progress_dailog_shape" />
 
     <android.support.v7.widget.CardView
         android:id="@+id/loader_gif"

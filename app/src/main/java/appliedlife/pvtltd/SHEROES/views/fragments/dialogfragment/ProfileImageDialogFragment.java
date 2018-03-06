@@ -96,6 +96,7 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
         } else {
             mTvProfileImageSave.setVisibility(View.GONE);
         }
+
     }
 
     @Override

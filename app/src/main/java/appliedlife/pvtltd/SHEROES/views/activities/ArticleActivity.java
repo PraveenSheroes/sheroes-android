@@ -196,10 +196,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Bind(R.id.fab)
     FloatingActionButton fab;
 
-    @BindColor(R.color.colorPrimary)
+    @BindColor(R.color.white)
     int mPrimaryColor;
 
-    @BindColor(R.color.colorPrimaryDark)
+    @BindColor(R.color.status_bar)
     int mPrimaryDarkColor;
 
     @Bind(R.id.home)

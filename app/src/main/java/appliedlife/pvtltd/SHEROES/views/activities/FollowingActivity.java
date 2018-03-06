@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -41,7 +42,7 @@ public class FollowingActivity extends BaseActivity {
     private boolean isSelfProfile;
     private FollowingEnum mMembersType;
 
-    @Bind(R.id.toolbar_name)
+    @Bind(R.id.title_toolbar)
     TextView titleName;
 
     @Bind(R.id.toolbar)
@@ -60,9 +61,7 @@ public class FollowingActivity extends BaseActivity {
             mMembersType = (FollowingEnum)getIntent().getSerializableExtra(MEMBERS_TYPE);
         }
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        setupToolbarItemsColor();
 
         if (mMembersType == null) return;
 
@@ -77,8 +76,6 @@ public class FollowingActivity extends BaseActivity {
             }
         }
         else if (type.equalsIgnoreCase(AppConstants.FOLLOWING)) {
-            titleName.setText(R.string.following_toolbar_title);
-
             if(isSelfProfile) {
                 titleName.setText(R.string.following_toolbar_title);
             } else{
@@ -92,6 +89,15 @@ public class FollowingActivity extends BaseActivity {
                 fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, followingFragment);
         fragmentTransaction.commit();
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        titleName.setText(R.string.ID_EDIT_PROFILE);
     }
 
     @Override
