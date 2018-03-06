@@ -1411,6 +1411,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 getFragmentManager().popBackStack();
             }
         } else {
+
             if (mFragmentOpen.isFeedFragment() || mFragmentOpen.isCommunityOpen()) {
                 if (doubleBackToExitPressedOnce) {
                     getSupportFragmentManager().popBackStackImmediate();
