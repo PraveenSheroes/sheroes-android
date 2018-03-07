@@ -36,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestions
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
-import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
 
 /**
@@ -186,10 +185,10 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         switch (viewType) {
             case TYPE_CONTACT:
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_tagging_list_layout, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
                 return new UserTagCardHolder(view, userTagCallback);
             case TYPE_HEADER:
-               // View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_tagging_list_layout, parent, false);
+               // View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
                // return new HeaderTaggedUserViewHolder(header, userTagCallback);
         }
         return null;

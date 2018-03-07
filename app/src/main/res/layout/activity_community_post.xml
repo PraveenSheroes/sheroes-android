@@ -15,22 +15,19 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/upload_image_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/suggestions_list"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:background="@drawable/user_tagg_border"
-            android:layout_height="150dp" />
+
         <RelativeLayout
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <CheckBox
                 android:id="@+id/anonymous_select"
                 android:layout_width="match_parent"
@@ -48,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_color_project_number"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
                 android:id="@+id/add_image"
@@ -127,14 +125,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/upload_image_container"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/upload_image_container"
         android:layout_below="@id/fb_share_container">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <RelativeLayout
                 android:id="@+id/user_container"
@@ -184,16 +181,19 @@
 
             </RelativeLayout>
 
-            <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
-                android:id="@+id/et_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
             <EditText
                 android:id="@+id/et_default_hint_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:layout_below="@id/user_container"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_5"
+                android:background="@null"
+                android:gravity="top"
+                android:hint="@string/hint.write_post"
+                android:inputType="textMultiLine|textCapSentences"
+                android:scrollHorizontally="false"
+                android:textSize="20sp" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_link_render"
@@ -268,10 +268,10 @@
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_link_render">
                 <TextView
                     android:id="@+id/image_count"
                     android:layout_width="wrap_content"
@@ -283,12 +283,14 @@
                     android:text="0/5"
                     android:visibility="gone"
                     android:textSize="14sp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/image_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/image_count" />
+                    android:layout_toLeftOf="@id/image_count"/>
+
             </RelativeLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 </RelativeLayout>
