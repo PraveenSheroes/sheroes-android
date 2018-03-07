@@ -145,6 +145,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mStatusBarColorEmpty = true;
     private Dialog mScheduledConfirmationDialog;
     private Dialog mPostNowOrLaterDialog;
+    private MenuItem menuItem;
+    private boolean menuInvalidate = false;
 
     //region View variables
     @Inject
@@ -244,6 +246,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String mTitleTextColor = "#3c3c3c";
     private String mStatusBarColor = "#aaaaaa";
     private String mToolbarIconColor = "#90949C";
+    private String titleIconColor = "#dc4541";
     private boolean mHasPermission = false;
     CallbackManager callbackManager;
     private AccessToken mAccessToken;
@@ -497,6 +500,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+
         if (id == android.R.id.home) {
             onBackPress();
         }
@@ -745,8 +749,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
         getMenuInflater().inflate(R.menu.menu_create_post, menu);
-        MenuItem menuItem = menu.findItem(R.id.post);
+         menuItem = menu.findItem(R.id.post);
+
         if (mCommunityPost == null) return true;
 
         switch (mCommunityPost.createPostRequestFrom) {
@@ -762,6 +768,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 break;
             default:
         }
+
+        if(menuInvalidate) {
+            SpannableString actionPost = new SpannableString(getResources().getString(R.string.action_post));
+            actionPost.setSpan(new ForegroundColorSpan(Color.RED), 0, actionPost.length(), 0);
+            menuItem.setTitle(actionPost);
+        }
+
         return true;
     }
 
@@ -990,6 +1003,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mEtDefaultText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
@@ -999,6 +1013,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
+                    menuInvalidate = true;
+                   invalidateOptionsMenu();
                     if (StringUtil.isNotNullOrEmptyString(mEtDefaultText.getText().toString()) && !isLinkRendered) {
                         String editTextDescription = mEtDefaultText.getText().toString().trim();
                         if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
@@ -1023,11 +1039,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
 
                 } else {
+                    menuInvalidate = false;
                 }
 
             }
         });
     }
+
 
     //Disable the link editing and enable for others
     private void disableEditTextForLinks() {

@@ -154,7 +154,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.view_pager_mentor)
     ViewPager mViewPager;
 
-    @Bind(R.id.toolbar)
+    @Bind(R.id.toolbar_mentor)
     Toolbar mToolbar;
 
     @Bind(R.id.loader_gif)
@@ -225,7 +225,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.tv_mentor_answer)
     TextView tvMentorAnswer;
 
-    @Bind(R.id.title_toolbar)
+    @Bind(R.id.tv_mentor_toolbar_name)
     TextView tvMentorToolbarName;
 
     @Bind(R.id.tv_mentor_dashboard_follow)
@@ -1607,7 +1607,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params1.setMargins(10, 0, 16, 0);
+                params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 tvMentorDashBoardFollow.setText("");
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.ic_profile_edit_icon);
@@ -1624,7 +1624,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params1.setMargins(10, 0, 16, 0);
+                params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 shareProfile.setText("");
                 shareProfile.setLayoutParams(params1);

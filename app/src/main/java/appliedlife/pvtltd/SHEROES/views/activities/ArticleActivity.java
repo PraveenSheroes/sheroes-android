@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -80,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -101,7 +104,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
 /**
  * Created by ujjwal on 28/10/17.
  */
-public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener {
+public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener, AppBarLayout.OnOffsetChangedListener {
 
     public static final String SCREEN_LABEL = "Article Activity";
     public static final String IMAGE_WIDTH = "IMAGE_WIDTH";
@@ -277,17 +280,15 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
 
         mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
-                0xaa000000, 8, Gravity.TOP));
+                0xffffff, 8, Gravity.TOP));
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        setupToolbarItemsColor();
 
         defaultUi = getWindow().getDecorView().getSystemUiVisibility();
         mArticleLayout.setOnScrollChangeListener(this);
 
         initializeCommentsAdapter();
-
+        mAppBarLayout.addOnOffsetChangedListener(this);
         if (mArticle != null) {
             loadArticleImage(mArticle);
         }
@@ -317,6 +318,14 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 toolTipForShareArticle();
             }
         }
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     private void toolTipForShareArticle() {
@@ -980,6 +989,18 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @OnClick(R.id.like_count)
     public void onLikeCountClicked() {
         LikeListBottomSheetFragment.showDialog(this, "", mArticle.entityId);
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        LogUtils.info("appbar", "**************" + verticalOffset);
+        if (verticalOffset > -500) {
+            //mLytUserProfileStatus.setVisibility(View.GONE);
+            Toast.makeText(this, "connection", Toast.LENGTH_SHORT).show();
+        } else {
+           // mLytUserProfileStatus.setVisibility(View.VISIBLE);
+            Toast.makeText(this, "not connection", Toast.LENGTH_SHORT).show();
+        }
     }
     //endregion
 }

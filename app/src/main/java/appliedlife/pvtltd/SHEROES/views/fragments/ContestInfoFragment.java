@@ -312,17 +312,19 @@ public class ContestInfoFragment extends BaseFragment {
     }
 
     private void showImage() {
-        int featureImageHeight = (CommonUtil.getWindowWidth(getActivity()) / 2);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
-        imageView.setLayoutParams(params);
-        if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
-            String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(getActivity()), featureImageHeight);
-            if (CommonUtil.isNotEmpty(imageKitUrl)) {
-                Glide.with(getActivity())
-                        .load(imageKitUrl)
-                        .into(imageView);
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            int featureImageHeight = (CommonUtil.getWindowWidth(getActivity()) / 2);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
+            imageView.setLayoutParams(params);
+            if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
+                String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(getActivity()), featureImageHeight);
+                if (CommonUtil.isNotEmpty(imageKitUrl)) {
+                    Glide.with(getActivity())
+                            .load(imageKitUrl)
+                            .into(imageView);
+                }
             }
-        }else {
+        } else {
             imageView.setImageResource(R.drawable.challenge_placeholder);
         }
     }

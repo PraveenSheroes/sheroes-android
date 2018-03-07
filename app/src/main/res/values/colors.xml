@@ -65,6 +65,7 @@
     <color name="search_shortcut_icon_color">#f8f8f8</color>
     <color name="join_conversation">#F7F7F7</color>
     <color name="fully_transparent">#00000000</color>
+    <color name="light_red">#9C27B0</color>
     <color name="feed_article_label">#3C3C3C</color>
     <color name="feed_article_comment">#777f8a</color>
     <color name="feed_card_time">#90949c</color>

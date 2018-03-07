@@ -22,29 +22,17 @@
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_search_loc"
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/challenge_header"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="@style/AppTheme.Toolbar"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupMenu">
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+                <include
+                    android:id="@id/toolbar"
+                    layout="@layout/toolbar" />
+            </android.support.design.widget.AppBarLayout>
 
-                <TextView
-                    android:id="@+id/tv_search_loc_toolbar_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|left"
-                    android:layout_marginLeft="@dimen/dp_size_10"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:maxLines="@integer/int_value_for_line_1"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_20" />
-
-            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 

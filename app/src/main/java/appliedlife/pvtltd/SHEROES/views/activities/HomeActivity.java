@@ -1180,13 +1180,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             fm.popBackStack();
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        /*Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT, parcelable);
-        bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
-        homeFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();*/
-
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
@@ -1248,6 +1241,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void homeButtonUi() {
+
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
 

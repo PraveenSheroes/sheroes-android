@@ -46,9 +46,16 @@
 
     <style name="AppTheme.Toolbar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColorPrimary">@color/primary_text_material_dark</item>
-        <item name="actionMenuTextColor">@color/menu_icon</item>
+        <item name="actionMenuTextColor">@color/toolbar_title_text</item>
         <item name="android:homeAsUpIndicator">@drawable/vector_back_arrow</item>
         <item name="android:textColorSecondary">@color/secondary_text_material_dark</item>
+    </style>
+
+    <!-- ToolBar -->
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:textColor">@color/toolbar_title</item>
     </style>
 
     <!--For Ripple effect-->

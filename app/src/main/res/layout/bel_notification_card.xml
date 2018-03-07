@@ -1,61 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lnr_notification"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="wrap_content"
     android:background="@color/white"
+    android:gravity="center_vertical"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_size_16"
-        android:paddingRight="@dimen/dp_size_16"
-        android:paddingLeft="@dimen/dp_size_16">
+        android:layout_height="wrap_content">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/iv_notification_image"
-            android:layout_width="@dimen/dp_size_42"
-            android:layout_height="@dimen/dp_size_42"
-            />
+            android:layout_width="@dimen/dp_size_45"
+            android:layout_height="@dimen/dp_size_45"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:src="@drawable/appicon" />
+
         <RelativeLayout
+            android:paddingRight="@dimen/dp_size_15"
+            android:paddingTop="@dimen/dp_size_16"
+            android:paddingBottom="@dimen/dp_size_16"
             android:id="@+id/rll_not"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16">
+
             <TextView
                 android:id="@+id/tv_notification_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxLines="@integer/int_value_for_line_2"
                 android:ellipsize="end"
+                android:maxLines="@integer/int_value_for_line_2"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_size_13" />
+
             <ImageView
                 android:id="@+id/iv_notification_type"
                 android:layout_width="@dimen/dp_size_16"
                 android:layout_height="@dimen/dp_size_20"
                 android:layout_below="@id/tv_notification_tittle"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/dp_size_8"/>
+                android:layout_marginTop="@dimen/dp_size_8" />
+
             <TextView
                 android:id="@+id/tv_notification_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_notification_tittle"
-                android:layout_toRightOf="@id/iv_notification_type"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_size_5"
                 android:layout_marginTop="@dimen/dp_size_8"
-                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/iv_notification_type"
                 android:textColor="@color/grey2"
                 android:textSize="@dimen/sp_size_12" />
         </RelativeLayout>
     </LinearLayout>
+
     <View
-        android:layout_below="@+id/rll_not"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/sp_size_1"
-        android:background="@color/grey2"
-        android:layout_marginTop="@dimen/dp_size_16"
-        />
-</LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_1"
+        android:layout_gravity="bottom"
+        android:background="@color/on_board_work" />
+</FrameLayout>
