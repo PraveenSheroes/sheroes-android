@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.City;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -42,11 +42,11 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
     @Override
     public void bindData(Suggestible suggestible, Context context, int position) {
         this.suggestible = suggestible;
-        String name = ((City) suggestible).getFirstName();
+        String name = ((TaggedUserPojo) suggestible).getFirstName();
         if (StringUtil.isNotNullOrEmptyString(name)) {
             mTvName.setText(name);
         }
-        String imageUrl = ((City) suggestible).getUserProfileURL();
+        String imageUrl = ((TaggedUserPojo) suggestible).getUserProfileURL();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             ivUserPicCircleIcon.setCircularImage(true);
             ivUserPicCircleIcon.bindImage(imageUrl);

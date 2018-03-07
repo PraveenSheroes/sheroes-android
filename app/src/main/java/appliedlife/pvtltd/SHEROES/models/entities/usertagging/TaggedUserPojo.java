@@ -33,13 +33,13 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 /**
  * Model representing a basic, mentionable city.
  */
-public class City implements Mentionable {
+public class TaggedUserPojo implements Mentionable {
 
    private final String mFirstName;
     private final String mLastName;
     private final String mUserProfileURL;
 
-    public City(String firstName, String lastName, String pictureURL) {
+    public TaggedUserPojo(String firstName, String lastName, String pictureURL) {
         mFirstName = firstName;
         mLastName = lastName;
         mUserProfileURL = pictureURL;
@@ -109,20 +109,20 @@ public class City implements Mentionable {
         dest.writeString(mUserProfileURL);
     }
 
-    public City(Parcel in) {
+    public TaggedUserPojo(Parcel in) {
         mFirstName = in.readString();
         mLastName = in.readString();
         mUserProfileURL = in.readString();
     }
 
-    public static final Parcelable.Creator<City> CREATOR
-            = new Parcelable.Creator<City>() {
-        public City createFromParcel(Parcel in) {
-            return new City(in);
+    public static final Parcelable.Creator<TaggedUserPojo> CREATOR
+            = new Parcelable.Creator<TaggedUserPojo>() {
+        public TaggedUserPojo createFromParcel(Parcel in) {
+            return new TaggedUserPojo(in);
         }
 
-        public City[] newArray(int size) {
-            return new City[size];
+        public TaggedUserPojo[] newArray(int size) {
+            return new TaggedUserPojo[size];
         }
     };
 
@@ -130,23 +130,23 @@ public class City implements Mentionable {
     // PersonLoader Class (loads people from JSON file)
     // --------------------------------------------------
 
-    public static class CityLoader extends MentionsLoader<City> {
-        private static final String TAG = City.CityLoader.class.getSimpleName();
+    public static class CityLoader extends MentionsLoader<TaggedUserPojo> {
+        private static final String TAG = TaggedUserPojo.CityLoader.class.getSimpleName();
 
         public CityLoader(Resources res) {
             super(res, R.raw.people);
         }
 
         @Override
-        public City[] loadData(JSONArray arr) {
-            City[] data = new City[arr.length()];
+        public TaggedUserPojo[] loadData(JSONArray arr) {
+            TaggedUserPojo[] data = new TaggedUserPojo[arr.length()];
             try {
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
                     String first = obj.getString("first");
                     String last = obj.getString("last");
                     String url = obj.getString("picture");
-                    data[i] = new City(first, last, url);
+                    data[i] = new TaggedUserPojo(first, last, url);
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Unhandled exception while parsing person JSONArray", e);
@@ -157,11 +157,11 @@ public class City implements Mentionable {
 
         // Modified to return suggestions based on both first and last name
         @Override
-        public List<City> getSuggestions(QueryToken queryToken) {
+        public List<TaggedUserPojo> getSuggestions(QueryToken queryToken) {
             String[] namePrefixes = queryToken.getKeywords().toLowerCase().split(" ");
-            List<City> suggestions = new ArrayList<>();
+            List<TaggedUserPojo> suggestions = new ArrayList<>();
             if (mData != null) {
-                for (City suggestion : mData) {
+                for (TaggedUserPojo suggestion : mData) {
                     String firstName = suggestion.getFirstName().toLowerCase();
                     String lastName = suggestion.getLastName().toLowerCase();
                     if (namePrefixes.length == 2) {

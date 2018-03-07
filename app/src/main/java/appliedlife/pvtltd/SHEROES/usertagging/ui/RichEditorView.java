@@ -422,7 +422,10 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      * {@inheritDoc}
      */
     public boolean isDisplayingSuggestions() {
-        return mSuggestionsList.getVisibility() == View.VISIBLE;
+        if(null!=mSuggestionsList) {
+            return mSuggestionsList.getVisibility() == View.VISIBLE;
+        }
+        return false;
     }
 
     /**

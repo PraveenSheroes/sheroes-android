@@ -41,7 +41,7 @@ public class MentionSpanConfig {
     public static class Builder {
 
         // Default colors
-        @ColorInt private int normalTextColor = Color.parseColor("#00a0dc");
+        @ColorInt private int normalTextColor = Color.parseColor("#d50000");
         @ColorInt private int normalTextBackgroundColor = Color.TRANSPARENT;
         @ColorInt private int selectedTextColor = Color.WHITE;
         @ColorInt private int selectedTextBackgroundColor = Color.parseColor("#0077b5");

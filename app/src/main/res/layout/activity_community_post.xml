@@ -24,12 +24,13 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/suggestions_list"
             android:layout_width="match_parent"
+            android:visibility="gone"
+            android:background="@drawable/user_tagg_border"
             android:layout_height="150dp" />
         <RelativeLayout
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
+            android:layout_height="wrap_content">
             <CheckBox
                 android:id="@+id/anonymous_select"
                 android:layout_width="match_parent"
@@ -46,7 +47,6 @@
             android:id="@+id/image_upload_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:background="@color/background_color_project_number"
             android:orientation="horizontal">
 
@@ -187,8 +187,7 @@
             <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
                 android:id="@+id/et_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minHeight="@dimen/dp_size_100"/>
+                android:layout_height="match_parent"/>
 
             <EditText
                 android:id="@+id/et_default_hint_text"

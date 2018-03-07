@@ -21,8 +21,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,33 +30,20 @@ import java.util.Map;
 import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
+import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
-import butterknife.ButterKnife;
-
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagColorInString;
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 /**
  * Adapter class for displaying suggestions.
  */
 public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE_PROGRESS_LOADER = -1;
+    private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTACT = 1;
     private final Object mLock = new Object();
     private final Context mContext;
@@ -74,14 +59,14 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final Map<String, SuggestionsResult> mResultMap = new HashMap<>();
     private final Map<QueryToken, Set<String>> mWaitingForResults = new HashMap<>();
 
-    public SuggestionsAdapter(final @NonNull Context context,final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager,final @NonNull SuggestionsListBuilder suggestionsListBuilder,UserTagCallback userTagCallback) {
+    public SuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserTagCallback userTagCallback) {
         mContext = context;
         mResources = context.getResources();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSuggestionsVisibilityManager = suggestionsVisibilityManager;
         mSuggestionsListBuilder = suggestionsListBuilder;
         mSuggestions = new ArrayList<>();
-        this.userTagCallback=userTagCallback;
+        this.userTagCallback = userTagCallback;
     }
     // --------------------------------------------------
     // Public Methods
@@ -182,7 +167,6 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      * Determines if the adapter is still waiting for results for a given {@link QueryToken}
      *
      * @param currentQuery the {@link QueryToken} to check if waiting for results on
-     *
      * @return true if still waiting for the results of the current query
      */
     private boolean isWaitingForResults(QueryToken currentQuery) {
@@ -203,9 +187,10 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (viewType) {
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_tagging_list_layout, parent, false);
-                return new UserTagCardHolder(view,userTagCallback);
-            case TYPE_PROGRESS_LOADER:
-                return new LoaderViewHolder(mInflater.inflate(R.layout.loading_progress_layout, parent, false));
+                return new UserTagCardHolder(view, userTagCallback);
+            case TYPE_HEADER:
+               // View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_tagging_list_layout, parent, false);
+               // return new HeaderTaggedUserViewHolder(header, userTagCallback);
         }
         return null;
     }
@@ -218,13 +203,13 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         switch (holder.getItemViewType()) {
             case TYPE_CONTACT:
                 UserTagCardHolder userTagCardHolder = (UserTagCardHolder) holder;
-                Suggestible feedDetail = (Suggestible) mSuggestions.get(position);
-                userTagCardHolder.bindData(feedDetail, mContext, position);
+                Suggestible suggestible1 = mSuggestions.get(position);
+                userTagCardHolder.bindData(suggestible1, mContext, position);
                 break;
-
-            case TYPE_PROGRESS_LOADER:
-              //  LoaderViewHolder loaderViewHolder = ((LoaderViewHolder) holder);
-               // loaderViewHolder.bindData(holder.getAdapterPosition(), showLoader);
+            case TYPE_HEADER:
+               // HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
+             //   Suggestible suggestible = mSuggestions.get(position);
+              //  headerTaggedUserViewHolder.bindData(suggestible, mContext, position);
                 break;
         }
     }
@@ -233,12 +218,13 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemCount() {
         return mSuggestions == null ? 0 : mSuggestions.size();
     }
+
     @Override
     public int getItemViewType(int position) {
         if (position < getItemCount() && getItemCount() > 0) {
             return TYPE_CONTACT;
         }
-        return TYPE_PROGRESS_LOADER;
+        return TYPE_HEADER;
     }
 
 

@@ -36,7 +36,6 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
     private MentionSpanConfig config;
     private long startIndex;
     private long endIndex;
-    private String userMentionUrl;
     private boolean isSelected = false;
     private Mentionable.MentionDisplayMode mDisplayMode = Mentionable.MentionDisplayMode.FULL;
 
@@ -132,7 +131,6 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         dest.writeInt(config.SELECTED_TEXT_BACKGROUND_COLOR);
         dest.writeLong(this.startIndex);
         dest.writeLong(this.endIndex);
-        dest.writeString(this.userMentionUrl);
         dest.writeInt(getDisplayMode().ordinal());
         dest.writeInt(isSelected() ? 1 : 0);
         dest.writeParcelable(getMention(), flags);
@@ -150,7 +148,6 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         setSelected((in.readInt() == 1));
         startIndex = in.readInt();
         endIndex = in.readInt();
-        userMentionUrl = in.readString();
         mention = in.readParcelable(Mentionable.class.getClassLoader());
     }
 
@@ -181,11 +178,4 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         this.endIndex = endIndex;
     }
 
-    public String getUserMentionUrl() {
-        return userMentionUrl;
-    }
-
-    public void setUserMentionUrl(String userMentionUrl) {
-        this.userMentionUrl = userMentionUrl;
-    }
 }
