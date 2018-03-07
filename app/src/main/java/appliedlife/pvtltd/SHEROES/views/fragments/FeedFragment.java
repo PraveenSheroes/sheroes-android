@@ -85,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -134,6 +135,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Bind(R.id.empty_subtext)
     TextView emptySubText;
+
+    @Bind(R.id.loader_gif)
+    CardView gifLoader;
     // endregion
 
     private long mLoggedInUser = -1;
@@ -269,10 +273,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+        showGifLoader();
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
+            ((HomeActivity) getActivity()).homeButtonUi();
         }
         return view;
     }
@@ -1190,6 +1196,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if(getActivity()!=null && getActivity() instanceof  CollectionActivity){
             ((CollectionActivity) getActivity()).setData(mAdapter.getDataList()); //todo - chk with ujjwal
         }
+    }
+
+    @Override
+    public void showGifLoader() {
+        gifLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideGifLoader() {
+        gifLoader.setVisibility(View.GONE);
     }
 
     public int findPositionById(long id) { //TODO - move to presenter

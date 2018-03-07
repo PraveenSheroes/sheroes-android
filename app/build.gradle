@@ -1,6 +1,6 @@
 def versionMajor = 6
 def versionMinor = 2
-def versionPatch = 0
+def versionPatch = 1
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -135,7 +135,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
-    compile 'com.moengage:moe-android-sdk:7.7.01'
+    compile 'com.moengage:moe-android-sdk:8.4.03'
     compile 'com.appsflyer:af-android-sdk:4.6.7@aar'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile files('libs/YouTubeAndroidPlayerApi.jar')

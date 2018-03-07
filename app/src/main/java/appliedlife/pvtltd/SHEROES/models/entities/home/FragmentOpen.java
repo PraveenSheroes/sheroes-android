@@ -10,11 +10,6 @@ import java.util.List;
 @Parcel(analyze = {FragmentOpen.class})
 public class FragmentOpen {
 
-
-
-
-    private boolean communityOpen;
-
     private List<HomeSpinnerItem> homeSpinnerItemList;
 
     private boolean isOwner;
@@ -22,20 +17,8 @@ public class FragmentOpen {
     private boolean isFAQSFragment;
     private boolean isFeedFragment;
 
-
     public FragmentOpen() {
     }
-
-
-
-    public boolean isCommunityOpen() {
-        return communityOpen;
-    }
-
-    public void setCommunityOpen(boolean communityOpen) {
-        this.communityOpen = communityOpen;
-    }
-
 
     public List<HomeSpinnerItem> getHomeSpinnerItemList() {
         return homeSpinnerItemList;

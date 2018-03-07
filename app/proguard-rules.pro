@@ -165,11 +165,17 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.google.android.gms.gcm.**
 -dontwarn com.google.android.gms.iid.**
 
+#Moengage
+-dontwarn com.google.android.gms.location.**
+-dontwarn com.google.android.gms.gcm.**
+-dontwarn com.google.android.gms.iid.**
+
 -keep class com.google.android.gms.gcm.** { *; }
 -keep class com.google.android.gms.iid.** { *; }
 -keep class com.google.android.gms.location.** { *; }
 
 -keep class com.moe.pushlibrary.activities.** { *; }
+-keep class com.moe.pushlibrary.MoEHelper
 -keep class com.moengage.locationlibrary.GeofenceIntentService
 -keep class com.moe.pushlibrary.InstallReceiver
 -keep class com.moengage.push.MoEPushWorker
@@ -198,7 +204,19 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.moengage.inapp.ViewEngine
 
 -keep class com.delight.**  { *; }
+#endregion
 
+-keep class java.awt.** { *; }
+-keep class com.google.firebase.iid.** { *; }
+-keep class com.google.firebase.messaging.FirebaseMessagingService { *; }
+-keep class com.google.android.gms.measurement.AppMeasurement { *; }
+-keep class com.google.android.gms.common.internal.safeparcel.** { *; }
+-keep class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement { *; }
+-keep class java.nio.file.**
+-keep class java.lang.invoke.**
+
+-dontwarn com.moengage.firebase.**
+-dontwarn com.google.firebase.**
 
 -dontwarn com.flurry.**
 -dontwarn okio.**
@@ -227,9 +245,7 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class com.google.android.gms.analytics.Tracker { *; }
 -keep class com.google.analytics.tracking.android.Tracker { *; }
 -keep class com.flurry.android.FlurryAgent { *; }
-
 -keep class android.support.v7.widget.SearchView { *; }
-
 -keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior {
     public <init>(android.content.Context, android.util.AttributeSet);
 }

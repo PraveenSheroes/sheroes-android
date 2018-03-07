@@ -157,13 +157,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             case NORMAL_REQUEST:
                 mNextToken = null;
                 if(mIsHomeFeed){
-                    List<FeedDetail> feedList = new ArrayList<>();
-                    FeedDetail homeFeedHeader = new FeedDetail();
-                    homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                    feedList.add(0, homeFeedHeader);
-                    getMvpView().showFeedList(feedList);
+                    if(CommonUtil.isEmpty(mFeedDetailList)){
+                        List<FeedDetail> feedList = new ArrayList<>();
+                        FeedDetail homeFeedHeader = new FeedDetail();
+                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                        feedList.add(0, homeFeedHeader);
+                        getMvpView().showFeedList(feedList);
+                    }
                 }
-                getMvpView().startProgressBar();
                 break;
             case LOAD_MORE_REQUEST:
                 break;
@@ -198,6 +199,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 public void onNext(FeedResponsePojo feedResponsePojo) {
                     mIsFeedLoading = false;
                     getMvpView().stopProgressBar();
+                    getMvpView().hideGifLoader();
                     if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
                         List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
                         mNextToken = feedResponsePojo.getNextToken();
