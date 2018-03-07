@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -63,6 +64,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private static final String RIGHT_HTML_TAG = "</font>";
     @Inject
     Preference<LoginResponse> userPreference;
+    @Inject
+    Preference<Configuration> mConfiguration;
     @Inject
     DateUtil mDateUtil;
     @Bind(R.id.li_feed_article_images)
@@ -99,6 +102,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserReaction;
     @Bind(R.id.tv_feed_article_user_comment)
     TextView tvFeedArticleUserComment;
+    @Bind(R.id.tv_article_join_conversation)
+    TextView tvArticleJoinConversation;
     @Bind(R.id.line_for_no_image)
     View lineForNoImage;
     @Bind(R.id.rl_feed_article_no_reaction_comments)
@@ -181,6 +186,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (!articleObj.isTrending()) {
             imageOperations(context);
         }
+        tvArticleJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
         // TODO : ujjwal
        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
             tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
