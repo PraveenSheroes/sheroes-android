@@ -212,6 +212,7 @@ public class MixpanelHelper {
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
                             .title(feedDetail.getNameOrTitle())
+                            .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
                             .build();
@@ -231,6 +232,7 @@ public class MixpanelHelper {
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
+                            .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()): "not defined")
                             .title(feedDetail.getNameOrTitle())
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())

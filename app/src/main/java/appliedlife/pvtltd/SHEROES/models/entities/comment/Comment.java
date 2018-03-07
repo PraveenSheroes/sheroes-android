@@ -88,6 +88,9 @@ public class Comment extends BaseResponse{
     @SerializedName("solr_ignore_participant_user_id")
     private Long participantUserId;
 
+    @SerializedName("particitipating_entity_community_id_l")
+    private String communityId;
+
     public boolean isEdit() {
         return isEdit;
     }
@@ -273,5 +276,13 @@ public class Comment extends BaseResponse{
 
     public void setParticipantUserId(Long participantUserId) {
         this.participantUserId = participantUserId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
