@@ -5,11 +5,6 @@
     <item android:bottom="40dp" >
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/ic_sheroes_icon"/>
-    </item>
-    <item android:top="20dp"  >
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/splash_text"/>
+            android:src="@drawable/logo_splash"/>
     </item>
 </layer-list>

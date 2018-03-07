@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Text color of the search box hint text  -->
-    <color name="colorPrimary">#6e2f95</color>
-    <color name="colorPrimaryDark">#6e2f95</color>
-    <color name="colorAccent">#6e2f95</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#aaaaaa</color>
+    <color name="colorAccent">#dc4541</color>
     <color name="once_card">#6d3493</color>
     <color name="light_grey">#4D4D4D</color>
     <color name="gray_light">#878787</color>

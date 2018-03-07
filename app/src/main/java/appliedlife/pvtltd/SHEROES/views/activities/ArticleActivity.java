@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,6 +19,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -127,7 +130,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private int mFeedPosition;
     public Article mArticle;
     private long mScrollPercentage = 0;
-    boolean isScrollingDown = false;
+    private boolean isScrollingDown = false;
+    private boolean isCollapsed = false;
+    private boolean isExpanded = false;
     private boolean mIsTransition = false;
     private FeedDetail mFeedDetail;
 
@@ -280,7 +285,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
 
         mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
-                0xffffff, 8, Gravity.TOP));
+                0xaa000000, 8, Gravity.TOP));
 
         setupToolbarItemsColor();
 
@@ -324,7 +329,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
@@ -378,6 +384,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+
         setUpOptionMenuStates(menu);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -414,6 +421,23 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (itemLike != null && itemBookmark != null) {
             menu.findItem(R.id.like).setIcon(mArticlePresenter.getLikeDrawable(mArticle));
             menu.findItem(R.id.bookmark).setIcon(mArticlePresenter.getBookmarkDrawable(mArticle));
+
+            if (isCollapsed) {
+                isCollapsed = false;
+                menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+                menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+
+                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+            } else if (isExpanded) {
+                isExpanded = false;
+                menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            }
+
             itemLike.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
             itemBookmark.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
         }
@@ -993,14 +1017,19 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        LogUtils.info("appbar", "**************" + verticalOffset);
-        if (verticalOffset > -500) {
-            //mLytUserProfileStatus.setVisibility(View.GONE);
-            Toast.makeText(this, "connection", Toast.LENGTH_SHORT).show();
-        } else {
-           // mLytUserProfileStatus.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "not connection", Toast.LENGTH_SHORT).show();
+        if (verticalOffset >= 0 || verticalOffset > -20) {
+            //Expanded enough
+            isExpanded = true;
+            isCollapsed = false;
+            invalidateOptionsMenu();
+
+        } else if(verticalOffset<-260){
+           //Collapse
+            isCollapsed = true;
+            isExpanded = false;
+            invalidateOptionsMenu();
         }
+
     }
     //endregion
 }
