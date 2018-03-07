@@ -50,7 +50,7 @@
             android:background="@color/background_color_project_number"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
                 android:id="@+id/add_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -74,10 +74,10 @@
                     android:textAllCaps="true"
                     android:textColor="@color/light_grey"
                     android:textSize="16sp" />
-            </LinearLayout>
+            </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
 
 
-            <LinearLayout
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
                 android:id="@+id/camera"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                     android:text="@string/camera"
                     android:textColor="@color/light_grey"
                     android:textSize="16sp" />
-            </LinearLayout>
+            </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
         </LinearLayout>
     </LinearLayout>
 

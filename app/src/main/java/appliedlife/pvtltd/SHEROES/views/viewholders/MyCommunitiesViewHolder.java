@@ -12,13 +12,17 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ravi on 31/01/18.
@@ -34,7 +38,7 @@ public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
 
     //region bind variables
     @Bind(R.id.community_item)
-    LinearLayout communityItemContainer;
+    RippleViewLinear communityItemContainer;
 
     @Bind(R.id.mutual_community_icon)
     CircleImageView mCommunityIcon;
@@ -71,7 +75,6 @@ public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         mCommunityName.setText(mFeedDetail.getNameOrTitle());
-        communityItemContainer.setOnClickListener(this);
     }
     //endregion
 
@@ -84,9 +87,18 @@ public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
     //region onclick method
     @Override
     public void onClick(View view) {
-        if(viewInterface instanceof AllCommunityItemCallback){
-            ((AllCommunityItemCallback)viewInterface).onMyCommunityClicked((CommunityFeedSolrObj) mFeedDetail);
-        }
+    }
+    @OnClick(R.id.community_item)
+    public void communityClick() {
+        communityItemContainer.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                if(viewInterface instanceof AllCommunityItemCallback){
+                    ((AllCommunityItemCallback)viewInterface).onMyCommunityClicked((CommunityFeedSolrObj) mFeedDetail);
+                }
+            }
+        });
+
     }
     //endregion
 }

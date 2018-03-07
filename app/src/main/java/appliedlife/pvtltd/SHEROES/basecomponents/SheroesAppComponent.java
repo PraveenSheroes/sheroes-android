@@ -7,6 +7,7 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
+import appliedlife.pvtltd.SHEROES.viewholder.ContestFlatViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
@@ -301,6 +302,10 @@ public interface SheroesAppComponent {
     void inject(UserTagCardHolder userTagCardHolder);
 
     void inject(HeaderTaggedUserViewHolder headerTaggedUserViewHolder);
+
+    void inject(ContestFlatViewHolder contestFlatViewHolder);
+
+
 
 
 }

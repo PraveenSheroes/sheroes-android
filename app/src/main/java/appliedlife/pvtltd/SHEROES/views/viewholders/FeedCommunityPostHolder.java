@@ -342,7 +342,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void normalCommunityPostUi(long userId, int adminId) {
         liCommunityPostMainLayout.setVisibility(View.VISIBLE);
-        tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setTag(true);
         mUserPostObj.setLastReactionValue(mUserPostObj.getReactionValue());
 
@@ -1035,8 +1034,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
     public void isBookMarkClick() {
-        // mUserPostObj.setTrending(true);
-        tvFeedCommunityPostUserBookmark.setEnabled(false);
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostBookMarkedClicked(mUserPostObj);
         } else {
