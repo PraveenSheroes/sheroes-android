@@ -131,8 +131,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public Article mArticle;
     private long mScrollPercentage = 0;
     private boolean isScrollingDown = false;
-    private boolean isCollapsed = false;
-    private boolean isExpanded = false;
+    public enum State {EXPANDED, COLLAPSED}
+    private State mCurrentState = State.EXPANDED;
     private boolean mIsTransition = false;
     private FeedDetail mFeedDetail;
 
@@ -384,7 +384,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
         setUpOptionMenuStates(menu);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -422,21 +421,19 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             menu.findItem(R.id.like).setIcon(mArticlePresenter.getLikeDrawable(mArticle));
             menu.findItem(R.id.bookmark).setIcon(mArticlePresenter.getBookmarkDrawable(mArticle));
 
-            if (isCollapsed) {
-                isCollapsed = false;
-                menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
-                menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+                if (mCurrentState == State.COLLAPSED) {
+                    menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+                    menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
 
-                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+                    final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+                    getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-            } else if (isExpanded) {
-                isExpanded = false;
-                menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
-                getSupportActionBar().setHomeAsUpIndicator(upArrow);
-            }
+                } else if (mCurrentState == State.EXPANDED) {
+                    menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                    menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                    final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
+                    getSupportActionBar().setHomeAsUpIndicator(upArrow);
+                }
 
             itemLike.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
             itemBookmark.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
@@ -1016,20 +1013,18 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-        if (verticalOffset >= 0 || verticalOffset > -20) {
-            //Expanded enough
-            isExpanded = true;
-            isCollapsed = false;
-            invalidateOptionsMenu();
-
-        } else if(verticalOffset<-260){
-           //Collapse
-            isCollapsed = true;
-            isExpanded = false;
-            invalidateOptionsMenu();
+    public final void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+        if (offset == 0) {
+            if (mCurrentState != State.EXPANDED) {
+                invalidateOptionsMenu();
+            }
+            mCurrentState = State.EXPANDED;
+        } else if (Math.abs(offset) >= appBarLayout.getTotalScrollRange()) {
+            if (mCurrentState != State.COLLAPSED) {
+                invalidateOptionsMenu();
+            }
+            mCurrentState = State.COLLAPSED;
         }
-
     }
     //endregion
 }
