@@ -325,14 +325,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 logOut();
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
-                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                //if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     hasTokenExpired = true;
                     mHomePresenter.getAuthTokenRefreshPresenter();
-                } else {
+               /* } else {
                     renderHomeFragmentView();
                     assignNavigationRecyclerListView();
                     sheUserInit();
-                }
+                }*/
             }
             if (null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
@@ -465,6 +465,19 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     renderFAQSView();
                 } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                        openArticleFragment(setCategoryIds(), false);
+                    }
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(AppConstants.HELPLINE_CHAT)) && getIntent().getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
+                        mentorListActivity();
+                    }
                 }
             }
         }
