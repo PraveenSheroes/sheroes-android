@@ -279,13 +279,6 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                if (isOperationPerformed) {
-                    if(!isFromCommunityScreen){
-                        ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
-                    }
-                } else {
-                    dismissAllowingStateLoss();//dismiss dialog on back button press
-                }
                 dismiss();
             }
         };
@@ -293,11 +286,6 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
 
     @OnClick(R.id.tv_event_detail_back)
     public void onEventDetailBack() {
-        if (isOperationPerformed) {
-            if(!isFromCommunityScreen){
-                ((HomeActivity) getActivity()).refreshHomeFragment(feedDetailCard);
-            }
-        }
         dismiss();
     }
 }

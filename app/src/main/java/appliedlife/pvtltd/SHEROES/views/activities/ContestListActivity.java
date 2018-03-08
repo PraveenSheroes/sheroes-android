@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.ContestListCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -48,7 +49,7 @@ import butterknife.ButterKnife;
  * Created by ujjwal on 28/04/17.
  */
 
-public class ContestListActivity extends BaseActivity implements IContestListView {
+public class ContestListActivity extends BaseActivity implements IContestListView,ContestListCallBack {
     public static final String SCREEN_LABEL = "Contest List";
     public static final int CONTEST_LIST_ACTIVITY = 10;
 
@@ -197,18 +198,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
     }
 
     private void initAdapter() {
-        mContestsListAdapter = new ContestsListAdapter(this, new View.OnClickListener() {
-            @Override
-            public void onClick(View item) {
-                int position = mContestListView.getChildAdapterPosition(item);
-                Contest contest = mContestList.get(position);
-                if (CommonUtil.getContestStatus(contest.getStartAt(), contest.getEndAt()) == ContestStatus.UPCOMING) {
-                   /* ContestPreviewActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, CONTEST_LIST_ACTIVITY);*/
-                } else {
-                    ContestActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, ContestListActivity.CONTEST_LIST_ACTIVITY, -1, 1);
-                }
-            }
-        });
+        mContestsListAdapter = new ContestsListAdapter(this, this);
     }
 
     @Override
@@ -234,6 +224,15 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
+    }
+
+    @Override
+    public void onContactClicked(Contest contest, View view) {
+        if (CommonUtil.getContestStatus(contest.getStartAt(), contest.getEndAt()) == ContestStatus.UPCOMING) {
+                   /* ContestPreviewActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, CONTEST_LIST_ACTIVITY);*/
+        } else {
+            ContestActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, ContestListActivity.CONTEST_LIST_ACTIVITY, -1, 1);
+        }
     }
     //endregion
 }

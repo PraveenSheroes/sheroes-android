@@ -312,18 +312,7 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
-        return sheroesAppServiceApi.getRefreshToken()
-                .map(new Function<LoginResponse, LoginResponse>() {
-                    @Override
-                    public LoginResponse apply(LoginResponse loginResponse) {
-                        return loginResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
 
-    }
 
     public Observable<BelNotificationListResponse> getNotificationFromModel(BellNotificationRequest bellNotificationRequest) {
         LogUtils.info(TAG, "Bell notification request" + new Gson().toJson(bellNotificationRequest));

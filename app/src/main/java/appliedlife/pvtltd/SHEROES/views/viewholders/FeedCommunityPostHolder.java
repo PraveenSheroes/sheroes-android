@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -80,6 +81,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
     @Inject
     Preference<LoginResponse> userPreference;
+    @Inject
+    Preference<Configuration> mConfiguration;
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     //spam handling
@@ -266,6 +269,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mUserPostObj = (UserPostSolrObj) item;
         mContext = context;
+        mJoinConveration.setText(mConfiguration.get().configData.mCommentHolderText);
         if (mUserPostObj.isTopPost()) {
             topPostView.setVisibility(View.VISIBLE);
         } else {
@@ -338,7 +342,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void normalCommunityPostUi(long userId, int adminId) {
         liCommunityPostMainLayout.setVisibility(View.VISIBLE);
-        tvFeedCommunityPostUserBookmark.setEnabled(true);
         tvFeedCommunityPostUserReaction.setTag(true);
         mUserPostObj.setLastReactionValue(mUserPostObj.getReactionValue());
 
@@ -1031,8 +1034,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
     public void isBookMarkClick() {
-        // mUserPostObj.setTrending(true);
-        tvFeedCommunityPostUserBookmark.setEnabled(false);
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostBookMarkedClicked(mUserPostObj);
         } else {

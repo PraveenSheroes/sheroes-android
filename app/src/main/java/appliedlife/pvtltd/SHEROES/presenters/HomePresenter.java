@@ -104,11 +104,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
     ProfileModel profileModel;
 
     @Inject
-    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData,Preference<Configuration> mConfiguration) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
-
+        this.mConfiguration=mConfiguration;
         this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
 
@@ -151,36 +151,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
 
     }
-    public void getAuthTokenRefreshPresenter() {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getAuthTokenRefreshFromModel().
-                compose(this.<LoginResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LoginResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-
-            }
-
-            @Override
-            public void onNext(LoginResponse loginResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().getLogInResponse(loginResponse);
-            }
-        });
-
-    }
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

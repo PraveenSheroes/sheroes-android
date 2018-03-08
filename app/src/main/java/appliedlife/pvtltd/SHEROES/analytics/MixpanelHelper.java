@@ -85,8 +85,8 @@ public class MixpanelHelper {
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
-                    .configType(mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
-                    .configVersion(mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
+                    .configType(mConfiguration!=null&&mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
+                    .configVersion(mConfiguration!=null&&mConfiguration.isSet()&& mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
                     .emailId(userSummary.getEmailId());
 
         /*int year = YearClass.get(CareApplication.getAppContext());
