@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -379,12 +381,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
-                tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
                 isOwnProfile = true;
                 loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
                 tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
                 tvMentorAskQuestion.setText(getString(R.string.ID_ANSWER_QUESTION));
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
                 viewFooter.setVisibility(View.VISIBLE);
             } else {
                 followUnFollowMentor();
@@ -1624,7 +1625,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
                 tvMentorDashBoardFollow.setText(AppConstants.EDIT_PROFILE);
 
-                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
+                shareProfile.setBackgroundResource(R.drawable.selector_event_share);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.setMargins(10, 0, 16, 0);

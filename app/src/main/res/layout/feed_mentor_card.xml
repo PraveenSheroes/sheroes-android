@@ -250,7 +250,7 @@
                 android:layout_height="@dimen/dp_size_40"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_weight=".6"
-                android:background="@drawable/rectangle_feed_commnity_join"
+                android:background="@drawable/selecter_invite_friend"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp_size_10"
@@ -259,7 +259,7 @@
                 android:paddingRight="@dimen/dp_size_16"
                 android:paddingTop="@dimen/dp_size_10"
                 android:text="@string/ID_ASK_QUESTION"
-                android:textColor="@color/footer_icon_text"
+                android:textColor="@drawable/selecter_contact_text_color"
                 android:textSize="@dimen/sp_size_14"
                 android:visibility="visible" />
         </LinearLayout>

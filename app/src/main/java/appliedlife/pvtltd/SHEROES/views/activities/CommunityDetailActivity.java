@@ -22,7 +22,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -82,7 +81,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
@@ -347,22 +345,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
                             .show();
-                    if (mCommunityFeedSolrObj.isMember() == false) {
+                    if (!mCommunityFeedSolrObj.isMember()) {
                         onCommunityJoined();
                     }
                     refreshCurrentFragment();
-                    break;
-
-                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
-                    if (null != data.getExtras()) {
-                        UserSolrObj userSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.FEED_SCREEN));
-                        if (null != userSolrObj) {
-                            Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                            if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                                invalidateItem(userSolrObj);
-                            }
-                        }
-                    }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
@@ -374,9 +360,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                    if (resultCode == Activity.RESULT_OK) {
                         refreshCurrentFragment();
-                    }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
@@ -456,13 +440,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE_CLICKED, getScreenName(), properties);
                 ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, Event.COMMUNITY_INVITE, properties);
-                /*Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType(AppConstants.SHARE_MENU_TYPE);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_LINK, AppConstants.EMPTY_STRING);
-                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_SHARED, getScreenName(), properties);*/
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -841,7 +818,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     .build();
             CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, true, mCommunityFeedSolrObj.communityPrimaryColor, mCommunityFeedSolrObj.titleTextColor, screenProperties);
         } else {
-            if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
+            if (StringUtil.isNotNullOrEmptyString(url)) {
                 Uri uri = Uri.parse(url);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(uri);

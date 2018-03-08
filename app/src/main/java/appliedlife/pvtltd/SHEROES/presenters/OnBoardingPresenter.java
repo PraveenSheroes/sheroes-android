@@ -55,11 +55,12 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     Preference<Configuration> mConfiguration;
 
     @Inject
-    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData,Preference<Configuration> mConfiguration) {
         this.mMasterDataModel = masterDataModel;
         this.onBoardingModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
+        this.mConfiguration=mConfiguration;
     }
 
     @Override

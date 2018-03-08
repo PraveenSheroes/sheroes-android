@@ -397,7 +397,6 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:maxLines="@integer/int_value_for_line_3"
-                android:text="@string/ID_JOIN_CONVERSATION"
                 android:textColor="@color/feed_card_time"
                 android:textSize="@dimen/sp_size_12" />
             </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView>

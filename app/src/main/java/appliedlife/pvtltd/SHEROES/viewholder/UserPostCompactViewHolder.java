@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -67,6 +68,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Inject
     Preference<LoginResponse> userPreference;
 
+    @Inject
+    Preference<Configuration> mConfiguration;
     // region ButterKnife Bindings
     @Bind(R.id.user_post_compact_card)
     CardView mUserCompactCard;
@@ -197,6 +200,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mPostAuthorImage.bindImage(userPostSolrObj.getAuthorImageUrl());
         }
 
+        mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
 
         String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, userPostSolrObj.getNoOfLikes());
         mPostLikeCount.setText(String.valueOf(userPostSolrObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));

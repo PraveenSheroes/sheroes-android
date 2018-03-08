@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.ContestListCallBack;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.viewholder.ContestFlatViewHolder;
 
@@ -21,13 +22,13 @@ import appliedlife.pvtltd.SHEROES.viewholder.ContestFlatViewHolder;
 public class ContestsListAdapter extends RecyclerView.Adapter<ContestFlatViewHolder> {
     private final Context mContext;
     private List<Contest> mContestList;
-    private final View.OnClickListener mOnClickListener;
+    private ContestListCallBack mContestListCallBack;
 
     //region Constructor
-    public ContestsListAdapter(Context context, View.OnClickListener onClickListener) {
+    public ContestsListAdapter(Context context, ContestListCallBack contestListCallBack) {
         this.mContext = context;
         mContestList = new ArrayList<>();
-        this.mOnClickListener = onClickListener;
+        this.mContestListCallBack = contestListCallBack;
     }
     //endregion
 
@@ -35,7 +36,7 @@ public class ContestsListAdapter extends RecyclerView.Adapter<ContestFlatViewHol
     @Override
     public ContestFlatViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_contest_compact_item, parent, false);
-        return new ContestFlatViewHolder(view, mContext, mOnClickListener);
+        return new ContestFlatViewHolder(view, mContext, mContestListCallBack);
     }
 
     @Override

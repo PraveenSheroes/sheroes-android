@@ -11,4 +11,7 @@ public class ConfigData {
     //For Profile Share
     @SerializedName("profileShareText")
     public String mProfileSharedText = "I found like-minded women on SHEROES to share my thoughts without hesitation.";
+
+    @SerializedName("commentHolderText")
+    public String mCommentHolderText = "Type your comment";
 }

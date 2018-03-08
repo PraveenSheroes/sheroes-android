@@ -2,7 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -61,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -157,6 +160,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String mGcmId;
     private String loggedInChannel;
     private boolean doubleBackToExitPressedOnce = false;
+    private boolean isHandleAuthTokenRefresh = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,7 +173,26 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        initializeAllDataAfterGCMId();
+        mLoginPresenter.getAuthTokenRefreshPresenter();
+        //checkAuthTokenExpireOrNot();
+    }
+
+    private void checkAuthTokenExpireOrNot() {
+        if (null != mUserPreference && mUserPreference.isSet()) {
+            if (StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+                long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
+                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                    isHandleAuthTokenRefresh = true;
+                    mLoginPresenter.getAuthTokenRefreshPresenter();
+                } else {
+                    initializeAllDataAfterGCMId();
+                }
+            } else {
+                initializeAllDataAfterGCMId();
+            }
+        } else {
+            initializeAllDataAfterGCMId();
+        }
     }
 
     private void initializeAllDataAfterGCMId() {
@@ -201,17 +224,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
         }
         moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
+        if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
             isFirstTimeUser = false;
             DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
         } else {
             setContentView(R.layout.welcome_activity);
             ButterKnife.bind(WelcomeActivity.this);
-            /*if(null!=getIntent()&&null!=getIntent().getExtras()) {
-                Bundle bundle = getIntent().getExtras();
-                mDefferedDeepLink = bundle.getString(AppConstants.DEFFERED_DEEP_LINK);
-            }*/
             isFirstTimeUser = true;
             initHomeViewPagerAndTabs();
             loginSetUp();
@@ -304,7 +323,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void openHomeScreen() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
+        if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
             openLoginActivity();
         } else {
             Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
@@ -546,8 +565,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             if (mProgressDialog != null) {
                 mProgressDialog.dismiss();
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
         Intent intent = getIntent();
@@ -741,73 +759,92 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-        fbLogin.setEnabled(true);
+        if (fbLogin != null) {
+            fbLogin.setEnabled(true);
+        }
         dismissDialog();
         if (loginResponse != null) {
-            switch (loginResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-                        loginResponse.setTokenTime(System.currentTimeMillis());
-                        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                        loginResponse.setGcmId(mGcmId);
-                        mUserPreference.set(loginResponse);
-                        AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
-                        moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
+            if (isHandleAuthTokenRefresh) {
+                if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+                    refreshAuthTokenResponse(loginResponse);
+                }
+            } else {
+                switch (loginResponse.getStatus()) {
+                    case AppConstants.SUCCESS:
+                        if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+                            loginAuthTokenResponse(loginResponse);
 
-                        if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
-                            long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-
-                            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial == MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
-                            AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-                            if (createdDate < currentTime) {
-                                moEngageUtills.entityMoEngageLoggedIn(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
-                                if (loginViaSocial == MoEngageConstants.FACEBOOK) {
-                                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                                } else {
-                                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
-                                }
-
-                            } else {
-                                moEngageUtills.entityMoEngageSignUp(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
-                                if (loginViaSocial == MoEngageConstants.FACEBOOK) {
-                                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                                } else {
-                                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
-                                }
-                            }
-                            ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                        } else {
+                            mUserPreference.delete();
+                            LoginManager.getInstance().logOut();
+                            signOut();
+                            showFaceBookError(AppConstants.EMPTY_STRING);
                         }
-                        mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
-
-                        mUserPreference.set(loginResponse);
-                        openHomeScreen();
-
-                    } else {
+                        break;
+                    case AppConstants.INVALID:
                         mUserPreference.delete();
-                        LoginManager.getInstance().logOut();
+                        break;
+                    case AppConstants.FAILED:
+                        mUserPreference.delete();
                         signOut();
-                        showFaceBookError(AppConstants.EMPTY_STRING);
-                    }
-                    break;
-                case AppConstants.INVALID:
-                    mUserPreference.delete();
-                    break;
-                case AppConstants.FAILED:
-                    mUserPreference.delete();
-                    signOut();
-                    LoginManager.getInstance().logOut();
-                    String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
-                    if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                        showFaceBookError(errorMessage);
-                    } else {
-                        errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
-                        showFaceBookError(errorMessage);
-                    }
-                    break;
+                        LoginManager.getInstance().logOut();
+                        String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
+                        if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
+                            showFaceBookError(errorMessage);
+                        } else {
+                            errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
+                            showFaceBookError(errorMessage);
+                        }
+                        break;
+                }
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
+
+    }
+
+    private void refreshAuthTokenResponse(LoginResponse loginResponse) {
+        loginResponse.setTokenTime(System.currentTimeMillis());
+        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+        mUserPreference.set(loginResponse);
+        openHomeScreen();
+    }
+
+    private void loginAuthTokenResponse(LoginResponse loginResponse) {
+        loginResponse.setTokenTime(System.currentTimeMillis());
+        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
+        loginResponse.setGcmId(mGcmId);
+        AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
+        moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
+
+        if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
+            long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+
+            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial == MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
+            AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
+            if (createdDate < currentTime) {
+                moEngageUtills.entityMoEngageLoggedIn(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
+                if (loginViaSocial == MoEngageConstants.FACEBOOK) {
+                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
+                } else {
+                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
+                }
+
+            } else {
+                moEngageUtills.entityMoEngageSignUp(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
+                if (loginViaSocial == MoEngageConstants.FACEBOOK) {
+                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
+                } else {
+                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
+                }
+            }
+            ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+        }
+        mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
+
+        mUserPreference.set(loginResponse);
+        openHomeScreen();
     }
 
     @Override
@@ -833,7 +870,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
                 if (resultCode == Activity.RESULT_OK) {
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                    if(this!=null && !isFinishing()){
+                    if (!isFinishing()) {
                         showDialogInWelcome(CustomSocialDialog.LOGGING_IN_DIALOG);
                     }
                     handleSignInResult(result);
@@ -954,14 +991,30 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        //onShowErrorDialog(errorMsg, feedParticipationEnum);
         dismissDialog();
         if (null != fbLogin) {
             fbLogin.setEnabled(true);
             mUserPreference.delete();
         }
+        if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
+            switch (errorMsg) {
+                case AppConstants.LOGOUT_USER:
+                    AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
+                    HashMap<String, Object> properties = new EventProperty.Builder().build();
+                    AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
+                    mUserPreference.delete();
+                    MoEHelper.getInstance(getApplicationContext()).logoutUser();
+                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+                    initializeAllDataAfterGCMId();
+                    break;
+                default:
+
+            }
+        }
+
     }
-
-
+    
 }
 

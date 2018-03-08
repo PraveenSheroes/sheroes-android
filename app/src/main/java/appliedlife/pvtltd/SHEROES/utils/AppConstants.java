@@ -377,5 +377,6 @@ public class AppConstants {
     public static final String SHARE_CHANNEL = "channel";
     public static final String IS_MOENGAGE = "Is Moengage";
 
+    public static final String LOGOUT_USER = "Logout_user";
 
 }
