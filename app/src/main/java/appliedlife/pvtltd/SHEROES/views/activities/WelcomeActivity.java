@@ -2,7 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -61,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -170,7 +173,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        checkAuthTokenExpireOrNot();
+        mLoginPresenter.getAuthTokenRefreshPresenter();
+        //checkAuthTokenExpireOrNot();
     }
 
     private void checkAuthTokenExpireOrNot() {
@@ -992,14 +996,22 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
             switch (errorMsg) {
                 case AppConstants.LOGOUT_USER:
+                    AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
+                    HashMap<String, Object> properties = new EventProperty.Builder().build();
+                    AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
                     mUserPreference.delete();
+                    MoEHelper.getInstance(getApplicationContext()).logoutUser();
+                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
                     initializeAllDataAfterGCMId();
                     break;
                 default:
+
             }
         }
+
     }
-
-
+    
 }
 
