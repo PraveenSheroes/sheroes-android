@@ -999,6 +999,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 .postId(Long.toString(comment.getEntityId()))
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
+                                .communityId(comment.getCommunityId())
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -1048,6 +1049,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 .postId(Long.toString(comment.getEntityId()))
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
+                                .communityId(comment.getCommunityId())
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }

@@ -46,7 +46,7 @@ public class SheroesApplication extends MultiDexApplication  {
     private static SheroesApplication sApplicationContext;
 
     public static SheroesAppComponent getAppComponent(Context context) {
-        return ((SheroesApplication) context.getApplicationContext()).mSheroesAppComponent;
+        return (sApplicationContext).mSheroesAppComponent;
     }
 
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
@@ -73,6 +73,7 @@ public class SheroesApplication extends MultiDexApplication  {
         sApplicationContext = SheroesApplication.this;
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
+        AnalyticsManager.initializeFbAnalytics(mContext);
         Stetho.initializeWithDefaults(this);
     }
 

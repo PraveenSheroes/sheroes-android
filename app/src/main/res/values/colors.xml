@@ -57,6 +57,7 @@
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#dc4541</color>
     <color name="toolbar_title_text">#dc4541</color>
+    <color name="ripple_color">#dc4541</color>
     <color name="posted_in">#90949c</color>
     <color name="menu_icon">#90949c</color>
     <color name="search_tab_text">#3949ab</color>

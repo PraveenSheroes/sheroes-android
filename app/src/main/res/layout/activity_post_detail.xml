@@ -55,7 +55,6 @@
                 android:background="@color/white"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:hint="Write an answer"
                 android:inputType="textMultiLine|textShortMessage|textCapSentences"
                 android:maxLines="1"
                 android:minHeight="48dp"

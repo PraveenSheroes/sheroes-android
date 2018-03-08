@@ -117,6 +117,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
@@ -191,6 +192,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.et_default_hint_text)
     EditText mEtDefaultText;
+
+    @Bind(R.id.add_image)
+    RippleViewLinear rippleViewLinearAddImage;
+
+    @Bind(R.id.camera)
+    RippleViewLinear rippleViewLinearCamera;
 
     @Bind(R.id.progress_bar_link)
     ProgressBar pbLink;
@@ -1445,18 +1452,28 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @OnClick(R.id.add_image)
     void onAddImageClick() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1200, 1200)
-                .start(this);
+        rippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setRequestedSize(1200, 1200)
+                        .start(CommunityPostActivity.this);
+            }
+        });
     }
 
     @OnClick(R.id.camera)
     void onCameraClick() {
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1000, 1000)
-                .start(this);
+        rippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setRequestedSize(1000, 1000)
+                        .start(CommunityPostActivity.this);
+            }
+        });
     }
 
     @OnClick(R.id.user_drop_down)

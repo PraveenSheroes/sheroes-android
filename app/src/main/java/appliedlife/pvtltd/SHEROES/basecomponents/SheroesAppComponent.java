@@ -7,6 +7,8 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
+import appliedlife.pvtltd.SHEROES.viewholder.ContestFlatViewHolder;
+import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -42,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -96,6 +97,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
 import dagger.Component;
 
 /**
@@ -113,7 +115,6 @@ public interface SheroesAppComponent {
 
     void inject(HomeActivity homeActivity);
 
-    void inject(HomeFragment homeFragment);
 
     void inject(LoginActivity loginActivity);
 
@@ -294,6 +295,16 @@ public interface SheroesAppComponent {
     void inject(ContactCardHolder contactCardHolder);
 
     void inject(SuggestedContactCardHolder suggestedContactCardHolder);
+
+
+    void inject(UserTagCardHolder userTagCardHolder);
+
+    void inject(HeaderTaggedUserViewHolder headerTaggedUserViewHolder);
+
+    void inject(ContestFlatViewHolder contestFlatViewHolder);
+
+
+
 
 }
 

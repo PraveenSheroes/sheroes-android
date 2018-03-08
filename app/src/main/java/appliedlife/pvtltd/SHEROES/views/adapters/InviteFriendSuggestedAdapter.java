@@ -140,7 +140,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
                 mUserSolrObjList = (List<UserSolrObj>) results.values;
                 String msg="";
                 if(!StringUtil.isNotEmptyCollection(mUserSolrObjList)) {
-                    CommonUtil.hideKeyboard(((AllContactActivity)mContext));
+                   //` CommonUtil.hideKeyboard(((AllContactActivity)mContext));
                     msg=mContext.getString(R.string.no_search_contact);
                 }
                 mContactDetailCallBack.showMsgOnSearch(msg);

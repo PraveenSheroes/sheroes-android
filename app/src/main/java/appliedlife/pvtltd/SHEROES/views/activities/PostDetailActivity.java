@@ -62,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -99,7 +100,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public int mPositionInFeed = -1;
     @Inject
     Preference<LoginResponse> mUserPreference;
-
+    @Inject
+    Preference<Configuration> mConfiguration;
     @Inject
     AppUtils mAppUtils;
 
@@ -209,6 +211,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mTitleToolbar.setText(R.string.ID_COMMENTS);
+        mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
         setupEditInputText();
         setupToolbarItemsColor();
       //  postCommentSocialTagging();
@@ -710,6 +713,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
         if (userPostSolrObj != null) {
             builder.title(userPostSolrObj.getNameOrTitle())
+                    .communityId(Long.toString(userPostSolrObj.getCommunityId()))
                     .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()));
 
         }
@@ -809,6 +813,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .id(Long.toString(comment.getId()))
                         .postId(Long.toString(comment.getEntityId()))
                         .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .communityId(comment.getCommunityId())
                         .body(comment.getComment())
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
@@ -821,6 +826,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .id(Long.toString(comment.getId()))
                         .postId(Long.toString(comment.getEntityId()))
                         .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .communityId(comment.getCommunityId())
                         .body(comment.getComment())
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);

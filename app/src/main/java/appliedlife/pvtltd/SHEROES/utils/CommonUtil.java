@@ -1241,4 +1241,17 @@ public class CommonUtil {
         }
         fromActivity.startActivity(intent);
     }
+
+    public static boolean isValidContextForGlide(final Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            if (activity.isFinishing()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -152,4 +152,16 @@ public class LoginModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
     }
+    public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
+        return sheroesAppServiceApi.getRefreshToken()
+                .map(new Function<LoginResponse, LoginResponse>() {
+                    @Override
+                    public LoginResponse apply(LoginResponse loginResponse) {
+                        return loginResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+    }
 }

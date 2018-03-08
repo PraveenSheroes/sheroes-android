@@ -71,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -166,7 +167,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         mFeedPresenter.attachView(this);
-
+        LogUtils.info("My","######## in Feed ");
         if (null != getArguments()) {
             Parcelable parcelable = getArguments().getParcelable(CommunityTab.COMMUNITY_TAB_OBJ);
             if (parcelable != null) {

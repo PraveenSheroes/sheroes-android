@@ -199,19 +199,19 @@
             android:id="@+id/tv_mentor_dashboard_follow"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_size_35"
-            android:background="@drawable/rectangle_feed_commnity_join"
+            android:background="@drawable/selecter_invite_friend"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:paddingBottom="@dimen/dp_size_7"
             android:textAllCaps="true"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@drawable/selecter_contact_text_color"
             android:textSize="@dimen/sp_size_14" />
 
             <TextView
                 android:id="@+id/share_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_size_35"
-                android:background="@drawable/rectangle_feed_commnity_join"
+                android:background="@drawable/selector_event_share"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp_size_7"

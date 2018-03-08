@@ -4,8 +4,6 @@ import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,9 +27,6 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
@@ -66,7 +61,6 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -84,14 +78,10 @@ import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -145,8 +135,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0) == 1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
-                HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
-                trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+                boolean isFromMoengage = getIntent().getExtras().getBoolean(AppConstants.IS_MOENGAGE, false);
+                String title = getIntent().getExtras().getString(AppConstants.TITLE);
+                boolean isFromPushNotification = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_PUSH, false);
+                if(isFromPushNotification){
+                    HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).isMonengage(isFromMoengage).title(title).build();
+                    trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+                }
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
             mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
@@ -688,13 +683,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             } else {
                 ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).bookMarkForCard(mFeedDetail);
-            }
         }
-
         if (this instanceof ContestActivity) {
             ((ContestActivity) this).bookmarkPost(mFeedDetail);
         }
@@ -886,10 +875,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         switch (menuEnum) {
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).markAsSpamCommunityPost(mFeedDetail);
-                    }
+
                 }
                 break;
 
@@ -946,10 +932,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        ((HomeFragment) fragment).deleteCommunityPost(mFeedDetail);
-                    } else {
                         if (mFragment instanceof UserPostFragment) {
                             if (AppUtils.isFragmentUIActive(mFragment)) {
                                 ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
@@ -959,8 +941,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                                 ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                             }
                         }
-
-                    }
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
@@ -986,18 +966,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-      /*  if (mFragmentOpen.isBookmarkFragment()) {
-            Fragment fragmentBookMark = getSupportFragmentManager().findFragmentByTag(BookmarksFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentBookMark)) {
-                ((BookmarksFragment) fragmentBookMark).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-            }
-        }
-            else {*/
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((HomeFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
-        }
-        // }
     }
 
     @Override

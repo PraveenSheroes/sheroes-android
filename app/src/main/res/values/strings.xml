@@ -87,7 +87,6 @@
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">min read</string>
     <string name="ID_COMMUNITY_ANNONYMOUS">ANONYMOUS</string>
-    <string name="ID_JOIN_CONVERSATION">Join the conversation</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
     <string name="ID_LIKE">Like</string>
@@ -131,7 +130,7 @@
     <string name="ID_FOLLOWER">Follower</string>
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
-    <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\n Help us personalize SHEROES for you by joining some communities of your interests.</string>
+    <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\nHelp us personalize SHEROES for you by joining some communities of your interests.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>

@@ -47,6 +47,10 @@ public class AnalyticsManager {
         initializeMixpanel(context, true);
     }
 
+    public static void initializeFbAnalytics(Context context){
+        FBAnalyticsHelper.initializeAnalyticsTracker(context);
+    }
+
     //endregion
 
     // endregion
@@ -140,6 +144,10 @@ public class AnalyticsManager {
         }
         if (event.trackEventToProvider(AnalyticsProvider.APPSFLYER)) {
             AppsFlyerLib.getInstance().trackEvent(sAppContext, event.getFullName(), properties);
+        }
+
+        if (event.trackEventToProvider(AnalyticsProvider.FACEBOOK)) {
+            FBAnalyticsHelper.logEvent(event.type.name, event.name, null);
         }
 
         // track all event to Moengage
