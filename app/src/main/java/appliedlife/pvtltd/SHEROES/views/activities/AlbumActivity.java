@@ -71,6 +71,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     private static final String TAG = "AlbumActivity";
     private static final String SCREEN_LABEL = "Album Activity";
     private static final String MAIN_ITEM_POSITION = "Main Item Position";
+    private String mStatusBarColor = "#aaaaaa";
 
     private Album mAlbum;
     private String mMainImageUrl;
@@ -122,7 +123,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(Color.BLACK);
+            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
         }
         mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent_dark));
         mToolbar.setPadding(0, CommonUtil.getStatusBarHeight(AlbumActivity.this), 0, 0);

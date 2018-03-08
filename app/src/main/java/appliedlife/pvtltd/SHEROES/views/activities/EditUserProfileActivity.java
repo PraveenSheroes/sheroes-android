@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
@@ -110,8 +112,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private String aboutMeValue = "";
     private LoginResponse userDetailsResponse;
 
-    @Bind(R.id.tv_mentor_toolbar_name)
-    TextView tvMentorToolbarName;
+    @Bind(R.id.title_toolbar)
+    TextView toolbarTitle;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -122,7 +124,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Inject
     AppUtils appUtils;
 
-    @Bind(R.id.edit_toolbar)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
     @Bind(R.id.scroll_fragment_edit)
@@ -178,10 +180,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         ButterKnife.bind(this);
         editProfilePresenter.attachView(this);
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        tvMentorToolbarName.setText(R.string.ID_EDIT_PROFILE);
+        setupToolbarItemsColor();
 
         String imageUrl = getIntent().getStringExtra(AppConstants.EXTRA_IMAGE);
         setProfileNameData(imageUrl);
@@ -760,6 +759,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         return validateName() && validateLocation() && validateDOB() && validateMobile();
     }
 
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
+    }
 
     @OnClick(R.id.btn_personal_basic_details_save)
     public void Save_Basic_Details() {
@@ -806,7 +813,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 if (userFullName.contains(AppConstants.SPACE)) {
                     String name[] = userFullName.split(AppConstants.SPACE);
                     String firstName = name[0];
-                    String lastName = name[1];
+                    String lastName = userFullName.substring(firstName.length()+1, userFullName.length());
 
                     personalBasicDetailsRequest.setFirstName(firstName);
                     personalBasicDetailsRequest.setLastName(lastName);
@@ -818,7 +825,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     personalBasicDetailsRequest.setFullName(userFullName);
                 }
             }
-
 
             if (StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
                 personalBasicDetailsRequest.setMobileNumber(mobileNumber.getText().toString());
@@ -851,12 +857,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                 try {
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
-
                     String userName = name.getText().toString().trim();
+
                     if (userName.contains(AppConstants.SPACE)) {
                         String name[] = userName.split(AppConstants.SPACE);
                         String firstName = name[0];
-                        String lastName = name[1];
+                        String lastName = userName.substring(firstName.length()+1, userName.length());
                         userSummary.setFirstName(firstName);
                         userSummary.setLastName(lastName);
                         userSummary.getUserBO().setName(userName);
@@ -921,7 +927,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         Intent intent = new Intent(fromActivity, EditUserProfileActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         intent.putExtra(AppConstants.EXTRA_IMAGE, imageUrl);
-        //intent.putExtra(AppConstants.CHAMPION_ID, )
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }

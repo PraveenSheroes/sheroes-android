@@ -153,9 +153,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
 
-    @Bind(R.id.toolbar_container)
-    RelativeLayout toolbarContainer;
-
     @Bind(R.id.view_pager_mentor)
     ViewPager mViewPager;
 
@@ -468,9 +465,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) {
-            userName.setText(mUserSolarObject.getNameOrTitle());
-            tvMentorToolbarName.setText(mUserSolarObject.getNameOrTitle());
-            setUserNameTitle(mUserSolarObject.getNameOrTitle());
+            String userNameTitle = CommonUtil.camelCaseString(mUserSolarObject.getNameOrTitle());
+
+            userName.setText(userNameTitle);
+            tvMentorToolbarName.setText(userNameTitle);
+            setUserNameTitle(userNameTitle);
         }
 
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
@@ -1257,6 +1256,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
         if(StringUtil.isNotNullOrEmptyString(name)) {
+            name = CommonUtil.camelCaseString(name);
             userName.setText(name);
             tvMentorToolbarName.setText(name);
         }
@@ -1611,7 +1611,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params1.setMargins(10, 0, 16, 0);
+                params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 tvMentorDashBoardFollow.setText("");
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.ic_profile_edit_icon);
@@ -1628,7 +1628,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 shareProfile.setBackgroundResource(R.drawable.selector_event_share);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params1.setMargins(10, 0, 16, 0);
+                params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 shareProfile.setText("");
                 shareProfile.setLayoutParams(params1);

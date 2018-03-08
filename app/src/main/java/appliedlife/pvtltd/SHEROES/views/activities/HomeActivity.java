@@ -1204,6 +1204,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void homeButtonUi() {
+
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
 

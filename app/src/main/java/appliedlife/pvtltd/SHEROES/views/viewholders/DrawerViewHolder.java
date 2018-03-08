@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
@@ -35,6 +37,7 @@ import butterknife.ButterKnife;
 public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
 
     private final String TAG = LogUtils.makeLogTag(DrawerViewHolder.class);
+    private static final int IMAGE_SIZE = 22;
 
     BaseHolderInterface viewInterface;
     private NavMenuItem dataItem;
@@ -45,7 +48,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     TextView tvDrawerItem;
 
     @Bind(R.id.tv_drawer_image)
-    AppCompatImageView tvDrawerImage;
+    ImageView tvDrawerImage;
 
     @Bind(R.id.ll_drawer_item)
     RippleView rippleView;
@@ -110,10 +113,10 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
 
     //set the image icon and cache it
     private void setImageBackground(Context context, String url) {
-        if (StringUtil.isNotNullOrEmptyString(url)) {
+        String imageKitUrl = CommonUtil.getImgKitUri(url, CommonUtil.convertDpToPixel(IMAGE_SIZE, context), CommonUtil.convertDpToPixel(IMAGE_SIZE, context));
+        if (CommonUtil.isNotEmpty(imageKitUrl)) {
             Glide.with(context)
-                    .load(url)
-                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                    .load(imageKitUrl)
                     .into(tvDrawerImage);
         }
     }

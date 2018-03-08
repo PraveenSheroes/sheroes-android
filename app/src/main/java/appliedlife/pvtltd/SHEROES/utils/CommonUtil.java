@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -19,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -48,6 +50,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -113,6 +116,20 @@ public class CommonUtil {
             }
         }
         return String.valueOf(chars);
+    }
+
+    public static String camelCaseString(String input) {
+        if (input == null)
+            return null;
+        String[] strArray = input.split(AppConstants.SPACE);
+        StringBuilder builder = new StringBuilder();
+        for (String s : strArray) {
+            if(s.length()>0) {
+                String cap = s.substring(0, 1).toUpperCase() + s.substring(1);
+                builder.append(cap).append(" ");
+            }
+        }
+        return builder.toString();
     }
 
     public static ContestStatus getContestStatus(Date startAt, Date endAt){
@@ -554,6 +571,101 @@ public class CommonUtil {
                 });
 
     }
+
+    public static String getPathFromURI(Context context, Uri contentURI) {
+        String result = null;
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) {
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            if(idx!=-1) {
+                result = cursor.getString(idx);
+            }
+            cursor.close();
+        }
+        return result;
+    }
+
+    public static File getFilFromBitmap(Context context, Bitmap bmp) {
+        File cachePath = new File(context.getCacheDir(), "images");
+        cachePath.mkdirs();
+        FileOutputStream stream = null;
+        String fileName = "IMG_" + new Date().getTime() + ".png";
+        String imagePath = cachePath + "/" + fileName;
+        try {
+            stream = new FileOutputStream(imagePath);
+        } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        try {
+            stream.close();
+        } catch (IOException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return new File(cachePath, fileName);
+    }
+
+    //Used for fetch the Uri from other apps
+    public static String getImagePathFromInputStreamUri(Context context, Uri uri) {
+        InputStream inputStream = null;
+        String filePath = null;
+
+        if (uri.getAuthority() != null) {
+            try {
+                inputStream = context.getContentResolver().openInputStream(uri); // context needed
+                File photoFile = createTemporalFileFrom(context, inputStream);
+
+                filePath = photoFile.getPath();
+
+            } catch (FileNotFoundException e) {
+                // log
+            } catch (IOException e) {
+                // log
+            }finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return filePath;
+    }
+
+    private static File createTemporalFileFrom(Context context, InputStream inputStream) throws IOException {
+        File targetFile = null;
+
+        if (inputStream != null) {
+            int read;
+            byte[] buffer = new byte[8 * 1024];
+
+            targetFile = createTemporalFile(context);
+            OutputStream outputStream = new FileOutputStream(targetFile);
+
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+            outputStream.flush();
+
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return targetFile;
+    }
+
+    private static File createTemporalFile(Context context) {
+        String tempImage = "IMG_" + new Date().getTime() + ".png";
+        return new File(context.getExternalCacheDir(), tempImage);
+    }
+    //end
 
     public static void shareBitmapWhatsApp(Context context, Bitmap bmp, String sourceScreen, String url, String imageShareText, Event eventName, HashMap<String, Object> eventProperties) {
         Uri contentUri = CommonUtil.getContentUriFromBitmap(context, bmp);

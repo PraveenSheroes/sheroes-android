@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.text.Html;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,7 +39,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     @Bind(R.id.iv_notification_image)
     ImageView mIvNotificationImage;
     @Bind(R.id.lnr_notification)
-    LinearLayout mLnrNotification;
+    FrameLayout mLnrNotification;
     @Bind(R.id.iv_notification_type)
     ImageView mIvNotificationType;
     BaseHolderInterface mViewInterface;
@@ -68,7 +70,12 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                 if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())) {
                     Glide.with(mContext)
                             .load(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())
-                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                            .into(mIvNotificationImage);
+                } else {
+                    Glide.with(mContext)
+                             .load(R.drawable.notification_icon)
+                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mIvNotificationImage);
                 }
                 if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreIconImageUrl())) {
@@ -77,7 +84,6 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                             .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mIvNotificationType);
                 }
-
             }
     }
 

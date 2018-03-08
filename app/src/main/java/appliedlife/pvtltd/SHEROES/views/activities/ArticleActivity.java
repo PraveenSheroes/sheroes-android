@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +19,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -48,6 +52,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -80,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -101,7 +107,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
 /**
  * Created by ujjwal on 28/10/17.
  */
-public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener {
+public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener, AppBarLayout.OnOffsetChangedListener {
 
     public static final String SCREEN_LABEL = "Article Activity";
     public static final String IMAGE_WIDTH = "IMAGE_WIDTH";
@@ -124,7 +130,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private int mFeedPosition;
     public Article mArticle;
     private long mScrollPercentage = 0;
-    boolean isScrollingDown = false;
+    private boolean isScrollingDown = false;
+    public enum State {EXPANDED, COLLAPSED}
+    private State mCurrentState = State.EXPANDED;
     private boolean mIsTransition = false;
     private FeedDetail mFeedDetail;
 
@@ -196,10 +204,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Bind(R.id.fab)
     FloatingActionButton fab;
 
-    @BindColor(R.color.colorPrimary)
+    @BindColor(R.color.white)
     int mPrimaryColor;
 
-    @BindColor(R.color.colorPrimaryDark)
+    @BindColor(R.color.status_bar)
     int mPrimaryDarkColor;
 
     @Bind(R.id.home)
@@ -279,15 +287,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
                 0xaa000000, 8, Gravity.TOP));
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        setupToolbarItemsColor();
 
         defaultUi = getWindow().getDecorView().getSystemUiVisibility();
         mArticleLayout.setOnScrollChangeListener(this);
 
         initializeCommentsAdapter();
-
+        mAppBarLayout.addOnOffsetChangedListener(this);
         if (mArticle != null) {
             loadArticleImage(mArticle);
         }
@@ -317,6 +323,15 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 toolTipForShareArticle();
             }
         }
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     private void toolTipForShareArticle() {
@@ -405,6 +420,21 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (itemLike != null && itemBookmark != null) {
             menu.findItem(R.id.like).setIcon(mArticlePresenter.getLikeDrawable(mArticle));
             menu.findItem(R.id.bookmark).setIcon(mArticlePresenter.getBookmarkDrawable(mArticle));
+
+                if (mCurrentState == State.COLLAPSED) {
+                    menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+                    menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+
+                    final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+                    getSupportActionBar().setHomeAsUpIndicator(upArrow);
+
+                } else if (mCurrentState == State.EXPANDED) {
+                    menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                    menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                    final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
+                    getSupportActionBar().setHomeAsUpIndicator(upArrow);
+                }
+
             itemLike.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
             itemBookmark.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
         }
@@ -980,6 +1010,21 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @OnClick(R.id.like_count)
     public void onLikeCountClicked() {
         LikeListBottomSheetFragment.showDialog(this, "", mArticle.entityId);
+    }
+
+    @Override
+    public final void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
+        if (offset == 0) {
+            if (mCurrentState != State.EXPANDED) {
+                invalidateOptionsMenu();
+            }
+            mCurrentState = State.EXPANDED;
+        } else if (Math.abs(offset) >= appBarLayout.getTotalScrollRange()) {
+            if (mCurrentState != State.COLLAPSED) {
+                invalidateOptionsMenu();
+            }
+            mCurrentState = State.COLLAPSED;
+        }
     }
     //endregion
 }

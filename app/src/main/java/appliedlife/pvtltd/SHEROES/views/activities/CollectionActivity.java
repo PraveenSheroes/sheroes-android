@@ -52,7 +52,7 @@ public class CollectionActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.toolbar_name)
+    @Bind(R.id.title_toolbar)
     TextView titleName;
     //endregion
 

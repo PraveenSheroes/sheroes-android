@@ -15,10 +15,12 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/home_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_56"
-            android:background="@color/text_color_close"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/AppTheme.Toolbar"
+            app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            app:popupTheme="@style/AppTheme.PopupMenu">
+
             <include
                 android:id="@+id/rl_search_box"
                 layout="@layout/home_search_bar"
@@ -26,18 +28,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|top" />
         </android.support.v7.widget.Toolbar>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_community_view"
-            style="@style/NavigationTabTextAppeareance"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:visibility="gone"
-            app:tabIndicatorColor="@color/footer_icon_text"
-            app:tabIndicatorHeight="@dimen/dp_size_5"
-            app:tabSelectedTextColor="@color/footer_icon_text"
-            app:tabTextColor="@color/search_tab_unselected_text" />
 
         <RelativeLayout
             android:id="@+id/li_article_spinner_icon"

@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -44,7 +44,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
-    @Bind(R.id.toolbar_name)
+    @Bind(R.id.title_toolbar)
     TextView titleName;
 
     @Inject
@@ -62,11 +62,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
             isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
         }
 
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-
-        titleName.setText(R.string.followed_communities);
+        setupToolbarItemsColor();
 
         Fragment followingFragment = UserMentorCommunity.createInstance(userMentorId, "", isSelfProfile);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -79,6 +75,15 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        titleName.setText(R.string.followed_communities);
     }
 
     @Override

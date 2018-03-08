@@ -40,7 +40,6 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -95,6 +94,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
+    private boolean mStatusBarColorEmpty = true;
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
@@ -149,8 +149,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private UserPostSolrObj mUserPostObj;
     private String mUserPostId;
     private boolean mIsAnonymous;
-    private String mPrimaryColor = "#6e2f95";
-    private String mTitleTextColor = "#ffffff";
+    private String mPrimaryColor = "#ffffff";
+    private String mTitleTextColor = "#3c3c3c";
+    private String mStatusBarColor = "#aaaaaa";
+    private String mToolbarIconColor = "#90949C";
 
     private int mFromNotification;
 
@@ -184,8 +186,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         if (null != getIntent() && getIntent().getExtras() != null) {
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
-            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, "#6e2f95");
-            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, "#ffffff");
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
+
+            if(getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
+                mStatusBarColorEmpty = true;
+            }
+
         }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -854,14 +861,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //endregion
 
     private void setupToolbarItemsColor() {
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        upArrow.mutate();
-        upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        if (upArrow != null) {
+            upArrow.mutate();
+            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        }
+
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+            if(mStatusBarColorEmpty) {
+                if (upArrow != null) {
+                    upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                }
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
+            } else {
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+            }
         }
+
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
     }
 }

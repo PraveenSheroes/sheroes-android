@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Text color of the search box hint text  -->
-    <color name="colorPrimary">#6e2f95</color>
-    <color name="colorPrimaryDark">#6e2f95</color>
-    <color name="colorAccent">#6e2f95</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#aaaaaa</color>
+    <color name="colorAccent">#dc4541</color>
     <color name="once_card">#6d3493</color>
     <color name="light_grey">#4D4D4D</color>
     <color name="gray_light">#878787</color>
@@ -17,6 +17,7 @@
     <color name="challenge_post">#ff4531</color>
     <color name="carousel_card_bg">#F9F9F9</color>
     <color name="screen_background">#EEEEEE</color>
+    <color name="status_bar">#aaaaaa</color>
     <color name="spinner">#f1f1f1</color>
     <color name="grey2">#b7b7b7</color>
     <color name="theme">#ECECEC</color>
@@ -55,14 +56,17 @@
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#dc4541</color>
+    <color name="toolbar_title_text">#dc4541</color>
     <color name="ripple_color">#dc4541</color>
     <color name="posted_in">#90949c</color>
+    <color name="menu_icon">#90949c</color>
     <color name="search_tab_text">#3949ab</color>
 
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>
     <color name="join_conversation">#F7F7F7</color>
     <color name="fully_transparent">#00000000</color>
+    <color name="light_red">#9C27B0</color>
     <color name="feed_article_label">#3C3C3C</color>
     <color name="feed_article_comment">#777f8a</color>
     <color name="feed_card_time">#90949c</color>
@@ -70,6 +74,7 @@
     <color name="suggested_text">#666666</color>
     <color name="comment_text">#3c3c3c</color>
     <color name="feed_title">#3c3c3c</color>
+    <color name="toolbar_title">#3c3c3c</color>
 
     <!--colors set through priyanka-->
 

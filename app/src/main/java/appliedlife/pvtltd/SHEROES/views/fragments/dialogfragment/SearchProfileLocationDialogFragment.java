@@ -70,7 +70,7 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     @Inject
     AppUtils mAppUtils;
 
-    @Bind(R.id.tv_search_loc_toolbar_name)
+    @Bind(R.id.title_toolbar)
     TextView toolbarTitle;
 
     @Inject
@@ -85,10 +85,9 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     @Bind(R.id.pb_onboarding_search_progress_bar)
     ProgressBar mProgressBar;
 
-
-
-    @Bind(R.id.toolbar_search_loc)
+    @Bind(R.id.toolbar)
     Toolbar mToolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);

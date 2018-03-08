@@ -2,11 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -23,11 +18,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
-import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.DEFFERED_DEEP_LINK;
 
 
 /**
