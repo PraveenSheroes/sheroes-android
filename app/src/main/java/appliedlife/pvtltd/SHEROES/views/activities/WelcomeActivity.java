@@ -863,7 +863,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
                 if (resultCode == Activity.RESULT_OK) {
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                    if (this != null && !isFinishing()) {
+                    if (!isFinishing()) {
                         showDialogInWelcome(CustomSocialDialog.LOGGING_IN_DIALOG);
                     }
                     handleSignInResult(result);
