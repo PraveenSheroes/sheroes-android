@@ -566,6 +566,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
                                 .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                                .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
                                 .title(mCommunityFeedSolrObj.getNameOrTitle())
                                 .tabTitle(communityTab.title)
                                 .tabKey(communityTab.key)
@@ -574,9 +575,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
                     mFabButton.setVisibility(View.VISIBLE);
                     mFabButton.setImageResource(R.drawable.challenge_placeholder);
-                    Glide.with(CommunityDetailActivity.this)
-                            .load(communityTab.fabIconUrl)
-                            .into(mFabButton);
+                    if(CommonUtil.isValidContextForGlide(mFabButton.getContext())){
+                        Glide.with(mFabButton.getContext())
+                                .load(communityTab.fabIconUrl)
+                                .into(mFabButton);
+                    }
                 } else {
                     mFabButton.setVisibility(View.GONE);
                 }
@@ -674,7 +677,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         final EventProperty.Builder builder = new EventProperty.Builder();
         if (mCommunityFeedSolrObj != null) {
             builder.title(mCommunityFeedSolrObj.getNameOrTitle())
-                    .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()));
+                    .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                    .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()));
         }
 
         HashMap<String, Object> properties = builder.build();

@@ -135,8 +135,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0) == 1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
-                HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).build();
-                trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+                boolean isFromMoengage = getIntent().getExtras().getBoolean(AppConstants.IS_MOENGAGE, false);
+                String title = getIntent().getExtras().getString(AppConstants.TITLE);
+                boolean isFromPushNotification = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_PUSH, false);
+                if(isFromPushNotification){
+                    HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).isMonengage(isFromMoengage).title(title).build();
+                    trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
+                }
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
             mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);

@@ -706,6 +706,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
         if (userPostSolrObj != null) {
             builder.title(userPostSolrObj.getNameOrTitle())
+                    .communityId(Long.toString(userPostSolrObj.getCommunityId()))
                     .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()));
 
         }
@@ -805,6 +806,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .id(Long.toString(comment.getId()))
                         .postId(Long.toString(comment.getEntityId()))
                         .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .communityId(comment.getCommunityId())
                         .body(comment.getComment())
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
@@ -817,6 +819,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .id(Long.toString(comment.getId()))
                         .postId(Long.toString(comment.getEntityId()))
                         .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .communityId(comment.getCommunityId())
                         .body(comment.getComment())
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);

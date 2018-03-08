@@ -50,6 +50,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
     private int mFromNotification;
+    private String mSource;
     private Intent mIntent;
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -114,6 +115,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             mIntent = intent;
             if (null != getIntent().getExtras()) {
                 mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+                mSource = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
             }
             if (null != intent.getData()) {
                 mData = intent.getData();
@@ -151,6 +153,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 into.putExtra(AppConstants.CHALLENGE_ID, Long.parseLong(newChallengeId));
                                 into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                                 into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+                                into.putExtra(BaseActivity.SOURCE_SCREEN,mSource);
                                 //    into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 addShareLink(sourceIntent, into);
                                 startActivity(into);
@@ -191,6 +194,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             if (CommonUtil.isNotEmpty(challengeId)) {
                                 into.putExtra(Contest.CONTEST_ID, challengeId);
                                 into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+                                into.putExtra(BaseActivity.SOURCE_SCREEN,mSource);
                                 addShareLink(sourceIntent, into);
                                 startActivity(into);
                                 finish();
@@ -210,6 +214,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         helplineIntent.putExtra(AppConstants.HELPLINE_CHAT, AppConstants.HELPLINE_CHAT);
                         helplineIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                         helplineIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+                        helplineIntent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                         addShareLink(sourceIntent, helplineIntent);
                         startActivity(helplineIntent);
                         finish();
@@ -290,6 +295,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 dataIdString = new String(id1, AppConstants.UTF_8);
                 Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleActivity.class);
                 articleDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                articleDetail.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                 articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
                 articleDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 addShareLink(mIntent, articleDetail);
@@ -328,6 +334,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             postIntent.putExtra(UserPostSolrObj.USER_POST_ID, dataIdString);
                             postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
                             postIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                            postIntent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                             postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                             addShareLink(sourceIntent, postIntent);
                             startActivity(postIntent);
@@ -346,6 +353,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                     into.putExtra(AppConstants.COMMUNITY_ID, newCommunityId);
                     into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+                    into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                     into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                     addShareLink(sourceIntent, into);
                     startActivity(into);
@@ -376,6 +384,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 //  eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 eventDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 eventDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+                eventDetail.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                 addShareLink(sourceIntent, eventDetail);
                 startActivity(eventDetail);
                 finish();
@@ -401,6 +410,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 intent.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
                // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                 intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
@@ -429,6 +439,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     intent.putExtra(AppConstants.CHAMPION_ID, userId);
                     intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
                     intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                    intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                     addShareLink(sourceIntent, intent);
                     ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
                     finish();
@@ -459,6 +470,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 intent.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
                 intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
@@ -482,6 +494,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             //   into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+            into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
             addShareLink(sourceIntent, into);
             startActivity(into);
             finish();
@@ -540,6 +553,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION,mFromNotification);
+        into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
         into.putExtra(OPEN_FRAGMENT, fragmentName);
         addShareLink(mIntent, into);
         startActivity(into);

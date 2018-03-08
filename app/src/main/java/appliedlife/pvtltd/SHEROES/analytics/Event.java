@@ -20,8 +20,22 @@ public enum Event {
     //region post related events
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
-    POST_SHARED(AnalyticsEventType.POST, "Shared"),
-    POST_SHARED_CLICKED(AnalyticsEventType.POST, "Shared Clicked"),
+    POST_SHARED(AnalyticsEventType.POST, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
+    POST_SHARED_CLICKED(AnalyticsEventType.POST, "Shared Clicked"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
     POST_BOOKMARKED(AnalyticsEventType.POST, "Bookmarked"),
     POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
@@ -30,16 +44,37 @@ public enum Event {
     POST_REPORTED(AnalyticsEventType.POST, "Reported"),
     POST_APPROVED(AnalyticsEventType.POST, "Approved"),
     POST_REJECTED(AnalyticsEventType.POST, "Rejected"),
-    POST_CREATED(AnalyticsEventType.POST, "Created"),
+    POST_CREATED(AnalyticsEventType.POST, "Created"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
     //endregion
 
     //region reply related events
-    REPLY_CREATED(AnalyticsEventType.REPLY, "Created"),
+    REPLY_CREATED(AnalyticsEventType.REPLY, "Created"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     REPLY_EDITED(AnalyticsEventType.REPLY, "Edited"),
     REPLY_DELETED(AnalyticsEventType.REPLY, "Deleted"),
     REPLY_REPORTED(AnalyticsEventType.REPLY, "Reported"),
-    REPLY_LIKED(AnalyticsEventType.REPLY, "Liked"),
+    REPLY_LIKED(AnalyticsEventType.REPLY, "Liked"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     REPLY_UNLIKED(AnalyticsEventType.REPLY, "Unliked"),
     //endregion
 
@@ -55,12 +90,26 @@ public enum Event {
     JOBS_RECOMMENDED(AnalyticsEventType.JOB, "Recommended"),
 
     //region Helpline message events
-    HELPLINE_MESSAGE_CREATED(AnalyticsEventType.HELPLINE_MESSAGE, "Created"),
+    HELPLINE_MESSAGE_CREATED(AnalyticsEventType.HELPLINE_MESSAGE, "Created"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     //endregion
 
     //region Challenge related events
     CHALLENGE_ACCEPTED(AnalyticsEventType.CHALLENGE, "Accepted"),
-    CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared"),
+    CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     CHALLENGE_SHARED_CLICKED(AnalyticsEventType.CHALLENGE, "Shared Clicked"),
     CHALLENGE_COMPLETED(AnalyticsEventType.CHALLENGE, "Completed"),
     CHALLENGE_SUBMIT_CLICKED(AnalyticsEventType.CHALLENGE, "Submit Clicked"),
@@ -115,7 +164,14 @@ public enum Event {
     PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
     PROFILE_POST_COUNT(AnalyticsEventType.PROFILE, "Post Count Clicked"),
     PROFILE_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Edit Clicked"),
-    PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited"),
+    PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     PROFILE_PIC_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Picture Edit Clicked"),
     PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Followers Count Clicked"),
     PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Following Count Clicked"),

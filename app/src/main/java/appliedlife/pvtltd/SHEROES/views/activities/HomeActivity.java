@@ -389,7 +389,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowNavTooTip.setOutsideTouchable(true);
-                    popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
+                    if(tvDrawerNavigation!=null && !isFinishing()){
+                        popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
+                    }
                     final ImageView ivArrow = navToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     imageParams.setMargins(CommonUtil.convertDpToPixel(10, HomeActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
@@ -441,6 +443,19 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     renderFAQSView();
                 } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                        openArticleFragment(setCategoryIds(), false);
+                    }
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(AppConstants.HELPLINE_CHAT)) && getIntent().getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
+                        mentorListActivity();
+                    }
                 }
             }
         }
@@ -1295,18 +1310,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
         LoginManager.getInstance().logOut();
-        String appLinkUrl, previewImageUrl;
-        appLinkUrl = AppConstants.FB_APP_LINK_URL;
-        previewImageUrl = AppConstants.FB_APP_LINK_URL_PREVIEW_IMAGE;
-        if (AppInviteDialog.canShow()) {
-            AppEventsLogger logger = AppEventsLogger.newLogger(this);
-            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT);
-            AppInviteContent content = new AppInviteContent.Builder()
-                    .setApplinkUrl(appLinkUrl)
-                    .setPreviewImageUrl(previewImageUrl)
-                    .build();
-            AppInviteDialog.show(this, content);
-        }
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
 
     }
@@ -1547,17 +1550,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void removeItem(FeedDetail feedDetail) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        ((FeedFragment) fragment).removeItem(feedDetail);
+        if(fragment!=null){
+            ((FeedFragment) fragment).removeItem(feedDetail);
+        }
     }
 
     private void invalidateItem(FeedDetail feedDetail) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        ((FeedFragment) fragment).updateItem(feedDetail);
+        if (fragment != null) {
+            ((FeedFragment) fragment).updateItem(feedDetail);
+        }
     }
 
     private void refreshCurrentFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        ((FeedFragment) fragment).refreshList();
+        if (fragment != null) {
+            ((FeedFragment) fragment).refreshList();
+        }
     }
 
     private Bitmap decodeFile(File f) {

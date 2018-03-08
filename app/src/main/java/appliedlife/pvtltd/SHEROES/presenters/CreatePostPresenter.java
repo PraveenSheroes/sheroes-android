@@ -107,6 +107,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
                             new EventProperty.Builder()
                                     .id(Long.toString(communityPostCreateResponse.getId()))
                                     .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
+                                    .communityId("0")
                                     .type(MoEngageConstants.CHALLENGE_POST)
                                     .build();
                     AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);

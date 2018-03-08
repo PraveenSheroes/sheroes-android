@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.facebook.appevents.AppEventsLogger;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 import com.mixpanel.android.mpmetrics.SuperPropertyUpdate;
 
@@ -140,9 +141,9 @@ public class MixpanelHelper {
             }
 
             mixpanel.getPeople().setOnce("$created", userSummary.getUserBO().getCrdt());
+            Branch.getInstance().setIdentity(Long.toString(userSummary.getUserId()));
+            AppEventsLogger.setUserID(Long.toString(userSummary.getUserId()));
         }
-
-        Branch.getInstance().setIdentity(Long.toString(userSummary.getUserId()));
 
     }
 
@@ -212,6 +213,7 @@ public class MixpanelHelper {
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
                             .title(feedDetail.getNameOrTitle())
+                            .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
                             .build();
@@ -231,6 +233,7 @@ public class MixpanelHelper {
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
+                            .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()): "not defined")
                             .title(feedDetail.getNameOrTitle())
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
