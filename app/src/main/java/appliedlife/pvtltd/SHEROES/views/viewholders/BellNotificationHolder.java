@@ -72,6 +72,11 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                             .load(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())
                             .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mIvNotificationImage);
+                } else {
+                    Glide.with(mContext)
+                             .load(R.drawable.notification_icon)
+                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                            .into(mIvNotificationImage);
                 }
                 if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreIconImageUrl())) {
                     Glide.with(mContext)
@@ -79,7 +84,6 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                             .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
                             .into(mIvNotificationType);
                 }
-
             }
     }
 

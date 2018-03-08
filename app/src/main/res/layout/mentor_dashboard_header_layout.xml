@@ -237,6 +237,8 @@
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_16"
         android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="@integer/int_value_for_line_1"
         android:lineSpacingExtra="@dimen/sp_size_6"
         android:layout_below="@id/ll_profile"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"

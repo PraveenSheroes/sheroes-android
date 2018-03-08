@@ -464,9 +464,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) {
-            userName.setText(mUserSolarObject.getNameOrTitle());
-            tvMentorToolbarName.setText(mUserSolarObject.getNameOrTitle());
-            setUserNameTitle(mUserSolarObject.getNameOrTitle());
+            String userNameTitle = CommonUtil.camelCaseString(mUserSolarObject.getNameOrTitle());
+
+            userName.setText(userNameTitle);
+            tvMentorToolbarName.setText(userNameTitle);
+            setUserNameTitle(userNameTitle);
         }
 
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
@@ -1253,6 +1255,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
         if(StringUtil.isNotNullOrEmptyString(name)) {
+            name = CommonUtil.camelCaseString(name);
             userName.setText(name);
             tvMentorToolbarName.setText(name);
         }

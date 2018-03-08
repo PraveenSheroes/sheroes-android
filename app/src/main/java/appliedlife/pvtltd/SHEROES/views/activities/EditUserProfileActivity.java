@@ -16,6 +16,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
@@ -762,7 +763,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         toolbarTitle.setText(R.string.ID_EDIT_PROFILE);
     }
@@ -812,7 +813,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 if (userFullName.contains(AppConstants.SPACE)) {
                     String name[] = userFullName.split(AppConstants.SPACE);
                     String firstName = name[0];
-                    String lastName = name[1];
+                    String lastName = userFullName.substring(firstName.length()+1, userFullName.length());
 
                     personalBasicDetailsRequest.setFirstName(firstName);
                     personalBasicDetailsRequest.setLastName(lastName);
@@ -824,7 +825,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     personalBasicDetailsRequest.setFullName(userFullName);
                 }
             }
-
 
             if (StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
                 personalBasicDetailsRequest.setMobileNumber(mobileNumber.getText().toString());
@@ -857,12 +857,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                 try {
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
-
                     String userName = name.getText().toString().trim();
+
                     if (userName.contains(AppConstants.SPACE)) {
                         String name[] = userName.split(AppConstants.SPACE);
                         String firstName = name[0];
-                        String lastName = name[1];
+                        String lastName = userName.substring(firstName.length()+1, userName.length());
                         userSummary.setFirstName(firstName);
                         userSummary.setLastName(lastName);
                         userSummary.getUserBO().setName(userName);

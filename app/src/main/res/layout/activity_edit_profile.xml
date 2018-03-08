@@ -104,6 +104,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_PROFILE_FULL_NAME"
                     android:maxLines="@integer/int_value_for_line_1"
+                    android:inputType="textCapWords"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_16" />

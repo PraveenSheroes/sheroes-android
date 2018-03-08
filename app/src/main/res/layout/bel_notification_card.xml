@@ -17,7 +17,7 @@
             android:layout_height="@dimen/dp_size_45"
             android:layout_marginTop="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:src="@drawable/appicon" />
+            android:src="@drawable/notification_icon" />
 
         <RelativeLayout
             android:paddingRight="@dimen/dp_size_15"

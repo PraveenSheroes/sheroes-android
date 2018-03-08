@@ -855,14 +855,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //endregion
 
     private void setupToolbarItemsColor() {
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        upArrow.mutate();
-        upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        if (upArrow != null) {
+            upArrow.mutate();
+            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        }
 
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(mStatusBarColorEmpty) {
-                upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                if (upArrow != null) {
+                    upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                }
                 getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
             } else {
                 getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));

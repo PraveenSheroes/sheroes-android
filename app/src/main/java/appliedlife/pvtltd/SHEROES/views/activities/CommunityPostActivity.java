@@ -466,7 +466,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (imageUri.getScheme().equalsIgnoreCase(TYPE_FILE)) {
             return imageUri.getPath();
         } else {
-            return CommonUtil.getPathFromURI(this, imageUri);
+            return CommonUtil.getImagePathFromInputStreamUri(this, imageUri);
         }
     }
 
@@ -1301,6 +1301,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             public void onClick(View view) {
                 View recyclerViewItem = (View) view.getParent();
                 int position = mImageListView.getChildAdapterPosition(recyclerViewItem);
+                if(position == -1) return;
                 Photo photo = mImageList.get(position);
                 if (mIsEditPost && !photo.isNew) {
                     deletedImageIdList.add((long) photo.remote_id);
@@ -1495,13 +1496,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //endregion
 
     private void setupToolbarItemsColor() {
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        if (upArrow != null) {
+            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        }
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(mStatusBarColorEmpty) {
-                upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                if (upArrow != null) {
+                    upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                }
                 getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
             } else {
                 getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
