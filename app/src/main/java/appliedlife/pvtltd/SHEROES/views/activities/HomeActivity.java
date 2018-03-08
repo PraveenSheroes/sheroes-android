@@ -144,7 +144,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
@@ -159,13 +158,10 @@ import butterknife.OnClick;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INVITE_FRIEND;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
@@ -290,60 +286,40 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public PopupWindow popUpNotificationWindow;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
-    private boolean hasTokenExpired = false;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         activityDataPresenter.attachView(this);
+        mHomePresenter.attachView(this);
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, 0);
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && false != mUserPreference.get().isSheUser()) {
-            isSheUser = true;
-        }
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            isSheUser = mUserPreference.get().isSheUser();
             mUserId = mUserPreference.get().getUserSummary().getUserId();
-
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
                 isMentor = true;
             }
         }
-
-        mHomePresenter.attachView(this);
+        renderHomeFragmentView();
+        assignNavigationRecyclerListView();
+        sheUserInit();
         mHomePresenter.queryConfig();
         fetchAllCommunity();
-
+        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         if (null == mUserPreference) {
             logOut();
-        } else if (null != mUserPreference.get()) {
-
-            if (!StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                logOut();
-            } else {
-                long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
-                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
-                    hasTokenExpired = true;
-                    mHomePresenter.getAuthTokenRefreshPresenter();
-                } else {
-                    renderHomeFragmentView();
-                    assignNavigationRecyclerListView();
-                    sheUserInit();
-                }
-            }
+        } else if (mUserPreference.isSet()) {
             if (null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
                 AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
                 AppsFlyerLib.getInstance().startTracking(SheroesApplication.mContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
                 ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(mUserId));
             }
-            }else {
-            mHomePresenter.getAuthTokenRefreshPresenter();
         }
-        mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         try {
             getGcmId();
         } catch (Exception e) {
@@ -475,14 +451,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void onResume() {
         super.onResume();
         if (isInviteReferral) {
-            if (this!=null && !this.isFinishing() && null != mProgressDialog) {
+            if (this != null && !this.isFinishing() && null != mProgressDialog) {
                 mProgressDialog.dismiss();
             }
             isInviteReferral = false;
         } else {
-            if(!hasTokenExpired){
-                setProfileImage();
-            }
+            setProfileImage();
         }
         resetHamburgerSelectedItems();
     }
@@ -599,9 +573,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void showCaseDesign() {
-        if(mIsFirstTimeOpen){
+        if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this,mFloatActionBtn,mTvHome,mTvCommunities,tvDrawerNavigation,mRecyclerView);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView);
             showcaseManager.showFirstMainActivityShowcase();
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);
@@ -952,12 +926,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     }
                 }
                 break;
-            case R.id.tv_mentor_follow:
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).followUnFollowRequest((UserSolrObj) baseResponse);
-                }
-                break;
+
             case R.id.tv_mentor_ask_question:
                 CommunityPost mentorPost = new CommunityPost();
                 mFeedDetail = (FeedDetail) baseResponse;
@@ -1021,25 +990,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     eventDetailDialogFragment.eventGoingListData(mFeedDetail);
                 }
                 break;
-            case R.id.tv_approve_spam_post:
-                Fragment fragmentHome = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragmentHome)) {
-                    ((HomeFragment) fragmentHome).approveSpamPost(mFeedDetail, true, false, true);
-                }
-                break;
-            case R.id.tv_delete_spam_post:
-                Fragment homeFragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(homeFragment)) {
-                    ((HomeFragment) homeFragment).approveSpamPost(mFeedDetail, true, true, false);
-                }
-                break;
             default:
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
                 setAllValues(mFragmentOpen);
-                // setViewPagerAndViewAdapter(mViewPagerAdapter, mViewPager);
-                //  setViewPagerAndViewAdapter();
                 super.feedCardsHandled(view, baseResponse);
 
         }
@@ -1066,13 +1021,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void openProfileActivity() {
         ProfileActivity.navigateTo(this, mUserId, isMentor, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-    }
-
-    public void refreshHomeFragment(FeedDetail feedDetail) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(fragment)) {
-            ((HomeFragment) fragment).commentListRefresh(feedDetail, COMMENT_REACTION);
-        }
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
@@ -1180,13 +1128,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             fm.popBackStack();
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        /*Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(mFeedDetail);
-        bundle.putParcelable(AppConstants.HOME_FRAGMENT, parcelable);
-        bundle.putLong(AppConstants.CHALLENGE_ID, mChallengeId);
-        homeFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();*/
-
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
@@ -1418,12 +1359,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         } else {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-            if (fragment!=null && fragment instanceof CommunitiesListFragment) {
+            if (fragment != null && fragment instanceof CommunitiesListFragment) {
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     homeOnClick();
                 }
-            }
-            else if (fragment!=null && fragment instanceof FeedFragment) {
+            } else if (fragment != null && fragment instanceof FeedFragment) {
                 if (doubleBackToExitPressedOnce) {
                     getSupportFragmentManager().popBackStackImmediate();
                     finish();
@@ -1522,11 +1462,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
         if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-            if (fragment instanceof HomeFragment) {
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    ((HomeFragment) fragment).onRefreshClick();
-                }
-            } else if (fragment instanceof CommunitiesListFragment) {
+            if (fragment instanceof CommunitiesListFragment) {
                 CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
                 if (currentFragment != null && currentFragment.isVisible()) {
                     currentFragment.refreshList();
@@ -1543,20 +1479,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         ((FeedFragment) fragment).refreshList();
                         break;
 
-                    case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
-                        if (null != intent.getExtras()) {
-                            UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                            if (null != userSolrObj) {
-                                Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                                if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                                    invalidateItem(userSolrObj);
-                                }
-                            }
-                        }
-                        break;
-
                     case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
-                        if (null != intent && null != intent.getExtras()) {
+                        if (null != intent.getExtras()) {
                             JobFeedSolrObj jobFeedSolrObj = null;
                             jobFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
                             invalidateItem(jobFeedSolrObj);
@@ -1596,70 +1520,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         } else {
                             invalidateItem(userPostSolrObj);
                         }
-
-
-
-
-
-
-                /*case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
-                    articleDetailActivityResponse(intent);
-                    break;*/
-                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
-                        //communityDetailActivityResponse(intent);
-                        break;
-
-                /*case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                    if (resultCode == Activity.RESULT_OK) {
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            ((HomeFragment) fragment).onRefreshClick();
-                        }
-                    }
-                    break;*/
-               /* case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
-                    boolean isPostDeleted = false;
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelable != null) {
-                            UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
-                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                            mFeedDetail = userPostSolrObj;
-                        }
-                        if (isPostDeleted) {
-                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                        } else {
-                            ((HomeFragment) fragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                        }
-                    }
-                    break;*/
-
-                    case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY:
-                       // createCommunityActivityResponse(intent);
-                        break;
-                /*case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    editCommunityPostResponse(intent);
-                    break;*/
-                    case AppConstants.REQ_CODE_SPEECH_INPUT:
-                        //  helplineSpeechActivityResponse(intent, resultCode);
-                        break;
-              /*  case REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
-                    if (null != intent.getExtras()) {
-                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                        if (null != userSolrObj) {
-                            Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                            if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                                userSolrObj.currentItemPosition = mSuggestionItemPosition;
-                                userSolrObj.setItemPosition(mMentorCardPosition);
-                                userSolrObj.setSuggested(true);
-                                ((HomeFragment) fragmentMentor).getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
-                            }
-                        } else {
-                            homeOnClick();
-                        }
-                    }
-                    break;*/
                     case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                         CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                         if (resultCode == RESULT_OK) {
@@ -1675,18 +1535,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                         }
                         break;
-                    case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
-                        Fragment fragmentMentor = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                        if (AppUtils.isFragmentUIActive(fragmentMentor)) {
-                            ((HomeFragment) fragmentMentor).onRefreshClick();
-                        }
-                        break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
                 }
             }
         }
-        if (this!=null && !this.isFinishing() && null != mProgressDialog) {
+        if (!this.isFinishing() && null != mProgressDialog) {
             mProgressDialog.dismiss();
         }
     }
@@ -1730,39 +1584,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Crashlytics.getInstance().core.logException(e);
         }
         return null;
-    }
-
-    private void editCommunityPostResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
-            if (null != mFeedDetail) {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    if (mFeedDetail.isFromHome()) {
-                        homeOnClick();
-                    } else {
-                        ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                    }
-                }
-            } else {
-                homeOnClick();
-            }
-        }
-    }
-
-    private void articleDetailActivityResponse(Intent intent) {
-        if (null != intent && null != intent.getExtras()) {
-            mFeedDetail = Parcels.unwrap(intent.getParcelableExtra(AppConstants.HOME_FRAGMENT));
-            Fragment fragmentArticle = getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragmentArticle)) {
-                ((ArticlesFragment) fragmentArticle).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-            }
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                ((HomeFragment) fragment).commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-            }
-
-        }
     }
 
     @Override
@@ -1944,7 +1765,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-
     @Override
     public void startProgressBar() {
 
@@ -1973,64 +1793,56 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void getGcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-            GCMClientManager pushClientManager = new GCMClientManager(this, getString(R.string.ID_PROJECT_ID));
-            pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-                @Override
-                public void onSuccess(String registrationId, boolean isNewRegistration) {
-                    mGcmId = registrationId;
-                    PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
-                    if (StringUtil.isNotNullOrEmptyString(registrationId)) {
-                        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
-                            if (mInstallUpdatePreference.get().isFirstOpen()) {
-                                LoginRequest loginRequest = loginRequestBuilder();
-                                loginRequest.setGcmorapnsid(registrationId);
-                                if (mInstallUpdatePreference.get().isWelcome()) {
-                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                    installUpdateForMoEngage.setWelcome(false);
-                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
-                                }
-                                mHomePresenter.getNewGCMidFromPresenter(loginRequest);
-                            } else {
-                                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
-                                    String mOldGcmId = mUserPreference.get().getGcmId();
-                                    if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
-                                        if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
-                                            LoginRequest loginRequest = loginRequestBuilder();
-                                            loginRequest.setGcmorapnsid(registrationId);
-                                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
-                                        }
+        GCMClientManager pushClientManager = new GCMClientManager(this, getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                mGcmId = registrationId;
+                PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
+                if (StringUtil.isNotNullOrEmptyString(registrationId)) {
+                    if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+                        if (mInstallUpdatePreference.get().isFirstOpen()) {
+                            LoginRequest loginRequest = loginRequestBuilder();
+                            loginRequest.setGcmorapnsid(registrationId);
+                            if (mInstallUpdatePreference.get().isWelcome()) {
+                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                installUpdateForMoEngage.setWelcome(false);
+                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                            }
+                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                        } else {
+                            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                                String mOldGcmId = mUserPreference.get().getGcmId();
+                                if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
+                                    if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                                        LoginRequest loginRequest = loginRequestBuilder();
+                                        loginRequest.setGcmorapnsid(registrationId);
+                                        mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                                     }
                                 }
-                                if (mInstallUpdatePreference.get().isWelcome()) {
-                                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                    installUpdateForMoEngage.setWelcome(false);
-                                    mInstallUpdatePreference.set(installUpdateForMoEngage);
-                                }
+                            }
+                            if (mInstallUpdatePreference.get().isWelcome()) {
+                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                installUpdateForMoEngage.setWelcome(false);
+                                mInstallUpdatePreference.set(installUpdateForMoEngage);
                             }
                         }
-                    } else {
-                        getGcmId();
                     }
+                } else {
+                    getGcmId();
                 }
+            }
 
-                @Override
-                public void onFailure(String ex) {
+            @Override
+            public void onFailure(String ex) {
 
-                }
-            });
+            }
+        });
     }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-        if (null != loginResponse && StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-            hasTokenExpired = false;
-            loginResponse.setTokenTime(System.currentTimeMillis());
-            loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-            mUserPreference.set(loginResponse);
-            renderHomeFragmentView();
-            assignNavigationRecyclerListView();
-            sheUserInit();
-        }
+
     }
 
     @Override
@@ -2081,7 +1893,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 if (baseResponse instanceof NotificationReadCountResponse) {
                     NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
                     StringBuilder stringBuilder = new StringBuilder();
-                    int  notificationCount=notificationReadCountResponse.getUnread_notification_count();
+                    int notificationCount = notificationReadCountResponse.getUnread_notification_count();
                     if (notificationReadCountResponse.getUnread_notification_count() > 0) {
                         flNotificationReadCount.setVisibility(View.VISIBLE);
                         String notification = String.valueOf(notificationCount);

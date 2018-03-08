@@ -242,7 +242,35 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         });
 
     }
+    public void getAuthTokenRefreshPresenter() {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mLoginModel.getAuthTokenRefreshFromModel().
+                compose(this.<LoginResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LoginResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(AppConstants.LOGOUT_USER, ERROR_AUTH_TOKEN);
+                    }
+
+                    @Override
+                    public void onNext(LoginResponse loginResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().getLogInResponse(loginResponse);
+                    }
+                });
+
+    }
     public void onStop() {
         detachView();
     }
