@@ -325,14 +325,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 logOut();
             } else {
                 long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
-                //if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
+                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
                     hasTokenExpired = true;
                     mHomePresenter.getAuthTokenRefreshPresenter();
-               /* } else {
+                } else {
                     renderHomeFragmentView();
                     assignNavigationRecyclerListView();
                     sheUserInit();
-                }*/
+                }
             }
             if (null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
