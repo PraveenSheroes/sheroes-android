@@ -73,6 +73,7 @@ public class SheroesApplication extends MultiDexApplication  {
         sApplicationContext = SheroesApplication.this;
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
+        AnalyticsManager.initializeFbAnalytics(mContext);
         Stetho.initializeWithDefaults(this);
     }
 

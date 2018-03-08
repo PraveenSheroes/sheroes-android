@@ -6,5 +6,6 @@ package appliedlife.pvtltd.SHEROES.analytics;
 public enum AnalyticsProvider {
     GOOGLE_ANALYTICS,
     MIXPANEL,
-    APPSFLYER
+    APPSFLYER,
+    FACEBOOK
 }

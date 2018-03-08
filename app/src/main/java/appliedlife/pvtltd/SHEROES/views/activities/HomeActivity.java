@@ -1354,18 +1354,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
         LoginManager.getInstance().logOut();
-        String appLinkUrl, previewImageUrl;
-        appLinkUrl = AppConstants.FB_APP_LINK_URL;
-        previewImageUrl = AppConstants.FB_APP_LINK_URL_PREVIEW_IMAGE;
-        if (AppInviteDialog.canShow()) {
-            AppEventsLogger logger = AppEventsLogger.newLogger(this);
-            logger.logEvent(AppEventsConstants.EVENT_NAME_VIEWED_CONTENT);
-            AppInviteContent content = new AppInviteContent.Builder()
-                    .setApplinkUrl(appLinkUrl)
-                    .setPreviewImageUrl(previewImageUrl)
-                    .build();
-            AppInviteDialog.show(this, content);
-        }
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
 
     }
