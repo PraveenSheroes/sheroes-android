@@ -413,7 +413,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowNavTooTip.setOutsideTouchable(true);
-                    popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
+                    if(tvDrawerNavigation!=null && !isFinishing()){
+                        popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
+                    }
                     final ImageView ivArrow = navToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     imageParams.setMargins(CommonUtil.convertDpToPixel(10, HomeActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
@@ -1694,17 +1696,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void removeItem(FeedDetail feedDetail) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        ((FeedFragment) fragment).removeItem(feedDetail);
+        if(fragment!=null){
+            ((FeedFragment) fragment).removeItem(feedDetail);
+        }
     }
 
     private void invalidateItem(FeedDetail feedDetail) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        ((FeedFragment) fragment).updateItem(feedDetail);
+        if (fragment != null) {
+            ((FeedFragment) fragment).updateItem(feedDetail);
+        }
     }
 
     private void refreshCurrentFragment() {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        ((FeedFragment) fragment).refreshList();
+        if (fragment != null) {
+            ((FeedFragment) fragment).refreshList();
+        }
     }
 
     private Bitmap decodeFile(File f) {

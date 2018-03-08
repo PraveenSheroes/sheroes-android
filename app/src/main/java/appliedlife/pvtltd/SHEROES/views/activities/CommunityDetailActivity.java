@@ -598,9 +598,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
                     mFabButton.setVisibility(View.VISIBLE);
                     mFabButton.setImageResource(R.drawable.challenge_placeholder);
-                    Glide.with(CommunityDetailActivity.this)
-                            .load(communityTab.fabIconUrl)
-                            .into(mFabButton);
+                    if(CommonUtil.isValidContextForGlide(mFabButton.getContext())){
+                        Glide.with(mFabButton.getContext())
+                                .load(communityTab.fabIconUrl)
+                                .into(mFabButton);
+                    }
                 } else {
                     mFabButton.setVisibility(View.GONE);
                 }

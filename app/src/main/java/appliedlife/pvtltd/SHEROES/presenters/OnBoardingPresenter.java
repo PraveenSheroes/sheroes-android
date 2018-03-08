@@ -205,7 +205,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        onBoardingModel.getConfig().subscribe(new DisposableObserver<ConfigurationResponse>() {
+        onBoardingModel.getConfig()
+                .compose(this.<ConfigurationResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ConfigurationResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

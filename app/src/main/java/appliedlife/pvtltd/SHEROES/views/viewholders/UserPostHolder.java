@@ -538,7 +538,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         String authorImageUrl = mUserPostObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             mAuthorIcon.setCircularImage(true);
-            mAuthorIcon.bindImage(authorImageUrl);
+            if(CommonUtil.isValidContextForGlide(context)){
+                mAuthorIcon.bindImage(authorImageUrl);
+            }
         }
     }
 
