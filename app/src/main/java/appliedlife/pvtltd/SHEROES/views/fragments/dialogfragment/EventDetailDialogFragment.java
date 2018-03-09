@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -104,10 +105,14 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mHomePresenter.attachView(this);
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                if(isFromCommunityScreen){
+                if(getActivity() instanceof CommunityDetailActivity){
                     mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunityDetailActivity) getActivity());
-                }else {
+                }else if(getActivity() instanceof HomeActivity) {
                     mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
+                }else {
+                    if(getActivity() instanceof CollectionActivity){
+                        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CollectionActivity) getActivity());
+                    }
                 }
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);
@@ -143,10 +148,14 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                             ivEventDetail.setImageBitmap(resource);
                             Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                                 public void onGenerated(Palette palette) {
-                                    if (isFromCommunityScreen) {
+                                    if (getActivity() instanceof CommunityDetailActivity) {
                                         ((CommunityDetailActivity) getActivity()).supportStartPostponedEnterTransition();
-                                    } else {
+                                    } else if(getActivity() instanceof HomeActivity){
                                         ((HomeActivity) getActivity()).supportStartPostponedEnterTransition();
+                                    }else {
+                                        if(getActivity() instanceof CollectionActivity){
+                                            ((CollectionActivity) getActivity()).supportStartPostponedEnterTransition();
+                                        }
                                     }
                                 }
                                 });
