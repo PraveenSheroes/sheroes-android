@@ -42,7 +42,6 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
     BaseHolderInterface viewInterface;
     private NavMenuItem dataItem;
     public static String selectedOptionName;
-    private boolean isUserProfile;
 
     @Bind(R.id.tv_drawer_item)
     TextView tvDrawerItem;
@@ -74,18 +73,6 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
 
         String itemName = dataItem.getMenuName();
         tvDrawerItem.setText(itemName);
-
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
-                if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() != AppConstants.MENTOR_TYPE_ID) {
-                    isUserProfile = true;
-                }
-        }
-
-        if(itemName.equalsIgnoreCase("Profile") && isUserProfile) { //Show new feature only to users
-            newFeature.setVisibility(View.VISIBLE);
-        } else {
-            newFeature.setVisibility(View.GONE);
-        }
 
         String iconUrl = dataItem.getMenuItemIconUrl();   //default icon
         if(StringUtil.isNotNullOrEmptyString(iconUrl)) {

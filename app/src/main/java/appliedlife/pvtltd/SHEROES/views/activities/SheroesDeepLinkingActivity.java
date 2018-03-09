@@ -122,7 +122,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String trimUrl = CommonUtil.trimBranchIdQuery(mData.toString());
                 getDeeplinkUrlFromNotification(trimUrl, intent);
             } else {
-                if (null != intent.getExtras()) {
+
+                if(intent.getType() != null && (Intent.ACTION_SEND.equals(intent.getAction()) || Intent.ACTION_SEND_MULTIPLE.equals(intent.getAction()))) {
+                    openPostActivity(intent);
+                }
+                else if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
                     notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
                     String trimUrl = CommonUtil.trimBranchIdQuery(deepLink.toString());
@@ -540,6 +544,21 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
         return counter;
     }
+
+    //Launch community post activity
+    private void openPostActivity(Intent intent) {
+       if(intent.getExtras()!=null) {
+           Intent into = new Intent(this, CommunityPostActivity.class);
+           into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+           into.putExtras(intent.getExtras());
+           into.setAction(intent.getAction());
+           into.setType(intent.getType());
+           addShareLink(mIntent, into);
+           startActivity(into);
+           finish();
+       }
+    }
+
 
     private void homeActivityCall(String fragmentName) {
         if (mFromNotification > 0) {

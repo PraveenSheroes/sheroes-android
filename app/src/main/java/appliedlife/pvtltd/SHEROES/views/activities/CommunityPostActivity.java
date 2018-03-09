@@ -1233,26 +1233,36 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void onBackPress() {
 
-        if (isDirty() && !isSharedFromOtherApp) {
-            AlertDialog.Builder builder =
-                    new AlertDialog.Builder(CommunityPostActivity.this);
-
-            builder.setTitle("Discard Post?");
-            builder.setMessage("Are you sure you want to discard your changes?");
-            builder.setNegativeButton("NO", null);
-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    CommunityPostActivity.this.finish();
-                }
-            });
-
-            builder.create();
-            builder.show();
+        if (isDirty()) {
+            confirmationAlert();
         } else {
             navigateToParentActivity();
         }
+    }
+
+
+    private void confirmationAlert() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(CommunityPostActivity.this);
+
+        builder.setTitle("Discard Post?");
+        builder.setMessage("Are you sure you want to discard your changes?");
+        builder.setNegativeButton("NO", null);
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                if(isSharedFromOtherApp) {
+                    navigateToParentActivity();
+                } else {
+                    CommunityPostActivity.this.finish();
+                }
+            }
+        });
+
+        builder.create();
+        builder.show();
     }
 
     private void navigateToParentActivity() {

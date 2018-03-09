@@ -814,7 +814,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             mCommentLikeCount.setVisibility(View.GONE);
         }
         if (lastComment.isLiked) {
-            mCommentLike.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+            mCommentLike.setTextColor(mContext.getResources().getColor(R.color.toolbar_title_text));
         } else {
             mCommentLike.setTextColor(mContext.getResources().getColor(R.color.posted_in));
         }
