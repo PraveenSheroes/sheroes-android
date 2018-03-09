@@ -327,6 +327,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
 
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
     }
 
     private void invalidateBottomBar() {
@@ -519,6 +520,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mTabLayout.setTabTextColors(Color.parseColor(alphaColor), Color.parseColor(mCommunityTitleTextColor));
         mFabButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(mCommunitySecondaryColor)));
         mTabLayout.setBackgroundColor(Color.parseColor(mCommunityPrimaryColor));
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityPrimaryColor));
     }
 
     private void setupViewPager(final ViewPager viewPager) {
