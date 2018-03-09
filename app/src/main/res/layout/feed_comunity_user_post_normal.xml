@@ -469,13 +469,13 @@
                         android:id="@+id/comment_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
                         android:layout_marginLeft="@dimen/dp_size_10"
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
-                        android:textStyle="normal"
+                        android:text="Like"
                         android:textColor="@color/posted_in"
-                        android:text="Like"/>
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/comment_like_count"

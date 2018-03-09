@@ -42,6 +42,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -52,6 +53,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -222,6 +224,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.image_upload_view)
     LinearLayout mImageUploadView;
+
 
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
@@ -953,6 +956,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void toolTipForAnonymous(Context context) {
         try {
+            int width = AppUtils.getWindowWidth(CommunityPostActivity.this);
             LayoutInflater inflater = null;
             inflater = LayoutInflater.from(context);
             final View view = inflater.inflate(R.layout.tool_tip_arrow_down_side, null);
@@ -974,7 +978,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }
             });
             mAnonymousView.addView(view, lps);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
     }
@@ -1229,26 +1233,36 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void onBackPress() {
 
-        if (isDirty() && !isSharedFromOtherApp) {
-            AlertDialog.Builder builder =
-                    new AlertDialog.Builder(CommunityPostActivity.this);
-
-            builder.setTitle("Discard Post?");
-            builder.setMessage("Are you sure you want to discard your changes?");
-            builder.setNegativeButton("NO", null);
-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    CommunityPostActivity.this.finish();
-                }
-            });
-
-            builder.create();
-            builder.show();
+        if (isDirty()) {
+            confirmationAlert();
         } else {
             navigateToParentActivity();
         }
+    }
+
+
+    private void confirmationAlert() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(CommunityPostActivity.this);
+
+        builder.setTitle("Discard Post?");
+        builder.setMessage("Are you sure you want to discard your changes?");
+        builder.setNegativeButton("NO", null);
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+                if(isSharedFromOtherApp) {
+                    navigateToParentActivity();
+                } else {
+                    CommunityPostActivity.this.finish();
+                }
+            }
+        });
+
+        builder.create();
+        builder.show();
     }
 
     private void navigateToParentActivity() {

@@ -367,7 +367,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                                     popUpNotificationWindow.dismiss();
                                 }
                             });
-                        } catch (WindowManager.BadTokenException e) {
+                        } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
                         }
                     }
@@ -405,7 +405,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             popupWindowNavTooTip.dismiss();
                         }
                     });
-                } catch (WindowManager.BadTokenException e) {
+                } catch (Exception e) {
                     Crashlytics.getInstance().core.logException(e);
                 }
             }
