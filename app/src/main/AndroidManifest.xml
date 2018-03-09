@@ -241,6 +241,7 @@
         <activity
             android:name=".views.activities.SheroesDeepLinkingActivity"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

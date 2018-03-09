@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:id="@+id/profile_community_container"
@@ -36,4 +36,4 @@
         tools:text="Parenting by Babygogo Babygogo"/>
 
     </LinearLayout>
-</LinearLayout>
+</appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>

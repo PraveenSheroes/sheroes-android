@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -161,15 +162,26 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
         SearchManager searchManager = (SearchManager) AllContactActivity.this.getSystemService(Context.SEARCH_SERVICE);
         if (searchItem != null) {
             etInviteSearchBox = (SearchView) searchItem.getActionView();
-            String LEFT_HTML_TAG = "<font color='#ffffff'>";
+            String LEFT_HTML_TAG = "<font color='#90949C'>";
             String RIGHT_HTML_TAG = "</font>";
             String search = LEFT_HTML_TAG + getString(R.string.ID_SEARCH) + AppConstants.DOTS + RIGHT_HTML_TAG;
             etInviteSearchBox.setQueryHint(Html.fromHtml(search));
             etInviteSearchBox.setIconifiedByDefault(false);
+            EditText searchEditText =etInviteSearchBox.findViewById(R.id.search_src_text);
+            searchEditText.setTextColor(getResources().getColor(R.color.comment_text));
             ImageView searchIcon = etInviteSearchBox.findViewById(R.id.search_mag_icon);
             searchIcon.setImageDrawable(null);
+
+          /*  ImageView searchBack = etInviteSearchBox.findViewById(R.id.search_button);
+            searchBack.setImageResource(R.drawable.ic_back_white);
+            ImageView back = etInviteSearchBox.findViewById(R.id.search_go_btn);
+            back.setImageResource(R.drawable.ic_back_white);*/
+
+            ImageView searchClose = etInviteSearchBox.findViewById(R.id.search_close_btn);
+            searchClose.setImageResource(R.drawable.ic_clear_black_24dp);
             View v = etInviteSearchBox.findViewById(R.id.search_plate);
             v.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.fully_transparent));
+
             searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
 
                 @Override

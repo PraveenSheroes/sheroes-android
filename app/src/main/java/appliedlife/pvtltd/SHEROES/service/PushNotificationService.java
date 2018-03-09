@@ -177,7 +177,8 @@ public class PushNotificationService extends GcmListenerService {
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class);
+        notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);;
         notificationIntent.setData(url);
         notificationIntent.putExtra(AppConstants.IS_MOENGAGE, false);
         notificationIntent.putExtra(BaseActivity.SOURCE_SCREEN, "From Push Notification");
@@ -187,11 +188,11 @@ public class PushNotificationService extends GcmListenerService {
         notificationIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, 1);
         notificationIntent.putExtra(AppConstants.IS_FROM_PUSH, true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
-        stackBuilder.addParentStack(HomeActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
+        stackBuilder.addNextIntentWithParentStack(notificationIntent);
         notificationIntent.setAction(AppConstants.SHEROES + mCount);
-
-        PendingIntent pIntent = stackBuilder.getPendingIntent(AppConstants.NO_REACTION_CONSTANT,PendingIntent.FLAG_ONE_SHOT);
+        Random random = new Random();
+        int randomId = random.nextInt(9999 - 1000) + 1000;
+        PendingIntent pIntent = stackBuilder.getPendingIntent(randomId,PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new NotificationCompat.Builder(PushNotificationService.this, relatedChannelId)
                 .setContentTitle(title)
                 .setTicker(AppConstants.TICKER)
@@ -208,8 +209,6 @@ public class PushNotificationService extends GcmListenerService {
                 .setChannelId(relatedChannelId)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setSmallIcon(getNotificationIcon()).build();
-        Random random = new Random();
-        int randomId = random.nextInt(9999 - 1000) + 1000;
         notificationManager.notify(Integer.parseInt(randomId + ""), notification);
     }
 
