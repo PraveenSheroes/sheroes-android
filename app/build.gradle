@@ -52,7 +52,7 @@ android {
             //buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
            // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
            
-            if(System.getProperty("BASE_URL")){
+            if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
                 buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""
             }
             shrinkResources false
