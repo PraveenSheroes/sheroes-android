@@ -1171,19 +1171,22 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.li_article_spinner_icon)
     public void openSpinnerOnClick() {
-        mFlHomeFooterList.setVisibility(View.GONE);
-        if (!StringUtil.isNotEmptyCollection(mHomeSpinnerItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
-            setArticleCategoryFilterValues();
-            mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
-        } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
-            mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
+        if (!AppUtils.isFragmentUIActive(fragment)) {
+            mFlHomeFooterList.setVisibility(View.GONE);
+            if (!StringUtil.isNotEmptyCollection(mHomeSpinnerItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
+                setArticleCategoryFilterValues();
+                mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
+            } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
+                mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
+            }
+            mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
+            bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
+            mArticleCategorySpinnerFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
-        mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
-        Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
-        bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
-        mArticleCategorySpinnerFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
     }
 
     @OnClick(R.id.tv_home)
@@ -1655,7 +1658,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
             if (AppUtils.isFragmentUIActive(fragment)) {
-                getSupportFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStackImmediate();
             }
         }
     }
