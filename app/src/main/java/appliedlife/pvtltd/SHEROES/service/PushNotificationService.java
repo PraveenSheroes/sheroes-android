@@ -25,6 +25,7 @@ import com.moengage.push.PushManager;
 import com.moengage.pushbase.push.MoEngageNotificationUtils;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -207,7 +208,9 @@ public class PushNotificationService extends GcmListenerService {
                 .setChannelId(relatedChannelId)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                 .setSmallIcon(getNotificationIcon()).build();
-        notificationManager.notify(Integer.parseInt(mCount + ""), notification);
+        Random random = new Random();
+        int randomId = random.nextInt(9999 - 1000) + 1000;
+        notificationManager.notify(Integer.parseInt(randomId + ""), notification);
     }
 
     private int getNotificationIcon() {
