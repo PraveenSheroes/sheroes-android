@@ -811,6 +811,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
             if (StringUtil.isNotNullOrEmptyString(userFullName)) {
                 if (userFullName.contains(AppConstants.SPACE)) {
+                    userFullName = CommonUtil.camelCaseString(userFullName);
                     String name[] = userFullName.split(AppConstants.SPACE);
                     String firstName = name[0];
                     String lastName = userFullName.substring(firstName.length()+1, userFullName.length());
