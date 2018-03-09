@@ -150,9 +150,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private Adapter mAdapter;
     private String mDefaultTabKey = "";
 
-    private String mCommunityPrimaryColor = "#6e2f95";
+    private String mCommunityPrimaryColor = "#ffffff";
     private String mCommunitySecondaryColor = "#dc4541";
-    private String mCommunityTitleTextColor = "#ffffff";
+    private String mCommunityTitleTextColor = "#3c3c3c";
 
     private int mFromNotification;
     private View inviteFriendToolTip;
@@ -291,15 +291,15 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     private void setAllColor() {
         if (mCommunityFeedSolrObj == null) {
-            mCommunityPrimaryColor = "#6e2f95";
+            mCommunityPrimaryColor = "#ffffff";
             mCommunitySecondaryColor = "#dc4541";
-            mCommunityTitleTextColor = "#ffffff";
+            mCommunityTitleTextColor = "#3c3c3c";
             return;
         }
         if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communityPrimaryColor)) {
             mCommunityPrimaryColor = mCommunityFeedSolrObj.communityPrimaryColor;
         } else {
-            mCommunityPrimaryColor = "#6e2f95";
+            mCommunityPrimaryColor = "#ffffff";
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communitySecondaryColor)) {
@@ -311,7 +311,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.titleTextColor)) {
             mCommunityTitleTextColor = mCommunityFeedSolrObj.titleTextColor;
         } else {
-            mCommunityTitleTextColor = "#ffffff";
+            mCommunityTitleTextColor = "#3c3c3c";
         }
     }
 
@@ -327,6 +327,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
 
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
     }
 
     private void invalidateBottomBar() {
@@ -519,6 +520,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mTabLayout.setTabTextColors(Color.parseColor(alphaColor), Color.parseColor(mCommunityTitleTextColor));
         mFabButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(mCommunitySecondaryColor)));
         mTabLayout.setBackgroundColor(Color.parseColor(mCommunityPrimaryColor));
+        mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
     }
 
     private void setupViewPager(final ViewPager viewPager) {
