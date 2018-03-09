@@ -31,6 +31,7 @@
         android:textSize="@dimen/sp_size_13" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/new_feature"
         android:layout_margin="@dimen/dp_size_10"
         android:layout_toEndOf="@id/tv_drawer_item"

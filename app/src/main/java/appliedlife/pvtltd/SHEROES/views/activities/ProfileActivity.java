@@ -1625,7 +1625,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
                 tvMentorDashBoardFollow.setText(AppConstants.EDIT_PROFILE);
 
-                shareProfile.setBackgroundResource(R.drawable.selector_event_share);
+                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
