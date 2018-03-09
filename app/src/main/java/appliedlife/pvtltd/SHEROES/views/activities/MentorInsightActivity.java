@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -201,8 +202,10 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         mMentorPresenter.attachView(this);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.ID_INSIGHT);
         mMentorPresenter.getMentorInsightFromPresenter(new MentorFollowerRequest());
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_MENTOR_INSIGHT));

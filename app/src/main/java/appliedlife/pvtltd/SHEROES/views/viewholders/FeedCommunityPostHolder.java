@@ -1179,9 +1179,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (!mUserPostObj.isAnonymous()) {
                     if (viewInterface instanceof FeedItemCallback) {
                         ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                    }
-                    if (viewInterface instanceof FeedItemCallback) {
-                        ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     } else {
                         viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 

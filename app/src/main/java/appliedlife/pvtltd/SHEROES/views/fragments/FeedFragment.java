@@ -305,24 +305,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             emptyView.setVisibility(View.VISIBLE);
             loadEmptyView();
         } else {
+            if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
+                ((HomeActivity)getActivity()).showCaseDesign();
+            }
             mFeedRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
-        if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
-            ((HomeActivity)getActivity()).showCaseDesign();
-        }
     }
-
-    /*@Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
-        }
-    }*/
 
     @Override
     protected Map<String, Object> getExtraProperties() {
