@@ -113,14 +113,18 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
 
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
-        ((HomeActivity)getActivity()).onCancelDone(AppConstants.NO_REACTION_CONSTANT);
+        if(getActivity()!=null && !getActivity().isFinishing()) {
+            ((HomeActivity) getActivity()).onCancelDone(AppConstants.NO_REACTION_CONSTANT);
+        }
 
     }
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
-        ((HomeActivity)getActivity()).onCancelDone(AppConstants.ONE_CONSTANT);
-        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
+        if(getActivity()!=null && !getActivity().isFinishing()) {
+            ((HomeActivity) getActivity()).onCancelDone(AppConstants.ONE_CONSTANT);
+            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
+        }
     }
 
     @Override
