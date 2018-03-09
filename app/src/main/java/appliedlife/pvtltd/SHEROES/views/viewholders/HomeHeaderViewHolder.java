@@ -195,7 +195,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
                 }
             });
             rootLayout.addView(view, lps);
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
     }
