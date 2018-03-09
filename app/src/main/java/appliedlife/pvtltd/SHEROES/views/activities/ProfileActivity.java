@@ -840,13 +840,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private void onActivtyResultOfParentRefresh() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        mUserSolarObject.currentItemPosition = itemPosition;
-        Parcelable parcelableMentorDetail = Parcels.wrap(mUserSolarObject);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
-        Parcelable parcelable = Parcels.wrap(mUserSolarObject);
-        bundle.putParcelable(AppConstants.FEED_SCREEN, parcelable);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
+        if(mUserSolarObject!=null){
+            mUserSolarObject.currentItemPosition = itemPosition;
+            Parcelable parcelableMentorDetail = Parcels.wrap(mUserSolarObject);
+            bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
+            Parcelable parcelable = Parcels.wrap(mUserSolarObject);
+            bundle.putParcelable(AppConstants.FEED_SCREEN, parcelable);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+        }
     }
 
 
