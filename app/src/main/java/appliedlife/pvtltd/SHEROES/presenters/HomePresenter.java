@@ -823,7 +823,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getConfig().subscribe(new DisposableObserver<ConfigurationResponse>() {
+        mHomeModel.getConfig()
+                .compose(this.<ConfigurationResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ConfigurationResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
