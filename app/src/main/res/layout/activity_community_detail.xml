@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:tabIndicatorColor="@color/white" />
+            app:tabIndicatorColor="#3c3c3c" />
 
     </android.support.design.widget.AppBarLayout>
 
