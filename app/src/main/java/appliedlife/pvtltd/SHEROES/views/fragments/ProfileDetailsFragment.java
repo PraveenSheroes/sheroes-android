@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
@@ -45,6 +46,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -52,6 +55,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static butterknife.ButterKnife.findById;
 
 /**
  * Created by Ravi on 31/12/17.
@@ -243,7 +247,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.profile_mutual_community, null);
-            CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.mutual_community_icon);
+            CircleImageView mutualCommunityImage = findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
                 mutualCommunityImage.bindImage(community.getThumbnailImageUrl());
@@ -294,19 +298,18 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         int counter = 0;
         for (final CommunityFeedSolrObj community : communities) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.profile_communities_items, null);
-            LinearLayout container = ButterKnife.findById(view, R.id.profile_community_container);
-            CircleImageView communityImage = ButterKnife.findById(view, R.id.community_icon);
-            TextView communityName = ButterKnife.findById(view, R.id.community_name);
+            RippleViewLinear container = findById(view, R.id.profile_community_container);
+            CircleImageView communityImage = findById(view, R.id.community_icon);
+            TextView communityName = findById(view, R.id.community_name);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 communityImage.setCircularImage(true);
                 communityImage.bindImage(community.getThumbnailImageUrl());
 
             }
             communityName.setText(community.getNameOrTitle());
-
-            container.setOnClickListener(new View.OnClickListener() {
+            container.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
                 @Override
-                public void onClick(View v) {
+                public void onComplete(RippleViewLinear rippleView) {
                     openCommunityDetails(community);
                 }
             });
@@ -445,10 +448,10 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
         for (final UserSolrObj userSolrObj : followedMentors) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.followed_mentor_list_item, null);
-            CircleImageView mutualCommunityImage = ButterKnife.findById(view, R.id.iv_mentor_full_view_icon);
-            TextView mentorName = ButterKnife.findById(view, R.id.user_name);
-            TextView expertAt = ButterKnife.findById(view, R.id.expert_at);
-            TextView follower = ButterKnife.findById(view, R.id.follower);
+            CircleImageView mutualCommunityImage = findById(view, R.id.iv_mentor_full_view_icon);
+            TextView mentorName = findById(view, R.id.user_name);
+            TextView expertAt = findById(view, R.id.expert_at);
+            TextView follower = findById(view, R.id.follower);
 
 
             if (StringUtil.isNotNullOrEmptyString(userSolrObj.getThumbnailImageUrl())) {
