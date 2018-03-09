@@ -497,7 +497,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_article_user_bookmark)
     public void isBookMarkClick() {
         articleObj .setTrending(true);
-        tvFeedArticleUserBookmark.setEnabled(false);
         if (articleObj .isBookmarked()) {
             if(viewInterface instanceof FeedItemCallback){
                 ((FeedItemCallback) viewInterface).onArticleUnBookMarkClicked(articleObj);

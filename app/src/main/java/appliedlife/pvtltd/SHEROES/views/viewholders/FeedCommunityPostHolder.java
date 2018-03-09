@@ -330,7 +330,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     view = null;
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
     }

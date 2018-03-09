@@ -285,7 +285,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_article_bookmark)
     public void tvBookMarkClick() {
-        tvArticleBookmark.setEnabled(false);
         dataItem.setLongPress(true);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
