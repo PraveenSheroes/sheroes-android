@@ -173,8 +173,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        mLoginPresenter.getAuthTokenRefreshPresenter();
-        //checkAuthTokenExpireOrNot();
+        checkAuthTokenExpireOrNot();
     }
 
     private void checkAuthTokenExpireOrNot() {
