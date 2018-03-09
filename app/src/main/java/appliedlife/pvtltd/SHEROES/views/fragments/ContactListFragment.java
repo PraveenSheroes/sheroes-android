@@ -192,6 +192,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                 }
             }
         });
+        mSwipeRefresh.setRefreshing(false);
         if (!syncContact) {
             mInviteFriendViewPresenterImp.fetchUserDetailFromServer(InviteFriendViewPresenterImp.NORMAL_REQUEST);
         } else {
