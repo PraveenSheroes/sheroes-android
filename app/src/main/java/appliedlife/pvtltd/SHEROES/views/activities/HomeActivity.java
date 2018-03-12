@@ -132,6 +132,7 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
+import appliedlife.pvtltd.SHEROES.svg.SvgModule;
 import appliedlife.pvtltd.SHEROES.svg.SvgSoftwareLayerSetter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -338,16 +339,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 toolTipForNav();
             }
         }
-        glideTest();
-    }
-
-    private void glideTest() {
-        requestBuilder = Glide.with(this)
-                .as(PictureDrawable.class)
-                .listener(new SvgSoftwareLayerSetter());
-
-        Uri uri = Uri.parse("http://www.clker.com/cliparts/u/Z/2/b/a/6/android-toy-h.svg");
-        requestBuilder.load(uri).into(mInvite);
     }
 
     private void toolTipForNotification() {

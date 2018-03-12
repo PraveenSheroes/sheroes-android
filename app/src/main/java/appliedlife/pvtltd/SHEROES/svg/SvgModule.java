@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.svg;
 
 import android.content.Context;
 import android.graphics.drawable.PictureDrawable;
+import android.support.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Registry;
@@ -17,9 +18,10 @@ import java.io.InputStream;
 @GlideModule
 public class SvgModule extends AppGlideModule {
   @Override
-  public void registerComponents(Context context, Glide glide, Registry registry) {
+  public void registerComponents(@NonNull Context context, @NonNull Glide glide,
+                                 @NonNull Registry registry) {
     registry.register(SVG.class, PictureDrawable.class, new SvgDrawableTranscoder())
-        .append(InputStream.class, SVG.class, new SvgDecoder());
+            .append(InputStream.class, SVG.class, new SvgDecoder());
   }
 
   // Disable manifest parsing to avoid adding similar modules twice.

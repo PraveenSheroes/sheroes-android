@@ -241,6 +241,8 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class android.support.v4.view.ViewPager
 -keepclassmembers class android.support.v4.view.ViewPager$LayoutParams { *; }
 
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
 
 -keep class com.google.android.gms.analytics.Tracker { *; }
 -keep class com.google.analytics.tracking.android.Tracker { *; }
