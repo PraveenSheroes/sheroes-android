@@ -220,9 +220,7 @@ public class UserPostFragment extends BaseFragment {
 
                         if(getActivity() instanceof ProfileActivity) {
                             if((getActivity()) == null || getActivity().isFinishing()) return;
-                            if(isMentor) {
                                 ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
-                            }
                         }
 
                     } catch (ClassCastException ex) {
