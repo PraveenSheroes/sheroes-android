@@ -398,7 +398,7 @@
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:maxLines="@integer/int_value_for_line_3"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14" />
             </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView>
         </LinearLayout>
 

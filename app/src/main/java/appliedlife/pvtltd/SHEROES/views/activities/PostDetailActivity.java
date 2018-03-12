@@ -882,4 +882,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
     }
+    public void onDestroy()
+    {
+        super.onDestroy();
+        mPostDetailPresenter.detachView();
+    }
 }

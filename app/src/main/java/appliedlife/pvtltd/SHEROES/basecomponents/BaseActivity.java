@@ -619,22 +619,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.tv_feed_community_post_card_title:
                 if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (null != mFeedDetail) {
-                        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                        if (null != userPreference && userPreference.isSet() &&  null != userPreference.get().getUserSummary()) {
                             mUserId = userPreference.get().getUserSummary().getUserId();
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
-                } else if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
-                    if (null != mFeedDetail) {
-
-                    }
-                } else {
+                }  else {
                     if (mFeedDetail instanceof UserPostSolrObj) {
                         if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
                             ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
                         } else {
                             CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-
                         }
                     } else {
                         CommunityDetailActivity.navigateTo(this, ((UserPostSolrObj) mFeedDetail).getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -644,7 +639,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case R.id.tv_feed_review_card_title:
                 if (null != mFeedDetail) {
-                    if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                    if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
                         mUserId = userPreference.get().getUserSummary().getUserId();
                         openGenericCardInWebView(mFeedDetail);
                     }
