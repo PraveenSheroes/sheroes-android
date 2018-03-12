@@ -414,7 +414,6 @@
     <string name="other_community">Other Communities</string>
     <string name="add_photo">Add Photo</string>
     <string name="post_anonymous">Post as Anonymous</string>
-    <string name="hint.write_post">What\'s on your mind?</string>
     <string name="action.post">Post</string>
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Write a Post</string>
@@ -427,7 +426,7 @@
     <string name="menu.post_as_community">Post as Community</string>
     <string name="menu.post_as_user">Post as %1$s</string>
 
-    <string name="ID_HEADER_TEXT">Share/ Ask Anything Without Hesitation</string>
+
 
 
     <string name="contest.status.ongoing">Live</string>

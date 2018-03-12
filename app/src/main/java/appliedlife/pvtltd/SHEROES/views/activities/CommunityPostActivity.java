@@ -101,6 +101,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -267,6 +268,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<Long> deletedImageIdList = new ArrayList<>();
     private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     private View anonymousToolTip;
+    @Inject
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region Activity methods
@@ -279,7 +282,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mCreatePostPresenter.attachView(this);
 
         isSharedFromOtherApp = false;
-
+        mEtDefaultText.setHint(mConfiguration.get().configData.mCreatePostText);
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
