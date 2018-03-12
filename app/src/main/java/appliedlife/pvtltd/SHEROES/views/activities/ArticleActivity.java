@@ -596,7 +596,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region ButterKnife Bindings
     @OnClick(R.id.fab)
     void onFabClick() {
-        if (mArticle != null) {
+        if (mFeedDetail != null) {
             AnalyticsManager.trackPostAction(Event.POST_SHARED_CLICKED, mFeedDetail, getScreenName());
             ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false, mArticle.deepLink, false, Event.POST_SHARED, MixpanelHelper.getPostProperties(mFeedDetail, getScreenName()));
         }
