@@ -1205,18 +1205,22 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                     //  refetchCommunity()
                     break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
-                    Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        if (fragment instanceof UserPostFragment) {
-                            ((UserPostFragment) fragment).swipeToRefreshList();
+                    if(null!=mViewPagerAdapter) {
+                        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
+                        if (AppUtils.isFragmentUIActive(fragment)) {
+                            if (fragment instanceof UserPostFragment) {
+                                ((UserPostFragment) fragment).swipeToRefreshList();
+                            }
                         }
                     }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
-                    if (AppUtils.isFragmentUIActive(activeFragment)) {
-                        if (activeFragment instanceof MentorQADetailFragment) {
-                            ((MentorQADetailFragment) activeFragment).swipeToRefreshList();
+                    if(null!=mViewPagerAdapter) {
+                        Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
+                        if (AppUtils.isFragmentUIActive(activeFragment)) {
+                            if (activeFragment instanceof MentorQADetailFragment) {
+                                ((MentorQADetailFragment) activeFragment).swipeToRefreshList();
+                            }
                         }
                     }
                     break;

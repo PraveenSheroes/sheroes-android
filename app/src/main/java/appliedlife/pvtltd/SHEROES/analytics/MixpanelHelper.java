@@ -59,7 +59,7 @@ public class MixpanelHelper {
         if (mUserPreference == null) {
             return;
         }
-        if (mUserPreference.isSet() && mUserPreference.get() != null && mUserPreference.get().getUserSummary() != null) {
+        if (mUserPreference.isSet()&& mUserPreference.get().getUserSummary() != null) {
             userSummary = mUserPreference.get().getUserSummary();
         }
         if (userSummary == null) {
