@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.models;
 
 import android.content.pm.PackageInfo;
+import android.provider.Settings;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
@@ -19,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -37,9 +39,6 @@ public class AppInstallation {
 
     @Inject
     Preference<LoginResponse> mLoginResponse;
-
-    @Inject
-    AppUtils mAppUtils;
 
     @SerializedName("device_GUID")
     public String guid; //done
@@ -130,23 +129,40 @@ public class AppInstallation {
     }
 
     private void fillDefaults() {
-        if(CommonUtil.isNotEmpty(this.guid)){
+        if(!CommonUtil.isNotEmpty(this.guid)){
             String uUId = UUID.randomUUID().toString();
             this.guid  = uUId;
         }
         PackageInfo packageInfo = CommonUtil.getPackageInfo(SheroesApplication.mContext);
         if (packageInfo != null) {
-            appVersion = packageInfo.versionName;
-            appVersionCode = packageInfo.versionCode;
+            this.appVersion = packageInfo.versionName;
+            this.appVersionCode = packageInfo.versionCode;
         }
-        androidId = mAppUtils.getDeviceId();
-        androidVersion = CommonUtil.getAndroidVersion();
-        timeZone = TimeZone.getDefault().getID();
-        deviceName = CommonUtil.getDeviceName();
-        platform = "android";
+        this.androidId = getDeviceId();
+        this.androidVersion = CommonUtil.getAndroidVersion();
+        this.timeZone = TimeZone.getDefault().getID();
+        this.deviceName = CommonUtil.getDeviceName();
+        this.platform = "android";
         if(mLoginResponse != null && mLoginResponse.isSet() && mLoginResponse.get().getUserSummary()!=null && CommonUtil.isNotEmpty(Long.toString(mLoginResponse.get().getUserSummary().getUserId()))) {
-            userId = Long.toString(mLoginResponse.get().getUserSummary().getUserId());
+            String currentUserId = Long.toString(mLoginResponse.get().getUserSummary().getUserId());
+            // If user has re-install the app with different user create new uuid
+            if(CommonUtil.isNotEmpty(userId) && !userId.equalsIgnoreCase(currentUserId)){
+                this.guid = UUID.randomUUID().toString();
+            }
+            this.userId = currentUserId;
         }
+    }
+
+    public String getDeviceId() {
+        String deviceId = "";
+        try {
+            if (!CommonUtil.isNotEmpty(deviceId)) {
+                deviceId = Settings.Secure.getString(SheroesApplication.mContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+        } catch (Exception ex) {
+            return "";
+        }
+        return deviceId;
     }
 
     private void saveInstallationAsync() {

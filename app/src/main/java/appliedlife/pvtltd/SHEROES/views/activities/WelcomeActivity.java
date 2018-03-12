@@ -118,7 +118,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     LoginPresenter mLoginPresenter;
     @Inject
-    AppInstallation mAppInstallation;
+    Preference<AppInstallation> mAppInstallation;
 
     @Bind(R.id.welcome_view_pager)
     ViewPager mViewPager;
@@ -189,15 +189,25 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mAppInstallation.gcmId = registrationId;
-                mAppInstallation.saveInBackground();
+                fillAndSaveInstallation(registrationId);
             }
 
             @Override
             public void onFailure(String ex) {
-                mAppInstallation.saveInBackground();
+                fillAndSaveInstallation("");
             }
         });
+    }
+
+    private void fillAndSaveInstallation(String registrationId) {
+        AppInstallation appInstallation;
+        if(mAppInstallation == null || !mAppInstallation.isSet()){
+            appInstallation = new AppInstallation();
+        }else {
+            appInstallation = mAppInstallation.get();
+        }
+        appInstallation.gcmId = registrationId;
+        appInstallation.saveInBackground();
     }
 
     private void checkAuthTokenExpireOrNot() {
@@ -838,6 +848,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         loginResponse.setTokenTime(System.currentTimeMillis());
         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
         loginResponse.setGcmId(mGcmId);
+        setupInstallation();
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
         moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
 
