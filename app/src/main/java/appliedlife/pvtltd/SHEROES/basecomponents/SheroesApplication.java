@@ -45,7 +45,7 @@ public class SheroesApplication extends MultiDexApplication  {
     private String mCurrentActivityName;
 
     public static SheroesAppComponent getAppComponent(Context context) {
-        return ((SheroesApplication)context).mSheroesAppComponent;
+        return (mContext).mSheroesAppComponent;
     }
 
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
@@ -57,9 +57,7 @@ public class SheroesApplication extends MultiDexApplication  {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        final CrashlyticsCore core = new CrashlyticsCore
-                .Builder()
-                .build();
+        final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
