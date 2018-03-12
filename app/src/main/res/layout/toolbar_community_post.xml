@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    style="@style/TextAppearance.Toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="@style/AppTheme.Toolbar"
+    app:popupTheme="@style/AppTheme.PopupMenu">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/title_toolbar"
+        style="@style/TextAppearance.Toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_toEndOf="@id/tv_drawer_navigation"
+        android:layout_toRightOf="@id/tv_drawer_navigation"
+        android:ellipsize="end"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center_vertical"
+        android:maxLines="@integer/int_value_for_line_1" />
+
+        <TextView
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#92878787"
+            android:lineSpacingExtra="6sp" />
+    </RelativeLayout>
+</android.support.v7.widget.Toolbar>
