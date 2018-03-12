@@ -55,6 +55,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -68,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
@@ -115,6 +117,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     LoginPresenter mLoginPresenter;
+    @Inject
+    AppInstallation mAppInstallation;
+
     @Bind(R.id.welcome_view_pager)
     ViewPager mViewPager;
     private SheroesWelcomeViewPagerAdapter mViewPagerAdapter;
@@ -174,6 +179,25 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
+        setupInstallation();
+    }
+
+    private void setupInstallation() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                mAppInstallation.gcmId = registrationId;
+                mAppInstallation.saveInBackground();
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                mAppInstallation.saveInBackground();
+            }
+        });
     }
 
     private void checkAuthTokenExpireOrNot() {

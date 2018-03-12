@@ -95,6 +95,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -173,6 +174,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
+
+    @Inject
+    Preference<AppInstallation> mAppInstallation;
+
     @Bind(R.id.home_toolbar)
     public Toolbar mToolbar;
     @Bind(R.id.fl_home_footer_list)
@@ -1810,9 +1815,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
+                if(mAppInstallation!=null && mAppInstallation.isSet()){
+                    mAppInstallation.get().gcmId = registrationId;
+                    mAppInstallation.get().saveInBackground();
+                }
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
+
                     if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();

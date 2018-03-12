@@ -368,6 +368,7 @@ public class AppConstants {
     public static final String SHARE_CHOOSER = "Share Chooser";
     public static final String LIST_TYPE_TAGGING = "COMMENT";
     public static final String CONFIG_KEY = "appliedlife.pvtltd.SHEROES.sharedprefs.CONFIG_KEY";
+    public static final String APP_INSTALLATION = "appliedlife.pvtltd.SHEROES.sharedprefs.APP_INSTALLATION";
 
     public static final String SHARE_TEXT = "share_text";
     public static final String SHARE_IMAGE = "share_image";
@@ -378,5 +379,6 @@ public class AppConstants {
     public static final String IS_MOENGAGE = "Is Moengage";
 
     public static final String LOGOUT_USER = "Logout_user";
+    public static final String PROJECT_ID = "409228886131";
 
 }
