@@ -35,10 +35,10 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="14dp"
             android:layout_centerVertical="true"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
+            android:textAllCaps="true"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="#92878787"
             android:lineSpacingExtra="6sp" />
     </RelativeLayout>
