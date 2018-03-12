@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -101,7 +102,11 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);
         }
-        headerMsg.setText(mConfiguration.get().configData.mCreatePostText);
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            headerMsg.setText(mConfiguration.get().configData.mCreatePostText);
+        } else {
+            headerMsg.setText((new ConfigData().mCreatePostText));
+        }
         if (isToolTip) {
             toolTipForHeaderFeed(context);
         }
