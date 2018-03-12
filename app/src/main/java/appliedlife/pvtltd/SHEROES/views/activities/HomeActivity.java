@@ -42,7 +42,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -57,11 +56,7 @@ import android.widget.Toast;
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.appevents.AppEventsConstants;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
-import com.facebook.share.model.AppInviteContent;
-import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -334,13 +329,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void toolTipForNotification() {
-        if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
+        try {
+            if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
+                if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
                             final View popupViewNotificationToolTip;
                             int width = AppUtils.getWindowWidth(HomeActivity.this);
                             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -367,29 +363,28 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                                     popUpNotificationWindow.dismiss();
                                 }
                             });
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
                         }
-                    }
-                }, 2000);
+                    }, 2000);
 
+                }
             }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
         }
-
     }
 
     private void toolTipForNav() {
+        try {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
                     final View navToolTip;
                     LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowNavTooTip.setOutsideTouchable(true);
-                    if(tvDrawerNavigation!=null && !isFinishing()){
+                    if (tvDrawerNavigation != null && !isFinishing()) {
                         popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
                     }
                     final ImageView ivArrow = navToolTip.findViewById(R.id.iv_arrow);
@@ -405,13 +400,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             popupWindowNavTooTip.dismiss();
                         }
                     });
-                } catch (Exception e) {
-                    Crashlytics.getInstance().core.logException(e);
-                }
+
             }
         }, 1000);
 
-
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
 
     @Override
@@ -1554,7 +1549,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void removeItem(FeedDetail feedDetail) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-        if(fragment!=null){
+        if (fragment != null) {
             ((FeedFragment) fragment).removeItem(feedDetail);
         }
     }

@@ -220,6 +220,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         }else
         {
             List<FeedDetail> data=mPullRefreshList.getFeedResponses();
+            if(null!=data)
             data.remove(data.size()-1);
             mMyCommunitiesAdapter.notifyDataSetChanged();
         }

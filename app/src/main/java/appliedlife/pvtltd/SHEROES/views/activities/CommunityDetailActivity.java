@@ -89,6 +89,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
+import static java.lang.System.gc;
 
 /**
  * Created by ujjwal on 27/12/17.

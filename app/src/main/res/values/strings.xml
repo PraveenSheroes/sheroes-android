@@ -562,4 +562,5 @@
     <string name="no_search_contact">No contact found</string>
     <string name="sheroesRelatedChannelID">sheroesRelatedChannelID</string>
     <string name="sheroesRelatedChannelName">Related to you and your posts</string>
+    <string name="no_job_found">No jobs found</string>
 </resources>
