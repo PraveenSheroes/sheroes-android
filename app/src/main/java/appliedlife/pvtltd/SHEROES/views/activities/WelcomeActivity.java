@@ -179,32 +179,35 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
-        setupInstallation();
+        setupInstallation(false);
     }
 
-    private void setupInstallation() {
+    private void setupInstallation(final boolean hasLoggedIn) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                fillAndSaveInstallation(registrationId);
+                fillAndSaveInstallation(registrationId, hasLoggedIn);
             }
 
             @Override
             public void onFailure(String ex) {
-                fillAndSaveInstallation("");
+                fillAndSaveInstallation("", hasLoggedIn);
             }
         });
     }
 
-    private void fillAndSaveInstallation(String registrationId) {
+    private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
         AppInstallation appInstallation;
         if(mAppInstallation == null || !mAppInstallation.isSet()){
             appInstallation = new AppInstallation();
         }else {
             appInstallation = mAppInstallation.get();
+        }
+        if(hasLoggedIn){
+            appInstallation.isLoggedOut = false;
         }
         appInstallation.gcmId = registrationId;
         appInstallation.saveInBackground();
@@ -278,7 +281,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             AnalyticsManager.trackScreenView(getScreenName());
         }
         mLoginPresenter.getMasterDataToPresenter();
-        //
 
     }
 
@@ -848,7 +850,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         loginResponse.setTokenTime(System.currentTimeMillis());
         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
         loginResponse.setGcmId(mGcmId);
-        setupInstallation();
+        setupInstallation(true);
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
         moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
 

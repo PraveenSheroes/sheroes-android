@@ -72,8 +72,8 @@ public class AppInstallation {
     @SerializedName("device_type")
     public String deviceType;
 
-    @SerializedName("logged_out")
-    public String loggedOut;
+    @SerializedName("isLoggedOut")
+    public boolean isLoggedOut;
 
     @SerializedName("Platform")
     public String platform; //done
@@ -143,6 +143,7 @@ public class AppInstallation {
         this.timeZone = TimeZone.getDefault().getID();
         this.deviceName = CommonUtil.getDeviceName();
         this.platform = "android";
+        this.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
         if(mLoginResponse != null && mLoginResponse.isSet() && mLoginResponse.get().getUserSummary()!=null && CommonUtil.isNotEmpty(Long.toString(mLoginResponse.get().getUserSummary().getUserId()))) {
             String currentUserId = Long.toString(mLoginResponse.get().getUserSummary().getUserId());
             // If user has re-install the app with different user create new uuid

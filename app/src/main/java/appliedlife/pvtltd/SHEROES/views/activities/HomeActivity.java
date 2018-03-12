@@ -808,6 +808,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
         HashMap<String, Object> properties = new EventProperty.Builder().build();
         AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
+        if(mAppInstallation!=null && mAppInstallation.isSet()){
+            AppInstallation appInstallation = mAppInstallation.get();
+            appInstallation.isLoggedOut = true;
+            appInstallation.saveInBackground();
+        }
         mUserPreference.delete();
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
