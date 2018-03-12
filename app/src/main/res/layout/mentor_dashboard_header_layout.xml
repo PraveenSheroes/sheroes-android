@@ -217,7 +217,7 @@
                 android:paddingBottom="@dimen/dp_size_7"
                 android:paddingTop="@dimen/dp_size_7"
                 android:textAllCaps="true"
-                android:textColor="@color/footer_icon_text"
+                android:textColor="@drawable/selecter_contact_text_color"
                 android:textSize="@dimen/sp_size_14" />
         </RelativeLayout>
     </LinearLayout>
