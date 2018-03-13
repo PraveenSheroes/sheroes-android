@@ -40,27 +40,27 @@ public class AppInstallation {
     @Inject
     Preference<LoginResponse> mLoginResponse;
 
-    @SerializedName("device_GUID")
+    @SerializedName("device_guid")
     public String guid; //done
 
-    @SerializedName("android_id")
+    @SerializedName("device_id")
     public String androidId; //done
 
     @SerializedName("advertising_id")
     public String advertisingId; //done
 
 
-    @SerializedName("android_version")
+    @SerializedName("os_version")
     public String androidVersion; //done
 
 
     @SerializedName("app_version")
     public String appVersion;
 
-    @SerializedName("App_version_code")
+    @SerializedName("app_version_code")
     public int appVersionCode;
 
-    @SerializedName("gcm_id")
+    @SerializedName("push_token")
     public String gcmId;
 
     @SerializedName("device_name")
@@ -72,25 +72,25 @@ public class AppInstallation {
     @SerializedName("device_type")
     public String deviceType;
 
-    @SerializedName("isLoggedOut")
+    @SerializedName("is_logged_out")
     public boolean isLoggedOut;
 
     @SerializedName("Platform")
     public String platform; //done
 
-    @SerializedName("Timezone")
+    @SerializedName("time_zone")
     public String timeZone; //done
 
-    @SerializedName("Locale")
+    @SerializedName("locale")
     public String locale;
 
-    @SerializedName("UserId")
+    @SerializedName("user_id")
     public String userId;   //done
 
-    @SerializedName("appsflyer")
+    @SerializedName("appsflyer_id")
     public String appsFlyerId;
 
-    @SerializedName("branchId")
+    @SerializedName("branch_install_url")
     public String branchId;
 
 
