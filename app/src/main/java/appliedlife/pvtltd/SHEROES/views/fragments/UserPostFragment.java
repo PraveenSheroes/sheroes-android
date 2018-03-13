@@ -146,7 +146,10 @@ public class UserPostFragment extends BaseFragment {
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
                 communityFeedSolrObj.setAuthorMentor(mUserMentorObj.isAuthorMentor());
 
-                isMentor = mUserMentorObj.isAuthorMentor();
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                    mUserId = mUserPreference.get().getUserSummary().getUserId();
+                }
+                    isMentor = mUserMentorObj.isAuthorMentor();
 
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
                     hideAnonymousPost = false;
