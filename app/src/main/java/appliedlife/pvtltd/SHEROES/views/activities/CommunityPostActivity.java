@@ -368,7 +368,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setupToolBarItem();
         setupUserView();
         setupImageListView();
         setCommunityName();
@@ -415,6 +414,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mCommunityPost.isEdit = false;
             }
         }
+
+        setupToolBarItem();
 
         if (!mIsChallengePost) {
             if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
