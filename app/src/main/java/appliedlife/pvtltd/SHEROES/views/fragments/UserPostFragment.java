@@ -139,18 +139,17 @@ public class UserPostFragment extends BaseFragment {
                 SCREEN_LABEL = getArguments().getString(BaseActivity.SOURCE_SCREEN);
             }
             Parcelable parcelable = getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                mUserId = mUserPreference.get().getUserSummary().getUserId();
-                int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                if (userType == AppConstants.MENTOR_TYPE_ID) {
-                    isMentor = true;
-                }
-            }
 
             if (null != parcelable) {
                 UserSolrObj mUserMentorObj = Parcels.unwrap(parcelable);
                 CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
+                communityFeedSolrObj.setAuthorMentor(mUserMentorObj.isAuthorMentor());
+
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                    mUserId = mUserPreference.get().getUserSummary().getUserId();
+                }
+                    isMentor = mUserMentorObj.isAuthorMentor();
 
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
                     hideAnonymousPost = false;
@@ -205,7 +204,9 @@ public class UserPostFragment extends BaseFragment {
 
                         if(getActivity() instanceof ProfileActivity) {
                             if((getActivity()) == null || getActivity().isFinishing()) return;
-                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                            if(isMentor) {
+                                ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                            }
                         }
 
                     } catch (ClassCastException ex) {
@@ -220,7 +221,9 @@ public class UserPostFragment extends BaseFragment {
 
                         if(getActivity() instanceof ProfileActivity) {
                             if((getActivity()) == null || getActivity().isFinishing()) return;
+                            if(isMentor) {
                                 ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
+                            }
                         }
 
                     } catch (ClassCastException ex) {
