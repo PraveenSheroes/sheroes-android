@@ -281,6 +281,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public PopupWindow popUpNotificationWindow;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
+    private Handler mHandler;
+    private Runnable mRunnable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -375,8 +377,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void toolTipForNav() {
         try {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        mHandler = new Handler();
+            mHandler.postDelayed(mRunnable = new Runnable() {
             @Override
             public void run() {
                     final View navToolTip;
@@ -411,6 +413,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onDestroy() {
+        if (mHandler != null && mRunnable != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
         if (popupWindowNavTooTip != null && popupWindowNavTooTip.isShowing()) {
             popupWindowNavTooTip.dismiss();
         }

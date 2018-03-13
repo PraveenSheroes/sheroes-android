@@ -69,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -1143,7 +1144,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                                 if (contentUri != null) {
                                     Intent intent = new Intent(Intent.ACTION_SEND);
                                     intent.setType(AppConstants.SHARE_MENU_TYPE);
-                                    intent.putExtra(Intent.EXTRA_TEXT, mConfiguration.get().configData.mProfileSharedText + "\n\nLink : " + branchPostDeepLink);
+                                    String profileSharedText = new ConfigData().mProfileSharedText;
+                                    if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                                        profileSharedText = mConfiguration.get().configData.mProfileSharedText;
+                                    }
+                                    intent.putExtra(Intent.EXTRA_TEXT, profileSharedText + "\n\nLink : " + branchPostDeepLink);
                                     intent.putExtra(Intent.EXTRA_STREAM, contentUri);
                                     intent.setType("image/*");
                                     startActivity(Intent.createChooser(intent, AppConstants.SHARE));
