@@ -670,6 +670,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         final String listDescription = mUserPostObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
+            tvFeedCommunityPostViewMore.setVisibility(View.GONE);
             return;
         } else {
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);

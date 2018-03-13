@@ -784,7 +784,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
             popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
-            if (currentUserId != comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId != comment.getParticipantUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);

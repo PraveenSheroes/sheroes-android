@@ -680,7 +680,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 return;
             }
             Comment comment = userPostObj.getLastComments().get(0);
-            if (currentUserId != comment.getEntityAuthorUserId() && adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId != comment.getParticipantUserId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
