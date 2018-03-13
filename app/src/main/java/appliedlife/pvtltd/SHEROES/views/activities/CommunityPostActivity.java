@@ -101,6 +101,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -282,7 +283,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mCreatePostPresenter.attachView(this);
 
         isSharedFromOtherApp = false;
-        mEtDefaultText.setHint(mConfiguration.get().configData.mCreatePostText);
+        mEtDefaultText.setHint(mConfiguration.isSet()&& mConfiguration.get().configData!=null ? mConfiguration.get().configData.mCreatePostText : new ConfigData().mCreatePostText);
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
