@@ -750,7 +750,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
             long createdDate = mDateUtil.getTimeInMillis(article.createdAt, AppConstants.DATE_FORMAT);
             String dateInWord  = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            mLikesViewsComments.setText(dateInWord+ "ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
+            mLikesViewsComments.setText(dateInWord+ " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
