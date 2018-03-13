@@ -981,7 +981,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private byte[] getBytesFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, stream);
         return stream.toByteArray();
     }
 
@@ -1469,7 +1469,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
                 CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                        .setRequestedSize(1000, 1000)
+                        .setRequestedSize(1200, 1200)
                         .start(CommunityPostActivity.this);
             }
         });

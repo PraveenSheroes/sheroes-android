@@ -190,7 +190,7 @@ public final class CropImage {
                 }
                 break;
             case 2:
-                List<Intent> galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
+                List<Intent> galleryIntents = getGalleryIntent(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
                 if (galleryIntents.size() == 0) {
                     // if no intents found for get-content try pick intent action (Huawei P9).
                     galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_PICK, includeDocuments);
@@ -298,6 +298,15 @@ public final class CropImage {
                 }
             }
         }
+        return intents;
+    }
+
+    public static List<Intent> getGalleryIntent(@NonNull PackageManager packageManager, String action, boolean includeDocuments) {
+        List<Intent> intents = new ArrayList<>();
+        final Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        intents.add(galleryIntent);
         return intents;
     }
 
