@@ -95,6 +95,10 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = userName;
             }
             userId = userPreference.get().getUserSummary().getUserId();
+            int userType = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            if (userType == AppConstants.MENTOR_TYPE_ID) {
+                dataItem.setAuthorMentor(true);
+            }
         }
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
