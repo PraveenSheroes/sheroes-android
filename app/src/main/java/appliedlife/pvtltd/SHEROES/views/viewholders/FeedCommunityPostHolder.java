@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -39,6 +41,7 @@ import com.f2prateek.rx.preferences2.Preference;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.microedition.khronos.opengles.GL;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -895,11 +898,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
 
         ivFirst.setOnClickListener(this);
+        RequestBuilder<Drawable> thumbnailRequest = Glide
+                .with(context)
+                .load(CommonUtil.getImgKitUri(firstImage, 48));
+
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
             Glide.with(context)
-                    .asBitmap()
                     .load(firstImage)
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(thumbnailRequest)
                     .into(ivFirst);
         }
 
