@@ -84,12 +84,6 @@ public class UserPostSolrObj extends FeedDetail {
     @SerializedName("is_top_post_b")
     private boolean isTopPost;
 
-    @SerializedName("post_image_width_is")
-    private long postImageWidth;
-
-    @SerializedName("post_image_height_is")
-    private long postImageHeight;
-
     //this field are added by own
     private int noOfOpenings;
     private int isEditOrDelete;
@@ -316,21 +310,5 @@ public class UserPostSolrObj extends FeedDetail {
 
     public void setTopPost(boolean topPost) {
         isTopPost = topPost;
-    }
-
-    public long getPostImageWidth() {
-        return postImageWidth;
-    }
-
-    public void setPostImageWidth(long postImageWidth) {
-        this.postImageWidth = postImageWidth;
-    }
-
-    public long getPostImageHeight() {
-        return postImageHeight;
-    }
-
-    public void setPostImageHeight(long postImageHeight) {
-        this.postImageHeight = postImageHeight;
     }
 }

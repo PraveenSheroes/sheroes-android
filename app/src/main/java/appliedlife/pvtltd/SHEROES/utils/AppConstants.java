@@ -379,4 +379,6 @@ public class AppConstants {
 
     public static final String LOGOUT_USER = "Logout_user";
 
+    public static final double MAX_IMAGE_RATIO = 1.5;
+
 }
