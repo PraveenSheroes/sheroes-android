@@ -545,13 +545,21 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void feedAlbum(Context context, String firstImage, String secondImage, String thirdImage, int typeOfHolder) {
-
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
         final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
-        int width = AppUtils.getWindowWidth(mContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (width * 2 / 3));
+        double imageRatio = mUserPostObj.getImageRatio().get(0);
+        if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
+            imageRatio = AppConstants.MAX_IMAGE_RATIO;
+        }
+        int imageHeight = 0;
+        if (CommonUtil.isNotEmpty(secondImage)) {
+            imageHeight = (int) (((double) 2 / (double) 3) * CommonUtil.getWindowWidth(mContext));
+        } else {
+            imageHeight = (int) (imageRatio * CommonUtil.getWindowWidth(mContext));
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
         final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
