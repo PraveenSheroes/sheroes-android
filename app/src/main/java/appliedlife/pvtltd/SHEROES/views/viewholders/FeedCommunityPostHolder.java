@@ -841,8 +841,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
         final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
-        int width = AppUtils.getWindowWidth(mContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (width * 2 / 3));
+        int imageHeight = (int)(((float)mUserPostObj.getPostImageHeight()/(float)mUserPostObj.getPostImageWidth()) * CommonUtil.getWindowWidth(mContext));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
         final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
