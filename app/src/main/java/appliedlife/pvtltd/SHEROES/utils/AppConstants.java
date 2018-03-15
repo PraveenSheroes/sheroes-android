@@ -272,6 +272,9 @@ public class AppConstants {
     public static final String MY_CHALLENGE_NEW_URL_COM = "https://sheroes.com/my-challenges";
     public static final String COLLECTION_NEW_URL = "https://sheroes.in/app-collections";
     public static final String COLLECTION_NEW_URL_COM = "https://sheroes.com/app-collections";
+    public static final String CREATE_POST_URL = "https://sheroes.in/create-post";
+    public static final String CREATE_POST_URL_COM = "https://sheroes.com/create-post";
+
 
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String FAQ_URL = "https://sheroes.com/faq";
@@ -292,6 +295,17 @@ public class AppConstants {
     public static final String END_POINT_URL = "end_point_url";
     public static final String TOOLBAR_TITTE = "toolbar_title";
     public static final String SCREEN_NAME = "screen_name";
+
+    public static final String ID_FOR_CREATE_POST_ENTITY = "entity_id";
+    public static final String CREATE_POST_ENTITY_NAME = "entity_name";
+    public static final String CREATE_POST_REQUEST_FOR = "create_post_request_for";
+    public static final String IS_MY_ENTITY = "is_my_entity";
+    public static final String PREFILL_TEXT = "prefill_text";
+    public static final String IS_CHALLENGE_TYPE = "is_challenge_type";
+    public static final String CHALLENGE_AUTHOR_TYPE = "challenge_author_type";
+
+
+
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
