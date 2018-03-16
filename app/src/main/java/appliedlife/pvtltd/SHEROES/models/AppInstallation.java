@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import io.branch.referral.Branch;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -100,35 +101,12 @@ public class AppInstallation {
      * Also saves to local shared prefs.
      */
     public void saveInBackground() {
-        Observable
-                .create(new ObservableOnSubscribe<String>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<String> subscriber) {
-                        String id = getAdvertisementID();
-                        subscriber.onNext(id);
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<String>() {
-                    @Override
-                    public void onComplete() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(String id) {
-                        advertisingId = id;
-                        fillDefaults();
-                        saveInstallationAsync();
-                    }
-                });
+        fillDefaults();
+        saveInstallationAsync();
     }
 
     private void fillDefaults() {
+        this.advertisingId = getAdvertisementID();
         if(!CommonUtil.isNotEmpty(this.guid)){
             String uUId = UUID.randomUUID().toString();
             this.guid  = uUId;

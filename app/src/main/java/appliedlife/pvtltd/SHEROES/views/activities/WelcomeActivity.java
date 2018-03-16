@@ -163,7 +163,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String loginViaSocial = MoEngageConstants.GOOGLE;
     private long currentTime;
     private String mGcmId;
-    private String loggedInChannel;
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isHandleAuthTokenRefresh = false;
 
@@ -850,7 +849,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         loginResponse.setTokenTime(System.currentTimeMillis());
         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
         loginResponse.setGcmId(mGcmId);
-        setupInstallation(true);
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
         moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
 
@@ -878,8 +876,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
         }
         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
-
         mUserPreference.set(loginResponse);
+        setupInstallation(true);
         openHomeScreen();
     }
 
