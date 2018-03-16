@@ -23,6 +23,10 @@ public class AppConstants {
     public static final int CREATE_POST = 101;
     public static final int MENTOR_CREATE_QUESTION = 201;
     public static final int SHEROES_COMMUNITY_ID = 273;
+    public static final int SECONDS_IN_MIN = 60;
+    public static final int MINUTES_IN_HOUR = 60;
+    public static final int HOURS_IN_DAY = 24;
+    public static final int CACHE_VALID_DAYS = 14;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
@@ -183,7 +187,6 @@ public class AppConstants {
 
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
-
     public static final int INVITE_PAGE_SIZE = 200;
     public static final int NO_REACTION_CONSTANT = 0;
     public static final int HEART_REACTION_CONSTANT = 10;

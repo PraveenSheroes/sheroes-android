@@ -16,7 +16,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.design.widget.Snackbar;
@@ -38,7 +37,7 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -47,7 +46,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -69,6 +67,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.tooltip.Tooltip;
 
 import org.parceler.Parcels;
 
@@ -168,6 +167,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.anonymous)
     RelativeLayout mAnonymousView;
+    @Bind(R.id.view_anonymous)
+    View viewAnonymous;
+
 
     @Bind(R.id.action)
     TextView mAction;
@@ -386,15 +388,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (!mIsChallengePost) {
                 try {
                     if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                toolTipForAnonymous(CommunityPostActivity.this);
-
-                            }
-                        }, 1500);
+                        toolTipForAnonymous(CommunityPostActivity.this);
                     }
                 } catch (Exception e) {
                     Crashlytics.getInstance().core.logException(e);
@@ -1013,32 +1007,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void toolTipForAnonymous(Context context) {
-        try {
-            int width = AppUtils.getWindowWidth(CommunityPostActivity.this);
-            LayoutInflater inflater = null;
-            inflater = LayoutInflater.from(context);
-            final View view = inflater.inflate(R.layout.tool_tip_arrow_down_side, null);
-            FrameLayout.LayoutParams lps = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            lps.setMargins(CommonUtil.convertDpToPixel(10, context), 0, CommonUtil.convertDpToPixel(25, context), CommonUtil.convertDpToPixel(180, context));
-            final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
-            RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-            arrowParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-            arrowParams.addRule(RelativeLayout.BELOW, R.id.ll_tool_tip_bg);
-            ivArrow.setLayoutParams(arrowParams);
-            TextView text = view.findViewById(R.id.title);
-            text.setText(R.string.tool_tip_create_post);
-            TextView gotIt = view.findViewById(R.id.got_it);
-            gotIt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAnonymousView.removeView(view);
-                }
-            });
-            mAnonymousView.addView(view, lps);
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
+        Tooltip.Builder builder = new Tooltip.Builder(viewAnonymous, R.style.Tooltip)
+                //.setCancelable(true)
+                .setDismissOnClick(true)
+                .setGravity(Gravity.TOP)
+                .setText(R.string.tool_tip_create_post);
+        builder.show();
+
     }
 
     private void setupCommunityNameListener() {

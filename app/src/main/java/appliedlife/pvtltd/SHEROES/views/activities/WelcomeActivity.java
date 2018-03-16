@@ -672,7 +672,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
                     mProgressDialog = new ProgressDialog(WelcomeActivity.this);
                     mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.setCancelable(true);
                     mProgressDialog.show();
                     break;
                 }
@@ -885,7 +885,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     public void dismissDialog() {
         try {
-            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            if (mProgressDialog != null&&mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         } catch (IllegalArgumentException e) {
