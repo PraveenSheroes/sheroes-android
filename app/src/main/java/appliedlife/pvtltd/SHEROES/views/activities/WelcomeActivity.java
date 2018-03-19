@@ -370,18 +370,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     currentPage = 0;
                 }
                 mViewPager.setCurrentItem(currentPage++, true);
+                mHandler.postDelayed(mRunnable, 10000);
             }
         };
-        timer = new Timer(); // This will create a new Thread
-        timer.schedule(new TimerTask() { // task to be scheduled
-
-            @Override
-            public void run() {
-                mHandler.post(mRunnable);
-            }
-        }, 500, 10000);
 
     }
+
 
     @Override
     protected void onDestroy() {
@@ -567,6 +561,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
+        if(mHandler != null && mRunnable != null) {
+            mHandler.postDelayed(mRunnable, 10000);
+        }
         Intent intent = getIntent();
         if (intent != null && null != intent.getExtras()) {
             Bundle extras = intent.getExtras();
@@ -587,6 +584,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mHandler != null && mRunnable != null) {
+            mHandler.removeCallbacks(mRunnable);
         }
     }
 
