@@ -907,11 +907,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         if (popupWindowFollowTooTip != null && popupWindowFollowTooTip.isShowing()) {
             popupWindowFollowTooTip.dismiss();
         }
         mHomePresenter.detachView();
+        super.onDestroy();
     }
 
     @Override
@@ -1276,6 +1276,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mProfileIcon.bindImage(imageUrl);
             mUserSolarObject.setImageUrl(imageUrl);
         }
+
+        invalidateProfileButton();
     }
 
     @Override
@@ -1534,6 +1536,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 shareProfile.setLayoutParams(params);
                 shareProfile.setPadding(0, 0, 0, 2);
                 shareProfile.setText(AppConstants.SHARE_PROFILE);
+                shareProfile.setBackgroundResource(R.drawable.selecter_invite_friend);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
@@ -1550,13 +1553,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 tvMentorDashBoardFollow.setLayoutParams(params);
                 tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
                 tvMentorDashBoardFollow.setText(AppConstants.EDIT_PROFILE);
+                tvMentorDashBoardFollow.setBackgroundResource(0);
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
 
-                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 shareProfile.setText("");
+                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
                 shareProfile.setLayoutParams(params1);
             }
         } else {
@@ -1569,10 +1574,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
     }
 
-    //Check if user have filled its details
+    //Check if user have filled its details in profile
+    //Added image condition - If its not the default image than only show profile filled completely
     private boolean isUserOrChampionDetailsFilled() {
         return StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription()) &&
-                StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle());
+                StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl()) && !mUserSolarObject.getImageUrl().contains("/default/user.png");
     }
 
 }
