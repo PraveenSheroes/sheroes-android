@@ -127,7 +127,6 @@ public class BranchDeepLink extends BaseActivity {
 
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.community = new Community();
-                communityPost.community.id = Long.parseLong(id_for_entity);
                 communityPost.community.name = entity_name;
                 communityPost.body = prefillText;
                 communityPost.isMyPost =isMyEntity;
@@ -136,6 +135,10 @@ public class BranchDeepLink extends BaseActivity {
                     communityPost.isChallengeType = true;
                     communityPost.challengeType = challengeAuthorType;
                     communityPost.challengeHashTag = prefillText;
+                    communityPost.challengeId = Integer.parseInt(id_for_entity);
+                }else
+                {
+                    communityPost.community.id = Long.parseLong(id_for_entity);
                 }
                 HashMap<String, Object> screenProperties = new EventProperty.Builder()
                         .sourceScreenId(entity_name)

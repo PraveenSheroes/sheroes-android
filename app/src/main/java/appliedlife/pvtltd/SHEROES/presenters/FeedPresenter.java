@@ -177,10 +177,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
         communityFeedRequestPojo.setNextToken(mNextToken);
 
-           /* if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
                 getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
                 return;
-            }*/
+            }
             mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl).subscribe(new DisposableObserver<FeedResponsePojo>() {
                 @Override
                 public void onComplete() {

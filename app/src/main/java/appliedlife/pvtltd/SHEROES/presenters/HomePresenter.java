@@ -818,10 +818,10 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
 
     public void queryConfig() {
-        /*if (!NetworkUtil.isConnected(mSheroesApplication)) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
-        }*/
+        }
         getMvpView().startProgressBar();
         mHomeModel.getConfig()
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
