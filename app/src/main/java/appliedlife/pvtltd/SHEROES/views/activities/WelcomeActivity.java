@@ -70,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
@@ -209,7 +210,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             appInstallation.isLoggedOut = false;
         }
         appInstallation.gcmId = registrationId;
-        appInstallation.saveInBackground();
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
+        appInstallationHelper.saveInBackground(this);
     }
 
     private void checkAuthTokenExpireOrNot() {

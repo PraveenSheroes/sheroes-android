@@ -96,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -811,7 +812,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if(mAppInstallation!=null && mAppInstallation.isSet()){
             AppInstallation appInstallation = mAppInstallation.get();
             appInstallation.isLoggedOut = true;
-            appInstallation.saveInBackground();
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
+            appInstallationHelper.saveInBackground(this);
         }
         mUserPreference.delete();
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
@@ -1822,7 +1824,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 if(mAppInstallation!=null && mAppInstallation.isSet()){
                     mAppInstallation.get().gcmId = registrationId;
-                    mAppInstallation.get().saveInBackground();
+                    AppInstallationHelper appInstallationHelper = new AppInstallationHelper(mAppInstallation.get());
+                    appInstallationHelper.saveInBackground(HomeActivity.this);
                 }
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);

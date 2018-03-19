@@ -4,6 +4,9 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationModel;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
@@ -303,8 +306,9 @@ public interface SheroesAppComponent {
 
     void inject(ContestFlatViewHolder contestFlatViewHolder);
 
+    void inject(AppInstallation appInstallation);
 
-
+    void inject(AppInstallationHelper appInstallationHelper);
 
 }
 

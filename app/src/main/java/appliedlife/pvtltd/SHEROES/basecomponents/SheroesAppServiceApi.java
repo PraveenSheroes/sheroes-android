@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
@@ -312,4 +313,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/refresh_user_app_invite_url")
     Observable<UpdateInviteUrlResponse> updateInviteUrl(@Body UpdateInviteUrlRequest updateInviteUrlRequest);
+
+    @POST("participant/user/update_user_device")
+    Observable<AppInstallation> saveInstallation(@Body AppInstallation appInstallation);
+
 }
