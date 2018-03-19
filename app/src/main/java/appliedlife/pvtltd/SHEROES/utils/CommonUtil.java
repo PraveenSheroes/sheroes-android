@@ -45,6 +45,9 @@ import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -122,6 +125,24 @@ public class CommonUtil {
             }
         }
         return builder.toString();
+    }
+
+    public static boolean deepLinkingRedirection(JSONObject referringParams) {
+        if(referringParams.has("+is_first_session") && referringParams.has("+clicked_branch_link")) {
+            try {
+                boolean isFirstSession = referringParams.getBoolean("+is_first_session");
+                boolean isBranchLinkClicked = referringParams.getBoolean("+clicked_branch_link");
+
+                // if(isFirstSession) { //TODO - commented to test scenario
+                    return true;
+                //}
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        return false;
     }
 
     public static ContestStatus getContestStatus(Date startAt, Date endAt) {

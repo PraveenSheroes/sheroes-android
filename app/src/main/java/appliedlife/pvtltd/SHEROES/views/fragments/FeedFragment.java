@@ -1056,9 +1056,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onFeedLastCommentUserClicked(UserPostSolrObj userSolrObj) {
-        if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
+        if (userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
             List<Comment> lastComments = userSolrObj.getLastComments();
-            if (lastComments.size() > 0) {
+            if (StringUtil.isNotEmptyCollection(lastComments)) {
                 Comment comment = lastComments.get(0);
                 if (comment != null && !comment.isAnonymous()) {
                     ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -1125,22 +1125,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
         }
-        else if(baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
+        else if(baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+            Comment comment = (Comment) baseResponse;
                 if(!comment.isAnonymous()) {
                     openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
                 }
-            }
         }
         else if (baseResponse instanceof UserPostSolrObj && mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(getActivity(), postDetails.getCommunityId(), getScreenName(), null, 1);
         }else {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(postDetails.getEntityOrParticipantTypeId() != 15) {
-                onChampionProfileClicked(postDetails, mValue);
+            if(baseResponse instanceof UserPostSolrObj) {
+                UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+                if (postDetails.getEntityOrParticipantTypeId() != 15) {
+                    onChampionProfileClicked(postDetails, mValue);
+                }
             }
         }
     }

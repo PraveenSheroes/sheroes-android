@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -31,6 +32,11 @@ import butterknife.ButterKnife;
  */
 public class LoginActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
+
+    //For ads Navigation
+    private boolean isFromAds = false;
+    private String deepLinkUrl  = null;
+
     @Inject
     Preference<LoginResponse> userPreference;
     @Override
@@ -59,9 +65,13 @@ public class LoginActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         LoginFragment frag = new LoginFragment();
         frag.setArguments(bundle);
+        if(bundle!=null) {
+           isFromAds = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
+           deepLinkUrl =  bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
+        }
+
         callFirstFragment(R.id.fragment_login, frag);
     }
-
 
     public void onErrorOccurence(String errorMessage) {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
@@ -80,11 +90,24 @@ public class LoginActivity extends BaseActivity {
         if ( userPreference.get().isSheUser()  && userPreference.get().getNextScreen()!=null && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
             renderEmailVerifyFragmentView();
         } else {
-            Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
-            Bundle bundle=new Bundle();
-            boardingIntent.putExtras(bundle);
-            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(boardingIntent);
+
+            if (isFromAds && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+                Uri url = Uri.parse(deepLinkUrl);
+                Intent intent = new Intent(LoginActivity.this, SheroesDeepLinkingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
+                bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isFromAds);
+                intent.putExtras(bundle);
+                intent.setData(url);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
+                Bundle bundle = new Bundle();
+                boardingIntent.putExtras(bundle);
+                boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(boardingIntent);
+            }
         }
     }
 

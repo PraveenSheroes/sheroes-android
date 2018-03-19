@@ -338,11 +338,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
                             final View popupViewNotificationToolTip;
                             int width = AppUtils.getWindowWidth(HomeActivity.this);
-                            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                            popupViewNotificationToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+                            popupViewNotificationToolTip = LayoutInflater.from(HomeActivity.this).inflate(R.layout.tooltip_arrow_up_side, null);
                             popUpNotificationWindow = new PopupWindow(popupViewNotificationToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             popUpNotificationWindow.setOutsideTouchable(true);
                             if (width < 750) {
@@ -1693,13 +1691,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
-        } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
-                if (!comment.isAnonymous()) {
-                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-                }
+        } else if (baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+            Comment comment = (Comment) baseResponse;
+            if (!comment.isAnonymous()) {
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
             }
         } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
             ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;

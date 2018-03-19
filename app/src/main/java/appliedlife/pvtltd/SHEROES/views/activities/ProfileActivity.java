@@ -529,9 +529,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private void toolTipForFollowUser() {
         try {
             viewToolTipFollow.setVisibility(View.INVISIBLE);
-            final View popupFollowToolTip;
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            popupFollowToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
+            final View popupFollowToolTip = LayoutInflater.from(this).inflate(R.layout.tooltip_arrow_up_side, null);
             popupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindowFollowTooTip.setOutsideTouchable(true);
             popupWindowFollowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
@@ -1173,15 +1171,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
-        } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
-                if (!comment.isAnonymous()) {
-                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-                }
-            }
-        } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+        }  else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
         } else if (baseResponse instanceof FeedDetail) {
@@ -1420,43 +1410,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, String extraImage, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(AppConstants.EXTRA_IMAGE, extraImage);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, String extraImage, long userId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtra(AppConstants.CHAMPION_ID, userId);
-        intent.putExtras(bundle);
-        intent.putExtra(AppConstants.EXTRA_IMAGE, extraImage);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
     public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String source, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
 
@@ -1494,24 +1447,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, boolean isMentor, int askingQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.ASKING_QUESTION, askingQuestion);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
     public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
 
@@ -1520,26 +1455,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         dataItem.setItemPosition(position);
         Parcelable parcelable = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-
-        Bundle bundle = new Bundle();
-        dataItem.setIdOfEntityOrParticipant(mChampionId);
-        dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        Parcelable parcelable = Parcels.wrap(dataItem);
-
         bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
