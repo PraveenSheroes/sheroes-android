@@ -1484,13 +1484,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
                     break;
                 case AppConstants.FAILED:
-                    //mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(linkRenderResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), DELETE_COMMUNITY_POST);
                     break;
                 default:
-                    //mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
             }
-        } else {
-            //mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), DELETE_COMMUNITY_POST);
         }
     }
 
@@ -1498,7 +1494,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public void finishActivity() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
-        CommunityPostActivity.this.finish();
+        navigateToParentActivity();
     }
 
     public void showMessage(int stringRes) {
