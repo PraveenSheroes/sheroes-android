@@ -509,8 +509,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             return;
         }
         doubleBackToExitPressedOnce = true;
-        Snackbar.make(clWelcome, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-
+        if(null!=clWelcome) {
+            Snackbar.make(clWelcome, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

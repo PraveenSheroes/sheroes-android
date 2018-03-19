@@ -213,6 +213,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mTitleToolbar.setText(R.string.ID_COMMENTS);
         if(mConfiguration!=null&&mConfiguration.isSet()) {
             mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
+        }else
+        {
+            mInputText.setHint("Type your comment here...");
         }
         setupEditInputText();
         setupToolbarItemsColor();

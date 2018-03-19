@@ -418,13 +418,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             mUserName.setLayoutParams(layoutParams);
+        }else
+        {
+            fbShareContainer.setVisibility(View.GONE);
+            mIsAnonymous = mCommunityPost.isAnonymous;
+            if(StringUtil.isNotNullOrEmptyString(mCommunityPost.body))
+            {
+                mEtDefaultText.setText(mCommunityPost.body);
+                mEtDefaultText.requestFocus();
+                mEtDefaultText.setSelection(mCommunityPost.body.length());
+                mOldText = mCommunityPost.body;
+            }
         }
-        fbShareContainer.setVisibility(View.GONE);
-        mIsAnonymous = mCommunityPost.isAnonymous;
-        mEtDefaultText.setText(mCommunityPost.body);
-        mEtDefaultText.requestFocus();
-        mEtDefaultText.setSelection(mCommunityPost.body.length());
-        mOldText = mCommunityPost.body;
         invalidateUserDropDownView();
         if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
             mEtDefaultText.requestFocus();
