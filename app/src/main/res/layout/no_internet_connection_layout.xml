@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/no_internet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_no_internet" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:text="@string/no_internet"
+            android:textColor="@color/comment_text"
+            android:textSize="@dimen/sp_size_16" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:text="@string/check_internet_Connection"
+            android:textColor="@color/comment_text"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:id="@+id/tv_retry_for_internet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:background="@drawable/rectangle_feed_community_joined_active"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_size_10"
+            android:paddingLeft="@dimen/dp_size_32"
+            android:paddingRight="@dimen/dp_size_32"
+            android:paddingTop="@dimen/dp_size_10"
+            android:text="@string/retry"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:id="@+id/tv_goto_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:autoLink="all"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:text="@string/setting"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_14" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

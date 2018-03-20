@@ -561,5 +561,9 @@
     <string name="no_search_contact">No contact found</string>
     <string name="sheroesRelatedChannelID">sheroesRelatedChannelID</string>
     <string name="sheroesRelatedChannelName">Related to you and your posts</string>
-    <string name="no_job_found">No jobs found</string>
+    <string name="no_internet">OOPS! \nNo Internet Connection</string>
+    <string name="retry">Retry</string>
+    <string name="setting">Go to settings</string>
+    <string name="check_internet_Connection">Check your Internet connection and try again</string>
+    <string name="check_setting">Internet connection</string>
 </resources>

@@ -2,9 +2,11 @@ package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -2095,5 +2097,35 @@ public class AppUtils {
                 Pattern.MULTILINE | Pattern.DOTALL);
         Matcher m = pattern.matcher(sentence);
         return m.find();
+    }
+    /**
+     * Display a dialog that user has no internet connection
+     * @param ctx1
+     *
+     * Code from: http://osdir.com/ml/Android-Developers/2009-11/msg05044.html
+     */
+    public static void showNoConnectionDialog(Context ctx1) {
+        final Context ctx = ctx1;
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        builder.setCancelable(true);
+        builder.setMessage(R.string.check_internet_Connection);
+        builder.setTitle(R.string.check_setting);
+        builder.setPositiveButton(R.string.setting, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                ctx.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                return;
+            }
+        });
+
+        builder.show();
     }
 }

@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -55,6 +58,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
@@ -94,6 +98,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Bind(R.id.loader_gif)
     CardView loaderGif;
+
+    @Bind(R.id.no_internet)
+    CardView noInternet;
+
+    @Bind(R.id.tv_goto_setting)
+    TextView tvGoToSetting;
 
     @Inject
     AppUtils mAppUtils;
@@ -158,7 +168,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).communityButton();
         }
-
+        String underLineData=getString(R.string.setting);
+        SpannableString content = new SpannableString(underLineData);
+        content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
+        tvGoToSetting.setText(content);
         return view;
     }
 
@@ -354,6 +367,14 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mCommunitiesListPresenter.fetchAllCommunities();
     }
+    public void backFromCommunityDetailPage(){
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        setRefreshList(mPullRefreshList);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mCommunitiesListPresenter.fetchAllCommunities();
+    }
 
     public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {
         String position[] = new String[2];
@@ -382,6 +403,26 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         }
         return position;
     } //todo - move to presenter
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        noInternet.setVisibility(View.VISIBLE);
+        communitiesContainer.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.GONE);
+    }
+    @OnClick({R.id.tv_retry_for_internet})
+    public void onRetryClick() {
+        noInternet.setVisibility(View.GONE);
+        communitiesContainer.setVisibility(View.VISIBLE);
+        loaderGif.setVisibility(View.VISIBLE);
+        if(null!=getActivity()) {
+            ((HomeActivity) getActivity()).communityOnClick();
+        }
+    }
+    @OnClick({R.id.tv_goto_setting})
+    public void onSettingClick() {
+        AppUtils.showNoConnectionDialog(getContext());
+    }
     //endregion
 
 }
