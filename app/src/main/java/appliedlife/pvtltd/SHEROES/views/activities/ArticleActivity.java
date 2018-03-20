@@ -85,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
@@ -141,6 +142,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Inject
     AppUtils mAppUtils;
+
+    @Inject
+    DateUtil mDateUtil;
     //endregion
 
     //region View variables
@@ -596,7 +600,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region ButterKnife Bindings
     @OnClick(R.id.fab)
     void onFabClick() {
-        if (mArticle != null) {
+        if (mFeedDetail != null) {
             AnalyticsManager.trackPostAction(Event.POST_SHARED_CLICKED, mFeedDetail, getScreenName());
             ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false, mArticle.deepLink, false, Event.POST_SHARED, MixpanelHelper.getPostProperties(mFeedDetail, getScreenName()));
         }
@@ -744,7 +748,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
             mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
-            mLikesViewsComments.setText(article.createdAt + " " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
+            long createdDate = mDateUtil.getTimeInMillis(article.createdAt, AppConstants.DATE_FORMAT);
+            String dateInWord  = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+            mLikesViewsComments.setText(dateInWord+ " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
                 String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
@@ -848,8 +854,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentCount++;
         updateTitleCommentCountView();
         mCommentsAdapter.addDataAndNotify(comment);
-        if(mFeedDetail instanceof ArticleSolrObj){
-            ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+        if(null!=mFeedDetail) {
+            if (mFeedDetail instanceof ArticleSolrObj) {
+                ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+            }
         }
     }
 

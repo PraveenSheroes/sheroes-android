@@ -89,7 +89,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
                         String youtubeIdSet=youTubeUrl[youTubeUrl.length - 1];
                         if (StringUtil.isNotNullOrEmptyString(youtubeIdSet)) {
                             String[] youTubeId = youtubeIdSet.split(AppConstants.EQUAL_SIGN);
-                            if(youTubeId!=null && youTubeId.length > 0 && StringUtil.isNotNullOrEmptyString(youTubeId[1]))
+                            if(youTubeId.length > 1 && StringUtil.isNotNullOrEmptyString(youTubeId[1]))
                             {
                                 if(youTubeId[1].contains(AppConstants.AND_SIGN)) {
                                     String[] id = youTubeId[1].split(AppConstants.AND_SIGN);

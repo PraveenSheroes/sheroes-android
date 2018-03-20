@@ -89,6 +89,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
+import static java.lang.System.gc;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -346,6 +347,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
                             .show();
+                    if (mCommunityFeedSolrObj == null) {
+                        return;
+                    }
                     if (!mCommunityFeedSolrObj.isMember()) {
                         onCommunityJoined();
                     }

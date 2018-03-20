@@ -101,6 +101,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -145,7 +147,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final String TYPE_FILE = "file";
     public static final int MAX_IMAGE = 5;
     private boolean mIsPostScheduled = false;
-    private boolean mStatusBarColorEmpty = true;
+    private boolean mStatusBarColorEmpty = false;
     private Dialog mScheduledConfirmationDialog;
     private Dialog mPostNowOrLaterDialog;
 
@@ -170,6 +172,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.anonymous)
     RelativeLayout mAnonymousView;
+
+    @Bind(R.id.action)
+    TextView mAction;
 
     @Bind(R.id.anonymous_select)
     CheckBox mAnonymousSelect;
@@ -254,6 +259,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String mTitleTextColor = "#3c3c3c";
     private String mStatusBarColor = "#aaaaaa";
     private String mToolbarIconColor = "#90949C";
+    private String actionDefault = "#dc4541";
     private boolean mHasPermission = false;
     CallbackManager callbackManager;
     private AccessToken mAccessToken;
@@ -263,6 +269,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<Long> deletedImageIdList = new ArrayList<>();
     private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     private View anonymousToolTip;
+    @Inject
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region Activity methods
@@ -275,7 +283,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mCreatePostPresenter.attachView(this);
 
         isSharedFromOtherApp = false;
-
+        mEtDefaultText.setHint(mConfiguration.isSet()&& mConfiguration.get().configData!=null ? mConfiguration.get().configData.mCreatePostText : new ConfigData().mCreatePostText);
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
@@ -361,7 +369,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         setupUserView();
         setupImageListView();
         setCommunityName();
@@ -409,6 +416,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
 
+        setupToolBarItem();
+
         if (!mIsChallengePost) {
             if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
                 final Handler handler = new Handler();
@@ -424,6 +433,26 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }, 1500);
             }
         }
+    }
+
+    private void setupToolBarItem() {
+        switch (mCommunityPost.createPostRequestFrom) {
+            case AppConstants.CREATE_POST:
+                mAction.setText(getResources().getString(R.string.action_post));
+                break;
+            case AppConstants.MENTOR_CREATE_QUESTION:
+                mAction.setText(getResources().getString(R.string.action_mentor_post));
+                break;
+            default:
+                mAction.setText(getResources().getString(R.string.action_post));
+                break;
+        }
+        if(mStatusBarColorEmpty) {
+            mAction.setTextColor(Color.parseColor(actionDefault));
+        } else{
+            mAction.setTextColor(Color.parseColor(mTitleTextColor));
+        }
+
     }
 
     // Handle multiple images being sent
@@ -510,25 +539,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         if (id == android.R.id.home) {
             onBackPress();
-        }
-
-        if (id == R.id.post) {
-            if (!validateFields()) {
-                return true;
-            }
-            if (mCommunityPost == null) {
-                finish();
-                return true;
-            }
-            if (mIsProgressBarVisible) {
-                return true;
-            }
-
-            if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
-                selectPostNowOrLater();
-            } else {
-                sendPost();
-            }
         }
 
         return true;
@@ -752,30 +762,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mScheduledConfirmationDialog != null) {
             mScheduledConfirmationDialog.dismiss();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        getMenuInflater().inflate(R.menu.menu_create_post, menu);
-         MenuItem menuItem = menu.findItem(R.id.post);
-
-        if (mCommunityPost == null) return true;
-
-        switch (mCommunityPost.createPostRequestFrom) {
-            case AppConstants.CREATE_POST:
-                SpannableString actionPost = new SpannableString(getResources().getString(R.string.action_post));
-                actionPost.setSpan(new ForegroundColorSpan(Color.parseColor(mTitleTextColor)), 0, actionPost.length(), 0);
-                menuItem.setTitle(actionPost);
-                break;
-            case AppConstants.MENTOR_CREATE_QUESTION:
-                SpannableString actionMentor = new SpannableString(getResources().getString(R.string.action_mentor_post));
-                actionMentor.setSpan(new ForegroundColorSpan(Color.parseColor(mTitleTextColor)), 0, actionMentor.length(), 0);
-                menuItem.setTitle(actionMentor);
-                break;
-            default:
-        }
-        return true;
     }
 
     @Override
@@ -1520,7 +1506,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if(mStatusBarColorEmpty) {
                 if (upArrow != null) {
-                    upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                    upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
                 }
                 getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
             } else {
@@ -1530,5 +1516,26 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
+    }
+
+    @OnClick(R.id.action)
+    public void onPostClicked(){
+        if (!validateFields()) {
+            return ;
+        }
+        if (mCommunityPost == null) {
+            finish();
+            return ;
+        }
+        if (mIsProgressBarVisible) {
+            return ;
+        }
+
+        if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
+            selectPostNowOrLater();
+        } else {
+            sendPost();
+        }
+
     }
 }

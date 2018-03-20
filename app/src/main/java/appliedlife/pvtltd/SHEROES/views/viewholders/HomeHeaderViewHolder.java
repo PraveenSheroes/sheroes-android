@@ -22,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -54,6 +56,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private Context context;
     @Inject
     Preference<LoginResponse> userPreference;
+    @Inject
+    Preference<Configuration> mConfiguration;
     private String mPhotoUrl;
     private String loggedInUser;
     private long userId;
@@ -91,6 +95,10 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = userName;
             }
             userId = userPreference.get().getUserSummary().getUserId();
+            int userType = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            if (userType == AppConstants.MENTOR_TYPE_ID) {
+                dataItem.setAuthorMentor(true);
+            }
         }
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
@@ -98,7 +106,11 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);
         }
-        headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            headerMsg.setText(mConfiguration.get().configData.mCreatePostText);
+        } else {
+            headerMsg.setText((new ConfigData().mCreatePostText));
+        }
         if (isToolTip) {
             toolTipForHeaderFeed(context);
         }

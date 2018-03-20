@@ -98,7 +98,7 @@ public class ArticlesFragment extends BaseFragment {
         mHomePresenter.attachView(this);
         loaderGif.setVisibility(View.VISIBLE);
         if (getArguments() != null) {
-            categoryIdList = (ArrayList<Long>) getArguments().getSerializable(AppConstants.ARTICLE_FRAGMENT);
+            categoryIdList = (List<Long>) getArguments().getSerializable(AppConstants.ARTICLE_FRAGMENT);
         }
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -108,11 +108,13 @@ public class ArticlesFragment extends BaseFragment {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
+                if(null!=getActivity())
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
+                if(null!=getActivity())
                 ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
@@ -130,20 +132,13 @@ public class ArticlesFragment extends BaseFragment {
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-              /*  setListLoadFlag(false);
-                setProgressBar(mProgressBar);
-                mPullRefreshList.setPullToRefresh(true);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mPullRefreshList = new SwipPullRefreshList();
-                setRefreshList(mPullRefreshList);
-                mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-                mCreateCommunityPresenter.getFeedFromPresenter(mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIdList));
-    */
                 categoryArticleFilter(categoryIdList);
             }
         });
-        ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-        ((HomeActivity)getActivity()).articleUi();
+        if(null!=getActivity()) {
+            ((HomeActivity) getActivity()).changeFragmentWithCommunities();
+            ((HomeActivity) getActivity()).articleUi();
+        }
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE_LISTING));
 
         return view;

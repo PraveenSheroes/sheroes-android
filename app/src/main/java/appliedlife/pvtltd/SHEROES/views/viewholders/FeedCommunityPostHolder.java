@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -269,7 +270,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mUserPostObj = (UserPostSolrObj) item;
         mContext = context;
-        mJoinConveration.setText(mConfiguration.get().configData.mCommentHolderText);
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            mJoinConveration.setText(mConfiguration.get().configData.mCommentHolderText);
+        } else {
+            mJoinConveration.setText(new ConfigData().mCommentHolderText);
+        }
         if (mUserPostObj.isTopPost()) {
             topPostView.setVisibility(View.VISIBLE);
         } else {
@@ -670,6 +675,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         final String listDescription = mUserPostObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
+            tvFeedCommunityPostViewMore.setVisibility(View.GONE);
             return;
         } else {
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
@@ -1140,7 +1146,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     //Redirect to logged in user
     @OnClick({R.id.iv_feed_community_post_login_user_pic, R.id.tv_feed_community_post_login_user_name})
     public void onCommentAuthorClick() { //Open profile from feed
-        viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+        if(!mUserPostObj.isAnonymous()) {
+            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+        }
     }
 
     @OnClick(R.id.iv_feed_community_post_circle_icon)
@@ -1257,17 +1265,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                //     if (mUserPostObj.isAuthorMentor())
-                {
-
                     if (mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
                         viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                    } else if (viewInterface instanceof FeedItemCallback) {
+                    } else if (!mUserPostObj.isAnonymous() && viewInterface instanceof FeedItemCallback) {
                         ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     } else {
-                        viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        if(!mUserPostObj.isAnonymous()) {
+                            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        }
                     }
-                }
             }
 
             @Override
@@ -1368,7 +1374,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     //Last comment user name or user pic
     @OnClick({R.id.iv_feed_community_post_user_pic, R.id.tv_feed_community_post_user_name})
     public void onLastCommentUserClick() { //Open profile from feed
-        viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
+        if(!mUserPostObj.isAnonymous()) {
+            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
+        }
     }
 
     @OnClick(R.id.comment_like)

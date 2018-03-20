@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|top"
                     android:padding="@dimen/dp_size_10"
-                    android:drawableLeft="@drawable/ic_back_white" />
+                    android:drawableLeft="@drawable/vector_back_arrow" />
 
                 <ImageView
                     android:layout_width="wrap_content"
