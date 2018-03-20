@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:gravity="center"
-                    android:text="@string/action.facebook"
+                    android:text="@string/action.gallery"
                     android:textColor="@color/light_grey"
                     android:textSize="12sp" />
             </LinearLayout>
