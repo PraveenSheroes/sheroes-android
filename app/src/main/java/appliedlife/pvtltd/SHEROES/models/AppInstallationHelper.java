@@ -46,7 +46,7 @@ public class AppInstallationHelper {
         mAppInstallation = appInstallation;
     }
 
-    public void saveInBackground(Context context) {
+    public void saveInBackground(Context context, final CommonUtil.Callback callback) {
         SheroesApplication.getAppComponent(context).inject(this);
         Observable
                 .create(new ObservableOnSubscribe<String>() {
@@ -71,7 +71,7 @@ public class AppInstallationHelper {
                     public void onNext(String id) {
                         mAppInstallation.advertisingId = id;
                         fillDefaults();
-                        saveInstallationAsync();
+                        saveInstallationAsync(callback);
                     }
                 });
     }
@@ -91,6 +91,7 @@ public class AppInstallationHelper {
         mAppInstallation.timeZone = TimeZone.getDefault().getID();
         mAppInstallation.deviceName = CommonUtil.getDeviceName();
         mAppInstallation.platform = "android";
+        mAppInstallation.deviceType = "android";
         mAppInstallation.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
         if(mLoginResponse != null && mLoginResponse.isSet() && mLoginResponse.get().getUserSummary()!=null && CommonUtil.isNotEmpty(Long.toString(mLoginResponse.get().getUserSummary().getUserId()))) {
             String currentUserId = Long.toString(mLoginResponse.get().getUserSummary().getUserId());
@@ -114,7 +115,7 @@ public class AppInstallationHelper {
         return deviceId;
     }
 
-    private void saveInstallationAsync() {
+    private void saveInstallationAsync(final CommonUtil.Callback callback) {
         appInstallationModel.getAppInstallation(mAppInstallation)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -128,6 +129,7 @@ public class AppInstallationHelper {
                     public void onError(Throwable e) {
                         //  Bamboo.e(TAG, "Error saving installation: " + e);
                         Crashlytics.getInstance().core.logException(e);
+                        callback.callBack(false);
                     }
 
                     @Override
@@ -135,6 +137,7 @@ public class AppInstallationHelper {
                         if (appInstallation != null) {
                             //Save to shared prefs
                             mAppInstallationPref.set(appInstallation);
+                            callback.callBack(true);
                         }
                     }
                 });

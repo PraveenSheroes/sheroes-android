@@ -42,7 +42,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -57,11 +56,7 @@ import android.widget.Toast;
 import com.appsflyer.AppsFlyerLib;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.appevents.AppEventsConstants;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
-import com.facebook.share.model.AppInviteContent;
-import com.facebook.share.widget.AppInviteDialog;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -135,6 +130,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -160,6 +156,7 @@ import butterknife.OnClick;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -806,6 +803,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
     public void logOut() {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
         HashMap<String, Object> properties = new EventProperty.Builder().build();
         AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
@@ -813,17 +814,21 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             AppInstallation appInstallation = mAppInstallation.get();
             appInstallation.isLoggedOut = true;
             AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
-            appInstallationHelper.saveInBackground(this);
+            appInstallationHelper.saveInBackground(this, new CommonUtil.Callback() {
+                @Override
+                public void callBack(boolean isShown) {
+                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
         mUserPreference.delete();
         MoEHelper.getInstance(getApplicationContext()).logoutUser();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
         ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
-        finish();
     }
 
     private void challengeIdHandle(String urlOfSharedCard) {
@@ -1823,9 +1828,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 if(mAppInstallation!=null && mAppInstallation.isSet()){
-                    mAppInstallation.get().gcmId = registrationId;
-                    AppInstallationHelper appInstallationHelper = new AppInstallationHelper(mAppInstallation.get());
-                    appInstallationHelper.saveInBackground(HomeActivity.this);
+                    AppInstallation appInstallation =  mAppInstallation.get();
+                    appInstallation.gcmId = registrationId;
+                    appInstallation.isLoggedOut = false;
+                    AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
+                    appInstallationHelper.saveInBackground(HomeActivity.this, new CommonUtil.Callback() {
+                        @Override
+                        public void callBack(boolean isShown) {
+                        }
+                    });
                 }
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);

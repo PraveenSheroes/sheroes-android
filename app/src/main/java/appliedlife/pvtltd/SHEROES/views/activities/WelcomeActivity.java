@@ -55,7 +55,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -91,6 +90,7 @@ import appliedlife.pvtltd.SHEROES.social.SocialListener;
 import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -211,7 +211,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         appInstallation.gcmId = registrationId;
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
-        appInstallationHelper.saveInBackground(this);
+        appInstallationHelper.saveInBackground(this, new CommonUtil.Callback() {
+            @Override
+            public void callBack(boolean isShown) {
+            }
+        });
     }
 
     private void checkAuthTokenExpireOrNot() {

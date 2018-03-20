@@ -67,7 +67,7 @@ public class AppInstallation {
     public String appVersion;
 
     @SerializedName("app_version_code")
-    public int appVersionCode;
+    public Integer appVersionCode;
 
     @SerializedName("push_token")
     public String gcmId;
