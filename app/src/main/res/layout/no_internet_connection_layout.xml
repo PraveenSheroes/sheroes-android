@@ -12,6 +12,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_16"
             android:background="@drawable/ic_no_internet" />
 
         <TextView
@@ -21,6 +22,7 @@
             android:layout_marginTop="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
+            android:lineSpacingExtra="@dimen/dp_size_3"
             android:text="@string/no_internet"
             android:textColor="@color/comment_text"
             android:textSize="@dimen/sp_size_16" />
@@ -40,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_22"
             android:background="@drawable/rectangle_feed_community_joined_active"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"

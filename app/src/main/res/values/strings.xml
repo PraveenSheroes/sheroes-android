@@ -565,5 +565,4 @@
     <string name="retry">Retry</string>
     <string name="setting">Go to settings</string>
     <string name="check_internet_Connection">Check your Internet connection and try again</string>
-    <string name="check_setting">Internet connection</string>
 </resources>

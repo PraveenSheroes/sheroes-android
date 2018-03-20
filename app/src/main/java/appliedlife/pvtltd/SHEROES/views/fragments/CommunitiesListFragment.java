@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -421,7 +422,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
     @OnClick({R.id.tv_goto_setting})
     public void onSettingClick() {
-        AppUtils.showNoConnectionDialog(getContext());
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
     //endregion
 
