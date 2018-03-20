@@ -75,6 +75,8 @@
             android:name="io.branch.sdk.BranchKey.test"
             android:value="key_test_ahwTwSEImTLdFFn9os4s1hkmAvlQK7ck" />
 
+       <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+
         <!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_ICON"

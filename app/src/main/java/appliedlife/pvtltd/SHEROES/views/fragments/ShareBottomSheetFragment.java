@@ -296,7 +296,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
             }
             CommonUtil.shareLinkToWhatsApp(getContext(), mShareText);
             EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Whatsapp");
-            /*final HashMap<String, Object> properties = builder.build();
+            /*final HashMap<String, Object> properties = mToolTip.build();
             properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
             properties.put(EventProperty.URL.getString(), mShareText);*/
             if(null==mProperties)
@@ -384,7 +384,7 @@ public class ShareBottomSheetFragment extends BottomSheetDialogFragment {
                                 AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, mSourceScreen, properties);
                             }else {
                                 EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Facebook");
-                                /*final HashMap<String, Object> properties = builder.build();
+                                /*final HashMap<String, Object> properties = mToolTip.build();
                                 properties.put(EventProperty.URL.getString(), mShareImageUrl);*/
                                 mProperties.put(EventProperty.SHARED_TO.getString(), "Facebook");
                                 AnalyticsManager.trackEvent(mEventName, mSourceScreen, mProperties);

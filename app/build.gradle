@@ -50,7 +50,7 @@ android {
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             //buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
+          //  buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
            
             if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
                 buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""
@@ -152,6 +152,7 @@ dependencies {
     compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
     compile('com.trello.rxlifecycle2:rxlifecycle:2.0.1')
     compile('com.trello.rxlifecycle2:rxlifecycle-android:2.0.1')
+    compile 'com.github.vihtarb:tooltip:0.1.9'
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'

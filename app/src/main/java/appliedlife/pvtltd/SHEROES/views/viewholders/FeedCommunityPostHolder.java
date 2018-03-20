@@ -684,21 +684,25 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
-                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
-                linkifyURLs(tvFeedCommunityPostText);
-
-                if (tvFeedCommunityPostText.getLineCount() > 4) {
-                    collapseFeedPostText();
-                } else {
-                    tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-                    tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                if(!mUserPostObj.isTextExpanded)
+                {
+                    tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
+                    linkifyURLs(tvFeedCommunityPostText);
+                    if (tvFeedCommunityPostText.getLineCount() > 4) {
+                        collapseFeedPostText();
+                    } else {
+                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                    }
                 }
+
             }
         });
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void collapseFeedPostText() {
+        mUserPostObj.isTextExpanded=false;
         tvFeedCommunityPostText.setMaxLines(4);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         String dots = LEFT_HTML_TAG + AppConstants.DOTS + RIGHT_HTML_TAG;
@@ -711,6 +715,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void expandFeedPostText() {
+        mUserPostObj.isTextExpanded=true;
         tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
@@ -995,7 +1000,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (tvFeedCommunityPostViewMore.getText().equals(mContext.getString(R.string.ID_LESS))) {
             collapseFeedPostText();
         } else {
-            expandFeedPostText();
+            if(tvFeedCommunityPostText.getLineCount()>16) {
+                if (viewInterface instanceof FeedItemCallback) {
+                    ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
+                } else {
+                    viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+                }
+            }else
+            {
+                expandFeedPostText();
+            }
         }
     }
 
