@@ -47,6 +47,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -164,7 +165,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
@@ -194,7 +194,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     ImageView mInvite;
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
-
 
     @Inject
     Preference<Configuration> mConfiguration;
@@ -326,7 +325,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         toolTipForNotification();
         if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION) == AppConstants.DRAWER_SESSION) {
-           if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
                 toolTipForNav();
             }
         }

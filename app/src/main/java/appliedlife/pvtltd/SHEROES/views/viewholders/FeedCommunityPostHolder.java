@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -269,7 +270,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mUserPostObj = (UserPostSolrObj) item;
         mContext = context;
-        mJoinConveration.setText(mConfiguration.get().configData.mCommentHolderText);
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            mJoinConveration.setText(mConfiguration.get().configData.mCommentHolderText);
+        } else {
+            mJoinConveration.setText(new ConfigData().mCommentHolderText);
+        }
         if (mUserPostObj.isTopPost()) {
             topPostView.setVisibility(View.VISIBLE);
         } else {
