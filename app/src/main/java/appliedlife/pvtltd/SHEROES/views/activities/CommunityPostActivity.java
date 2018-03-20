@@ -39,10 +39,8 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -53,7 +51,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -1339,7 +1336,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void setUserImage() {
         if (!mIsAnonymous && !mPostAsCommunitySelected) {
             if (mUserSummary.getPhotoUrl() != null && CommonUtil.isNotEmpty(mUserSummary.getPhotoUrl())) {
-                String authorImage = CommonUtil.getImgKitUri(mUserSummary.getPhotoUrl(), mAuthorPicSize, mAuthorPicSize);
+                String authorImage = CommonUtil.getThumborUri(mUserSummary.getPhotoUrl(), mAuthorPicSize, mAuthorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))

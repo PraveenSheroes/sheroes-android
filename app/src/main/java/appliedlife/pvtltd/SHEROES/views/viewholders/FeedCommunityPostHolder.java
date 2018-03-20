@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,7 +17,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -41,7 +39,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.microedition.khronos.opengles.GL;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -59,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -898,32 +894,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
 
         ivFirst.setOnClickListener(this);
-        RequestBuilder<Drawable> thumbnailRequest = Glide
-                .with(context)
-                .load(CommonUtil.getImgKitUri(firstImage, 48));
 
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
+            String firstThumborUrl = firstImage;
+            if(typeOfHolder == 1){
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context)/2, imageHeight);
+            }
             Glide.with(context)
-                    .load(firstImage)
-                    .thumbnail(thumbnailRequest)
+                    .load(firstThumborUrl)
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
         if (StringUtil.isNotNullOrEmptyString(secondImage)) {
             ivSecond.setOnClickListener(this);
-
+            String secondThumborUrl = "";
+            if(typeOfHolder == 2){
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(secondImage)
+                    .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
+            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
             Glide.with(context)
-                    .asBitmap()
-                    .load(thirdImage)
+                    .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         liFeedCommunityUserPostImages.addView(child);

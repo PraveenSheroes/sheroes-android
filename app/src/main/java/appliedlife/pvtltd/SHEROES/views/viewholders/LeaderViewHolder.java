@@ -66,14 +66,14 @@ public class LeaderViewHolder extends BaseViewHolder<FeedDetail> {
         if (leaderObj != null) {
             mDescription.setText(leaderObj.getDescription());
             if (CommonUtil.isNotEmpty(leaderObj.crownUrl)) {
-                String trophyImageUrl = CommonUtil.getImgKitUri(leaderObj.crownUrl, mCrownWidth, mCrownHeight);
+                String trophyImageUrl = CommonUtil.getThumborUri(leaderObj.crownUrl, mCrownWidth, mCrownHeight);
                 Glide.with(mCrown.getContext())
                         .load(trophyImageUrl)
                         .into(mCrown);
             }
             mName.setText(leaderObj.getNameOrTitle());
             if (leaderObj.getThumbnailImageUrl() != null && CommonUtil.isNotEmpty(leaderObj.getThumbnailImageUrl())) {
-                String userImage = CommonUtil.getImgKitUri(leaderObj.getThumbnailImageUrl(), mUserPicSize, mUserPicSize);
+                String userImage = CommonUtil.getThumborUri(leaderObj.getThumbnailImageUrl(), mUserPicSize, mUserPicSize);
                 Glide.with(mProfilePic.getContext())
                         .load(userImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(context)))

@@ -599,28 +599,39 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
         ivFirst.setOnClickListener(this);
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
+            String firstThumborUrl = firstImage;
+            if(typeOfHolder == 1){
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context)/2, imageHeight);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(firstImage)
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .load(firstThumborUrl)
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
         if (StringUtil.isNotNullOrEmptyString(secondImage)) {
             ivSecond.setOnClickListener(this);
-
+            String secondThumborUrl = "";
+            if(typeOfHolder == 2){
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(secondImage)
+                    .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
+            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
             Glide.with(context)
-                    .asBitmap()
-                    .load(thirdImage)
+                    .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         userPostImages.addView(child);

@@ -19,7 +19,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -89,7 +88,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         int imageHeight = (int) (((float) 1 / (float) 2) * CommonUtil.getWindowWidth(mContext));
         mFeatureImage.getLayoutParams().height = imageHeight;
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
-            String finalImageUri = CommonUtil.getImgKitUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
+            String finalImageUri = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
             Glide.with(context)
                     .asBitmap()
                     .load(finalImageUri)
@@ -97,7 +96,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getThumbnailImageUrl())) {
-            String thumbImageUrl = CommonUtil.getImgKitUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
+            String thumbImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
             Glide.with(context)
                     .asBitmap()
                     .load(thumbImageUrl)
