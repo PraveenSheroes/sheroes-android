@@ -211,7 +211,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
-            mTitleToolbar.setText(mUserPostObj.getAuthorName());
+            mTitleToolbar.setText(mUserPostObj.getAuthorName()+"'s"+" post");
         }
         if(mConfiguration!=null&&mConfiguration.isSet()) {
             mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
