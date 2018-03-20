@@ -246,7 +246,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 public void onInitFinished(JSONObject referringParams, BranchError error) {
                     isFromAds = CommonUtil.deepLinkingRedirection(referringParams);
                         Branch branch = Branch.getInstance(getApplicationContext());
-                        JSONObject sessionParams = branch.getFirstReferringParams();
+                        JSONObject sessionParams = branch.getLatestReferringParams();
+                       // JSONObject sessionParams = branch.getFirstReferringParams();
 
                         if (sessionParams.has(BRANCH_DEEP_LINK)) {
                             String deepLink;

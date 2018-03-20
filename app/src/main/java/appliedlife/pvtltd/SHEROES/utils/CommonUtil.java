@@ -133,9 +133,9 @@ public class CommonUtil {
                 boolean isFirstSession = referringParams.getBoolean("+is_first_session");
                 boolean isBranchLinkClicked = referringParams.getBoolean("+clicked_branch_link");
 
-                // if(isFirstSession) { //TODO - commented to test scenario
+                 if(isFirstSession) {
                     return true;
-                //}
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 return false;
