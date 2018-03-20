@@ -292,7 +292,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             branchUrlHandle();
         } else {
             isSharedFromOtherApp = false;
-            mEtDefaultText.setHint(mConfiguration.get().configData.mCreatePostText);
+            if(null!=mConfiguration&&mConfiguration.isSet()) {
+                mEtDefaultText.setHint(mConfiguration.get().configData.mCreatePostText);
+            }
             if (null != getIntent() && getIntent().getExtras() != null) {
                 mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
                 mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);

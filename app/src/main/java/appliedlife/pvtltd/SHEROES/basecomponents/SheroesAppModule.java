@@ -120,7 +120,7 @@ public class SheroesAppModule {
                 builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
                 builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
                 if (NetworkUtil.isConnected(mApplication)) {
-                     int maxAge =500;//AppConstants.SECONDS_IN_MIN; // read from cache for 0 minute if connected
+                     int maxAge =0; // read from cache for 0 minute if connected
                      builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
                 } else {
                      int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
