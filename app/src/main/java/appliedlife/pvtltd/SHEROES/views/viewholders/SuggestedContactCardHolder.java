@@ -91,16 +91,16 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.unfollow_confirmation_dialog);
 
-            CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_img_icon);
+            CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
             if (StringUtil.isNotNullOrEmptyString(mUseSolarObj.getThumbnailImageUrl())) {
                 circleImageView.setCircularImage(true);
                 circleImageView.bindImage(mUseSolarObj.getThumbnailImageUrl());
             }
 
-            TextView text = (TextView) dialog.findViewById(R.id.title);
+            TextView text = dialog.findViewById(R.id.title);
             text.setText("Unfollow " + mUseSolarObj.getNameOrTitle());
 
-            TextView dialogButton = (TextView) dialog.findViewById(R.id.cancel);
+            TextView dialogButton = dialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -108,7 +108,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
                 }
             });
 
-            TextView unFollowButton = (TextView) dialog.findViewById(R.id.unfollow);
+            TextView unFollowButton = dialog.findViewById(R.id.unfollow);
             unFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

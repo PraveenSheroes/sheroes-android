@@ -130,7 +130,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return TYPE_COMMUNITY;
             }
             else if (feedDetail instanceof UserSolrObj) {
-                if(((UserSolrObj)feedDetail).getEntityOrParticipantTypeId() == 7){
+                if(feedDetail.getEntityOrParticipantTypeId() == 7){
                     return TYPE_MENTOR;
                 }else {
                     return TYPE_USER;

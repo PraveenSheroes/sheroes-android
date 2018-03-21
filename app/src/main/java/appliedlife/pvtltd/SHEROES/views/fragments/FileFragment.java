@@ -106,7 +106,7 @@ public class FileFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        final Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        final Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
         mImgDisplay.setOnClickListener(new View.OnClickListener() {
 
             @Override

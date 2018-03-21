@@ -50,8 +50,8 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(final ViewGroup container, final int position) {
         View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.welcome_screen_first_fragment, container, false);
-        ImageView imageView = (ImageView) itemView.findViewById(R.id.iv_welcome_screen);
-        TextView textView = (TextView) itemView.findViewById(R.id.tv_welcome_text);
+        ImageView imageView = itemView.findViewById(R.id.iv_welcome_screen);
+        TextView textView = itemView.findViewById(R.id.tv_welcome_text);
         int screen=nameOfScreen.get(position);
         String text=screenText.get(position);
         imageView.setImageResource(screen);

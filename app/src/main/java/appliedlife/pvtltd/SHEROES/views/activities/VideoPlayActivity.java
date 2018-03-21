@@ -37,7 +37,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         if (null != getIntent() && null != getIntent().getExtras()) {
             videoString = getIntent().getExtras().getString(AppConstants.YOUTUBE_VIDEO_CODE);
         }
-        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+        youTubeView = findViewById(R.id.youtube_view);
         youTubeView.initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
