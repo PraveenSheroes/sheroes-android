@@ -70,13 +70,12 @@
         <meta-data
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_kdBTwNxOeTMdqEi8nsWj2ogeABiIJMY9" />
+
         <meta-data
             android:name="io.branch.sdk.BranchKey.test"
             android:value="key_test_ahwTwSEImTLdFFn9os4s1hkmAvlQK7ck" />
 
-
-        <!--only for testing -->
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+        <!--meta-data android:name="io.branch.sdk.TestMode" android:value="${branchTestMode}" / -->
 
         <!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data

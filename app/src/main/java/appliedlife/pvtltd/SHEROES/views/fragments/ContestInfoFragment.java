@@ -333,9 +333,9 @@ public class ContestInfoFragment extends BaseFragment {
                             .load(imageKitUrl)
                             .into(imageView);
                 }
+            } else {
+                imageView.setImageResource(R.drawable.challenge_placeholder);
             }
-        } else {
-            imageView.setImageResource(R.drawable.challenge_placeholder);
         }
     }
 

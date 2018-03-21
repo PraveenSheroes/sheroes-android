@@ -169,8 +169,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private boolean isHandleAuthTokenRefresh = false;
 
     //Ads Navigation
-    private boolean isFromAds = false;
+    private boolean isBranchFirstSession = false;
     private String deepLinkUrl = null;
+    private String defaultTab = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -239,16 +240,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
         } else {
+            //Get Branch Details for First Install
             final Branch branch = Branch.getInstance();
             branch.resetUserSession();
             branch.initSession(new Branch.BranchReferralInitListener() {
                 @Override
-                public void onInitFinished(JSONObject referringParams, BranchError error) {
-                    isFromAds = CommonUtil.deepLinkingRedirection(referringParams);
-                        Branch branch = Branch.getInstance(getApplicationContext());
-                        JSONObject sessionParams = branch.getLatestReferringParams();
-                       // JSONObject sessionParams = branch.getFirstReferringParams();
+                public void onInitFinished(JSONObject sessionParams, BranchError error) {
+                    isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
+                    //JSONObject latestSessionParams = branch.getLatestReferringParams();
+                    //JSONObject firstSessionParams = branch.getFirstReferringParams();
 
+                    if(isBranchFirstSession) {
                         if (sessionParams.has(BRANCH_DEEP_LINK)) {
                             String deepLink;
                             try {
@@ -257,18 +259,23 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                 if (StringUtil.isNotNullOrEmptyString(deepLink)) {
                                     if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
                                         deepLinkUrl = deepLink;
-
                                     }
                                 }
+
+                                if(sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
+                                    defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
+                                }
+
                             } catch (JSONException e) {
                                 deepLinkUrl = null;
-                                isFromAds = false;
+                                defaultTab = null;
+                                isBranchFirstSession = false;
                             }
                         }
+                    }
                 }});
         }
 
-        //Get Branch Details
         setContentView(R.layout.welcome_activity);
         ButterKnife.bind(WelcomeActivity.this);
         isFirstTimeUser = true;
@@ -367,12 +374,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     //before
     private void openHomeScreen() {
 
-        if (isFromAds && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+        if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
             Uri url = Uri.parse(deepLinkUrl);
             Intent intent = new Intent(WelcomeActivity.this, SheroesDeepLinkingActivity.class);
             Bundle bundle = new Bundle();
+            bundle.putString(CommunityDetailActivity.TAB_KEY, "");
             bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
-            bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isFromAds);
+            bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
+            if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
+                bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
+            }
             intent.putExtras(bundle);
             intent.setData(url);
             startActivity(intent);
@@ -468,7 +479,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void openLoginActivity() {
         Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isFromAds);
+        bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
         bundle.putString(AppConstants.ADS_DEEP_LINK_URL, deepLinkUrl);
         loginIntent.putExtras(bundle);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);

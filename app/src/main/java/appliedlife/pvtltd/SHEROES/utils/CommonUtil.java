@@ -128,10 +128,9 @@ public class CommonUtil {
     }
 
     public static boolean deepLinkingRedirection(JSONObject referringParams) {
-        if(referringParams.has("+is_first_session") && referringParams.has("+clicked_branch_link")) {
+        if(referringParams.has("+is_first_session")) {
             try {
                 boolean isFirstSession = referringParams.getBoolean("+is_first_session");
-                boolean isBranchLinkClicked = referringParams.getBoolean("+clicked_branch_link");
 
                  if(isFirstSession) {
                     return true;

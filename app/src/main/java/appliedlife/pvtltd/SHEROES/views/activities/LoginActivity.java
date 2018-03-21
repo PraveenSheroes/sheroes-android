@@ -36,6 +36,7 @@ public class LoginActivity extends BaseActivity {
     //For ads Navigation
     private boolean isFromAds = false;
     private String deepLinkUrl  = null;
+    private String defaultTab = null;
 
     @Inject
     Preference<LoginResponse> userPreference;
@@ -68,6 +69,7 @@ public class LoginActivity extends BaseActivity {
         if(bundle!=null) {
            isFromAds = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
            deepLinkUrl =  bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
+           defaultTab = bundle.getString(CommunityDetailActivity.TAB_KEY);
         }
 
         callFirstFragment(R.id.fragment_login, frag);
@@ -97,6 +99,9 @@ public class LoginActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
                 bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isFromAds);
+                if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
+                    bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
+                }
                 intent.putExtras(bundle);
                 intent.setData(url);
                 startActivity(intent);
