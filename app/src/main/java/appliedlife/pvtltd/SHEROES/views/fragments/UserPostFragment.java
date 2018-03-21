@@ -1,17 +1,23 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -57,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -86,6 +93,10 @@ public class UserPostFragment extends BaseFragment {
     AppUtils mAppUtils;
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
+    @Bind(R.id.no_internet)
+    CardView noInternet;
+    @Bind(R.id.tv_goto_setting)
+    TextView tvGoToSetting;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private CommunityFeedSolrObj mCommunityFeedObj;
@@ -104,7 +115,7 @@ public class UserPostFragment extends BaseFragment {
     Preference<LoginResponse> mUserPreference;
     private FeedDetail mApprovePostFeedDetail;
     private boolean mIsSpam;
-    boolean isMentor=false;
+    boolean isMentor = false;
     private long mUserId;
     private Comment mComment;
     private boolean hideAnonymousPost = true;
@@ -139,18 +150,17 @@ public class UserPostFragment extends BaseFragment {
                 SCREEN_LABEL = getArguments().getString(BaseActivity.SOURCE_SCREEN);
             }
             Parcelable parcelable = getArguments().getParcelable(AppConstants.MENTOR_DETAIL);
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                mUserId = mUserPreference.get().getUserSummary().getUserId();
-                int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                if (userType == AppConstants.MENTOR_TYPE_ID) {
-                    isMentor = true;
-                }
-            }
 
             if (null != parcelable) {
                 UserSolrObj mUserMentorObj = Parcels.unwrap(parcelable);
                 CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
+                communityFeedSolrObj.setAuthorMentor(mUserMentorObj.isAuthorMentor());
+
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                    mUserId = mUserPreference.get().getUserSummary().getUserId();
+                }
+                isMentor = mUserMentorObj.isAuthorMentor();
 
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
                     hideAnonymousPost = false;
@@ -168,7 +178,10 @@ public class UserPostFragment extends BaseFragment {
         }
 
         networkAndListenerData();
-
+        String underLineData=getString(R.string.setting);
+        SpannableString content = new SpannableString(underLineData);
+        content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
+        tvGoToSetting.setText(content);
         return view;
     }
 
@@ -203,9 +216,11 @@ public class UserPostFragment extends BaseFragment {
                 public void onHide() {
                     try {
 
-                        if(getActivity() instanceof ProfileActivity) {
-                            if((getActivity()) == null || getActivity().isFinishing()) return;
-                            ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                        if (getActivity() instanceof ProfileActivity) {
+                            if ((getActivity()) == null || getActivity().isFinishing()) return;
+                            if (isMentor) {
+                                ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
+                            }
                         }
 
                     } catch (ClassCastException ex) {
@@ -218,9 +233,9 @@ public class UserPostFragment extends BaseFragment {
                 public void onShow() {
                     try {
 
-                        if(getActivity() instanceof ProfileActivity) {
-                            if((getActivity()) == null || getActivity().isFinishing()) return;
-                            if(isMentor) {
+                        if (getActivity() instanceof ProfileActivity) {
+                            if ((getActivity()) == null || getActivity().isFinishing()) return;
+                            if (isMentor) {
                                 ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
                             }
                         }
@@ -421,9 +436,9 @@ public class UserPostFragment extends BaseFragment {
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
-        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity&& feedParticipationEnum == FeedParticipationEnum.DELETE_COMMUNITY_POST) {
-            if((getActivity()) == null || getActivity().isFinishing()) return;
-            ((ProfileActivity)getActivity()).refreshPostCount(true);
+        if (baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS) && getActivity() instanceof ProfileActivity && feedParticipationEnum == FeedParticipationEnum.DELETE_COMMUNITY_POST) {
+            if ((getActivity()) == null || getActivity().isFinishing()) return;
+            ((ProfileActivity) getActivity()).refreshPostCount(true);
         }
     }
 
@@ -540,5 +555,30 @@ public class UserPostFragment extends BaseFragment {
     @Override
     protected SheroesPresenter getPresenter() {
         return mHomePresenter;
+    }
+
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        noInternet.setVisibility(View.VISIBLE);
+        mLiNoResult.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    @OnClick({R.id.tv_retry_for_internet})
+    public void onRetryClick() {
+        noInternet.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mLiNoResult.setVisibility(View.GONE);
+        if (null != getActivity()) {
+            if (getActivity() instanceof ProfileActivity) {
+                swipeToRefreshList();
+            }
+        }
+    }
+
+    @OnClick({R.id.tv_goto_setting})
+    public void onSettingClick() {
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 }

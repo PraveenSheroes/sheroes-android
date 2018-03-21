@@ -111,7 +111,7 @@ public class SheroesAppModule {
                 Request original = chain.request();
                 Request.Builder builder = original.newBuilder();
                 Request request;
-                if (null != userPreference && userPreference.isSet() && null != userPreference.get()) {
+                if (null != userPreference && userPreference.isSet()) {
                     builder.header("Content-Type", "application/json")
                             .header("Authorization", userPreference.get().getToken());
                 } else {
@@ -119,12 +119,12 @@ public class SheroesAppModule {
                 }
                 builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
                 builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
-                if (!NetworkUtil.isConnected(mApplication)) {
-                    // int maxAge =AppConstants.NO_REACTION_CONSTANT; // read from cache for 0 minute if connected
-                    // builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
+                if (NetworkUtil.isConnected(mApplication)) {
+                     int maxAge =0; // read from cache for 0 minute if connected
+                     builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
                 } else {
-                    // int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
-                    // builder.addHeader("Cache-Control","public, only-if-cached, max-stale=" + maxStale);
+                     int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
+                     builder.addHeader("Cache-Control","public, only-if-cached, max-stale=" + maxStale);
                 }
                 request = builder.build();
 
@@ -265,7 +265,7 @@ public class SheroesAppModule {
                 .cache(cache);
 
         if (BuildConfig.DEBUG) {
-            okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
+           okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
         }
 
         return okHttpClientBuilder.build();

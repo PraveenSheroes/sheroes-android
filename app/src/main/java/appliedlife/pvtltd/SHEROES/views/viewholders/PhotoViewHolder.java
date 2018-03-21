@@ -40,7 +40,7 @@ public class PhotoViewHolder extends RecyclerView.ViewHolder {
         if (CommonUtil.isNotEmpty(photo.url)) {
             int width = CommonUtil.convertDpToPixel(68, mContext);
             int height = CommonUtil.convertDpToPixel(68, mContext);
-             String imageThumbor = CommonUtil.getImgKitUri(photo.url, width, height);
+             String imageThumbor = CommonUtil.getThumborUri(photo.url, width, height);
             Glide.with(mContext)
                     .load(imageThumbor)
                     .into(mImage);

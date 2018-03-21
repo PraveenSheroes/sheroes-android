@@ -15,13 +15,18 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -111,6 +116,37 @@ public class BranchDeepLink extends BaseActivity {
                 return;
             }
 
+            if(url.equalsIgnoreCase(AppConstants.CREATE_POST_URL) || url.equalsIgnoreCase(AppConstants.CREATE_POST_URL_COM)){
+                String id_for_entity = sessionParams.has(AppConstants.ID_FOR_CREATE_POST_ENTITY) ? sessionParams.getString(AppConstants.ID_FOR_CREATE_POST_ENTITY) : "";
+                String entity_name = sessionParams.has(AppConstants.CREATE_POST_ENTITY_NAME) ? sessionParams.getString(AppConstants.CREATE_POST_ENTITY_NAME) : "";
+                int createRequestFor = sessionParams.has(AppConstants.CREATE_POST_REQUEST_FOR) ? sessionParams.getInt(AppConstants.CREATE_POST_REQUEST_FOR) : 0;
+                boolean isMyEntity = sessionParams.has(AppConstants.IS_MY_ENTITY) && sessionParams.getBoolean(AppConstants.IS_MY_ENTITY);
+                String prefillText = sessionParams.has(AppConstants.PREFILL_TEXT) ? sessionParams.getString(AppConstants.PREFILL_TEXT) : "";
+                boolean isChallengeType = sessionParams.has(AppConstants.IS_CHALLENGE_TYPE) &&sessionParams.getBoolean(AppConstants.IS_CHALLENGE_TYPE);
+                String challengeAuthorType = sessionParams.has(AppConstants.CHALLENGE_AUTHOR_TYPE) ? sessionParams.getString(AppConstants.CHALLENGE_AUTHOR_TYPE) : "";
+
+                CommunityPost communityPost = new CommunityPost();
+                communityPost.community = new Community();
+                communityPost.community.name = entity_name;
+                communityPost.body = prefillText;
+                communityPost.isMyPost =isMyEntity;
+                communityPost.createPostRequestFrom = createRequestFor;
+                if(isChallengeType) {
+                    communityPost.isChallengeType = true;
+                    communityPost.challengeType = challengeAuthorType;
+                    communityPost.challengeHashTag = prefillText;
+                    communityPost.challengeId = Integer.parseInt(id_for_entity);
+                }else
+                {
+                    communityPost.community.id = Long.parseLong(id_for_entity);
+                }
+                HashMap<String, Object> screenProperties = new EventProperty.Builder()
+                        .sourceScreenId(entity_name)
+                        .build();
+                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST,  screenProperties,true);
+                finish();
+                return;
+            }
             if (TextUtils.isEmpty(url)) {
                 startMainActivity();
             } else {

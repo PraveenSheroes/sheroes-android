@@ -20,7 +20,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,7 +51,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -85,7 +83,7 @@ import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -141,6 +139,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Inject
     AppUtils mAppUtils;
+
+    @Inject
+    DateUtil mDateUtil;
     //endregion
 
     //region View variables
@@ -596,7 +597,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     //region ButterKnife Bindings
     @OnClick(R.id.fab)
     void onFabClick() {
-        if (mArticle != null) {
+        if (mFeedDetail != null) {
             AnalyticsManager.trackPostAction(Event.POST_SHARED_CLICKED, mFeedDetail, getScreenName());
             ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false, mArticle.deepLink, false, Event.POST_SHARED, MixpanelHelper.getPostProperties(mFeedDetail, getScreenName()));
         }
@@ -744,9 +745,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
             mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
-            mLikesViewsComments.setText(article.createdAt + " " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
+            long createdDate = mDateUtil.getTimeInMillis(article.createdAt, AppConstants.DATE_FORMAT);
+            String dateInWord  = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+            mLikesViewsComments.setText(dateInWord+ " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
+                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
@@ -754,7 +757,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             }
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
+                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
@@ -778,7 +781,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
         image.getLayoutParams().height = imageNewHeight;
         if (CommonUtil.isNotEmpty(article.featureImage)) {
-            String finalImageUri = CommonUtil.getImgKitUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
+            String finalImageUri = CommonUtil.getThumborUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
             Glide.with(ArticleActivity.this)
                     .asBitmap()
                     .load(finalImageUri)
@@ -848,8 +851,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentCount++;
         updateTitleCommentCountView();
         mCommentsAdapter.addDataAndNotify(comment);
-        if(mFeedDetail instanceof ArticleSolrObj){
-            ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+        if(null!=mFeedDetail) {
+            if (mFeedDetail instanceof ArticleSolrObj) {
+                ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+            }
         }
     }
 

@@ -6,7 +6,6 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +19,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
-import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
@@ -115,7 +113,7 @@ public class DrawerViewHolder extends BaseViewHolder<NavMenuItem> {
 
     //set the image icon and cache it
     private void setImageBackground(Context context, String url) {
-        String imageKitUrl = CommonUtil.getImgKitUri(url, CommonUtil.convertDpToPixel(IMAGE_SIZE, context), CommonUtil.convertDpToPixel(IMAGE_SIZE, context));
+        String imageKitUrl = CommonUtil.getThumborUri(url, CommonUtil.convertDpToPixel(IMAGE_SIZE, context), CommonUtil.convertDpToPixel(IMAGE_SIZE, context));
         if (CommonUtil.isNotEmpty(imageKitUrl)) {
             Glide.with(context)
                     .load(imageKitUrl)

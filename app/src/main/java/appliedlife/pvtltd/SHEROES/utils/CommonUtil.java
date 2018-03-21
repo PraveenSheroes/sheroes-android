@@ -16,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -44,6 +47,7 @@ import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.squareup.pollexor.ThumborUrlBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,10 +55,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -73,15 +79,7 @@ import javax.security.auth.x500.X500Principal;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -124,7 +122,7 @@ public class CommonUtil {
         String[] strArray = input.split(AppConstants.SPACE);
         StringBuilder builder = new StringBuilder();
         for (String s : strArray) {
-            if(s.length()>0) {
+            if (s.length() > 0) {
                 String cap = s.substring(0, 1).toUpperCase() + s.substring(1);
                 builder.append(cap).append(" ");
             }
@@ -132,16 +130,15 @@ public class CommonUtil {
         return builder.toString();
     }
 
-    public static ContestStatus getContestStatus(Date startAt, Date endAt){
+    public static ContestStatus getContestStatus(Date startAt, Date endAt) {
         Date currentDate = new Date();
-        if(currentDate.before(startAt)){
+        if (currentDate.before(startAt)) {
             return ContestStatus.UPCOMING;
-        }
-        else if(currentDate.after(startAt) && currentDate.before(endAt)){
+        } else if (currentDate.after(startAt) && currentDate.before(endAt)) {
             return ContestStatus.ONGOING;
-        }else if(currentDate.after(startAt) && currentDate.after(endAt)){
+        } else if (currentDate.after(startAt) && currentDate.after(endAt)) {
             return ContestStatus.COMPLETED;
-        }else {
+        } else {
             return ContestStatus.UPCOMING;
         }
     }
@@ -290,7 +287,6 @@ public class CommonUtil {
     /*public static boolean isDebuggable() {
         return BuildConfig.DEBUG;
     }*/
-
     public static boolean isAppInstalled(Context context, String packageName) {
         boolean installed = false;
         if (context != null) {
@@ -365,12 +361,12 @@ public class CommonUtil {
     }
 
     public static boolean isSheoresAppLink(Uri url) {
-        if (url==null || url.getScheme() == null) {
+        if (url == null || url.getScheme() == null) {
             return false;
         }
-        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in") ))) {
+        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") ||  url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members")||url.getPath().startsWith("/invite-friends")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends")) {
                 return true;
             }
         }
@@ -378,14 +374,14 @@ public class CommonUtil {
     }
 
     public static boolean isSheroesValidLink(Uri url) {
-        if (url==null || url.getScheme() == null) {
+        if (url == null || url.getScheme() == null) {
             return false;
         }
         return ((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")));
     }
 
     public static boolean isBranchLink(Uri url) {
-        if (url==null || url.getScheme() == null) {
+        if (url == null || url.getScheme() == null) {
             return false;
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")))) {
@@ -400,6 +396,47 @@ public class CommonUtil {
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+    }
+
+    public static String getThumborUriWithUpscale(String image, int width, int height) {
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .smart()
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return uri;
+    }
+
+    public static String getThumborUriWithoutSmart(String image, int width, int height){
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return uri;
+    }
+
+    public static String getThumborUriWithFit(String image, int width, int height){
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .fitIn(ThumborUrlBuilder.FitInStyle.NORMAL)
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return uri;
     }
 
     public static String getPrettyString(ArrayList<String> list) {
@@ -479,29 +516,37 @@ public class CommonUtil {
 
     public static int[] getWindowSize(Context context) {
         int screenWidth, screenHeight;
-        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
-                .getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            Point point = new Point();
-            display.getSize(point);
-            screenWidth = point.x;
-            screenHeight = point.y;
-        } else {
-            screenWidth = display.getWidth();
-            screenHeight = display.getHeight();
-        }
-
-        return new int[]{screenWidth, screenHeight};
+            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                Point point = new Point();
+                display.getSize(point);
+                screenWidth = point.x;
+                screenHeight = point.y;
+            } else {
+                screenWidth = display.getWidth();
+                screenHeight = display.getHeight();
+            }
+            return new int[]{screenWidth, screenHeight};
     }
 
     public static int getWindowWidth(Context context) {
-        int[] size = getWindowSize(context);
-        return size[0];
+        try {
+            int[] size = getWindowSize(context);
+            return size[0];
+            } catch (NullPointerException e) {
+            Crashlytics.getInstance().core.logException(e);
+             }
+        return 400;
     }
 
     public static int getWindowHeight(Context context) {
-        int[] size = getWindowSize(context);
-        return size[1];
+        try {
+            int[] size = getWindowSize(context);
+            return size[1];
+        } catch (NullPointerException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return 600;
     }
 
     /**
@@ -580,7 +625,7 @@ public class CommonUtil {
         } else {
             cursor.moveToFirst();
             int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            if(idx!=-1) {
+            if (idx != -1) {
                 result = cursor.getString(idx);
             }
             cursor.close();
@@ -624,7 +669,7 @@ public class CommonUtil {
                 // log
             } catch (IOException e) {
                 // log
-            }finally {
+            } finally {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
@@ -685,13 +730,11 @@ public class CommonUtil {
             if (eventName == null) {
                 return;
             }
-            if(StringUtil.isNotNullOrEmptyString(sourceScreen)&&sourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN))
-            {
+            if (StringUtil.isNotNullOrEmptyString(sourceScreen) && sourceScreen.equalsIgnoreCase(AppConstants.CHALLENGE_GRATIFICATION_SCREEN)) {
                 HashMap<String, Object> properties = new EventProperty.Builder().sharedTo("Whatsapp").build();
                 properties.put(EventProperty.URL.getString(), url);
                 AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, sourceScreen, properties);
-            }else
-            {
+            } else {
                 EventProperty.Builder builder = new EventProperty.Builder().sharedTo("Whatsapp");
                 final HashMap<String, Object> properties = builder.build();
                 properties.put(EventProperty.SOURCE.getString(), sourceScreen);
@@ -733,28 +776,42 @@ public class CommonUtil {
     }
 
 
-    public static String getImgKitUri(@NonNull String image, int width, int height) {
-        String heightWidth = "";
-        if(image.contains("img.sheroes")){
-            heightWidth = "?tr=w-" + Integer.toString(width) + ",h-" + Integer.toString(height);
+    public static String getThumborUri(@NonNull String image, int width, int height) {
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .filter(ThumborUrlBuilder.noUpscale())
+                    .smart()
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
-        if(image.contains("images.assettype")){
-            heightWidth = "?w=" + Integer.toString(width) + "&h=" + Integer.toString(height);
-        }
-        String uri = image + heightWidth;
         return uri;
     }
 
-    public static String getImgKitUri(@NonNull String image, int width) {
-        String heightWidth = "";
-        if(image.contains("img.sheroes")){
-            heightWidth = "?tr=w-" + Integer.toString(width);
+    public static String getThumborUri(@NonNull String image, int width) {
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, 0)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .filter(ThumborUrlBuilder.noUpscale())
+                    .smart()
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
-        if(image.contains("images.assettype")){
-            heightWidth = "?w=" + Integer.toString(width);
-        }
-        String uri = image + heightWidth;
         return uri;
+    }
+
+    public static RequestBuilder<Drawable> getThumbnailRequest(Context context, String image){
+        RequestBuilder<Drawable> thumbnailRequest = Glide
+                .with(context)
+                .load(CommonUtil.getThumborUri(image, 48));
+        return thumbnailRequest;
+
     }
 
     public static String getYoutubeURL(String videoId) {
@@ -981,7 +1038,6 @@ public class CommonUtil {
     }*/
 
 
-
     public static boolean matchesWebsiteURLPattern(String sentence) {
         final Pattern pattern = Pattern.compile("\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
                 Pattern.MULTILINE | Pattern.DOTALL);
@@ -1073,21 +1129,22 @@ public class CommonUtil {
         return !shown;
     }
 
-   public static void setTimeForContacts(String key,long contactSyncTime) {
+    public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        if(null==prefs) {
+        if (null == prefs) {
             return;
         }
-       prefs.edit().putLong(key, contactSyncTime).apply();
+        prefs.edit().putLong(key, contactSyncTime).apply();
     }
+
     public static long getTimeForContacts(String key) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        if(null==prefs)
-        {
+        if (null == prefs) {
             return 0;
         }
-       return prefs.getLong(key, 0);
+        return prefs.getLong(key, 0);
     }
+
     public static int forGivenCountOnly(String key, int n) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (prefs == null) {
@@ -1106,7 +1163,8 @@ public class CommonUtil {
             return count;
         }
     }
-    public  static class CircleTransform extends BitmapTransformation {
+
+    public static class CircleTransform extends BitmapTransformation {
         public CircleTransform(Context context) {
             super(context);
         }
@@ -1116,7 +1174,7 @@ public class CommonUtil {
             return circleCrop(pool, toTransform);
         }
 
-        private static Bitmap  circleCrop(BitmapPool pool, Bitmap source) {
+        private static Bitmap circleCrop(BitmapPool pool, Bitmap source) {
             if (source == null) return null;
 
             int size = Math.min(source.getWidth(), source.getHeight());
@@ -1146,14 +1204,14 @@ public class CommonUtil {
         }
     }
 
-    public static String trimBranchIdQuery(String url){
+    public static String trimBranchIdQuery(String url) {
         URI uri = null;
         try {
             uri = new URI(url);
         } catch (URISyntaxException e) {
             return url;
         }
-        if(!CommonUtil.isNotEmpty(uri.getQuery())){
+        if (!CommonUtil.isNotEmpty(uri.getQuery())) {
             return url;
         }
         if (uri.getQuery().contains("branch_match_id")) {
@@ -1180,7 +1238,7 @@ public class CommonUtil {
     }
 
 
-    public static void shareCardViaSocial(Context context,Bitmap bmp, String deepLinkUrl) {
+    public static void shareCardViaSocial(Context context, Bitmap bmp, String deepLinkUrl) {
         Uri contentUri = CommonUtil.getContentUriFromBitmap(context, bmp);
         if (contentUri != null) {
             Intent intent = new Intent((Intent.ACTION_SEND));
@@ -1191,7 +1249,8 @@ public class CommonUtil {
             context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         }
     }
-    public static void facebookImageShare(final Activity fromActivity, String shareImageUrl){
+
+    public static void facebookImageShare(final Activity fromActivity, String shareImageUrl) {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, shareImageUrl, 816, 816)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -1220,7 +1279,7 @@ public class CommonUtil {
                 });
     }
 
-    public static void shareFacebookLink(Activity fromActivity, String shareText){
+    public static void shareFacebookLink(Activity fromActivity, String shareText) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, shareText);

@@ -22,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -54,6 +56,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private Context context;
     @Inject
     Preference<LoginResponse> userPreference;
+    @Inject
+    Preference<Configuration> mConfiguration;
     private String mPhotoUrl;
     private String loggedInUser;
     private long userId;
@@ -68,11 +72,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         if (CommonUtil.forGivenCountOnly(AppConstants.HEADER_PROFILE_SESSION_PREF, AppConstants.HEADER_SESSION) == AppConstants.HEADER_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF)) {
-                isToolTip = true;
-            } else {
-                isToolTip = false;
-            }
+            isToolTip = CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF);
         } else {
             isToolTip = false;
         }
@@ -82,7 +82,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.context = context;
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet()  && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
             }
@@ -91,6 +91,10 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = userName;
             }
             userId = userPreference.get().getUserSummary().getUserId();
+            int userType = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            if (userType == AppConstants.MENTOR_TYPE_ID) {
+                dataItem.setAuthorMentor(true);
+            }
         }
         ivLoginUserPic.setCircularImage(true);
         ivLoginUserPic.bindImage(mPhotoUrl);
@@ -98,14 +102,18 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);
         }
-        headerMsg.setText(context.getString(R.string.ID_HEADER_TEXT));
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            headerMsg.setText(mConfiguration.get().configData.mCreatePostText);
+        } else {
+            headerMsg.setText((new ConfigData().mCreatePostText));
+        }
         if (isToolTip) {
             toolTipForHeaderFeed(context);
         }
     }
 
     @OnClick(R.id.user_name)
-    public void userNameClickForProfile() {
+    void userNameClickForProfile() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -123,7 +131,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.iv_header_circle_icon)
-    public void userImageClickForProfile() {
+    void userImageClickForProfile() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -142,7 +150,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.header_msg)
-    public void textClickForCreatePost() {
+     void textClickForCreatePost() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {

@@ -52,11 +52,18 @@
                     android:textSize="@dimen/sp_size_14"
                     android:textStyle="normal" />
 
+                <ImageView
+                    android:id="@+id/edit_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_edit_pic"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
+                    android:visibility="gone"
                     android:background="@drawable/ic_edit_profile">
 
                     <TextView

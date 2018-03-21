@@ -12,7 +12,7 @@
 
         <include
             android:id="@id/toolbar"
-            layout="@layout/toolbar" />
+            layout="@layout/toolbar_community_post" />
     </android.support.design.widget.AppBarLayout>
 
     <ProgressBar
@@ -33,7 +33,11 @@
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <View
+                android:id="@+id/view_anonymous"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="@dimen/dp_size_30"/>
             <CheckBox
                 android:id="@+id/anonymous_select"
                 android:layout_width="match_parent"
@@ -196,7 +200,6 @@
                 android:layout_marginTop="@dimen/dp_size_5"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="@string/hint.write_post"
                 android:inputType="textMultiLine|textCapSentences"
                 android:scrollHorizontally="false"
                 android:textSize="20sp" />

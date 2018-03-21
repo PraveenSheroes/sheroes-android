@@ -43,10 +43,9 @@ public class SheroesApplication extends MultiDexApplication  {
     SheroesAppComponent mSheroesAppComponent;
     public static volatile SheroesApplication mContext;
     private String mCurrentActivityName;
-    private static SheroesApplication sApplicationContext;
 
     public static SheroesAppComponent getAppComponent(Context context) {
-        return (sApplicationContext).mSheroesAppComponent;
+        return (mContext).mSheroesAppComponent;
     }
 
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
@@ -58,9 +57,7 @@ public class SheroesApplication extends MultiDexApplication  {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        final CrashlyticsCore core = new CrashlyticsCore
-                .Builder()
-                .build();
+        final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -70,7 +67,6 @@ public class SheroesApplication extends MultiDexApplication  {
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
         setAppComponent(mSheroesAppComponent);
-        sApplicationContext = SheroesApplication.this;
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
         AnalyticsManager.initializeFbAnalytics(mContext);
@@ -96,10 +92,10 @@ public class SheroesApplication extends MultiDexApplication  {
     }
 
     public static SharedPreferences getAppSharedPrefs(){
-        if(sApplicationContext == null){
+        if(mContext == null){
             return null;
         }
-        return sApplicationContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
+        return mContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
     }
 
     public synchronized Tracker getGoogleAnalyticsTracker() {

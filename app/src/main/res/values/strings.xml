@@ -40,7 +40,7 @@
     <string name="ID_COMMUNITIES">Communities</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
-    <string name="ID_NOTIFICATION">Notification</string>
+    <string name="ID_NOTIFICATION">Notifications</string>
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
@@ -332,7 +332,9 @@
 
     <!-- Actions -->
     <string name="action.whatsapp">WhatsApp</string>
+    <string name="action.camera">Camera</string>
     <string name="action.facebook">Facebook</string>
+    <string name="action.gallery">Gallery</string>
     <string name="action.copy_link">Copy Link</string>
     <string name="action.save_to_gallery">Save to\nGallery</string>
     <string name="action_share">share</string>
@@ -414,7 +416,6 @@
     <string name="other_community">Other Communities</string>
     <string name="add_photo">Add Photo</string>
     <string name="post_anonymous">Post as Anonymous</string>
-    <string name="hint.write_post">What\'s on your mind?</string>
     <string name="action.post">Post</string>
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Write a Post</string>
@@ -427,7 +428,7 @@
     <string name="menu.post_as_community">Post as Community</string>
     <string name="menu.post_as_user">Post as %1$s</string>
 
-    <string name="ID_HEADER_TEXT">Share/ Ask Anything Without Hesitation</string>
+
 
 
     <string name="contest.status.ongoing">Live</string>
@@ -532,13 +533,13 @@
 
     <string name="tool_tip_create_post">Use this button to hide your identity on the post.</string>
     <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
-    <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.</string>
+    <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
     <string name="tool_tip_follower">Follow her to see what she shares!</string>
     <string name="tool_tip_picture_share">Like this picture? Share it with friends.</string>
     <string name="tool_tip_invite_friend">Invite your friends to this community by tapping here.</string>
     <string name="tool_tip_article_share">Share this article with a friend who will love reading it.</string>
     <string name="tool_tip_feed_header_profile">Check out your profile to see your posts, communities, followers &amp; more.</string>
-    <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.</string>
+    <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
     <string name="share_with_friends">Share with friends</string>
     <string name="share_with_friend_text">Share the happiness with your friends &amp; invite them to take up this challenge</string>
     <string name="share_profile_text">Share the happiness with your friends &amp; invite them to join here</string>
@@ -562,4 +563,8 @@
     <string name="no_search_contact">No contact found</string>
     <string name="sheroesRelatedChannelID">sheroesRelatedChannelID</string>
     <string name="sheroesRelatedChannelName">Related to you and your posts</string>
+    <string name="no_internet">OOPS! \nNo Internet Connection</string>
+    <string name="retry">Retry</string>
+    <string name="setting">Go to settings</string>
+    <string name="check_internet_Connection">Check your Internet connection and try again</string>
 </resources>

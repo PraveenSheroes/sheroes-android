@@ -140,7 +140,7 @@ public class CollectionActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         if (StringUtil.isNotNullOrEmptyString(toolbarTitle)) {
             titleName.setText(toolbarTitle);
