@@ -202,7 +202,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         mPostDetailPresenter.setUserPost(mUserPostObj, mUserPostId);
         mPostDetailPresenter.fetchUserPost();
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
+        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
             mUserPic.setCircularImage(true);
             mUserPic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
@@ -210,16 +210,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTitleToolbar.setText(R.string.ID_COMMENTS);
-        mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
+        if(mUserPostObj!=null&&StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
+            mTitleToolbar.setText(mUserPostObj.getAuthorName()+"'s"+" post");
+        }
+        if(mConfiguration!=null&&mConfiguration.isSet()) {
+            mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
+        }else
+        {
+            mInputText.setHint("Type your comment here...");
+        }
         setupEditInputText();
         setupToolbarItemsColor();
-      //  postCommentSocialTagging();
     }
 
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareText = "";
             shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareText)) {
@@ -384,6 +390,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void smoothScrollToBottom() {
         mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
+        if(null==mUserPostObj) {
+            UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
+            if (userPostSolrObj != null && StringUtil.isNotNullOrEmptyString(userPostSolrObj.getAuthorName())) {
+                mTitleToolbar.setText(userPostSolrObj.getAuthorName() + "'s" + " post");
+            }
+        }
     }
 
     @Override
@@ -404,7 +416,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 return;
             }
             if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST) {
-                if (null != intent && null != intent.getExtras()) {
+                if ( null != intent.getExtras()) {
                     UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
                     mPostDetailPresenter.updateUserPost(userPostSolrObj);
                 }
@@ -733,9 +745,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
-        if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-            if (null != userPostObj) {
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != userPostObj) {
+            if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                     if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
                         Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
                         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -743,13 +756,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         startActivity(intent);
                     }
                 }
-            }
-        } else {
-            if (userPostObj.getCommunityId() == 0) {
-                ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
-
             } else {
-                CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                if (userPostObj.getCommunityId() == 0) {
+                    ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
+
+                } else {
+                    CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                }
             }
         }
     }

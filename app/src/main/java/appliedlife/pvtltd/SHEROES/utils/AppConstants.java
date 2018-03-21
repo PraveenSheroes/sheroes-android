@@ -23,6 +23,10 @@ public class AppConstants {
     public static final int CREATE_POST = 101;
     public static final int MENTOR_CREATE_QUESTION = 201;
     public static final int SHEROES_COMMUNITY_ID = 273;
+    public static final int SECONDS_IN_MIN = 60;
+    public static final int MINUTES_IN_HOUR = 60;
+    public static final int HOURS_IN_DAY = 24;
+    public static final int CACHE_VALID_DAYS = 14;
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String SPACE = " ";
     public static final String SHEROES_AUTH_TOKEN = "sheroes_auth_token";
@@ -183,7 +187,6 @@ public class AppConstants {
 
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_CHAT = 20;
-
     public static final int INVITE_PAGE_SIZE = 200;
     public static final int NO_REACTION_CONSTANT = 0;
     public static final int HEART_REACTION_CONSTANT = 10;
@@ -275,6 +278,18 @@ public class AppConstants {
     public static final String COLLECTION_NEW_URL = "https://sheroes.in/app-collections";
     public static final String COLLECTION_NEW_URL_COM = "https://sheroes.com/app-collections";
 
+    /* Create post deeplink */
+    public static final String CREATE_POST_URL = "https://sheroes.in/create-post";
+    public static final String CREATE_POST_URL_COM = "https://sheroes.com/create-post";
+    public static final String ID_FOR_CREATE_POST_ENTITY = "entity_id";
+    public static final String CREATE_POST_ENTITY_NAME = "entity_name";
+    public static final String CREATE_POST_REQUEST_FOR = "create_post_request_for";
+    public static final String IS_MY_ENTITY = "is_my_entity";
+    public static final String PREFILL_TEXT = "prefill_text";
+    public static final String IS_CHALLENGE_TYPE = "is_challenge_type";
+    public static final String CHALLENGE_AUTHOR_TYPE = "challenge_author_type";
+
+
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String FAQ_URL = "https://sheroes.com/faq";
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
@@ -294,6 +309,7 @@ public class AppConstants {
     public static final String END_POINT_URL = "end_point_url";
     public static final String TOOLBAR_TITTE = "toolbar_title";
     public static final String SCREEN_NAME = "screen_name";
+
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
@@ -380,5 +396,7 @@ public class AppConstants {
     public static final String IS_MOENGAGE = "Is Moengage";
 
     public static final String LOGOUT_USER = "Logout_user";
+
+    public static final double MAX_IMAGE_RATIO = 1.5;
 
 }

@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 
 public interface HomeView extends BaseMvpView {
     void getLogInResponse(LoginResponse loginResponse);
@@ -26,4 +27,6 @@ public interface HomeView extends BaseMvpView {
     void invalidateLikeUnlike(Comment comment);
 
     void onConfigFetched();
+
+    void getUserSummaryResponse(BoardingDataResponse boardingDataResponse);
 }

@@ -1,10 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,8 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
@@ -183,7 +177,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     author.setText(comment.getParticipantName());
                    // bio.setText(comment.getPa);
                     if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
-                        String authorImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                        String authorImage = CommonUtil.getThumborUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
                         Glide.with(mContext)
                                 .load(authorImage)
                                // .placeholder(comment.author.getPlaceholder())

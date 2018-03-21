@@ -167,7 +167,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
-            String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(mContext), featureImageHeight);
+            String imageKitUrl = CommonUtil.getThumborUri(mContest.thumbImage, CommonUtil.getWindowWidth(mContext), featureImageHeight);
             if (CommonUtil.isNotEmpty(imageKitUrl)) {
                 Glide.with(mContext)
                         .load(imageKitUrl)

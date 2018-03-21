@@ -17,6 +17,33 @@ buildscript {
     }
 }
 
+def commitSha() {
+    def file = new File(project.buildDir, "commit-sha.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def value = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
+}
+
+def commitTime() {
+    def file = new File(project.buildDir, "commit-timestamp.txt")
+    if (file.exists()) {
+        return file.text
+    }
+
+    def date = new Date()
+    def value = date.format("yyyy-MM-dd'T'HH:mm:ss'Z'", TimeZone.getTimeZone("UTC"))
+
+    file.parentFile.mkdirs()
+    file.text = value
+    return value
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.2"
@@ -27,6 +54,7 @@ android {
         targetSdkVersion 27
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        manifestPlaceholders = [branchTestMode: false]
     }
 
     signingConfigs {
@@ -50,7 +78,7 @@ android {
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
              buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
             //buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
+          //  buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
            
             if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
                 buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""
@@ -60,6 +88,10 @@ android {
             signingConfig signingConfigs.debug
             ext.crashlyticsApiSecret = "c8e9927007c169ba7b17261a41984f3d63d39fe5cda3e9c42234990e04cec4ae"
             ext.crashlyticsApiKey = "6f53a2cf9e2249594beb5d245e04eb8094f6a56e"
+            manifestPlaceholders = [branchTestMode: true]
+
+            buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
+            buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
         }
         release {
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
@@ -67,6 +99,10 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
+            buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
+
             ext.crashlyticsApiSecret = "9edaf311149aaaac17a2399c76e31db5fd18706615646d41ac84e561504e4e57"
             ext.crashlyticsApiKey = "07aa242372597565df80681a25002e6e25e6ef0e"
         }
@@ -102,10 +138,10 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.facebook.android:facebook-android-sdk:4.28.0'
-    compile 'com.google.android.gms:play-services-analytics:11.0.4'
-    compile 'com.google.android.gms:play-services-auth:11.0.4'
-    compile 'com.google.android.gms:play-services-gcm:11.0.4'
-    compile 'com.google.android.gms:play-services-location:11.0.4'
+    compile 'com.google.android.gms:play-services-analytics:11.8.0'
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.google.android.gms:play-services-gcm:11.8.0'
+    compile 'com.google.android.gms:play-services-location:11.8.0'
     compile 'com.android.support:mediarouter-v7:27.0.2'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:27.0.2'
@@ -152,6 +188,7 @@ dependencies {
     compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
     compile('com.trello.rxlifecycle2:rxlifecycle:2.0.1')
     compile('com.trello.rxlifecycle2:rxlifecycle-android:2.0.1')
+    compile 'com.github.vihtarb:tooltip:0.1.9'
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'

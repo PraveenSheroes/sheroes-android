@@ -2,16 +2,22 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -41,6 +47,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -51,6 +58,7 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +77,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -81,6 +91,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -90,10 +101,12 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
@@ -130,6 +143,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private int askingQuestionCode;
     boolean isOwnProfile = false;
     ViewPagerAdapter mViewPagerAdapter;
+    private String mEncodeImageUrl;
+    private Uri mImageCaptureUri;
 
     private Dialog dialog = null;
     private CommunityEnum communityEnum = MY_COMMUNITY;
@@ -144,6 +159,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private String mSourceName;
     private String userNameTitle;
     private boolean isProfileClicked = false;
+    private File localImageSaveForChallenge;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -236,6 +252,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Bind(R.id.edit_overlay_container)
     LinearLayout editProfileOverlayContainer;
+
+    @Bind(R.id.edit_icon)
+    ImageView editIcon;
 
     @Bind(R.id.share_profile)
     TextView shareProfile;
@@ -414,8 +433,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
         if(isOwnProfile) {
             verifiedIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.VISIBLE);
+            editProfileOverlayContainer.setVisibility(View.GONE);
+            editIcon.setVisibility(View.VISIBLE);
         } else {
+            editIcon.setVisibility(View.GONE);
             editProfileOverlayContainer.setVisibility(View.GONE);
         }
 
@@ -556,6 +577,24 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         } catch (WindowManager.BadTokenException e) {
             Crashlytics.getInstance().core.logException(e);
         }
+    }
+
+    public void selectImageFrmCamera() {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
+                .start(this);
+    }
+
+    public void selectImageFrmGallery() {
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
+                .start(this);
     }
 
     private void followUnFollowMentor() {
@@ -729,7 +768,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
     }
 
-    @OnClick({R.id.iv_mentor_full_view_icon, R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description})
+    @OnClick({R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description})
     public void navigateToProfileEditing() {
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
@@ -745,6 +784,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 AnalyticsManager.trackEvent(Event.PROFILE_EDIT_CLICKED, getScreenName(), properties);
             }
         }
+    }
+
+    @OnClick(R.id.iv_mentor_full_view_icon)
+    public void onImageEditClicked() {
+        CameraBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
     }
 
     @OnClick(R.id.tv_mentor_dashboard_follow)
@@ -1247,12 +1291,117 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                     }
 
                     break;
+
+                case AppConstants.REQUEST_CODE_FOR_GALLERY:
+                    mImageCaptureUri = intent.getData();
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
+                    imageCropping(intent);
+                    break;
+
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                        try {
+                            File file = new File(result.getUri().getPath());
+                            Bitmap photo = CompressImageUtil.decodeFile(file);
+                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
                 default:
 
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
 
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+        if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
+            LoginResponse userDetailsResponse = null;
+            if(mUserPreference!=null && mUserPreference.isSet()){
+                userDetailsResponse = mUserPreference.get();
+            }
+            if (userDetailsResponse != null) {
+                try {
+                    if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
+                        setProfileNameData(boardingDataResponse.getResponse());
+                        //Save image
+                        userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
+                        userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
+                        mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
+                        mUserPreference.set(userDetailsResponse);
+                        refreshImageView(boardingDataResponse.getResponse());
+                    }
+                } catch (Exception e) {
+                    LogUtils.info(TAG, e.getMessage());
+                }
+            }
+        }
+    }
+
+
+    private void imageCropping(Intent intent) {
+        try {
+            if (localImageSaveForChallenge.exists()) {
+                Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
+                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+            } else {
+                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+            e.printStackTrace();
+        }
+    }
+
+    public void setProfileNameData(String imageUrl) {
+        /*if (null != imageUrl) {
+            userImage.setCircularImage(true);
+            userImage.bindImage(imageUrl);
+        }*/
+        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        setLocalImageSaveForChallenge(localImageSaveForChallenge);
+    }
+
+    public void setLocalImageSaveForChallenge(File localImageSaveForChallenge) {
+        this.localImageSaveForChallenge = localImageSaveForChallenge;
+    }
+
+    private void cropingIMG() {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+        List list = getPackageManager().queryIntentActivities(intent, 0);
+        intent.setData(mImageCaptureUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("scale", true);
+        if (StringUtil.isNotEmptyCollection(list)) {
+            Intent i = new Intent(intent);
+            ResolveInfo res = (ResolveInfo) list.get(0);
+            i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+            startActivityForResult(i, AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING);
+        }
     }
 
     private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
@@ -1270,7 +1419,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             userDescription.setText(userBio);
             mUserSolarObject.setDescription(userBio);
         }
+    }
 
+    public void refreshImageView(String imageUrl){
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
             mProfileIcon.bindImage(imageUrl);

@@ -41,6 +41,7 @@
         android:label="@string/ID_APP_NAME"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:replace="android:label">
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -70,7 +71,6 @@
         <meta-data
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_kdBTwNxOeTMdqEi8nsWj2ogeABiIJMY9" />
-
         <meta-data
             android:name="io.branch.sdk.BranchKey.test"
             android:value="key_test_ahwTwSEImTLdFFn9os4s1hkmAvlQK7ck" />

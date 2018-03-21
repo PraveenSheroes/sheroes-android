@@ -190,7 +190,7 @@ public final class CropImage {
                 }
                 break;
             case 2:
-                List<Intent> galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
+                List<Intent> galleryIntents = getGalleryIntent(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
                 if (galleryIntents.size() == 0) {
                     // if no intents found for get-content try pick intent action (Huawei P9).
                     galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_PICK, includeDocuments);
@@ -301,6 +301,15 @@ public final class CropImage {
         return intents;
     }
 
+    public static List<Intent> getGalleryIntent(@NonNull PackageManager packageManager, String action, boolean includeDocuments) {
+        List<Intent> intents = new ArrayList<>();
+        final Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        intents.add(galleryIntent);
+        return intents;
+    }
+
     /**
      * Check if explicetly requesting camera permission is required.<br>
      * It is required in Android Marshmellow and above if "CAMERA" permission is requested in the manifest.<br>
@@ -408,7 +417,7 @@ public final class CropImage {
      * Result will be received in {@link Activity#onActivityResult(int, int, Intent)} and can be retrieved
      * using {@link #getActivityResult(Intent)}.
      *
-     * @return builder for Crop Image Activity
+     * @return mToolTip for Crop Image Activity
      */
     public static ActivityBuilder activity() {
         return new ActivityBuilder(null,0);
@@ -420,7 +429,7 @@ public final class CropImage {
      * using {@link #getActivityResult(Intent)}.
      *
      * @param uri the image Android uri source to crop or null to start a picker
-     * @return builder for Crop Image Activity
+     * @return mToolTip for Crop Image Activity
      */
     public static ActivityBuilder activity(@Nullable Uri uri,int imageSelectOptionPicker) {
 

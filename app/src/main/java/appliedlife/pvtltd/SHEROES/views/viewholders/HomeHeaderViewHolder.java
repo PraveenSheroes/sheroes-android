@@ -72,11 +72,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         if (CommonUtil.forGivenCountOnly(AppConstants.HEADER_PROFILE_SESSION_PREF, AppConstants.HEADER_SESSION) == AppConstants.HEADER_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF)) {
-                isToolTip = true;
-            } else {
-                isToolTip = false;
-            }
+            isToolTip = CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF);
         } else {
             isToolTip = false;
         }
@@ -86,7 +82,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
         this.context = context;
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet()  && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
             }
@@ -117,7 +113,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.user_name)
-    public void userNameClickForProfile() {
+    void userNameClickForProfile() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -135,7 +131,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.iv_header_circle_icon)
-    public void userImageClickForProfile() {
+    void userImageClickForProfile() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
@@ -154,7 +150,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.header_msg)
-    public void textClickForCreatePost() {
+     void textClickForCreatePost() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {

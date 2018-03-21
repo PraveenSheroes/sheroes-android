@@ -441,6 +441,16 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
             }
 
+            if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                if (mConfiguration.get().configData.showArticleViews) {
+                    tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                } else {
+                    tvFeedArticleTotalViews.setVisibility(View.GONE);
+                }
+            } else {
+                tvFeedArticleTotalViews.setVisibility(View.GONE);
+            }
+
             RequestOptions requestOptions = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.color.photo_placeholder)
