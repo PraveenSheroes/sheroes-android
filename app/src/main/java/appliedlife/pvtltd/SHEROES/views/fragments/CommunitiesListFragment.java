@@ -416,7 +416,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         noInternet.setVisibility(View.GONE);
         communitiesContainer.setVisibility(View.VISIBLE);
         loaderGif.setVisibility(View.VISIBLE);
-        if(null!=getActivity()) {
+        if(null!=getActivity()&&getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).communityOnClick();
         }
     }

@@ -870,6 +870,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 liHolderLayout.weight = 0;
                 break;
             case AppConstants.TWO_CONSTANT:
+                LinearLayout.LayoutParams liHolderLinear = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
+                liHolderLinear.setMargins(5,0,0,0);
                 LinearLayout.LayoutParams firstImageLayout = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayout.weight = 1;
                 LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
@@ -878,6 +880,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             case AppConstants.THREE_CONSTANT:
                 LinearLayout.LayoutParams liHolderLayoutDefault = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
                 liHolderLayoutDefault.weight = 1;
+                liHolderLayoutDefault.setMargins(5,0,0,0);
                 LinearLayout.LayoutParams firstImageLayoutDefault = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayoutDefault.weight = 2;
                 LinearLayout.LayoutParams secondImageLayoutDefault = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();

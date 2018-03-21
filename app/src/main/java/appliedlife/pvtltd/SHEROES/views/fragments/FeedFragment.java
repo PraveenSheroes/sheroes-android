@@ -321,15 +321,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             emptyView.setVisibility(View.VISIBLE);
             loadEmptyView();
         } else {
-            if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
-                ((HomeActivity)getActivity()).showCaseDesign();
-            }
             mFeedRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
+        if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
+            ((HomeActivity)getActivity()).showCaseDesign();
+        }
     }
 
     @Override
@@ -1282,7 +1282,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mFeedRecyclerView.setVisibility(View.VISIBLE);
         gifLoader.setVisibility(View.VISIBLE);
         if(null!=getActivity()) {
-            ((HomeActivity) getActivity()).homeOnClick();
+            if (getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).homeOnClick();
+            }
         }
     }
     @OnClick({R.id.tv_goto_setting})
