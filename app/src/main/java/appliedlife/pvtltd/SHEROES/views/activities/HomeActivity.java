@@ -209,8 +209,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
 
-    private RequestBuilder<PictureDrawable> requestBuilder;
-
     @Inject
     Preference<LoginResponse> mUserPreference;
 

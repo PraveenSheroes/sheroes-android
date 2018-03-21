@@ -38,6 +38,14 @@ public class NavMenuItem extends BaseResponse{
     @Expose
     private int menuType;
 
+    @SerializedName("menu_item_icon_url_svg")
+    @Expose
+    private String menuItemIconUrlSvg;
+
+    @SerializedName("menu_item_icon_selected_url_svg")
+    @Expose
+    private String menuItemIconUrlSelectedSvg;
+
     public int getMenuType() {
         return menuType;
     }
@@ -108,5 +116,21 @@ public class NavMenuItem extends BaseResponse{
 
     public void setMenuItemIconUrlSelected(String menuItemIconUrlSelected) {
         this.menuItemIconUrlSelected = menuItemIconUrlSelected;
+    }
+
+    public String getMenuItemIconUrlSvg() {
+        return menuItemIconUrlSvg;
+    }
+
+    public void setMenuItemIconUrlSvg(String menuItemIconUrlSvg) {
+        this.menuItemIconUrlSvg = menuItemIconUrlSvg;
+    }
+
+    public String getMenuItemIconUrlSelectedSvg() {
+        return menuItemIconUrlSelectedSvg;
+    }
+
+    public void setMenuItemIconUrlSelectedSvg(String menuItemIconUrlSelectedSvg) {
+        this.menuItemIconUrlSelectedSvg = menuItemIconUrlSelectedSvg;
     }
 }
