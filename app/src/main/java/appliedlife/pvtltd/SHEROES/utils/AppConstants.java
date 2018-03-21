@@ -320,8 +320,6 @@ public class AppConstants {
     public static final String PROFILE_PIC_TYPE = "PROFILE_PHOTO";
     public static final String PROFILE_PIC_SUB_TYPE = "USER_PROFILE_PHOTO_SERVICE";
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 79;
-    public static final String GOOGLE_PLAY_URL_REFERRAL = "referrer";
-    public static final String GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID = "app_user_contact_id";
     public static final String PUBLIC_PROFILE = "public profile";
     public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final long ASKED_QUESTION_TO_MENTOR = 3;
@@ -380,5 +378,13 @@ public class AppConstants {
 
     public static final String LOGOUT_USER = "Logout_user";
     public static final String PROJECT_ID = "409228886131";
+
+    public static final String REFERRER = "Referrer";
+    public static final String UTM_SOURCE = "utm_source";
+    public static final String UTM_MEDIUM = "utm_medium";
+    public static final String UTM_CAMPAIGN = "utm_campaign";
+    public static final String UTM_CONTENT = "utm_content";
+    public static final String UTM_TERM = "utm_term";
+
 
 }

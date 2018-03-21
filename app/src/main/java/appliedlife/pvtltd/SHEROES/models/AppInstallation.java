@@ -102,6 +102,24 @@ public class AppInstallation {
     @SerializedName("branch_install_url")
     public String branchId;
 
+    @SerializedName("referrer")
+    public String referrer;
+
+    @SerializedName("utm_source")
+    public String utmSource;
+
+    @SerializedName("utm_medium")
+    public String utmMedium;
+
+    @SerializedName("utm_campaign")
+    public String utmCampaign;
+
+    @SerializedName("utm_content")
+    public String utmContent;
+
+    @SerializedName("utm_term")
+    public String utmTerm;
+
     /**
      * Saves the current installation object to our server
      * Updates or inserts a new one.

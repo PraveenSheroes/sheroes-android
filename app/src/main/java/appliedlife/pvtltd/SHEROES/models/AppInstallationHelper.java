@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import io.reactivex.Observable;
@@ -98,6 +99,15 @@ public class AppInstallationHelper {
         mAppInstallationLocal.deviceName = CommonUtil.getDeviceName();
         mAppInstallationLocal.platform = "android";
         mAppInstallationLocal.deviceType = "android";
+
+        //fetch referrer params from sharedPref
+        mAppInstallationLocal.referrer = CommonUtil.getPref(AppConstants.REFERRER);
+        mAppInstallationLocal.utmSource = CommonUtil.getPref(AppConstants.UTM_SOURCE);
+        mAppInstallationLocal.utmMedium = CommonUtil.getPref(AppConstants.UTM_MEDIUM);
+        mAppInstallationLocal.utmCampaign = CommonUtil.getPref(AppConstants.UTM_CAMPAIGN);
+        mAppInstallationLocal.utmContent = CommonUtil.getPref(AppConstants.UTM_CONTENT);
+        mAppInstallationLocal.utmTerm = CommonUtil.getPref(AppConstants.UTM_TERM);
+
         mAppInstallationLocal.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
         if(mLoginResponse != null && mLoginResponse.isSet() && mLoginResponse.get().getUserSummary()!=null && CommonUtil.isNotEmpty(Long.toString(mLoginResponse.get().getUserSummary().getUserId()))) {
             String currentUserId = Long.toString(mLoginResponse.get().getUserSummary().getUserId());

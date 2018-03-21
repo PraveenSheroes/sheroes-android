@@ -218,30 +218,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     }
 
-    public void updateUserReferralInPresenter(UserFromReferralRequest userFromReferralRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        mLoginModel.updateUserReferralInModel(userFromReferralRequest).subscribe(new DisposableObserver<UserFromReferralResponse>() {
-            @Override
-            public void onComplete() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-
-            }
-
-            @Override
-            public void onNext(UserFromReferralResponse userFromReferralResponse) {
-                LogUtils.info(TAG, "************updateUserReferralInModel Response*******" + new Gson().toJson(userFromReferralResponse));
-            }
-        });
-
-    }
     public void getAuthTokenRefreshPresenter() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);

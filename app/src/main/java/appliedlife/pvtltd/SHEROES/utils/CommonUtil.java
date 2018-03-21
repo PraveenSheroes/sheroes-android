@@ -1068,6 +1068,14 @@ public class CommonUtil {
         return !shown;
     }
 
+    public static String getPref(String key) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return "";
+        }
+        return prefs.getString(key, "");
+    }
+
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (null == prefs) {

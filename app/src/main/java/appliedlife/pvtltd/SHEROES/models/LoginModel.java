@@ -139,19 +139,6 @@ public class LoginModel {
 
     }
 
-    public Observable<UserFromReferralResponse> updateUserReferralInModel(UserFromReferralRequest userFromReferralRequest) {
-        LogUtils.info(TAG,"************updateUserReferralInModel*******"+new Gson().toJson(userFromReferralRequest));
-        return sheroesAppServiceApi.updateUserReferral(userFromReferralRequest)
-                .map(new Function<UserFromReferralResponse, UserFromReferralResponse>() {
-                    @Override
-                    public UserFromReferralResponse apply(UserFromReferralResponse userFromReferralResponse) {
-                        return userFromReferralResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-
-    }
     public Observable<LoginResponse> getAuthTokenRefreshFromModel() {
         return sheroesAppServiceApi.getRefreshToken()
                 .map(new Function<LoginResponse, LoginResponse>() {

@@ -573,27 +573,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        Intent intent = getIntent();
-        if (intent != null && null != intent.getExtras()) {
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                if (null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
-                    if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
-                        String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
-                        LogUtils.info(TAG, "********Id of  new Intent ***********" + appContactId);
-                        UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
-                        if (StringUtil.isNotNullOrEmptyString(appContactId)) {
-                            try {
-                                userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
-                                mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
-                            } catch (Exception e) {
-                                Crashlytics.getInstance().core.logException(e);
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @Override
