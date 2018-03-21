@@ -2,9 +2,11 @@ package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -2096,4 +2098,5 @@ public class AppUtils {
         Matcher m = pattern.matcher(sentence);
         return m.find();
     }
+
 }

@@ -47,6 +47,9 @@
                     android:textSize="@dimen/sp_size_16" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
+        <include
+            layout="@layout/no_internet_connection_layout"
+            android:visibility="gone" />
     <include layout="@layout/empty_list_view" />
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
