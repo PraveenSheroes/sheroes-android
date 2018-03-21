@@ -34,7 +34,7 @@ public class LoginActivity extends BaseActivity {
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
 
     //For ads Navigation
-    private boolean isFromAds = false;
+    private boolean isBranchFirstSession = false;
     private String deepLinkUrl  = null;
     private String defaultTab = null;
 
@@ -67,7 +67,7 @@ public class LoginActivity extends BaseActivity {
         LoginFragment frag = new LoginFragment();
         frag.setArguments(bundle);
         if(bundle!=null) {
-           isFromAds = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
+           isBranchFirstSession = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
            deepLinkUrl =  bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
            defaultTab = bundle.getString(CommunityDetailActivity.TAB_KEY);
         }
@@ -93,12 +93,12 @@ public class LoginActivity extends BaseActivity {
             renderEmailVerifyFragmentView();
         } else {
 
-            if (isFromAds && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+            if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
                 Uri url = Uri.parse(deepLinkUrl);
                 Intent intent = new Intent(LoginActivity.this, SheroesDeepLinkingActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
-                bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isFromAds);
+                bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
                 if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
                     bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
                 }
