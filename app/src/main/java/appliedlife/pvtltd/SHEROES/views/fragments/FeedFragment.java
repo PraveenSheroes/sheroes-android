@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,6 +91,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -141,6 +144,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Bind(R.id.loader_gif)
     CardView gifLoader;
+
+    @Bind(R.id.no_internet)
+    CardView noInternet;
+
+    @Bind(R.id.tv_goto_setting)
+    TextView tvGoToSetting;
     // endregion
 
     private long mLoggedInUser = -1;
@@ -283,6 +292,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ((HomeActivity) getActivity()).fetchAllCommunity();
             ((HomeActivity) getActivity()).homeButtonUi();
         }
+        String underLineData=getString(R.string.setting);
+        SpannableString content = new SpannableString(underLineData);
+        content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
+        tvGoToSetting.setText(content);
+
         return view;
     }
 
@@ -307,15 +321,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             emptyView.setVisibility(View.VISIBLE);
             loadEmptyView();
         } else {
-            if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
-                ((HomeActivity)getActivity()).showCaseDesign();
-            }
             mFeedRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
+        if(getActivity()!=null && isAdded() && getActivity() instanceof HomeActivity){
+            ((HomeActivity)getActivity()).showCaseDesign();
+        }
     }
 
     @Override
@@ -1258,6 +1272,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-
+        noInternet.setVisibility(View.VISIBLE);
+        mFeedRecyclerView.setVisibility(View.GONE);
+        gifLoader.setVisibility(View.GONE);
+    }
+    @OnClick({R.id.tv_retry_for_internet})
+    public void onRetryClick() {
+        noInternet.setVisibility(View.GONE);
+        mFeedRecyclerView.setVisibility(View.VISIBLE);
+        gifLoader.setVisibility(View.VISIBLE);
+        if(null!=getActivity()) {
+            if (getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).homeOnClick();
+            }
+        }
+    }
+    @OnClick({R.id.tv_goto_setting})
+    public void onSettingClick() {
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 }
