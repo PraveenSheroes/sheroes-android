@@ -210,8 +210,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mTitleToolbar.setText(R.string.ID_COMMENTS);
-        mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
+        if(StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
+            mTitleToolbar.setText(mUserPostObj.getAuthorName()+"'s"+" post");
+        }
+        if(mConfiguration!=null&&mConfiguration.isSet()) {
+            mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
+        }else
+        {
+            mInputText.setHint("Type your comment here...");
+        }
         setupEditInputText();
         setupToolbarItemsColor();
       //  postCommentSocialTagging();
