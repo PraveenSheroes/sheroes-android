@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
+import io.reactivex.functions.Consumer;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -220,7 +221,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     protected void onStart() {
         super.onStart();
-        ReferrerBus.getInstance().register(this);
+        ReferrerBus.getInstance().register(this).add(ReferrerBus.getInstance().toObserveable().subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object event) {
+                if (event instanceof Boolean) {
+                    onReferrerReceived((Boolean) event);
+                }
+            }
+        }));
         if (null != mMoEHelper) {
             mMoEHelper.onStart(this);
         }
@@ -1057,8 +1065,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     protected abstract SheroesPresenter getPresenter();
 
-    public void onReferrerReceived(boolean isReceived) {
-        if (isReceived) {
+    public void onReferrerReceived(Boolean isReceived) {
+        if (isReceived!=null && isReceived) {
             AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
             appInstallationHelper.setupInstallation(false);
         }
