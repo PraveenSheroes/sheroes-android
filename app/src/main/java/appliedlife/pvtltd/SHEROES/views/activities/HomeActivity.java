@@ -1421,7 +1421,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (fragment instanceof CommunitiesListFragment) {
                 CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
                 if (currentFragment != null && currentFragment.isVisible()) {
-                    currentFragment.backFromCommunityDetailPage();
+                    currentFragment.refreshList();
                 }
             }
         } else {

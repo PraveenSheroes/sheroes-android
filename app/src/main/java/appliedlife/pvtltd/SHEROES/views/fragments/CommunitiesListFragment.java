@@ -359,16 +359,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
 
     public void refreshList(){
-        communitiesContainer.setVisibility(View.GONE);
-        loaderGif.setVisibility(View.VISIBLE);
-        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-        mPullRefreshList = new SwipPullRefreshList();
-        setRefreshList(mPullRefreshList);
-        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mCommunitiesListPresenter.fetchAllCommunities();
-    }
-    public void backFromCommunityDetailPage(){
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
