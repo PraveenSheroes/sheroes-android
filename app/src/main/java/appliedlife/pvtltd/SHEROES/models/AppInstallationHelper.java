@@ -14,6 +14,7 @@ import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.gson.Gson;
+import com.moengage.push.PushManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class AppInstallationHelper {
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
+                PushManager.getInstance().refreshToken(mContext, registrationId);
                 fillAndSaveInstallation(registrationId, hasLoggedIn);
             }
 

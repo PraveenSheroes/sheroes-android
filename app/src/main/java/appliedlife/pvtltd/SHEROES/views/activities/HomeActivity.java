@@ -1836,7 +1836,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
-
+                    if(mAppInstallation!=null && mAppInstallation.isSet()){
+                        AppInstallation appInstallation = mAppInstallation.get() ;
+                        appInstallation.gcmId = registrationId;
+                        mAppInstallation.set(appInstallation);
+                    }
                     if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();
