@@ -818,7 +818,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if(mAppInstallation!=null && mAppInstallation.isSet()){
             AppInstallation appInstallation = mAppInstallation.get();
             appInstallation.isLoggedOut = true;
-            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+            appInstallationHelper.setAppInstallation(appInstallation);
             appInstallationHelper.saveInBackground(this, new CommonUtil.Callback() {
                 @Override
                 public void callBack(boolean isShown) {
@@ -1832,17 +1833,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                if(mAppInstallation!=null && mAppInstallation.isSet()){
-                    AppInstallation appInstallation =  mAppInstallation.get();
-                    appInstallation.gcmId = registrationId;
-                    appInstallation.isLoggedOut = false;
-                    AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
-                    appInstallationHelper.saveInBackground(HomeActivity.this, new CommonUtil.Callback() {
-                        @Override
-                        public void callBack(boolean isShown) {
-                        }
-                    });
-                }
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {

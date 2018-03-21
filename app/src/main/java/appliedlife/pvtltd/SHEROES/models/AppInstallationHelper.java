@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.os.StrictMode;
 import android.provider.Settings;
 
 import com.crashlytics.android.Crashlytics;
@@ -16,9 +18,12 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -40,14 +45,15 @@ public class AppInstallationHelper {
     @Inject
     AppInstallationModel appInstallationModel;
 
-    private AppInstallation mAppInstallation;
+    private AppInstallation mAppInstallationLocal;
+    private Context mContext;
 
-    public AppInstallationHelper(AppInstallation appInstallation){
-        mAppInstallation = appInstallation;
+    public AppInstallationHelper(Context context){
+        SheroesApplication.getAppComponent(context).inject(this);
+        mContext = context;
     }
 
     public void saveInBackground(Context context, final CommonUtil.Callback callback) {
-        SheroesApplication.getAppComponent(context).inject(this);
         Observable
                 .create(new ObservableOnSubscribe<String>() {
                     @Override
@@ -69,7 +75,7 @@ public class AppInstallationHelper {
 
                     @Override
                     public void onNext(String id) {
-                        mAppInstallation.advertisingId = id;
+                        mAppInstallationLocal.advertisingId = id;
                         fillDefaults();
                         saveInstallationAsync(callback);
                     }
@@ -77,29 +83,29 @@ public class AppInstallationHelper {
     }
 
     private void fillDefaults() {
-        if(!CommonUtil.isNotEmpty(mAppInstallation.guid)){
+        if(!CommonUtil.isNotEmpty(mAppInstallationLocal.guid)){
             String uUId = UUID.randomUUID().toString();
-            mAppInstallation.guid  = uUId;
+            mAppInstallationLocal.guid  = uUId;
         }
         PackageInfo packageInfo = CommonUtil.getPackageInfo(SheroesApplication.mContext);
         if (packageInfo != null) {
-            mAppInstallation.appVersion = packageInfo.versionName;
-            mAppInstallation.appVersionCode = packageInfo.versionCode;
+            mAppInstallationLocal.appVersion = packageInfo.versionName;
+            mAppInstallationLocal.appVersionCode = packageInfo.versionCode;
         }
-        mAppInstallation.androidId = getDeviceId();
-        mAppInstallation.androidVersion = CommonUtil.getAndroidVersion();
-        mAppInstallation.timeZone = TimeZone.getDefault().getID();
-        mAppInstallation.deviceName = CommonUtil.getDeviceName();
-        mAppInstallation.platform = "android";
-        mAppInstallation.deviceType = "android";
-        mAppInstallation.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
+        mAppInstallationLocal.androidId = getDeviceId();
+        mAppInstallationLocal.androidVersion = CommonUtil.getAndroidVersion();
+        mAppInstallationLocal.timeZone = TimeZone.getDefault().getID();
+        mAppInstallationLocal.deviceName = CommonUtil.getDeviceName();
+        mAppInstallationLocal.platform = "android";
+        mAppInstallationLocal.deviceType = "android";
+        mAppInstallationLocal.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
         if(mLoginResponse != null && mLoginResponse.isSet() && mLoginResponse.get().getUserSummary()!=null && CommonUtil.isNotEmpty(Long.toString(mLoginResponse.get().getUserSummary().getUserId()))) {
             String currentUserId = Long.toString(mLoginResponse.get().getUserSummary().getUserId());
             // If user has re-install the app with different user create new uuid
-            if(CommonUtil.isNotEmpty(mAppInstallation.userId) && !mAppInstallation.userId.equalsIgnoreCase(currentUserId)){
-                mAppInstallation.guid = UUID.randomUUID().toString();
+            if(CommonUtil.isNotEmpty(mAppInstallationLocal.userId) && !mAppInstallationLocal.userId.equalsIgnoreCase(currentUserId)){
+                mAppInstallationLocal.guid = UUID.randomUUID().toString();
             }
-            mAppInstallation.userId = currentUserId;
+            mAppInstallationLocal.userId = currentUserId;
         }
     }
 
@@ -116,7 +122,7 @@ public class AppInstallationHelper {
     }
 
     private void saveInstallationAsync(final CommonUtil.Callback callback) {
-        appInstallationModel.getAppInstallation(mAppInstallation)
+        appInstallationModel.getAppInstallation(mAppInstallationLocal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<AppInstallation>() {
@@ -160,5 +166,43 @@ public class AppInstallationHelper {
         }
 
         return advertId;
+    }
+
+    public void setupInstallation(final boolean hasLoggedIn) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager((Activity) mContext, mContext.getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                fillAndSaveInstallation(registrationId, hasLoggedIn);
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                fillAndSaveInstallation("", hasLoggedIn);
+            }
+        });
+    }
+
+    private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
+        if(mAppInstallationPref == null || !mAppInstallationPref.isSet()){
+            mAppInstallationLocal = new AppInstallation();
+        }else {
+            mAppInstallationLocal = mAppInstallationPref.get();
+        }
+        if(hasLoggedIn){
+            mAppInstallationLocal.isLoggedOut = false;
+        }
+        mAppInstallationLocal.gcmId = registrationId;
+        saveInBackground(mContext, new CommonUtil.Callback() {
+            @Override
+            public void callBack(boolean isShown) {
+            }
+        });
+    }
+
+    public void setAppInstallation(AppInstallation appInstallation){
+        mAppInstallationLocal = appInstallation;
     }
 }

@@ -179,43 +179,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
-        setupInstallation(false);
-    }
-
-    private void setupInstallation(final boolean hasLoggedIn) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-                fillAndSaveInstallation(registrationId, hasLoggedIn);
-            }
-
-            @Override
-            public void onFailure(String ex) {
-                fillAndSaveInstallation("", hasLoggedIn);
-            }
-        });
-    }
-
-    private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
-        AppInstallation appInstallation;
-        if(mAppInstallation == null || !mAppInstallation.isSet()){
-            appInstallation = new AppInstallation();
-        }else {
-            appInstallation = mAppInstallation.get();
-        }
-        if(hasLoggedIn){
-            appInstallation.isLoggedOut = false;
-        }
-        appInstallation.gcmId = registrationId;
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
-        appInstallationHelper.saveInBackground(this, new CommonUtil.Callback() {
-            @Override
-            public void callBack(boolean isShown) {
-            }
-        });
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        appInstallationHelper.setupInstallation(false);
     }
 
     private void checkAuthTokenExpireOrNot() {
@@ -883,7 +848,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
         mUserPreference.set(loginResponse);
-        setupInstallation(true);
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        appInstallationHelper.setupInstallation(true);
         openHomeScreen();
     }
 

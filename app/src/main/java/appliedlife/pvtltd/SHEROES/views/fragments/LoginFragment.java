@@ -148,7 +148,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
-                        setupInstallation(true);
+                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
+                        appInstallationHelper.setupInstallation(true);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
@@ -169,7 +170,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
                     AnalyticsManager.initializeMixpanel(getContext());
-                    setupInstallation(true);
+                    AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
+                    appInstallationHelper.setupInstallation(true);
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
@@ -189,42 +191,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 }
             }
         }
-    }
-
-    private void setupInstallation(final boolean hasLoggedIn) {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-                fillAndSaveInstallation(registrationId, hasLoggedIn);
-            }
-
-            @Override
-            public void onFailure(String ex) {
-                fillAndSaveInstallation("", hasLoggedIn);
-            }
-        });
-    }
-
-    private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
-        AppInstallation appInstallation;
-        if(mAppInstallation == null || !mAppInstallation.isSet()){
-            appInstallation = new AppInstallation();
-        }else {
-            appInstallation = mAppInstallation.get();
-        }
-        if(hasLoggedIn){
-            appInstallation.isLoggedOut = false;
-        }
-        appInstallation.gcmId = registrationId;
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
-        appInstallationHelper.saveInBackground(getActivity(), new CommonUtil.Callback() {
-            @Override
-            public void callBack(boolean isShown) {
-            }
-        });
     }
 
     @Override
