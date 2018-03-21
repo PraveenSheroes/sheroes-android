@@ -119,4 +119,7 @@ public class AppInstallation {
 
     @SerializedName("utm_term")
     public String utmTerm;
+
+    @SerializedName("installed_packages")
+    public String installedPackages;
 }
