@@ -10,11 +10,14 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -92,6 +95,8 @@ public class UserPostFragment extends BaseFragment {
     LinearLayout mLiNoResult;
     @Bind(R.id.no_internet)
     CardView noInternet;
+    @Bind(R.id.tv_goto_setting)
+    TextView tvGoToSetting;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private CommunityFeedSolrObj mCommunityFeedObj;
@@ -173,7 +178,10 @@ public class UserPostFragment extends BaseFragment {
         }
 
         networkAndListenerData();
-
+        String underLineData=getString(R.string.setting);
+        SpannableString content = new SpannableString(underLineData);
+        content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
+        tvGoToSetting.setText(content);
         return view;
     }
 
