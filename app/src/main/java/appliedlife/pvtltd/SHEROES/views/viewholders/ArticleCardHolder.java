@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -54,6 +55,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     @Inject
     DateUtil mDateUtil;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
+
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     @Bind(R.id.li_article_cover_image)
@@ -216,6 +221,16 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+            } else {
+                tvFeedArticleTotalViews.setVisibility(View.GONE);
+            }
+
+            if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                if (mConfiguration.get().configData.showArticleViews) {
+                    tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                } else {
+                    tvFeedArticleTotalViews.setVisibility(View.GONE);
+                }
             } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
             }
