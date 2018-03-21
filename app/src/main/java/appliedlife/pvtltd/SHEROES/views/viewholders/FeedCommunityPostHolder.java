@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -56,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -851,8 +850,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
         final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
-        int width = AppUtils.getWindowWidth(mContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (width * 2 / 3));
+        double imageRatio = mUserPostObj.getImageRatio().get(0);
+        if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
+            imageRatio = AppConstants.MAX_IMAGE_RATIO;
+        }
+        int imageHeight = 0;
+        if (CommonUtil.isNotEmpty(secondImage)) {
+            imageHeight = (int) (((double) 2 / (double) 3) * CommonUtil.getWindowWidth(mContext));
+        } else {
+            imageHeight = (int) (imageRatio * CommonUtil.getWindowWidth(mContext));
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
         final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
@@ -894,29 +902,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
 
         ivFirst.setOnClickListener(this);
+
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
+            String firstThumborUrl = firstImage;
+            if(typeOfHolder == 1){
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context)/2, imageHeight);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(firstImage)
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .load(firstThumborUrl)
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
         if (StringUtil.isNotNullOrEmptyString(secondImage)) {
             ivSecond.setOnClickListener(this);
-
+            String secondThumborUrl = "";
+            if(typeOfHolder == 2){
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(secondImage)
+                    .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
+            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
             Glide.with(context)
-                    .asBitmap()
-                    .load(thirdImage)
+                    .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         liFeedCommunityUserPostImages.addView(child);

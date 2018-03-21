@@ -6,8 +6,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,10 +14,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -317,7 +313,7 @@ public class ContestInfoFragment extends BaseFragment {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
             imageView.setLayoutParams(params);
             if (CommonUtil.isNotEmpty(mContest.thumbImage)) {
-                String imageKitUrl = CommonUtil.getImgKitUri(mContest.thumbImage, CommonUtil.getWindowWidth(getActivity()), featureImageHeight);
+                String imageKitUrl = CommonUtil.getThumborUri(mContest.thumbImage, CommonUtil.getWindowWidth(getActivity()), featureImageHeight);
                 if (CommonUtil.isNotEmpty(imageKitUrl)) {
                     Glide.with(getActivity())
                             .load(imageKitUrl)

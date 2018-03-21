@@ -123,7 +123,7 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             if (prize!=null) {
                 mDescription.setText(prize.prizeDescription);
                 if (CommonUtil.isNotEmpty(prize.mPrizeIcon)) {
-                    String trophyImageUrl = CommonUtil.getImgKitUri(prize.mPrizeIcon, mTrophySize, mTrophySize);
+                    String trophyImageUrl = CommonUtil.getThumborUri(prize.mPrizeIcon, mTrophySize, mTrophySize);
                     Glide.with(mTrophyImage.getContext())
                             .load(trophyImageUrl)
                             .into(mTrophyImage);
@@ -131,7 +131,7 @@ public class WinnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 mName.setText(prize.name);
                 mRank.setText(prize.rank);
                 if (prize.imageUrl != null && CommonUtil.isNotEmpty(prize.imageUrl)) {
-                    String userImage = CommonUtil.getImgKitUri(prize.imageUrl, mUserPicSize, mUserPicSize);
+                    String userImage = CommonUtil.getThumborUri(prize.imageUrl, mUserPicSize, mUserPicSize);
                     Glide.with(mProfilePic.getContext())
                             .load(userImage)
                             .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(context)))

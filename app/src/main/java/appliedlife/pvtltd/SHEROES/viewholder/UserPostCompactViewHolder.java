@@ -4,19 +4,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.media.Image;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,8 +23,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences2.Preference;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -259,14 +252,14 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 mImageFirst.setVisibility(View.VISIBLE);
                 mImageSecond.setVisibility(View.VISIBLE);
                 mSecondImageContainer.setVisibility(View.VISIBLE);
-                String imageFirstKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
+                String imageFirstKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(imageFirstKitUrl)
                         .into(mImageFirst);
 
                 mImageFirst.setVisibility(View.VISIBLE);
-                String imageSecondKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(1), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
+                String imageSecondKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(1), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(imageSecondKitUrl)
@@ -284,7 +277,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 mImageSecond.setVisibility(View.GONE);
                 mSecondImageContainer.setVisibility(View.GONE);
                 mImageFirst.setVisibility(View.VISIBLE);
-                String imageKitUrl = CommonUtil.getImgKitUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext), mAuthorPicSize);
+                String imageKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext), mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(imageKitUrl)
@@ -574,7 +567,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mLinkSubTitle.setText(mUserPostObj.getOgDescriptionS());
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgImageUrlS())) {
-            String linkImageUrl = CommonUtil.getImgKitUri(mUserPostObj.getOgImageUrlS(), CommonUtil.getWindowWidth(mContext), mLinkImageHeight);
+            String linkImageUrl = CommonUtil.getThumborUri(mUserPostObj.getOgImageUrlS(), CommonUtil.getWindowWidth(mContext), mLinkImageHeight);
             Glide.with(mContext)
                     .asBitmap()
                     .load(linkImageUrl)

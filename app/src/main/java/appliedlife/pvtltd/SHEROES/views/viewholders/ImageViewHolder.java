@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.media.Image;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,7 +14,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -51,7 +48,7 @@ public class ImageViewHolder extends BaseViewHolder<FeedDetail> {
             int featureImageHeight = (CommonUtil.getWindowWidth(mContext) / 2);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
             mImage.setLayoutParams(params);
-            String imageKitUrl = CommonUtil.getImgKitUri(mImageSolrObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), featureImageHeight);
+            String imageKitUrl = CommonUtil.getThumborUri(mImageSolrObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), featureImageHeight);
             if (CommonUtil.isNotEmpty(imageKitUrl)) {
                 Glide.with(mContext)
                         .load(imageKitUrl)

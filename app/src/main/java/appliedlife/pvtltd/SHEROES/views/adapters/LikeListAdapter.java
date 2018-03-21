@@ -97,7 +97,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
         public void bindData(final Comment comment, final int position) {
             if (comment != null) {
                 if (comment.getParticipantImageUrl() != null && CommonUtil.isNotEmpty(comment.getParticipantImageUrl())) {
-                    String userImage = CommonUtil.getImgKitUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                    String userImage = CommonUtil.getThumborUri(comment.getParticipantImageUrl(), authorPicSize, authorPicSize);
                     Glide.with(userPic.getContext())
                             .load(userImage)
                             .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))

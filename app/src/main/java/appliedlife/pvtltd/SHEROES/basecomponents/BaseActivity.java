@@ -54,6 +54,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
@@ -1028,6 +1029,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     public void onConfigFetched() {
+
+    }
+
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse){
 
     }
     public String screenName() {
