@@ -55,7 +55,7 @@ public class CommunityListAdapter extends RecyclerView.Adapter<CommunityListAdap
         Community community = mCommunityList.get(position);
         if (community != null) {
             if (community.thumbImageUrl != null && CommonUtil.isNotEmpty(community.thumbImageUrl)) {
-                String userImage = CommonUtil.getImgKitUri(community.thumbImageUrl, holder.authorPicSize, holder.authorPicSize);
+                String userImage = CommonUtil.getThumborUri(community.thumbImageUrl, holder.authorPicSize, holder.authorPicSize);
                 Glide.with(holder.communityPic.getContext())
                         .load(userImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))

@@ -67,7 +67,7 @@ public class ContestFlatViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, featureImageHeight);
         mImage.setLayoutParams(params);
         if (CommonUtil.isNotEmpty(contest.thumbImage)) {
-            String contestImage = CommonUtil.getImgKitUri(contest.thumbImage, CommonUtil.getWindowWidth(mContext) - mImageMargin, featureImageHeight);
+            String contestImage = CommonUtil.getThumborUri(contest.thumbImage, CommonUtil.getWindowWidth(mContext) - mImageMargin, featureImageHeight);
             Glide.with(mContext)
                     .load(contestImage)
                     .into(mImage);

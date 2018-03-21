@@ -37,6 +37,7 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -1037,7 +1038,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private byte[] getBytesFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, stream);
         return stream.toByteArray();
     }
 
@@ -1403,7 +1404,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void setUserImage() {
         if (!mIsAnonymous && !mPostAsCommunitySelected) {
             if (mUserSummary.getPhotoUrl() != null && CommonUtil.isNotEmpty(mUserSummary.getPhotoUrl())) {
-                String authorImage = CommonUtil.getImgKitUri(mUserSummary.getPhotoUrl(), mAuthorPicSize, mAuthorPicSize);
+                String authorImage = CommonUtil.getThumborUri(mUserSummary.getPhotoUrl(), mAuthorPicSize, mAuthorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
@@ -1530,7 +1531,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
                 StrictMode.setVmPolicy(builder.build());
                 CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                        .setRequestedSize(1000, 1000)
+                        .setRequestedSize(1200, 1200)
                         .start(CommunityPostActivity.this);
             }
         });

@@ -82,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IEditProfileView;
@@ -533,15 +534,13 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         try {
                             File file = new File(result.getUri().getPath());
                             Bitmap photo = CompressImageUtil.decodeFile(file);
-                            if (null != profileImageDialogFragment) {
-                                profileImageDialogFragment.setUserProfileData(true, photo);
-                                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-                            }
+                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
 
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        requestForUpdateProfileImage();
 
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
@@ -604,6 +603,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     public void selectImageFrmGallery() {
         CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
                 .start(this);
     }
 
@@ -627,6 +628,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         StrictMode.setVmPolicy(builder.build());
         CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
                 .start(this);
     }
 
@@ -647,8 +650,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         } else if (view == location) {
             searchUserLocation();
         } else if (view == userImage) {
-            profileImageDialog();
-
+            CameraBottomSheetFragment.showDialog(this, getScreenName());
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
