@@ -37,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
@@ -48,10 +50,12 @@ import appliedlife.pvtltd.SHEROES.social.CustomSocialDialog;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,6 +79,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    Preference<AppInstallation> mAppInstallation;
+
     @Inject
     LoginPresenter mLoginPresenter;
     @Inject
@@ -140,6 +148,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
+                        setupInstallation(true);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
@@ -160,6 +169,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
                     AnalyticsManager.initializeMixpanel(getContext());
+                    setupInstallation(true);
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
@@ -179,6 +189,42 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 }
             }
         }
+    }
+
+    private void setupInstallation(final boolean hasLoggedIn) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                fillAndSaveInstallation(registrationId, hasLoggedIn);
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                fillAndSaveInstallation("", hasLoggedIn);
+            }
+        });
+    }
+
+    private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
+        AppInstallation appInstallation;
+        if(mAppInstallation == null || !mAppInstallation.isSet()){
+            appInstallation = new AppInstallation();
+        }else {
+            appInstallation = mAppInstallation.get();
+        }
+        if(hasLoggedIn){
+            appInstallation.isLoggedOut = false;
+        }
+        appInstallation.gcmId = registrationId;
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(appInstallation);
+        appInstallationHelper.saveInBackground(getActivity(), new CommonUtil.Callback() {
+            @Override
+            public void callBack(boolean isShown) {
+            }
+        });
     }
 
     @Override
