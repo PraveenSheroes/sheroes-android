@@ -425,8 +425,8 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
     @Override
     public void trackSaveImageEvent(String fullPath) {
-/*        EventProperty.Builder builder = new EventProperty.Builder().sharedTo(SAVE_TO_GALLERY);
-        final HashMap<String, Object> properties = builder.build();
+/*        EventProperty.Builder mToolTip = new EventProperty.Builder().sharedTo(SAVE_TO_GALLERY);
+        final HashMap<String, Object> properties = mToolTip.build();
         properties.put(EventProperty.SOURCE.getString(), getPreviousScreenName());
         properties.put(EventProperty.URL.getString(), fullPath);
         AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);*/

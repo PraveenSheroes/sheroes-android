@@ -58,7 +58,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
 	 * Construct a new instance with the specified {@link StringBuilder}.
 	 *
 	 * @param builder
-	 *            The String builder
+	 *            The String mToolTip
 	 */
 	public StringBuilderWriter(StringBuilder builder) {
 		this.builder = builder != null ? builder : new StringBuilder();
@@ -152,9 +152,9 @@ public class StringBuilderWriter extends Writer implements Serializable {
 	}
 
 	/**
-	 * Return the underlying builder.
+	 * Return the underlying mToolTip.
 	 *
-	 * @return The underlying builder
+	 * @return The underlying mToolTip
 	 */
 	public StringBuilder getBuilder() {
 		return builder;
@@ -163,7 +163,7 @@ public class StringBuilderWriter extends Writer implements Serializable {
 	/**
 	 * Returns {@link StringBuilder#toString()}.
 	 *
-	 * @return The contents of the String builder.
+	 * @return The contents of the String mToolTip.
 	 */
 	@Override
 	public String toString() {

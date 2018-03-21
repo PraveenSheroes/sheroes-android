@@ -683,21 +683,25 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
-                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
-                linkifyURLs(tvFeedCommunityPostText);
-
-                if (tvFeedCommunityPostText.getLineCount() > 4) {
-                    collapseFeedPostText();
-                } else {
-                    tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-                    tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                if(!mUserPostObj.isTextExpanded)
+                {
+                    tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
+                    linkifyURLs(tvFeedCommunityPostText);
+                    if (tvFeedCommunityPostText.getLineCount() > 4) {
+                        collapseFeedPostText();
+                    } else {
+                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                    }
                 }
+
             }
         });
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void collapseFeedPostText() {
+        mUserPostObj.isTextExpanded=false;
         tvFeedCommunityPostText.setMaxLines(4);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         String dots = LEFT_HTML_TAG + AppConstants.DOTS + RIGHT_HTML_TAG;
@@ -710,6 +714,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void expandFeedPostText() {
+        mUserPostObj.isTextExpanded=true;
         tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
@@ -873,6 +878,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 liHolderLayout.weight = 0;
                 break;
             case AppConstants.TWO_CONSTANT:
+                LinearLayout.LayoutParams liHolderLinear = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
+                liHolderLinear.setMargins(5,0,0,0);
                 LinearLayout.LayoutParams firstImageLayout = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayout.weight = 1;
                 LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
@@ -881,6 +888,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             case AppConstants.THREE_CONSTANT:
                 LinearLayout.LayoutParams liHolderLayoutDefault = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
                 liHolderLayoutDefault.weight = 1;
+                liHolderLayoutDefault.setMargins(5,0,0,0);
                 LinearLayout.LayoutParams firstImageLayoutDefault = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayoutDefault.weight = 2;
                 LinearLayout.LayoutParams secondImageLayoutDefault = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
@@ -1015,7 +1023,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (tvFeedCommunityPostViewMore.getText().equals(mContext.getString(R.string.ID_LESS))) {
             collapseFeedPostText();
         } else {
-            expandFeedPostText();
+            if(tvFeedCommunityPostText.getLineCount()>16) {
+                if (viewInterface instanceof FeedItemCallback) {
+                    ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
+                } else {
+                    viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+                }
+            }else
+            {
+                expandFeedPostText();
+            }
         }
     }
 

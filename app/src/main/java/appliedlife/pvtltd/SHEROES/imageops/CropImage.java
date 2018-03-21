@@ -417,7 +417,7 @@ public final class CropImage {
      * Result will be received in {@link Activity#onActivityResult(int, int, Intent)} and can be retrieved
      * using {@link #getActivityResult(Intent)}.
      *
-     * @return builder for Crop Image Activity
+     * @return mToolTip for Crop Image Activity
      */
     public static ActivityBuilder activity() {
         return new ActivityBuilder(null,0);
@@ -429,7 +429,7 @@ public final class CropImage {
      * using {@link #getActivityResult(Intent)}.
      *
      * @param uri the image Android uri source to crop or null to start a picker
-     * @return builder for Crop Image Activity
+     * @return mToolTip for Crop Image Activity
      */
     public static ActivityBuilder activity(@Nullable Uri uri,int imageSelectOptionPicker) {
 

@@ -625,7 +625,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         });
     }
 
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
