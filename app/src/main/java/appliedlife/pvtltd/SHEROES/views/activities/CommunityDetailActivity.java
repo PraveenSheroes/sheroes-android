@@ -568,7 +568,27 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
             @Override
             public void onPageSelected(int position) {
-                reloadFragmentOnPageSwipe(position);
+                CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                                .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                                .title(mCommunityFeedSolrObj.getNameOrTitle())
+                                .tabTitle(communityTab.title)
+                                .tabKey(communityTab.key)
+                                .build();
+                AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
+                if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
+                    mFabButton.setVisibility(View.VISIBLE);
+                    mFabButton.setImageResource(R.drawable.challenge_placeholder);
+                    if(CommonUtil.isValidContextForGlide(mFabButton.getContext())){
+                        Glide.with(mFabButton.getContext())
+                                .load(communityTab.fabIconUrl)
+                                .into(mFabButton);
+                    }
+                } else {
+                    mFabButton.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -605,30 +625,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         });
     }
 
-    public void reloadFragmentOnPageSwipe(int position)
-    {
-        CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                        .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                        .title(mCommunityFeedSolrObj.getNameOrTitle())
-                        .tabTitle(communityTab.title)
-                        .tabKey(communityTab.key)
-                        .build();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
-        if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
-            mFabButton.setVisibility(View.VISIBLE);
-            mFabButton.setImageResource(R.drawable.challenge_placeholder);
-            if(CommonUtil.isValidContextForGlide(mFabButton.getContext())){
-                Glide.with(mFabButton.getContext())
-                        .load(communityTab.fabIconUrl)
-                        .into(mFabButton);
-            }
-        } else {
-            mFabButton.setVisibility(View.GONE);
-        }
-    }
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
