@@ -20,7 +20,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,7 +51,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -86,7 +84,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
@@ -555,7 +552,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                 if (comment == null) {
                                     return true;
                                 }
-                                mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                                mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
                                 return true;
                             }
                         });
@@ -752,7 +749,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             String dateInWord  = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
             mLikesViewsComments.setText(dateInWord+ " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
+                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
@@ -760,7 +757,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             }
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getImgKitUri(article.author.thumbUrl, authorPicSize, authorPicSize);
+                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
                         .load(authorImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
@@ -784,7 +781,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
         image.getLayoutParams().height = imageNewHeight;
         if (CommonUtil.isNotEmpty(article.featureImage)) {
-            String finalImageUri = CommonUtil.getImgKitUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
+            String finalImageUri = CommonUtil.getThumborUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
             Glide.with(ArticleActivity.this)
                     .asBitmap()
                     .load(finalImageUri)
@@ -856,7 +853,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentsAdapter.addDataAndNotify(comment);
         if(null!=mFeedDetail) {
             if (mFeedDetail instanceof ArticleSolrObj) {
-                ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+                mFeedDetail.getLastComments().add(comment);
             }
         }
     }

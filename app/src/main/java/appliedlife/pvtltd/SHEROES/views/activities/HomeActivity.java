@@ -16,11 +16,14 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.PictureDrawable;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -38,7 +41,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,12 +56,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
+import com.tooltip.Tooltip;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -126,6 +132,8 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
+import appliedlife.pvtltd.SHEROES.svg.SvgModule;
+import appliedlife.pvtltd.SHEROES.svg.SvgSoftwareLayerSetter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -206,6 +214,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -244,8 +253,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     FrameLayout mFlNotification;
     @Bind(R.id.title_text)
     TextView mTitleText;
-    @Bind(R.id.view_tool_tip_notification)
-    View viewtoolTipNotification;
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
     @Bind(R.id.pb_login_progress_bar)
@@ -256,6 +263,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     ImageView mSantaView;
     @Bind(R.id.tv_drawer_navigation)
     public TextView tvDrawerNavigation;
+    @Bind(R.id.view_tool_tip_nav)
+    public View viewToolTipNav;
+
     GenericRecyclerViewAdapter mAdapter;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -289,8 +299,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public PopupWindow popUpNotificationWindow;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
-    private Handler mHandler;
-    private Runnable mRunnable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -342,42 +350,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         try {
             if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
                 if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            final View popupViewNotificationToolTip;
-                            int width = AppUtils.getWindowWidth(HomeActivity.this);
-                            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                            popupViewNotificationToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
-                            popUpNotificationWindow = new PopupWindow(popupViewNotificationToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            popUpNotificationWindow.setOutsideTouchable(true);
-                            if (width < 750) {
-                                popUpNotificationWindow.showAsDropDown(viewtoolTipNotification, -100, 30);
-                            } else {
-                                popUpNotificationWindow.showAsDropDown(viewtoolTipNotification, -150, 30);
-                            }
-
-                            final ImageView ivArrow = popupViewNotificationToolTip.findViewById(R.id.iv_arrow);
-                            RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, HomeActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-                            imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
-                            ivArrow.setLayoutParams(imageParams);
-                            final TextView tvGotIt = popupViewNotificationToolTip.findViewById(R.id.got_it);
-                            final TextView tvTitle = popupViewNotificationToolTip.findViewById(R.id.title);
-                            tvTitle.setText(getString(R.string.tool_tip_notification));
-                            tvGotIt.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    popUpNotificationWindow.dismiss();
-                                }
-                            });
-                        }
-                    }, 2000);
+                     Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
+                    //.setCancelable(true)
+                    .setDismissOnClick(true)
+                    .setGravity(Gravity.BOTTOM)
+                    .setText(R.string.tool_tip_notification);
+            builder.show();
 
                 }
-            }
+           }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -385,34 +366,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void toolTipForNav() {
         try {
-        mHandler = new Handler();
-            mHandler.postDelayed(mRunnable = new Runnable() {
-            @Override
-            public void run() {
-                    final View navToolTip;
-                    LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    navToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
-                    popupWindowNavTooTip = new PopupWindow(navToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindowNavTooTip.setOutsideTouchable(true);
-                    if (tvDrawerNavigation != null && !isFinishing()) {
-                        popupWindowNavTooTip.showAsDropDown(tvDrawerNavigation, 0, -10);
-                    }
-                    final ImageView ivArrow = navToolTip.findViewById(R.id.iv_arrow);
-                    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    imageParams.setMargins(CommonUtil.convertDpToPixel(10, HomeActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
-                    ivArrow.setLayoutParams(imageParams);
-                    final TextView tvGotIt = navToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle = navToolTip.findViewById(R.id.title);
-                    tvTitle.setText(getString(R.string.tool_tip_nav));
-                    tvGotIt.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            popupWindowNavTooTip.dismiss();
-                        }
-                    });
-
-            }
-        }, 1000);
+            Tooltip.Builder builder = new Tooltip.Builder(viewToolTipNav, R.style.Tooltip)
+                    //.setCancelable(true)
+                    .setDismissOnClick(true)
+                    .setGravity(Gravity.BOTTOM)
+                    .setText(R.string.tool_tip_nav);
+            builder.show();
 
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
@@ -421,9 +380,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onDestroy() {
-        if (mHandler != null && mRunnable != null) {
-            mHandler.removeCallbacks(mRunnable);
-        }
         if (popupWindowNavTooTip != null && popupWindowNavTooTip.isShowing()) {
             popupWindowNavTooTip.dismiss();
         }

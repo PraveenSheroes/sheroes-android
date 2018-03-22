@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -90,15 +91,17 @@ public class HelplineFragment extends BaseFragment {
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
 
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
-        CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
-        params.setScrollFlags(0);
-        appBarLayoutParams.setBehavior(null);
-        ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
+        if(getActivity() instanceof HomeActivity){
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
+            CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
+            params.setScrollFlags(0);
+            appBarLayoutParams.setBehavior(null);
+            ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
+            ((HomeActivity)getActivity()).changeFragmentWithCommunities();
+            ((HomeActivity)getActivity()).helplineUi();
+        }
 
         setUpRecyclerView();
-        ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-        ((HomeActivity)getActivity()).helplineUi();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
         return view;
     }
@@ -130,11 +133,13 @@ public class HelplineFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
-        CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
-        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-        appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
-        ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
+        if(getActivity() instanceof HomeActivity){
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
+            CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+            appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
+            ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
+        }
         mHelplinePresenter.detachView();
     }
 
@@ -221,7 +226,12 @@ public class HelplineFragment extends BaseFragment {
 
     public void setUpRecyclerView(){
         mLayoutManager = new LinearLayoutManager(getContext());
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        if(getActivity() instanceof HomeActivity){
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        }
+        if(getActivity() instanceof CommunityDetailActivity){
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunityDetailActivity) getActivity());
+        }
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.clearOnScrollListeners();

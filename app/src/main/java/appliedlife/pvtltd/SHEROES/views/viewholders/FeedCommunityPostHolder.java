@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -56,7 +56,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -310,9 +309,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
                     ivArrow.setLayoutParams(arrowParams);
-                    TextView text = (TextView) view.findViewById(R.id.title);
+                    TextView text = view.findViewById(R.id.title);
                     text.setText(R.string.tool_tip_user_profile);
-                    TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+                    TextView gotIt = view.findViewById(R.id.got_it);
                     gotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -684,21 +683,25 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
-                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
-                linkifyURLs(tvFeedCommunityPostText);
-
-                if (tvFeedCommunityPostText.getLineCount() > 4) {
-                    collapseFeedPostText();
-                } else {
-                    tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-                    tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                if(!mUserPostObj.isTextExpanded)
+                {
+                    tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
+                    linkifyURLs(tvFeedCommunityPostText);
+                    if (tvFeedCommunityPostText.getLineCount() > 4) {
+                        collapseFeedPostText();
+                    } else {
+                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                    }
                 }
+
             }
         });
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void collapseFeedPostText() {
+        mUserPostObj.isTextExpanded=false;
         tvFeedCommunityPostText.setMaxLines(4);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         String dots = LEFT_HTML_TAG + AppConstants.DOTS + RIGHT_HTML_TAG;
@@ -711,6 +714,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void expandFeedPostText() {
+        mUserPostObj.isTextExpanded=true;
         tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
@@ -845,19 +849,28 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
-        final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
-        int width = AppUtils.getWindowWidth(mContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (width * 2 / 3));
+        final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
+        double imageRatio = mUserPostObj.getImageRatio().get(0);
+        if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
+            imageRatio = AppConstants.MAX_IMAGE_RATIO;
+        }
+        int imageHeight = 0;
+        if (CommonUtil.isNotEmpty(secondImage)) {
+            imageHeight = (int) (((double) 2 / (double) 3) * CommonUtil.getWindowWidth(mContext));
+        } else {
+            imageHeight = (int) (imageRatio * CommonUtil.getWindowWidth(mContext));
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
-        final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
+        final LinearLayout liHolder = child.findViewById(R.id.li_holder);
 
-        final ImageView ivFirst = (ImageView) child.findViewById(R.id.iv_first);
+        final ImageView ivFirst = child.findViewById(R.id.iv_first);
 
-        final ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_second);
+        final ImageView ivSecond = child.findViewById(R.id.iv_second);
 
-        final ImageView ivThird = (ImageView) child.findViewById(R.id.iv_third);
-        final TextView tvMoreImage = (TextView) child.findViewById(R.id.tv_feed_community_more_image);
+        final ImageView ivThird = child.findViewById(R.id.iv_third);
+        final TextView tvMoreImage = child.findViewById(R.id.tv_feed_community_more_image);
         tvMoreImage.setVisibility(View.GONE);
         switch (typeOfHolder) {
             case AppConstants.ONE_CONSTANT:
@@ -865,6 +878,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 liHolderLayout.weight = 0;
                 break;
             case AppConstants.TWO_CONSTANT:
+                LinearLayout.LayoutParams liHolderLinear = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
+                liHolderLinear.setMargins(5,0,0,0);
                 LinearLayout.LayoutParams firstImageLayout = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayout.weight = 1;
                 LinearLayout.LayoutParams secondImageLayout = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
@@ -873,6 +888,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             case AppConstants.THREE_CONSTANT:
                 LinearLayout.LayoutParams liHolderLayoutDefault = (LinearLayout.LayoutParams) liHolder.getLayoutParams();
                 liHolderLayoutDefault.weight = 1;
+                liHolderLayoutDefault.setMargins(5,0,0,0);
                 LinearLayout.LayoutParams firstImageLayoutDefault = (LinearLayout.LayoutParams) ivFirst.getLayoutParams();
                 firstImageLayoutDefault.weight = 2;
                 LinearLayout.LayoutParams secondImageLayoutDefault = (LinearLayout.LayoutParams) ivSecond.getLayoutParams();
@@ -886,29 +902,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
 
         ivFirst.setOnClickListener(this);
+
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
+            String firstThumborUrl = firstImage;
+            if(typeOfHolder == 1){
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context)/2, imageHeight);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(firstImage)
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .load(firstThumborUrl)
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
         if (StringUtil.isNotNullOrEmptyString(secondImage)) {
             ivSecond.setOnClickListener(this);
-
+            String secondThumborUrl = "";
+            if(typeOfHolder == 2){
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(secondImage)
+                    .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
+            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
             Glide.with(context)
-                    .asBitmap()
-                    .load(thirdImage)
+                    .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         liFeedCommunityUserPostImages.addView(child);
@@ -995,7 +1023,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (tvFeedCommunityPostViewMore.getText().equals(mContext.getString(R.string.ID_LESS))) {
             collapseFeedPostText();
         } else {
-            expandFeedPostText();
+            if(tvFeedCommunityPostText.getLineCount()>16) {
+                if (viewInterface instanceof FeedItemCallback) {
+                    ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
+                } else {
+                    viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
+                }
+            }else
+            {
+                expandFeedPostText();
+            }
         }
     }
 

@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -54,6 +55,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
     @Inject
     DateUtil mDateUtil;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
+
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     @Bind(R.id.li_article_cover_image)
@@ -202,11 +207,11 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             String backgrndImageUrl = dataItem.getImageUrl();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
+            final ImageView ivFirstLandscape = backgroundImage.findViewById(R.id.iv_feed_article_single_image);
 
-            final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
-            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
-            final ProgressBar pbImage=(ProgressBar) backgroundImage.findViewById(R.id.pb_article_image);
+            final TextView tvFeedArticleTotalViews = backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final RelativeLayout rlFeedArticleViews = backgroundImage.findViewById(R.id.rl_gradiant);
+            final ProgressBar pbImage= backgroundImage.findViewById(R.id.pb_article_image);
             StringBuilder stringBuilder = new StringBuilder();
             if (dataItem.getNoOfViews() > 1) {
                 stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
@@ -216,6 +221,16 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                 stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
                 tvFeedArticleTotalViews.setText(stringBuilder.toString());
                 tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+            } else {
+                tvFeedArticleTotalViews.setVisibility(View.GONE);
+            }
+
+            if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                if (mConfiguration.get().configData.showArticleViews) {
+                    tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                } else {
+                    tvFeedArticleTotalViews.setVisibility(View.GONE);
+                }
             } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
             }

@@ -14,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -121,6 +122,11 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     @Override
     public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse){
 
     }
 }

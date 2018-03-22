@@ -16,6 +16,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,8 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -44,6 +47,7 @@ import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.squareup.pollexor.ThumborUrlBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,10 +55,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -378,10 +384,7 @@ public class CommonUtil {
         if (url == null || url.getScheme() == null) {
             return false;
         }
-        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")))) {
-            return true;
-        }
-        return false;
+        return ((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")));
     }
 
     public static boolean isValidEmail(CharSequence target) {
@@ -390,6 +393,47 @@ public class CommonUtil {
         } else {
             return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
         }
+    }
+
+    public static String getThumborUriWithUpscale(String image, int width, int height) {
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .smart()
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return uri;
+    }
+
+    public static String getThumborUriWithoutSmart(String image, int width, int height){
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return uri;
+    }
+
+    public static String getThumborUriWithFit(String image, int width, int height){
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .fitIn(ThumborUrlBuilder.FitInStyle.NORMAL)
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        return uri;
     }
 
     public static String getPrettyString(ArrayList<String> list) {
@@ -729,28 +773,42 @@ public class CommonUtil {
     }
 
 
-    public static String getImgKitUri(@NonNull String image, int width, int height) {
-        String heightWidth = "";
-        if (image.contains("img.sheroes")) {
-            heightWidth = "?tr=w-" + Integer.toString(width) + ",h-" + Integer.toString(height);
+    public static String getThumborUri(@NonNull String image, int width, int height) {
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, height)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .filter(ThumborUrlBuilder.noUpscale())
+                    .smart()
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
-        if (image.contains("images.assettype")) {
-            heightWidth = "?w=" + Integer.toString(width) + "&h=" + Integer.toString(height);
-        }
-        String uri = image + heightWidth;
         return uri;
     }
 
-    public static String getImgKitUri(@NonNull String image, int width) {
-        String heightWidth = "";
-        if (image.contains("img.sheroes")) {
-            heightWidth = "?tr=w-" + Integer.toString(width);
+    public static String getThumborUri(@NonNull String image, int width) {
+        String uri = image;
+        try {
+            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
+                    .resize(width, 0)
+                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
+                    .filter(ThumborUrlBuilder.noUpscale())
+                    .smart()
+                    .toUrl();
+        } catch (UnsupportedEncodingException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
-        if (image.contains("images.assettype")) {
-            heightWidth = "?w=" + Integer.toString(width);
-        }
-        String uri = image + heightWidth;
         return uri;
+    }
+
+    public static RequestBuilder<Drawable> getThumbnailRequest(Context context, String image){
+        RequestBuilder<Drawable> thumbnailRequest = Glide
+                .with(context)
+                .load(CommonUtil.getThumborUri(image, 48));
+        return thumbnailRequest;
+
     }
 
     public static String getYoutubeURL(String videoId) {

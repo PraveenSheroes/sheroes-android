@@ -17,4 +17,7 @@ public class ConfigData {
 
     @SerializedName("createPostText")
     public String mCreatePostText = "Ask/ Share without hesitation";
+
+    @SerializedName("showArticleViews")
+    public boolean showArticleViews;
 }

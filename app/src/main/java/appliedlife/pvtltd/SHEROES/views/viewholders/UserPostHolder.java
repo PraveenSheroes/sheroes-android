@@ -545,23 +545,31 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void feedAlbum(Context context, String firstImage, String secondImage, String thirdImage, int typeOfHolder) {
-
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
-        final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
-        int width = AppUtils.getWindowWidth(mContext);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (width * 2 / 3));
+        final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
+        double imageRatio = mUserPostObj.getImageRatio().get(0);
+        if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
+            imageRatio = AppConstants.MAX_IMAGE_RATIO;
+        }
+        int imageHeight = 0;
+        if (CommonUtil.isNotEmpty(secondImage)) {
+            imageHeight = (int) (((double) 2 / (double) 3) * CommonUtil.getWindowWidth(mContext));
+        } else {
+            imageHeight = (int) (imageRatio * CommonUtil.getWindowWidth(mContext));
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
-        final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
+        final LinearLayout liHolder = child.findViewById(R.id.li_holder);
 
-        final ImageView ivFirst = (ImageView) child.findViewById(R.id.iv_first);
+        final ImageView ivFirst = child.findViewById(R.id.iv_first);
 
-        final ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_second);
+        final ImageView ivSecond = child.findViewById(R.id.iv_second);
 
-        final ImageView ivThird = (ImageView) child.findViewById(R.id.iv_third);
-        final TextView tvMoreImage = (TextView) child.findViewById(R.id.tv_feed_community_more_image);
+        final ImageView ivThird = child.findViewById(R.id.iv_third);
+        final TextView tvMoreImage = child.findViewById(R.id.tv_feed_community_more_image);
         tvMoreImage.setVisibility(View.GONE);
         switch (typeOfHolder) {
             case AppConstants.ONE_CONSTANT:
@@ -591,28 +599,39 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
         ivFirst.setOnClickListener(this);
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
+            String firstThumborUrl = firstImage;
+            if(typeOfHolder == 1){
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context)/2, imageHeight);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(firstImage)
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .load(firstThumborUrl)
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
         if (StringUtil.isNotNullOrEmptyString(secondImage)) {
             ivSecond.setOnClickListener(this);
-
+            String secondThumborUrl = "";
+            if(typeOfHolder == 2){
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight);
+            }else {
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            }
             Glide.with(context)
-                    .asBitmap()
-                    .load(secondImage)
+                    .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
+            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
             Glide.with(context)
-                    .asBitmap()
-                    .load(thirdImage)
+                    .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         userPostImages.addView(child);

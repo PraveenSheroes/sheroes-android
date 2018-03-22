@@ -43,9 +43,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -458,6 +460,36 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                 }
                 getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
+            }
+        });
+
+    }
+
+    public void getUserSummaryDetails(UserSummaryRequest userSummaryRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                //getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+            }
+
+            @Override
+            public void onNext(BoardingDataResponse boardingDataResponse) {
+                getMvpView().stopProgressBar();
+                if (null != boardingDataResponse) {
+                    getMvpView().getUserSummaryResponse(boardingDataResponse);
+                }
             }
         });
 

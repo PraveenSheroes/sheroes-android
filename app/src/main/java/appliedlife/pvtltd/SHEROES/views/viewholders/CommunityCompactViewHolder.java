@@ -2,47 +2,30 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
-import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-
-import org.w3c.dom.Text;
-
-import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
 
 /**
@@ -114,7 +97,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
-            String featureImageUrl = CommonUtil.getImgKitUri(mCommunityFeedObj.getImageUrl(), mFeatureImageWidth, mFeatureImageHeight);
+            String featureImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), mFeatureImageWidth, mFeatureImageHeight);
             Glide.with(context)
                     .asBitmap()
                     .load(featureImageUrl)
@@ -122,7 +105,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getThumbnailImageUrl())) {
-            String thumbImageUrl = CommonUtil.getImgKitUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
+            String thumbImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
             Glide.with(context)
                     .asBitmap()
                     .load(thumbImageUrl)

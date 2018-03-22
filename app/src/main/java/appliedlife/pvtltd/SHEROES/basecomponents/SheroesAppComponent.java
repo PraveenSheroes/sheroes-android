@@ -39,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.JobFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
@@ -308,8 +307,6 @@ public interface SheroesAppComponent {
     void inject(ContestFlatViewHolder contestFlatViewHolder);
 
     void inject(AppInstallation appInstallation);
-    void inject(JobFragment jobFragment);
-
 
     void inject(AppInstallationHelper appInstallationHelper);
 

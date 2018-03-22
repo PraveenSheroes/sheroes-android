@@ -165,8 +165,8 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotEmptyCollection(userPostSolrObj.getImageUrls())) {
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.challenge_image, null);
-            ImageView ivEventImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-            LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+            ImageView ivEventImage = child.findViewById(R.id.iv_feed_challenge);
+            LinearLayout liImageText = child.findViewById(R.id.li_image_text);
             liImageText.setVisibility(View.GONE);
             Glide.with(mContext)
                     .load(userPostSolrObj.getImageUrls().get(0))

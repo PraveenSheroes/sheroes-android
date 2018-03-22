@@ -77,7 +77,7 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
             liUserProfileImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.profile_single_image, null);
-            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_profile_single_image);
+            ImageView ivUserProfileImage = child.findViewById(R.id.iv_profile_single_image);
             Glide.with(getActivity())
                     .load(mUserPreference.get().getUserSummary().getPhotoUrl())
                     .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
@@ -90,7 +90,7 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
             liUserProfileImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View child = layoutInflater.inflate(R.layout.profile_single_image, null);
-            ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_profile_single_image);
+            ImageView ivUserProfileImage = child.findViewById(R.id.iv_profile_single_image);
             ivUserProfileImage.setImageBitmap(imageUrl);
             liUserProfileImages.addView(child);
         } else {
@@ -164,8 +164,8 @@ public class ProfileImageDialogFragment extends BaseDialogFragment {
         liUserProfileImages.removeAllViewsInLayout();
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.challenge_image, null);
-        ImageView ivUserProfileImage = (ImageView) child.findViewById(R.id.iv_feed_challenge);
-        LinearLayout liImageText = (LinearLayout) child.findViewById(R.id.li_image_text);
+        ImageView ivUserProfileImage = child.findViewById(R.id.iv_feed_challenge);
+        LinearLayout liImageText = child.findViewById(R.id.li_image_text);
         liImageText.setVisibility(View.GONE);
         liUserProfileImages.addView(child);
     }

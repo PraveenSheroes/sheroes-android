@@ -81,6 +81,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
@@ -102,7 +103,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     public enum TabType {
         NAVTIVE("native"),
         WEB("web"),
-        HTML("html");
+        HTML("html"),
+        FRAGMENT("fragment");
 
         public String tabType;
         private String mCommS;
@@ -554,6 +556,15 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }
+
+
+                if (communityTab.type.equalsIgnoreCase(TabType.FRAGMENT.getName())) {
+                    if(communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL) || communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL_COM)){
+                        HelplineFragment helplineFragment = new HelplineFragment();
+                        mAdapter.addFragment(helplineFragment, communityTab.title);
+                        mTabFragments.add(helplineFragment);
+                    }
+                }
             }
         }
 
@@ -568,6 +579,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
             @Override
             public void onPageSelected(int position) {
+                if (mCommunityFeedSolrObj.communityTabs.size() <= position) {
+                    return;
+                }
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
@@ -624,7 +638,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         });
     }
-
 
     @Override
     public String getScreenName() {

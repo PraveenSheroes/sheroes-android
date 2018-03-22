@@ -68,6 +68,9 @@
         <include
             layout="@layout/gif_loader"
             android:visibility="gone" />
+        <include
+            layout="@layout/no_internet_connection_layout"
+            android:visibility="gone" />
 
     </FrameLayout>
 </android.support.v4.widget.NestedScrollView>

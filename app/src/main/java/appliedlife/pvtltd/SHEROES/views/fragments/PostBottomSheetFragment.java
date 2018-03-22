@@ -35,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
@@ -265,6 +266,11 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
     //endregion
