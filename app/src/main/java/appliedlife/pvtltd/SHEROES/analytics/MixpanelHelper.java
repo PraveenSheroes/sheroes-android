@@ -71,7 +71,7 @@ public class MixpanelHelper {
 
         MixpanelAPI mixpanel = MixpanelHelper.getInstance(context);
 
-        if (userSummary != null) {
+        if (mixpanel!=null && userSummary != null) {
             mixpanel.identify(Long.toString(userSummary.getUserId()));
             mixpanel.getPeople().identify(Long.toString(userSummary.getUserId()));
 

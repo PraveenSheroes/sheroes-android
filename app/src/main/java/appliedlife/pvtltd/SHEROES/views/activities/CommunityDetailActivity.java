@@ -442,6 +442,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 break;
             case R.id.share:
                 String deepLinkUrl;
+                if (mCommunityFeedSolrObj == null) {
+                    break;
+                }
                 if (StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls())) {
                     deepLinkUrl = mCommunityFeedSolrObj.getPostShortBranchUrls();
                 } else {
