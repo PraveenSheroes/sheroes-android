@@ -245,64 +245,70 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
         } else { //Get Branch Details for First Install
-            final Branch branch = Branch.getInstance();
-            branch.resetUserSession();
-            branch.initSession(new Branch.BranchReferralInitListener() {
-                @Override
-                public void onInitFinished(JSONObject sessionParams, BranchError error) {
-                    isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
-                    if(isBranchFirstSession) {
-                        if (sessionParams.has(BRANCH_DEEP_LINK)) {
-                            String deepLink;
-                            try {
-                                deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
+            Bundle bundle = getIntent().getExtras();
+            if(bundle!=null && bundle.getBoolean(AppConstants.HIDE_SPLASH_THEME)) {
+                setUpView();
+            } else {
+                final Branch branch = Branch.getInstance();
+                branch.resetUserSession();
+                branch.initSession(new Branch.BranchReferralInitListener() {
+                    @Override
+                    public void onInitFinished(JSONObject sessionParams, BranchError error) {
+                        isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
+                        if (isBranchFirstSession) {
+                            if (sessionParams.has(BRANCH_DEEP_LINK)) {
+                                String deepLink;
+                                try {
+                                    deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
 
-                                if (StringUtil.isNotNullOrEmptyString(deepLink)) {
-                                    if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
-                                        deepLinkUrl = deepLink;
+                                    if (StringUtil.isNotNullOrEmptyString(deepLink)) {
+                                        if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
+                                            deepLinkUrl = deepLink;
 
-                                        if( mInstallUpdatePreference !=null) {
-                                            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                            installUpdateForMoEngage.setOnBoardingSkipped(true);
-                                            mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                            if (mInstallUpdatePreference != null) {
+                                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                                installUpdateForMoEngage.setOnBoardingSkipped(true);
+                                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                            }
                                         }
                                     }
-                                }
 
-                                if(sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
-                                    defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
+                                    if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
+                                        defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
+                                    }
+                                } catch (JSONException e) {
+                                    deepLinkUrl = null;
+                                    defaultTab = null;
+                                    isBranchFirstSession = false;
                                 }
-
-                            } catch (JSONException e) {
-                                deepLinkUrl = null;
-                                defaultTab = null;
-                                isBranchFirstSession = false;
                             }
                         }
+                        setUpView();
                     }
+                });
+            }
+        }
+    }
 
-                    setContentView(R.layout.welcome_activity);
-                    ButterKnife.bind(WelcomeActivity.this);
-                    isFirstTimeUser = true;
+    private void setUpView() {
+        setContentView(R.layout.welcome_activity);
+        ButterKnife.bind(WelcomeActivity.this);
+        isFirstTimeUser = true;
 
-                    initHomeViewPagerAndTabs();
+        initHomeViewPagerAndTabs();
 
-                    loginSetUp();
-                    if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                        showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                        return;
-                    }
+        loginSetUp();
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+            return;
+        }
 
-                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
 
-                    if (isFirstTimeUser) {
-                        AnalyticsManager.trackScreenView(getScreenName());
-                    }
-                }});
+        if (isFirstTimeUser) {
+            AnalyticsManager.trackScreenView(getScreenName());
         }
         mLoginPresenter.getMasterDataToPresenter();
-        //
-
     }
 
     private void loginSetUp() {

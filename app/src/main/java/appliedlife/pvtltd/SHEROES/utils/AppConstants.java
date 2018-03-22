@@ -151,7 +151,7 @@ public class AppConstants {
     public static final String FOLLOWERS_COUNT_CLICK = "Followers Count Click";
     public static final String SHARE_PROFILE = "Share profile";
     public static final String EDIT_PROFILE = "Edit profile";
-
+    public static final String HIDE_SPLASH_THEME = "hide_splash_theme";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
