@@ -497,15 +497,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         ButterKnife.bind(this);
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && !mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
-            Branch branch = Branch.getInstance();
-            branch.resetUserSession();
-            branch.initSession(new Branch.BranchReferralInitListener() {
-                                   @Override
-                                   public void onInitFinished(JSONObject referringParams, BranchError error) {
-                                       deepLinkingRedirection();
+            if (!mInstallUpdatePreference.get().isOnBoardingSkipped()) {
+                Branch branch = Branch.getInstance();
+                branch.resetUserSession();
+                branch.initSession(new Branch.BranchReferralInitListener() {
+                                       @Override
+                                       public void onInitFinished(JSONObject referringParams, BranchError error) {
+                                           deepLinkingRedirection();
+                                       }
                                    }
-                               }
-                    , this.getIntent().getData(), this);
+                        , this.getIntent().getData(), this);
+            }
         }
 
         if (shouldShowSnowFlake()) {
@@ -1648,13 +1650,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
-        } else if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
-                if (!comment.isAnonymous()) {
-                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-                }
+        } else if (baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+            Comment comment = (Comment) baseResponse;
+            if (!comment.isAnonymous()) {
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
             }
         } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
             ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;

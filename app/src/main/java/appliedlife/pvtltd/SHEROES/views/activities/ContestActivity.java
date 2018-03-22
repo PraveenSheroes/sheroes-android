@@ -690,13 +690,10 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-        if (baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if (StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
-                if (!comment.isAnonymous()) {
-                    championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), SOURCE_SCREEN);
-                }
+        if (baseResponse instanceof Comment) {
+            Comment comment = (Comment) baseResponse;
+            if (!comment.isAnonymous()) {
+                championDetailActivity(comment.getParticipantId(), 0,  comment.isVerifiedMentor(), SOURCE_SCREEN);
             }
         } else if (mValue == AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             if (mUserId != -1) {

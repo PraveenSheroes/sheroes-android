@@ -49,6 +49,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.squareup.pollexor.ThumborUrlBuilder;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -128,6 +131,23 @@ public class CommonUtil {
             }
         }
         return builder.toString();
+    }
+
+    public static boolean deepLinkingRedirection(JSONObject referringParams) {
+        if(referringParams.has("+is_first_session")) {
+            try {
+                boolean isFirstSession = referringParams.getBoolean("+is_first_session");
+
+                 if(isFirstSession) {
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+        return false;
     }
 
     public static ContestStatus getContestStatus(Date startAt, Date endAt) {

@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -88,6 +90,7 @@ import appliedlife.pvtltd.SHEROES.social.SocialListener;
 import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -98,6 +101,8 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
@@ -108,6 +113,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
     public static final String SCREEN_LABEL = "Intro Screen";
+    private static final String BRANCH_DEEP_LINK = "deep_link_url";
     private final String TAG = LogUtils.makeLogTag(WelcomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -115,6 +121,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     LoginPresenter mLoginPresenter;
+
     @Bind(R.id.welcome_view_pager)
     ViewPager mViewPager;
     private SheroesWelcomeViewPagerAdapter mViewPagerAdapter;
@@ -161,6 +168,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String loggedInChannel;
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isHandleAuthTokenRefresh = false;
+
+    //Ads Navigation
+    private boolean isBranchFirstSession = false;
+    private String deepLinkUrl = null;
+    private String defaultTab = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -223,29 +235,68 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
         }
         moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
+
         if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
             isFirstTimeUser = false;
             DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
-        } else {
-            setContentView(R.layout.welcome_activity);
-            ButterKnife.bind(WelcomeActivity.this);
-            isFirstTimeUser = true;
-            initHomeViewPagerAndTabs();
-            loginSetUp();
-            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                return;
-            }
+        } else { //Get Branch Details for First Install
+            final Branch branch = Branch.getInstance();
+            branch.resetUserSession();
+            branch.initSession(new Branch.BranchReferralInitListener() {
+                @Override
+                public void onInitFinished(JSONObject sessionParams, BranchError error) {
+                    isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
+                    if(isBranchFirstSession) {
+                        if (sessionParams.has(BRANCH_DEEP_LINK)) {
+                            String deepLink;
+                            try {
+                                deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
 
-            ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
-        }
-        if (isFirstTimeUser) {
-            AnalyticsManager.trackScreenView(getScreenName());
+                                if (StringUtil.isNotNullOrEmptyString(deepLink)) {
+                                    if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
+                                        deepLinkUrl = deepLink;
+
+                                        if( mInstallUpdatePreference !=null) {
+                                            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                            installUpdateForMoEngage.setOnBoardingSkipped(true);
+                                            mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                        }
+                                    }
+                                }
+
+                                if(sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
+                                    defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
+                                }
+
+                            } catch (JSONException e) {
+                                deepLinkUrl = null;
+                                defaultTab = null;
+                                isBranchFirstSession = false;
+                            }
+                        }
+                    }
+
+                    setContentView(R.layout.welcome_activity);
+                    ButterKnife.bind(WelcomeActivity.this);
+                    isFirstTimeUser = true;
+
+                    initHomeViewPagerAndTabs();
+
+                    loginSetUp();
+                    if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                        showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                        return;
+                    }
+
+                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+
+                    if (isFirstTimeUser) {
+                        AnalyticsManager.trackScreenView(getScreenName());
+                    }
+                }});
         }
         mLoginPresenter.getMasterDataToPresenter();
-        //
-
     }
 
     private void loginSetUp() {
@@ -258,6 +309,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         final AccessToken accessToken = loginResult.getAccessToken();
+
                         // Facebook Email address
                         GraphRequest request = GraphRequest.newMeRequest(
                                 accessToken,
@@ -321,18 +373,35 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
+    //before
     private void openHomeScreen() {
-        if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
-            openLoginActivity();
-        } else {
-            Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
-            Bundle bundle = new Bundle();
-            boardingIntent.putExtras(bundle);
-            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(boardingIntent);
-            finish();
-        }
 
+        if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+            Uri url = Uri.parse(deepLinkUrl);
+            Intent intent = new Intent(WelcomeActivity.this, SheroesDeepLinkingActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(CommunityDetailActivity.TAB_KEY, "");
+            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+            bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
+            if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
+                bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
+            }
+            intent.putExtras(bundle);
+            intent.setData(url);
+            startActivity(intent);
+            finish();
+        } else {
+            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
+                openLoginActivity();
+            } else {
+                Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
+                Bundle bundle = new Bundle();
+                boardingIntent.putExtras(bundle);
+                boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(boardingIntent);
+                finish();
+            }
+        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -406,6 +475,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void openLoginActivity() {
         Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
+        bundle.putString(AppConstants.ADS_DEEP_LINK_URL, deepLinkUrl);
         loginIntent.putExtras(bundle);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(loginIntent);
@@ -676,6 +747,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         try {
             switch (id) {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
+
+                    if(isFinishing()) return;
+
                     mProgressDialog = new ProgressDialog(WelcomeActivity.this);
                     mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
                     mProgressDialog.setCancelable(true);
@@ -826,11 +900,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
 
-            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial == MoEngageConstants.FACEBOOK ? "Facebook" : "Google").build();
+            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK) ? "Facebook" : "Google").build();
             AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
             if (createdDate < currentTime) {
                 moEngageUtills.entityMoEngageLoggedIn(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
-                if (loginViaSocial == MoEngageConstants.FACEBOOK) {
+                if (loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK)) {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
                 } else {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
@@ -838,7 +912,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
             } else {
                 moEngageUtills.entityMoEngageSignUp(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
-                if (loginViaSocial == MoEngageConstants.FACEBOOK) {
+                if (loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK)) {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
                 } else {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
@@ -956,6 +1030,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
             mGoogleApiClient.disconnect();
         }
+        dismissDialog();
     }
 
     @Override

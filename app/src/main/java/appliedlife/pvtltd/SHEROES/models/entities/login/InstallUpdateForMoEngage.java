@@ -12,6 +12,8 @@ public class InstallUpdateForMoEngage {
     private boolean isWelcome;
     private boolean isAppInstallFirstTime;
     private boolean isWalkThroughShown;
+    private boolean isOnBoardingSkipped;
+
     public int getAppVersion() {
         return appVersion;
     }
@@ -53,5 +55,14 @@ public class InstallUpdateForMoEngage {
 
     public void setWalkThroughShown(boolean walkThroughShown) {
         isWalkThroughShown = walkThroughShown;
+    }
+
+
+    public boolean isOnBoardingSkipped() {
+        return isOnBoardingSkipped;
+    }
+
+    public void setOnBoardingSkipped(boolean onboardingSkipped) {
+        isOnBoardingSkipped = onboardingSkipped;
     }
 }

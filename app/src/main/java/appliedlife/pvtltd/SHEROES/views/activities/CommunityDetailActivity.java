@@ -39,6 +39,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -68,7 +69,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -90,7 +90,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
-import static java.lang.System.gc;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -153,6 +152,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private List<Fragment> mTabFragments = new ArrayList<>();
     private Adapter mAdapter;
     private String mDefaultTabKey = "";
+    private boolean isFromAds = false;
 
     private String mCommunityPrimaryColor = "#ffffff";
     private String mCommunitySecondaryColor = "#dc4541";
@@ -179,6 +179,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             } else {
                 String communityId = getIntent().getExtras().getString(AppConstants.COMMUNITY_ID);
                 mDefaultTabKey = getIntent().getExtras().getString(TAB_KEY, "");
+                isFromAds = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
                 if (CommonUtil.isNotEmpty(communityId)) {
                     mCommunityDetailPresenter.fetchCommunity(communityId);
                 } else {
@@ -714,6 +715,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             communityFeedSolrObj.setStreamType(streamType);
         }
         mCommunityFeedSolrObj = communityFeedSolrObj;
+
+        //Auto join Community if its coming through ads for new users
+        boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
+        if (isFromAds && !isOwnerOrMember) {
+            onJoinClicked();
+        }
+
         initializeLayout();
     }
 

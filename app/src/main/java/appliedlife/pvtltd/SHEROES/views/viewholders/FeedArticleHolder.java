@@ -186,7 +186,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (!articleObj.isTrending()) {
             imageOperations(context);
         }
-        tvArticleJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        if(mConfiguration!=null && mConfiguration.get()!=null && mConfiguration.get().configData!=null ) {
+            tvArticleJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        }
         // TODO : ujjwal
        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
             tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
