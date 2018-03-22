@@ -879,6 +879,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         loginResponse.setTokenTime(System.currentTimeMillis());
         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
         loginResponse.setGcmId(mGcmId);
+        mUserPreference.set(loginResponse);
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
         moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
 
@@ -906,7 +907,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
         }
         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
-        mUserPreference.set(loginResponse);
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
         appInstallationHelper.setupAndSaveInstallation(true);
         openHomeScreen();

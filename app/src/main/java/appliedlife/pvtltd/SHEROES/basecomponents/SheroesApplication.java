@@ -67,8 +67,6 @@ public class SheroesApplication extends MultiDexApplication  {
         AnalyticsManager.initializeMixpanel(mContext);
         AnalyticsManager.initializeFbAnalytics(mContext);
         Stetho.initializeWithDefaults(this);
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
-        appInstallationHelper.setupAndSaveInstallation(false);
     }
 
     public String getCurrentActivityName() {
