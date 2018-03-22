@@ -63,7 +63,12 @@ public class AppInstallationHelper {
         mAppInstallationLocal = appInstallation;
     }
 
-    public void setupInstallation(final boolean hasLoggedIn) {
+    /**
+     *
+     * @param hasLoggedIn If true, isLoggedOut method will be set to false.
+     *                    If false, No change to isLoggedOut
+     */
+    public void setupAndSaveInstallation(final boolean hasLoggedIn) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         GCMClientManager pushClientManager = new GCMClientManager((Activity) mContext, mContext.getString(R.string.ID_PROJECT_ID));
@@ -192,7 +197,7 @@ public class AppInstallationHelper {
     }
 
     private void saveInstallationAsync(final CommonUtil.Callback callback) {
-        //Save to shared prefs
+        //Save to shared prefs first before sending to server
         mAppInstallationPref.set(mAppInstallationLocal);
         appInstallationModel.getAppInstallation(mAppInstallationLocal)
                 .subscribeOn(Schedulers.io())

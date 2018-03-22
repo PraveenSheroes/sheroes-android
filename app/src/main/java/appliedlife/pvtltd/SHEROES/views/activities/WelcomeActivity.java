@@ -56,7 +56,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -78,7 +77,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
@@ -191,7 +189,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
-        appInstallationHelper.setupInstallation(false);
+        appInstallationHelper.setupAndSaveInstallation(false);
     }
 
     private void checkAuthTokenExpireOrNot() {
@@ -910,7 +908,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
         mUserPreference.set(loginResponse);
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
-        appInstallationHelper.setupInstallation(true);
+        appInstallationHelper.setupAndSaveInstallation(true);
         openHomeScreen();
     }
 

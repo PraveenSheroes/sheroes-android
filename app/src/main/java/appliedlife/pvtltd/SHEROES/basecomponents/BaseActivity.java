@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
-import android.Manifest;
 import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -48,7 +46,6 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
-import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -68,7 +65,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
-import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -1073,7 +1069,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void onReferrerReceived(Boolean isReceived) {
         if (isReceived!=null && isReceived) {
             AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
-            appInstallationHelper.setupInstallation(false);
+            appInstallationHelper.setupAndSaveInstallation(false);
         }
     }
 }

@@ -6,7 +6,6 @@ import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.stetho.Stetho;
@@ -18,11 +17,8 @@ import com.moe.pushlibrary.MoEHelper;
 
 import java.io.File;
 
-import javax.inject.Inject;
-
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -71,6 +67,8 @@ public class SheroesApplication extends MultiDexApplication  {
         AnalyticsManager.initializeMixpanel(mContext);
         AnalyticsManager.initializeFbAnalytics(mContext);
         Stetho.initializeWithDefaults(this);
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        appInstallationHelper.setupAndSaveInstallation(false);
     }
 
     public String getCurrentActivityName() {

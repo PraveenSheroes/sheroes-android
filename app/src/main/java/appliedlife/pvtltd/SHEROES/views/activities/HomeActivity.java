@@ -766,10 +766,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
     public void logOut() {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-            return;
-        }
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
         HashMap<String, Object> properties = new EventProperty.Builder().build();
         AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);

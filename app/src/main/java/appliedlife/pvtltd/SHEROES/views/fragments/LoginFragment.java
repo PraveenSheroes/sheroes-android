@@ -50,12 +50,10 @@ import appliedlife.pvtltd.SHEROES.social.CustomSocialDialog;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -149,7 +147,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
-                        appInstallationHelper.setupInstallation(true);
+                        appInstallationHelper.setupAndSaveInstallation(true);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
@@ -171,7 +169,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
                     AnalyticsManager.initializeMixpanel(getContext());
                     AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
-                    appInstallationHelper.setupInstallation(true);
+                    appInstallationHelper.setupAndSaveInstallation(true);
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);
