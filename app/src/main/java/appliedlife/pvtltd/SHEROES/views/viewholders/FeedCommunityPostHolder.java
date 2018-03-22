@@ -309,9 +309,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     RelativeLayout.LayoutParams arrowParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     arrowParams.setMargins(CommonUtil.convertDpToPixel(20, context), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
                     ivArrow.setLayoutParams(arrowParams);
-                    TextView text = (TextView) view.findViewById(R.id.title);
+                    TextView text = view.findViewById(R.id.title);
                     text.setText(R.string.tool_tip_user_profile);
-                    TextView gotIt = (TextView) view.findViewById(R.id.got_it);
+                    TextView gotIt = view.findViewById(R.id.got_it);
                     gotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -849,7 +849,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
-        final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
+        final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
         double imageRatio = mUserPostObj.getImageRatio().get(0);
         if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
             imageRatio = AppConstants.MAX_IMAGE_RATIO;
@@ -863,14 +863,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
-        final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
+        final LinearLayout liHolder = child.findViewById(R.id.li_holder);
 
-        final ImageView ivFirst = (ImageView) child.findViewById(R.id.iv_first);
+        final ImageView ivFirst = child.findViewById(R.id.iv_first);
 
-        final ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_second);
+        final ImageView ivSecond = child.findViewById(R.id.iv_second);
 
-        final ImageView ivThird = (ImageView) child.findViewById(R.id.iv_third);
-        final TextView tvMoreImage = (TextView) child.findViewById(R.id.tv_feed_community_more_image);
+        final ImageView ivThird = child.findViewById(R.id.iv_third);
+        final TextView tvMoreImage = child.findViewById(R.id.tv_feed_community_more_image);
         tvMoreImage.setVisibility(View.GONE);
         switch (typeOfHolder) {
             case AppConstants.ONE_CONSTANT:

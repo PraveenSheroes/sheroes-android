@@ -548,7 +548,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
-        final LinearLayout liFeedAlbum = (LinearLayout) child.findViewById(R.id.li_feed_album);
+        final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
         double imageRatio = mUserPostObj.getImageRatio().get(0);
         if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
             imageRatio = AppConstants.MAX_IMAGE_RATIO;
@@ -562,14 +562,14 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, imageHeight);
         liFeedAlbum.setLayoutParams(params);
 
-        final LinearLayout liHolder = (LinearLayout) child.findViewById(R.id.li_holder);
+        final LinearLayout liHolder = child.findViewById(R.id.li_holder);
 
-        final ImageView ivFirst = (ImageView) child.findViewById(R.id.iv_first);
+        final ImageView ivFirst = child.findViewById(R.id.iv_first);
 
-        final ImageView ivSecond = (ImageView) child.findViewById(R.id.iv_second);
+        final ImageView ivSecond = child.findViewById(R.id.iv_second);
 
-        final ImageView ivThird = (ImageView) child.findViewById(R.id.iv_third);
-        final TextView tvMoreImage = (TextView) child.findViewById(R.id.tv_feed_community_more_image);
+        final ImageView ivThird = child.findViewById(R.id.iv_third);
+        final TextView tvMoreImage = child.findViewById(R.id.tv_feed_community_more_image);
         tvMoreImage.setVisibility(View.GONE);
         switch (typeOfHolder) {
             case AppConstants.ONE_CONSTANT:

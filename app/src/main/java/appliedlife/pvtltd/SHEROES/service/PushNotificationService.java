@@ -178,7 +178,7 @@ public class PushNotificationService extends GcmListenerService {
         }
 
         notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);;
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
         notificationIntent.setData(url);
         notificationIntent.putExtra(AppConstants.IS_MOENGAGE, false);
         notificationIntent.putExtra(BaseActivity.SOURCE_SCREEN, "From Push Notification");

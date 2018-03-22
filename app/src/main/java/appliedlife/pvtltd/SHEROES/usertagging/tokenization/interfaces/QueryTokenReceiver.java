@@ -41,13 +41,13 @@ public interface QueryTokenReceiver {
      *
      * @return a List of String representing the buckets that will be used when calling {@link SuggestionsResultListener}
      */
-    public List<String> onQueryReceived(final @NonNull QueryToken queryToken);
+    List<String> onQueryReceived(final @NonNull QueryToken queryToken);
 
-    public  List<MentionSpan> onMentionReceived(final @NonNull List<MentionSpan> mentionSpanList, String allText);
+    List<MentionSpan> onMentionReceived(final @NonNull List<MentionSpan> mentionSpanList, String allText);
 
-    public  SuggestionsAdapter onSuggestedList(final @NonNull SuggestionsAdapter suggestionsAdapter);
+    SuggestionsAdapter onSuggestedList(final @NonNull SuggestionsAdapter suggestionsAdapter);
 
-    public  Suggestible onUserTaggedClick(final @NonNull Suggestible suggestible,View view);
+    Suggestible onUserTaggedClick(final @NonNull Suggestible suggestible, View view);
 
-    public  void textChangeListner(final Editable s);
+    void textChangeListner(final Editable s);
 }
