@@ -399,4 +399,7 @@ public class AppConstants {
 
     public static final double MAX_IMAGE_RATIO = 1.5;
 
+    public static final String SET_ORDER_KEY = "set order key";
+    public static final String FEED_CONFIG_VERSION = "feed config version";
+
 }

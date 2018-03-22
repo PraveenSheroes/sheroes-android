@@ -36,4 +36,6 @@ public interface IArticleView extends BaseMvpView {
     void setFeedDetail(FeedDetail feedDetail);
 
     void trackEvent(Event postLiked);
+
+    String getStreamType();
 }

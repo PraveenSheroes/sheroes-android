@@ -336,6 +336,14 @@ public class CommonUtil {
         return null;
     }
 
+    public static String getPref(String key) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return "";
+        }
+        return prefs.getString(key, "");
+    }
+
     public static PackageInfo getPackageInfo(Context context) {
         try {
             return context.getPackageManager()

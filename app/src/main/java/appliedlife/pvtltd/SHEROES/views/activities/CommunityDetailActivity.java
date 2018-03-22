@@ -98,6 +98,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
 public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView {
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String TAB_KEY = "tab_key";
+    private String streamType;
 
     public enum TabType {
         NAVTIVE("native"),
@@ -174,6 +175,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
             if (parcelable != null) {
                 mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
+                streamType = mCommunityFeedSolrObj.getStreamType();
             } else {
                 String communityId = getIntent().getExtras().getString(AppConstants.COMMUNITY_ID);
                 mDefaultTabKey = getIntent().getExtras().getString(TAB_KEY, "");
@@ -445,7 +447,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 } else {
                     deepLinkUrl = mCommunityFeedSolrObj.getDeepLinkUrl();
                 }
-                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE_CLICKED, getScreenName(), properties);
                 ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, Event.COMMUNITY_INVITE, properties);
                 break;
@@ -460,7 +462,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         LoginResponse loginResponse = userPreference.get();
         UserSummary userSummary = loginResponse.getUserSummary();
         RemoveMemberRequest removeMemberRequest = removeMemberRequestBuilder(mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), userSummary.getUserId());
-        HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+        HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).streamType(mCommunityFeedSolrObj.getStreamType()).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
         AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
         mCommunityDetailPresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequest);
     }
@@ -591,6 +593,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                                 .title(mCommunityFeedSolrObj.getNameOrTitle())
                                 .tabTitle(communityTab.title)
                                 .tabKey(communityTab.key)
+                                .streamType(mCommunityFeedSolrObj.getStreamType())
                                 .build();
                 AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
                 if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
@@ -698,6 +701,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mCommunityFeedSolrObj != null) {
             builder.title(mCommunityFeedSolrObj.getNameOrTitle())
                     .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                    .streamType(mCommunityFeedSolrObj.getStreamType())
                     .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()));
         }
 
@@ -707,6 +711,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public void setCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
+        if (CommonUtil.isNotEmpty(streamType)) {
+            communityFeedSolrObj.setStreamType(streamType);
+        }
         mCommunityFeedSolrObj = communityFeedSolrObj;
 
         //Auto join Community if its coming through ads for new users
@@ -818,7 +825,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
                 userIdList.add(userPreference.get().getUserSummary().getUserId());
-                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                 mCommunityDetailPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
             }

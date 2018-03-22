@@ -45,4 +45,6 @@ public interface IPostDetailView extends BaseMvpView {
 
     void deleteLastComment();
     void showListOfParticipate(List<UserTaggingPerson>participantLists);
+
+    String getStreamType();
 }
