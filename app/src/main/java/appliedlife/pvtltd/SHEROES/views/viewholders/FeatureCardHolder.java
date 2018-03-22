@@ -147,11 +147,11 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.communities_single_image, null);
-            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_community_single_image);
-            final TextView time = (TextView) backgroundImage.findViewById(R.id.tv_community_time_label);
+            final ImageView ivFirstLandscape = backgroundImage.findViewById(R.id.iv_community_single_image);
+            final TextView time = backgroundImage.findViewById(R.id.tv_community_time_label);
             time.setVisibility(View.INVISIBLE);
-            final TextView tvTotalMember = (TextView) backgroundImage.findViewById(R.id.tv_community_total_views);
-            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
+            final TextView tvTotalMember = backgroundImage.findViewById(R.id.tv_community_total_views);
+            final RelativeLayout rlFeedArticleViews = backgroundImage.findViewById(R.id.rl_gradiant);
             tvTotalMember.setText(CommunityFeedObj.getNoOfMembers() + AppConstants.SPACE + context.getString(R.string.ID_MEMBERS));
             Glide.with(mContext)
                     .asBitmap()

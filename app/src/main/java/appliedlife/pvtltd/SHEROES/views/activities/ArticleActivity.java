@@ -552,7 +552,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                 if (comment == null) {
                                     return true;
                                 }
-                                mArticlePresenter.onDeleteCommentClicked(position, mAppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                                mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
                                 return true;
                             }
                         });
@@ -853,7 +853,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentsAdapter.addDataAndNotify(comment);
         if(null!=mFeedDetail) {
             if (mFeedDetail instanceof ArticleSolrObj) {
-                ((ArticleSolrObj) mFeedDetail).getLastComments().add(comment);
+                mFeedDetail.getLastComments().add(comment);
             }
         }
     }

@@ -532,8 +532,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             popupWindowAnswerQuestionTooTip = new PopupWindow(askQuesToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindowAnswerQuestionTooTip.setOutsideTouchable(true);
             popupWindowAnswerQuestionTooTip.showAsDropDown(toolTipProfile, 0, 0);
-            final TextView tvGotIt = (TextView) askQuesToolTip.findViewById(R.id.got_it);
-            final TextView tvTitle = (TextView) askQuesToolTip.findViewById(R.id.title);
+            final TextView tvGotIt = askQuesToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle = askQuesToolTip.findViewById(R.id.title);
             tvTitle.setText(getString(R.string.tool_tip_ask_question));
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -1517,16 +1517,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             dialog.setCancelable(false);
             dialog.setContentView(R.layout.unfollow_confirmation_dialog);
 
-            CircleImageView circleImageView = (CircleImageView) dialog.findViewById(R.id.user_img_icon);
+            CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
                 circleImageView.setCircularImage(true);
                 circleImageView.bindImage(mUserSolarObject.getImageUrl());
             }
 
-            TextView text = (TextView) dialog.findViewById(R.id.title);
+            TextView text = dialog.findViewById(R.id.title);
             text.setText("Unfollow " + mUserSolarObject.getNameOrTitle());
 
-            TextView dialogButton = (TextView) dialog.findViewById(R.id.cancel);
+            TextView dialogButton = dialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1535,7 +1535,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
                 }
             });
 
-            TextView unFollowButton = (TextView) dialog.findViewById(R.id.unfollow);
+            TextView unFollowButton = dialog.findViewById(R.id.unfollow);
             unFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

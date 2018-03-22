@@ -69,7 +69,7 @@ public class InviteFriendSuggestedAdapter extends RecyclerView.Adapter<RecyclerV
         switch (holder.getItemViewType()) {
             case TYPE_CONTACT:
                 SuggestedContactCardHolder suggestedContactCardHolder = (SuggestedContactCardHolder) holder;
-                UserSolrObj userSolrObj = (UserSolrObj) mUserSolrObjList.get(position);
+                UserSolrObj userSolrObj = mUserSolrObjList.get(position);
                 suggestedContactCardHolder.bindData(userSolrObj, mContext, position);
                 break;
 
