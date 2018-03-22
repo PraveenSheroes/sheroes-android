@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -63,6 +64,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -83,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
+import io.reactivex.functions.Consumer;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -215,6 +218,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     protected void onStart() {
         super.onStart();
+        ReferrerBus.getInstance().register(this).add(ReferrerBus.getInstance().toObserveable().subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(Object event) {
+                if (event instanceof Boolean) {
+                    onReferrerReceived((Boolean) event);
+                }
+            }
+        }));
         if (null != mMoEHelper) {
             mMoEHelper.onStart(this);
         }
@@ -344,6 +355,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     protected void onStop() {
         super.onStop();
+        ReferrerBus.getInstance().unregister(this);
         if (mSheroesApplication != null) {
             mMoEHelper.onStop(this);
             mSheroesApplication.notifyIfAppInBackground();
@@ -1053,4 +1065,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     protected abstract SheroesPresenter getPresenter();
+
+    public void onReferrerReceived(Boolean isReceived) {
+        if (isReceived!=null && isReceived) {
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+            appInstallationHelper.setupAndSaveInstallation(false);
+        }
+    }
 }

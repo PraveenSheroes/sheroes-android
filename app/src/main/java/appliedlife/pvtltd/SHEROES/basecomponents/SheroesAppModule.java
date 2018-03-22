@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -233,6 +234,12 @@ public class SheroesAppModule {
     @Provides
     public Preference<Configuration> provideConfiguration(RxSharedPreferences rxSharedPreferences, Gson gson) {
         return rxSharedPreferences.getObject(AppConstants.CONFIG_KEY, new Configuration(), new GsonConverter<Configuration>(gson, Configuration.class));
+    }
+
+    @Singleton
+    @Provides
+    public Preference<AppInstallation> provideAppInstallation(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.APP_INSTALLATION, new AppInstallation(), new GsonConverter<AppInstallation>(gson, AppInstallation.class));
     }
 
 

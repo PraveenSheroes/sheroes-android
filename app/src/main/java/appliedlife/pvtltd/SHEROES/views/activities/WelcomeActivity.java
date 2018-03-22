@@ -56,7 +56,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -70,13 +69,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
@@ -121,6 +121,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     LoginPresenter mLoginPresenter;
+    @Inject
+    Preference<AppInstallation> mAppInstallation;
+
 
     @Bind(R.id.welcome_view_pager)
     ViewPager mViewPager;
@@ -165,7 +168,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String loginViaSocial = MoEngageConstants.GOOGLE;
     private long currentTime;
     private String mGcmId;
-    private String loggedInChannel;
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isHandleAuthTokenRefresh = false;
 
@@ -186,6 +188,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        appInstallationHelper.setupAndSaveInstallation(false);
     }
 
     private void checkAuthTokenExpireOrNot() {
@@ -297,6 +301,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 }});
         }
         mLoginPresenter.getMasterDataToPresenter();
+        //
+
     }
 
     private void loginSetUp() {
@@ -636,27 +642,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if(mHandler != null && mRunnable != null) {
             mHandler.postDelayed(mRunnable, 10000);
         }
-        Intent intent = getIntent();
-        if (intent != null && null != intent.getExtras()) {
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                if (null != extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID)) {
-                    if (StringUtil.isNotNullOrEmptyString(extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID))) {
-                        String appContactId = extras.getString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID);
-                        LogUtils.info(TAG, "********Id of  new Intent ***********" + appContactId);
-                        UserFromReferralRequest userFromReferralRequest = new UserFromReferralRequest();
-                        if (StringUtil.isNotNullOrEmptyString(appContactId)) {
-                            try {
-                                userFromReferralRequest.setAppUserContactTableId(Long.parseLong(appContactId));
-                                mLoginPresenter.updateUserReferralInPresenter(userFromReferralRequest);
-                            } catch (Exception e) {
-                                Crashlytics.getInstance().core.logException(e);
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -921,8 +906,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
         }
         mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
-
         mUserPreference.set(loginResponse);
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        appInstallationHelper.setupAndSaveInstallation(true);
         openHomeScreen();
     }
 

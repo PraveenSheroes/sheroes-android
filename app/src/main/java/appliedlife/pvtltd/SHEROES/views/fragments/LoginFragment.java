@@ -37,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
@@ -75,6 +77,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    Preference<AppInstallation> mAppInstallation;
+
     @Inject
     LoginPresenter mLoginPresenter;
     @Inject
@@ -140,6 +146,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
+                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
+                        appInstallationHelper.setupAndSaveInstallation(true);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
@@ -160,6 +168,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
                     AnalyticsManager.initializeMixpanel(getContext());
+                    AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
+                    appInstallationHelper.setupAndSaveInstallation(true);
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setGcmId(mGcmId);

@@ -3,62 +3,95 @@ package appliedlife.pvtltd.SHEROES.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
-import com.google.android.gms.tagmanager.InstallReferrerReceiver;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
+import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 
 /**
- * Created by SHEROES-TECH on 06-07-2017.
+ * Created by Ujjwal on 21-03-2018.
  */
 
 public class CustomInstallTrackersReceiver extends BroadcastReceiver {
-    private final String TAG = LogUtils.makeLogTag(CustomInstallTrackersReceiver.class);
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        try {
-            InstallReferrerReceiver googleReferrerTracking = new InstallReferrerReceiver();
-            googleReferrerTracking.onReceive(context, intent);
-            if (intent != null) {
-                LogUtils.info(TAG, "********Referral Install tracker***********"+ intent.getStringExtra(AppConstants.GOOGLE_PLAY_URL_REFERRAL));
-                if (intent.getStringExtra(AppConstants.GOOGLE_PLAY_URL_REFERRAL) != null) {
-                    String url = intent.getStringExtra(AppConstants.GOOGLE_PLAY_URL_REFERRAL);
-                    String referrers[] = url.split(AppConstants.AND_SIGN);
-                    if (referrers.length >= 3) {
-                        LogUtils.info(TAG, "********Size refral User Id tracker***********"+ referrers.length);
-                        if (StringUtil.isNotNullOrEmptyString(referrers[3])) {
-                            String appContactTableidArray[] = referrers[3].split(AppConstants.EQUAL_SIGN);
-                            if (StringUtil.isNotNullOrEmptyString(appContactTableidArray[1])) {
-                                String appUserContactid = appContactTableidArray[1];
-                                LogUtils.info(TAG, "********App User Id tracker***********"+ appUserContactid);
-                                Intent i = new Intent(context, WelcomeActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putString(AppConstants.GOOGLE_PLAY_URL_REFERRAL_CONTACT_ID, appUserContactid);
-                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                //  i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                i.putExtras(bundle);
-                                context.startActivity(i);
-                            }
-                        }
-                    }else
-                    {
-                        Intent i = new Intent(context, WelcomeActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString(AppConstants.DEFFERED_DEEP_LINK, url);
-                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        //  i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        i.putExtras(bundle);
-                        context.startActivity(i);
-                    }
+        final Bundle extras = intent.getExtras();
+        if (null == extras) {
+            return;
+        }
+        final String referrer = extras.getString("referrer");
+        if (null == referrer) {
+            return;
+        }
+
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        SharedPreferences.Editor editor= prefs.edit();
+        editor.putString(AppConstants.REFERRER, referrer);
+
+        final Matcher sourceMatcher = UTM_SOURCE_PATTERN.matcher(referrer);
+        final String source = find(sourceMatcher);
+        if (null != source) {
+            editor.putString(AppConstants.UTM_SOURCE, source).apply();
+        }
+
+        final Matcher mediumMatcher = UTM_MEDIUM_PATTERN.matcher(referrer);
+        final String medium = find(mediumMatcher);
+        if (null != medium) {
+            editor.putString(AppConstants.UTM_MEDIUM, medium).apply();
+        }
+
+        final Matcher campaignMatcher = UTM_CAMPAIGN_PATTERN.matcher(referrer);
+        final String campaign = find(campaignMatcher);
+        if (null != campaign) {
+            editor.putString(AppConstants.UTM_CAMPAIGN, campaign);
+        }
+
+        final Matcher contentMatcher = UTM_CONTENT_PATTERN.matcher(referrer);
+        final String content = find(contentMatcher);
+        if (null != content) {
+            editor.putString(AppConstants.UTM_CONTENT, content);
+        }
+
+        final Matcher termMatcher = UTM_TERM_PATTERN.matcher(referrer);
+        final String term = find(termMatcher);
+        if (null != term) {
+            editor.putString(AppConstants.UTM_TERM, term);
+        }
+        editor.apply();
+
+        //send event of received referrer
+        ReferrerBus.getInstance().post(true);
+    }
+
+
+    private String find(Matcher matcher) {
+        if (matcher.find()) {
+            final String encoded = matcher.group(2);
+            if (null != encoded) {
+                try {
+                    return URLDecoder.decode(encoded, "UTF-8");
+                } catch (final UnsupportedEncodingException e) {
+                    Log.e(LOGTAG, "Could not decode a parameter into UTF-8");
                 }
             }
-        }catch(Exception e){
-            e.printStackTrace();
         }
+        return null;
     }
+
+    private final Pattern UTM_SOURCE_PATTERN = Pattern.compile("(^|&)utm_source=([^&#=]*)([#&]|$)");
+    private final Pattern UTM_MEDIUM_PATTERN = Pattern.compile("(^|&)utm_medium=([^&#=]*)([#&]|$)");
+    private final Pattern UTM_CAMPAIGN_PATTERN = Pattern.compile("(^|&)utm_campaign=([^&#=]*)([#&]|$)");
+    private final Pattern UTM_CONTENT_PATTERN = Pattern.compile("(^|&)utm_content=([^&#=]*)([#&]|$)");
+    private final Pattern UTM_TERM_PATTERN = Pattern.compile("(^|&)utm_term=([^&#=]*)([#&]|$)");
+
+    private static final String LOGTAG = "MixpanelAPI.InstRfrRcvr";
 }
