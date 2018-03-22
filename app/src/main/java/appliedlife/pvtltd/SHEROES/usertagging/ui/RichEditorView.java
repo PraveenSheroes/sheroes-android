@@ -126,7 +126,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         inflater.inflate(R.layout.editor_view, this, true);
 
         // Get the inner views
-        mMentionsEditText = (MentionsEditText) findViewById(R.id.text_editor);
+        mMentionsEditText = findViewById(R.id.text_editor);
 
 
         // Get the MentionSpanConfig from custom XML attributes and set it

@@ -72,7 +72,7 @@ public class InviteFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         switch (holder.getItemViewType()) {
             case TYPE_CONTACT:
                 ContactCardHolder contactCardHolder = (ContactCardHolder) holder;
-                UserContactDetail feedDetail = (UserContactDetail) mContactDetailList.get(position);
+                UserContactDetail feedDetail = mContactDetailList.get(position);
                 contactCardHolder.bindData(feedDetail, mContext, position);
                 break;
 

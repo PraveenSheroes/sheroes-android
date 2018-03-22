@@ -897,11 +897,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mScheduledConfirmationDialog.setCancelable(false);
         mScheduledConfirmationDialog.setContentView(R.layout.dialog_schedule_post_confirmation);
 
-        TextView messageText = (TextView) mScheduledConfirmationDialog.findViewById(R.id.message);
+        TextView messageText = mScheduledConfirmationDialog.findViewById(R.id.message);
         String scheduledMessage = getResources().getString(R.string.post_schedule_message, mCommunityPost.community.name, formattedMessage);
         Spanned message = StringUtil.fromHtml(scheduledMessage);
         messageText.setText(message);
-        TextView confirmedOk = (TextView) mScheduledConfirmationDialog.findViewById(R.id.ok);
+        TextView confirmedOk = mScheduledConfirmationDialog.findViewById(R.id.ok);
         confirmedOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -910,7 +910,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         });
 
-        TextView editPost = (TextView) mScheduledConfirmationDialog.findViewById(R.id.edit);
+        TextView editPost = mScheduledConfirmationDialog.findViewById(R.id.edit);
         editPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

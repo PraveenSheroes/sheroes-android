@@ -192,7 +192,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 String dataUrl = getArguments().getString(AppConstants.END_POINT_URL);
                 String screenName = getArguments().getString(AppConstants.SCREEN_NAME);
                 mProperties = (HashMap<String, Object>) getArguments().getSerializable(SCREEN_PROPERTIES);
-                String sourceScreenId = mProperties!=null && ((String) mProperties.get(EventProperty.ID.getString()))!=null ? ((String) mProperties.get(EventProperty.ID.getString())) : ""  ;
+                String sourceScreenId = mProperties!=null && mProperties.get(EventProperty.ID.getString()) !=null ? ((String) mProperties.get(EventProperty.ID.getString())) : ""  ;
                 if(CommonUtil.isNotEmpty(screenName)) {
                     mScreenLabel = screenName;
                 }
@@ -657,11 +657,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public boolean shouldTrackScreen() {
-        if (mCommunityTab != null) {
-            return false;
-        } else {
-            return true;
-        }
+        return mCommunityTab == null;
     }
 
     @Override

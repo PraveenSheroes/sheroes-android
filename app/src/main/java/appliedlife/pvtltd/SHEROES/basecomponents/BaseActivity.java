@@ -734,11 +734,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 popupWindow.dismiss();
             }
         });
-        final LinearLayout liFeedMenu = (LinearLayout) popupView.findViewById(R.id.li_feed_menu);
-        final TextView tvEdit = (TextView) popupView.findViewById(R.id.tv_article_menu_edit);
-        final TextView tvDelete = (TextView) popupView.findViewById(R.id.tv_article_menu_delete);
-        final TextView tvShare = (TextView) popupView.findViewById(R.id.tv_article_menu_share);
-        final TextView tvReport = (TextView) popupView.findViewById(R.id.tv_article_menu_report);
+        final LinearLayout liFeedMenu = popupView.findViewById(R.id.li_feed_menu);
+        final TextView tvEdit = popupView.findViewById(R.id.tv_article_menu_edit);
+        final TextView tvDelete = popupView.findViewById(R.id.tv_article_menu_delete);
+        final TextView tvShare = popupView.findViewById(R.id.tv_article_menu_share);
+        final TextView tvReport = popupView.findViewById(R.id.tv_article_menu_report);
         // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
         popupWindow.showAsDropDown(view, -150, -10);
         tvEdit.setOnClickListener(new View.OnClickListener() {

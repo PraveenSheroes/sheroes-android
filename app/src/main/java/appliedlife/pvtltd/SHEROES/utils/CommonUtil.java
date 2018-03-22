@@ -404,10 +404,7 @@ public class CommonUtil {
         if (url == null || url.getScheme() == null) {
             return false;
         }
-        if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")))) {
-            return true;
-        }
-        return false;
+        return ((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")));
     }
 
     public static boolean isValidEmail(CharSequence target) {

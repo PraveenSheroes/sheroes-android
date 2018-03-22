@@ -425,9 +425,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             liFeedArticleImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View backgroundImage = layoutInflater.inflate(R.layout.feed_article_single_image, null);
-            final ImageView ivFirstLandscape = (ImageView) backgroundImage.findViewById(R.id.iv_feed_article_single_image);
-            final TextView tvFeedArticleTotalViews = (TextView) backgroundImage.findViewById(R.id.tv_feed_article_total_views);
-            final RelativeLayout rlFeedArticleViews = (RelativeLayout) backgroundImage.findViewById(R.id.rl_gradiant);
+            final ImageView ivFirstLandscape = backgroundImage.findViewById(R.id.iv_feed_article_single_image);
+            final TextView tvFeedArticleTotalViews = backgroundImage.findViewById(R.id.tv_feed_article_total_views);
+            final RelativeLayout rlFeedArticleViews = backgroundImage.findViewById(R.id.rl_gradiant);
             StringBuilder stringBuilder = new StringBuilder();
             if (articleObj .getNoOfViews() > 1) {
                 stringBuilder.append(numericToThousand(articleObj .getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
