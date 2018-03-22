@@ -95,6 +95,10 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 ArticleSolrObj articleObj = new ArticleSolrObj();
                 if(feedDetail instanceof ArticleSolrObj){
                     articleObj = (ArticleSolrObj) feedDetail;
+                    if(CommonUtil.isNotEmpty(getMvpView().getStreamType())){
+                        articleObj.setStreamType(getMvpView().getStreamType());
+                        feedDetail.setStreamType(getMvpView().getStreamType());
+                    }
                 }
                 getMvpView().setFeedDetail(feedDetail);
                 if (null != feedResponsePojo) {
@@ -113,6 +117,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     article.author.shortDescription = articleObj.getAuthorShortDescription();
                     article.author.thumbUrl = articleObj.getAuthorImageUrl();
                     article.isBookmarked = articleObj.isBookmarked();
+                    article.streamType = articleObj.getStreamType();
                     article.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
                     article.thumbImageWidth = articleObj.getThumbImageWidth();
                     article.thumbImageHeight = articleObj.getThumbImageHeight();
@@ -180,6 +185,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                     .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                     .postType(AnalyticsEventType.ARTICLE.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                    .streamType(getMvpView().getStreamType())
                                     .build();
                     AnalyticsManager.trackEvent(Event.REPLY_DELETED,ArticleActivity.SOURCE_SCREEN, properties);
                 }
@@ -220,6 +226,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                     .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                     .postType(AnalyticsEventType.ARTICLE.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                    .streamType(getMvpView().getStreamType())
                                     .build();
                     AnalyticsManager.trackEvent(Event.REPLY_EDITED, ArticleActivity.SCREEN_LABEL, properties);
                 }
@@ -261,6 +268,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                         .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                         .postType(AnalyticsEventType.ARTICLE.toString())
                                         .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                        .streamType(getMvpView().getStreamType())
                                         .build();
                         AnalyticsManager.trackEvent(Event.REPLY_CREATED, ArticleActivity.SCREEN_LABEL, properties);
                     }

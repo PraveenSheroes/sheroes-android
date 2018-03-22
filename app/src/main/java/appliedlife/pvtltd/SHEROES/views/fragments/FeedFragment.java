@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -59,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -1211,6 +1213,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void hideGifLoader() {
         gifLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
+        String setOrderKey = feedResponsePojo.getSetOrderKey();
+        String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion()!=null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        SharedPreferences.Editor editor= prefs.edit();
+        editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
+        editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
+        editor.apply();
+        AnalyticsManager.initializeMixpanel(getActivity(), false);
     }
 
     public int findPositionById(long id) { //TODO - move to presenter

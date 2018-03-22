@@ -25,6 +25,12 @@ public class FeedResponsePojo extends BaseResponse {
     @SerializedName("next_token")
     private String nextToken;
 
+    @SerializedName("set_order_key")
+    private String setOrderKey;
+
+    @SerializedName("server_feed_config_version")
+    private Integer serverFeedConfigVersion;
+
     public List<FeedDetail> getFeaturedDocs() {
         return featuredDocs;
     }
@@ -47,5 +53,21 @@ public class FeedResponsePojo extends BaseResponse {
 
     public void setNextToken(String nextToken) {
         this.nextToken = nextToken;
+    }
+
+    public String getSetOrderKey() {
+        return setOrderKey;
+    }
+
+    public void setSetOrderKey(String setOrderKey) {
+        this.setOrderKey = setOrderKey;
+    }
+
+    public Integer getServerFeedConfigVersion() {
+        return serverFeedConfigVersion;
+    }
+
+    public void setServerFeedConfigVersion(Integer serverFeedConfigVersion) {
+        this.serverFeedConfigVersion = serverFeedConfigVersion;
     }
 }
