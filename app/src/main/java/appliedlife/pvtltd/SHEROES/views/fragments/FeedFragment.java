@@ -99,6 +99,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
@@ -204,7 +205,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
                 isHomeFeed = getArguments().getBoolean(IS_HOME_FEED, false);
                 mFeedPresenter.setIsHomeFeed(isHomeFeed);
-
+                if (isHomeFeed) {
+                    mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+                }
                 mScreenProperties = new EventProperty.Builder()
                         .sourceCollectionName(screenName)
                         .sourceUrl(dataUrl)
@@ -243,7 +246,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
             }
         });
-        mSwipeRefresh.setColorSchemeResources(R.color.accent);
+        mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
         mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
