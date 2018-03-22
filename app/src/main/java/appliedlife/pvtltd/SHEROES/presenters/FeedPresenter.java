@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -181,7 +182,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
                 return;
             }
-            mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl).subscribe(new DisposableObserver<FeedResponsePojo>() {
+            mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl)
+                    .compose(this.<FeedResponsePojo>bindToLifecycle())
+                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
                 @Override
                 public void onComplete() {
                     getMvpView().stopProgressBar();
@@ -215,6 +218,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 getMvpView().setFeedEnded(false);
                                 List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
                                 getMvpView().showFeedList(feedDetails);
+                                getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
                                 break;
                             case LOAD_MORE_REQUEST:
                                 // append in case of load more

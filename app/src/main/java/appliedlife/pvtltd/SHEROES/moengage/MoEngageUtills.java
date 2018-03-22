@@ -1,10 +1,14 @@
 package appliedlife.pvtltd.SHEROES.moengage;
 
 import android.content.Context;
+import android.util.Base64;
 
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.core.MoEDispatcher;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +58,19 @@ public class MoEngageUtills {
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getLastName())) {
                 mMoEHelper.setLastName(loginResponse.getUserSummary().getLastName());
             }
+
+            try {
+                String userId = String.valueOf(loginResponse.getUserSummary().getUserId());
+                byte[] data = new byte[0];
+
+                data = userId.getBytes(AppConstants.UTF_8);
+                String encodedUserId = Base64.encodeToString(data, Base64.DEFAULT);
+
+                mMoEHelper.setUserAttribute("encoded_user_id", encodedUserId);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getEmailId())) {
                 mMoEHelper.setEmail(loginResponse.getUserSummary().getEmailId());
             }

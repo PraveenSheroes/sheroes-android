@@ -16,6 +16,8 @@ public enum SuperProperty {
     DATE_OF_BIRTH("Date Of Birth"),
     CREATED_DATE("Created Date"),
     MOBILE_NUMBER("Mobile Number"),
+    FEED_CONFIG_VERSION("Feed Config Version"),
+    SET_ORDER_KEY("Set Order Key"),
     USER_NAME("User Name"),
     EMAIL_ID("Email Id"),
     CONFIG_TYPE("Config Type"),
@@ -80,6 +82,16 @@ public enum SuperProperty {
 
         public Builder mobileNumber(String value){
             put(MOBILE_NUMBER, value);
+            return this;
+        }
+
+        public Builder setOrderKey(String value){
+            put(SET_ORDER_KEY, value);
+            return this;
+        }
+
+        public Builder feedConfigVersion(String value){
+            put(FEED_CONFIG_VERSION, value);
             return this;
         }
 

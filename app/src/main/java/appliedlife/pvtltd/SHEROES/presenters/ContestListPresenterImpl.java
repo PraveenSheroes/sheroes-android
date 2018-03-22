@@ -84,12 +84,15 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                             contest.hasWinner = challengeSolrObj.isChallengeHasWinner();
                             contest.isWinner = challengeSolrObj.isChallengeIsWinner();
                             contest.authorName = challengeSolrObj.getAuthorName();
+                            contest.authorId = challengeSolrObj.getAuthorId();
+                            contest.isAuthorMentor = challengeSolrObj.isAuthorMentor();
                             contest.authorType = challengeSolrObj.getChallengeAuthorTypeS();
                             contest.authorImageUrl = challengeSolrObj.getAuthorImageUrl();
                             contest.submissionCount = challengeSolrObj.getNoOfChallengeAccepted();
                             contest.hasMyPost = challengeSolrObj.isChallengeAccepted();
                             contest.tag = challengeSolrObj.getChallengeAcceptPostText();
                             contest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
+                            contest.createdBy = challengeSolrObj.getCreatedBy();
                             if(StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls()))
                             {
                                 contest.shortUrl  = challengeSolrObj.getPostShortBranchUrls();

@@ -221,6 +221,8 @@ public class AppConstants {
     public static final String NAV_PREF= "NAV_PREF";
     public static final String CONTACT_SYNC_TIME_PREF= "CONTACT_SYNC";
     public static final int MIN_QUESTION_SEARCH_LENGTH=3;
+    public static final String IS_FROM_ADVERTISEMENT = "IS_FROM_ADVERTISEMENT";
+    public static final String ADS_DEEP_LINK_URL = "ADS_DEEP_LINK";
 
 
     /*Master data keys for pages*/
@@ -404,5 +406,8 @@ public class AppConstants {
 
 
     public static final double MAX_IMAGE_RATIO = 1.5;
+
+    public static final String SET_ORDER_KEY = "set order key";
+    public static final String FEED_CONFIG_VERSION = "feed config version";
 
 }

@@ -28,6 +28,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -49,9 +50,11 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Ujjwal on 01/05/17.
@@ -156,6 +159,13 @@ public class ContestInfoFragment extends BaseFragment {
         }
         HashMap<String, Object> properties = builder.build();
         return properties;
+    }
+
+    @OnClick({R.id.author_pic, R.id.author})
+    public void authorNameClicked() {
+        if(mContest.createdBy!= -1) {
+            ProfileActivity.navigateTo(getActivity(), mContest.createdBy, mContest.isAuthorMentor, SCREEN_LABEL, null,  AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        }
     }
 
     @Override
@@ -319,9 +329,9 @@ public class ContestInfoFragment extends BaseFragment {
                             .load(imageKitUrl)
                             .into(imageView);
                 }
+            } else {
+                imageView.setImageResource(R.drawable.challenge_placeholder);
             }
-        } else {
-            imageView.setImageResource(R.drawable.challenge_placeholder);
         }
     }
 

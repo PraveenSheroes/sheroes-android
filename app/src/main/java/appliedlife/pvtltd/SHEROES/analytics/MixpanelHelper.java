@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.branch.referral.Branch;
 
@@ -79,12 +80,17 @@ public class MixpanelHelper {
             Crashlytics.getInstance().core.setUserEmail(userSummary.getEmailId());
             Crashlytics.getInstance().core.setUserName(userSummary.getFirstName() + " " + userSummary.getLastName());
 
+            String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
+            String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
+
             final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
                     .dateOfBirth(userSummary.getUserBO().getDob())
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
+                    .setOrderKey(setOrderKey)
+                    .feedConfigVersion(feedConfigVersion)
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
                     .configType(mConfiguration!=null&&mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
                     .configVersion(mConfiguration!=null&&mConfiguration.isSet()&& mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
@@ -215,6 +221,7 @@ public class MixpanelHelper {
                             .title(feedDetail.getNameOrTitle())
                             .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .positionInList(feedDetail.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
@@ -235,6 +242,7 @@ public class MixpanelHelper {
                             .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
                             .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()): "not defined")
                             .title(feedDetail.getNameOrTitle())
+                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
                             .build();
@@ -255,6 +263,7 @@ public class MixpanelHelper {
                             .communityCategory(communityDetails.getCommunityType())
                             .positionInCarousel(positionInCarousel)
                             .positionOfCarousel(positionOfCarousel)
+                            .streamType(CommonUtil.isNotEmpty(communityDetails.getStreamType()) ? communityDetails.getStreamType() : "")
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
@@ -271,6 +280,7 @@ public class MixpanelHelper {
                             .title(communityDetails.getNameOrTitle())
                             .communityCategory(communityDetails.getCommunityType())
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
+                            .streamType(CommonUtil.isNotEmpty(communityDetails.getStreamType()) ? communityDetails.getStreamType() : "")
                             .positionInList(communityDetails.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);

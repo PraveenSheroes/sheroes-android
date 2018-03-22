@@ -51,6 +51,7 @@ public enum EventProperty {
     POSITION_IN_CAROUSEL("Position In Carousel"),
     IS_CHECKED("Is Checked"),
     COLLECTION_NAME("Collection Name"),
+    STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
     POSITION_OF_CAROUSEL("Position Of Carousel");
 
@@ -278,6 +279,11 @@ public enum EventProperty {
 
         public Builder sourceCollectionName(String value){
             put(SOURCE_COLLECTION_NAME, value);
+            return this;
+        }
+
+        public Builder streamType(String value){
+            put(STREAM_TYPE, value);
             return this;
         }
 

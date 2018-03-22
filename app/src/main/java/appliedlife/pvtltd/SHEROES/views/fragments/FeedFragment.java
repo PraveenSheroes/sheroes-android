@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -59,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -1068,9 +1070,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onFeedLastCommentUserClicked(UserPostSolrObj userSolrObj) {
-        if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
+        if (userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
             List<Comment> lastComments = userSolrObj.getLastComments();
-            if (lastComments.size() > 0) {
+            if (StringUtil.isNotEmptyCollection(lastComments)) {
                 Comment comment = lastComments.get(0);
                 if (comment != null && !comment.isAnonymous()) {
                     ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -1137,22 +1139,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
         }
-        else if(baseResponse instanceof UserPostSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(StringUtil.isNotEmptyCollection(postDetails.getLastComments())) {
-                Comment comment = postDetails.getLastComments().get(0);
+        else if(baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+            Comment comment = (Comment) baseResponse;
                 if(!comment.isAnonymous()) {
                     openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
                 }
-            }
         }
         else if (baseResponse instanceof UserPostSolrObj && mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(getActivity(), postDetails.getCommunityId(), getScreenName(), null, 1);
         }else {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if(postDetails.getEntityOrParticipantTypeId() != 15) {
-                onChampionProfileClicked(postDetails, mValue);
+            if(baseResponse instanceof UserPostSolrObj) {
+                UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+                if (postDetails.getEntityOrParticipantTypeId() != 15) {
+                    onChampionProfileClicked(postDetails, mValue);
+                }
             }
         }
     }
@@ -1211,6 +1212,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void hideGifLoader() {
         gifLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
+        String setOrderKey = feedResponsePojo.getSetOrderKey();
+        String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion()!=null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        SharedPreferences.Editor editor= prefs.edit();
+        editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
+        editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
+        editor.apply();
+        AnalyticsManager.initializeMixpanel(getActivity(), false);
     }
 
     public int findPositionById(long id) { //TODO - move to presenter

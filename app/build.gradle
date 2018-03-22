@@ -54,6 +54,7 @@ android {
         targetSdkVersion 27
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        manifestPlaceholders = [branchTestMode: false]
     }
 
     signingConfigs {
@@ -72,10 +73,10 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            //buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
-            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
            // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
           //  buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
            
@@ -87,6 +88,7 @@ android {
             signingConfig signingConfigs.debug
             ext.crashlyticsApiSecret = "c8e9927007c169ba7b17261a41984f3d63d39fe5cda3e9c42234990e04cec4ae"
             ext.crashlyticsApiKey = "6f53a2cf9e2249594beb5d245e04eb8094f6a56e"
+            manifestPlaceholders = [branchTestMode: true]
 
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""

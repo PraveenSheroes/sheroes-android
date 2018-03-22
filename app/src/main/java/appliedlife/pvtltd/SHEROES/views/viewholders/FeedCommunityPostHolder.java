@@ -1411,9 +1411,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     //Last comment user name or user pic
     @OnClick({R.id.iv_feed_community_post_user_pic, R.id.tv_feed_community_post_user_name})
     public void onLastCommentUserClick() { //Open profile from feed
-        if(!mUserPostObj.isAnonymous()) {
-            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
-        }
+            List<Comment> lastCommentList = mUserPostObj.getLastComments();
+            if (StringUtil.isNotEmptyCollection(lastCommentList)) {
+                mItemPosition = lastCommentList.size() - 1;
+                Comment lastComment = lastCommentList.get(mItemPosition);
+                if (!lastComment.isAnonymous()) {
+                    viewInterface.navigateToProfileView(lastComment, AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL);
+                }
+            }
     }
 
     @OnClick(R.id.comment_like)

@@ -68,6 +68,9 @@ public class Contest{
     public int totalViews;
     public Date endAt;
 
+    public long authorId;
+    public boolean isAuthorMentor;
+
     @SerializedName("challenge_has_winner_b")
     public boolean hasWinner = true;
 
@@ -87,6 +90,8 @@ public class Contest{
     public String mWinnerAddress;
     public List<FeedDetail> submissions;
     public String thumbImage;
+
+    public long createdBy = -1;
 
     //public int totalViews;
     public ContestStatus getContestStatus() {

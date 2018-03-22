@@ -7,6 +7,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 
@@ -36,4 +37,6 @@ public interface IFeedView extends BaseMvpView {
     void showGifLoader();
 
     void hideGifLoader();
+
+    void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo);
 }

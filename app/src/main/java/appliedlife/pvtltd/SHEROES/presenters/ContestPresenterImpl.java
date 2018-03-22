@@ -88,6 +88,7 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                     mContest.hasMyPost = challengeSolrObj.isChallengeAccepted();
                     mContest.tag = challengeSolrObj.getChallengeAcceptPostText();
                     mContest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
+                    mContest.createdBy = challengeSolrObj.getCreatedBy();
                     if (StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls())) {
                         mContest.shortUrl = challengeSolrObj.getPostShortBranchUrls();
                     } else {
