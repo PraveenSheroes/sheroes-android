@@ -144,6 +144,7 @@ public class LoginActivity extends BaseActivity {
     public void onBackPressed() {
         userPreference.delete();
         Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.putExtra(AppConstants.HIDE_SPLASH_THEME, true);
         startActivity(intent);
         finish();
     }
