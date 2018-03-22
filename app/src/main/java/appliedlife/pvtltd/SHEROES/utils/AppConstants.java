@@ -409,5 +409,6 @@ public class AppConstants {
 
     public static final String SET_ORDER_KEY = "set order key";
     public static final String FEED_CONFIG_VERSION = "feed config version";
+    public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
 
 }

@@ -153,6 +153,7 @@ public class AppInstallationHelper {
         mAppInstallationLocal.utmCampaign = CommonUtil.getPref(AppConstants.UTM_CAMPAIGN);
         mAppInstallationLocal.utmContent = CommonUtil.getPref(AppConstants.UTM_CONTENT);
         mAppInstallationLocal.utmTerm = CommonUtil.getPref(AppConstants.UTM_TERM);
+        mAppInstallationLocal.branchInstallUrl = CommonUtil.getPref(AppConstants.REFERRER_BRANCH_LINK_URL);
     }
 
     public String getDeviceId() {

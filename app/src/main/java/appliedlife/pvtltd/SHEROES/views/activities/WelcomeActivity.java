@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -260,8 +261,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                 String deepLink;
                                 try {
                                     deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
-
                                     if (StringUtil.isNotNullOrEmptyString(deepLink)) {
+                                        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+                                        SharedPreferences.Editor editor= prefs.edit();
+                                        editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, deepLink);
+                                        editor.apply();
+                                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(WelcomeActivity.this);
+                                        appInstallationHelper.setupAndSaveInstallation(false);
                                         if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
                                             deepLinkUrl = deepLink;
 
@@ -284,6 +290,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             }
                         }
                         setUpView();
+
                     }
                 });
             }
