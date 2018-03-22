@@ -192,6 +192,8 @@ public class AppInstallationHelper {
     }
 
     private void saveInstallationAsync(final CommonUtil.Callback callback) {
+        //Save to shared prefs
+        mAppInstallationPref.set(mAppInstallationLocal);
         appInstallationModel.getAppInstallation(mAppInstallationLocal)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -211,8 +213,6 @@ public class AppInstallationHelper {
                     @Override
                     public void onNext(AppInstallation appInstallation) {
                         if (appInstallation != null) {
-                            //Save to shared prefs
-                            mAppInstallationPref.set(appInstallation);
                             callback.callBack(true);
                         }
                     }
