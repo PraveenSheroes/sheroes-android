@@ -244,6 +244,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
                     mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
+                    if(CommonUtil.isNotEmpty(getMvpView().getStreamType())){
+                        mUserPostObj.setStreamType(getMvpView().getStreamType());
+                    }
                     mBaseResponseList.add(mUserPostObj);
                     getMvpView().addData(0, mUserPostObj);
                     headerCount++;
@@ -756,6 +759,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public void updateUserPost(UserPostSolrObj userPostSolrObj) {
         mUserPostObj = userPostSolrObj;
+        if(CommonUtil.isNotEmpty(getMvpView().getStreamType())){
+            mUserPostObj.setStreamType(getMvpView().getStreamType());
+        }
         mBaseResponseList.set(0, userPostSolrObj);
         getMvpView().setData(0, userPostSolrObj);
     }

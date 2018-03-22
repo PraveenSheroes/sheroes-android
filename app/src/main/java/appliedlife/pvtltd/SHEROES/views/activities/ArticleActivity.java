@@ -246,6 +246,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     private   View articleToolTip;
     private PopupWindow popupWindowArticleTooTip;
+    private String streamType;
     //endregion
 
     //region Activity methods
@@ -269,6 +270,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 updateTitleCommentCountView();
                 mImageWidth = mArticle.featureImageWidth;
                 mImageHeight = mArticle.featureImageHeight;
+                streamType = mArticle.streamType;
             }
         } else {
             if (getIntent().getExtras() != null) {
@@ -507,7 +509,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         final EventProperty.Builder builder = new EventProperty.Builder();
         if (mArticle != null) {
             builder.title(mArticle.title)
-                    .id(Integer.toString(mArticle.remote_id));
+                    .id(Integer.toString(mArticle.remote_id))
+                    .streamType(mArticle.streamType);
 
         }
 
@@ -645,6 +648,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public void showArticle(final Article article, boolean imageLoaded) {
+        streamType = article.streamType;
         mImageHeight = article.featureImageHeight;
         mImageWidth = article.featureImageWidth;
 
@@ -892,6 +896,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
+    public String getStreamType() {
+        return streamType;
+    }
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
@@ -948,6 +957,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         article.author.shortDescription = articleSolrObj.getAuthorShortDescription();
         article.author.thumbUrl = articleSolrObj.getAuthorImageUrl();
         article.isBookmarked = articleSolrObj.isBookmarked();
+        article.streamType = articleSolrObj.getStreamType();
         article.isLiked = articleSolrObj.getLastReactionValue() > 0;
         article.thumbImageWidth = articleSolrObj.getThumbImageWidth();
         article.thumbImageHeight = articleSolrObj.getThumbImageHeight();

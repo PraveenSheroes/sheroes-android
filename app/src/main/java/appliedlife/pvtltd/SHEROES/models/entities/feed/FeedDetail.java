@@ -73,7 +73,6 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     @SerializedName(value = "p_crdt")
     private String createdDate;
 
-
     @SerializedName(value = "posting_date_dt")
     private String postingDate;
 
@@ -208,6 +207,9 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     @SerializedName(value = "short_branch_url_s")
     private String postShortBranchUrls;
+
+    @SerializedName(value = "solr_ignore_stream_type")
+    private String streamType;
 
     //These fields are not from API response
     private int itemPosition;
@@ -796,5 +798,13 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     public void setPostShortBranchUrls(String postShortBranchUrls) {
         this.postShortBranchUrls = postShortBranchUrls;
+    }
+
+    public String getStreamType() {
+        return streamType;
+    }
+
+    public void setStreamType(String streamType) {
+        this.streamType = streamType;
     }
 }

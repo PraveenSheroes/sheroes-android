@@ -98,6 +98,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
+    private String streamType;
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -173,6 +174,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
             mPositionInFeed = mUserPostObj.getItemPosition();
+            streamType = mUserPostObj.getStreamType();
             boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
             if (showKeyboard) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -375,6 +377,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void showListOfParticipate(List<UserTaggingPerson> participantLists) {
         customSocialUserAdapter.addAll(participantLists);
         customSocialUserAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public String getStreamType() {
+        return streamType;
     }
 
     @Override
@@ -726,8 +733,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (userPostSolrObj != null) {
             builder.title(userPostSolrObj.getNameOrTitle())
                     .communityId(Long.toString(userPostSolrObj.getCommunityId()))
-                    .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()));
-
+                    .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                    .streamType(userPostSolrObj.getStreamType());
         }
         HashMap<String, Object> properties = builder.build();
         return properties;
@@ -824,6 +831,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
+                        .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
         mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
@@ -837,6 +845,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
+                        .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
         mInputText.setText(comment.getComment());

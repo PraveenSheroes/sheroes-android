@@ -38,6 +38,7 @@ public class Article extends Post {
     public int featureImageHeight;
     public long creatorId;
     public boolean isCreatorMentor;
+    public String streamType;
     public ArrayList<Comment> comments = new ArrayList<>();
     public long entityId;
 

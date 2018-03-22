@@ -182,7 +182,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
                 return;
             }
-            mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl).subscribe(new DisposableObserver<FeedResponsePojo>() {
+            mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl)
+                    .compose(this.<FeedResponsePojo>bindToLifecycle())
+                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
                 @Override
                 public void onComplete() {
                     getMvpView().stopProgressBar();

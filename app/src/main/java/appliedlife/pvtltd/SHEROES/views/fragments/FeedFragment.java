@@ -1221,20 +1221,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
-        boolean updateMixpanel = false;
         String setOrderKey = feedResponsePojo.getSetOrderKey();
         String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion()!=null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        if (!CommonUtil.isNotEmpty(CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION)) || !CommonUtil.isNotEmpty(CommonUtil.getPref(AppConstants.SET_ORDER_KEY))) {
-            updateMixpanel = true;
-        }
         SharedPreferences.Editor editor= prefs.edit();
         editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
         editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
-
-        if (updateMixpanel) {
-            AnalyticsManager.initializeMixpanel(getActivity(), false);
-        }
+        editor.apply();
+        AnalyticsManager.initializeMixpanel(getActivity(), false);
     }
 
     public int findPositionById(long id) { //TODO - move to presenter

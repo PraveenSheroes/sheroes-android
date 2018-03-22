@@ -221,6 +221,7 @@ public class MixpanelHelper {
                             .title(feedDetail.getNameOrTitle())
                             .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .positionInList(feedDetail.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
@@ -241,6 +242,7 @@ public class MixpanelHelper {
                             .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
                             .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()): "not defined")
                             .title(feedDetail.getNameOrTitle())
+                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .positionInList(feedDetail.getItemPosition())
                             .build();
@@ -261,6 +263,7 @@ public class MixpanelHelper {
                             .communityCategory(communityDetails.getCommunityType())
                             .positionInCarousel(positionInCarousel)
                             .positionOfCarousel(positionOfCarousel)
+                            .streamType(CommonUtil.isNotEmpty(communityDetails.getStreamType()) ? communityDetails.getStreamType() : "")
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
@@ -277,6 +280,7 @@ public class MixpanelHelper {
                             .title(communityDetails.getNameOrTitle())
                             .communityCategory(communityDetails.getCommunityType())
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
+                            .streamType(CommonUtil.isNotEmpty(communityDetails.getStreamType()) ? communityDetails.getStreamType() : "")
                             .positionInList(communityDetails.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
