@@ -55,6 +55,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.crashlytics.android.Crashlytics;
+import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
@@ -73,6 +74,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -136,6 +138,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Inject
     ArticlePresenterImpl mArticlePresenter;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     @Inject
     AppUtils mAppUtils;
@@ -751,7 +756,17 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
             long createdDate = mDateUtil.getTimeInMillis(article.createdAt, AppConstants.DATE_FORMAT);
             String dateInWord  = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            mLikesViewsComments.setText(dateInWord+ " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews);
+            String likesViews = "";
+            if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                if (mConfiguration.get().configData.showArticleViews) {
+                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews;
+                } else {
+                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.getReadingTime();
+                }
+            } else {
+                likesViews = dateInWord + " ago " + "\u2022" + " " + article.getReadingTime();
+            }
+            mLikesViewsComments.setText(likesViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
                 String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
                 Glide.with(this)
