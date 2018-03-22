@@ -342,10 +342,14 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 } else {
                     Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunityDetailActivity.class);
                     String tabKey = "";
+                    boolean isFromAdvertisement = false;
                     if (sourceIntent != null && sourceIntent.getExtras() != null) {
                         tabKey = sourceIntent.getStringExtra(CommunityDetailActivity.TAB_KEY);
+                        isFromAdvertisement = sourceIntent.getBooleanExtra(AppConstants.IS_FROM_ADVERTISEMENT, false);
                     }
+                    into.putExtra(AppConstants.IS_FROM_ADVERTISEMENT, isFromAdvertisement);
                     into.putExtra(CommunityDetailActivity.TAB_KEY, tabKey);
+
                     int indexOfSecondBackSlace = AppUtils.findNthIndexOf(communityDetail, AppConstants.BACK_SLASH, 2);
                     String communityId = communityDetail.substring(indexOfSecondBackSlace + 1, communityDetail.length());
                     byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);

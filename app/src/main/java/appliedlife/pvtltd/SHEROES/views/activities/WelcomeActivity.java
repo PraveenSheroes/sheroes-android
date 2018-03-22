@@ -121,6 +121,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     @Inject
     LoginPresenter mLoginPresenter;
+
     @Bind(R.id.welcome_view_pager)
     ViewPager mViewPager;
     private SheroesWelcomeViewPagerAdapter mViewPagerAdapter;
@@ -239,17 +240,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             isFirstTimeUser = false;
             DrawerViewHolder.selectedOptionName = null;
             openHomeScreen();
-        } else {
-            //Get Branch Details for First Install
+        } else { //Get Branch Details for First Install
             final Branch branch = Branch.getInstance();
             branch.resetUserSession();
             branch.initSession(new Branch.BranchReferralInitListener() {
                 @Override
                 public void onInitFinished(JSONObject sessionParams, BranchError error) {
                     isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
-                    //JSONObject latestSessionParams = branch.getLatestReferringParams();
-                    //JSONObject firstSessionParams = branch.getFirstReferringParams();
-
                     if(isBranchFirstSession) {
                         if (sessionParams.has(BRANCH_DEEP_LINK)) {
                             String deepLink;
@@ -259,6 +256,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                 if (StringUtil.isNotNullOrEmptyString(deepLink)) {
                                     if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
                                         deepLinkUrl = deepLink;
+
+                                        if( mInstallUpdatePreference !=null) {
+                                            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                            installUpdateForMoEngage.setOnBoardingSkipped(true);
+                                            mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                        }
                                     }
                                 }
 
@@ -273,28 +276,27 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             }
                         }
                     }
+
+                    setContentView(R.layout.welcome_activity);
+                    ButterKnife.bind(WelcomeActivity.this);
+                    isFirstTimeUser = true;
+
+                    initHomeViewPagerAndTabs();
+
+                    loginSetUp();
+                    if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                        showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                        return;
+                    }
+
+                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+
+                    if (isFirstTimeUser) {
+                        AnalyticsManager.trackScreenView(getScreenName());
+                    }
                 }});
         }
-
-        setContentView(R.layout.welcome_activity);
-        ButterKnife.bind(WelcomeActivity.this);
-        isFirstTimeUser = true;
-
-        initHomeViewPagerAndTabs();
-
-        loginSetUp();
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-            return;
-        }
-
-        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
-
-        if (isFirstTimeUser) {
-            AnalyticsManager.trackScreenView(getScreenName());
-        }
         mLoginPresenter.getMasterDataToPresenter();
-
     }
 
     private void loginSetUp() {
@@ -379,7 +381,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             Intent intent = new Intent(WelcomeActivity.this, SheroesDeepLinkingActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(CommunityDetailActivity.TAB_KEY, "");
-            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
+            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
             bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
             if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
                 bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);

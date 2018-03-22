@@ -39,6 +39,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -710,7 +711,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
         //Auto join Community if its coming through ads for new users
         boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
-        if (!isOwnerOrMember) {
+        if (isFromAds && !isOwnerOrMember) {
             onJoinClicked();
         }
 

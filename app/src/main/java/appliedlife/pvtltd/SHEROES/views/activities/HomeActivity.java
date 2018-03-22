@@ -497,15 +497,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         ButterKnife.bind(this);
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && !mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
-            Branch branch = Branch.getInstance();
-            branch.resetUserSession();
-            branch.initSession(new Branch.BranchReferralInitListener() {
-                                   @Override
-                                   public void onInitFinished(JSONObject referringParams, BranchError error) {
-                                       deepLinkingRedirection();
+            if (!mInstallUpdatePreference.get().isOnBoardingSkipped()) {
+                Branch branch = Branch.getInstance();
+                branch.resetUserSession();
+                branch.initSession(new Branch.BranchReferralInitListener() {
+                                       @Override
+                                       public void onInitFinished(JSONObject referringParams, BranchError error) {
+                                           deepLinkingRedirection();
+                                       }
                                    }
-                               }
-                    , this.getIntent().getData(), this);
+                        , this.getIntent().getData(), this);
+            }
         }
 
         if (shouldShowSnowFlake()) {

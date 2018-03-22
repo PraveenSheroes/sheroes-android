@@ -97,7 +97,7 @@ public class LoginActivity extends BaseActivity {
                 Uri url = Uri.parse(deepLinkUrl);
                 Intent intent = new Intent(LoginActivity.this, SheroesDeepLinkingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 0);
+                bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
                 bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
                 if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
                     bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);

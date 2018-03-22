@@ -788,7 +788,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @OnClick(R.id.iv_mentor_full_view_icon)
     public void onImageEditClicked() {
-        CameraBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+        if(isOwnProfile) {
+            CameraBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+        }
     }
 
     @OnClick(R.id.tv_mentor_dashboard_follow)
