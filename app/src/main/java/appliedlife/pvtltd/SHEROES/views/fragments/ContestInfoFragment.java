@@ -163,9 +163,9 @@ public class ContestInfoFragment extends BaseFragment {
 
     @OnClick({R.id.author_pic, R.id.author})
     public void authorNameClicked() {
-        if(mContest.createdBy!= -1) {
-            ProfileActivity.navigateTo(getActivity(), mContest.createdBy, mContest.isAuthorMentor, SCREEN_LABEL, null,  AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-        }
+       // if(mContest.createdBy!= -1) {
+            //ProfileActivity.navigateTo(getActivity(), mContest.createdBy, mContest.isAuthorMentor, SCREEN_LABEL, null,  AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+       // }
     }
 
     @Override
