@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.branch.referral.Branch;
 
@@ -79,12 +80,17 @@ public class MixpanelHelper {
             Crashlytics.getInstance().core.setUserEmail(userSummary.getEmailId());
             Crashlytics.getInstance().core.setUserName(userSummary.getFirstName() + " " + userSummary.getLastName());
 
+            String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
+            String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
+
             final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
                     .dateOfBirth(userSummary.getUserBO().getDob())
                     .createdDate(userSummary.getUserBO().getCrdt())
                     .mobileNumber(userSummary.getMobile())
+                    .setOrderKey(setOrderKey)
+                    .feedConfigVersion(feedConfigVersion)
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
                     .configType(mConfiguration!=null&&mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
                     .configVersion(mConfiguration!=null&&mConfiguration.isSet()&& mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
