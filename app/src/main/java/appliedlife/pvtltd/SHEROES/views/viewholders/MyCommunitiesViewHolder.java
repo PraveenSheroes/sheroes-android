@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -45,6 +46,9 @@ public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.community_name)
     TextView mCommunityName;
+
+    @BindDimen(R.dimen.dp_size_50)
+    int iconSize;
     //endregion
 
     //region constructor
@@ -63,7 +67,7 @@ public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
         mFeedDetail = feedDetail;
 
         if (CommonUtil.isNotEmpty(mFeedDetail.getThumbnailImageUrl())) {
-           String imageKitUrl = mFeedDetail.getThumbnailImageUrl();
+           String imageKitUrl = CommonUtil.getThumborUri(mFeedDetail.getThumbnailImageUrl(), iconSize, iconSize);
             if (CommonUtil.isNotEmpty(imageKitUrl)) {
                 Glide.with(mContext)
                         .load(imageKitUrl)

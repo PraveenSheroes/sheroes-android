@@ -466,9 +466,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     .error(R.color.photo_placeholder)
                     .priority(Priority.HIGH);
 
+            int imageWidth = CommonUtil.getWindowWidth(context);
+            int imageHeight = CommonUtil.getWindowWidth(context)/2;
+            String thumborFeatureImageUrl = CommonUtil.getThumborUri(backgrndImageUrl, imageWidth, imageHeight);
             Glide.with(mContext)
                     .asBitmap()
-                    .load(backgrndImageUrl)
+                    .load(thumborFeatureImageUrl)
                     .apply(requestOptions)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override

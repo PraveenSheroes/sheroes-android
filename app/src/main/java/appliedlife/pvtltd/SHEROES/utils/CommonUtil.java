@@ -825,14 +825,6 @@ public class CommonUtil {
         return uri;
     }
 
-    public static RequestBuilder<Drawable> getThumbnailRequest(Context context, String image){
-        RequestBuilder<Drawable> thumbnailRequest = Glide
-                .with(context)
-                .load(CommonUtil.getThumborUri(image, 48));
-        return thumbnailRequest;
-
-    }
-
     public static String getYoutubeURL(String videoId) {
         return "https://www.youtube.com/watch?v=" + videoId;
     }

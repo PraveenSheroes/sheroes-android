@@ -248,10 +248,13 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                     .error(R.color.photo_placeholder)
                     .priority(Priority.HIGH);
 
+            int imageWidth = CommonUtil.getWindowWidth(context);
+            int imageHeight = CommonUtil.getWindowWidth(context)/2;
+            String thumborFeatureImageUrl = CommonUtil.getThumborUri(backgrndImageUrl, imageWidth, imageHeight);
             Glide.with(mContext)
                     .asBitmap()
                     .apply(options)
-                    .load(backgrndImageUrl)
+                    .load(thumborFeatureImageUrl)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {

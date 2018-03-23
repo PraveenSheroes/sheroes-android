@@ -612,7 +612,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             }
             Glide.with(context)
                     .load(firstThumborUrl)
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
@@ -627,7 +626,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             Glide.with(context)
                     .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
@@ -636,7 +634,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             Glide.with(context)
                     .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         userPostImages.addView(child);
