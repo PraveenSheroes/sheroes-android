@@ -25,6 +25,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -83,6 +84,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -386,7 +388,7 @@ public class CommonUtil {
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge")) {
                 return true;
             }
         }
@@ -821,14 +823,6 @@ public class CommonUtil {
             Crashlytics.getInstance().core.logException(e);
         }
         return uri;
-    }
-
-    public static RequestBuilder<Drawable> getThumbnailRequest(Context context, String image){
-        RequestBuilder<Drawable> thumbnailRequest = Glide
-                .with(context)
-                .load(CommonUtil.getThumborUri(image, 48));
-        return thumbnailRequest;
-
     }
 
     public static String getYoutubeURL(String videoId) {

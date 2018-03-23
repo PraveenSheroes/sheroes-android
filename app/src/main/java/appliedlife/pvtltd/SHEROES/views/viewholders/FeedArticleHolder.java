@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.ArticleTextView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -124,6 +125,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleLoginUserName;
     @Bind(R.id.ripple_feed_article_comment)
     RippleView rippleView;
+    @BindDimen(R.dimen.dp_size_40)
+    int profileSize;
+
+    @BindDimen(R.dimen.dp_size_30)
+    int profileSizeSmaller;
     BaseHolderInterface viewInterface;
     ArticleSolrObj articleObj;
     private Context mContext;
@@ -221,7 +227,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
         }
-        mViewMoreDescription = articleObj .getShortDescription();
+        mViewMoreDescription = articleObj.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -356,6 +362,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
+                    String authorThumborUrl = CommonUtil.getThumborUri(lastComment.getParticipantImageUrl(), profileSizeSmaller, profileSizeSmaller);
                     ivFeedArticleUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedArticleUserName.setText(lastComment.getParticipantName());
                     tvFeedArticleUserCommentPost.setText(lastComment.getComment());
@@ -410,10 +417,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         String feedCircleIconUrl = articleObj .getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivFeedArticleCircleIcon.setCircularImage(true);
-            ivFeedArticleCircleIcon.bindImage(feedCircleIconUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(feedCircleIconUrl, profileSize, profileSize);
+            ivFeedArticleCircleIcon.bindImage(authorThumborUrl);
         }
         ivFeedArticleLoginUserPic.setCircularImage(true);
-        ivFeedArticleLoginUserPic.bindImage(mPhotoUrl);
+        String authorThumborUrl = CommonUtil.getThumborUri(mPhotoUrl, profileSize, profileSize);
+        ivFeedArticleLoginUserPic.bindImage(authorThumborUrl);
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             tvFeedArticleLoginUserName.setText(loggedInUser);
         }
@@ -457,9 +466,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     .error(R.color.photo_placeholder)
                     .priority(Priority.HIGH);
 
+            int imageWidth = CommonUtil.getWindowWidth(context);
+            int imageHeight = CommonUtil.getWindowWidth(context)/2;
+            String thumborFeatureImageUrl = CommonUtil.getThumborUri(backgrndImageUrl, imageWidth, imageHeight);
             Glide.with(mContext)
                     .asBitmap()
-                    .load(backgrndImageUrl)
+                    .load(thumborFeatureImageUrl)
                     .apply(requestOptions)
                     .into(new SimpleTarget<Bitmap>() {
                         @Override

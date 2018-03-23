@@ -64,8 +64,11 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
+import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
@@ -585,6 +588,16 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     public void startActivity(Intent intent) {
         boolean handled = false;
         if (TextUtils.equals(intent.getAction(), Intent.ACTION_VIEW)) {
+            if (CommonUtil.isSheoresAppLink(Uri.parse(intent.getDataString()))) {
+                intent.setClass(getActivity(), SheroesDeepLinkingActivity.class);
+                super.startActivity(intent);
+                return;
+            }
+            if (CommonUtil.isBranchLink(Uri.parse(intent.getDataString()))) {
+                intent.setClass(getActivity(), BranchDeepLink.class);
+                super.startActivityForResult(intent, BaseActivity.BRANCH_REQUEST_CODE);
+                return;
+            }
             if (AppUtils.matchesWebsiteURLPattern(intent.getDataString())) {
                 Uri url = Uri.parse(intent.getDataString());
                 AppUtils.openChromeTab(getActivity(), url);

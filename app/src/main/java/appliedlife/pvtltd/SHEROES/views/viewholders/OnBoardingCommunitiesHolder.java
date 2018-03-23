@@ -16,11 +16,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -42,6 +44,9 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
     @Bind(R.id.iv_boarding_circle_icon)
     CircleImageView ivBoardingCircleIcon;
 
+    @BindDimen(R.dimen.dp_size_66)
+    int authorProfilePicSize;
+
     public OnBoardingCommunitiesHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -58,7 +63,8 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
             ivBoardingCircleIcon.setCircularImage(true);
             ivBoardingCircleIcon.setPlaceHolderId(R.drawable.ic_community_selected_icon);
             ivBoardingCircleIcon.setErrorPlaceHolderId(R.drawable.ic_community_selected_icon);
-            ivBoardingCircleIcon.bindImage(communityFeedObj.getThumbnailImageUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(communityFeedObj.getThumbnailImageUrl(), authorProfilePicSize, authorProfilePicSize);
+            ivBoardingCircleIcon.bindImage(authorThumborUrl);
         }
 
         if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getNameOrTitle())) {

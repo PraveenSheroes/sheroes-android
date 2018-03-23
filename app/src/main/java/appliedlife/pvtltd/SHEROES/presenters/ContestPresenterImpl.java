@@ -44,7 +44,7 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
         this.sheroesAppServiceApi = sheroesAppServiceApi;
     }
 
-    public void fetchContest(FeedRequestPojo feedRequestPojo) {
+    public void fetchContest(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
@@ -68,7 +68,11 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-                getMvpView().stopProgressBar();
+                if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)){
+                    getMvpView().showError("", null);
+                    getMvpView().stopProgressBar();
+                    return;
+                }
                 // LogUtils.info(TAG, "********response***********");
                 FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
                 ChallengeSolrObj challengeSolrObj = (ChallengeSolrObj) feedDetail;

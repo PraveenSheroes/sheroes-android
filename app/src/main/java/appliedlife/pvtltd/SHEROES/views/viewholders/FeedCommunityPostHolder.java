@@ -64,6 +64,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -204,6 +205,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvCompanyNameCommPost;
     @Bind(R.id.line_for_organsiation_text)
     View orgCommPostSeparateLine;
+
+    @BindDimen(R.dimen.dp_size_30)
+    int authorPicSize;
+
+    @BindDimen(R.dimen.dp_size_40)
+    int authorPicSizeFourty;
 
     BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
@@ -754,7 +761,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
-                    ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(lastComment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                    ivFeedCommunityPostUserPic.bindImage(authorThumborUrl);
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
                     tvFeedCommunityPostUserName.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -763,7 +771,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
-                    ivFeedCommunityPostUserPic.bindImage(lastComment.getParticipantImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(lastComment.getParticipantImageUrl(), authorPicSize, authorPicSize);
+                    ivFeedCommunityPostUserPic.bindImage(authorThumborUrl);
                     tvFeedCommunityPostUserName.setText(lastComment.getParticipantName());
                     tvFeedCommunityPostUserName.setTextColor(ContextCompat.getColor(mContext, R.color.feed_title));
                     tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -834,10 +843,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         String authorImageUrl = mUserPostObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivFeedCommunityPostCircleIcon.setCircularImage(true);
-            ivFeedCommunityPostCircleIcon.bindImage(authorImageUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(authorImageUrl, authorPicSizeFourty, authorPicSizeFourty);
+            ivFeedCommunityPostCircleIcon.bindImage(authorThumborUrl);
         }
         ivFeedCommunityPostLoginUserPic.setCircularImage(true);
-        ivFeedCommunityPostLoginUserPic.bindImage(mPhotoUrl); //todo - chk it here
+        String authorThumborUrl = CommonUtil.getThumborUri(mPhotoUrl, authorPicSizeFourty, authorPicSizeFourty);
+        ivFeedCommunityPostLoginUserPic.bindImage(authorThumborUrl); //todo - chk it here
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             tvFeedCommunityPostLoginUserName.setText(loggedInUser);
         }
@@ -912,7 +923,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
             Glide.with(context)
                     .load(firstThumborUrl)
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
@@ -927,7 +937,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             Glide.with(context)
                     .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
@@ -936,7 +945,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             Glide.with(context)
                     .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         liFeedCommunityUserPostImages.addView(child);

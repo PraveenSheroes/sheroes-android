@@ -22,12 +22,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -76,6 +78,9 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
     @Inject
     Preference<LoginResponse> mUserPreference;
 
+    @BindDimen(R.dimen.dp_size_64)
+    int authorProfilePic;
+
     public MentorCard(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -121,7 +126,8 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
     private void setAllData() {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getThumbnailImageUrl())) {
             ivFeedMentorCardCircleIcon.setCircularImage(true);
-            ivFeedMentorCardCircleIcon.bindImage(dataItem.getThumbnailImageUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(dataItem.getThumbnailImageUrl(), authorProfilePic, authorProfilePic);
+            ivFeedMentorCardCircleIcon.bindImage(authorThumborUrl);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
             tvFeedMentorCardTitle.setText(dataItem.getNameOrTitle());

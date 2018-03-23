@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
@@ -97,6 +98,9 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
         @Bind(R.id.subtitle_header_container)
         LinearLayout subTitleHeaderContainer;
 
+        @BindDimen(R.dimen.dp_size_65)
+        int authorProfileSize;
+
         // endregion
 
         FollowedUserListItemViewHolder(View itemView) {
@@ -136,7 +140,8 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if (profileCommunity.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
-                    mentorIcon.bindImage(profileCommunity.getThumbnailImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(profileCommunity.getThumbnailImageUrl(), authorProfileSize, authorProfileSize);
+                    mentorIcon.bindImage(authorThumborUrl);
                 }
 
                 if (profileCommunity.getNameOrTitle() != null) {

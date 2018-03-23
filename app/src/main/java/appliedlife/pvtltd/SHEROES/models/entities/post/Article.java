@@ -18,8 +18,8 @@ public class Article extends Post {
     public static final String ARTICLE_OBJ = "ARTICLE_OBJ";
     public static final String ARTICLE_ID = "ARTICLE_ID";
     public static final String URL_PATH_STRING = "articles";
-    private static final int MIN_READING_TIME = 1;
-    private static final int AVG_HUMAN_READING_SPEED = 275;
+    public static final int MIN_READING_TIME = 1;
+    public static final int AVG_HUMAN_READING_SPEED = 275;
     public long id;
     public int readingTime;
     public int commentsCount;

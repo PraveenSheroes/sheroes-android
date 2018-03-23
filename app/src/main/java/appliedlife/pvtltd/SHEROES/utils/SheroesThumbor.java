@@ -11,7 +11,11 @@ public class SheroesThumbor {
     public static Thumbor getInstance() {
         if (thumbor == null) {
             String thumborUrl = "https://t.sheroes.in";
-            thumbor = Thumbor.create(thumborUrl);
+            if (CommonUtil.isNotEmpty(CommonUtil.getPref(AppConstants.THUMBOR_KEY))) {
+                thumbor = Thumbor.create(thumborUrl, CommonUtil.getPref(AppConstants.THUMBOR_KEY));
+            } else {
+                thumbor = Thumbor.create(thumborUrl);
+            }
         }
         return thumbor;
     }

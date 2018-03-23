@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDia
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IEditProfileView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -172,6 +173,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Bind(R.id.pb_image_loader)
     ProgressBar imageLoader;
+
+    @BindDimen(R.dimen.dp_size_80)
+    int authorProfileSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -429,7 +433,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     public void setProfileNameData(String imageUrl) {
         if (null != imageUrl) {
             userImage.setCircularImage(true);
-            userImage.bindImage(imageUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, authorProfileSize, authorProfileSize);
+            userImage.bindImage(authorThumborUrl);
         }
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         setLocalImageSaveForChallenge(localImageSaveForChallenge);

@@ -759,12 +759,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             String likesViews = "";
             if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 if (mConfiguration.get().configData.showArticleViews) {
-                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.getReadingTime() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews;
+                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.readingTime + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews;
                 } else {
-                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.getReadingTime();
+                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.readingTime;
                 }
             } else {
-                likesViews = dateInWord + " ago " + "\u2022" + " " + article.getReadingTime();
+                likesViews = dateInWord + " ago " + "\u2022" + " " + article.readingTime;
             }
             mLikesViewsComments.setText(likesViews);
             if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {

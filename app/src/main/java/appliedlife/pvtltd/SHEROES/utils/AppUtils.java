@@ -1803,7 +1803,7 @@ public class AppUtils {
         commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         commentReactionRequestPojo.setPageNo(pageNo);
         //Page size for comment list
-        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE);
+        commentReactionRequestPojo.setPageSize(AppConstants.PAGE_SIZE_FOR_COMMENTS);
         commentReactionRequestPojo.setEntityId(entityId);
         return commentReactionRequestPojo;
     }

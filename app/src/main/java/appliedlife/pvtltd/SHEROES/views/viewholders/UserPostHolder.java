@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -158,6 +159,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
+
+    @BindDimen(R.dimen.dp_size_40)
+    int authorPicIconSize;
 
     private UserPostSolrObj mUserPostObj;
     private Context mContext;
@@ -539,7 +543,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             mAuthorIcon.setCircularImage(true);
             if(mAuthorIcon!=null && CommonUtil.isValidContextForGlide(mAuthorIcon.getContext())){
-                mAuthorIcon.bindImage(authorImageUrl);
+                String authorThumborUrl = CommonUtil.getThumborUri(authorImageUrl, authorPicIconSize, authorPicIconSize);
+                mAuthorIcon.bindImage(authorThumborUrl);
             }
         }
     }
@@ -607,7 +612,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             }
             Glide.with(context)
                     .load(firstThumborUrl)
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, firstImage))
                     .into(ivFirst);
         }
 
@@ -622,7 +626,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             Glide.with(context)
                     .load(secondThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, secondImage))
                     .into(ivSecond);
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
@@ -631,7 +634,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             Glide.with(context)
                     .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .thumbnail(CommonUtil.getThumbnailRequest(context, thirdImage))
                     .into(ivThird);
         }
         userPostImages.addView(child);

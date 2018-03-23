@@ -29,7 +29,7 @@ public class WebViewClickListener {
         UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
         List<String> imageUrls = new ArrayList<>();
         imageUrls.add(imageSource);
-        //feedDetail.setImageUrls(imageUrls);
+        userPostSolrObj.setImageUrls(imageUrls);
         AlbumActivity.navigateTo((ArticleActivity) mContext, userPostSolrObj, ArticleActivity.SCREEN_LABEL, null);
     }
 }

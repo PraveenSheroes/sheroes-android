@@ -20,4 +20,7 @@ public class ConfigData {
 
     @SerializedName("showArticleViews")
     public boolean showArticleViews;
+
+    @SerializedName("thumborKey")
+    public String thumborKey;
 }
