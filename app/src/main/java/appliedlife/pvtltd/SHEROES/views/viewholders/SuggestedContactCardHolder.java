@@ -20,10 +20,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -40,6 +42,11 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
     CircleImageView ivSuggestedContactCardCircleIcon;
     @Bind(R.id.ll_suggested_contact)
     LinearLayout llSuggestedContact;
+    @BindDimen(R.dimen.dp_size_50)
+    int authorProfilePicSize;
+
+    @BindDimen(R.dimen.dp_size_87)
+    int getAuthorProfilePicSizeLarge;
     private ContactDetailCallBack mPostDetailCallback;
     private UserSolrObj mUseSolarObj;
     private Context mContext;
@@ -60,7 +67,8 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
         mUseSolarObj.setItemPosition(position);
         if (StringUtil.isNotNullOrEmptyString(userSolrObj.getThumbnailImageUrl())) {
             ivSuggestedContactCardCircleIcon.setCircularImage(true);
-            ivSuggestedContactCardCircleIcon.bindImage(userSolrObj.getThumbnailImageUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getThumbnailImageUrl(), authorProfilePicSize, authorProfilePicSize);
+            ivSuggestedContactCardCircleIcon.bindImage(authorThumborUrl);
         }
         if (StringUtil.isNotNullOrEmptyString(mUseSolarObj.getNameOrTitle())) {
             String str = mUseSolarObj.getNameOrTitle();
@@ -94,7 +102,8 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
             CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
             if (StringUtil.isNotNullOrEmptyString(mUseSolarObj.getThumbnailImageUrl())) {
                 circleImageView.setCircularImage(true);
-                circleImageView.bindImage(mUseSolarObj.getThumbnailImageUrl());
+                String authorThumborUrl = CommonUtil.getThumborUri(mUseSolarObj.getThumbnailImageUrl(), getAuthorProfilePicSizeLarge, getAuthorProfilePicSizeLarge);
+                circleImageView.bindImage(authorThumborUrl);
             }
 
             TextView text = dialog.findViewById(R.id.title);

@@ -32,6 +32,7 @@ public enum AnalyticsEventType {
     LOOKING_FOR("Looking For"),
     LINK("Link"),
     PROMO_CARD("Promo Card"),
+    POST_LOAD_MORE("Post Load More"),
     FRIEND("Friend"),
     IMAGE_CARD("Image Card");
 

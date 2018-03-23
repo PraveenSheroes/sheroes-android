@@ -134,6 +134,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @BindDimen(R.dimen.dp_size_4)
     public int defaultSize;
 
+    @BindDimen(R.dimen.dp_size_65)
+    int profileSize;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -250,7 +253,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             CircleImageView mutualCommunityImage = findById(view, R.id.mutual_community_icon);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
-                mutualCommunityImage.bindImage(community.getThumbnailImageUrl());
+                String authorThumborUrl = CommonUtil.getThumborUri(community.getThumbnailImageUrl(), profileSize, profileSize);
+                mutualCommunityImage.bindImage(authorThumborUrl);
             }
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -303,7 +307,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             TextView communityName = findById(view, R.id.community_name);
             if (StringUtil.isNotNullOrEmptyString(community.getThumbnailImageUrl())) {
                 communityImage.setCircularImage(true);
-                communityImage.bindImage(community.getThumbnailImageUrl());
+                String authorThumborUrl = CommonUtil.getThumborUri(community.getThumbnailImageUrl(), profileSize, profileSize);
+                communityImage.bindImage(authorThumborUrl);
 
             }
             communityName.setText(community.getNameOrTitle());
@@ -456,7 +461,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
             if (StringUtil.isNotNullOrEmptyString(userSolrObj.getThumbnailImageUrl())) {
                 mutualCommunityImage.setCircularImage(true);
-                mutualCommunityImage.bindImage(userSolrObj.getThumbnailImageUrl());
+                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getThumbnailImageUrl(), profileSize, profileSize);
+                mutualCommunityImage.bindImage(authorThumborUrl);
             }
 
             view.setOnClickListener(new View.OnClickListener() {

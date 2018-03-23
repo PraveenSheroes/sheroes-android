@@ -1,6 +1,8 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
+import android.content.SharedPreferences;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -875,6 +877,12 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
                     if(configurationResponse.configuration!=null){
                         mConfiguration.set(configurationResponse.configuration);
+                        if(configurationResponse.configuration.configData!=null && CommonUtil.isNotEmpty(configurationResponse.configuration.configData.thumborKey)){
+                            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+                            SharedPreferences.Editor editor= prefs.edit();
+                            editor.putString(AppConstants.THUMBOR_KEY, configurationResponse.configuration.configData.thumborKey);
+                            editor.apply();
+                        }
                         getMvpView().onConfigFetched();
                     }
                 }

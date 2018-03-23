@@ -169,6 +169,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @BindDimen(R.dimen.dp_size_100)
     int mLinkImageHeight;
 
+    @BindDimen(R.dimen.dp_size_40)
+    int authorProfileSize;
+
+    @BindDimen(R.dimen.dp_size_30)
+    int commentAuthorProfileSize;
+
 
     private BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
@@ -190,7 +196,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         mUserPostObj = userPostSolrObj;
         if (CommonUtil.isNotEmpty(userPostSolrObj.getAuthorImageUrl())) {
             mPostAuthorImage.setCircularImage(true);
-            mPostAuthorImage.bindImage(userPostSolrObj.getAuthorImageUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(userPostSolrObj.getAuthorImageUrl(), authorProfileSize, authorProfileSize);
+            mPostAuthorImage.bindImage(authorThumborUrl);
         }
 
         mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
@@ -606,7 +613,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
-                    mCommentAuthorImage.bindImage(lastComment.getParticipantImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(lastComment.getParticipantImageUrl(), commentAuthorProfileSize, commentAuthorProfileSize);
+                    mCommentAuthorImage.bindImage(authorThumborUrl);
                     mCommentAuthorName.setText(lastComment.getParticipantName());
                     mCommentDescription.setText(hashTagColorInString(lastComment.getComment()));
                     mCommentAuthorVerifiedIcon.setVisibility(View.GONE);
@@ -614,7 +622,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
-                    mCommentAuthorImage.bindImage(lastComment.getParticipantImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(lastComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
+                    mCommentAuthorImage.bindImage(authorThumborUrl);
                     mCommentAuthorName.setText(lastComment.getParticipantName());
                     mCommentDescription.setText(hashTagColorInString(lastComment.getComment()));
                     if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -645,8 +654,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mLastCommentContainer.setVisibility(View.GONE);
             mJoinConversationContainer.setVisibility(View.VISIBLE);
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
+                String authorThumborUrl = CommonUtil.getThumborUri(userPreference.get().getUserSummary().getPhotoUrl(), commentAuthorProfileSize, commentAuthorProfileSize);
                 mConversationAuthorImageConversation.setCircularImage(true);
-                mConversationAuthorImageConversation.bindImage(userPreference.get().getUserSummary().getPhotoUrl());
+                mConversationAuthorImageConversation.bindImage(authorThumborUrl);
             }
         }
 

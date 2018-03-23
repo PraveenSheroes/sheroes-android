@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ArticleTextView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -82,6 +83,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_article_tag)
     TextView tvArticleTag;
     BaseHolderInterface viewInterface;
+
+    @BindDimen(R.dimen.dp_size_40)
+    int authorProfileSize;
+
     private ArticleSolrObj dataItem;
     Context mContext;
     String mViewMoreDescription;
@@ -201,7 +206,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorImageUrl())) {
             String feedCircleIconUrl = dataItem.getAuthorImageUrl();
             ivArticleCircleIcon.setCircularImage(true);
-            ivArticleCircleIcon.bindImage(feedCircleIconUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(feedCircleIconUrl, authorProfileSize, authorProfileSize);
+            ivArticleCircleIcon.bindImage(authorThumborUrl);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getImageUrl())) {
             String backgrndImageUrl = dataItem.getImageUrl();

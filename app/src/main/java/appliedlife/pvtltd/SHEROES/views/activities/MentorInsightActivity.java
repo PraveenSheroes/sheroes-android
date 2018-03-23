@@ -30,10 +30,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.MentorPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.MentorView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -187,7 +189,8 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
     @Bind(R.id.tv_mentor_answering_question)
     TextView tvMentorAnsweringQuestion;
 
-
+    @BindDimen(R.dimen.dp_size_150)
+    int mentorProfileSize;
 
     @Bind(R.id.view_insight)
     View viewInsight;
@@ -223,7 +226,8 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         mUserSolrObj = mentorInsightResponse.getUserDoc();
         if (StringUtil.isNotNullOrEmptyString(mUserSolrObj.getThumbnailImageUrl())) {
             ivMentorFullViewIcon.setCircularImage(true);
-            ivMentorFullViewIcon.bindImage(mUserSolrObj.getThumbnailImageUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(mUserSolrObj.getThumbnailImageUrl(), mentorProfileSize, mentorProfileSize);
+            ivMentorFullViewIcon.bindImage(authorThumborUrl);
         }
         if (StringUtil.isNotNullOrEmptyString(mUserSolrObj.getNameOrTitle())) {
             tvInsightName.setText(mUserSolrObj.getNameOrTitle());

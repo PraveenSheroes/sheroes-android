@@ -82,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -142,6 +143,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Bind(R.id.tv_anonymous_post)
     TextView tvAnonymousPost;
+
+    @BindDimen(R.dimen.dp_size_36)
+    int profileSize;
 
     //endregion
 
@@ -207,7 +211,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
             mUserPic.setCircularImage(true);
-            mUserPic.bindImage(mUserPreference.get().getUserSummary().getPhotoUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(mUserPreference.get().getUserSummary().getPhotoUrl(), profileSize, profileSize);
+            mUserPic.bindImage(authorThumborUrl);
         }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -529,6 +534,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     // user post detail callbacks
     @Override
     public void loadMoreComments() {
+        MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+        AnalyticsManager.trackEvent(Event.POST_SHARED_CLICKED, getScreenName(), properties);
         mPostDetailPresenter.fetchMoreComments();
     }
 

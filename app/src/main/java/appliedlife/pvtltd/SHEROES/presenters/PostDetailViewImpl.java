@@ -138,7 +138,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 boolean smoothScrollToBottom = false;
                 getMvpView().stopProgressBar();
                 getMvpView().commentFinishedLoading();
-                if (pageNumber == 1 && commentResponsePojo.getNumFound() > 10) {
+                if (pageNumber == 1 && commentResponsePojo.getNumFound() > AppConstants.PAGE_SIZE_FOR_COMMENTS) {
                     BaseResponse baseResponse = new BaseResponse();
                     mBaseResponseList.add(baseResponse);
                     getMvpView().addData(baseResponse);
@@ -150,7 +150,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().addAllPost(headerCount, commentResponsePojo.getCommentList());
 
                 if (pageNumber != 1) {
-                    if (commentResponsePojo.getCommentList().size() < 10) {
+                    if (commentResponsePojo.getCommentList().size() < AppConstants.PAGE_SIZE_FOR_COMMENTS) {
                         mBaseResponseList.remove(1);
                         getMvpView().setHasMoreComments(false);
                     }

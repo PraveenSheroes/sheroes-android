@@ -112,6 +112,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -273,6 +274,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
     @Bind(R.id.view_footer)
     View viewFooter;
+
+    @BindDimen(R.dimen.dp_size_90)
+    int profileSize;
+
+    @BindDimen(R.dimen.dp_size_87)
+    int profileSizeSmall;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -481,8 +488,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
             if(!isFinishing()) {
+                String authorThumborUrl = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), profileSize, profileSize);
                 mProfileIcon.setCircularImage(true);
-                mProfileIcon.bindImage(mUserSolarObject.getImageUrl());
+                mProfileIcon.bindImage(authorThumborUrl);
             }
         }
 
@@ -1426,7 +1434,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     public void refreshImageView(String imageUrl){
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
-            mProfileIcon.bindImage(imageUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, profileSize, profileSize);
+            mProfileIcon.bindImage(authorThumborUrl);
             mUserSolarObject.setImageUrl(imageUrl);
         }
 
@@ -1513,8 +1522,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
             CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
+                String authorThumborUrl = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), profileSizeSmall, profileSizeSmall);
                 circleImageView.setCircularImage(true);
-                circleImageView.bindImage(mUserSolarObject.getImageUrl());
+                circleImageView.bindImage(authorThumborUrl);
             }
 
             TextView text = dialog.findViewById(R.id.title);

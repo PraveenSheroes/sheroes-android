@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.ArticleTextView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -124,6 +125,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleLoginUserName;
     @Bind(R.id.ripple_feed_article_comment)
     RippleView rippleView;
+    @BindDimen(R.dimen.dp_size_40)
+    int profileSize;
+
+    @BindDimen(R.dimen.dp_size_30)
+    int profileSizeSmaller;
     BaseHolderInterface viewInterface;
     ArticleSolrObj articleObj;
     private Context mContext;
@@ -356,6 +362,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getComment()) && StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
+                    String authorThumborUrl = CommonUtil.getThumborUri(lastComment.getParticipantImageUrl(), profileSizeSmaller, profileSizeSmaller);
                     ivFeedArticleUserPic.bindImage(lastComment.getParticipantImageUrl());
                     tvFeedArticleUserName.setText(lastComment.getParticipantName());
                     tvFeedArticleUserCommentPost.setText(lastComment.getComment());
@@ -410,10 +417,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         String feedCircleIconUrl = articleObj .getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(feedCircleIconUrl)) {
             ivFeedArticleCircleIcon.setCircularImage(true);
-            ivFeedArticleCircleIcon.bindImage(feedCircleIconUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(feedCircleIconUrl, profileSize, profileSize);
+            ivFeedArticleCircleIcon.bindImage(authorThumborUrl);
         }
         ivFeedArticleLoginUserPic.setCircularImage(true);
-        ivFeedArticleLoginUserPic.bindImage(mPhotoUrl);
+        String authorThumborUrl = CommonUtil.getThumborUri(mPhotoUrl, profileSize, profileSize);
+        ivFeedArticleLoginUserPic.bindImage(authorThumborUrl);
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             tvFeedArticleLoginUserName.setText(loggedInUser);
         }
