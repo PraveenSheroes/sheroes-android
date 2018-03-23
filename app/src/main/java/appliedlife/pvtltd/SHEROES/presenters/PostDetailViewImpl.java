@@ -317,6 +317,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                     .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                     .postType(AnalyticsEventType.COMMUNITY.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                    .streamType(CommonUtil.isNotEmpty(mUserPostObj.getStreamType()) ? mUserPostObj.getStreamType() : "")
                                     .communityId(commentResponsePojo.getCommentReactionModel().getCommunityId())
                                     .build();
                     AnalyticsManager.trackEvent(Event.REPLY_CREATED, PostDetailActivity.SCREEN_LABEL, properties);
@@ -446,6 +447,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
+                                .streamType((mUserPostObj!=null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType(): "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -494,6 +496,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
+                                .streamType((mUserPostObj!=null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType(): "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
