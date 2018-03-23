@@ -1004,6 +1004,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
+                                .streamType((userPostSolrObj!=null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType(): "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -1054,6 +1055,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
+                                .streamType((userPostSolrObj!=null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType(): "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }

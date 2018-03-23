@@ -666,6 +666,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
     protected SheroesPresenter getPresenter() {
         return mFeedPresenter;
     }
