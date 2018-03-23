@@ -186,7 +186,7 @@ public class AppConstants {
     public static final int FOURTH_CONSTANT = 4;
 
     public static final int PAGE_SIZE = 10;
-    public static final int PAGE_SIZE_FOR_COMMENTS = 50;
+    public static final int PAGE_SIZE_FOR_COMMENTS = 25;
     public static final int PAGE_SIZE_CHAT = 20;
     public static final int INVITE_PAGE_SIZE = 200;
     public static final int NO_REACTION_CONSTANT = 0;
