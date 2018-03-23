@@ -61,6 +61,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -872,7 +873,14 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentsAdapter.addDataAndNotify(comment);
         if(null!=mFeedDetail) {
             if (mFeedDetail instanceof ArticleSolrObj) {
-                mFeedDetail.getLastComments().add(comment);
+                if (CommonUtil.isEmpty(mFeedDetail.getLastComments())) {
+                    List<Comment> comments = new ArrayList<>();
+                    comments.add(comment);
+                    mFeedDetail.setLastComments(comments);
+                    ;
+                } else {
+                    mFeedDetail.getLastComments().add(comment);
+                }
             }
         }
     }

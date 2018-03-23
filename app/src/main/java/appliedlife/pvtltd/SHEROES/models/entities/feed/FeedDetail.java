@@ -208,7 +208,7 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     @SerializedName(value = "short_branch_url_s")
     private String postShortBranchUrls;
 
-    @SerializedName(value = "solr_ignore_stream_type")
+    @SerializedName(value = "solr_ignore_stream_name")
     private String streamType;
 
     //These fields are not from API response
