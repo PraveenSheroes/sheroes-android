@@ -31,11 +31,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -78,6 +80,8 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     TextView reviewPostShareIc;
     @Bind(R.id.tv_review_post_share)
     TextView tvReviewPostShare;
+    @BindDimen(R.dimen.dp_size_40)
+    int authorProfilePicSize;
     private Handler mHandler;
     @Inject
     Preference<LoginResponse> userPreference;
@@ -117,7 +121,8 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         String authorImageUrl = userPostObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             ivReviewPostAuthor.setCircularImage(true);
-            ivReviewPostAuthor.bindImage(authorImageUrl);
+            String authorThumborUrl = CommonUtil.getThumborUri(authorImageUrl, authorProfilePicSize, authorProfilePicSize);
+            ivReviewPostAuthor.bindImage(authorThumborUrl);
         }
     }
 

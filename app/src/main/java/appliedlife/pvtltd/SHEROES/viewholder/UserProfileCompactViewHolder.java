@@ -14,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -58,6 +59,9 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.location)
     TextView mLocation;
 
+    @BindDimen(R.dimen.dp_size_80)
+    int authorProfileSize;
+
     private BaseHolderInterface viewInterface;
     private UserSolrObj mUserSolrObj;
 
@@ -74,7 +78,8 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
         mUserSolrObj = userSolrObj;
         if (CommonUtil.isNotEmpty(userSolrObj.getThumbnailImageUrl())) {
             mImage.setCircularImage(true);
-            mImage.bindImage(userSolrObj.getThumbnailImageUrl());
+            String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getThumbnailImageUrl(), authorProfileSize, authorProfileSize);
+            mImage.bindImage(authorThumborUrl);
         }
         String pluralPosts = context.getResources().getQuantityString(R.plurals.numberOfPosts, userSolrObj.getSolrIgnoreNoOfMentorPosts());
         mPostCount.setText(Integer.toString(userSolrObj.getSolrIgnoreNoOfMentorPosts()));

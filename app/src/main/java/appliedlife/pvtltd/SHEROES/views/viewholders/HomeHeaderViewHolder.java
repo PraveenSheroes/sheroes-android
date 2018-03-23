@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -54,6 +55,10 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.ripple)
     RippleView rippleView;
     private Context context;
+
+    @BindDimen(R.dimen.dp_size_40)
+    int authorProfileSize;
+
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
@@ -97,7 +102,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             }
         }
         ivLoginUserPic.setCircularImage(true);
-        ivLoginUserPic.bindImage(mPhotoUrl);
+        String authorThumborUrl = CommonUtil.getThumborUri(mPhotoUrl, authorProfileSize, authorProfileSize);
+        ivLoginUserPic.bindImage(authorThumborUrl);
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);

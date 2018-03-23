@@ -26,11 +26,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -70,6 +72,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @Bind(R.id.comment_author_name)
     TextView mCommentAuthorName;
 
+    @BindDimen(R.dimen.dp_size_40)
+    int authorProfileSize;
+
     Context mContext;
     CommentCallBack mCommentCallback;
     private Comment mComment;
@@ -108,7 +113,8 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         invalidateLikeView(item);
         if(!((Activity)mContext).isFinishing()){
             if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
-                mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
+                String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
+                mUserProfilePic.bindImage(authorThumborUrl);
                 StringBuilder stringBuilder = new StringBuilder();
 
                 stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
@@ -125,7 +131,8 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 mProfileVerfied.setVisibility(View.GONE);
             } else {
                 if (StringUtil.isNotNullOrEmptyString(mComment.getComment())&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
-                    mUserProfilePic.bindImage(mComment.getParticipantImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
+                    mUserProfilePic.bindImage(authorThumborUrl);
                 /*StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
                 Spannable getCommentString = new SpannableString(stringBuilder.toString());

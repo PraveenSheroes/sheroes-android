@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.MENTOR_TYPE_ID;
@@ -107,6 +108,9 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         @Bind(R.id.follower)
         TextView follower;
 
+        @BindDimen(R.dimen.dp_size_65)
+        int authorProfileSize;
+
         // endregion
 
         public FollowedUserListItemViewHolder(View itemView) {
@@ -133,7 +137,8 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 if (mentor.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
-                    mentorIcon.bindImage(mentor.getThumbnailImageUrl());
+                    String authorThumborUrl = CommonUtil.getThumborUri(mentor.getThumbnailImageUrl(), authorProfileSize, authorProfileSize);
+                    mentorIcon.bindImage(authorThumborUrl);
                 }
 
                 if (mentor.getNameOrTitle() != null) {

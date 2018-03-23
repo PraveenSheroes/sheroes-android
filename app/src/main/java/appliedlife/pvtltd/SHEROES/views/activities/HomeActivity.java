@@ -159,6 +159,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDial
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.branch.referral.Branch;
@@ -265,6 +266,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public TextView tvDrawerNavigation;
     @Bind(R.id.view_tool_tip_nav)
     public View viewToolTipNav;
+
+    @BindDimen(R.dimen.dp_size_64)
+    int navProfileSize;
 
     GenericRecyclerViewAdapter mAdapter;
     @Inject
@@ -689,7 +693,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 ivDrawerProfileCircleIcon.setCircularImage(true);
                 ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.default_img);
                 ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.default_img);
-                ivDrawerProfileCircleIcon.bindImage(profile);
+                String authorThumborUrl = CommonUtil.getThumborUri(profile, navProfileSize, navProfileSize);
+                ivDrawerProfileCircleIcon.bindImage(authorThumborUrl);
             }
             String profileUserName = getResources().getString(R.string.PLACEHOLDER_PROFILE_USER_NAME, mUserPreference.get().getUserSummary().getFirstName(), mUserPreference.get().getUserSummary().getLastName());
             mTvUserName.setText(profileUserName);
