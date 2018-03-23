@@ -227,7 +227,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
         }
-        mViewMoreDescription = articleObj .getShortDescription();
+        mViewMoreDescription = articleObj.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
