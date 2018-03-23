@@ -177,7 +177,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             StringBuilder stringBuilder=new StringBuilder();
             stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
             if (dataItem.getCharCount() > 0) {
-                stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_MIN_READ));
+                stringBuilder.append(AppConstants.DOT).append(CommonUtil.calculateReadingTime(dataItem.getListDescription())).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_MIN_READ));
             }
             tvArticleTime.setText(stringBuilder);
         }
