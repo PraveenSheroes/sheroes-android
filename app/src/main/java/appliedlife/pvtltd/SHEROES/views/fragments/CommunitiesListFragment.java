@@ -169,7 +169,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).communityButton();
         }
-        String underLineData=getString(R.string.setting);
+        String underLineData = getString(R.string.setting);
         SpannableString content = new SpannableString(underLineData);
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
@@ -231,11 +231,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
             mMyCommunitiesAdapter.notifyDataSetChanged();
-        }else
-        {
-            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
-            if(null!=data)
-            data.remove(data.size()-1);
+        } else {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            if (null != data)
+                data.remove(data.size() - 1);
             mMyCommunitiesAdapter.notifyDataSetChanged();
         }
     }
@@ -358,7 +357,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         return true;
     }
 
-    public void refreshList(){
+    public void refreshList() {
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         setRefreshList(mPullRefreshList);
@@ -397,19 +396,26 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        noInternet.setVisibility(View.VISIBLE);
-        communitiesContainer.setVisibility(View.GONE);
-        loaderGif.setVisibility(View.GONE);
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            communitiesContainer.setVisibility(View.GONE);
+            loaderGif.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
+        }
+
     }
+
     @OnClick({R.id.tv_retry_for_internet})
     public void onRetryClick() {
         noInternet.setVisibility(View.GONE);
         communitiesContainer.setVisibility(View.VISIBLE);
         loaderGif.setVisibility(View.VISIBLE);
-        if(null!=getActivity()&&getActivity() instanceof HomeActivity) {
+        if (null != getActivity() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).communityOnClick();
         }
     }
+
     @OnClick({R.id.tv_goto_setting})
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));

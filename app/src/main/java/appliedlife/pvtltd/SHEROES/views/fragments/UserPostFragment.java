@@ -560,9 +560,13 @@ public class UserPostFragment extends BaseFragment {
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        noInternet.setVisibility(View.VISIBLE);
-        mLiNoResult.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            mLiNoResult.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
+        }
     }
 
     @OnClick({R.id.tv_retry_for_internet})
