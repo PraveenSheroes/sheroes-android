@@ -473,7 +473,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onArticleItemClicked(ArticleSolrObj articleSolrObj) {
-        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), mScreenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleSolrObj.getItemPosition()));
+        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
     }
 
     @Override
@@ -554,17 +556,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onUserPostClicked(UserPostSolrObj userPostSolrObj) {
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
     @Override
     public void onUserPostCommentClicked(UserPostSolrObj userPostSolrObj) {
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, true, mPrimaryColor, mTitleTextColor);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, true, mPrimaryColor, mTitleTextColor);
     }
 
     @Override
     public void onUserPostImageClicked(UserPostSolrObj userPostObj) {
-        AlbumActivity.navigateTo(getActivity(), userPostObj, getScreenName(), mScreenProperties);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostObj.getItemPosition()));
+        AlbumActivity.navigateTo(getActivity(), userPostObj, getScreenName(), screenProperties);
     }
 
     @Override
@@ -768,7 +776,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
-        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), mScreenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(communityFeedObj.getItemPosition()));
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }
 
     @Override
@@ -914,7 +924,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), mScreenProperties);
 
             } else {
-                CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), mScreenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+                screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostObj.getItemPosition()));
+                CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                /* Intent intentFromCommunityPost = new Intent(getActivity(), CommunitiesDetailActivity.class);
                 Bundle bundleFromPost = new Bundle();
                 bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
@@ -1104,7 +1116,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onArticleCommentClicked(ArticleSolrObj articleObj) {
-        ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), mScreenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleObj.getItemPosition()));
+        ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
     }
 
     @Override
@@ -1176,12 +1190,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
         userPostSolrObj.setIsEditOrDelete(AppConstants.TWO_CONSTANT);
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
     private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
         userPostSolrObj.setIsEditOrDelete(AppConstants.ONE_CONSTANT);
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, mScreenProperties, false, mPrimaryColor, mTitleTextColor);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
     public void updateItem(FeedDetail updatedFeedDetail) {

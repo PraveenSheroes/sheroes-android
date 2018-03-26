@@ -585,7 +585,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
             @Override
             public void onPageSelected(int position) {
-                if (mCommunityFeedSolrObj.communityTabs.size() <= position) {
+                if (mCommunityFeedSolrObj == null && mCommunityFeedSolrObj.communityTabs == null && mCommunityFeedSolrObj.communityTabs.size() <= position) {
                     return;
                 }
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);

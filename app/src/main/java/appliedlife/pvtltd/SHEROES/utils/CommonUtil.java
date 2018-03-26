@@ -797,6 +797,9 @@ public class CommonUtil {
 
     public static String getThumborUri(@NonNull String image, int width, int height) {
         String uri = image;
+        if (!CommonUtil.isNotEmpty(uri)) {
+            return "";
+        }
         try {
             uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
                     .resize(width, height)
