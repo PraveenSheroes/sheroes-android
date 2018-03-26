@@ -8,52 +8,43 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class UserTaggingPerson {
-    @SerializedName("id_of_entity_or_participant")
+    @SerializedName("user_id")
     @Expose
-    public int idOfEntityOrParticipant;
-    @SerializedName("entity_or_participant_id")
+    public int userId;
+
+    @SerializedName("fullname")
     @Expose
-    public int entityOrParticipantId;
-    @SerializedName("name")
+    public String fullName;
+    @SerializedName("user_profile_url")
     @Expose
-    public String name;
-    @SerializedName("solr_ignore_deep_link_url")
-    @Expose
-    public String solrIgnoreDeepLinkUrl;
-    @SerializedName("author_image_url")
+    public String userProfileDeepLinkUrl;
+    @SerializedName("user_profile_image_url")
     @Expose
     public String authorImageUrl;
 
-    public int getIdOfEntityOrParticipant() {
-        return idOfEntityOrParticipant;
+
+    public int getUserId() {
+        return userId;
     }
 
-    public void setIdOfEntityOrParticipant(int idOfEntityOrParticipant) {
-        this.idOfEntityOrParticipant = idOfEntityOrParticipant;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getEntityOrParticipantId() {
-        return entityOrParticipantId;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setEntityOrParticipantId(int entityOrParticipantId) {
-        this.entityOrParticipantId = entityOrParticipantId;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
-    public String getName() {
-        return name;
+    public String getUserProfileDeepLinkUrl() {
+        return userProfileDeepLinkUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSolrIgnoreDeepLinkUrl() {
-        return solrIgnoreDeepLinkUrl;
-    }
-
-    public void setSolrIgnoreDeepLinkUrl(String solrIgnoreDeepLinkUrl) {
-        this.solrIgnoreDeepLinkUrl = solrIgnoreDeepLinkUrl;
+    public void setUserProfileDeepLinkUrl(String userProfileDeepLinkUrl) {
+        this.userProfileDeepLinkUrl = userProfileDeepLinkUrl;
     }
 
     public String getAuthorImageUrl() {

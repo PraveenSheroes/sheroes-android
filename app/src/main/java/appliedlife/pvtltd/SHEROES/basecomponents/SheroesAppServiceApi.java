@@ -314,4 +314,7 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/update_user_device")
     Observable<AppInstallation> saveInstallation(@Body AppInstallation appInstallation);
 
+    @POST("entity/master/user_mention_suggestions")
+    Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);
+
 }

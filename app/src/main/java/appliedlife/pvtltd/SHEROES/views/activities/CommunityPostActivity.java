@@ -12,12 +12,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -37,10 +39,11 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
-import android.view.LayoutInflater;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -81,6 +84,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -97,7 +101,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -109,8 +112,19 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -134,7 +148,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.schedulePost;
  * Created by ujjwal on 28/10/17.
  */
 
-public class CommunityPostActivity extends BaseActivity implements ICommunityPostView {
+public class CommunityPostActivity extends BaseActivity implements ICommunityPostView, QueryTokenReceiver {
     public static final String SCREEN_LABEL = "Create Communities Post Screen";
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
     public static final String IS_FROM_COMMUNITY = "Is from community";
@@ -230,6 +244,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.image_upload_view)
     LinearLayout mImageUploadView;
 
+    @Bind(R.id.et_view)
+    RichEditorView etView;
+
+    @Bind(R.id.suggestions_list)
+    RecyclerView mSuggestionList;
 
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
@@ -265,6 +284,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     CallbackManager callbackManager;
     private AccessToken mAccessToken;
 
+    private static final String BUCKET = "cities-memory";
+    private TaggedUserPojo.CityLoader cities;
+    private List<MentionSpan> mentionSpanList;
+    private String mAllText;
+
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
@@ -282,6 +306,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setContentView(R.layout.activity_community_post);
         ButterKnife.bind(this);
         mCreatePostPresenter.attachView(this);
+        etView.setQueryTokenReceiver(this);
+        etView.setHint("Hello");
+        etView.onReceiveSuggestionsListView(mSuggestionList);
+        cities = new TaggedUserPojo.CityLoader(getResources());
+        etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!keyboardShown(etView.getRootView())) {
+                    // mSuggestionList.setVisibility(View.GONE);
+                    mImageUploadView.setVisibility(View.VISIBLE);
+                    mAnonymousView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
 
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
@@ -293,7 +332,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             branchUrlHandle();
         } else {
             isSharedFromOtherApp = false;
-            if(null!=mConfiguration&&mConfiguration.isSet()) {
+            if (null != mConfiguration && mConfiguration.isSet()) {
                 mEtDefaultText.setHint(mConfiguration.get().configData.mCreatePostText);
             }
             if (null != getIntent() && getIntent().getExtras() != null) {
@@ -380,7 +419,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupUserView();
             setupImageListView();
             setCommunityName();
-            setupTextChangeListener();
+         //   setupTextChangeListener();
             setupCommunityNameListener();
             setupShareToFbListener();
             setupAnonymousSlelectListener();
@@ -422,12 +461,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
             mUserName.setLayoutParams(layoutParams);
-        }else
-        {
+        } else {
             fbShareContainer.setVisibility(View.GONE);
             mIsAnonymous = mCommunityPost.isAnonymous;
-            if(StringUtil.isNotNullOrEmptyString(mCommunityPost.body))
-            {
+            if (StringUtil.isNotNullOrEmptyString(mCommunityPost.body)) {
                 mEtDefaultText.setText(mCommunityPost.body);
                 mEtDefaultText.requestFocus();
                 mEtDefaultText.setSelection(mCommunityPost.body.length());
@@ -462,7 +499,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupUserView();
         setupImageListView();
         setCommunityName();
-        setupTextChangeListener();
+      //  setupTextChangeListener();
         setupCommunityNameListener();
         setupShareToFbListener();
         setupAnonymousSlelectListener();
@@ -1495,6 +1532,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
+    public void userTagResponse(SearchUserDataResponse searchUserDataResponse) {
+
+    }
+
+    @Override
     public void finishActivity() {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
@@ -1596,6 +1638,99 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             selectPostNowOrLater();
         } else {
             sendPost();
+        }
+
+    }
+
+    private boolean keyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
+    }
+
+    @Override
+    public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+         if (queryToken.getTokenString().contains("@")) {
+             MentionsEditText mentionsEditText=etView.getEditText();
+             if(null!=mentionsEditText) {
+                 LogUtils.info("data","########### @string--->   "+queryToken.getTokenString());
+                 mCreatePostPresenter.userTaggingSearchEditText(mentionsEditText,queryToken.getTokenString(),mCommunityPost);
+             }
+         }
+        LogUtils.info("data","########### Query data--->   "+queryToken.getTokenString());
+        List<String> buckets = Collections.singletonList(BUCKET);
+        List<TaggedUserPojo> suggestions = cities.getSuggestions(queryToken);
+        UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, suggestions);
+        etView.onReceiveSuggestionsResult(result, BUCKET);
+        return buckets;
+    }
+
+    @Override
+    public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
+        this.mentionSpanList = mentionSpanList;
+        this.mAllText = allText;
+        return null;
+    }
+
+    @Override
+    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mSuggestionList.setLayoutManager(layoutManager);
+        mSuggestionList.setAdapter(userTagSuggestionsAdapter);
+        return null;
+    }
+
+    @Override
+    public Suggestible onUserTaggedClick(@NonNull Suggestible suggestible, View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.li_social_user:
+                Mentionable mention = (Mentionable) suggestible;
+                etView.setInsertion(mention);
+                break;
+            default:
+        }
+
+        return null;
+    }
+
+    @Override
+    public void textChangeListner(Editable editText) {
+        if (editText.length() > 0) {
+            mAllText = editText.toString();
+            if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !isLinkRendered) {
+                String editTextDescription = editText.toString().trim();
+                if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
+                    int indexOfFirstHttp = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "https", 1);
+                    int urlLength = getUrlLength(editTextDescription, indexOfFirstHttp);
+                    if (urlLength <= editTextDescription.length()) {
+                        String httpString = editTextDescription.substring(indexOfFirstHttp, urlLength);
+                        if (mAppUtils.checkUrl(httpString)) {
+                            mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(httpString));
+                        }
+                    }
+                } else if (editTextDescription.contains("www") || editTextDescription.contains("WWW")) {
+                    int indexOfFirstWWW = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "www", 1);
+                    int urlLength = getUrlLength(editTextDescription, indexOfFirstWWW);
+                    if (urlLength <= editTextDescription.length()) {
+                        String wwwString = editTextDescription.substring(indexOfFirstWWW, urlLength);
+                        if (mAppUtils.checkWWWUrl(wwwString)) {
+                            mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(wwwString));
+                        }
+                    }
+                }
+                if (editTextDescription.contains("@")) {
+                    mAnonymousView.setVisibility(View.GONE);
+                    mImageUploadView.setVisibility(View.GONE);
+                } else {
+                    mAnonymousView.setVisibility(View.VISIBLE);
+                    mImageUploadView.setVisibility(View.VISIBLE);
+                }
+            }
+
         }
 
     }

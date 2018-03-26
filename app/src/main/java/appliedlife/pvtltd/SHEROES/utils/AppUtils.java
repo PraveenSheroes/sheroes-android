@@ -1611,17 +1611,6 @@ public class AppUtils {
         feedRequestPojo.setSubType(typeOfFeed);
         return feedRequestPojo;
     }
-    public  SearchUserDataRequest searchUserDataRequest(String query,String listType,long entityOrParticipantId) {
-        AppUtils appUtils = AppUtils.getInstance();
-        SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
-        searchUserDataRequest.setParticipatingEntityOrParticipantId(entityOrParticipantId);
-        searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
-        searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        searchUserDataRequest.setListTypeForUserTagging(listType);
-        searchUserDataRequest.setSearchNameOfUserForTagging(query);
-        return searchUserDataRequest;
-    }
 
     public static FeedRequestPojo makeFeedChallengeListRequest(String typeOfFeed, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();

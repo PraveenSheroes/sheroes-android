@@ -28,7 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/suggestions_list"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:background="@drawable/user_tagg_border"
+            android:layout_height="150dp" />
         <RelativeLayout
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
@@ -190,7 +195,12 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
-
+            <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
+                android:id="@+id/et_view"
+                android:layout_below="@id/user_container"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_height="match_parent"/>
             <EditText
                 android:id="@+id/et_default_hint_text"
                 android:layout_width="match_parent"
@@ -198,6 +208,7 @@
                 android:layout_below="@id/user_container"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_5"
+                android:visibility="gone"
                 android:background="@null"
                 android:gravity="top"
                 android:inputType="textMultiLine|textCapSentences"
@@ -208,7 +219,7 @@
                 android:id="@+id/card_link_render"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/et_default_hint_text"
+                android:layout_below="@id/et_view"
                 android:layout_margin="@dimen/dp_size_10"
                 android:elevation="@dimen/dp_size_5"
                 android:visibility="gone">

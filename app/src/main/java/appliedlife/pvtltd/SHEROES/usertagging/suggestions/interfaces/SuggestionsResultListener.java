@@ -16,7 +16,7 @@ package appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces;
 
 import android.support.annotation.NonNull;
 
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsResult;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 
 
 /**
@@ -25,7 +25,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsResult;
 public interface SuggestionsResultListener {
 
     /**
-     * Callback to return a {@link SuggestionsResult} so that the suggestions it contains can be added to a
+     * Callback to return a {@link UserTagSuggestionsResult} so that the suggestions it contains can be added to a
      * {@link SuggestionsAdapter} and rendered accordingly.
      * <p>
      * Note that for any given {@link QueryToken} that the {@link QueryTokenReceiver} handles, onReceiveSuggestionsResult
@@ -33,8 +33,8 @@ public interface SuggestionsResultListener {
      * {@link QueryTokenReceiver} will receive a single {@link QueryToken}, but it should call onReceiveSuggestionsResult
      * twice (once with people suggestions and once with company suggestions), using a different bucket each time.
      *
-     * @param result a {@link SuggestionsResult} representing the result of the query
+     * @param result a {@link UserTagSuggestionsResult} representing the result of the query
      * @param bucket a string representing the type of mention (used for grouping in the {@link SuggestionsAdapter}
      */
-    void onReceiveSuggestionsResult(@NonNull final SuggestionsResult result, @NonNull final String bucket);
+    void onReceiveSuggestionsResult(@NonNull final UserTagSuggestionsResult result, @NonNull final String bucket);
 }

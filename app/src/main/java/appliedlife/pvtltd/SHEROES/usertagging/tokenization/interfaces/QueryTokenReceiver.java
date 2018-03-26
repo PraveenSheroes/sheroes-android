@@ -22,7 +22,7 @@ import android.view.View;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsAdapter;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 
@@ -45,7 +45,7 @@ public interface QueryTokenReceiver {
 
     List<MentionSpan> onMentionReceived(final @NonNull List<MentionSpan> mentionSpanList, String allText);
 
-    SuggestionsAdapter onSuggestedList(final @NonNull SuggestionsAdapter suggestionsAdapter);
+    UserTagSuggestionsAdapter onSuggestedList(final @NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter);
 
     Suggestible onUserTaggedClick(final @NonNull Suggestible suggestible, View view);
 

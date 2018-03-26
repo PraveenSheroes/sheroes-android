@@ -1,8 +1,10 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -18,13 +20,22 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
-
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -33,18 +44,19 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREAT
  * Created by ujjwal on 17/10/17.
  */
 
-public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
+public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
     @Inject
     CommunityModel communityModel;
+    private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
 
     @Inject
     public CreatePostPresenter() {
 
     }
 
-    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest){
+    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -64,10 +76,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                if(communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
+                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
                     AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
-                }else {
+                } else {
                     getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
                     getMvpView().stopProgressBar();
                 }
@@ -77,9 +89,9 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
     }
 
-    public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest){
+    public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -100,17 +112,17 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().stopProgressBar();
-                if(communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
+                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().finishActivity();
                 }
-                    final HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(communityPostCreateResponse.getId()))
-                                    .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
-                                    .communityId("0")
-                                    .type(MoEngageConstants.CHALLENGE_POST)
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(communityPostCreateResponse.getId()))
+                                .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
+                                .communityId("0")
+                                .type(MoEngageConstants.CHALLENGE_POST)
+                                .build();
+                AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
             }
 
         });
@@ -119,7 +131,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
     public void fetchLinkDetails(LinkRequest linkRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -149,7 +161,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
     public void editPost(final CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -176,5 +188,77 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
         });
 
+    }
+
+    public void userTaggingSearchEditText(final MentionsEditText searchQuestionText, final String queryData, final CommunityPost communityPost) {
+        RxTextView.textChanges(searchQuestionText)
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(CharSequence charSequence) {
+                        if (queryData.length() >= MIN_QUESTION_SEARCH_LENGTH) {
+                            getMvpView().startProgressBar();
+                        } else {
+                            getMvpView().stopProgressBar();
+                        }
+                        return queryData.length() >= MIN_QUESTION_SEARCH_LENGTH;
+                    }
+                })
+                .debounce(200, TimeUnit.MILLISECONDS)
+                .flatMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
+                    @Override
+                    public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
+                        SearchUserDataRequest searchUserDataRequest = null;
+                        Long communityId = null;
+                        if (null != communityPost&&null!=communityPost.community) {
+                            communityId = communityPost.community.id;
+                        }
+                        if (queryData.length() < MIN_QUESTION_SEARCH_LENGTH) {
+                            return Observable.empty();
+                        } else {
+                            searchUserDataRequest = searchUserDataRequest(queryData.trim().replace("@",""), communityId, null, null);
+                        }
+                        LogUtils.info("data", "########### @final string--->   " + queryData);
+                        if (searchUserDataRequest == null) {
+                            return Observable.empty();
+                        }
+                        return communityModel.getSearchResult(searchUserDataRequest);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .compose(this.<SearchUserDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+
+                    }
+
+                    @Override
+                    public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().userTagResponse(searchUserDataResponse);
+                    }
+                });
+    }
+
+    private SearchUserDataRequest searchUserDataRequest(String query, Long communityId, Long postEntityId, Long postUserAuthorId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
+        searchUserDataRequest.setSearchNameOfUserForTagging(query);
+        searchUserDataRequest.setCommunityId(communityId);
+        searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
+        searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        searchUserDataRequest.setPostAuthorUserId(postUserAuthorId);
+        searchUserDataRequest.setPostEntityId(postEntityId);
+        return searchUserDataRequest;
     }
 }

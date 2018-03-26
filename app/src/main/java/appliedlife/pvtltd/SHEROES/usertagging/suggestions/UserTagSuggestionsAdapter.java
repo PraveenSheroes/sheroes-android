@@ -36,12 +36,13 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestions
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
+import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
 
 /**
  * Adapter class for displaying suggestions.
  */
-public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_CONTACT = 1;
     private final Object mLock = new Object();
@@ -55,10 +56,10 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // Map from a given bucket (defined by a unique string) to the latest query result for that bucket
     // Example buckets: "Person-Database", "Person-Network", "Companies-Database", "Companies-Network"
-    private final Map<String, SuggestionsResult> mResultMap = new HashMap<>();
+    private final Map<String, UserTagSuggestionsResult> mResultMap = new HashMap<>();
     private final Map<QueryToken, Set<String>> mWaitingForResults = new HashMap<>();
 
-    public SuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserTagCallback userTagCallback) {
+    public UserTagSuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserTagCallback userTagCallback) {
         mContext = context;
         mResources = context.getResources();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,11 +98,11 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
      * <p>
      * Note: This should be called exactly once for every bucket returned from the query client.
      *
-     * @param result a {@link SuggestionsResult} containing the suggestions to add
-     * @param bucket a string representing the group to place the {@link SuggestionsResult} into
+     * @param result a {@link UserTagSuggestionsResult} containing the suggestions to add
+     * @param bucket a string representing the group to place the {@link UserTagSuggestionsResult} into
      * @param source the associated {@link TokenSource} to use for reference
      */
-    public void addSuggestions(final @NonNull SuggestionsResult result,
+    public void addSuggestions(final @NonNull UserTagSuggestionsResult result,
                                final @NonNull String bucket,
                                final @NonNull TokenSource source) {
         // Add result to proper bucket and remove from waiting
@@ -188,8 +189,8 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
                 return new UserTagCardHolder(view, userTagCallback);
             case TYPE_HEADER:
-               // View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
-               // return new HeaderTaggedUserViewHolder(header, userTagCallback);
+                View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_header_layout, parent, false);
+                return new HeaderTaggedUserViewHolder(header, userTagCallback);
         }
         return null;
     }
@@ -206,24 +207,27 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 userTagCardHolder.bindData(suggestible1, mContext, position);
                 break;
             case TYPE_HEADER:
-               // HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
-             //   Suggestible suggestible = mSuggestions.get(position);
-              //  headerTaggedUserViewHolder.bindData(suggestible, mContext, position);
+                HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
+                Suggestible suggestible = mSuggestions.get(position);
+                headerTaggedUserViewHolder.bindData(suggestible, mContext, position);
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return mSuggestions == null ? 0 : mSuggestions.size();
+        return mSuggestions == null ? 0 : mSuggestions.size()+1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position < getItemCount() && getItemCount() > 0) {
+        if(position==0)
+        {
+            return TYPE_HEADER;
+        }else
+        {
             return TYPE_CONTACT;
         }
-        return TYPE_HEADER;
     }
 
 
