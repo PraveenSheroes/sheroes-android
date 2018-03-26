@@ -164,6 +164,15 @@
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".views.activities.ArticleSubmissionActivity"
+            android:exported="true"
+            android:configChanges="keyboardHidden"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="GoogleAppIndexingDeepLinkError">
+        </activity>
         <activity
             android:name=".views.activities.ContestActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -266,6 +275,7 @@
                 <data android:pathPrefix="/users/" />
                 <data android:pathPrefix="/sheroes-challenge" />
                 <data android:pathPrefix="/my-challenges" />
+                <data android:pathPrefix="/articleSubmission/"/>
                 <data android:pathPrefix="/faq" />
                 <data android:pathPrefix="/invite-friends" />
             </intent-filter>

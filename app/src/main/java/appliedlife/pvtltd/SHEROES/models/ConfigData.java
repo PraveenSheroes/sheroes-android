@@ -23,4 +23,7 @@ public class ConfigData {
 
     @SerializedName("thumborKey")
     public String thumborKey;
+
+    @SerializedName("articleGuideline")
+    public String articleGuideline;
 }

@@ -413,4 +413,6 @@ public class AppConstants {
     public static final String FEED_CONFIG_VERSION = "feed config version";
     public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
 
+    public static final String ARTICLE_GUIDELINE = "<h3> 7 things to keep in mind when writing article on Babygogo </h3><p>1. We welcome you to share your experiences and expertise with the Babygogo audience. If you think you can help the mothers and fathers on our platform in some way or have a really interesting story to tell, do write to us.</p><p>2. Word length for an article should be between 200 words to 1000 words.</p><p>3. By submitting the article you grant us a license to use, edit, and modify the content.</p><p>4. Please ensure the content you submit is your original work.</p><p>5. Promotional or Spammy content in any form would not be accepted.</p><p>6. Email to us at care@babygogo.in incase you have any further queries regarding submitting an article.</p><p>7. All the best!</p>";
+
 }

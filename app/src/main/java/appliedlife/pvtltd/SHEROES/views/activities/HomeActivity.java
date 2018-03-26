@@ -754,13 +754,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.fab_filter)
     public void createPostActivity() {
-        String fabString = (String) mFloatActionBtn.getTag();
+        /*String fabString = (String) mFloatActionBtn.getTag();
         if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
             CommunityPost communityPost = new CommunityPost();
             communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
             createCommunityPostOnClick(communityPost);
 
-        }
+        }*/
+        ArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
 
     }
 

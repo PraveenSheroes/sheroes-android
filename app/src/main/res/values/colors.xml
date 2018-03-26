@@ -13,6 +13,7 @@
     <color name="secondary_text_disabled_dark">#36FFFFFF</color>
     <color name="secondary_text_default_dark">#B3FFFFFF</color>
     <color name="white">#ffffff</color>
+    <color name="transparent_darker">#d9000000</color>
     <color name="grey8">#fafafa</color>
     <color name="challenge_post">#ff4531</color>
     <color name="carousel_card_bg">#F9F9F9</color>
