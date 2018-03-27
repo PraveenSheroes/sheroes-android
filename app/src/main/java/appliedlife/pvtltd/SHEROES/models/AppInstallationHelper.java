@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -51,6 +52,8 @@ public class AppInstallationHelper {
     @Inject
     AppInstallationModel appInstallationModel;
 
+    public static Object appInstallationObjectLock = new Object();
+
     private AppInstallation mAppInstallationLocal;
     private Context mContext;
 
@@ -69,6 +72,18 @@ public class AppInstallationHelper {
      *                    If false, No change to isLoggedOut
      */
     public void setupAndSaveInstallation(final boolean hasLoggedIn) {
+        synchronized (appInstallationObjectLock) {
+            if (mAppInstallationPref == null || !mAppInstallationPref.isSet()) {
+                mAppInstallationLocal = new AppInstallation();
+                mAppInstallationPref.set(mAppInstallationLocal);
+            } else {
+                mAppInstallationLocal = mAppInstallationPref.get();
+            }
+        }
+        if (hasLoggedIn) {
+            mAppInstallationLocal.isLoggedOut = false;
+        }
+        fillGuid();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         GCMClientManager pushClientManager = new GCMClientManager((Activity) mContext, mContext.getString(R.string.ID_PROJECT_ID));
@@ -87,7 +102,6 @@ public class AppInstallationHelper {
     }
 
     private void fillDefaults() {
-        fillGuid();
         fillAppAndDeviceRelatedInfo();
         fillReferrerData();
         fillInstalledPackage();
@@ -121,9 +135,10 @@ public class AppInstallationHelper {
     }
 
     private void fillGuid() {
-        if (!CommonUtil.isNotEmpty(mAppInstallationLocal.guid)) {
+        if (CommonUtil.ensureFirstTime(AppConstants.ENSURE_FIRST_GUUID) && !CommonUtil.isNotEmpty(mAppInstallationLocal.guid)) {
             String uUId = UUID.randomUUID().toString();
             mAppInstallationLocal.guid = uUId;
+            mAppInstallationPref.set(mAppInstallationLocal);
         }
     }
 
@@ -245,14 +260,6 @@ public class AppInstallationHelper {
     }
 
     private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
-        if (mAppInstallationPref == null || !mAppInstallationPref.isSet()) {
-            mAppInstallationLocal = new AppInstallation();
-        } else {
-            mAppInstallationLocal = mAppInstallationPref.get();
-        }
-        if (hasLoggedIn) {
-            mAppInstallationLocal.isLoggedOut = false;
-        }
         mAppInstallationLocal.gcmId = registrationId;
         saveInBackground(mContext, new CommonUtil.Callback() {
             @Override

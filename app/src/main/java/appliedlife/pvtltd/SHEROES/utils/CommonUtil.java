@@ -1131,14 +1131,15 @@ public class CommonUtil {
         void callBack(boolean isShown);
     }
 
-    public static boolean ensureFirstTime(String key) {
+
+    public static synchronized boolean ensureFirstTime(String key) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (prefs == null) {
             return false;
         }
         boolean shown = prefs.getBoolean(key, false);
         if (!shown) {
-            prefs.edit().putBoolean(key, true).apply();
+            prefs.edit().putBoolean(key, true).commit();
         }
         return !shown;
     }
