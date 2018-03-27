@@ -325,7 +325,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         assignNavigationRecyclerListView();
         sheUserInit();
         mHomePresenter.queryConfig();
-        fetchAllCommunity();
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         if (null == mUserPreference) {
             logOut();
