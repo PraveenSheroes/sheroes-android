@@ -17,6 +17,8 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.DragEvent;
@@ -24,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -61,8 +64,10 @@ import appliedlife.pvtltd.SHEROES.utils.ArticleStatus;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -99,6 +104,16 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Bind(R.id.guideline_close)
     ImageView mGuidelineClose;
+
+    @Bind(R.id.editor_container)
+    RelativeLayout mEditorContainer;
+
+    @Bind(R.id.article_post_final_container)
+    RelativeLayout mArticleNextPageContainer;
+
+    @Bind(R.id.share_on_fb_switch)
+    SwitchCompat mShareToFacebook;
+
     //endregion
 
     //region member variables
@@ -108,6 +123,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     private File localImageSaveForChallenge;
     private Uri mImageCaptureUri;
     private String mEncodeImageUrl;
+    private boolean isNextPage;
     //endregion
 
     //region activity methods
@@ -136,6 +152,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         if (article == null) {
             isNewArticle = true;
         }
+        setupShareToFbListener();
     }
 
     @Override
@@ -218,10 +235,13 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == android.R.id.home) {
             if (!isGuidelineShown) {
-                onBackPress();
+                if (isNextPage) {
+                    hideNextPage();
+                } else {
+                    onBackPress();
+                }
             }
             return true;
         }
@@ -231,6 +251,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
                     postArticle(false);
                 }
             }
+        }
+
+        if (id == R.id.next) {
+            showNextPage();
         }
 
         if (id == R.id.draft) {
@@ -244,6 +268,17 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             showGuideLineView();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showNextPage() {
+        isNextPage = true;
+        mArticleNextPageContainer.setVisibility(View.VISIBLE);;
+        mEditorContainer.setVisibility(View.GONE);
+    }
+    private void hideNextPage() {
+        isNextPage = false;
+        mArticleNextPageContainer.setVisibility(View.GONE);
+        mEditorContainer.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -385,6 +420,16 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     //region private methods
     private void showCamera() {
         /*mCameraUtil.openImageIntent(ArticleSubmissionActivity.this);*/
+    }
+
+
+    private void setupShareToFbListener() {
+        mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+
+            }
+        });
     }
 
     private void postArticle(boolean isDraft) {
@@ -612,6 +657,18 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
+    }
+    //endregion
+
+    //region next page view
+    @OnClick(R.id.add_photo_container)
+    public void onAddCoverClicked(){
+
+    }
+
+    @OnClick(R.id.choose_community_container)
+    public void onChooseCommunityClicked(){
+        PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
     }
     //endregion
 }

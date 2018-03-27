@@ -417,6 +417,7 @@
     <string name="add_photo">Add Photo</string>
     <string name="post_anonymous">Post as Anonymous</string>
     <string name="action.post">Post</string>
+    <string name="action.next">Next</string>
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Write a Post</string>
     <string name="title.ask_question">Ask a Question</string>

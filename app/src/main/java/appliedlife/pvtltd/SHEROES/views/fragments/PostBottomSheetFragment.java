@@ -37,11 +37,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityListAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -61,6 +63,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     public List<Community> mCommunityList = new ArrayList<>();
     private MyCommunities mMyCommunities;
     CommunityPostActivity mCommunityPostActivity;
+    ArticleSubmissionActivity mArticleSubmissionActivity;
     @Inject
     HomePresenter mHomePresenter;
 
@@ -84,7 +87,11 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void onAttach(Activity activity) {
-        mCommunityPostActivity = (CommunityPostActivity) activity;
+        if(activity instanceof CommunityPostActivity){
+            mCommunityPostActivity = (CommunityPostActivity) activity;
+        }else {
+            mArticleSubmissionActivity = (ArticleSubmissionActivity) activity;
+        }
         super.onAttach(activity);
     }
 
@@ -163,7 +170,13 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        mCommunityPostActivity.showError(s, feedParticipationEnum);
+        if(getActivity() instanceof CommunityPostActivity){
+            mCommunityPostActivity.showError(s, feedParticipationEnum);
+        }else {
+            if(getActivity() instanceof ArticleSubmissionActivity){
+                mArticleSubmissionActivity.showError(s, feedParticipationEnum);
+            }
+        }
     }
 
     @Override
@@ -224,7 +237,9 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 clearCheck();
                 mMyCommunities.myCommunities.get(position).isChecked = true;
                 mCommunityListAdapter.notifyDataSetChanged();
-                mCommunityPostActivity.setMainCommunity(community, mMyCommunities);
+                if(getActivity() instanceof CommunityPostActivity){
+                    mCommunityPostActivity.setMainCommunity(community, mMyCommunities);
+                }
                 dismiss();
             }
         }));

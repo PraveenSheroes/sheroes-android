@@ -11,7 +11,7 @@
         android:title="@string/action_draft"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/post"
-        android:title="@string/action.post"
+    <item android:id="@+id/next"
+        android:title="@string/action.next"
         app:showAsAction="always"/>
 </menu>

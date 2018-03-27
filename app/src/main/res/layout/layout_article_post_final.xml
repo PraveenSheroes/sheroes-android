@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/article_post_final_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/upload_photo_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="8sp"
+        android:text="Upload cover photo (Optional)"
+        android:textColor="@color/toolbar_title"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+
+        <RelativeLayout
+            android:id="@+id/add_photo_container"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/dash_border"
+            android:layout_below="@id/upload_photo_text_view"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/add_photo_image_view"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_add_circle" />
+
+            <TextView
+                android:id="@+id/add_cover_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_toRightOf="@id/add_photo_image_view"
+                android:fontFamily="sans-serif"
+                android:text="Add cover photo"
+                android:textColor="#90949c"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/choose_community_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_photo_container"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp">
+
+    <TextView
+        android:id="@+id/choose_community_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="Choose upto 3 communities to post in"
+        android:textColor="#878787"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+        <ImageView
+            android:layout_width="9dp"
+            android:layout_height="14dp"
+            android:src="@drawable/ic_chevron_right"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/share_social_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/choose_community_container"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="8sp"
+        android:text="Share via social media"
+        android:textColor="@color/toolbar_title"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <RelativeLayout
+        android:id="@+id/fb_share_container"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/share_social_title_text_view"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp">
+
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/share_on_fb_switch"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:defaultValue="true"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="Share on Facebook"
+            android:drawablePadding="12dp"
+            android:drawableLeft="@drawable/ic_facebook_small"
+            android:textColor="#878787"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</RelativeLayout>

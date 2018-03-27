@@ -9,6 +9,12 @@
         android:id="@id/toolbar"
         layout="@layout/toolbar" />
 
+    <include
+        layout="@layout/layout_article_post_final"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"/>
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
@@ -16,12 +22,19 @@
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
+    <RelativeLayout
+        android:id="@+id/editor_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar">
+
     <fragment
         android:id="@+id/postEditor"
         android:name="org.wordpress.android.editor.EditorFragment"
-        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/guideline_container"
