@@ -75,15 +75,20 @@ public class AppInstallationHelper {
         synchronized (appInstallationObjectLock) {
             if (mAppInstallationPref == null || !mAppInstallationPref.isSet()) {
                 mAppInstallationLocal = new AppInstallation();
-                mAppInstallationPref.set(mAppInstallationLocal);
             } else {
                 mAppInstallationLocal = mAppInstallationPref.get();
             }
+
+            // Create a GUID to ensure uniqueness of installation object on server
+            if (!CommonUtil.isNotEmpty(mAppInstallationLocal.guid)) {
+                String uUId = UUID.randomUUID().toString();
+                mAppInstallationLocal.guid = uUId;
+            }
+            mAppInstallationPref.set(mAppInstallationLocal);
         }
         if (hasLoggedIn) {
             mAppInstallationLocal.isLoggedOut = false;
         }
-        fillGuid();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         GCMClientManager pushClientManager = new GCMClientManager((Activity) mContext, mContext.getString(R.string.ID_PROJECT_ID));
@@ -132,14 +137,6 @@ public class AppInstallationHelper {
         mAppInstallationLocal.platform = "android";
         mAppInstallationLocal.deviceType = "android";
         mAppInstallationLocal.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
-    }
-
-    private void fillGuid() {
-        if (CommonUtil.ensureFirstTime(AppConstants.ENSURE_FIRST_GUUID) && !CommonUtil.isNotEmpty(mAppInstallationLocal.guid)) {
-            String uUId = UUID.randomUUID().toString();
-            mAppInstallationLocal.guid = uUId;
-            mAppInstallationPref.set(mAppInstallationLocal);
-        }
     }
 
     private void fillInstalledPackage() {
