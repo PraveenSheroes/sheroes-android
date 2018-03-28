@@ -892,6 +892,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 int index = userMention.getStartIndex();
                 etView.setMentionSelectionText(userMention, index, index + 1);
             }
+            etView.getEditText().setSelection(etView.getEditText().length());
         }
     }
     @Override
@@ -952,7 +953,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mRecyclerView.setVisibility(View.GONE);
             mSuggestionList.setVisibility(View.VISIBLE);
             List<TaggedUserPojo> taggedUserPojoList=searchUserDataResponse.getParticipantList();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1,getString(R.string.comment_user_tag_header),"",""));
+            taggedUserPojoList.add(0, new TaggedUserPojo(1,getString(R.string.comment_user_tag_header),"","",0));
             hasMentions = true;
             UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
             etView.onReceiveSuggestionsResult(result, "data");

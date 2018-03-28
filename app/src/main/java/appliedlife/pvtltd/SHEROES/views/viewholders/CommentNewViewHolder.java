@@ -30,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -236,19 +237,30 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         SpannableString spannableString = new SpannableString(description);
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
-            final ClickableSpan postedInClick = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
+            if(null!=mentionSpan&&null!=mentionSpan.getMention()) {
+                final ClickableSpan postedInClick = new ClickableSpan() {
+                    @Override
+                    public void onClick(View textView) {
+                        Comment comment = new Comment();
+                        long participantId = mentionSpan.getMention().userId;
+                        comment.setParticipantUserId(participantId);
+                        if(mentionSpan.getMention().getUserType()==7) {
+                            comment.setVerifiedMentor(true);
+                        }else
+                        {
+                            comment.setVerifiedMentor(false);
+                        }
+                        mCommentCallback.userProfileNameClick(comment, mCommentAuthorName);
+                    }
 
-                }
-                @Override
-                public void updateDrawState(final TextPaint textPaint) {
-                    textPaint.setUnderlineText(false);
-                }
-            };
-            spannableString.setSpan(postedInClick, mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
-
+                    @Override
+                    public void updateDrawState(final TextPaint textPaint) {
+                        textPaint.setUnderlineText(false);
+                    }
+                };
+                spannableString.setSpan(postedInClick, mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
+            }
         }
 
         mUserComment.setMovementMethod(LinkMovementMethod.getInstance());

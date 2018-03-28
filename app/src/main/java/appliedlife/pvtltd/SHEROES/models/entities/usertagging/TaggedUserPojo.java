@@ -57,12 +57,17 @@ public class TaggedUserPojo implements Mentionable {
     @Expose
     public String name;
 
+    @SerializedName("user_type")
+    @Expose
+    public long userType;
 
-    public TaggedUserPojo(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl) {
+
+    public TaggedUserPojo(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl,long userType) {
         this.userId = userId;
         this.name = name;
         this.userProfileDeepLinkUrl = userProfileDeepLinkUrl;
         this.authorImageUrl = authorImageUrl;
+        this.userType=userType;
     }
 
     public int getUserId() {
@@ -151,6 +156,14 @@ public class TaggedUserPojo implements Mentionable {
         this.name = name;
     }
 
+    public long getUserType() {
+        return userType;
+    }
+
+    public void setUserType(long userType) {
+        this.userType = userType;
+    }
+
     // --------------------------------------------------
     // PersonLoader Class (loads people from JSON file)
     // --------------------------------------------------
@@ -203,6 +216,7 @@ public class TaggedUserPojo implements Mentionable {
         dest.writeInt(this.endIndex);
         dest.writeInt(this.startIndex);
         dest.writeString(this.name);
+        dest.writeLong(this.userType);
     }
 
     protected TaggedUserPojo(Parcel in) {
@@ -212,6 +226,7 @@ public class TaggedUserPojo implements Mentionable {
         this.endIndex = in.readInt();
         this.startIndex = in.readInt();
         this.name = in.readString();
+        this.userType = in.readLong();
     }
 
     public static final Creator<TaggedUserPojo> CREATOR = new Creator<TaggedUserPojo>() {
