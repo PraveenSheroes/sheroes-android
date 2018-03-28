@@ -6,15 +6,20 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_10"
-        android:background="@drawable/ic_caution"/>
+        android:layout_marginLeft="@dimen/dp_size_24"
+        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginBottom="@dimen/dp_size_10"
+        android:background="@drawable/user_tag_header"/>
     <TextView
+        android:id="@+id/tv_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_10"
+        android:layout_marginLeft="@dimen/dp_size_24"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginBottom="@dimen/dp_size_8"
+        android:layout_marginRight="@dimen/dp_size_8"
         android:textColor="@color/comment_text"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:textSize="@dimen/sp_size_12"
-        android:text="You can tag community owners, your followers or people who engaged on this post."/>
+        android:textSize="@dimen/sp_size_12"/>
 
 </LinearLayout>

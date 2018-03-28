@@ -17,10 +17,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -41,7 +43,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private boolean showMoreItem = false;
     public static final int INITIAL_ITEM_COUNT = 1;
     public int commentAdded = 0;
-
+    private List<MentionSpan> mentionSpanList;
+    private boolean hasMentions=false;
     //region Constructor
     public CommentListAdapter(Context context, ArticlePresenterImpl articlePresenter, View.OnClickListener onDeleteClickListener) {
         mContext = context;
@@ -207,7 +210,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 public void onClick(View view) {
                                     hideKeyboard();
                                     hideEditorView(comment);
-                                    mArticlePresenter.onEditComment(position, AppUtils.getInstance().editCommentRequestBuilder(comment.getEntityId(), editBody.getText().toString().trim(), false, true, comment.getId()));
+                                    mArticlePresenter.onEditComment(position, AppUtils.getInstance().editCommentRequestBuilder(comment.getEntityId(), editBody.getText().toString().trim(), false, true, comment.getId(),hasMentions,mentionSpanList));
                                 }
                             });
                             mCancel.setOnClickListener((new View.OnClickListener() {

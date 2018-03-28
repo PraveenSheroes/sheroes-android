@@ -27,7 +27,6 @@ import android.text.InputType;
 import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
-import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionsEditable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
@@ -58,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizer;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizerConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 
 /**
  * Custom view for the RichEditor. Manages three subviews:
@@ -117,11 +116,17 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     public void init(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         // Inflate view from XML layout file
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.editor_view, this, true);
 
         // Get the inner views
-        mMentionsEditText = findViewById(R.id.text_editor);
+        if (context instanceof CommunityPostActivity) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater.inflate(R.layout.editor_view_for_create_post, this, true);
+            mMentionsEditText = findViewById(R.id.text_editor_create_post);
+        } else {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater.inflate(R.layout.editer_view_for_comment, this, true);
+            mMentionsEditText = findViewById(R.id.text_editor_comment);
+        }
 
 
         // Get the MentionSpanConfig from custom XML attributes and set it
@@ -196,10 +201,14 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             mUserTagSuggestionsAdapter.clear();
         }
     }
+
     public MentionsEditText getEditText() {
-        if(mMentionsEditText==null)
-        {
-           return mMentionsEditText=findViewById(R.id.text_editor);
+        if (mMentionsEditText == null) {
+            if (getContext() instanceof CommunityPostActivity) {
+                mMentionsEditText = findViewById(R.id.text_editor_create_post);
+            } else {
+                mMentionsEditText = findViewById(R.id.text_editor_comment);
+            }
         }
         return mMentionsEditText;
     }
@@ -419,11 +428,12 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         requestLayout();
         invalidate();
     }
+
     /**
      * {@inheritDoc}
      */
     public boolean isDisplayingSuggestions() {
-        if(null!=mSuggestionsList) {
+        if (null != mSuggestionsList) {
             return mSuggestionsList.getVisibility() == View.VISIBLE;
         }
         return false;
@@ -558,13 +568,14 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         }
     }
 
-    public void setEditText(final @NonNull String  textData,int position) {
+    public void setEditText(final @NonNull String textData, int position) {
         if (mMentionsEditText != null) {
             mMentionsEditText.setText(textData);
             mMentionsEditText.requestFocus();
             mMentionsEditText.setSelection(position);
         }
     }
+
     /**
      * Sets the text being displayed within the {@link RichEditorView}. Note that this removes the
      * {@link TextWatcher} temporarily to avoid changing the text while listening to text changes
@@ -572,11 +583,12 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      *
      * @param mention the text to display
      */
-    public void setMentionSelectionText(@NonNull TaggedUserPojo mention,int start,int end) {
+    public void setMentionSelectionText(@NonNull TaggedUserPojo mention, int start, int end) {
         if (mMentionsEditText != null) {
-            mMentionsEditText.editInsertMention(mention,start,end);
+            mMentionsEditText.editInsertMention(mention, start, end);
         }
     }
+
     /**
      * Sets the input type of the embedded {@link MentionsEditText}.
      *

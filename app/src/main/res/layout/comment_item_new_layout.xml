@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/li_list_comment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,11 +31,10 @@
         android:id="@+id/tv_list_user_comment_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_alignParentRight="true"
         android:layout_alignBaseline="@+id/comment_author_name"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="6dp"
-        android:text="2 min"
         android:textColor="@color/text_grey"
         android:textSize="14sp" />
 
@@ -44,46 +42,42 @@
         android:id="@+id/comment_author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image_container"
-        android:layout_toLeftOf="@id/tv_list_user_comment_time"
         android:layout_marginTop="16dp"
-        android:textSize="14sp"
+        android:layout_toLeftOf="@id/tv_list_user_comment_time"
+        android:layout_toRightOf="@id/image_container"
         android:fontFamily="sans-serif"
-        android:textStyle="bold"
-        android:textColor="#3c3c3c"
         android:lineSpacingExtra="4sp"
-        tools:text="Anupriya Udai" />
+        android:textColor="#3c3c3c"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
         android:id="@+id/tv_list_user_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/image_container"
-        android:layout_toRightOf="@id/image_container"
-        android:layout_marginRight="8dp"
         android:layout_below="@+id/comment_author_name"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_toRightOf="@id/image_container"
         android:fontFamily="sans-serif"
         android:lineSpacingExtra="4sp"
         android:textColor="#3c3c3c"
         android:textColorLink="@color/view_more"
-        android:textSize="@dimen/sp_size_14"
-        tools:text="Anyone on the other end who is interviewing you or trying to recruit you\nlooks for honesty and zeal to learn and adapt. Be honest ..." />
+        android:textSize="@dimen/sp_size_14" />
 
     <TextView
         android:id="@+id/like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/image_container"
         android:layout_below="@+id/tv_list_user_comment"
+        android:layout_toRightOf="@id/image_container"
         android:drawablePadding="8dp"
         android:gravity="center"
         android:paddingBottom="12dp"
         android:paddingRight="16dp"
         android:paddingTop="12dp"
-        android:text="1"
         android:textColor="@color/text_grey"
-        android:drawableLeft="@drawable/vector_like_red_18dp"
         android:textSize="14sp" />
 
     <ImageView

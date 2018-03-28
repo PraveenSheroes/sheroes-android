@@ -1999,7 +1999,7 @@ public class AppUtils {
         return bookmarkRequestPojo;
     }
 
-    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous) {
+    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2009,10 +2009,13 @@ public class AppUtils {
         commentReactionRequestPojo.setUserComment(userComment);
         commentReactionRequestPojo.setIsAnonymous(isAnonymous);
         commentReactionRequestPojo.setEntityId(entityId);
+        /*User mention*/
+        commentReactionRequestPojo.setHasMentions(hasMention);
+        commentReactionRequestPojo.setUserMentionList(mentionSpanList);
         return commentReactionRequestPojo;
     }
 
-    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId) {
+    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2024,6 +2027,9 @@ public class AppUtils {
         commentReactionRequestPojo.setIsActive(isActive);
         commentReactionRequestPojo.setEntityId(entityId);
         commentReactionRequestPojo.setParticipationId(participationId);
+        /*User mention*/
+        commentReactionRequestPojo.setHasMentions(hasMention);
+        commentReactionRequestPojo.setUserMentionList(mentionSpanList);
         return commentReactionRequestPojo;
     }
 

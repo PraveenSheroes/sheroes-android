@@ -1516,8 +1516,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
         if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
+            List<TaggedUserPojo> taggedUserPojoList=searchUserDataResponse.getParticipantList();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1,getString(R.string.create_post_user_tag_header),"",""));
             hasMentions = true;
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, searchUserDataResponse.getParticipantList());
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
             etView.onReceiveSuggestionsResult(result, "data");
         }else
         {

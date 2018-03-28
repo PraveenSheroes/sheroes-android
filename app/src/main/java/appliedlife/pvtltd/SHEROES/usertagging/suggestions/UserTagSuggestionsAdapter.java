@@ -16,6 +16,7 @@ package appliedlife.pvtltd.SHEROES.usertagging.suggestions;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestions
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
 
@@ -188,9 +190,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
                 return new UserTagCardHolder(view, userTagCallback);
-           /* case TYPE_HEADER:
+            case TYPE_HEADER:
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_header_layout, parent, false);
-                return new HeaderTaggedUserViewHolder(header, userTagCallback);*/
+                return new HeaderTaggedUserViewHolder(header, userTagCallback);
         }
         return null;
     }
@@ -206,11 +208,11 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
                 Suggestible suggestible1 = mSuggestions.get(position);
                 userTagCardHolder.bindData(suggestible1, mContext, position);
                 break;
-           /* case TYPE_HEADER:
+            case TYPE_HEADER:
                 HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
                 Suggestible suggestible = mSuggestions.get(position);
                 headerTaggedUserViewHolder.bindData(suggestible, mContext, position);
-                break;*/
+                break;
         }
     }
 
@@ -221,14 +223,13 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
-        return TYPE_CONTACT;
-       /* if(position==0)
+        if(position==0)
         {
             return TYPE_HEADER;
         }else
         {
             return TYPE_CONTACT;
-        }*/
+        }
     }
 
 

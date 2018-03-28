@@ -34,8 +34,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -281,12 +286,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void addComment(String commentText, boolean isAnonymous) {
+    public void addComment(String commentText, boolean isAnonymous, boolean hasMention, List<MentionSpan> mentionSpanList) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
-        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
+        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous,hasMention,mentionSpanList);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
@@ -738,6 +743,65 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         return null;
     }
+    public void userTaggingSearchEditText(final QueryToken queryToken, final String queryData, final UserPostSolrObj userPostSolrObj) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        SearchUserDataRequest searchUserDataRequest = null;
+        Long communityId = null,postEntityId=null,postAuthorUserId=null;
+        if (null != userPostSolrObj) {
+            communityId = userPostSolrObj.getCommunityId();
+            postEntityId=userPostSolrObj.getEntityOrParticipantId();
+            postAuthorUserId=userPostSolrObj.getAuthorId();
+        }
+        if(queryToken.getTokenString().length()==1)
+        {
+            searchUserDataRequest = mAppUtils.searchUserDataRequest("@", communityId, postEntityId, postAuthorUserId, "COMMENT");
+        }else
+        {
+            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, postEntityId, postAuthorUserId, "COMMENT");
+        }
 
+        getSearchResult(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+            }
+
+            @Override
+            public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                getMvpView().stopProgressBar();
+                if (null != searchUserDataResponse) {
+                    if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                    } else {
+                        getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
+                    }
+                }
+            }
+
+        });
+
+    }
+    private Observable<SearchUserDataResponse> getSearchResult(SearchUserDataRequest searchUserDataRequest) {
+        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
+                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
+                    @Override
+                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
+                        return searchUserDataResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
     //endregion
 }

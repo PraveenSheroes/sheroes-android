@@ -16,16 +16,19 @@
             android:layout_height="@dimen/feed_profile_icon_size"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_margin="@dimen/dp_size_10"
-            android:src="@drawable/ic_anonomous" />
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:layout_marginBottom="@dimen/dp_size_10"
+            android:src="@drawable/ic_user_contact" />
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_24"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginBottom="@dimen/dp_size_8"
+            android:layout_marginRight="@dimen/dp_size_8"
             android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/comment_text"
@@ -35,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_8"
             android:layout_marginRight="@dimen/dp_size_16"
             android:drawableRight="@drawable/ic_spinner_icon"
             android:rotation="270" />
