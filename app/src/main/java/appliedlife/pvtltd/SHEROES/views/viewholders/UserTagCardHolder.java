@@ -42,11 +42,11 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
     @Override
     public void bindData(Suggestible suggestible, Context context, int position) {
         this.suggestible = suggestible;
-        String name = ((TaggedUserPojo) suggestible).getFirstName();
+        String name = ((TaggedUserPojo) suggestible).getName();
         if (StringUtil.isNotNullOrEmptyString(name)) {
             mTvName.setText(name);
         }
-        String imageUrl = ((TaggedUserPojo) suggestible).getUserProfileURL();
+        String imageUrl = ((TaggedUserPojo) suggestible).getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             ivUserPicCircleIcon.setCircularImage(true);
             ivUserPicCircleIcon.bindImage(imageUrl);

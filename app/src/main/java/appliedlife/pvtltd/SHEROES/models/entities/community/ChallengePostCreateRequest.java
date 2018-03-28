@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 
 /**
  * Created by SHEROES-TECH on 22-03-2017.
@@ -68,6 +69,17 @@ public class ChallengePostCreateRequest extends BaseRequest implements Parcelabl
     @SerializedName("challenge_id")
     @Expose
     private int mChallengeId;
+
+    /* Mention fields*/
+
+    @SerializedName("has_mentions")
+    @Expose
+    private boolean hasMentions;
+
+    @SerializedName("user_mentions")
+    @Expose
+    private List<MentionSpan> userMentionList;
+
 
     public boolean isAccepted() {
         return isAccepted;
@@ -276,6 +288,22 @@ public class ChallengePostCreateRequest extends BaseRequest implements Parcelabl
         isSpam = spam;
     }
 
+    public boolean isHasMentions() {
+        return hasMentions;
+    }
+
+    public void setHasMentions(boolean hasMentions) {
+        this.hasMentions = hasMentions;
+    }
+
+    public List<MentionSpan> getUserMentionList() {
+        return userMentionList;
+    }
+
+    public void setUserMentionList(List<MentionSpan> userMentionList) {
+        this.userMentionList = userMentionList;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -297,6 +325,8 @@ public class ChallengePostCreateRequest extends BaseRequest implements Parcelabl
         dest.writeString(this.mSourceType);
         dest.writeInt(this.mCompletionPercent);
         dest.writeInt(this.mChallengeId);
+        dest.writeByte(this.hasMentions ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(this.userMentionList);
         dest.writeValue(this.id);
         dest.writeValue(this.communityId);
         dest.writeString(this.creatorType);
@@ -322,6 +352,8 @@ public class ChallengePostCreateRequest extends BaseRequest implements Parcelabl
         this.mSourceType = in.readString();
         this.mCompletionPercent = in.readInt();
         this.mChallengeId = in.readInt();
+        this.hasMentions = in.readByte() != 0;
+        this.userMentionList = in.createTypedArrayList(MentionSpan.CREATOR);
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.communityId = (Long) in.readValue(Long.class.getClassLoader());
         this.creatorType = in.readString();

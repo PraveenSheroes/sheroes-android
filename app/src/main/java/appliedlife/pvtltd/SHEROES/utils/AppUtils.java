@@ -108,6 +108,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 
@@ -1676,6 +1677,19 @@ public class AppUtils {
         return userSummaryRequest;
     }
 
+    public SearchUserDataRequest searchUserDataRequest(String query, Long communityId, Long postEntityId, Long postUserAuthorId,String context) {
+        AppUtils appUtils = AppUtils.getInstance();
+        SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
+        searchUserDataRequest.setSearchNameOfUserForTagging(query);
+        searchUserDataRequest.setCommunityId(communityId);
+        searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
+        searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        searchUserDataRequest.setPostAuthorUserId(postUserAuthorId);
+        searchUserDataRequest.setPostEntityId(postEntityId);
+        searchUserDataRequest.setUserMentionContext(context);
+        return searchUserDataRequest;
+    }
     /**
      * Request for feed api
      */
@@ -1821,14 +1835,14 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime) {
-        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken);
+    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime,boolean hasMention, List<MentionSpan> userMentionList) {
+        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken,hasMention,userMentionList);
         communityPostCreateRequest.setSchedulePost(mDateTime);
         return communityPostCreateRequest;
     }
 
 
-        public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken) {
+        public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1854,11 +1868,14 @@ public class AppUtils {
             communityPostCreateRequest.setOgVideoLinkB(false);
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
+        /*User tagging fields*/
+        communityPostCreateRequest.setHasMentions(hasMention);
+        communityPostCreateRequest.setUserMentionList(userMentionList);
         return communityPostCreateRequest;
     }
 
 
-    public static ChallengePostCreateRequest createChallengePostRequestBuilder(String createType, int challengeId, String sourceType, String description, List<String> imag, LinkRenderResponse linkRenderResponse) {
+    public static ChallengePostCreateRequest createChallengePostRequestBuilder(String createType, int challengeId, String sourceType, String description, List<String> imag, LinkRenderResponse linkRenderResponse, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         ChallengePostCreateRequest challengePostCreateRequest = new ChallengePostCreateRequest();
         challengePostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1888,6 +1905,9 @@ public class AppUtils {
             challengePostCreateRequest.setOgVideoLinkB(false);
             challengePostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
+        /*User tagging fields*/
+        challengePostCreateRequest.setHasMentions(hasMention);
+        challengePostCreateRequest.setUserMentionList(userMentionList);
         return challengePostCreateRequest;
     }
 
@@ -1900,7 +1920,7 @@ public class AppUtils {
         return linkRequest;
     }
 
-    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, List<Long> deletedImageId, LinkRenderResponse linkRenderResponse) {
+    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, List<Long> deletedImageId, LinkRenderResponse linkRenderResponse, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1925,6 +1945,9 @@ public class AppUtils {
             communityPostCreateRequest.setOgVideoLinkB(false);
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
+              /*User tagging fields*/
+        communityPostCreateRequest.setHasMentions(hasMention);
+        communityPostCreateRequest.setUserMentionList(userMentionList);
         return communityPostCreateRequest;
     }
 

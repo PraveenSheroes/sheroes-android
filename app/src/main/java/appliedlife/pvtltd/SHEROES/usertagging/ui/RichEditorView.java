@@ -40,6 +40,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
@@ -189,16 +190,16 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     }
 
-    public void setInsertion(Mentionable mention) {
+    public void setInsertion(TaggedUserPojo taggedUserPojo) {
         if (mMentionsEditText != null) {
-            mMentionsEditText.insertMention(mention);
+            mMentionsEditText.insertMention(taggedUserPojo);
             mUserTagSuggestionsAdapter.clear();
         }
     }
     public MentionsEditText getEditText() {
         if(mMentionsEditText==null)
         {
-           return null;
+           return mMentionsEditText=findViewById(R.id.text_editor);
         }
         return mMentionsEditText;
     }
@@ -275,7 +276,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      */
     @Override
     public void afterTextChanged(Editable s) {
-        Log.e("Data", "###### editable data  " + s.toString());
         //  TODO: Here we can implement link rendering
         textChangeListner(s);
     }
@@ -548,19 +548,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     }
 
     /**
-     * Sets the text being displayed within the {@link RichEditorView}. Note that this removes the
-     * {@link TextWatcher} temporarily to avoid changing the text while listening to text changes
-     * (which could result in an infinite loop).
-     *
-     * @param mention the text to display
-     */
-    public void setMentionSelectionText(@NonNull Mentionable mention, int start, int end) {
-        if (mMentionsEditText != null) {
-            mMentionsEditText.editInsertMention(mention, start, end);
-        }
-    }
-
-    /**
      * Sets the text hint to use within the embedded {@link MentionsEditText}.
      *
      * @param hint the text hint to use
@@ -568,6 +555,14 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     public void setHint(final @NonNull CharSequence hint) {
         if (mMentionsEditText != null) {
             mMentionsEditText.setHint(hint);
+        }
+    }
+
+    public void setEditText(final @NonNull String  textData,int position) {
+        if (mMentionsEditText != null) {
+            mMentionsEditText.setText(textData);
+            mMentionsEditText.requestFocus();
+            mMentionsEditText.setSelection(position);
         }
     }
 

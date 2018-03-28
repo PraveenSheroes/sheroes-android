@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -48,10 +49,12 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
     @Inject
     CommunityModel communityModel;
     private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
+    @Inject
+    AppUtils mAppUtils;
 
     @Inject
-    public CreatePostPresenter() {
-
+    public CreatePostPresenter(AppUtils appUtils) {
+        mAppUtils = appUtils;
     }
 
     public void sendPost(CommunityPostCreateRequest communityPostCreateRequest) {
@@ -80,7 +83,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                     getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
                     AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
                 } else {
-                    getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                    getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
                     getMvpView().stopProgressBar();
                 }
             }
@@ -190,7 +193,48 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
     }
 
-    public void userTaggingSearchEditText(final MentionsEditText searchQuestionText, final String queryData, final CommunityPost communityPost) {
+    public void userTaggingSearchEditText(final QueryToken queryToken, final String queryData, final CommunityPost communityPost) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        SearchUserDataRequest searchUserDataRequest = null;
+        Long communityId = null;
+        if (null != communityPost && null != communityPost.community) {
+            communityId = communityPost.community.id;
+        }
+        searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
+        LogUtils.info("data", "########### @data--->   " +searchUserDataRequest.toString());
+        communityModel.getSearchResult(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+            }
+
+            @Override
+            public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                if (null != searchUserDataResponse) {
+                    LogUtils.info("data", "########### @response--->   " +searchUserDataResponse.toString());
+                    if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                    } else {
+                        getMvpView().showError("Users are not available", ERROR_CREATE_COMMUNITY);
+                    }
+                }
+            }
+
+        });
+
+    }
+
+   /* public void userTaggingSearchEditText(final QueryToken queryToken, final MentionsEditText searchQuestionText, final String queryData, final CommunityPost communityPost) {
         RxTextView.textChanges(searchQuestionText)
                 .filter(new Predicate<CharSequence>() {
                     @Override
@@ -209,13 +253,13 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                     public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
                         SearchUserDataRequest searchUserDataRequest = null;
                         Long communityId = null;
-                        if (null != communityPost&&null!=communityPost.community) {
+                        if (null != communityPost && null != communityPost.community) {
                             communityId = communityPost.community.id;
                         }
                         if (queryData.length() < MIN_QUESTION_SEARCH_LENGTH) {
                             return Observable.empty();
                         } else {
-                            searchUserDataRequest = searchUserDataRequest(queryData.trim().replace("@",""), communityId, null, null);
+                            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
                         }
                         LogUtils.info("data", "########### @final string--->   " + queryData);
                         if (searchUserDataRequest == null) {
@@ -244,21 +288,15 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                     @Override
                     public void onNext(SearchUserDataResponse searchUserDataResponse) {
                         getMvpView().stopProgressBar();
-                        getMvpView().userTagResponse(searchUserDataResponse);
+                        if (null != searchUserDataResponse) {
+                            if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                                getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                            } else {
+                                getMvpView().showError("Users are not available", ERROR_CREATE_COMMUNITY);
+                            }
+                        }
                     }
                 });
-    }
+    }*/
 
-    private SearchUserDataRequest searchUserDataRequest(String query, Long communityId, Long postEntityId, Long postUserAuthorId) {
-        AppUtils appUtils = AppUtils.getInstance();
-        SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
-        searchUserDataRequest.setSearchNameOfUserForTagging(query);
-        searchUserDataRequest.setCommunityId(communityId);
-        searchUserDataRequest.setAppVersion(appUtils.getAppVersionName());
-        searchUserDataRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        searchUserDataRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        searchUserDataRequest.setPostAuthorUserId(postUserAuthorId);
-        searchUserDataRequest.setPostEntityId(postEntityId);
-        return searchUserDataRequest;
-    }
 }

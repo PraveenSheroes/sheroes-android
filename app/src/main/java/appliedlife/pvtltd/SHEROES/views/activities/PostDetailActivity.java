@@ -70,7 +70,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -162,7 +161,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private int mFromNotification;
 
 
-    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
+
     //endregion
 
     //region activity methods
@@ -378,11 +377,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
 
-    @Override
-    public void showListOfParticipate(List<UserTaggingPerson> participantLists) {
-        customSocialUserAdapter.addAll(participantLists);
-        customSocialUserAdapter.notifyDataSetChanged();
-    }
+
 
     @Override
     public String getStreamType() {

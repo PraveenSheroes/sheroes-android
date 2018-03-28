@@ -36,8 +36,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -114,7 +112,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
     }
 
-    public void getAllCommentFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo) {
+    private void getAllCommentFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             getMvpView().hideProgressBar();
@@ -207,7 +205,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
+    private Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
         return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
@@ -244,7 +242,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
                     mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
-                    if(CommonUtil.isNotEmpty(getMvpView().getStreamType())){
+                    if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
                         mUserPostObj.setStreamType(getMvpView().getStreamType());
                     }
                     mBaseResponseList.add(mUserPostObj);
@@ -288,7 +286,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
-        CommentReactionRequestPojo  commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
+        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
@@ -327,7 +325,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
+    private Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
@@ -377,7 +375,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
+    private Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
         return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
@@ -389,7 +387,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public static int findCommentPositionById(List<BaseResponse> baseResponses, long id) {
+    private static int findCommentPositionById(List<BaseResponse> baseResponses, long id) {
         if (CommonUtil.isEmpty(baseResponses)) {
             return -1;
         }
@@ -398,7 +396,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             BaseResponse baseResponse = baseResponses.get(i);
             if (baseResponse instanceof Comment) {
                 Comment comment = (Comment) baseResponse;
-                if (comment != null && comment.getId() == id) {
+                if (comment.getId() == id) {
                     return i;
                 }
             }
@@ -435,7 +433,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                     comment.isLiked = true;
                     comment.likeCount++;
                 }
@@ -447,7 +445,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
-                                .streamType((mUserPostObj!=null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType(): "")
+                                .streamType((mUserPostObj != null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType() : "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -484,7 +482,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                     comment.isLiked = false;
                     comment.likeCount--;
                 }
@@ -496,7 +494,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
-                                .streamType((mUserPostObj!=null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType(): "")
+                                .streamType((mUserPostObj != null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType() : "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -533,52 +531,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
+    private Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
         return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
                 .map(new Function<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
                     @Override
                     public DeleteCommunityPostResponse apply(DeleteCommunityPostResponse deleteCommunityPostResponse) {
                         return deleteCommunityPostResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-
-    public void searchUserTagging(SearchUserDataRequest searchUserDataRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            return;
-        }
-        searchUserDataFromModel(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-            }
-
-            @Override
-            public void onNext(SearchUserDataResponse searchUserDataResponse) {
-                if (!searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.INVALID)) {
-                    getMvpView().showListOfParticipate(searchUserDataResponse.getParticipantList());
-                }
-            }
-        });
-
-    }
-
-    public Observable<SearchUserDataResponse> searchUserDataFromModel(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.getUserTaggingResponse(searchUserDataRequest)
-                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
-                    @Override
-                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
-                        return searchUserDataResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -617,7 +575,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                     userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                     userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                     mBaseResponseList.set(0, userPostSolrObj);
@@ -661,7 +619,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
+                if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                     userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                     userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                     mBaseResponseList.set(0, userPostSolrObj);
@@ -673,7 +631,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
+    private Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
@@ -685,7 +643,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
+    private Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
@@ -716,10 +674,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    if (approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true) {
+                    if (!approveSpamPostRequest.isApproved() && approveSpamPostRequest.isSpam()) {
                         // spam post was rejected
                         getMvpView().onPostDeleted();
-                    } else if (approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false) {
+                    } else if (approveSpamPostRequest.isApproved() && !approveSpamPostRequest.isSpam()) {
                         // spam post was approved
                         userPostSolrObj.setSpamPost(false);
                         mBaseResponseList.set(0, userPostSolrObj);
@@ -733,7 +691,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
+    private Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
         return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
                 .map(new Function<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
                     @Override
@@ -762,7 +720,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public void updateUserPost(UserPostSolrObj userPostSolrObj) {
         mUserPostObj = userPostSolrObj;
-        if(CommonUtil.isNotEmpty(getMvpView().getStreamType())){
+        if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
             mUserPostObj.setStreamType(getMvpView().getStreamType());
         }
         mBaseResponseList.set(0, userPostSolrObj);

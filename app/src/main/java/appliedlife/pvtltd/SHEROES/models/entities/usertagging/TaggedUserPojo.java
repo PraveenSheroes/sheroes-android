@@ -14,52 +14,82 @@
 
 package appliedlife.pvtltd.SHEROES.models.entities.usertagging;
 
-import android.content.res.Resources;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
  * Model representing a basic, mentionable city.
  */
 public class TaggedUserPojo implements Mentionable {
 
-   private final String mFirstName;
-    private final String mLastName;
-    private final String mUserProfileURL;
+    @SerializedName("user_id")
+    @Expose
+    public int userId;
 
-    public TaggedUserPojo(String firstName, String lastName, String pictureURL) {
-        mFirstName = firstName;
-        mLastName = lastName;
-        mUserProfileURL = pictureURL;
+    @SerializedName("user_profile_url")
+    @Expose
+    public String userProfileDeepLinkUrl;
+
+    @SerializedName("user_profile_image_url")
+    @Expose
+    public String authorImageUrl;
+
+    @SerializedName("end")
+    @Expose
+    public int endIndex;
+
+    @SerializedName("start")
+    @Expose
+    public int startIndex;
+
+    @SerializedName("name")
+    @Expose
+    public String name;
+
+
+    public TaggedUserPojo(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl) {
+        this.userId = userId;
+        this.name = name;
+        this.userProfileDeepLinkUrl = userProfileDeepLinkUrl;
+        this.authorImageUrl = authorImageUrl;
     }
 
-    public String getFirstName() {
-        return mFirstName;
+    public int getUserId() {
+        return userId;
     }
 
-    public String getLastName() {
-        return mLastName;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getFullName() {
-        return getFirstName() + " " + getLastName();
+
+    public String getUserProfileDeepLinkUrl() {
+        return userProfileDeepLinkUrl;
     }
 
-    public String getUserProfileURL() {
-        return mUserProfileURL;
+    public void setUserProfileDeepLinkUrl(String userProfileDeepLinkUrl) {
+        this.userProfileDeepLinkUrl = userProfileDeepLinkUrl;
     }
+
+    public String getAuthorImageUrl() {
+        return authorImageUrl;
+    }
+
+    public void setAuthorImageUrl(String authorImageUrl) {
+        this.authorImageUrl = authorImageUrl;
+    }
+
 
     // --------------------------------------------------
     // Mentionable/Suggestible Implementation
@@ -70,9 +100,9 @@ public class TaggedUserPojo implements Mentionable {
     public String getTextForDisplayMode(MentionDisplayMode mode) {
         switch (mode) {
             case FULL:
-                return getFullName();
+                return getName();
             case PARTIAL:
-                String[] words = getFullName().split(" ");
+                String[] words = getName().split(" ");
                 return (words.length > 1) ? words[0] : "";
             case NONE:
             default:
@@ -89,12 +119,12 @@ public class TaggedUserPojo implements Mentionable {
 
     @Override
     public int getSuggestibleId() {
-        return getFullName().hashCode();
+        return getName().hashCode();
     }
 
     @Override
     public String getSuggestiblePrimaryText() {
-        return getFullName();
+        return getName();
     }
 
     @Override
@@ -104,15 +134,25 @@ public class TaggedUserPojo implements Mentionable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mFirstName);
-        dest.writeString(mLastName);
-        dest.writeString(mUserProfileURL);
+        dest.writeInt(userId);
+        dest.writeString(name);
+        dest.writeString(userProfileDeepLinkUrl);
+        dest.writeString(authorImageUrl);
+
+        dest.writeString(name);
+        dest.writeInt(startIndex);
+        dest.writeInt(endIndex);
     }
 
     public TaggedUserPojo(Parcel in) {
-        mFirstName = in.readString();
-        mLastName = in.readString();
-        mUserProfileURL = in.readString();
+        userId = in.readInt();
+        name = in.readString();
+        userProfileDeepLinkUrl = in.readString();
+        authorImageUrl = in.readString();
+
+
+        startIndex = in.readInt();
+        endIndex = in.readInt();
     }
 
     public static final Parcelable.Creator<TaggedUserPojo> CREATOR
@@ -126,33 +166,44 @@ public class TaggedUserPojo implements Mentionable {
         }
     };
 
+    public int getEndIndex() {
+        return endIndex;
+    }
+
+    public void setEndIndex(int endIndex) {
+        this.endIndex = endIndex;
+    }
+
+    public int getStartIndex() {
+        return startIndex;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     // --------------------------------------------------
     // PersonLoader Class (loads people from JSON file)
     // --------------------------------------------------
 
-    public static class CityLoader extends MentionsLoader<TaggedUserPojo> {
-        private static final String TAG = TaggedUserPojo.CityLoader.class.getSimpleName();
+    public static class TaggUserDataLoader extends MentionsLoader<TaggedUserPojo> {
+        private static final String TAG = TaggUserDataLoader.class.getSimpleName();
 
-        public CityLoader(Resources res) {
-            super(res, R.raw.people);
+        public TaggUserDataLoader(List<TaggedUserPojo> taggedUserPojoList) {
+            super(taggedUserPojoList);
         }
 
         @Override
-        public TaggedUserPojo[] loadData(JSONArray arr) {
-            TaggedUserPojo[] data = new TaggedUserPojo[arr.length()];
-            try {
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject obj = arr.getJSONObject(i);
-                    String first = obj.getString("first");
-                    String last = obj.getString("last");
-                    String url = obj.getString("picture");
-                    data[i] = new TaggedUserPojo(first, last, url);
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Unhandled exception while parsing person JSONArray", e);
-            }
-
-            return data;
+        public List<TaggedUserPojo> loadData(List<TaggedUserPojo> taggedUserPojoList) {
+            return taggedUserPojoList;
         }
 
         // Modified to return suggestions based on both first and last name
@@ -160,16 +211,15 @@ public class TaggedUserPojo implements Mentionable {
         public List<TaggedUserPojo> getSuggestions(QueryToken queryToken) {
             String[] namePrefixes = queryToken.getKeywords().toLowerCase().split(" ");
             List<TaggedUserPojo> suggestions = new ArrayList<>();
-            if (mData != null) {
+            if (StringUtil.isNotEmptyCollection(mData)) {
                 for (TaggedUserPojo suggestion : mData) {
-                    String firstName = suggestion.getFirstName().toLowerCase();
-                    String lastName = suggestion.getLastName().toLowerCase();
+                    String firstName = suggestion.getName().toLowerCase();
                     if (namePrefixes.length == 2) {
-                        if (firstName.startsWith(namePrefixes[0]) && lastName.startsWith(namePrefixes[1])) {
+                        if (firstName.startsWith(namePrefixes[0])) {
                             suggestions.add(suggestion);
                         }
                     } else {
-                        if (firstName.startsWith(namePrefixes[0]) || lastName.startsWith(namePrefixes[0])) {
+                        if (firstName.startsWith(namePrefixes[0])) {
                             suggestions.add(suggestion);
                         }
                     }

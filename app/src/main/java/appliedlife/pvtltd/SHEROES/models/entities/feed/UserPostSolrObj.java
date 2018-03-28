@@ -1,10 +1,13 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
 import java.util.List;
+
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 
 /**
  * Created by ujjwal on 26/11/17.
@@ -86,6 +89,13 @@ public class UserPostSolrObj extends FeedDetail {
 
     @SerializedName("is_top_post_b")
     private boolean isTopPost;
+
+    @SerializedName("has_mentions_b")
+    private boolean hasMention;
+
+    @SerializedName("user_mentions")
+    @Expose
+    private List<MentionSpan> userMentionList;
 
     //this field are added by own
     private int noOfOpenings;
@@ -313,5 +323,21 @@ public class UserPostSolrObj extends FeedDetail {
 
     public void setTopPost(boolean topPost) {
         isTopPost = topPost;
+    }
+
+    public boolean isHasMention() {
+        return hasMention;
+    }
+
+    public void setHasMention(boolean hasMention) {
+        this.hasMention = hasMention;
+    }
+
+    public List<MentionSpan> getUserMentionList() {
+        return userMentionList;
+    }
+
+    public void setUserMentionList(List<MentionSpan> userMentionList) {
+        this.userMentionList = userMentionList;
     }
 }

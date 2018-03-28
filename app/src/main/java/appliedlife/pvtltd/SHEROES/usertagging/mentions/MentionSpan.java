@@ -23,6 +23,10 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 
@@ -31,21 +35,26 @@ import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
  * specifically used by the {@link MentionsEditText}.
  */
 public class MentionSpan extends ClickableSpan implements Parcelable {
+    @SerializedName("mention")
+    @Expose
+    public TaggedUserPojo mention;
+    @SerializedName("config")
+    @Expose
+    public MentionSpanConfig config;
+    @SerializedName("isSelected")
+    @Expose
+    public boolean isSelected = false;
+    @SerializedName("mDisplayMode")
+    @Expose
+    public TaggedUserPojo.MentionDisplayMode mDisplayMode = TaggedUserPojo.MentionDisplayMode.FULL;
 
-    private final Mentionable mention;
-    private MentionSpanConfig config;
-    private long startIndex;
-    private long endIndex;
-    private boolean isSelected = false;
-    private Mentionable.MentionDisplayMode mDisplayMode = Mentionable.MentionDisplayMode.FULL;
-
-    public MentionSpan(@NonNull Mentionable mention) {
+    public MentionSpan(@NonNull TaggedUserPojo mention) {
         super();
         this.mention = mention;
         this.config = new MentionSpanConfig.Builder().build();
     }
 
-    public MentionSpan(@NonNull Mentionable mention, @NonNull MentionSpanConfig config) {
+    public MentionSpan(@NonNull TaggedUserPojo mention, @NonNull MentionSpanConfig config) {
         super();
         this.mention = mention;
         this.config = config;
@@ -94,8 +103,11 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         tp.setUnderlineText(false);
     }
 
-    public Mentionable getMention() {
+    public TaggedUserPojo getMention() {
         return mention;
+    }
+    public void setMention(TaggedUserPojo taggedUserPojo) {
+        mention= taggedUserPojo;
     }
 
     public boolean isSelected() {
@@ -129,8 +141,6 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         dest.writeInt(config.NORMAL_TEXT_BACKGROUND_COLOR);
         dest.writeInt(config.SELECTED_TEXT_COLOR);
         dest.writeInt(config.SELECTED_TEXT_BACKGROUND_COLOR);
-        dest.writeLong(this.startIndex);
-        dest.writeLong(this.endIndex);
         dest.writeInt(getDisplayMode().ordinal());
         dest.writeInt(isSelected() ? 1 : 0);
         dest.writeParcelable(getMention(), flags);
@@ -146,8 +156,6 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
 
         mDisplayMode = Mentionable.MentionDisplayMode.values()[in.readInt()];
         setSelected((in.readInt() == 1));
-        startIndex = in.readInt();
-        endIndex = in.readInt();
         mention = in.readParcelable(Mentionable.class.getClassLoader());
     }
 
@@ -161,21 +169,5 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
             return new MentionSpan[size];
         }
     };
-
-    public long getStartIndex() {
-        return startIndex;
-    }
-
-    public void setStartIndex(long startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public long getEndIndex() {
-        return endIndex;
-    }
-
-    public void setEndIndex(long endIndex) {
-        this.endIndex = endIndex;
-    }
 
 }

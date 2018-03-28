@@ -188,9 +188,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
                 return new UserTagCardHolder(view, userTagCallback);
-            case TYPE_HEADER:
+           /* case TYPE_HEADER:
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_header_layout, parent, false);
-                return new HeaderTaggedUserViewHolder(header, userTagCallback);
+                return new HeaderTaggedUserViewHolder(header, userTagCallback);*/
         }
         return null;
     }
@@ -206,28 +206,29 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
                 Suggestible suggestible1 = mSuggestions.get(position);
                 userTagCardHolder.bindData(suggestible1, mContext, position);
                 break;
-            case TYPE_HEADER:
+           /* case TYPE_HEADER:
                 HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
                 Suggestible suggestible = mSuggestions.get(position);
                 headerTaggedUserViewHolder.bindData(suggestible, mContext, position);
-                break;
+                break;*/
         }
     }
 
     @Override
     public int getItemCount() {
-        return mSuggestions == null ? 0 : mSuggestions.size()+1;
+        return mSuggestions == null ? 0 : mSuggestions.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0)
+        return TYPE_CONTACT;
+       /* if(position==0)
         {
             return TYPE_HEADER;
         }else
         {
             return TYPE_CONTACT;
-        }
+        }*/
     }
 
 

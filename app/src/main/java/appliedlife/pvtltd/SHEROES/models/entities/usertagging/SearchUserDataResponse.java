@@ -14,14 +14,14 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 public class SearchUserDataResponse extends BaseResponse {
     @SerializedName("user_mention_suggestions")
     @Expose
-    private List<UserTaggingPerson> participantList;
+    private List<TaggedUserPojo> participantList;
 
 
-    public List<UserTaggingPerson> getParticipantList() {
+    public List<TaggedUserPojo> getParticipantList() {
         return participantList;
     }
 
-    public void setParticipantList(List<UserTaggingPerson> participantList) {
+    public void setParticipantList(List<TaggedUserPojo> participantList) {
         this.participantList = participantList;
     }
 }

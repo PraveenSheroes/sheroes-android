@@ -17,15 +17,27 @@ package appliedlife.pvtltd.SHEROES.usertagging.mentions;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Class used to configure various options for the {@link MentionSpan}. Instantiate using the
  * {@link MentionSpanConfig.Builder} class.
  */
 public class MentionSpanConfig {
 
+    @SerializedName("NORMAL_TEXT_COLOR")
+    @Expose
     @ColorInt public final int NORMAL_TEXT_COLOR;
+    @SerializedName("NORMAL_TEXT_BACKGROUND_COLOR")
+    @Expose
     @ColorInt public final int NORMAL_TEXT_BACKGROUND_COLOR;
+    @SerializedName("SELECTED_TEXT_COLOR")
+    @Expose
     @ColorInt public final int SELECTED_TEXT_COLOR;
+
+    @SerializedName("SELECTED_TEXT_BACKGROUND_COLOR")
+    @Expose
     @ColorInt public final int SELECTED_TEXT_BACKGROUND_COLOR;
 
     MentionSpanConfig(@ColorInt final int normalTextColor,

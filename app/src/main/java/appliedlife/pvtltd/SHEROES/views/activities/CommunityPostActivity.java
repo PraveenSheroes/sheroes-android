@@ -35,8 +35,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -45,7 +47,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -114,16 +115,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
-import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -140,6 +138,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.schedulePost;
@@ -211,8 +210,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.community_name)
     TextView mCommunityName;
 
-    @Bind(R.id.et_default_hint_text)
-    EditText mEtDefaultText;
+   // @Bind(R.id.et_default_hint_text)
+   // EditText mEtDefaultText;
 
     @Bind(R.id.add_image)
     RippleViewLinear rippleViewLinearAddImage;
@@ -283,16 +282,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mHasPermission = false;
     CallbackManager callbackManager;
     private AccessToken mAccessToken;
-
-    private static final String BUCKET = "cities-memory";
-    private TaggedUserPojo.CityLoader cities;
     private List<MentionSpan> mentionSpanList;
-    private String mAllText;
+    private boolean hasMentions=false;
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
-    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     private View anonymousToolTip;
     @Inject
     Preference<Configuration> mConfiguration;
@@ -307,21 +302,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         ButterKnife.bind(this);
         mCreatePostPresenter.attachView(this);
         etView.setQueryTokenReceiver(this);
-        etView.setHint("Hello");
-        etView.onReceiveSuggestionsListView(mSuggestionList);
-        cities = new TaggedUserPojo.CityLoader(getResources());
-        etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (!keyboardShown(etView.getRootView())) {
-                    // mSuggestionList.setVisibility(View.GONE);
-                    mImageUploadView.setVisibility(View.VISIBLE);
-                    mAnonymousView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
@@ -333,7 +313,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             isSharedFromOtherApp = false;
             if (null != mConfiguration && mConfiguration.isSet()) {
-                mEtDefaultText.setHint(mConfiguration.get().configData.mCreatePostText);
+                etView.getEditText().setHint(mConfiguration.get().configData.mCreatePostText);
             }
             if (null != getIntent() && getIntent().getExtras() != null) {
                 mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
@@ -356,9 +336,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mAnonymousSelect.setVisibility(View.GONE);
                 mAnonymousView.setVisibility(View.GONE);
                 if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
-                    mEtDefaultText.setText(" " + "#" + mCommunityPost.challengeHashTag);
-                    mEtDefaultText.requestFocus();
-                    mEtDefaultText.setSelection(0);
+                    etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
                 }
                 RelativeLayout.LayoutParams layoutParams =
                         (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
@@ -369,9 +347,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 fbShareContainer.setVisibility(View.GONE);
                 mPostAsCommunitySelected = mCommunityPost.isPostByCommunity;
                 mIsAnonymous = mCommunityPost.isAnonymous;
-                mEtDefaultText.setText(mCommunityPost.body);
-                mEtDefaultText.requestFocus();
-                mEtDefaultText.setSelection(mCommunityPost.body.length());
+                etView.setEditText(mCommunityPost.body,mCommunityPost.body.length());
                 if (mIsAnonymous) {
                     mAnonymousSelect.setChecked(true);
                     mPostAsCommunitySelected = false;
@@ -382,7 +358,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 invalidateUserDropDownView();
             } else {
                 if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
-                    mEtDefaultText.requestFocus();
+                    etView.getEditText().requestFocus();
                     if (!mIsChallengePost) {
                         fbShareContainer.setVisibility(View.VISIBLE);
                     }
@@ -419,7 +395,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupUserView();
             setupImageListView();
             setCommunityName();
-         //   setupTextChangeListener();
+            //   setupTextChangeListener();
             setupCommunityNameListener();
             setupShareToFbListener();
             setupAnonymousSlelectListener();
@@ -438,6 +414,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }
             }
         }
+        etView.onReceiveSuggestionsListView(mSuggestionList);
+
+        etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!keyboardShown(etView.getRootView())) {
+                    mImageUploadView.setVisibility(View.VISIBLE);
+                    mAnonymousView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void branchUrlHandle() {
@@ -453,9 +440,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
             if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
-                mEtDefaultText.setText(" " + "#" + mCommunityPost.challengeHashTag);
-                mEtDefaultText.requestFocus();
-                mEtDefaultText.setSelection(0);
+                etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
             }
             RelativeLayout.LayoutParams layoutParams =
                     (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
@@ -465,15 +450,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             fbShareContainer.setVisibility(View.GONE);
             mIsAnonymous = mCommunityPost.isAnonymous;
             if (StringUtil.isNotNullOrEmptyString(mCommunityPost.body)) {
-                mEtDefaultText.setText(mCommunityPost.body);
-                mEtDefaultText.requestFocus();
-                mEtDefaultText.setSelection(mCommunityPost.body.length());
+                etView.setEditText(mCommunityPost.body,mCommunityPost.body.length());
                 mOldText = mCommunityPost.body;
             }
         }
         invalidateUserDropDownView();
         if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
-            mEtDefaultText.requestFocus();
+            etView.getEditText().requestFocus();
             if (!mIsChallengePost) {
                 fbShareContainer.setVisibility(View.VISIBLE);
             }
@@ -499,7 +482,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupUserView();
         setupImageListView();
         setCommunityName();
-      //  setupTextChangeListener();
+        //  setupTextChangeListener();
         setupCommunityNameListener();
         setupShareToFbListener();
         setupAnonymousSlelectListener();
@@ -523,9 +506,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 } else if (type.startsWith(TYPE_IMAGE)) {
                     String textLink = intent.getStringExtra(Intent.EXTRA_TEXT);
                     if (StringUtil.isNotNullOrEmptyString(textLink)) {
-                        mEtDefaultText.setText(textLink);
-                        mEtDefaultText.requestFocus();
-                        mEtDefaultText.setSelection(0);
+                        etView.setEditText(textLink,0);
                     }
                     handleSendImage((Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM));
                 }
@@ -624,7 +605,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (sharedText != null) {
             mIsEditPost = false;
             isSharedContent = true;
-            mEtDefaultText.setText(sharedText);
+            etView.setText(sharedText);
         }
     }
 
@@ -695,17 +676,20 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(AppUtils.createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtDefaultText.getText().toString(), getImageUrls(), mLinkRenderResponse));
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, hasMentions, mentionSpanList));
         } else if (!mIsEditPost) {
             String accessToken = "";
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, hasMentions, mentionSpanList));
+           // mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mAllText, getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, hasMentions, mentionSpanList));
 
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken));
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtDefaultText.getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse));
+                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse, hasMentions, mentionSpanList));
+              //  mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mAllText, newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse, hasMentions, mentionSpanList));
+
             }
         }
     }
@@ -791,7 +775,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (AccessToken.getCurrentAccessToken() != null) {
             accessToken = AccessToken.getCurrentAccessToken().getToken();
         }
-        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), mEtDefaultText.getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime));
+        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, hasMentions, null));
     }
 
     private boolean validateFields() {
@@ -1080,7 +1064,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setupTextChangeListener() {
-        mEtDefaultText.addTextChangedListener(new TextWatcher() {
+        etView.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -1094,8 +1078,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
 
-                    if (StringUtil.isNotNullOrEmptyString(mEtDefaultText.getText().toString()) && !isLinkRendered) {
-                        String editTextDescription = mEtDefaultText.getText().toString().trim();
+                    if (StringUtil.isNotNullOrEmptyString(etView.getEditText().getText().toString()) && !isLinkRendered) {
+                        String editTextDescription = etView.getEditText().getText().toString().trim();
                         if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
                             int indexOfFirstHttp = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "https", 1);
                             int urlLength = getUrlLength(editTextDescription, indexOfFirstHttp);
@@ -1125,9 +1109,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //Disable the link editing and enable for others
     private void disableEditTextForLinks() {
         if (isLinkRendered) {
-            mEtDefaultText.setFocusable(false);
-            mEtDefaultText.setFocusableInTouchMode(false);
-            mEtDefaultText.setClickable(false);
+            etView.getEditText().setFocusable(false);
+            etView.getEditText().setFocusableInTouchMode(false);
+            etView.getEditText().setClickable(false);
         }
     }
 
@@ -1153,6 +1137,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             o2.inSampleSize = scale;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
         }
         return null;
     }
@@ -1180,8 +1165,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mCommunityName.setMovementMethod(LinkMovementMethod.getInstance());
             mCommunityName.setText(SpanString, TextView.BufferType.SPANNABLE);
             mCommunityName.setSelected(true);
-            mEtDefaultText.setHint(getString(R.string.ID_WHAT_IS_QUESTION));
-            mEtDefaultText.requestFocus();
+            etView.getEditText().setHint(getString(R.string.ID_WHAT_IS_QUESTION));
+            etView.getEditText().requestFocus();
         } else {
             if (mIsChallengePost) {
                 mCommunityName.setVisibility(View.GONE);
@@ -1202,7 +1187,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public boolean isPostModified() {
-        return !mOldText.equals(mEtDefaultText.getText().toString()) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList);
+        return !mOldText.equals(etView.getEditText().getText().toString()) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList);
+
+       // return !mOldText.equals(mAllText) || !CommonUtil.isEmpty(newEncodedImages) || !CommonUtil.isEmpty(deletedImageIdList);
     }
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
@@ -1373,9 +1360,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 return true;
             }
         } else {
-            if (CommonUtil.isNotEmpty(mEtDefaultText.getText().toString().trim()) || !CommonUtil.isEmpty(mImageList)) {
+            if (CommonUtil.isNotEmpty(etView.getEditText().getText().toString().trim()) || !CommonUtil.isEmpty(mImageList)) {
                 return true;
             }
+           /* if (CommonUtil.isNotEmpty(mAllText.trim()) || !CommonUtil.isEmpty(mImageList)) {
+                return true;
+            }*/
         }
         return false;
     }
@@ -1532,9 +1522,19 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public void userTagResponse(SearchUserDataResponse searchUserDataResponse) {
+    public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
+        if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
+            hasMentions = true;
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, searchUserDataResponse.getParticipantList());
+            etView.onReceiveSuggestionsResult(result, "data");
+        }else
+        {
+            hasMentions=false;
+            mentionSpanList=null;
+        }
 
     }
+
 
     @Override
     public void finishActivity() {
@@ -1653,25 +1653,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-         if (queryToken.getTokenString().contains("@")) {
-             MentionsEditText mentionsEditText=etView.getEditText();
-             if(null!=mentionsEditText) {
-                 LogUtils.info("data","########### @string--->   "+queryToken.getTokenString());
-                 mCreatePostPresenter.userTaggingSearchEditText(mentionsEditText,queryToken.getTokenString(),mCommunityPost);
-             }
-         }
-        LogUtils.info("data","########### Query data--->   "+queryToken.getTokenString());
-        List<String> buckets = Collections.singletonList(BUCKET);
-        List<TaggedUserPojo> suggestions = cities.getSuggestions(queryToken);
-        UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, suggestions);
-        etView.onReceiveSuggestionsResult(result, BUCKET);
+        if (queryToken.getTokenString().length() > 1 && queryToken.getTokenString().contains("@")) {
+            LogUtils.info("data", "########### @string--->   " + queryToken.getTokenString());
+            mCreatePostPresenter.userTaggingSearchEditText(queryToken, queryToken.getTokenString(), mCommunityPost);
+        }
+        List<String> buckets = Collections.singletonList("user-history");
         return buckets;
     }
 
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
         this.mentionSpanList = mentionSpanList;
-        this.mAllText = allText;
+        LogUtils.info("data", "########### @user mention list--->   " + mentionSpanList);
         return null;
     }
 
@@ -1688,8 +1681,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
-                Mentionable mention = (Mentionable) suggestible;
-                etView.setInsertion(mention);
+                TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
+                etView.setInsertion(taggedUserPojo);
                 break;
             default:
         }
@@ -1700,7 +1693,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void textChangeListner(Editable editText) {
         if (editText.length() > 0) {
-            mAllText = editText.toString();
             if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !isLinkRendered) {
                 String editTextDescription = editText.toString().trim();
                 if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
@@ -1734,4 +1726,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
     }
+
+
 }

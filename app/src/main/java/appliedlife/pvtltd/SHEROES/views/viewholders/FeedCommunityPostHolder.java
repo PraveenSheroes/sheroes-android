@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -55,11 +56,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
@@ -692,7 +695,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
                 if(!mUserPostObj.isTextExpanded)
                 {
-                    tvFeedCommunityPostText.setText(hashTagColorInString(listDescription));
+                    if(mUserPostObj.isHasMention())
+                    {
+                        List<MentionSpan> mentionSpanList =mUserPostObj.getUserMentionList();
+                        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                            clickOnUserMentionName(listDescription, mentionSpanList);
+                        }
+                    }else
+                    {
+                        tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
+                    }
                     linkifyURLs(tvFeedCommunityPostText);
                     if (tvFeedCommunityPostText.getLineCount() > 4) {
                         collapseFeedPostText();
@@ -1461,5 +1473,35 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
         }
     }
+    private void clickOnUserMentionName(String description,List<MentionSpan> mentionSpanList) {
+        SpannableString spannableString = new SpannableString(description);
+        for (int i = 0; i <  mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            final ClickableSpan postedInClick = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    if (!mUserPostObj.isAnonymous()) {
+                        if (viewInterface instanceof FeedItemCallback) {
+                            ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        } else {
+                            viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
+                        }
+                    }
+                }
+                @Override
+                public void updateDrawState(final TextPaint textPaint) {
+                    textPaint.setUnderlineText(false);
+                }
+            };
+            spannableString.setSpan(postedInClick, mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
+
+        }
+
+        tvFeedCommunityPostText.setMovementMethod(LinkMovementMethod.getInstance());
+        tvFeedCommunityPostText.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
+        // tvMention.setSelected(true);
+
+    }
 }
