@@ -71,7 +71,7 @@ public class MentionSpanConfig implements Parcelable {
     public static class Builder {
 
         // Default colors
-        @ColorInt private int normalTextColor = Color.parseColor("#d50000");
+        @ColorInt private int normalTextColor = Color.parseColor("#2793e7");
         @ColorInt private int normalTextBackgroundColor = Color.TRANSPARENT;
         @ColorInt private int selectedTextColor = Color.WHITE;
         @ColorInt private int selectedTextBackgroundColor = Color.parseColor("#0077b5");

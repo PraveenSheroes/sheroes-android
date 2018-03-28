@@ -247,7 +247,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 }
             };
             spannableString.setSpan(postedInClick, mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.footer_icon_text)), mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
 
         }
 
