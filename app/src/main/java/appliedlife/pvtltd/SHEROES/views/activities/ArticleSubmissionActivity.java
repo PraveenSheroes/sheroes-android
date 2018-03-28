@@ -118,8 +118,8 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     //region member variables
     private EditorFragmentAbstract mEditorFragment;
-    private boolean isNewArticle;
-    private boolean isGuidelineShown;
+    private boolean shouldShowGuideLine;
+    private boolean isGuidelineVisible;
     private File localImageSaveForChallenge;
     private Uri mImageCaptureUri;
     private String mEncodeImageUrl;
@@ -144,22 +144,21 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         toolbarTitle.setText(R.string.title_article_submit);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationIcon(R.drawable.vector_clear);
+        invalidateToolBar();
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         this.localImageSaveForChallenge = localImageSaveForChallenge;
-        String articleGuideline = (mConfiguration!=null && mConfiguration.isSet() && mConfiguration.get() != null  && mConfiguration.get().configData!=null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
+        String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
         mBody.setText(Html.fromHtml(articleGuideline));
         if (article == null) {
-            isNewArticle = true;
+            shouldShowGuideLine = true;
         }
         setupShareToFbListener();
     }
 
     @Override
     protected void onResumeFragments() {
-        if (isNewArticle && !isGuidelineShown) {
+        if (shouldShowGuideLine) {
             showGuideLineView();
-            isGuidelineShown = true;
         }
         super.onResumeFragments();
     }
@@ -176,6 +175,27 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         return true;
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        setUpOptionMenuStates(menu);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void setUpOptionMenuStates(Menu menu) {
+        MenuItem itemNext = menu.findItem(R.id.next);
+        MenuItem itemPost = menu.findItem(R.id.post);
+        MenuItem itemInfo = menu.findItem(R.id.guideline);
+        if (isNextPage) {
+            itemInfo.setVisible(false);
+            itemNext.setVisible(false);
+            itemPost.setVisible(true);
+        } else {
+            itemInfo.setVisible(true);
+            itemNext.setVisible(true);
+            itemPost.setVisible(false);
+        }
+    }
+
 
     @Override
     public void hideProgressBar() {
@@ -190,8 +210,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void onBackPressed() {
-        if (isGuidelineShown) {
-            isGuidelineShown = false;
+        if (isGuidelineVisible) {
             mGuidelineClose.performClick();
         } else {
             super.onBackPressed();
@@ -236,21 +255,17 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (!isGuidelineShown) {
                 if (isNextPage) {
                     hideNextPage();
                 } else {
                     onBackPress();
                 }
-            }
             return true;
         }
         if (id == R.id.post) {
-            if (!isGuidelineShown) {
                 if (validateFields(false, true)) {
                     postArticle(false);
                 }
-            }
         }
 
         if (id == R.id.next) {
@@ -258,11 +273,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
 
         if (id == R.id.draft) {
-            if (!isGuidelineShown) {
                 if (validateFields(true, true)) {
                     postArticle(true);
                 }
-            }
         }
         if (id == R.id.guideline) {
             showGuideLineView();
@@ -274,11 +287,15 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         isNextPage = true;
         mArticleNextPageContainer.setVisibility(View.VISIBLE);;
         mEditorContainer.setVisibility(View.GONE);
+        invalidateToolBar();
+        invalidateOptionsMenu();
     }
     private void hideNextPage() {
         isNextPage = false;
         mArticleNextPageContainer.setVisibility(View.GONE);
         mEditorContainer.setVisibility(View.VISIBLE);
+        invalidateToolBar();
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -534,10 +551,11 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     }
 
     private void showGuideLineView() {
+        shouldShowGuideLine = false;
+        isGuidelineVisible = true;
         mGuidelineContainer.setVisibility(View.VISIBLE);
         mGuidelineContainer.requestFocusFromTouch();
         hideKeyboard(mToolbar);
-        isGuidelineShown = true;
     }
 
     private void hideKeyboard(View v) {
@@ -609,6 +627,15 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     }
 
 
+    private void invalidateToolBar() {
+        if (!isNextPage) {
+            mToolbar.setNavigationIcon(R.drawable.vector_clear);
+        } else {
+            mToolbar.setNavigationIcon(R.drawable.vector_back_arrow);
+        }
+    }
+
+
     private void cropingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
@@ -631,7 +658,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @OnClick(R.id.guideline_close)
     public void onGuidelineCancel() {
         mGuidelineContainer.setVisibility(View.GONE);
-        isGuidelineShown = false;
+        isGuidelineVisible = false;
     }
 
     @Override
