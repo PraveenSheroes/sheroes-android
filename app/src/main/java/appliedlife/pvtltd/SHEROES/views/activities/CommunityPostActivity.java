@@ -35,10 +35,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -50,7 +47,6 @@ import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -335,8 +331,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 fbShareContainer.setVisibility(View.GONE);
                 mAnonymousSelect.setVisibility(View.GONE);
                 mAnonymousView.setVisibility(View.GONE);
-                if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
-                    etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
+                if(mCommunityPost.hasMention)
+                {
+                    mentionSpanList=mCommunityPost.userMentionList;
+                    editUserMentionWithFullDescriptionText(mentionSpanList," " + "#" + mCommunityPost.challengeHashTag);
+                }else {
+                    if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
+                        etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
+                    }
                 }
                 RelativeLayout.LayoutParams layoutParams =
                         (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
@@ -347,7 +349,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 fbShareContainer.setVisibility(View.GONE);
                 mPostAsCommunitySelected = mCommunityPost.isPostByCommunity;
                 mIsAnonymous = mCommunityPost.isAnonymous;
-                etView.setEditText(mCommunityPost.body,mCommunityPost.body.length());
                 if (mIsAnonymous) {
                     mAnonymousSelect.setChecked(true);
                     mPostAsCommunitySelected = false;
@@ -355,6 +356,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mAnonymousSelect.setChecked(false);
                 }
                 mOldText = mCommunityPost.body;
+                if(mCommunityPost.hasMention)
+                {
+                   mentionSpanList=mCommunityPost.userMentionList;
+                    editUserMentionWithFullDescriptionText(mentionSpanList,mOldText);
+                }else {
+                    etView.setEditText(mOldText,mCommunityPost.body.length());
+                }
                 invalidateUserDropDownView();
             } else {
                 if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
@@ -426,6 +434,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         });
     }
+    private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
+        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+            for (int i = 0; i < mentionSpanList.size(); i++) {
+                final MentionSpan mentionSpan = mentionSpanList.get(i);
+                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+            }
+
+            etView.getEditText().setText(editDescText);
+            for (int i = 0; i < mentionSpanList.size(); i++) {
+                final MentionSpan mentionSpan = mentionSpanList.get(i);
+                TaggedUserPojo userMention = mentionSpan.getMention();
+                int index = userMention.getStartIndex();
+                etView.setMentionSelectionText(userMention, index, index + 1);
+            }
+        }
+    }
 
     private void branchUrlHandle() {
         if (null != getIntent() && getIntent().getExtras() != null) {
@@ -439,8 +463,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             fbShareContainer.setVisibility(View.GONE);
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
-            if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
-                etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
+            if(mCommunityPost.hasMention)
+            {
+                mentionSpanList=mCommunityPost.userMentionList;
+                editUserMentionWithFullDescriptionText(mentionSpanList," " + "#" + mCommunityPost.challengeHashTag);
+            }else {
+                if (CommonUtil.isNotEmpty(mCommunityPost.challengeHashTag)) {
+                    etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
+                }
             }
             RelativeLayout.LayoutParams layoutParams =
                     (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
@@ -450,8 +480,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             fbShareContainer.setVisibility(View.GONE);
             mIsAnonymous = mCommunityPost.isAnonymous;
             if (StringUtil.isNotNullOrEmptyString(mCommunityPost.body)) {
-                etView.setEditText(mCommunityPost.body,mCommunityPost.body.length());
                 mOldText = mCommunityPost.body;
+                if(mCommunityPost.hasMention)
+                {
+                    mentionSpanList=mCommunityPost.userMentionList;
+                    editUserMentionWithFullDescriptionText(mentionSpanList,mOldText);
+                }else {
+                    mOldText = mCommunityPost.body;
+                    etView.setEditText(mOldText,mOldText.length());
+                }
             }
         }
         invalidateUserDropDownView();
@@ -482,7 +519,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setupUserView();
         setupImageListView();
         setCommunityName();
-        //  setupTextChangeListener();
         setupCommunityNameListener();
         setupShareToFbListener();
         setupAnonymousSlelectListener();
@@ -683,13 +719,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
             mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, hasMentions, mentionSpanList));
-           // mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mAllText, getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, hasMentions, mentionSpanList));
 
         } else {
             if (mCommunityPost != null) {
                 mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse, hasMentions, mentionSpanList));
-              //  mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mAllText, newEncodedImages, (long) mCommunityPost.remote_id, deletedImageIdList, mLinkRenderResponse, hasMentions, mentionSpanList));
-
             }
         }
     }
@@ -1063,49 +1096,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         return stream.toByteArray();
     }
 
-    private void setupTextChangeListener() {
-        etView.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int aft) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-
-                    if (StringUtil.isNotNullOrEmptyString(etView.getEditText().getText().toString()) && !isLinkRendered) {
-                        String editTextDescription = etView.getEditText().getText().toString().trim();
-                        if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
-                            int indexOfFirstHttp = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "https", 1);
-                            int urlLength = getUrlLength(editTextDescription, indexOfFirstHttp);
-                            if (urlLength <= editTextDescription.length()) {
-                                String httpString = editTextDescription.substring(indexOfFirstHttp, urlLength);
-                                if (mAppUtils.checkUrl(httpString)) {
-                                    mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(httpString));
-                                }
-                            }
-                        } else if (editTextDescription.contains("www") || editTextDescription.contains("WWW")) {
-                            int indexOfFirstWWW = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "www", 1);
-                            int urlLength = getUrlLength(editTextDescription, indexOfFirstWWW);
-                            if (urlLength <= editTextDescription.length()) {
-                                String wwwString = editTextDescription.substring(indexOfFirstWWW, urlLength);
-                                if (mAppUtils.checkWWWUrl(wwwString)) {
-                                    mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(wwwString));
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-        });
-    }
-
     //Disable the link editing and enable for others
     private void disableEditTextForLinks() {
         if (isLinkRendered) {
@@ -1260,6 +1250,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     i++;
                 }
             }
+            if(userPostObj.isHasMention()) {
+                communityPost.hasMention=userPostObj.isHasMention();
+                communityPost.userMentionList=userPostObj.getUserMentionList();
+            }
+
             Parcelable parcelable = Parcels.wrap(communityPost);
             intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
             intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
@@ -1363,9 +1358,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (CommonUtil.isNotEmpty(etView.getEditText().getText().toString().trim()) || !CommonUtil.isEmpty(mImageList)) {
                 return true;
             }
-           /* if (CommonUtil.isNotEmpty(mAllText.trim()) || !CommonUtil.isEmpty(mImageList)) {
-                return true;
-            }*/
         }
         return false;
     }
@@ -1653,8 +1645,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-        if (queryToken.getTokenString().length() > 1 && queryToken.getTokenString().contains("@")) {
-            LogUtils.info("data", "########### @string--->   " + queryToken.getTokenString());
+        if (queryToken.getTokenString().contains("@")) {
+            mIsProgressBarVisible = true;
+            mProgressBar.setVisibility(View.VISIBLE);
             mCreatePostPresenter.userTaggingSearchEditText(queryToken, queryToken.getTokenString(), mCommunityPost);
         }
         List<String> buckets = Collections.singletonList("user-history");
@@ -1664,7 +1657,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
         this.mentionSpanList = mentionSpanList;
-        LogUtils.info("data", "########### @user mention list--->   " + mentionSpanList);
         return null;
     }
 
@@ -1691,7 +1683,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public void textChangeListner(Editable editText) {
+    public void textChangeListner(@NonNull Editable editText) {
         if (editText.length() > 0) {
             if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !isLinkRendered) {
                 String editTextDescription = editText.toString().trim();

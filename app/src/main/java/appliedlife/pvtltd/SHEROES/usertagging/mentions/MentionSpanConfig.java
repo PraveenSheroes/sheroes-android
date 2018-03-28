@@ -15,6 +15,8 @@
 package appliedlife.pvtltd.SHEROES.usertagging.mentions;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 
 import com.google.gson.annotations.Expose;
@@ -24,7 +26,7 @@ import com.google.gson.annotations.SerializedName;
  * Class used to configure various options for the {@link MentionSpan}. Instantiate using the
  * {@link MentionSpanConfig.Builder} class.
  */
-public class MentionSpanConfig {
+public class MentionSpanConfig implements Parcelable {
 
     @SerializedName("NORMAL_TEXT_COLOR")
     @Expose
@@ -48,6 +50,22 @@ public class MentionSpanConfig {
         this.NORMAL_TEXT_BACKGROUND_COLOR = normalTextBackgroundColor;
         this.SELECTED_TEXT_COLOR = selectedTextColor;
         this.SELECTED_TEXT_BACKGROUND_COLOR = selectedTextBackgroundColor;
+    }
+
+    public int getNORMAL_TEXT_COLOR() {
+        return NORMAL_TEXT_COLOR;
+    }
+
+    public int getNORMAL_TEXT_BACKGROUND_COLOR() {
+        return NORMAL_TEXT_BACKGROUND_COLOR;
+    }
+
+    public int getSELECTED_TEXT_COLOR() {
+        return SELECTED_TEXT_COLOR;
+    }
+
+    public int getSELECTED_TEXT_BACKGROUND_COLOR() {
+        return SELECTED_TEXT_BACKGROUND_COLOR;
     }
 
     public static class Builder {
@@ -91,4 +109,36 @@ public class MentionSpanConfig {
                                          selectedTextColor, selectedTextBackgroundColor);
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.NORMAL_TEXT_COLOR);
+        dest.writeInt(this.NORMAL_TEXT_BACKGROUND_COLOR);
+        dest.writeInt(this.SELECTED_TEXT_COLOR);
+        dest.writeInt(this.SELECTED_TEXT_BACKGROUND_COLOR);
+    }
+
+    protected MentionSpanConfig(Parcel in) {
+        this.NORMAL_TEXT_COLOR = in.readInt();
+        this.NORMAL_TEXT_BACKGROUND_COLOR = in.readInt();
+        this.SELECTED_TEXT_COLOR = in.readInt();
+        this.SELECTED_TEXT_BACKGROUND_COLOR = in.readInt();
+    }
+
+    public static final Creator<MentionSpanConfig> CREATOR = new Creator<MentionSpanConfig>() {
+        @Override
+        public MentionSpanConfig createFromParcel(Parcel source) {
+            return new MentionSpanConfig(source);
+        }
+
+        @Override
+        public MentionSpanConfig[] newArray(int size) {
+            return new MentionSpanConfig[size];
+        }
+    };
 }

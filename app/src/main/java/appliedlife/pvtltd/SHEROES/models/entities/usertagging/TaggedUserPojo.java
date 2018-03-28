@@ -127,45 +127,6 @@ public class TaggedUserPojo implements Mentionable {
         return getName();
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(userId);
-        dest.writeString(name);
-        dest.writeString(userProfileDeepLinkUrl);
-        dest.writeString(authorImageUrl);
-
-        dest.writeString(name);
-        dest.writeInt(startIndex);
-        dest.writeInt(endIndex);
-    }
-
-    public TaggedUserPojo(Parcel in) {
-        userId = in.readInt();
-        name = in.readString();
-        userProfileDeepLinkUrl = in.readString();
-        authorImageUrl = in.readString();
-
-
-        startIndex = in.readInt();
-        endIndex = in.readInt();
-    }
-
-    public static final Parcelable.Creator<TaggedUserPojo> CREATOR
-            = new Parcelable.Creator<TaggedUserPojo>() {
-        public TaggedUserPojo createFromParcel(Parcel in) {
-            return new TaggedUserPojo(in);
-        }
-
-        public TaggedUserPojo[] newArray(int size) {
-            return new TaggedUserPojo[size];
-        }
-    };
-
     public int getEndIndex() {
         return endIndex;
     }
@@ -228,4 +189,40 @@ public class TaggedUserPojo implements Mentionable {
             return suggestions;
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.userId);
+        dest.writeString(this.userProfileDeepLinkUrl);
+        dest.writeString(this.authorImageUrl);
+        dest.writeInt(this.endIndex);
+        dest.writeInt(this.startIndex);
+        dest.writeString(this.name);
+    }
+
+    protected TaggedUserPojo(Parcel in) {
+        this.userId = in.readInt();
+        this.userProfileDeepLinkUrl = in.readString();
+        this.authorImageUrl = in.readString();
+        this.endIndex = in.readInt();
+        this.startIndex = in.readInt();
+        this.name = in.readString();
+    }
+
+    public static final Creator<TaggedUserPojo> CREATOR = new Creator<TaggedUserPojo>() {
+        @Override
+        public TaggedUserPojo createFromParcel(Parcel source) {
+            return new TaggedUserPojo(source);
+        }
+
+        @Override
+        public TaggedUserPojo[] newArray(int size) {
+            return new TaggedUserPojo[size];
+        }
+    };
 }

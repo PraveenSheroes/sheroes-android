@@ -565,7 +565,18 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             mMentionsEditText.setSelection(position);
         }
     }
-
+    /**
+     * Sets the text being displayed within the {@link RichEditorView}. Note that this removes the
+     * {@link TextWatcher} temporarily to avoid changing the text while listening to text changes
+     * (which could result in an infinite loop).
+     *
+     * @param mention the text to display
+     */
+    public void setMentionSelectionText(@NonNull TaggedUserPojo mention,int start,int end) {
+        if (mMentionsEditText != null) {
+            mMentionsEditText.editInsertMention(mention,start,end);
+        }
+    }
     /**
      * Sets the input type of the embedded {@link MentionsEditText}.
      *

@@ -130,44 +130,52 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         return mention.getTextForDisplayMode(mDisplayMode);
     }
 
+    public MentionSpanConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(MentionSpanConfig config) {
+        this.config = config;
+    }
+
+    public TaggedUserPojo.MentionDisplayMode getmDisplayMode() {
+        return mDisplayMode;
+    }
+
+    public void setmDisplayMode(TaggedUserPojo.MentionDisplayMode mDisplayMode) {
+        this.mDisplayMode = mDisplayMode;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(@NonNull final Parcel dest, int flags) {
-        dest.writeInt(config.NORMAL_TEXT_COLOR);
-        dest.writeInt(config.NORMAL_TEXT_BACKGROUND_COLOR);
-        dest.writeInt(config.SELECTED_TEXT_COLOR);
-        dest.writeInt(config.SELECTED_TEXT_BACKGROUND_COLOR);
-        dest.writeInt(getDisplayMode().ordinal());
-        dest.writeInt(isSelected() ? 1 : 0);
-        dest.writeParcelable(getMention(), flags);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.mention, flags);
+        dest.writeParcelable(this.config, flags);
+        dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.mDisplayMode == null ? -1 : this.mDisplayMode.ordinal());
     }
 
-    public MentionSpan(Parcel in) {
-        int normalTextColor = in.readInt();
-        int normalTextBackgroundColor = in.readInt();
-        int selectedTextColor = in.readInt();
-        int selectedTextBackgroundColor = in.readInt();
-        config = new MentionSpanConfig(normalTextColor, normalTextBackgroundColor,
-                                       selectedTextColor, selectedTextBackgroundColor);
-
-        mDisplayMode = Mentionable.MentionDisplayMode.values()[in.readInt()];
-        setSelected((in.readInt() == 1));
-        mention = in.readParcelable(Mentionable.class.getClassLoader());
+    protected MentionSpan(Parcel in) {
+        this.mention = in.readParcelable(TaggedUserPojo.class.getClassLoader());
+        this.config = in.readParcelable(MentionSpanConfig.class.getClassLoader());
+        this.isSelected = in.readByte() != 0;
+        int tmpMDisplayMode = in.readInt();
+        this.mDisplayMode = tmpMDisplayMode == -1 ? null : TaggedUserPojo.MentionDisplayMode.values()[tmpMDisplayMode];
     }
 
-    public static final Creator<MentionSpan> CREATOR
-            = new Creator<MentionSpan>() {
-        public MentionSpan createFromParcel(Parcel in) {
-            return new MentionSpan(in);
+    public static final Creator<MentionSpan> CREATOR = new Creator<MentionSpan>() {
+        @Override
+        public MentionSpan createFromParcel(Parcel source) {
+            return new MentionSpan(source);
         }
 
+        @Override
         public MentionSpan[] newArray(int size) {
             return new MentionSpan[size];
         }
     };
-
 }

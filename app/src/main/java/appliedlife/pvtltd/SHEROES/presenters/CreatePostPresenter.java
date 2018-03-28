@@ -203,8 +203,14 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         if (null != communityPost && null != communityPost.community) {
             communityId = communityPost.community.id;
         }
-        searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
-        LogUtils.info("data", "########### @data--->   " +searchUserDataRequest.toString());
+        if(queryToken.getTokenString().length()==1)
+        {
+            searchUserDataRequest = mAppUtils.searchUserDataRequest("@", communityId, null, null, "POST");
+        }else
+        {
+            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
+        }
+
         communityModel.getSearchResult(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
 
             @Override
@@ -214,18 +220,19 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
             @Override
             public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
             }
 
             @Override
             public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                getMvpView().stopProgressBar();
                 if (null != searchUserDataResponse) {
-                    LogUtils.info("data", "########### @response--->   " +searchUserDataResponse.toString());
                     if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                         getMvpView().userTagResponse(searchUserDataResponse, queryToken);
                     } else {
-                        getMvpView().showError("Users are not available", ERROR_CREATE_COMMUNITY);
+                        getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
                     }
                 }
             }

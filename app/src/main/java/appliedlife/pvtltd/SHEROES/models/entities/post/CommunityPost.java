@@ -1,9 +1,14 @@
 package appliedlife.pvtltd.SHEROES.models.entities.post;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 
 
 /**
@@ -25,4 +30,6 @@ public class CommunityPost extends Post {
     public boolean isChallengeType;
     public String challengeHashTag;
     public boolean isCompanyAdmin;
+    public boolean hasMention;
+    public List<MentionSpan> userMentionList=new ArrayList<>();
 }
