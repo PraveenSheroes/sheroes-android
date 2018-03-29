@@ -1488,7 +1488,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList,boolean isComment) {
-        SpannableString spannableString = new SpannableString(description+" ");
+        StringBuilder strWithAddExtra = new StringBuilder(description+" ");
+        for (int i = 0; i <  mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
+            }
+        }
+        SpannableString spannableString = new SpannableString(strWithAddExtra);
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan&&null!=mentionSpan.getMention()) {
@@ -1516,9 +1523,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         textPaint.setUnderlineText(false);
                     }
                 };
-                spannableString.setSpan(postedInClick, mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), mentionSpan.getMention().getStartIndex(), mentionSpan.getMention().getEndIndex(), 0);
-
+                int start=mentionSpan.getMention().getStartIndex()+i;
+                int end=mentionSpan.getMention().getEndIndex()+i;
+                spannableString.setSpan(postedInClick, start, end+1, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
             }
         }
         if(isComment) {

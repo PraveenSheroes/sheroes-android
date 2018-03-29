@@ -16,8 +16,8 @@
             android:layout_height="@dimen/feed_profile_icon_size"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_10"
-            android:layout_marginBottom="@dimen/dp_size_10"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginBottom="@dimen/dp_size_8"
             android:src="@drawable/default_img" />
 
         <TextView
@@ -47,6 +47,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_0.5"
+        android:layout_marginLeft="77dp"
+        android:alpha=".5"
         android:background="@color/feed_card_time"/>
 
 </LinearLayout>

@@ -104,7 +104,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     private MentionSpanConfig mentionSpanConfig;
     private boolean isLongPressed;
     private CheckLongClickRunnable longClickRunnable;
-
+    RichEditorView richEditView;
     public MentionsEditText(@NonNull Context context) {
         super(context);
         init(null, 0);
@@ -143,6 +143,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             mSuggestionsVisibilityManager.displaySuggestions(false);
+            richEditView.setEditTextShouldWrapContent(true);
         }
         return false;
     }
@@ -1394,6 +1395,10 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      */
     public void setAvoidPrefixOnTap(boolean avoidPrefixOnTap) {
         mAvoidPrefixOnTap = avoidPrefixOnTap;
+    }
+
+    public void setRichEditView(RichEditorView richEditView) {
+        this.richEditView = richEditView;
     }
 
     // --------------------------------------------------

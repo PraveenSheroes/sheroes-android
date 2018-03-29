@@ -128,7 +128,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             mMentionsEditText = findViewById(R.id.text_editor_comment);
         }
 
-
+        mMentionsEditText.setRichEditView(this);
         // Get the MentionSpanConfig from custom XML attributes and set it
         MentionSpanConfig mentionSpanConfig = parseMentionSpanConfigFromAttributes(attrs, defStyleAttr);
         mMentionsEditText.setMentionSpanConfig(mentionSpanConfig);
