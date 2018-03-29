@@ -872,7 +872,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         String authorThumborUrl = CommonUtil.getThumborUri(mPhotoUrl, authorPicSizeFourty, authorPicSizeFourty);
         ivFeedCommunityPostLoginUserPic.bindImage(authorThumborUrl); //todo - chk it here
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
+            tvFeedCommunityPostLoginUserName.setVisibility(View.VISIBLE);
             tvFeedCommunityPostLoginUserName.setText(loggedInUser);
+        }else
+        {
+            tvFeedCommunityPostLoginUserName.setVisibility(View.GONE);
         }
 
     }
