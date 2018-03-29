@@ -101,7 +101,7 @@ import butterknife.OnClick;
  * Created by ujjwal on 07/12/17.
  */
 
-public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack ,QueryTokenReceiver {
+public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack, QueryTokenReceiver {
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
@@ -174,8 +174,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private int mFromNotification;
     private List<MentionSpan> mentionSpanList;
-    private boolean hasMentions=false;
-
+    private boolean hasMentions = false;
+    private String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
 
     //endregion
 
@@ -211,7 +211,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
             mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
 
-            if(getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
+            if (getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
                 mStatusBarColorEmpty = true;
             }
 
@@ -224,7 +224,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         mPostDetailPresenter.setUserPost(mUserPostObj, mUserPostId);
         mPostDetailPresenter.fetchUserPost();
-        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
             mUserPic.setCircularImage(true);
             String authorThumborUrl = CommonUtil.getThumborUri(mUserPreference.get().getUserSummary().getPhotoUrl(), profileSize, profileSize);
@@ -233,18 +233,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(mUserPostObj!=null&&StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
-            if(mUserPostObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN)))
-            {
+        if (mUserPostObj != null && StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
+            if (mUserPostObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
                 mTitleToolbar.setText(mUserPostObj.getPostCommunityName() + " post");
-            }else {
+            } else {
                 mTitleToolbar.setText(mUserPostObj.getAuthorName() + "'s" + " post");
             }
         }
-        if(mConfiguration!=null&&mConfiguration.isSet()) {
+        if (mConfiguration != null && mConfiguration.isSet()) {
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
-        }else
-        {
+            mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
+        } else {
             etView.getEditText().setHint("Type your comment here...");
         }
         setupToolbarItemsColor();
@@ -260,6 +259,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         });
     }
+
     private boolean keyboardShown(View rootView) {
         final int softKeyboardHeight = 100;
         Rect r = new Rect();
@@ -268,9 +268,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         int heightDiff = rootView.getBottom() - r.bottom;
         return heightDiff > softKeyboardHeight * dm.density;
     }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareText = "";
             shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareText)) {
@@ -417,7 +418,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
 
-
     @Override
     public String getStreamType() {
         return streamType;
@@ -436,7 +436,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void smoothScrollToBottom() {
         mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
-        if(null==mUserPostObj) {
+        if (null == mUserPostObj) {
             UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
             if (userPostSolrObj != null && StringUtil.isNotNullOrEmptyString(userPostSolrObj.getAuthorName())) {
                 mTitleToolbar.setText(userPostSolrObj.getAuthorName() + "'s" + " post");
@@ -462,7 +462,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 return;
             }
             if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST) {
-                if ( null != intent.getExtras()) {
+                if (null != intent.getExtras()) {
                     UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
                     mPostDetailPresenter.updateUserPost(userPostSolrObj);
                 }
@@ -806,7 +806,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onSendButtonClicked() {
         String message = etView.getEditText().getText().toString().trim();
         if (!TextUtils.isEmpty(message)) {
-            mPostDetailPresenter.addComment(message, mIsAnonymous,hasMentions,mentionSpanList);
+            mPostDetailPresenter.addComment(message, mIsAnonymous, hasMentions, mentionSpanList);
             etView.getEditText().setText("");
         }
     }
@@ -854,7 +854,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(),hasMentions,mentionSpanList), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), hasMentions, mentionSpanList), AppConstants.ONE_CONSTANT);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -869,18 +869,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
 
-        if(comment.isHasCommentMention())
-        {
-            mentionSpanList=comment.getCommentUserMentionList();
-            editUserMentionWithCommentText(mentionSpanList,comment.getComment());
-        }else {
+        if (comment.isHasCommentMention()) {
+            mentionSpanList = comment.getCommentUserMentionList();
+            editUserMentionWithCommentText(mentionSpanList, comment.getComment());
+        } else {
             etView.getEditText().setText(comment.getComment());
             etView.getEditText().setSelection(comment.getComment().length());
         }
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(),hasMentions,mentionSpanList), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), hasMentions, mentionSpanList), AppConstants.ONE_CONSTANT);
     }
+
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
-        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+        if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
@@ -896,6 +896,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             etView.getEditText().setSelection(etView.getEditText().length());
         }
     }
+
     @Override
     public void userCommentLikeRequest(Comment comment, boolean isLikedAction, int adapterPosition) {
         if (isLikedAction) {
@@ -930,7 +931,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if(mStatusBarColorEmpty) {
+            if (mStatusBarColorEmpty) {
                 if (upArrow != null) {
                     upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
                 }
@@ -943,27 +944,28 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
     }
-    public void onDestroy()
-    {
+
+    public void onDestroy() {
         super.onDestroy();
         mPostDetailPresenter.detachView();
     }
+
     @Override
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
         if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
             mRecyclerView.setVisibility(View.GONE);
             mSuggestionList.setVisibility(View.VISIBLE);
-            List<TaggedUserPojo> taggedUserPojoList=searchUserDataResponse.getParticipantList();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1,getString(R.string.comment_user_tag_header),"","",0));
+            List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
             hasMentions = true;
             UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
             etView.onReceiveSuggestionsResult(result, "data");
-        }else
-        {
-            hasMentions=false;
-            mentionSpanList=null;
+        } else {
+            hasMentions = false;
+            mentionSpanList = null;
         }
     }
+
     @Override
     public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
         if (queryToken.getTokenString().contains("@")) {

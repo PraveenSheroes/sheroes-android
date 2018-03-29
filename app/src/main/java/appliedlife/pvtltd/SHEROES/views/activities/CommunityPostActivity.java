@@ -161,6 +161,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Inject
     Preference<LoginResponse> mUserPreference;
 
+
     @Inject
     CreatePostPresenter mCreatePostPresenter;
 
@@ -280,6 +281,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private AccessToken mAccessToken;
     private List<MentionSpan> mentionSpanList;
     private boolean hasMentions=false;
+    private String mUserTagCreatePostText="You can tag community owners &amp; your followers";
 
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
@@ -310,6 +312,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             isSharedFromOtherApp = false;
             if (null != mConfiguration && mConfiguration.isSet()) {
                 etView.getEditText().setHint(mConfiguration.get().configData.mCreatePostText);
+                mUserTagCreatePostText=mConfiguration.get().configData.mUserTagCreatePostInfoText;
             }
             if (null != getIntent() && getIntent().getExtras() != null) {
                 mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
@@ -1517,7 +1520,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
         if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
             List<TaggedUserPojo> taggedUserPojoList=searchUserDataResponse.getParticipantList();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1,getString(R.string.create_post_user_tag_header),"","",0));
+            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
             hasMentions = true;
             UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
             etView.onReceiveSuggestionsResult(result, "data");

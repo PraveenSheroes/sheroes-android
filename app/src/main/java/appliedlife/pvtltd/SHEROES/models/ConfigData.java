@@ -23,4 +23,10 @@ public class ConfigData {
 
     @SerializedName("thumborKey")
     public String thumborKey;
+
+    @SerializedName("userTagCreatePostInfoText")
+    public String mUserTagCreatePostInfoText = "You can tag community owners & your followers";
+
+    @SerializedName("userTagCommentInfoText")
+    public String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
 }
