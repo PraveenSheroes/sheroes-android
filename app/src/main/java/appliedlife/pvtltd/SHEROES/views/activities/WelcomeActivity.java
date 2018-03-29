@@ -190,7 +190,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
         appInstallationHelper.setupAndSaveInstallation(false);
     }
 
