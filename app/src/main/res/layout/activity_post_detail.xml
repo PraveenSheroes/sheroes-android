@@ -50,6 +50,7 @@
                 android:id="@+id/input_edit_text"
                 android:layout_weight="@integer/int_value_for_line_1"
                 android:layout_width="0dp"
+                android:background="@color/white"
                 android:layout_height="match_parent"/>
 
             <ImageView

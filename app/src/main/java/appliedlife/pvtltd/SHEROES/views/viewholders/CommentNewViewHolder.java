@@ -234,7 +234,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     public void onClick(View view) {
     }
     private void clickOnUserMentionName(String description,List<MentionSpan> mentionSpanList) {
-        SpannableString spannableString = new SpannableString(description);
+        SpannableString spannableString = new SpannableString(description+" ");
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if(null!=mentionSpan&&null!=mentionSpan.getMention()) {

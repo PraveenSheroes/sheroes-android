@@ -1488,7 +1488,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList,boolean isComment) {
-        SpannableString spannableString = new SpannableString(description);
+        SpannableString spannableString = new SpannableString(description+" ");
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan&&null!=mentionSpan.getMention()) {
