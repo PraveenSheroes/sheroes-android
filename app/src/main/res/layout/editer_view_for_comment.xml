@@ -5,11 +5,10 @@
     <appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText
         android:id="@+id/text_editor_comment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:ellipsize="end"
         android:inputType="textMultiLine|textShortMessage|textCapSentences"
-        android:maxLines="1"
         android:scrollbars="vertical"
         android:focusable="true"
         android:focusableInTouchMode="true"

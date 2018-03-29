@@ -189,6 +189,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mPostDetailPresenter.attachView(this);
         mUserPic.setCircularImage(true);
         etView.setQueryTokenReceiver(this);
+        etView.setEditTextShouldWrapContent(true);
         Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
