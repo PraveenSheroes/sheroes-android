@@ -141,6 +141,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_above="@id/upload_image_container"
         android:layout_below="@id/fb_share_container">
 
@@ -200,6 +201,7 @@
                 android:layout_below="@id/user_container"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_16"
                 android:layout_height="match_parent"/>
 
             <android.support.v7.widget.CardView
