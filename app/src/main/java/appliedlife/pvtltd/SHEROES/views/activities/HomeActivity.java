@@ -299,8 +299,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
-    public PopupWindow popupWindowNavTooTip;
-    public PopupWindow popUpNotificationWindow;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
 
@@ -384,13 +382,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onDestroy() {
-        if (popupWindowNavTooTip != null && popupWindowNavTooTip.isShowing()) {
-            popupWindowNavTooTip.dismiss();
-        }
-
-        if (popUpNotificationWindow != null && popUpNotificationWindow.isShowing()) {
-            popUpNotificationWindow.dismiss();
-        }
         super.onDestroy();
         activityDataPresenter.detachView();
     }

@@ -4,11 +4,15 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.support.v7.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -41,15 +45,18 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequ
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -755,14 +762,13 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             postEntityId=userPostSolrObj.getEntityOrParticipantId();
             postAuthorUserId=userPostSolrObj.getAuthorId();
         }
-        if(queryToken.getTokenString().length()==1)
+        if(queryData.length()==1)
         {
             searchUserDataRequest = mAppUtils.searchUserDataRequest("@", communityId, postEntityId, postAuthorUserId, "COMMENT");
         }else
         {
             searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, postEntityId, postAuthorUserId, "COMMENT");
         }
-
         getSearchResult(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
 
             @Override
@@ -803,5 +809,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+
     //endregion
 }

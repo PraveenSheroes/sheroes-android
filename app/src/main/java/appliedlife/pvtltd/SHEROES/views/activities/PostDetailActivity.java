@@ -48,6 +48,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -85,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -967,10 +970,36 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-        if (queryToken.getTokenString().contains("@")) {
+    public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
+       final String searchText=queryToken.getTokenString();
+        if (searchText.contains("@")) {
             mProgressBar.setVisibility(View.VISIBLE);
-            mPostDetailPresenter.userTaggingSearchEditText(queryToken, queryToken.getTokenString(), mUserPostObj);
+            if (searchText.length() <= 3) {
+                Timer timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                LogUtils.info("data", "##################### 100 timer" +searchText);
+                                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
+                            }
+                        },
+                        100
+                );
+            } else {
+                mPostDetailPresenter.userTaggingSearchEditText(queryToken, queryToken.getTokenString(), mUserPostObj);
+                Timer timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                LogUtils.info("data", "##################### 3000 timer" + searchText);
+                                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
+                            }
+                        },
+                        2000
+                );
+            }
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
@@ -1009,7 +1038,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void textChangeListner(Editable editText) {
         if (editText.length() > 0) {
-
             if (editText.toString().length() == 0) {
                 //   etView.setMaxLines(SINGLE_LINE);
                 mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
