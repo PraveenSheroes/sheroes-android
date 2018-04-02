@@ -1530,6 +1530,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         {
             hasMentions=false;
             mentionSpanList=null;
+            List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");
         }
 
     }

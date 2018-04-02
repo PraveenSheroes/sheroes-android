@@ -811,6 +811,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (!TextUtils.isEmpty(message)) {
             mPostDetailPresenter.addComment(message, mIsAnonymous, hasMentions, mentionSpanList);
             etView.getEditText().setText("");
+            CommonUtil.hideKeyboard(this);
         }
     }
 
@@ -966,6 +967,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         } else {
             hasMentions = false;
             mentionSpanList = null;
+            mRecyclerView.setVisibility(View.GONE);
+            mSuggestionList.setVisibility(View.VISIBLE);
+            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");
         }
     }
 
@@ -1025,6 +1032,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void textChangeListner(Editable editText) {
+        etView.setEditTextShouldWrapContent(true);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mSuggestionList.setVisibility(View.GONE);
         if (editText.length() > 0) {
             if (editText.toString().length() == 0) {
                 //   etView.setMaxLines(SINGLE_LINE);
