@@ -85,6 +85,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -1649,11 +1651,25 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-        if (queryToken.getTokenString().contains("@")) {
+    public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
+        final String searchText=queryToken.getTokenString();
+        if (searchText.contains("@")) {
             mIsProgressBarVisible = true;
             mProgressBar.setVisibility(View.VISIBLE);
-            mCreatePostPresenter.userTaggingSearchEditText(queryToken, queryToken.getTokenString(), mCommunityPost);
+            if (searchText.length() <= 3) {
+                mCreatePostPresenter.userTaggingSearchEditText(queryToken, searchText, mCommunityPost);
+            } else {
+                Timer timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                mCreatePostPresenter.userTaggingSearchEditText(queryToken, searchText, mCommunityPost);
+                            }
+                        },
+                        2000
+                );
+            }
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;

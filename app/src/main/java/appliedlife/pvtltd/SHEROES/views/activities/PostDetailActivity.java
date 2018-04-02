@@ -975,25 +975,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (searchText.contains("@")) {
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
-                Timer timer = new Timer();
-                timer.schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                LogUtils.info("data", "##################### 100 timer" +searchText);
-                                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
-                            }
-                        },
-                        100
-                );
+                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
             } else {
-                mPostDetailPresenter.userTaggingSearchEditText(queryToken, queryToken.getTokenString(), mUserPostObj);
                 Timer timer = new Timer();
                 timer.schedule(
                         new TimerTask() {
                             @Override
                             public void run() {
-                                LogUtils.info("data", "##################### 3000 timer" + searchText);
                                 mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
                             }
                         },
