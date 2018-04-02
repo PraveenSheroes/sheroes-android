@@ -534,7 +534,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     // user post detail callbacks
     @Override
     public void loadMoreComments() {
-        MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+        if (mUserPostObj == null) {
+            mUserPostObj = mPostDetailPresenter.getUserPostObj();
+        }
+        if (mUserPostObj != null) {
+            MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+        }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED_CLICKED, getScreenName(), properties);
         mPostDetailPresenter.fetchMoreComments();
