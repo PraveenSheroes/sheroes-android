@@ -1039,7 +1039,7 @@ public class CommonUtil {
         boolean equalsObject(T t, U u);
     }
 
-    public static boolean isMarshmallow() {
+    public static boolean isMarshmallowAndAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 

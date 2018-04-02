@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -7,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,7 +18,10 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -56,7 +62,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Timer;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -161,6 +169,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public static final int GOOGLE_CALL = 101;
     public static final int FACEBOOK_CALL = 201;
     public static final int NORMAL_CALL = 301;
+    private static final int REQUEST_PERMISSION_EMAIL = 1100;
     private GooglePlusHelper mGooglePlusHelper;
     private GoogleSignInOptions gso;
     private ProgressDialog mProgressDialog;
@@ -177,6 +186,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private boolean isBranchFirstSession = false;
     private String deepLinkUrl = null;
     private String defaultTab = null;
+    private Account[] account;
+    private Pattern pattern;
+    private String googleAccounts;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -192,6 +204,53 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         checkAuthTokenExpireOrNot();
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
         appInstallationHelper.setupAndSaveInstallation(false);
+        if (CommonUtil.isMarshmallowAndAbove()) {
+            runtimePermissionEmail();
+        } else {
+            getGoogleAccountsName();
+        }
+    }
+
+    public void getGoogleAccountsName() {
+        pattern = Patterns.EMAIL_ADDRESS;
+        try {
+            account = AccountManager.get(WelcomeActivity.this).getAccountsByType("com.google");
+        } catch (SecurityException e) {
+            return;
+        }
+        List<String> accountNames = new ArrayList<>();
+        for (Account googleAccount : account) {
+            if (pattern.matcher(googleAccount.name).matches()) {
+                accountNames.add(googleAccount.name);
+            }
+        }
+        if (!CommonUtil.isEmpty(accountNames)) {
+            googleAccounts = android.text.TextUtils.join(",", accountNames);
+            MoEHelper.getInstance(this).setUserAttribute("emailIds", googleAccounts);
+        }
+    }
+
+    public void runtimePermissionEmail() {
+        ActivityCompat.requestPermissions(WelcomeActivity.this, new String[]{
+                        android.Manifest.permission.GET_ACCOUNTS,
+                        android.Manifest.permission.READ_PHONE_STATE
+                }, REQUEST_PERMISSION_EMAIL);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSION_EMAIL:
+                if (grantResults.length > 0) {
+                    boolean getAccountPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean readPhoneStatePermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    if (getAccountPermission && readPhoneStatePermission) {
+                        getGoogleAccountsName();
+                    }
+                }
+
+                break;
+        }
     }
 
     private void checkAuthTokenExpireOrNot() {
