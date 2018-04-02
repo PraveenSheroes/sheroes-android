@@ -68,6 +68,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -1335,5 +1336,45 @@ public class CommonUtil {
             }
         }
         return true;
+    }
+
+    public static int getCurrentAppVersion() {
+        int currentVersion = 0;
+        try {
+            currentVersion = SheroesApplication.mContext.getPackageManager().getPackageInfo(SheroesApplication.mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return currentVersion;
+    }
+
+    public static boolean isLaterClicked() {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return false;
+        }
+        String reminderDate = prefs.getString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.getCurrentDate()));
+        if (DateUtil.isToday(DateUtil.parseOnlyDate(reminderDate))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static void saveReminderForTomorrow() {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return;
+        }
+        prefs.edit().putString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.addDays(DateUtil.getCurrentDate(), 1))).apply();
+    }
+
+    private static boolean validateDate(Date date) {
+        return date != null;
+    }
+
+
+    public static Date getCurrentDate() {
+        return Calendar.getInstance().getTime();
     }
 }

@@ -413,4 +413,6 @@ public class AppConstants {
     public static final String FEED_CONFIG_VERSION = "feed config version";
     public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
 
+    public static final String NEXT_DAY_DATE = "NEXT_DAY_DATE";
+
 }

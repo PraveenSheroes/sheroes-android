@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -86,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
@@ -115,6 +117,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Inject
     FeedPresenter mFeedPresenter;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -213,12 +218,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             mFeedRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
+
+        if (showUpdateCard()) {
+            mAdapter.addHeader(HeaderRecyclerViewAdapter.header);
+        }
         mAdapter.feedFinishedLoading();
         mAdapter.setData(feedDetailList);
         mAdapter.notifyDataSetChanged();
         if (getActivity() != null && isAdded() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).showCaseDesign();
         }
+    }
+
+    public boolean showUpdateCard() {
+        if (mConfiguration!= null && mConfiguration.isSet() && mConfiguration.get().configData!=null && mConfiguration.get().configData.updateVersion!= null && !CommonUtil.isLaterClicked()) {
+            return CommonUtil.versionCompare(CommonUtil.getCurrentAppVersion(), mConfiguration.get().configData.updateVersion);
+        }
+        return false;
     }
 
     @Override
@@ -906,6 +922,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             });
         }
         popup.show();
+    }
+
+    @Override
+    public void onUpdateNowClicked() {
+        AnalyticsManager.trackEvent(Event.APP_UPDATE_YES, getScreenName(), null);
+        CommonUtil.openPlayStore(getContext(), SheroesApplication.mContext.getPackageName());
+    }
+
+    @Override
+    public void onUpdateLaterClicked() {
+        AnalyticsManager.trackEvent(Event.APP_UPDATE_NO, getScreenName(), null);
+        CommonUtil.saveReminderForTomorrow();
+        mAdapter.removeHeader(HeaderRecyclerViewAdapter.header);
     }
 
     @Override

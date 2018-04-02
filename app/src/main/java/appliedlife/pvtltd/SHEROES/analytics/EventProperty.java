@@ -53,6 +53,7 @@ public enum EventProperty {
     COLLECTION_NAME("Collection Name"),
     STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
+    CURRENT_VERSION("Current Version"),
     POSITION_OF_CAROUSEL("Position Of Carousel");
 
     private final String string;
