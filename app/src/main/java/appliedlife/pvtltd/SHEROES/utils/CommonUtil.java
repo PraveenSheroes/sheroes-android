@@ -11,11 +11,13 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -81,6 +83,7 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.x500.X500Principal;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -608,10 +611,46 @@ public class CommonUtil {
                     @Override
                     public void onNext(Bitmap bmp) {
                         Event event = trackEvent ? eventName : null;
-                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event, properties);
+                        Bitmap topImage = drawableToBitmap(context.getDrawable(R.drawable.challenge_placeholder));
+                        Bitmap newBitmap = combineImages(bmp, topImage);
+                        shareBitmapWhatsApp(context, newBitmap, sourceScreen, url, imageShareText, event, properties);
                     }
                 });
 
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    public static Bitmap combineImages(Bitmap c, Bitmap s) { // can add a 3rd parameter 'String loc' if you want to save the new image - left some code to do that at the bottom
+        Bitmap cs = null;
+
+        int width, height = 0;
+            width = c.getWidth();
+            height = c.getHeight() + s.getHeight();
+
+        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas comboImage = new Canvas(cs);
+
+        comboImage.drawBitmap(c, 0f, 0f, null);
+        comboImage.drawBitmap(s, 0f, c.getHeight(), null);
+        return cs;
     }
 
     public static void shareImageChooser(final Context context, final String imageShareText, final String url) {
