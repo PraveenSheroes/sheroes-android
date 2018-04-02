@@ -205,7 +205,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         }
         if(queryToken.getTokenString().length()==1)
         {
-            searchUserDataRequest = mAppUtils.searchUserDataRequest("@", communityId, null, null, "POST");
+            searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
         }else
         {
             searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");

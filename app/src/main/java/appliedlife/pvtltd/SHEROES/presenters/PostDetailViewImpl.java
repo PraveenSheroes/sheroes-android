@@ -764,7 +764,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         if(queryData.length()==1)
         {
-            searchUserDataRequest = mAppUtils.searchUserDataRequest("@", communityId, postEntityId, postAuthorUserId, "COMMENT");
+            searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, postEntityId, postAuthorUserId, "COMMENT");
         }else
         {
             searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, postEntityId, postAuthorUserId, "COMMENT");

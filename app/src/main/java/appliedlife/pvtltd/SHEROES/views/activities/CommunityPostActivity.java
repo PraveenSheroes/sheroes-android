@@ -363,6 +363,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mOldText = mCommunityPost.body;
                 if(mCommunityPost.hasMention)
                 {
+                    hasMentions=mCommunityPost.hasMention;
                    mentionSpanList=mCommunityPost.userMentionList;
                     editUserMentionWithFullDescriptionText(mentionSpanList,mOldText);
                 }else {

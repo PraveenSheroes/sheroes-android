@@ -874,6 +874,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         trackEvent(Event.REPLY_EDITED, properties);
 
         if (comment.isHasCommentMention()) {
+            hasMentions=comment.isHasCommentMention();
             mentionSpanList = comment.getCommentUserMentionList();
             editUserMentionWithCommentText(mentionSpanList, comment.getComment());
         } else {
