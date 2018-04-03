@@ -1703,6 +1703,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             case R.id.li_social_user:
                 TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
                 etView.setInsertion(taggedUserPojo);
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .postCommentId(Integer.toString(mCommunityPost.remote_id))
+                                .taggedIn("POST")
+                                .taggedUserId(Integer.toString(taggedUserPojo.getUserId()))
+                                .build();
+                AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
                 break;
             default:
         }

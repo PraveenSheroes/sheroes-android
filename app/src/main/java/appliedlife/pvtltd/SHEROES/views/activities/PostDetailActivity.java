@@ -972,6 +972,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mSuggestionList.setVisibility(View.VISIBLE);
             List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,"","","",0));
             UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
             etView.onReceiveSuggestionsResult(result, "data");
         }
@@ -1024,6 +1025,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mSuggestionList.setVisibility(View.GONE);
                 TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
                 etView.setInsertion(taggedUserPojo);
+                if(null!=mUserPostObj) {
+                    final HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .postCommentId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
+                                    .taggedIn("COMMENT")
+                                    .taggedUserId(Integer.toString(taggedUserPojo.getUserId()))
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
+                }
                 break;
             default:
         }
