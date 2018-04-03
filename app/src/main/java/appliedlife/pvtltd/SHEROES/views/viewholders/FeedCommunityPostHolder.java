@@ -694,6 +694,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                             clickOnUserMentionName(listDescription, mentionSpanList,false);
+                        }else
+                        {
+                            tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
                         }
                     } else {
                         tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);

@@ -515,6 +515,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
             if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                 clickOnUserMentionName(listDescription, mentionSpanList);
+            }else {
+                mPostDescription.setText(hashTagColorInString(listDescription));
             }
         } else {
             mPostDescription.setText(hashTagColorInString(listDescription));

@@ -36,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -218,9 +219,22 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.VISIBLE);
         } else {
-            mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
+            if (mUserPostObj.isHasMention()) {
+                List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
+                if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                    clickOnUserMentionName(listDescription, mentionSpanList);
+                } else {
+                    mPostDescription.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
+                }
+            } else {
+                mPostDescription.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
+            }
+
         }
+
+
+
         linkifyURLs(mPostDescription);
 
         allTextViewStringOperations(mContext);
@@ -764,5 +778,52 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
         }
+    }
+    private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList) {
+        StringBuilder strWithAddExtra = new StringBuilder(description+" ");
+        for (int i = 0; i <  mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
+            }
+        }
+        SpannableString spannableString = new SpannableString(strWithAddExtra);
+        for (int i = 0; i < mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan&&null!=mentionSpan.getMention()) {
+                final ClickableSpan postedInClick = new ClickableSpan() {
+                    @Override
+                    public void onClick(View textView) {
+                       /* UserPostSolrObj  userPostSolrObj=mUserPostObj;
+                        userPostSolrObj.setCreatedBy(mentionSpan.getMention().getUserId());
+                        if(mentionSpan.getMention().getUserType()==7) {
+                            userPostSolrObj.setAuthorMentor(true);
+                        }else
+                        {
+                            userPostSolrObj.setAuthorMentor(false);
+                        }
+                        if (viewInterface instanceof FeedItemCallback) {
+                            ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        } else {
+                            viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+                        }*/
+                    }
+
+                    @Override
+                    public void updateDrawState(final TextPaint textPaint) {
+                        textPaint.setUnderlineText(false);
+                    }
+                };
+                int start=mentionSpan.getMention().getStartIndex()+i;
+                int end=mentionSpan.getMention().getEndIndex()+i;
+                spannableString.setSpan(postedInClick, start, end+1, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
+            }
+        }
+
+            mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
+            mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
+        // tvMention.setSelected(true);
     }
 }
