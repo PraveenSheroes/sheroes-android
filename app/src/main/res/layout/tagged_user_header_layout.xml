@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_30"
         android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp_size_8"
         android:layout_marginRight="@dimen/dp_size_8"
         android:textColor="@color/comment_text"
