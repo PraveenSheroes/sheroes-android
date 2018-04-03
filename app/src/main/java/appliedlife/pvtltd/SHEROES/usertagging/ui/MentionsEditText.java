@@ -147,6 +147,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         }
         return false;
     }
+
     private MentionSpanConfig parseMentionSpanConfigFromAttributes(@Nullable AttributeSet attrs, int defStyleAttr) {
         final Context context = getContext();
         MentionSpanConfig.Builder builder = new MentionSpanConfig.Builder();

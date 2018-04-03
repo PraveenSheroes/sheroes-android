@@ -1089,6 +1089,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mCommunityName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mSuggestionList.setVisibility(View.GONE);
                 if (!mIsEditPost && !mIsFromCommunity) {
                     PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, mMyCommunities);
                 }
@@ -1533,6 +1534,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mentionSpanList=null;
             List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,"","","",0));
             UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
             etView.onReceiveSuggestionsResult(result, "data");
         }

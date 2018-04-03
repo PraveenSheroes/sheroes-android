@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/li_social_user"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_30"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/dp_size_8"
+        android:layout_marginRight="@dimen/dp_size_8"
+        android:text="No Result Found"
+        android:textColor="@color/recent_post_comment"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textSize="@dimen/sp_size_16"/>
 
     <LinearLayout
+        android:id="@+id/li_social_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -45,6 +60,7 @@
             android:rotation="270" />
     </LinearLayout>
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
         android:layout_height="0.7dp"
         android:layout_marginLeft="77dp"
