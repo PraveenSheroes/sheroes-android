@@ -209,9 +209,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.community_name)
     TextView mCommunityName;
 
-   // @Bind(R.id.et_default_hint_text)
-   // EditText mEtDefaultText;
-
     @Bind(R.id.add_image)
     RippleViewLinear rippleViewLinearAddImage;
 
@@ -381,12 +378,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
                 }
             }
-       /* if (getIntent() != null) {
-            Parcelable parcelableMyCommunities = getIntent().getParcelableExtra(MyCommunities.MY_COMMUNITY_OBJ);
-            if (parcelableMyCommunities != null) {
-                mMyCommunities = Parcels.unwrap(parcelableMyCommunities);
-            }
-        }*/
 
             setSupportActionBar(mToolbar);
             if (mUserPreference == null) {
@@ -409,7 +400,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupUserView();
             setupImageListView();
             setCommunityName();
-            //   setupTextChangeListener();
             setupCommunityNameListener();
             setupShareToFbListener();
             setupAnonymousSlelectListener();

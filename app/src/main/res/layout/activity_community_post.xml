@@ -280,6 +280,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:layout_below="@id/card_link_render">
                 <TextView
                     android:id="@+id/image_count"
