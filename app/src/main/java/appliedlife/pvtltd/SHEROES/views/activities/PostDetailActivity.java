@@ -27,6 +27,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -100,6 +101,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
     private String streamType;
+    private boolean isDirty = false;
+    private Comment editedComment = null;
+    private Map<Integer, Comment> lastEditedComment = new HashMap<>();
+
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -366,6 +371,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void editLastComment() {
         Comment comment = mPostDetailPresenter.getLastComment();
         if (comment != null) {
+            isDirty = true;
             onEditMenuClicked(comment);
         }
     }
@@ -792,6 +798,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
+        if(isDirty && editedComment!=null) {
+            isDirty = false;
+            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), editedComment.getComment(), false, false, editedComment.getId()), AppConstants.TWO_CONSTANT);
+        }
+
         String message = mInputText.getText().toString().trim();
         if (!TextUtils.isEmpty(message)) {
             mPostDetailPresenter.addComment(message, mIsAnonymous);
@@ -846,6 +857,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void onEditMenuClicked(Comment comment) {
+        //todo move this also only when edit submit
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(comment.getId()))
@@ -856,9 +868,29 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
+
+        editedComment = comment;
         mInputText.setText(comment.getComment());
         mInputText.setSelection(comment.getComment().length());
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+
+        int pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
+
+        if (mPostDetailListAdapter.getItemCount() > pos) {
+            if (pos != RecyclerView.NO_POSITION) {
+
+                if (isDirty && !lastEditedComment.isEmpty()) {
+                    Map.Entry<Integer, Comment> entry = lastEditedComment.entrySet().iterator().next();
+                    lastEditedComment.clear();
+                    mPostDetailListAdapter.addData(entry.getValue(), entry.getKey());
+                    pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
+                }
+
+                mPostDetailListAdapter.removeData(pos);
+
+                lastEditedComment.put(pos, comment);
+                isDirty = true;
+            }
+        }
     }
 
     @Override

@@ -362,14 +362,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().stopProgressBar();
                 if (commentResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
 
-                    int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
-                    if (pos != RecyclerView.NO_POSITION) {
-                        mBaseResponseList.remove(pos);
-                        getMvpView().removeData(pos);
+                    if (editDeleteId == AppConstants.ONE_CONSTANT) {
+                        int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
+                        if (pos != RecyclerView.NO_POSITION) {
+                            mBaseResponseList.remove(pos);
+                            getMvpView().removeData(pos);
 
-                        mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
-                        mBaseResponseList.set(0, mUserPostObj);
-                        getMvpView().setData(0, mUserPostObj);
+                            mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
+                            mBaseResponseList.set(0, mUserPostObj);
+                            getMvpView().setData(0, mUserPostObj);
+                        }
                     }
                 }
             }
