@@ -179,7 +179,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private List<MentionSpan> mentionSpanList;
     private boolean hasMentions = false;
     private String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
-
     //endregion
 
     //region activity methods
@@ -963,6 +962,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
             hasMentions = true;
             UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            LogUtils.info("Data","#####################data");
             etView.onReceiveSuggestionsResult(result, "data");
         } else {
             hasMentions = false;
@@ -971,8 +971,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
             taggedUserPojoList.add(1, new TaggedUserPojo(0,"","","",0));
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
+            LogUtils.info("Data","#####################null");
+            etView.notifyAdapterOnData(taggedUserPojoList);
         }
     }
 
@@ -980,6 +980,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
        final String searchText=queryToken.getTokenString();
         if (searchText.contains("@")) {
+            hasMentions = false;
+            mentionSpanList = null;
+            mSuggestionList.setVisibility(View.VISIBLE);
+            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+            etView.notifyAdapterOnData(taggedUserPojoList);
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
                 mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
@@ -995,14 +1002,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         2000
                 );
             }
-            hasMentions = false;
-            mentionSpanList = null;
-            mSuggestionList.setVisibility(View.VISIBLE);
-            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;

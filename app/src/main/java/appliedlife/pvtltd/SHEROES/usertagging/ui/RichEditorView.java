@@ -56,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizer;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizerConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 
 /**
@@ -367,6 +368,14 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
                 }
             }
         });
+    }
+    public void notifyAdapterOnData(List<TaggedUserPojo> taggedUserPojoList) {
+        // Add the mentions and notify the editor/dropdown of the changes on the UI thread
+                if (mUserTagSuggestionsAdapter != null) {
+                    mUserTagSuggestionsAdapter.addUserData(taggedUserPojoList);
+                    mUserTagSuggestionsAdapter.notifyDataSetChanged();
+                }
+
     }
 
     public void onReceiveSuggestionsListView(final @NonNull RecyclerView suggestionsList) {

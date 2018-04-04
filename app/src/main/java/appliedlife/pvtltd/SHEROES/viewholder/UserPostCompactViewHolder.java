@@ -791,7 +791,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan&&null!=mentionSpan.getMention()) {
-                final ClickableSpan postedInClick = new ClickableSpan() {
+                /*final ClickableSpan postedInClick = new ClickableSpan() {
                     @Override
                     public void onClick(View textView) {
 
@@ -801,10 +801,10 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                     public void updateDrawState(final TextPaint textPaint) {
                         textPaint.setUnderlineText(false);
                     }
-                };
+                };*/
                 int start=mentionSpan.getMention().getStartIndex()+i;
                 int end=mentionSpan.getMention().getEndIndex()+i;
-                spannableString.setSpan(postedInClick, start, end+1, 0);
+              //  spannableString.setSpan(postedInClick, start, end+1, 0);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
             }
         }

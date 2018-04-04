@@ -1525,8 +1525,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
             taggedUserPojoList.add(1, new TaggedUserPojo(0,"","","",0));
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
+            etView.notifyAdapterOnData(taggedUserPojoList);
         }
 
     }
@@ -1672,8 +1671,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
             taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
+            etView.notifyAdapterOnData(taggedUserPojoList);
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;

@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
@@ -56,6 +57,9 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
             String name = ((TaggedUserPojo) suggestible).getName();
             if (StringUtil.isNotNullOrEmptyString(name)) {
                 mText.setText(name);
+            }else
+            {
+                mText.setText("No Result Found");
             }
         }else
         {

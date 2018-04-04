@@ -32,11 +32,13 @@ import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
@@ -137,6 +139,15 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
         notifyDataSetChanged();
     }
+    public void addUserData(List<TaggedUserPojo> suggestions) {
+        // Add result to proper bucket and remove from waiting
+        // If we have suggestions, add them to the adapter and display them
+            mSuggestions.clear();
+            mSuggestions.addAll(suggestions);
+            mSuggestionsVisibilityManager.displaySuggestions(true);
+            notifyDataSetChanged();
+    }
+
 
     /**
      * Clear all data from adapter.
