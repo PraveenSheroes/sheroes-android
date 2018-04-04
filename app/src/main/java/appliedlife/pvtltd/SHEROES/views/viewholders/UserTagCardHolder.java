@@ -53,6 +53,10 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
             liSocialUser.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
+            String name = ((TaggedUserPojo) suggestible).getName();
+            if (StringUtil.isNotNullOrEmptyString(name)) {
+                mText.setText(name);
+            }
         }else
         {
             String name = ((TaggedUserPojo) suggestible).getName();

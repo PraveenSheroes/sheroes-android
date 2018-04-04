@@ -958,7 +958,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
         if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-            mRecyclerView.setVisibility(View.GONE);
             mSuggestionList.setVisibility(View.VISIBLE);
             List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
@@ -968,7 +967,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         } else {
             hasMentions = false;
             mentionSpanList = null;
-            mRecyclerView.setVisibility(View.GONE);
             mSuggestionList.setVisibility(View.VISIBLE);
             List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
@@ -997,6 +995,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         2000
                 );
             }
+            hasMentions = false;
+            mentionSpanList = null;
+            mSuggestionList.setVisibility(View.VISIBLE);
+            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
@@ -1045,7 +1051,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void textChangeListner(Editable editText) {
         etView.setEditTextShouldWrapContent(true);
         mRecyclerView.setVisibility(View.VISIBLE);
-        mSuggestionList.setVisibility(View.GONE);
         if (editText.length() > 0) {
             if (editText.toString().length() == 0) {
                 //   etView.setMaxLines(SINGLE_LINE);

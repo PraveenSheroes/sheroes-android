@@ -1667,6 +1667,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         2000
                 );
             }
+            hasMentions=false;
+            mentionSpanList=null;
+            List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
