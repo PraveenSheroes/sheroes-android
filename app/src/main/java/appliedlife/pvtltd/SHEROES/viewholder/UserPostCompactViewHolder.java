@@ -794,20 +794,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 final ClickableSpan postedInClick = new ClickableSpan() {
                     @Override
                     public void onClick(View textView) {
-                       /* UserPostSolrObj  userPostSolrObj=mUserPostObj;
-                        userPostSolrObj.setCreatedBy(mentionSpan.getMention().getUserId());
-                        if(mentionSpan.getMention().getUserType()==7) {
-                            userPostSolrObj.setAuthorMentor(true);
-                        }else
-                        {
-                            userPostSolrObj.setAuthorMentor(false);
-                        }
-                        if (viewInterface instanceof FeedItemCallback) {
-                            ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                        } else {
-                            viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
-                        }*/
                     }
 
                     @Override

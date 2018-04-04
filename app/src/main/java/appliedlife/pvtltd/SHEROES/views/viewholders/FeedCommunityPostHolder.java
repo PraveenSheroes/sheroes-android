@@ -1507,7 +1507,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     public void onClick(View textView) {
                             UserPostSolrObj  userPostSolrObj=mUserPostObj;
                             userPostSolrObj.setCreatedBy(mentionSpan.getMention().getUserId());
-                            if(mentionSpan.getMention().getUserType()==7) {
+                            if(mentionSpan.getMention().getUserType()==AppConstants.MENTOR_USER_TYPE_FOR_TAGGING) {
                                 userPostSolrObj.setAuthorMentor(true);
                             }else
                             {
