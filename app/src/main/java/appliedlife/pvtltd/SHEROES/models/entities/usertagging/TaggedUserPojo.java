@@ -57,7 +57,7 @@ public class TaggedUserPojo implements Mentionable {
     @Expose
     public String name;
 
-    @SerializedName("user_type")
+    @SerializedName("user_type_id")
     @Expose
     public long userType;
 
