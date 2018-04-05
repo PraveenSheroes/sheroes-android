@@ -986,7 +986,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
             taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
-            etView.notifyAdapterOnData(taggedUserPojoList);
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
                 mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
