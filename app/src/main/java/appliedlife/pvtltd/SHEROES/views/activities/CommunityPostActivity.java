@@ -461,6 +461,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mAnonymousView.setVisibility(View.GONE);
             if(mCommunityPost.hasMention)
             {
+                hasMentions=true;
                 mentionSpanList=mCommunityPost.userMentionList;
                 editUserMentionWithFullDescriptionText(mentionSpanList," " + "#" + mCommunityPost.challengeHashTag);
             }else {
@@ -479,6 +480,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mOldText = mCommunityPost.body;
                 if(mCommunityPost.hasMention)
                 {
+                    hasMentions=true;
                     mentionSpanList=mCommunityPost.userMentionList;
                     editUserMentionWithFullDescriptionText(mentionSpanList,mOldText);
                 }else {
