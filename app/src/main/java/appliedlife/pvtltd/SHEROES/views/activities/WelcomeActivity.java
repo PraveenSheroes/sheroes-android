@@ -115,6 +115,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
     public static final String SCREEN_LABEL = "Intro Screen";
     private static final String BRANCH_DEEP_LINK = "deep_link_url";
+    private static final String BRANCH_REFERRER_LINK = "~referring_link";
     private final String TAG = LogUtils.makeLogTag(WelcomeActivity.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -259,12 +260,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         if (isBranchFirstSession) {
                             if (sessionParams.has(BRANCH_DEEP_LINK)) {
                                 String deepLink;
+                                String branchLink;
                                 try {
                                     deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
+                                    branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
                                     if (StringUtil.isNotNullOrEmptyString(deepLink)) {
                                         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
                                         SharedPreferences.Editor editor= prefs.edit();
-                                        editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, deepLink);
+                                        editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
                                         editor.apply();
                                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(WelcomeActivity.this);
                                         appInstallationHelper.setupAndSaveInstallation(false);

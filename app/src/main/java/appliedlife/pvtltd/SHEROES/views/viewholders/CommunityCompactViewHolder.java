@@ -83,7 +83,6 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mCommunityFeedObj = (CommunityFeedSolrObj) item;
-        mCommunityFeedObj.setItemPosition(position);
         mContext = context;
 
         if (mCommunityFeedObj.isOwner() || mCommunityFeedObj.isMember()) {

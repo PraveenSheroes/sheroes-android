@@ -797,6 +797,9 @@ public class CommonUtil {
 
     public static String getThumborUri(@NonNull String image, int width, int height) {
         String uri = image;
+        if (!CommonUtil.isNotEmpty(uri)) {
+            return "";
+        }
         try {
             uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
                     .resize(width, height)
@@ -1128,14 +1131,15 @@ public class CommonUtil {
         void callBack(boolean isShown);
     }
 
-    public static boolean ensureFirstTime(String key) {
+
+    public static synchronized boolean ensureFirstTime(String key) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (prefs == null) {
             return false;
         }
         boolean shown = prefs.getBoolean(key, false);
         if (!shown) {
-            prefs.edit().putBoolean(key, true).apply();
+            prefs.edit().putBoolean(key, true).commit();
         }
         return !shown;
     }

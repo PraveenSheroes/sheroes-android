@@ -323,7 +323,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         assignNavigationRecyclerListView();
         sheUserInit();
         mHomePresenter.queryConfig();
-        fetchAllCommunity();
         mHomePresenter.getNotificationCountFromPresenter(notificationReadCountRequestBuilder(TAG));
         if (null == mUserPreference) {
             logOut();
@@ -353,7 +352,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
                 if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
                      Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
-                    //.setCancelable(true)
+                    .setCancelable(true)
                     .setDismissOnClick(true)
                     .setGravity(Gravity.BOTTOM)
                     .setText(R.string.tool_tip_notification);
@@ -369,7 +368,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void toolTipForNav() {
         try {
             Tooltip.Builder builder = new Tooltip.Builder(viewToolTipNav, R.style.Tooltip)
-                    //.setCancelable(true)
+                    .setCancelable(true)
                     .setDismissOnClick(true)
                     .setGravity(Gravity.BOTTOM)
                     .setText(R.string.tool_tip_nav);

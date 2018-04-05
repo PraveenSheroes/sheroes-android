@@ -91,6 +91,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public void bindData(CarouselDataObj item, final Context context, final int position) {
         this.carouselDataObj = item;
         this.position = position;
+        item.setItemPosition(position);
         if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             mTitle.setVisibility(View.VISIBLE);
             mTitle.setText(item.getTitle());

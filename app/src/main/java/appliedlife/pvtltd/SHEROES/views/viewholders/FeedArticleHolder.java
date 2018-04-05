@@ -181,6 +181,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (articleObj == null) {
             return;
         }
+        articleObj.setItemPosition(position);
         this.mContext = context;
         tvFeedArticleUserBookmark.setEnabled(true);
         tvFeedArticleUserReaction.setTag(true);
