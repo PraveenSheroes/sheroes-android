@@ -177,6 +177,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private int mFromNotification;
     private List<MentionSpan> mentionSpanList;
+    List<TaggedUserPojo> mTaggedUserPojoList;
     private boolean hasMentions = false;
     private String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
     //endregion
@@ -956,23 +957,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-        if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-            mSuggestionList.setVisibility(View.VISIBLE);
-            List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-            hasMentions = true;
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            LogUtils.info("Data","#####################data");
-            etView.onReceiveSuggestionsResult(result, "data");
-        } else {
-            hasMentions = false;
-            mentionSpanList = null;
-            mSuggestionList.setVisibility(View.VISIBLE);
-            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-            taggedUserPojoList.add(1, new TaggedUserPojo(0,"","","",0));
-            LogUtils.info("Data","#####################null");
-            etView.notifyAdapterOnData(taggedUserPojoList);
+        if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
+            if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
+                mTaggedUserPojoList = searchUserDataResponse.getParticipantList();
+                List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
+                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+                hasMentions = true;
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                mSuggestionList.setLayoutManager(layoutManager);
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mTaggedUserPojoList));
+            } else {
+                hasMentions = false;
+                mentionSpanList = null;
+                List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+                taggedUserPojoList.add(1, new TaggedUserPojo(0, "", "", "", 0));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                mSuggestionList.setLayoutManager(layoutManager);
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+            }
         }
     }
 
@@ -982,12 +985,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (searchText.contains("@")) {
             hasMentions = false;
             mentionSpanList = null;
-            mSuggestionList.setVisibility(View.VISIBLE);
             List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
             taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mSuggestionList.setLayoutManager(layoutManager);
+            mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+            mTaggedUserPojoList=taggedUserPojoList;
+
+            //UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+           // etView.onReceiveSuggestionsResult(result, "data");
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
                 mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
@@ -1027,8 +1035,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mSuggestionList.setVisibility(View.GONE);
+                mTaggedUserPojoList.clear();
+                etView.displayHide();
                 TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
                 etView.setInsertion(taggedUserPojo);
                 if(null!=mUserPostObj) {

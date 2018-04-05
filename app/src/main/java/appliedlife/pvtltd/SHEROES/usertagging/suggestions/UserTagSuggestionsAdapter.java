@@ -147,6 +147,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
             mSuggestionsVisibilityManager.displaySuggestions(true);
             notifyDataSetChanged();
     }
+    public void displayHide() {
+          mSuggestionsVisibilityManager.displaySuggestions(false);
+    }
 
 
     /**

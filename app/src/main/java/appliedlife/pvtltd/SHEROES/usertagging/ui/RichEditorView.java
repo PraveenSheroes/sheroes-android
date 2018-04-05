@@ -369,13 +369,17 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             }
         });
     }
-    public void notifyAdapterOnData(List<TaggedUserPojo> taggedUserPojoList) {
+    public UserTagSuggestionsAdapter notifyAdapterOnData(List<TaggedUserPojo> taggedUserPojoList) {
         // Add the mentions and notify the editor/dropdown of the changes on the UI thread
-                if (mUserTagSuggestionsAdapter != null) {
-                    mUserTagSuggestionsAdapter.addUserData(taggedUserPojoList);
-                    mUserTagSuggestionsAdapter.notifyDataSetChanged();
-                }
-
+        SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
+        mUserTagSuggestionsAdapter = new UserTagSuggestionsAdapter(getContext(), this, listBuilder, this);
+        mUserTagSuggestionsAdapter.addUserData(taggedUserPojoList);
+        mUserTagSuggestionsAdapter.notifyDataSetChanged();
+        return mUserTagSuggestionsAdapter;
+    }
+    public void displayHide() {
+        // Add the mentions and notify the editor/dropdown of the changes on the UI thread
+        mUserTagSuggestionsAdapter.displayHide();
     }
 
     public void onReceiveSuggestionsListView(final @NonNull RecyclerView suggestionsList) {

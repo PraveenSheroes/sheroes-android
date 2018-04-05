@@ -285,6 +285,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //new images and deleted images are send when user edit the post
     private List<String> newEncodedImages = new ArrayList<>();
     private List<Long> deletedImageIdList = new ArrayList<>();
+    List<TaggedUserPojo> mTaggedUserPojoList;
     private View anonymousToolTip;
     @Inject
     Preference<Configuration> mConfiguration;
@@ -1514,22 +1515,26 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-        if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-            List<TaggedUserPojo> taggedUserPojoList=searchUserDataResponse.getParticipantList();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
-            hasMentions = true;
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
-        }else
-        {
-            hasMentions=false;
-            mentionSpanList=null;
-            List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
-            taggedUserPojoList.add(1, new TaggedUserPojo(0,"","","",0));
-            etView.notifyAdapterOnData(taggedUserPojoList);
-        }
+        if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
+            if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
+                mTaggedUserPojoList = searchUserDataResponse.getParticipantList();
+                mTaggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCreatePostText, "", "", 0));
+                hasMentions = true;
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                mSuggestionList.setLayoutManager(layoutManager);
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mTaggedUserPojoList));
+            } else {
+                hasMentions = false;
+                mentionSpanList = null;
+                List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCreatePostText, "", "", 0));
+                taggedUserPojoList.add(1, new TaggedUserPojo(0, "", "", "", 0));
 
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                mSuggestionList.setLayoutManager(layoutManager);
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+            }
+        }
     }
 
 
@@ -1652,6 +1657,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
         final String searchText=queryToken.getTokenString();
         if (searchText.contains("@")) {
+            hasMentions=false;
+            mentionSpanList=null;
+            List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+          /*  UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");*/
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mSuggestionList.setLayoutManager(layoutManager);
+            mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+            mTaggedUserPojoList=taggedUserPojoList;
+
             mIsProgressBarVisible = true;
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
@@ -1668,13 +1685,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         2000
                 );
             }
-            hasMentions=false;
-            mentionSpanList=null;
-            List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
-            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
-            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
@@ -1699,6 +1709,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
+                mTaggedUserPojoList.clear();
+                etView.displayHide();
                 TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
                 etView.setInsertion(taggedUserPojo);
                 final HashMap<String, Object> properties =
