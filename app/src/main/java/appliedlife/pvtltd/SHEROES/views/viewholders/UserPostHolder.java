@@ -811,7 +811,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void clickOnMentorName(String nameAndCommunity, String feedTitle, String postedIn) {
 
-        SpannableString SpanString = new SpannableString(nameAndCommunity);
+        SpannableString SpanString = new SpannableString(nameAndCommunity+" ");
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
@@ -854,7 +854,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             }
 
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
-                nameAndCommunity=nameAndCommunity+" ";
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
