@@ -119,12 +119,11 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         // Inflate view from XML layout file
 
         // Get the inner views
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (context instanceof CommunityPostActivity) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             inflater.inflate(R.layout.editor_view_for_create_post, this, true);
             mMentionsEditText = findViewById(R.id.text_editor_create_post);
         } else {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             inflater.inflate(R.layout.editer_view_for_comment, this, true);
             mMentionsEditText = findViewById(R.id.text_editor_comment);
         }
