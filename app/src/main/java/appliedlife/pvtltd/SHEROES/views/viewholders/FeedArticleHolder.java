@@ -425,7 +425,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         String authorThumborUrl = CommonUtil.getThumborUri(mPhotoUrl, profileSize, profileSize);
         ivFeedArticleLoginUserPic.bindImage(authorThumborUrl);
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
+            tvFeedArticleLoginUserName.setVisibility(View.VISIBLE);
             tvFeedArticleLoginUserName.setText(loggedInUser);
+        }else
+        {
+            tvFeedArticleLoginUserName.setVisibility(View.GONE);
         }
 
 

@@ -193,8 +193,6 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
 
-    @POST("entity/master/get_tagging_list")
-    Observable<SearchUserDataResponse> getUserTaggingResponse(@Body SearchUserDataRequest searchUserDataRequest);
 
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
@@ -313,5 +311,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_user_device")
     Observable<AppInstallation> saveInstallation(@Body AppInstallation appInstallation);
+
+    @POST("entity/master/user_mention_suggestions")
+    Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);
 
 }

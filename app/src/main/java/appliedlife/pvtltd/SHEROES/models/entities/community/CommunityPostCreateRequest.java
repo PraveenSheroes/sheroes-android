@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 
 /**
  * Created by SHEROES-TECH on 22-03-2017.
@@ -88,6 +89,17 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
     @SerializedName("crdt")
     @Expose
     private String schedulePost;
+
+    /* Mention fields*/
+
+    @SerializedName("has_mentions")
+    @Expose
+    private boolean hasMentions;
+
+    @SerializedName("user_mentions")
+    @Expose
+    private List<MentionSpan> userMentionList;
+
 
     public String getmSourceType() {
         return mSourceType;
@@ -239,6 +251,50 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         isTopPost = topPost;
     }
 
+    public boolean isPostToFacebook() {
+        return isPostToFacebook;
+    }
+
+    public void setPostToFacebook(boolean postToFacebook) {
+        isPostToFacebook = postToFacebook;
+    }
+
+    public String isUserFbAccessToken() {
+        return userFbAccessToken;
+    }
+
+    public void setUserFbAccessToken(String userFbAccessToken) {
+        this.userFbAccessToken = userFbAccessToken;
+    }
+
+    public String getSchedulePost() {
+        return schedulePost;
+    }
+
+    public void setSchedulePost(String schedulePost) {
+        this.schedulePost = schedulePost;
+    }
+
+    public String getUserFbAccessToken() {
+        return userFbAccessToken;
+    }
+
+    public boolean isHasMentions() {
+        return hasMentions;
+    }
+
+    public void setHasMentions(boolean hasMentions) {
+        this.hasMentions = hasMentions;
+    }
+
+    public List<MentionSpan> getUserMentionList() {
+        return userMentionList;
+    }
+
+    public void setUserMentionList(List<MentionSpan> userMentionList) {
+        this.userMentionList = userMentionList;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -264,6 +320,11 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         dest.writeByte(this.isActive ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isSpam ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isTopPost ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isPostToFacebook ? (byte) 1 : (byte) 0);
+        dest.writeString(this.userFbAccessToken);
+        dest.writeString(this.schedulePost);
+        dest.writeByte(this.hasMentions ? (byte) 1 : (byte) 0);
+        dest.writeTypedList(this.userMentionList);
     }
 
     protected CommunityPostCreateRequest(Parcel in) {
@@ -286,6 +347,11 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
         this.isActive = in.readByte() != 0;
         this.isSpam = in.readByte() != 0;
         this.isTopPost = in.readByte() != 0;
+        this.isPostToFacebook = in.readByte() != 0;
+        this.userFbAccessToken = in.readString();
+        this.schedulePost = in.readString();
+        this.hasMentions = in.readByte() != 0;
+        this.userMentionList = in.createTypedArrayList(MentionSpan.CREATOR);
     }
 
     public static final Creator<CommunityPostCreateRequest> CREATOR = new Creator<CommunityPostCreateRequest>() {
@@ -299,28 +365,4 @@ public class CommunityPostCreateRequest extends BaseRequest implements Parcelabl
             return new CommunityPostCreateRequest[size];
         }
     };
-
-    public boolean isPostToFacebook() {
-        return isPostToFacebook;
-    }
-
-    public void setPostToFacebook(boolean postToFacebook) {
-        isPostToFacebook = postToFacebook;
-    }
-
-    public String isUserFbAccessToken() {
-        return userFbAccessToken;
-    }
-
-    public void setUserFbAccessToken(String userFbAccessToken) {
-        this.userFbAccessToken = userFbAccessToken;
-    }
-
-    public String getSchedulePost() {
-        return schedulePost;
-    }
-
-    public void setSchedulePost(String schedulePost) {
-        this.schedulePost = schedulePost;
-    }
 }

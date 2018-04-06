@@ -83,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -253,6 +254,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private   View articleToolTip;
     private PopupWindow popupWindowArticleTooTip;
     private String streamType;
+    private List<MentionSpan> mentionSpanList;
+    private boolean hasMentions=false;
     //endregion
 
     //region Activity methods
@@ -561,7 +564,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                 if (comment == null) {
                                     return true;
                                 }
-                                mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()));
+                                mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(),hasMentions,mentionSpanList));
                                 return true;
                             }
                         });
@@ -616,7 +619,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public void onSubmitClicked() {
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
-            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false));
+            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false,hasMentions,mentionSpanList));
         }
         mCommentBody.setText("");
         mCommentBody.clearFocus();

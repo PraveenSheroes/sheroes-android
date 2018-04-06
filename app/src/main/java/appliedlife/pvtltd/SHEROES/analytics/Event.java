@@ -190,7 +190,8 @@ public enum Event {
     POST_LOAD_MORE_CLICKED(AnalyticsEventType.POST_LOAD_MORE, "Clicked"),
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
-    FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, "");
+    FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, ""),
+    USER_TAGGED(AnalyticsEventType.USER_TAGGED, "");
     //endregion
 
     public final AnalyticsEventType type;

@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import java.util.List;
 import java.util.Map;
 
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsResult;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 
 /**
  * Interface that defines the list of suggestions to display and how to display them.
@@ -35,16 +35,16 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsResult;
 public interface SuggestionsListBuilder {
 
     /**
-     * Create the list of suggestions from the newest {@link SuggestionsResult} received for every bucket. This
+     * Create the list of suggestions from the newest {@link UserTagSuggestionsResult} received for every bucket. This
      * allows you to control the exact order of the suggestions.
      *
-     * @param latestResults      newest {@link SuggestionsResult} for every bucket
+     * @param latestResults      newest {@link UserTagSuggestionsResult} for every bucket
      * @param currentTokenString the most recent token, as typed by the user
      *
      * @return a list of {@link Suggestible} representing the suggestions in proper order
      */
     @NonNull
-    List<Suggestible> buildSuggestions(final @NonNull Map<String, SuggestionsResult> latestResults,
+    List<Suggestible> buildSuggestions(final @NonNull Map<String, UserTagSuggestionsResult> latestResults,
                                        final @NonNull String currentTokenString);
 
     /**

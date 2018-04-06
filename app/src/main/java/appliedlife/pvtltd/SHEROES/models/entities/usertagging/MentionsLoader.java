@@ -38,14 +38,14 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
  */
 public  abstract class MentionsLoader<T extends Mentionable> {
 
-    protected T[] mData;
+    protected List<T> mData;
     private static final String TAG = MentionsLoader.class.getSimpleName();
 
-    public MentionsLoader(final Resources res, final int resID) {
-        new LoadJSONArray(res, resID).execute();
+    public MentionsLoader(List<TaggedUserPojo> taggedUserPojoList) {
+        mData = loadData(taggedUserPojoList);
     }
 
-    public abstract T[] loadData(JSONArray arr);
+    public abstract List<T> loadData(List<TaggedUserPojo> taggedUserPojoList);
 
     // Returns a subset
     public List<T> getSuggestions(QueryToken queryToken) {
@@ -63,7 +63,7 @@ public  abstract class MentionsLoader<T extends Mentionable> {
     }
 
     // Loads data from JSONArray file, defined in the raw resources folder
-    private class LoadJSONArray extends AsyncTask<Void, Void, JSONArray> {
+   /* private class LoadJSONArray extends AsyncTask<Void, Void, JSONArray> {
 
         private final WeakReference<Resources> mRes;
         private final int mResId;
@@ -102,7 +102,7 @@ public  abstract class MentionsLoader<T extends Mentionable> {
         @Override
         protected void onPostExecute(JSONArray arr) {
             super.onPostExecute(arr);
-            mData = loadData(arr);
+
         }
-    }
+    }*/
 }

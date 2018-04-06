@@ -552,46 +552,45 @@
                     android:background="@drawable/ic_verified"
                     android:visibility="gone" />
             </FrameLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_size_16"
+                android:layout_toRightOf="@id/fl_login_user"
                 android:layout_marginLeft="@dimen/dp_size_10"
                 android:layout_marginTop="@dimen/dp_size_16"
-                android:layout_toRightOf="@id/fl_login_user"
+                android:layout_marginBottom="@dimen/dp_size_16"
                 android:orientation="vertical">
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView
                     android:id="@+id/ripple_feed_post_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_feed_community_post_login_user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_size_16"
-                    android:ellipsize="end"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:maxLines="@integer/int_value_for_line_2"
-                    android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_14" />
+                    <TextView
+                        android:id="@+id/tv_feed_community_post_login_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:maxLines="@integer/int_value_for_line_2"
+                        android:layout_marginRight="@dimen/dp_size_16"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_12" />
 
-                <TextView
-                    android:id="@+id/tv_join_conversation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_size_16"
-                    android:layout_marginTop="@dimen/dp_size_4"
-                    android:background="@drawable/rectangle_comment_background"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:lineSpacingExtra="@dimen/dp_size_3"
-                    android:maxLines="@integer/int_value_for_line_3"
-                    android:padding="@dimen/dp_size_11"
-                    android:textColor="@color/feed_card_time"
-                    android:textSize="@dimen/sp_size_14" />
+                    <TextView
+                        android:id="@+id/tv_join_conversation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_4"
+                        android:layout_below="@id/tv_feed_community_post_login_user_name"
+                        android:padding="@dimen/dp_size_11"
+                        android:layout_marginRight="@dimen/dp_size_16"
+                        android:background="@drawable/rectangle_comment_background"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:lineSpacingExtra="@dimen/dp_size_3"
+                        android:maxLines="@integer/int_value_for_line_3"
+                        android:textColor="@color/feed_card_time"
+                        android:textSize="@dimen/sp_size_14" />
                 </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView>
             </LinearLayout>
-
 
         </RelativeLayout>
 

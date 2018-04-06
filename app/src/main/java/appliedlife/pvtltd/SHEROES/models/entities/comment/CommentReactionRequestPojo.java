@@ -3,7 +3,10 @@ package appliedlife.pvtltd.SHEROES.models.entities.comment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 
 /**
  * Created by Praveen_Singh on 14-02-2017.
@@ -32,6 +35,16 @@ public class CommentReactionRequestPojo extends BaseRequest {
     @SerializedName("search_text")
     @Expose
     private String searchText;
+
+    /* Mention fields*/
+
+    @SerializedName("has_mentions")
+    @Expose
+    private boolean hasMentions;
+
+    @SerializedName("user_mentions")
+    @Expose
+    private List<MentionSpan> userMentionList;
 
     public String getUserComment() {
         return userComment;
@@ -103,5 +116,21 @@ public class CommentReactionRequestPojo extends BaseRequest {
 
     public void setSearchText(String searchText) {
         this.searchText = searchText;
+    }
+
+    public boolean isHasMentions() {
+        return hasMentions;
+    }
+
+    public void setHasMentions(boolean hasMentions) {
+        this.hasMentions = hasMentions;
+    }
+
+    public List<MentionSpan> getUserMentionList() {
+        return userMentionList;
+    }
+
+    public void setUserMentionList(List<MentionSpan> userMentionList) {
+        this.userMentionList = userMentionList;
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="0dp">
+    <appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText
+        android:id="@+id/text_editor_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:ellipsize="end"
+        android:inputType="textMultiLine|textShortMessage|textCapSentences"
+        android:scrollbars="vertical"
+        android:focusable="true"
+        android:paddingLeft="@dimen/dp_size_8"
+        android:paddingRight="@dimen/dp_size_8"
+        android:focusableInTouchMode="true"
+        android:scrollHorizontally="false"
+        android:minHeight="48dp"
+        android:textColor="@color/black"
+        android:textColorHint="#90949c"
+        android:textSize="14sp" />
+</merge>
