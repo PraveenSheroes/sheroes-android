@@ -201,7 +201,11 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         SearchUserDataRequest searchUserDataRequest = null;
         Long communityId = null;
         if (null != communityPost && null != communityPost.community) {
-            communityId = communityPost.community.id;
+            if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
+                communityId=null;
+            }else {
+                communityId = communityPost.community.id;
+            }
         }
         if(queryToken.getTokenString().length()==1)
         {
