@@ -758,7 +758,13 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         SearchUserDataRequest searchUserDataRequest = null;
         Long communityId = null,postEntityId=null,postAuthorUserId=null;
         if (null != userPostSolrObj) {
-            communityId = userPostSolrObj.getCommunityId();
+            if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR)
+            {
+                communityId=null;
+            }else
+            {
+                communityId = userPostSolrObj.getCommunityId();
+            }
             postEntityId=userPostSolrObj.getEntityOrParticipantId();
             postAuthorUserId=userPostSolrObj.getAuthorId();
         }
