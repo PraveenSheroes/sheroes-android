@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,7 +17,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +25,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.text.Html;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -35,11 +35,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -80,11 +81,11 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.x500.X500Principal;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -1335,5 +1336,44 @@ public class CommonUtil {
             }
         }
         return true;
+    }
+
+    public static void createDialog(Context context, String title, String message, String buttonName, boolean hasCross) {
+
+        final Dialog mPostNowOrLaterDialog = new Dialog(context);
+        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mPostNowOrLaterDialog.setCancelable(true);
+        mPostNowOrLaterDialog.setContentView(R.layout.dialog_success);
+        mPostNowOrLaterDialog.setTitle(title);
+
+        TextView titleText = mPostNowOrLaterDialog.findViewById(R.id.title);
+        titleText.setText(title);
+
+        TextView buttonText = mPostNowOrLaterDialog.findViewById(R.id.close);
+        buttonText.setText(buttonName);
+
+        buttonText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPostNowOrLaterDialog.dismiss();
+            }
+        });
+
+        ImageView cross = mPostNowOrLaterDialog.findViewById(R.id.cross);
+
+        if(!hasCross) {
+            cross.setVisibility(View.GONE);
+        }
+        cross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPostNowOrLaterDialog.dismiss();
+            }
+        });
+
+        TextView messageText = mPostNowOrLaterDialog.findViewById(R.id.message);
+        messageText.setText(message);
+
+        mPostNowOrLaterDialog.show();
     }
 }

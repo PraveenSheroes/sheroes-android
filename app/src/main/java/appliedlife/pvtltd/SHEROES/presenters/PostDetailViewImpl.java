@@ -372,6 +372,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             mBaseResponseList.set(0, mUserPostObj);
                             getMvpView().setData(0, mUserPostObj);
                         }
+                    } else  {
+                         getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
                     }
                 }
             }

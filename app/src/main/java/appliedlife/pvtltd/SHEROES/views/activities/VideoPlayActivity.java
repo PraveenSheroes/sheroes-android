@@ -19,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -55,6 +56,8 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         player.setPlaybackEventListener(playbackEventListener);
         if (!wasRestored) {
             if (StringUtil.isNotNullOrEmptyString(videoString)) {
+                LogUtils.info("Data","######################## link string "+videoString);
+
                 if (videoString.contains(AppConstants.YOUTUBE_VIDEO_CODE)) {
                     String[] youTubeUrl = videoString.split(AppConstants.BACK_SLASH);
                     if (youTubeUrl.length > 1) {

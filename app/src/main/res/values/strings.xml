@@ -112,6 +112,7 @@
     <string name="ID_APPROVE">Approve</string>
 
     <string name="ID_REPORT">Report as spam</string>
+    <string name="REPORT_SPAM">Report Spam</string>
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>

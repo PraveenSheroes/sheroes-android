@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -24,8 +25,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -470,6 +476,58 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mFeedRecyclerView.setAdapter(mAdapter);
     }
 
+    private void reportSpamDialog() {
+
+        if(getActivity() == null || getActivity().isFinishing()) return;
+
+        final Dialog mPostNowOrLaterDialog = new Dialog(getActivity());
+        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mPostNowOrLaterDialog.setCancelable(true);
+        mPostNowOrLaterDialog.setContentView(R.layout.dialog_spam_options);
+
+        Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
+        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+        final RadioGroup spamOptions = mPostNowOrLaterDialog.findViewById(R.id.radios);
+
+        final RadioButton options1 = mPostNowOrLaterDialog.findViewById(R.id.first);
+        final RadioButton options2 = mPostNowOrLaterDialog.findViewById(R.id.second);
+        final RadioButton options3 = mPostNowOrLaterDialog.findViewById(R.id.third);
+        final RadioButton options4 = mPostNowOrLaterDialog.findViewById(R.id.fourth);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+                    if(spamOptions.getCheckedRadioButtonId() == R.id.other) {
+
+                        if(reason.getVisibility() == View.VISIBLE) {
+                            //submit
+                            mPostNowOrLaterDialog.dismiss();
+                            CommonUtil.createDialog(getActivity(), "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes", "Close", false);
+                        } else {
+
+                            reason.setVisibility(View.VISIBLE);
+                            options1.setVisibility(View.GONE);
+                            options2.setVisibility(View.GONE);
+                            options3.setVisibility(View.GONE);
+                            options4.setVisibility(View.GONE);
+                        }
+
+                    } else {
+                        //submit request
+                        mPostNowOrLaterDialog.dismiss();
+                        CommonUtil.createDialog(getActivity(), "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes", "Close", false);
+                    }
+                }
+
+            }
+        });
+
+        mPostNowOrLaterDialog.show();
+
+    }
+
     private void shareCardDetail(UserPostSolrObj userPostObj) {
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(userPostObj.getPostShortBranchUrls())) {
@@ -610,6 +668,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             popup.getMenu().add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
             popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             popup.getMenu().add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
+            popup.getMenu().add(0, R.id.report_spam, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             //****   Hide/show options according to user
             if (userPostObj.getAuthorId() == currentUserId || userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
@@ -633,7 +692,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
             popup.getMenu().findItem(R.id.share).setVisible(true);
 
-            if (currentUserId != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
+            if (currentUserId != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) { //own post
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
@@ -667,6 +726,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
                             mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
+                            return true;
+                        case R.id.report_spam :
+                            reportSpamDialog();
                             return true;
                         default:
                             return false;

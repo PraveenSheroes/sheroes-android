@@ -39,6 +39,8 @@ public interface IPostDetailView extends BaseMvpView {
 
     void setData(int index, BaseResponse baseResponse);
 
+    void updateComment(Comment comment);
+
     void onPostDeleted();
 
     void editLastComment();

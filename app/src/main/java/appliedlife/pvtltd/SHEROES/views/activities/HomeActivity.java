@@ -515,7 +515,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 branch.initSession(new Branch.BranchReferralInitListener() {
                                        @Override
                                        public void onInitFinished(JSONObject referringParams, BranchError error) {
-                                           deepLinkingRedirection();
+                                           deepLinkingRedirection(referringParams);
                                        }
                                    }
                         , this.getIntent().getData(), this);
@@ -567,12 +567,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void deepLinkingRedirection() {
+    private void deepLinkingRedirection(JSONObject sessionParams) {
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
         Intent intent = new Intent();
-        Branch branch = Branch.getInstance(getApplicationContext());
-        JSONObject sessionParams = branch.getFirstReferringParams();
+       // Branch branch = Branch.getInstance(getApplicationContext());
+        //JSONObject sessionParams = branch.getFirstReferringParams();
         try {
             // JSONObject firstSession = branch.getLatestReferringParams();
             //   if (firstSession.length() > 0 && (Boolean)branch.getLatestReferringParams().get("+is_first_session")|| (Boolean)branch.getLatestReferringParams().get("+clicked_branch_link")) {

@@ -402,6 +402,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_post_link_render)
     public void tvLinkClick() {
+        LogUtils.info("Data","######################## link clcik");
         if (null != mUserPostObj) {
             if (mUserPostObj.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
                 if (!mUserPostObj.getOgRequestedUrlS().contains(AppConstants.USER_YOU_TUBE) || !mUserPostObj.getOgRequestedUrlS().contains(AppConstants.CHANNEL_YOU_TUBE)) {
@@ -1367,6 +1368,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
+    //spam post
     private void handlingSpamUi(long userId, int adminId) {
         if (adminId == AppConstants.TWO_CONSTANT || mUserPostObj.isCommunityOwner()) {
             liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));

@@ -166,7 +166,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private int mFromNotification;
 
-
+    LinearLayoutManager mLayoutManager;
     private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
     //endregion
 
@@ -205,7 +205,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
 
         }
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
@@ -351,6 +351,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void setData(int index, BaseResponse baseResponse) {
         mPostDetailListAdapter.setData(index, baseResponse);
+    }
+
+    @Override
+    public void updateComment(Comment comment) {
+        if (isDirty && !lastEditedComment.isEmpty()) {
+            isDirty = false;
+            Map.Entry<Integer, Comment> entry = lastEditedComment.entrySet().iterator().next();
+            lastEditedComment.clear();
+            mPostDetailListAdapter.addData(comment, entry.getKey());
+            mLayoutManager.scrollToPositionWithOffset(entry.getKey(), 0);
+        }
     }
 
     @Override
@@ -799,15 +810,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         if(isDirty && editedComment!=null) {
-            isDirty = false;
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), editedComment.getComment(), false, false, editedComment.getId()), AppConstants.TWO_CONSTANT);
+            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), mInputText.getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
+        } else {
+            String message = mInputText.getText().toString().trim();
+            if (!TextUtils.isEmpty(message)) {
+                mPostDetailPresenter.addComment(message, mIsAnonymous);
+            }
         }
-
-        String message = mInputText.getText().toString().trim();
-        if (!TextUtils.isEmpty(message)) {
-            mPostDetailPresenter.addComment(message, mIsAnonymous);
-            mInputText.setText("");
-        }
+        mInputText.setText("");
     }
 
     @Override
