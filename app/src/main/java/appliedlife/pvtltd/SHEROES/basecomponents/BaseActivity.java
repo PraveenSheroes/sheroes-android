@@ -751,6 +751,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         final TextView tvDelete = popupView.findViewById(R.id.tv_article_menu_delete);
         final TextView tvShare = popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = popupView.findViewById(R.id.tv_article_menu_report);
+
         // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
         popupWindow.showAsDropDown(view, -150, -10);
         tvEdit.setOnClickListener(new View.OnClickListener() {
@@ -784,7 +785,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
     }
 
-    private void shareWithMultipleOption(BaseResponse baseResponse) {
+    public void shareWithMultipleOption(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
@@ -803,7 +804,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
-    private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
+    public void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_article_user_comment_post_menu:
@@ -879,7 +880,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    private void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+    public void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
@@ -890,7 +891,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+    public void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
                 Comment comment = (Comment) baseResponse;
@@ -919,7 +920,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    private void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+    public void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
                 Comment comment = (Comment) baseResponse;

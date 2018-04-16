@@ -16,11 +16,12 @@
         android:title="@string/delete" />
 
     <item
-        android:id="@+id/top_post"
-        android:title="@string/FEATURE_POST" />
-
-    <item
         android:id="@+id/report_spam"
         android:icon="@drawable/ic_report_spam"
         android:title="@string/REPORT_SPAM" />
+
+    <item
+        android:id="@+id/top_post"
+        android:icon="@drawable/ic_feature_post"
+        android:title="@string/FEATURE_POST" />
 </menu>

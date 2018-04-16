@@ -221,8 +221,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
 
         }
-        else
-        {
+        else {
             tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE));
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
@@ -354,6 +353,15 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             mItemPosition = lastCommentList.size() - 1;
             lastComment = lastCommentList.get(mItemPosition);
             ivFeedArticleUserPic.setCircularImage(true);
+
+            tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
+
+            if(lastComment.isSpamComment()) {
+                spamCommentContainer.setVisibility(View.VISIBLE);
+            } else {
+                spamCommentContainer.setVisibility(View.GONE);
+            }
+
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
                     ivFeedArticleUserPic.setImageResource(R.drawable.ic_anonomous);
@@ -503,6 +511,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     public void commentItemClick() {
         /*articleObj .setItemPosition(mItemPosition);
         viewInterface.handleOnClick(articleObj , tvFeedArticleUserCommentPostMenu);*/
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostMenuClicked(articleObj, tvFeedArticleUserCommentPostMenu);
+        }
     }
 
     @OnClick(R.id.tv_feed_article_total_reactions)

@@ -1349,21 +1349,8 @@ public class CommonUtil {
         TextView titleText = mPostNowOrLaterDialog.findViewById(R.id.title);
         titleText.setText(title);
 
-        TextView buttonText = mPostNowOrLaterDialog.findViewById(R.id.close);
-        buttonText.setText(buttonName);
-
-        buttonText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mPostNowOrLaterDialog.dismiss();
-            }
-        });
-
         ImageView cross = mPostNowOrLaterDialog.findViewById(R.id.cross);
 
-        if(!hasCross) {
-            cross.setVisibility(View.GONE);
-        }
         cross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

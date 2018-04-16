@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -27,16 +28,19 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -62,8 +66,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.Spam;
+import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -71,11 +79,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -100,6 +111,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
+    private long mLoggedInUser = -1;
     private String streamType;
     private boolean isDirty = false;
     private Comment editedComment = null;
@@ -179,6 +191,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         ButterKnife.bind(this);
         mPostDetailPresenter.attachView(this);
         mUserPic.setCircularImage(true);
+        setIsLoggedInUser();
         Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
@@ -247,6 +260,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         }
         return isWhatsappShare;
+    }
+
+    private void setIsLoggedInUser() {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
+        }
     }
 
     @OnClick(R.id.tv_user_name_for_post)
@@ -563,12 +582,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void onPostMenuClicked(final UserPostSolrObj userPostObj, TextView view) {
+    public void onPostMenuClicked(final UserPostSolrObj userPostObj, final TextView view) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
-        long currentUserId = -1;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            currentUserId = mUserPreference.get().getUserSummary().getUserId();
-        }
+
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
@@ -579,13 +595,23 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
             menu.add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
             menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-            menu.add(0, R.id.top_post, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.FEATURE_POST)));
+            menu.add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
+            if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
+                if (userPostObj.isTopPost()) {
+                    popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_feature_post), getResources().getString(R.string.UNFEATURE_POST)));
+                } else {
+                    popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_feature_post), getResources().getString(R.string.FEATURE_POST)));
+                }
+                popup.getMenu().findItem(R.id.top_post).setVisible(true);
+            } else {
+                popup.getMenu().findItem(R.id.top_post).setVisible(false);
+            }
             //****   Hide/show options according to user
-            if (userPostObj.getAuthorId() == currentUserId || userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
+            if (userPostObj.getAuthorId() == mLoggedInUser || userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.delete).setVisible(true);
                 if (userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
-                    if (userPostObj.getAuthorId() == currentUserId) {
+                    if (userPostObj.getAuthorId() == mLoggedInUser) {
                         popup.getMenu().findItem(R.id.edit).setVisible(true);
                     } else {
                         popup.getMenu().findItem(R.id.edit).setVisible(false);
@@ -600,27 +626,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
             popup.getMenu().findItem(R.id.share).setVisible(true);
 
-            if (currentUserId != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
+            if (mLoggedInUser != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setEnabled(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
             }
-            if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
-                popup.getMenu().findItem(R.id.top_post).setVisible(true);
-                if (userPostObj.isTopPost()) {
-                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.UNFEATURE_POST);
-                } else {
-                    popup.getMenu().findItem(R.id.top_post).setTitle(R.string.FEATURE_POST);
-                }
-            } else {
-                popup.getMenu().findItem(R.id.top_post).setVisible(false);
-            }
+
             if (userPostObj.communityId == 0) {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
             if (userPostObj.isSpamPost()) {
                 popup.getMenu().findItem(R.id.share).setVisible(false);
             }
+
+            if (userPostObj.getAuthorId() == mLoggedInUser) {
+                popup.getMenu().findItem(R.id.report_spam).setVisible(false);
+            } else {
+                popup.getMenu().findItem(R.id.report_spam).setVisible(true);
+            }
+
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -637,6 +661,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             return true;
                         case R.id.share:
                             shareWithMultipleOption(userPostObj);
+                            return true;
+                        case R.id.report_spam:
+                            SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(userPostObj, view, mLoggedInUser);
+                            reportSpamDialog(spamPostRequest);
+                            return true;
+
+
                         default:
                             return false;
                     }
@@ -646,7 +677,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         popup.show();
     }
 
-    private void shareWithMultipleOption(BaseResponse baseResponse) {
+    public void shareWithMultipleOption(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
@@ -804,6 +835,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         LikeListBottomSheetFragment.showDialog(this, "", userPostObj.getEntityOrParticipantId());
     }
 
+    @Override
+    public void postOrCommentSpamResponse(SpamResponse spamResponse) {
+        if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+            if(!spamResponse.isSpamAlreadyReported()) {
+                CommonUtil.createDialog(PostDetailActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes", "Close", false);
+            } else {
+                CommonUtil.createDialog(PostDetailActivity.this, "Reported Earlier", "You have already reported this user as spam, and is in review. Thank You!", null, true);
+            }
+        }
+    }
+
     //endregion
 
     //region onclick methods
@@ -821,19 +863,29 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void onCommentMenuClicked(final Comment comment, ImageView userCommentListMenu) {
+    public void onCommentMenuClicked(final Comment comment, final ImageView userCommentListMenu) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, userCommentListMenu);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             int adminId = 0;
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-            popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
-            if (!comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
-                popup.getMenu().findItem(R.id.edit).setEnabled(false);
+           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
+            Menu menu = popup.getMenu();
+            menu.add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+            menu.add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            menu.add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+
+            if (!comment.isMyOwnParticipation() && adminId != AppConstants.TWO_CONSTANT) {
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+                popup.getMenu().findItem(R.id.report_spam).setVisible(true); //check for admin add this functionality to delete
             } else {
-                popup.getMenu().findItem(R.id.edit).setEnabled(true);
+                popup.getMenu().findItem(R.id.edit).setVisible(true);
+                popup.getMenu().findItem(R.id.delete).setVisible(true);
+                popup.getMenu().findItem(R.id.report_spam).setVisible(false);
             }
+
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -842,6 +894,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             return true;
                         case R.id.delete:
                             onDeleteMenuClicked(comment);
+                            return true;
+                        case R.id.report_spam:
+                            SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(comment, userCommentListMenu, mLoggedInUser);
+                            reportSpamDialog(spamPostRequest);
                             return true;
                         default:
                             return false;
@@ -902,6 +958,84 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         }
     }
+
+    private void reportSpamDialog(final SpamPostRequest request) {
+
+        if(request ==null || PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
+
+        SpamReasons spamReasons = new ConfigData().reasonOfSpamCategory;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
+        }
+
+        final Dialog mPostNowOrLaterDialog = new Dialog(PostDetailActivity.this);
+        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mPostNowOrLaterDialog.setCancelable(true);
+        mPostNowOrLaterDialog.setContentView(R.layout.dialog_spam_options);
+
+        RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
+                RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(CommonUtil.convertDpToPixel(16, PostDetailActivity.this), CommonUtil.convertDpToPixel(10, PostDetailActivity.this), 0, 0);
+
+        TextView reasonTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_sub_title);
+        reasonTitle.setLayoutParams(layoutParams);
+        reasonSubTitle.setLayoutParams(layoutParams);
+
+        final RadioGroup spamOptions = mPostNowOrLaterDialog.findViewById(R.id.options_container);
+
+        List<Spam> spamList =null;
+        if(request.getSpamContentType().equals(SpamContentType.POST)) {
+            spamList = spamReasons.getPost();
+        } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
+            spamList = spamReasons.getComment();
+        }
+
+        if(spamList ==null) return;
+
+        SpamUtil.addRadioToView(PostDetailActivity.this, spamList , spamOptions);
+
+        Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
+        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+
+                    RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
+                    Spam spam = (Spam) radioButton.getTag();
+                    if (spam != null) {
+                        request.setSpamReason(spam.getReason());
+                        request.setScore(spam.getScore());
+
+                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                            if (reason.getVisibility() == View.VISIBLE) {
+
+                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
+                                    request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                    mPostDetailPresenter.reportSpamPostOrComment(request); //submit
+                                    mPostNowOrLaterDialog.dismiss();
+                                } else {
+                                    reason.setError("Add the reason");
+                                }
+
+                            } else {
+                                reason.setVisibility(View.VISIBLE);
+                                SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
+                            }
+                        } else {
+                            mPostDetailPresenter.reportSpamPostOrComment(request);  //submit request
+                            mPostNowOrLaterDialog.dismiss();
+                        }
+                    }
+                }
+            }
+        });
+
+        mPostNowOrLaterDialog.show();
+    }
+
 
     @Override
     public void userCommentLikeRequest(Comment comment, boolean isLikedAction, int adapterPosition) {

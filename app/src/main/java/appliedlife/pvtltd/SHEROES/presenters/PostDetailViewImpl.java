@@ -36,6 +36,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -54,6 +56,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMME
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
@@ -378,7 +381,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 }
             }
         });
-
     }
 
     public Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -786,4 +788,48 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     //endregion
+
+
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            //communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
+            //communityFeedSolrObj.setMember(true);
+            //getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<SpamResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
+                        // communityFeedSolrObj.setMember(true);
+                        // getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(SpamResponse spamPostOrCommentResponse) {
+                        if (spamPostOrCommentResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+                            // getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                            // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
+                            //communityFeedSolrObj.setMember(true);
+                        }
+                        getMvpView().postOrCommentSpamResponse(spamPostOrCommentResponse);
+                        getMvpView().stopProgressBar();
+                    }
+                });
+
+    }
 }

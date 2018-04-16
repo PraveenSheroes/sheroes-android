@@ -102,4 +102,48 @@
         android:layout_below="@+id/like"
         android:background="#90949c" />
 
-</RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/spam_comment_ui"
+            android:layout_width="match_parent"
+            android:minHeight="@dimen/dp_size_150"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:gravity="right"
+                android:layout_gravity="right"
+                android:id="@+id/tv_feed_community_post_user_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:paddingBottom="@dimen/dp_size_10"
+                android:paddingLeft="@dimen/dp_size_14"
+                android:paddingRight="@dimen/sp_size_24"
+                android:paddingTop="@dimen/dp_size_5" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="@integer/int_value_for_line_1">
+
+                <TextView
+                    android:id="@+id/tv_review_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ic_spam_post_message"
+                    android:drawableStart="@drawable/ic_spam_post_message"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:drawablePadding="@dimen/dp_size_11"
+                    android:layout_marginRight="@dimen/dp_size_16"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:lineSpacingExtra="@dimen/dp_size_3"
+                    android:text="@string/COMMENT_REVIEW_MESSAGE"
+                    android:textColor="@color/pure_black"
+                    android:textSize="@dimen/sp_size_14" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+    </RelativeLayout>

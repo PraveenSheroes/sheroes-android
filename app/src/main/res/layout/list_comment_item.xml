@@ -127,7 +127,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="Cancel"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="14sp" />
     </RelativeLayout>
 

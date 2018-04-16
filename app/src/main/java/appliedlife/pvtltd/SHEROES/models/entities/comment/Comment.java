@@ -91,6 +91,9 @@ public class Comment extends BaseResponse{
     @SerializedName("particitipating_entity_community_id_l")
     private String communityId;
 
+    @SerializedName("is_spam_comment_b")
+    private boolean isSpamComment;
+
     public boolean isEdit() {
         return isEdit;
     }
@@ -284,5 +287,13 @@ public class Comment extends BaseResponse{
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public boolean isSpamComment() {
+        return isSpamComment;
+    }
+
+    public void setSpamComment(boolean spamComment) {
+        isSpamComment = spamComment;
     }
 }

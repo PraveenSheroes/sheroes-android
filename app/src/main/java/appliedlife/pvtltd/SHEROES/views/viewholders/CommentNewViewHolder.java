@@ -12,6 +12,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,6 +73,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @Bind(R.id.comment_author_name)
     TextView mCommentAuthorName;
 
+    @Bind(R.id.spam_comment_ui)
+    FrameLayout spamUiContainer;
+
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
 
@@ -103,14 +107,18 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             mCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
-        if (mComment.isMyOwnParticipation()||mAdminId==AppConstants.TWO_CONSTANT) {
+        /*if (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) {
             mUserCommentListMenu.setVisibility(View.VISIBLE);
         } else {
             mUserCommentListMenu.setVisibility(View.GONE);
-        }
+        }*/
+
         mCommentAuthorName.setText(mComment.getParticipantName());
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(item);
+
+        invalidateSpamComment(item);
+
         if(!((Activity)mContext).isFinishing()){
             if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                 String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
@@ -152,6 +160,15 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     }
                 }
             }
+        }
+    }
+
+    private void invalidateSpamComment(Comment item) {
+        //item.setSpamComment(true); //todo - spqam testing
+        if(item.isSpamComment()) {
+            spamUiContainer.setVisibility(View.VISIBLE);
+        } else  {
+            spamUiContainer.setVisibility(View.GONE);
         }
     }
 

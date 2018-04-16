@@ -60,9 +60,11 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -104,6 +106,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvDeleteSpamPost;
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
+
+    @Bind(R.id.spam_comment_ui)
+    FrameLayout spamCommentContainer;
 
     @Bind(R.id.tv_join_conversation)
     TextView mJoinConveration;
@@ -287,7 +292,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             topPostView.setVisibility(View.GONE);
         }
         mUserPostObj.setItemPosition(position);
+       // mUserPostObj.setSpamPost(true); //todo -remove it added for testing
         normalCommunityPostUi(mUserId, mAdminId);
+
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
         } else {
@@ -297,7 +304,22 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             liApproveDelete.setVisibility(View.GONE);
             tvReviewDescription.setVisibility(View.VISIBLE);
         }
+
+        invalidateSpamComment(mUserPostObj);
         showToolTip(mContext);
+    }
+
+    private void invalidateSpamComment(UserPostSolrObj mUserPostObj) {
+        if(mUserPostObj.getLastComments()!=null && mUserPostObj.getLastComments().size()>0) {
+            Comment comment = mUserPostObj.getLastComments().get(0);
+           // comment.setSpamComment(true); //todo - ravi -last comment spam testing purpose
+            if(comment.isSpamComment()) {
+                spamCommentContainer.setVisibility(View.VISIBLE);
+            } else {
+                spamCommentContainer.setVisibility(View.GONE);
+            }
+        }
+
     }
 
     private void showToolTip(Context context) {
@@ -814,11 +836,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
                 }
             }
-            if (lastComment.isMyOwnParticipation() || mAdminId==AppConstants.TWO_CONSTANT) {
+
+            /*if (lastComment.isMyOwnParticipation() || mAdminId==AppConstants.TWO_CONSTANT) {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
-            }
+            }*/
+
         } else {
             liFeedCommunityPostUserComments.setVisibility(View.GONE);
             tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
@@ -980,11 +1004,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userCommentClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
-        } else {
+        }  else {
             viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
         }
-
-
     }
 
     @OnClick(R.id.li_feed_community_user_post_images)
@@ -1001,7 +1023,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userMenuClick() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
-        } else {
+        }  else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
         }
     }
@@ -1014,7 +1036,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
         }
     }
-
 
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
     public void userCommentMenuClick() {

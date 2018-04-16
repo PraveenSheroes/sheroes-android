@@ -195,6 +195,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 author.setOnClickListener(mOnDeleteClickListener);
                 authorPic.setOnClickListener(mOnDeleteClickListener);
                 delete.setOnClickListener(mOnDeleteClickListener);
+                delete.setVisibility(View.VISIBLE);
 
                 if (comment.isMyOwnParticipation()) {
                     edit.setVisibility(View.VISIBLE);
@@ -219,13 +220,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             }));
                         }
                     });
-                    delete.setVisibility(View.VISIBLE);
-                    delete.setOnClickListener(mOnDeleteClickListener);
+                  //  delete.setVisibility(View.VISIBLE);
+                  //  delete.setOnClickListener(mOnDeleteClickListener);
                 } else {
                     edit.setVisibility(View.GONE);
                     edit.setOnClickListener(null);
-                    delete.setVisibility(View.GONE);
-                    delete.setOnClickListener(null);
+                  //  delete.setVisibility(View.GONE);
+                  //  delete.setOnClickListener(null);
                 }
 
             }

@@ -2,127 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:minWidth="312dp"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/dp_size_16"
-    android:paddingEnd="@dimen/dp_size_16"
-    android:paddingLeft="@dimen/dp_size_16"
-    android:paddingRight="@dimen/dp_size_16"
-    android:paddingStart="@dimen/dp_size_16">
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/reason_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_16"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:lineSpacingExtra="9sp"
-        android:text="Select a reason"
+        android:text="@string/select_a_reason"
         android:textColor="#3c3c3c"
         android:textSize="14sp"
         android:textStyle="normal" />
 
     <TextView
+        android:id="@+id/reason_sub_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_16"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="9sp"
-        android:text="Why is it inappropriate?"
+        android:text="@string/why_is_it_inappropriate"
         android:textColor="#3c3c3c"
         android:textSize="14sp"
         android:textStyle="normal" />
 
     <RadioGroup
-        android:id="@+id/radios"
-        android:layout_width="fill_parent"
+        android:layout_margin="@dimen/dp_size_8"
+        android:id="@+id/options_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:orientation="vertical">
-
-        <RadioButton
-            android:id="@+id/first"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:checked="true"
-            android:drawableEnd="@android:drawable/btn_radio"
-            android:drawablePadding="30dp"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="This post is a spam"
-            android:textColor="#878787"
-            android:textSize="14sp"
-            android:textStyle="normal" />
-
-        <RadioButton
-            android:id="@+id/second"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:drawableEnd="@android:drawable/btn_radio"
-            android:drawablePadding="30dp"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="This post has been done by a man"
-            android:textColor="#878787"
-            android:textSize="14sp"
-            android:textStyle="normal" />
-
-        <RadioButton
-            android:id="@+id/third"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:drawableEnd="@android:drawable/btn_radio"
-            android:drawablePadding="30dp"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="This post contains promotional content"
-            android:textColor="#878787"
-            android:textSize="14sp"
-            android:textStyle="normal" />
-
-
-        <RadioButton
-            android:id="@+id/fourth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:drawableEnd="@android:drawable/btn_radio"
-            android:drawablePadding="30dp"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="This post contains fake/scammy content/news"
-            android:textColor="#878787"
-            android:textSize="14sp"
-            android:textStyle="normal" />
-
-        <RadioButton
-            android:id="@+id/other"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:drawableEnd="@android:drawable/btn_radio"
-            android:drawablePadding="30dp"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:text="Others"
-            android:textColor="#878787"
-            android:textSize="14sp"
-            android:textStyle="normal" />
     </RadioGroup>
 
     <EditText
         android:id="@+id/edit_text_reason"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_100"
-        android:gravity="top|left"
+        android:layout_margin="@dimen/dp_size_10"
+        android:hint="@string/please_elaborate"
         android:inputType="textMultiLine"
         android:scrollHorizontally="false"
         android:visibility="gone" />
