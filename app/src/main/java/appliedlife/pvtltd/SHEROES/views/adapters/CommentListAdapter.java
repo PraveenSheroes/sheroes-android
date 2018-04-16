@@ -157,6 +157,9 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Bind(R.id.spam_comment_container)
         LinearLayout spamContainer;
 
+        @Bind(R.id.spam_article_comment_menu)
+        ImageView spamCommentMenuIcon;
+
         // endregion
 
         public CommentListItemViewHolder(View itemView) {
@@ -176,6 +179,11 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 if(comment.isSpamComment()) {
                     spamContainer.setVisibility(View.VISIBLE);
+                    if(!comment.isMyOwnParticipation() && comment.isSpamComment())  {
+                        spamCommentMenuIcon.setVisibility(View.GONE);
+                    } else {
+                        spamCommentMenuIcon.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     spamContainer.setVisibility(View.GONE);
                 }

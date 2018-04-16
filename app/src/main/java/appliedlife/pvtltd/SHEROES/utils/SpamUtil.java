@@ -98,7 +98,7 @@ public class SpamUtil {
         spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
         spamPostRequest.setModelType("COMMENT");
         spamPostRequest.setSpamContentType(SpamContentType.COMMENT);
-        spamPostRequest.setSpamReportedOn(comment.getParticipantId());
+        spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
         return spamPostRequest;
     }
 
@@ -114,7 +114,7 @@ public class SpamUtil {
             //spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId())); //not id for article
             spamPostRequest.setModelType("ARTICLE_COMMENT");
             spamPostRequest.setSpamContentType(SpamContentType.COMMENT);
-            spamPostRequest.setSpamReportedOn(comment.getParticipantId());
+            spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
         }
         return spamPostRequest;
     }
@@ -131,7 +131,7 @@ public class SpamUtil {
                 spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
                 spamPostRequest.setModelType(SpamContentType.COMMENT.name());
                 spamPostRequest.setSpamContentType(SpamContentType.COMMENT);
-                spamPostRequest.setSpamReportedOn(comment.getParticipantId());
+                spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
             }
         } else {
             spamPostRequest.setModelType(SpamContentType.POST.name());

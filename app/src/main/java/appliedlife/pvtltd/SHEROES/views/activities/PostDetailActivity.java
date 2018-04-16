@@ -603,9 +603,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 } else {
                     popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_feature_post), getResources().getString(R.string.FEATURE_POST)));
                 }
-                popup.getMenu().findItem(R.id.top_post).setVisible(true);
-            } else {
-                popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
             //****   Hide/show options according to user
             if (userPostObj.getAuthorId() == mLoggedInUser || userPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
@@ -876,14 +873,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             menu.add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             menu.add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
-            if (!comment.isMyOwnParticipation() && adminId != AppConstants.TWO_CONSTANT) {
-                popup.getMenu().findItem(R.id.edit).setVisible(false);
-                popup.getMenu().findItem(R.id.delete).setVisible(false);
-                popup.getMenu().findItem(R.id.report_spam).setVisible(true); //check for admin add this functionality to delete
-            } else {
+            if (comment.isMyOwnParticipation() ||  adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.edit).setVisible(true);
                 popup.getMenu().findItem(R.id.delete).setVisible(true);
                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
+            } else {
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+                if(!comment.isSpamComment()) {
+                    popup.getMenu().findItem(R.id.report_spam).setVisible(true); //check for admin add this functionality to delete
+                }
             }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

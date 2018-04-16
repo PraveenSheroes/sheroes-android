@@ -14,6 +14,7 @@ import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -74,7 +75,13 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     TextView mCommentAuthorName;
 
     @Bind(R.id.spam_comment_ui)
-    FrameLayout spamUiContainer;
+    RelativeLayout spamUiContainer;
+
+    @Bind(R.id.spam_comment_menu)
+    ImageView spamMenu;
+
+    @Bind(R.id.comment_container)
+    RelativeLayout commentContainer;
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
@@ -106,12 +113,6 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         } else {
             mCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
-
-        /*if (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) {
-            mUserCommentListMenu.setVisibility(View.VISIBLE);
-        } else {
-            mUserCommentListMenu.setVisibility(View.GONE);
-        }*/
 
         mCommentAuthorName.setText(mComment.getParticipantName());
         mUserProfilePic.setCircularImage(true);
@@ -166,8 +167,16 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     private void invalidateSpamComment(Comment item) {
         if(item.isSpamComment()) {
             spamUiContainer.setVisibility(View.VISIBLE);
+            commentContainer.setVisibility(View.GONE);
         } else  {
             spamUiContainer.setVisibility(View.GONE);
+            commentContainer.setVisibility(View.VISIBLE);
+        }
+
+        if (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) { //hide 3 dot of menu
+            spamMenu.setVisibility(View.VISIBLE);
+        } else {
+            spamMenu.setVisibility(View.GONE);
         }
     }
 
@@ -197,6 +206,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @OnClick(R.id.comment_author_name)
     public void onUserNameClick() {
       mCommentCallback.userProfileNameClick(mComment,  mCommentAuthorName);
+    }
+
+    @OnClick(R.id.spam_comment_ui)
+    public void onSpamCommentMenuClick() {
+        mComment.setItemPosition(getAdapterPosition());
+        mCommentCallback.onCommentMenuClicked(mComment, spamMenu);
     }
 
     @OnClick(R.id.tv_user_comment_list_menu)

@@ -737,6 +737,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onCommentMenuClicked(final UserPostSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
         //todo - for comment - ravi
+        if(getActivity() ==null || getActivity().isFinishing()) return;
+
         PopupMenu popup = new PopupMenu(getActivity(), tvFeedCommunityPostUserCommentPostMenu);
         long currentUserId = -1;
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -748,15 +750,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 return;
             }
 
+            int adminId = 0;
+            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
+
             popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
             popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             Comment comment = userPostObj.getLastComments().get(0);
 
-            //todo check after removing this if option available or not
-            if (comment.getParticipantUserId() == currentUserId) {
-                popup.getMenu().findItem(R.id.edit).setVisible(true);
+            if (comment.getParticipantUserId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
+                if(comment.getParticipantUserId() == currentUserId) {
+                    popup.getMenu().findItem(R.id.edit).setVisible(true);
+                }
                 popup.getMenu().findItem(R.id.delete).setVisible(true);
                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
             } else {
@@ -764,12 +772,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
-
-//            if (currentUserId == comment.getParticipantUserId() || adminId == AppConstants.TWO_CONSTANT) {
-//                popup.getMenu().findItem(R.id.edit).setEnabled(true);
-//            } else {
-//                popup.getMenu().findItem(R.id.edit).setEnabled(false);
-//            }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -952,7 +954,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     } else {
                         popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
                         popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-
                     }
                 }
 

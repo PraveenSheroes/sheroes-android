@@ -581,10 +581,18 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
                         final Comment comment1 = mCommentsAdapter.getComment(position);
-                        if(comment1!=null && comment1.isMyOwnParticipation() ) {
+                        if (comment1 == null) return;
+
+                        if(comment1.isMyOwnParticipation() ) {
                             popup.getMenu().findItem(R.id.delete).setVisible(true);
+                            popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                         } else {
                             popup.getMenu().findItem(R.id.delete).setVisible(false);
+                            if(comment1.isSpamComment()) {
+                                popup.getMenu().findItem(R.id.report_spam).setVisible(false);
+                            } else {
+                                popup.getMenu().findItem(R.id.report_spam).setVisible(true);
+                            }
                         }
 
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

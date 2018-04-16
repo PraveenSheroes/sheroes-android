@@ -117,10 +117,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.li_community_post_main_layout)
     LinearLayout liCommunityPostMainLayout;
 
-
     //Communitypost handling
     @Bind(R.id.li_feed_community_post_user_comments)
     LinearLayout liFeedCommunityPostUserComments;
+
+    @Bind(R.id.last_comment_container)
+    LinearLayout lastCommentConatiner;
+
+    @Bind(R.id.spam_comment_menu)
+    TextView spamCommentMenu;
 
     @Bind(R.id.comment_like)
     TextView mCommentLike;
@@ -292,7 +297,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             topPostView.setVisibility(View.GONE);
         }
         mUserPostObj.setItemPosition(position);
-       // mUserPostObj.setSpamPost(true); //todo -remove it added for testing
+        //mUserPostObj.setSpamPost(true); //todo -remove it added for testing
         normalCommunityPostUi(mUserId, mAdminId);
 
         if (mUserPostObj.isSpamPost()) {
@@ -312,11 +317,18 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void invalidateSpamComment(UserPostSolrObj mUserPostObj) {
         if(mUserPostObj.getLastComments()!=null && mUserPostObj.getLastComments().size()>0) {
             Comment comment = mUserPostObj.getLastComments().get(0);
-           // comment.setSpamComment(true); //todo - ravi -last comment spam testing purpose
+            //comment.setSpamComment(true); //todo - ravi -last comment spam testing purpose
             if(comment.isSpamComment()) {
                 spamCommentContainer.setVisibility(View.VISIBLE);
+                lastCommentConatiner.setVisibility(View.GONE);
+                if(comment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) { //Hide menu dots
+                    spamCommentMenu.setVisibility(View.VISIBLE);
+                } else{
+                    spamCommentMenu.setVisibility(View.GONE);
+                }
             } else {
                 spamCommentContainer.setVisibility(View.GONE);
+                lastCommentConatiner.setVisibility(View.VISIBLE);
             }
         }
 
@@ -1022,7 +1034,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_user_menu)
     public void userMenuClick() {
         if (viewInterface instanceof FeedItemCallback) {
-            ((FeedItemCallback) viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
+            if(!mUserPostObj.isSpamPost()) {
+                ((FeedItemCallback) viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
+            }
         }  else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
         }
@@ -1035,6 +1049,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.handleOnClick(mUserPostObj, tvSpamPostMenu);
         }
+    }
+
+    @OnClick(R.id.spam_comment_menu)
+    public void spamCommentMenuClick() {
+        mUserPostObj.setNoOfOpenings(mItemPosition);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onCommentMenuClicked(mUserPostObj, spamCommentMenu);
+        } else {
+            viewInterface.handleOnClick(mUserPostObj, spamCommentMenu);
+        }
+
     }
 
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)

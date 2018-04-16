@@ -134,43 +134,38 @@
 
     <LinearLayout
         android:id="@+id/spam_comment_container"
-        android:background="@color/white"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="@integer/int_value_for_line_1">
 
-        <LinearLayout
-            android:layout_gravity="center_vertical"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_review_description"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/dp_size_1">
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_weight="0.9"
+            android:drawableLeft="@drawable/ic_spam_post_message"
+            android:drawablePadding="@dimen/dp_size_11"
+            android:drawableStart="@drawable/ic_spam_post_message"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="@dimen/dp_size_3"
+            android:text="@string/COMMENT_REVIEW_MESSAGE"
+            android:textColor="@color/pure_black"
+            android:textSize="@dimen/sp_size_12" />
 
-            <TextView
-                android:id="@+id/tv_review_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_spam_post_message"
-                android:drawableStart="@drawable/ic_spam_post_message"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:drawablePadding="@dimen/dp_size_11"
-                android:layout_marginRight="@dimen/dp_size_16"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:lineSpacingExtra="@dimen/dp_size_3"
-                android:text="@string/COMMENT_REVIEW_MESSAGE"
-                android:textColor="@color/pure_black"
-                android:textSize="@dimen/sp_size_12" />
-
-            <TextView
-                android:id="@+id/spam_article_comment_menu"
-                android:layout_width="0dp"
-                android:layout_weight="0.1"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/dp_size_8"
-                android:drawableRight="@drawable/ic_menu_dashboard" />
-
-        </LinearLayout>
-
+        <ImageView
+            android:id="@+id/spam_article_comment_menu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:drawableRight="@drawable/ic_menu_dashboard"
+            android:drawableEnd="@drawable/ic_menu_dashboard"
+            android:padding="@dimen/dp_size_8" />
     </LinearLayout>
 
 </RelativeLayout>
