@@ -636,11 +636,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 } else {
                     popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.ic_feature_post), getResources().getString(R.string.FEATURE_POST)));
                 }
-                popup.getMenu().findItem(R.id.top_post).setVisible(true);
-            } else {
-                popup.getMenu().findItem(R.id.top_post).setVisible(false);
             }
-
             //****   Hide/show options according to user
 
             if (userPostObj.getAuthorId() == currentUserId) {
@@ -669,10 +665,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (userPostObj.communityId == 0) {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
-            popup.getMenu().findItem(R.id.share).setVisible(true);
 
             if (userPostObj.isSpamPost()) {
                 popup.getMenu().findItem(R.id.share).setVisible(false);
+            } else {
+                popup.getMenu().findItem(R.id.share).setVisible(true);
             }
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -940,7 +937,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         PopupMenu popup = new PopupMenu(getActivity(), view);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-           if(view.getId() == R.id.tv_feed_article_user_comment_post_menu) {
+           if(view.getId() == R.id.tv_feed_article_user_comment_post_menu || view.getId() == R.id.spam_article_comment_menu) {
                 long currentUserId = -1;
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                     currentUserId = mUserPreference.get().getUserSummary().getUserId();
@@ -953,7 +950,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     if (comment.getParticipantUserId() != currentUserId) {
                         popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
                     } else {
-                        popup.getMenu().add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+                        popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
                         popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
 
                     }

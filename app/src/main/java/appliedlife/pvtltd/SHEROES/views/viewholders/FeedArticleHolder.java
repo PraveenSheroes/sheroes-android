@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,7 +21,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences2.Preference;
-
 
 import java.util.List;
 
@@ -38,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -73,6 +72,10 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     LinearLayout liFeedArticleImages;
     @Bind(R.id.li_feed_article_user_comments)
     LinearLayout liFeedArticleUserComments;
+    @Bind(R.id.spam_comment_container)
+    FrameLayout spamContainer;
+    @Bind(R.id.last_comment_container)
+    RelativeLayout lastCommentContainer;
     @Bind(R.id.iv_feed_article_card_circle_icon)
     CircleImageView ivFeedArticleCircleIcon;
     @Bind(R.id.iv_feed_article_user_pic)
@@ -99,6 +102,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleTotalReactions;
     @Bind(R.id.tv_feed_article_user_menu)
     TextView tvFeedArticleUserMenu;
+    @Bind(R.id.spam_article_comment_menu)
+    TextView spamCommentMenu;
+
     @Bind(R.id.tv_feed_article_user_reaction)
     TextView tvFeedArticleUserReaction;
     @Bind(R.id.tv_feed_article_user_comment)
@@ -357,9 +363,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
 
             if(lastComment.isSpamComment()) {
-                spamCommentContainer.setVisibility(View.VISIBLE);
+                spamContainer.setVisibility(View.VISIBLE);
+                lastCommentContainer.setVisibility(View.GONE);
             } else {
-                spamCommentContainer.setVisibility(View.GONE);
+                spamContainer.setVisibility(View.GONE);
+                lastCommentContainer.setVisibility(View.VISIBLE);
             }
 
             if (lastComment.isAnonymous()) {
@@ -416,6 +424,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
             }*/
+
+           if(!lastComment.isMyOwnParticipation() && lastComment.isSpamComment())  {
+               spamCommentMenu.setVisibility(View.GONE);
+           } else {
+               spamCommentMenu.setVisibility(View.VISIBLE);
+           }
+
         } else {
             liFeedArticleUserComments.setVisibility(View.GONE);
             tvFeedArticleTotalReplies.setVisibility(View.GONE);
@@ -435,7 +450,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             tvFeedArticleLoginUserName.setText(loggedInUser);
         }
-
 
         String backgrndImageUrl = articleObj .getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgrndImageUrl)) {
@@ -504,6 +518,15 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             ((FeedItemCallback)viewInterface).onPostMenuClicked(articleObj, tvFeedArticleUserMenu);
         }else {
             viewInterface.handleOnClick(articleObj , tvFeedArticleUserMenu);
+        }
+    }
+
+    @OnClick({R.id.spam_article_comment_menu})
+    public void spamMenuCommentItemClick() {
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onPostMenuClicked(articleObj, spamCommentMenu);
+        }else {
+            viewInterface.handleOnClick(articleObj , spamCommentMenu);
         }
     }
 

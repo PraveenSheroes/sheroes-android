@@ -164,7 +164,6 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     }
 
     private void invalidateSpamComment(Comment item) {
-        //item.setSpamComment(true); //todo - spqam testing
         if(item.isSpamComment()) {
             spamUiContainer.setVisibility(View.VISIBLE);
         } else  {

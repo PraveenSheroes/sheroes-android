@@ -107,6 +107,7 @@
             android:id="@+id/spam_comment_ui"
             android:layout_width="match_parent"
             android:minHeight="@dimen/dp_size_150"
+            android:visibility="gone"
             android:layout_height="wrap_content">
 
             <TextView
