@@ -34,8 +34,8 @@
         android:layout_margin="@dimen/dp_size_8"
         android:id="@+id/options_container"
         android:layout_width="match_parent"
+        android:layout_gravity="top"
         android:layout_height="wrap_content"
-        android:inputType="text"
         android:orientation="vertical">
     </RadioGroup>
 
@@ -43,11 +43,14 @@
         android:id="@+id/edit_text_reason"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_100"
-        android:layout_margin="@dimen/dp_size_10"
+        android:background="@drawable/background_borderline_box"
+        android:layout_margin="@dimen/dp_size_16"
+        android:layout_gravity="top"
         android:hint="@string/please_elaborate"
+        android:padding="@dimen/dp_size_2"
         android:inputType="textMultiLine"
-        android:scrollHorizontally="false"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:scrollHorizontally="false" />
 
     <Button
         android:id="@+id/submit"
@@ -55,8 +58,7 @@
         android:layout_height="36dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="@dimen/dp_size_24"
-        android:background="@color/red"
-        android:clickable="true"
+        android:background="@drawable/border_new_feature"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:text="submit"
