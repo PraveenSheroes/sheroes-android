@@ -865,10 +865,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
 
-            if (!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(PostDetailActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes");
+            if(!spamResponse.isSpamAlreadyReported()) {
+                CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
-                CommonUtil.createDialog(PostDetailActivity.this, "Reported Earlier", "You have already reported this "+ spamResponse.getModelType().toLowerCase()+" as spam, and is in review. Thank You!");
+                CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType()));
             }
         }
     }

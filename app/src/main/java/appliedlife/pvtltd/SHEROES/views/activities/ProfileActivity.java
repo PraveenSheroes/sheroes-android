@@ -1124,9 +1124,9 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     public void postOrCommentSpamResponse(SpamResponse spamResponse) {
         if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             if(!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(ProfileActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes");
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
-                CommonUtil.createDialog(ProfileActivity.this, "Reported Earlier", "You have already reported this "+spamResponse.getModelType().toLowerCase()+" as spam, and is in review. Thank You!");
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType()));
             }
         }
     }

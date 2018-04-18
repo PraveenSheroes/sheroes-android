@@ -1184,9 +1184,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             }
 
             if(!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(ArticleActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes");
+                CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
-                CommonUtil.createDialog(ArticleActivity.this, "Reported Earlier", "You have already reported this comment as spam, and is in review. Thank You!");
+                CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, SpamContentType.COMMENT));
             }
         }
     }

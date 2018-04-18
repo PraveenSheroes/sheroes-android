@@ -436,6 +436,9 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
 
+    <string name="spam.status.post">Post</string>
+    <string name="spam.status.comment">Comment</string>
+    <string name="spam.status.user">User</string>
 
 
     <string name="contest.status.ongoing">Live</string>
@@ -577,4 +580,16 @@
     <string name="select_a_reason">Select a reason</string>
     <string name="why_is_it_inappropriate">Why is it inappropriate?</string>
     <string name="please_elaborate">Please elaborate…</string>
+
+    <!--spam region start-->
+    <string name="spam_confirmation_dialog_title">Thank You for your Feedback!</string>
+    <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and is in review. Thank You!</string>
+
+    <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
+    <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with Sheroes</string>
+
+
+    <!--spam region end-->
+
+
 </resources>

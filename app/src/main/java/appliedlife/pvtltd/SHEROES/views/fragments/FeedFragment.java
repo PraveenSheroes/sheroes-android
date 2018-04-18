@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -1431,28 +1432,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
 
-            if(adminId == AppConstants.TWO_CONSTANT) {
-                /*if (editedComment != null) {
-                    // onDeleteMenuClicked(editedComment);
-                    mPostDetailPresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(editedComment, true, true, false), editedComment);
-
-                    editedComment = null;
-                } else */
-
-                    if(userPostSolrObj!=null) {
-                        if (spamResponse.getModelType().toUpperCase().contains("COMMENT")) {
-                            onDeleteMenuClicked(userPostSolrObj);
-                        } else {
-                            AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
-                            mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
-                        }
+            if (adminId == AppConstants.TWO_CONSTANT) {
+                if (userPostSolrObj != null) {
+                    if (spamResponse.getModelType().toUpperCase().contains(SpamContentType.COMMENT.name())) {
+                        onDeleteMenuClicked(userPostSolrObj);
+                    } else {
+                        AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
+                        mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
                     }
+                }
             }
 
             if(!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(getActivity(), "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes");
+                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
-                CommonUtil.createDialog(getActivity(), "Reported Earlier", "You have already reported this "+ spamResponse.getModelType().toLowerCase()+" as spam, and is in review. Thank You!");
+                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType()));
             }
         }
     }
