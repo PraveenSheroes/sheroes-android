@@ -360,7 +360,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             lastComment = lastCommentList.get(mItemPosition);
             ivFeedArticleUserPic.setCircularImage(true);
 
-            tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
+            //tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
 
             if(lastComment.isSpamComment()) {
                 spamContainer.setVisibility(View.VISIBLE);
