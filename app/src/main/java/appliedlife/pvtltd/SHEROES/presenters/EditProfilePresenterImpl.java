@@ -66,7 +66,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getAllUserDetailsromModel().subscribe(new DisposableObserver<UserProfileResponse>() {
+        profileModel.getAllUserDetailsromModel()
+                .compose(this.<UserProfileResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<UserProfileResponse>() {
             @Override
             public void onComplete() {
 
@@ -98,7 +100,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
         }
 
         getMvpView().startProgressBar();
-        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 
@@ -137,7 +141,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 

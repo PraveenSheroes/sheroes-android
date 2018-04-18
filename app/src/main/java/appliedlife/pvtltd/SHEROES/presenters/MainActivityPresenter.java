@@ -50,7 +50,9 @@ public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerVi
             return;
         }
 
-        getNavigationDrawerItemsResponseInModel(navigationDrawerRequest).subscribe(new DisposableObserver<NavigationItems>() {
+        getNavigationDrawerItemsResponseInModel(navigationDrawerRequest)
+                .compose(this.<NavigationItems>bindToLifecycle())
+                .subscribe(new DisposableObserver<NavigationItems>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

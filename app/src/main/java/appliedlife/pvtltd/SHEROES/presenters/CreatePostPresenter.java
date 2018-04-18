@@ -48,7 +48,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.addPostCommunity(communityPostCreateRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        communityModel.addPostCommunity(communityPostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
@@ -83,7 +83,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.createChallengePost(challengePostCreateRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        communityModel.createChallengePost(challengePostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
@@ -123,7 +123,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.linkRenderFromModel(linkRequest).subscribe(new DisposableObserver<LinkRenderResponse>() {
+        communityModel.linkRenderFromModel(linkRequest).compose(this.<LinkRenderResponse>bindToLifecycle()).subscribe(new DisposableObserver<LinkRenderResponse>() {
 
             @Override
             public void onComplete() {
@@ -153,7 +153,9 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.editPostCommunity(communityPostCreateRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        communityModel.editPostCommunity(communityPostCreateRequest)
+                .compose(this.<CreateCommunityResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {

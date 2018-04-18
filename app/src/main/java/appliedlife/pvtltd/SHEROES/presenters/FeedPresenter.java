@@ -1139,6 +1139,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommunityResponse>() {
                     @Override
                     public void onComplete() {
@@ -1231,6 +1232,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<SpamResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<SpamResponse>() {
                     @Override
                     public void onComplete() {
