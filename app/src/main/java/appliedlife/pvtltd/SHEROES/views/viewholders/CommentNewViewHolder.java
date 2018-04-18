@@ -173,7 +173,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             commentContainer.setVisibility(View.VISIBLE);
         }
 
-        if (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) { //hide 3 dot of menu
+        if (!mComment.isSpamComment() && (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT)) { //hide 3 dot of menu
             spamMenu.setVisibility(View.VISIBLE);
         } else {
             spamMenu.setVisibility(View.GONE);
