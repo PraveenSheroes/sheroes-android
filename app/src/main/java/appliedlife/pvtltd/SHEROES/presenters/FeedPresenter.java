@@ -787,8 +787,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 }
             }
         });
-
     }
+
     public void getSpamPostApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final UserPostSolrObj userPostSolrObj) {
         getMvpView().startProgressBar();
         mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest).subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
@@ -1221,12 +1221,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     }
 
 
-    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest) {
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final UserPostSolrObj userPostSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-            //communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-            //communityFeedSolrObj.setMember(true);
-            //getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
             return;
         }
         getMvpView().startProgressBar();
@@ -1244,20 +1241,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-                       // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-                       // communityFeedSolrObj.setMember(true);
-                       // getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
                         getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onNext(SpamResponse spamResponse) {
-                        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                           // getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-                           // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-                            //communityFeedSolrObj.setMember(true);
-                        }
-                        getMvpView().postOrCommentSpamResponse(spamResponse);
+                        getMvpView().postOrCommentSpamResponse(spamResponse, userPostSolrObj);
                         getMvpView().stopProgressBar();
                     }
                 });

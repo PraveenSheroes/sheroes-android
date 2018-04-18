@@ -722,17 +722,13 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    if (approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true) {
-                        // spam post was rejected
+                    if(approveSpamPostResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                         getMvpView().onPostDeleted();
-                    } else if (approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false) {
-                        // spam post was approved
+                    } else {
                         userPostSolrObj.setSpamPost(false);
                         mBaseResponseList.set(0, userPostSolrObj);
                         getMvpView().setData(0, userPostSolrObj);
-
                     }
-                    //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
                 }
             }
         });
@@ -793,9 +789,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     public void reportSpamPostOrComment(SpamPostRequest spamPostRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-            //communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-            //communityFeedSolrObj.setMember(true);
-            //getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
             return;
         }
         getMvpView().startProgressBar();
@@ -813,23 +806,50 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-                        // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-                        // communityFeedSolrObj.setMember(true);
-                        // getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
                         getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onNext(SpamResponse spamPostOrCommentResponse) {
-                        if (spamPostOrCommentResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                            // getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-                            // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-                            //communityFeedSolrObj.setMember(true);
-                        }
                         getMvpView().postOrCommentSpamResponse(spamPostOrCommentResponse);
                         getMvpView().stopProgressBar();
                     }
                 });
+
+    }
+
+    //Spam Comment for admin
+    public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final Comment comment) {
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest).subscribe(new DisposableObserver<BaseResponse>() {
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+
+            @Override
+            public void onNext(BaseResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
+                if (null != approveSpamPostResponse) {
+                    int pos = findCommentPositionById(mBaseResponseList, comment.getId());
+                    if (pos != RecyclerView.NO_POSITION) {
+                        mBaseResponseList.remove(pos);
+                        getMvpView().removeData(pos);
+
+                        mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
+                        mBaseResponseList.set(0, mUserPostObj);
+                        getMvpView().setData(0, mUserPostObj);
+                    }
+                }
+            }
+        });
 
     }
 }

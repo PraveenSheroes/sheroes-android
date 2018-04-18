@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.support.v7.widget.RecyclerView;
+
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -27,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -50,6 +54,7 @@ import io.reactivex.schedulers.Schedulers;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 
 /**
  * Created by avinash on 28/01/16.
@@ -546,14 +551,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
         }
     }
 
-    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest) {
-       /* if (!NetworkUtil.isConnected(mSheroesApplication)) { //todo - make this network condition on , inject it
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-            //communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-            //communityFeedSolrObj.setMember(true);
-            //getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
-            return;
-        }*/
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final Comment comment, final int position) {
         getMvpView().startProgressBar();
 
         sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
@@ -568,24 +566,44 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-                        // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-                        // communityFeedSolrObj.setMember(true);
-                        // getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
+                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
                         getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onNext(SpamResponse spamResponse) {
-                        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                            // getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-                            // communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-                            //communityFeedSolrObj.setMember(true);
-                        }
-                        getMvpView().postOrCommentSpamResponse(spamResponse);
+                        getMvpView().postOrCommentSpamResponse(spamResponse, comment, position);
                         getMvpView().stopProgressBar();
                     }
                 });
+    }
+
+    //Spam Comment for admin
+    public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final int position) {
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest).subscribe(new DisposableObserver<BaseResponse>() {
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
+            }
+
+            @Override
+            public void onNext(BaseResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
+                if (null != approveSpamPostResponse) {
+                    getMvpView().removeAndNotifyComment(position);
+                    getMvpView().showMessage(R.string.comment_deleted);
+                }
+            }
+        });
 
     }
+
 }

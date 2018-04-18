@@ -176,14 +176,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 body.setLinkTextColor(ContextCompat.getColor(mContext, R.color.link_color));
                 StringUtil.linkifyURLs(body);
 
-
                 if(comment.isSpamComment()) {
                     spamContainer.setVisibility(View.VISIBLE);
-                    if(!comment.isMyOwnParticipation() && comment.isSpamComment())  {
-                        spamCommentMenuIcon.setVisibility(View.GONE);
-                    } else {
-                        spamCommentMenuIcon.setVisibility(View.VISIBLE);
-                    }
                 } else {
                     spamContainer.setVisibility(View.GONE);
                 }

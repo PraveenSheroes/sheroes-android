@@ -76,6 +76,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
@@ -1961,6 +1962,19 @@ public class AppUtils {
         approveSpamPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
         approveSpamPostRequest.setApproved(isApproved);
         approveSpamPostRequest.setId(feedDetail.getIdOfEntityOrParticipant());
+        approveSpamPostRequest.setActive(isActive);
+        approveSpamPostRequest.setSpam(isSpam);
+        return approveSpamPostRequest;
+    }
+
+    public ApproveSpamPostRequest spamCommentApprovedRequestBuilder(Comment comment, boolean isActive, boolean isSpam, boolean isApproved) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ApproveSpamPostRequest approveSpamPostRequest = new ApproveSpamPostRequest();
+        approveSpamPostRequest.setAppVersion(appUtils.getAppVersionName());
+        approveSpamPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        approveSpamPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        approveSpamPostRequest.setApproved(isApproved);
+        approveSpamPostRequest.setId(comment.getCommentsId());
         approveSpamPostRequest.setActive(isActive);
         approveSpamPostRequest.setSpam(isSpam);
         return approveSpamPostRequest;

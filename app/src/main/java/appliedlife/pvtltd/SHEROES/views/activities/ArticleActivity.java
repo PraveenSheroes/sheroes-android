@@ -57,7 +57,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -81,7 +80,6 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
@@ -91,7 +89,6 @@ import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
@@ -103,7 +100,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
@@ -139,6 +135,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private WebViewClickListener webViewClickListener = null;
     public int mCommentCount = 0;
     public boolean mHasFocus = false;
+    private long adminId = 0;
+    private long currentUserId = -1;
 
     //region member variabe
     private VideoEnabledWebChromeClient webChromeClient;
@@ -154,6 +152,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private State mCurrentState = State.EXPANDED;
     private boolean mIsTransition = false;
     private FeedDetail mFeedDetail;
+    private Comment clickedComment;
 
     @Inject
     ArticlePresenterImpl mArticlePresenter;
@@ -318,6 +317,17 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 0xaa000000, 8, Gravity.TOP));
 
         setupToolbarItemsColor();
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
+        }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
+
 
         defaultUi = getWindow().getDecorView().getSystemUiVisibility();
         mArticleLayout.setOnScrollChangeListener(this);
@@ -574,7 +584,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         break;
 
                     case R.id.delete:
-                        //todo - ravi- spam - rename case delete to menu - ravi
                         final PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
 
                         popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
@@ -583,7 +592,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         final Comment comment1 = mCommentsAdapter.getComment(position);
                         if (comment1 == null) return;
 
-                        if(comment1.isMyOwnParticipation() ) {
+                        if(comment1.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
                             popup.getMenu().findItem(R.id.delete).setVisible(true);
                             popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                         } else {
@@ -599,17 +608,19 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             public boolean onMenuItemClick(MenuItem item) {
                                 if(item.getItemId() == R.id.report_spam ) {
 
-                                    long currentUserId = -1;
-                                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                                        currentUserId = mUserPreference.get().getUserSummary().getUserId();
-                                    }
-
-                                    SpamPostRequest spamPostRequest = SpamUtil.spamRequestBuilder(comment1, deleteItem, currentUserId);
-                                    reportSpamDialog(spamPostRequest);
+                                    SpamPostRequest spamPostRequest = SpamUtil.spamArticleCommentRequestBuilder(comment1, currentUserId);
+                                    reportSpamDialog(spamPostRequest, comment1, position);
 
                                     return true;
                                 } else  {
-                                    mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment1.getEntityId(), comment1.getComment(), false, false, comment1.getId()));
+                                    final long adminID = adminId;
+                                    if(!comment1.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
+                                        clickedComment = comment1;
+                                        SpamPostRequest spamPostRequest  = SpamUtil.spamArticleCommentRequestBuilder(comment1, currentUserId);
+                                        reportSpamDialog(spamPostRequest, comment1, position);
+                                    } else{
+                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment1.getEntityId(), comment1.getComment(), false, false, comment1.getId()));
+                                    }
                                     return true;
                                 }
                             }
@@ -630,9 +641,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         return sb;
     }
 
-    private void reportSpamDialog(final SpamPostRequest request) {
+    private Dialog reportSpamDialog(final SpamPostRequest request, final Comment comment, final int commentPos) {
 
-        if(request ==null || ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
+        if(request ==null || ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return null;
 
         SpamReasons spamReasons = new ConfigData().reasonOfSpamCategory;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
@@ -662,7 +673,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             spamList = spamReasons.getComment();
         }
 
-        if(spamList ==null) return;
+        if(spamList ==null) return null;
 
         SpamUtil.addRadioToView(ArticleActivity.this, spamList , spamOptions);
 
@@ -685,7 +696,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
                                     request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
-                                    mArticlePresenter.reportSpamPostOrComment(request); //submit
+                                    mArticlePresenter.reportSpamPostOrComment(request, comment, commentPos); //submit
                                     mPostNowOrLaterDialog.dismiss();
                                 } else {
                                     reason.setError("Add the reason");
@@ -696,7 +707,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
                             }
                         } else {
-                            mArticlePresenter.reportSpamPostOrComment(request);  //submit request
+                            mArticlePresenter.reportSpamPostOrComment(request, comment, commentPos);  //submit request
                             mPostNowOrLaterDialog.dismiss();
                         }
                     }
@@ -705,29 +716,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         });
 
         mPostNowOrLaterDialog.show();
-    }
-
-
-    private SpamPostRequest createSpamPostRequest(Comment comment, boolean isComment) {
-
-        SpamPostRequest spamPostRequest = new SpamPostRequest();
-        spamPostRequest.setScore(5); //todo - change these hardcode
-        spamPostRequest.setSpamReason("DUDE");
-
-        long currentUserId = -1;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            currentUserId = mUserPreference.get().getUserSummary().getUserId();
-        }
-
-        spamPostRequest.setSpamReportedBy(currentUserId);//todo - chk with the case of admin , community post, community id not need it goes null
-        if(isComment) {
-                spamPostRequest.setModelId(comment.getCommentsId());
-                spamPostRequest.setModelType("ARTICLE_COMMENT");
-                spamPostRequest.setSpamReportedOn(comment.getParticipantId());
-            }
-
-        return spamPostRequest;
-
+        return mPostNowOrLaterDialog;
     }
 
     private void fetchArticle(int articleId, boolean isImageLoaded) {
@@ -1184,12 +1173,20 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void postOrCommentSpamResponse(SpamResponse spamResponse) {
+    public void postOrCommentSpamResponse(SpamResponse spamResponse, Comment comment, int position) {
         if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+
+            if(!comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
+                if (clickedComment != null) {
+                    mArticlePresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(clickedComment, true, true, false), position);
+                    clickedComment = null;
+                }
+            }
+
             if(!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(ArticleActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes", "Close", false);
+                CommonUtil.createDialog(ArticleActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes");
             } else {
-                CommonUtil.createDialog(ArticleActivity.this, "Reported Earlier", "You have already reported this user as spam, and is in review. Thank You!", null, true);
+                CommonUtil.createDialog(ArticleActivity.this, "Reported Earlier", "You have already reported this comment as spam, and is in review. Thank You!");
             }
         }
     }

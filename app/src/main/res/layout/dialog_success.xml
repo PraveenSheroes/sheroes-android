@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:minWidth="312dp"
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp_size_16">
@@ -11,7 +11,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_size_16">
+        android:paddingBottom="@dimen/dp_size_8"
+        android:paddingEnd="@dimen/dp_size_16"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:paddingRight="@dimen/dp_size_16"
+        android:paddingStart="@dimen/dp_size_16"
+        android:paddingTop="@dimen/dp_size_16">
 
         <TextView
             android:id="@+id/title"
@@ -41,7 +46,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_8"
-        android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="sans-serif"
         android:lineSpacingExtra="9sp"
         android:paddingLeft="@dimen/dp_size_16"
@@ -50,6 +54,4 @@
         android:textSize="14sp"
         android:textStyle="normal"
         tools:text="Your response will help us to improve your experience with Sheroes" />
-
-
 </LinearLayout>

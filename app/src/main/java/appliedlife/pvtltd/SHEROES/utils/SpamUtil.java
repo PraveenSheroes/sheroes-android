@@ -91,10 +91,10 @@ public class SpamUtil {
         return spamPostRequest;
     }
 
-    public static SpamPostRequest spamRequestBuilder(Comment comment, View view, long currentUserId) {
+    public static SpamPostRequest spamRequestBuilder(Comment comment, long currentUserId) {
         SpamPostRequest spamPostRequest = new SpamPostRequest();
         spamPostRequest.setModelId(comment.getCommentsId());
-        spamPostRequest.setSpamReportedBy(currentUserId);//todo - chk with the case of admin , community post
+        spamPostRequest.setSpamReportedBy(currentUserId);
         spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
         spamPostRequest.setModelType("COMMENT");
         spamPostRequest.setSpamContentType(SpamContentType.COMMENT);
@@ -102,21 +102,24 @@ public class SpamUtil {
         return spamPostRequest;
     }
 
-    private static SpamPostRequest createArticleCommentSpamRequest(ArticleSolrObj userPostSolrObj, long currentUserId) {
 
+    public static SpamPostRequest spamArticleCommentRequestBuilder(Comment comment, long currentUserId) {
         SpamPostRequest spamPostRequest = new SpamPostRequest();
+        spamPostRequest.setModelId(comment.getCommentsId());
+        spamPostRequest.setSpamReportedBy(currentUserId);
+        //spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId())); //not id for article
+        spamPostRequest.setModelType("ARTICLE_COMMENT");
+        spamPostRequest.setSpamContentType(SpamContentType.COMMENT);
+        spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
+        return spamPostRequest;
+    }
 
-        spamPostRequest.setSpamReportedBy(currentUserId);//todo - chk with the case of admin , community post
+    public static SpamPostRequest createArticleCommentSpamRequest(ArticleSolrObj userPostSolrObj, long currentUserId) {
         if(userPostSolrObj.getLastComments().size()>0) {
             Comment comment = userPostSolrObj.getLastComments().get(0);
-
-            spamPostRequest.setModelId(comment.getCommentsId());
-            //spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId())); //not id for article
-            spamPostRequest.setModelType("ARTICLE_COMMENT");
-            spamPostRequest.setSpamContentType(SpamContentType.COMMENT);
-            spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
+            return spamArticleCommentRequestBuilder(comment, currentUserId);
         }
-        return spamPostRequest;
+        return null;
     }
 
     private static SpamPostRequest createSpamPostRequest(UserPostSolrObj userPostSolrObj, boolean isComment, long currentUserId) {

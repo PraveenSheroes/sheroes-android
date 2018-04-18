@@ -1338,7 +1338,7 @@ public class CommonUtil {
         return true;
     }
 
-    public static void createDialog(Context context, String title, String message, String buttonName, boolean hasCross) {
+    public static void createDialog(Context context, String title, String message) {
 
         final Dialog mPostNowOrLaterDialog = new Dialog(context);
         mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -182,8 +182,8 @@
     <string name="ID_RELACTIONSHIP_HINT"><font size="12">RELATIONSHIP STATUS</font></string>
     <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
     <string name="ID_SAVE">SAVE</string>
-    <string name="ID_NEED_TO_BE_REVIEWED">Your post is under review due to potential community guidelines violation. You can edit the post or check back soon.</string>
-    <string name="COMMENT_REVIEW_MESSAGE">Your comment is under review due to potential community guidelines violation. You can edit the comment or check back soon.</string>
+    <string name="ID_NEED_TO_BE_REVIEWED">Your post is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
+    <string name="COMMENT_REVIEW_MESSAGE">Your comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
 

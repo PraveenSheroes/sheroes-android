@@ -1124,9 +1124,9 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     public void postOrCommentSpamResponse(SpamResponse spamResponse) {
         if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             if(!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(ProfileActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes", "Close", false);
+                CommonUtil.createDialog(ProfileActivity.this, "Thank You for your Feedback!", "Your response will help us to improve your experience with Sheroes");
             } else {
-                CommonUtil.createDialog(ProfileActivity.this, "Reported Earlier", "You have already reported this user as spam, and is in review. Thank You!", null, true);
+                CommonUtil.createDialog(ProfileActivity.this, "Reported Earlier", "You have already reported this "+spamResponse.getModelType().toLowerCase()+" as spam, and is in review. Thank You!");
             }
         }
     }
@@ -1908,39 +1908,6 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
     }
 
-   /* private SpamPostRequest createSpamPostRequest(UserPostSolrObj userPostSolrObj, boolean isComment) {
-
-        SpamPostRequest spamPostRequest = new SpamPostRequest();
-        spamPostRequest.setScore(5); //todo - change these hardcode
-        spamPostRequest.setSpamReason("DUDE");
-
-        long currentUserId = -1;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            currentUserId = mUserPreference.get().getUserSummary().getUserId();
-        }
-
-        spamPostRequest.setSpamReportedBy(currentUserId);//todo - chk with the case of admin , community post
-        if(isComment) {
-            if(userPostSolrObj.getLastComments().size()>0) {
-                Comment comment = userPostSolrObj.getLastComments().get(0);
-
-                spamPostRequest.setModelId(comment.getCommentsId());
-                spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
-                spamPostRequest.setModelType("COMMENT");
-                spamPostRequest.setSpamReportedOn(comment.getParticipantId());
-            }
-        } else {
-            spamPostRequest.setModelType("POST");
-            spamPostRequest.setCommunityId(userPostSolrObj.getCommunityId());
-            spamPostRequest.setSpamReportedOn(userPostSolrObj.getAuthorId());
-            spamPostRequest.setModelId(userPostSolrObj.getIdOfEntityOrParticipant());
-        }
-
-        return spamPostRequest;
-
-    }
-
-*/
     private void reportSpamDialog(final SpamPostRequest request) {
 
         if(request ==null || ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;

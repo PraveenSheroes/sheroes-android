@@ -425,7 +425,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
             }*/
 
-           if(!lastComment.isMyOwnParticipation() && lastComment.isSpamComment())  {
+           if(lastComment.isSpamComment())  {
                spamCommentMenu.setVisibility(View.GONE);
            } else {
                spamCommentMenu.setVisibility(View.VISIBLE);

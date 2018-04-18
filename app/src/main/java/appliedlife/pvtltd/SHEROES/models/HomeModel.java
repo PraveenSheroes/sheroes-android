@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
@@ -339,6 +340,8 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+
     public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
         LogUtils.info(TAG, " Spam post  request" + new Gson().toJson(approveSpamPostRequest));
         return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
@@ -352,6 +355,18 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<BaseResponse> getSpamCommentDelete(ApproveSpamPostRequest approveSpamPostRequest) {
+        LogUtils.info(TAG, " Spam comment post  request" + new Gson().toJson(approveSpamPostRequest));
+        return sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+                .map(new Function<BaseResponse, BaseResponse>() {
+                    @Override
+                    public BaseResponse apply(BaseResponse approveSpamPostResponse) {
+                        return approveSpamPostResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 
     public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest) {

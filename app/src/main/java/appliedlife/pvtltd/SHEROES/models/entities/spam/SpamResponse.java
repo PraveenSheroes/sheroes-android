@@ -13,11 +13,22 @@ public class SpamResponse extends BaseResponse {
     @SerializedName("isReported")
     private boolean isSpamAlreadyReported;
 
+    @SerializedName("modelType")
+    private String modelType;
+
     public boolean isSpamAlreadyReported() {
         return isSpamAlreadyReported;
     }
 
     public void setSpamAlreadyReported(boolean spamAlreadyReported) {
         isSpamAlreadyReported = spamAlreadyReported;
+    }
+
+    public String getModelType() {
+        return modelType;
+    }
+
+    public void setModelType(String modelType) {
+        this.modelType = modelType;
     }
 }

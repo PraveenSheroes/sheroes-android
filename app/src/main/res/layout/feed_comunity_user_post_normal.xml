@@ -318,6 +318,7 @@
             android:visibility="gone" />
 
         <RelativeLayout
+            android:id="@+id/action_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_8"
@@ -381,19 +382,17 @@
 
         </RelativeLayout>
 
-
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/li_feed_community_post_user_comments"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_16"
             android:orientation="horizontal">
 
-
             <FrameLayout
-                android:visibility="gone"
                 android:id="@+id/spam_comment_ui"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -404,15 +403,24 @@
                         android:orientation="horizontal"
                         android:weightSum="@integer/int_value_for_line_1">
 
+                        <ImageView
+                            android:id="@+id/spam_info_icon"
+                            android:layout_marginTop="@dimen/dp_size_8"
+                            android:layout_marginLeft="@dimen/dp_size_8"
+                            android:layout_marginStart="@dimen/dp_size_8"
+                            android:layout_width="wrap_content"
+                            android:src="@drawable/ic_spam_post_message"
+                            android:layout_height="wrap_content" />
+
                         <TextView
-                            android:id="@+id/comment_review"
+                            android:id="@+id/tv_review_description11"
+                            android:layout_toRightOf="@id/spam_info_icon"
+                            android:layout_toEndOf="@id/spam_info_icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_spam_post_message"
-                            android:layout_marginLeft="@dimen/dp_size_16"
+                            android:layout_marginLeft="@dimen/dp_size_11"
                             android:padding="@dimen/dp_size_8"
-                            android:drawablePadding="@dimen/dp_size_8"
-                            android:layout_marginRight="@dimen/dp_size_16"
+                            android:layout_marginRight="@dimen/dp_size_11"
                             android:fontFamily="@string/ID_ROBOTO_REGULAR"
                             android:lineSpacingExtra="@dimen/dp_size_3"
                             android:text="@string/COMMENT_REVIEW_MESSAGE"
@@ -421,17 +429,17 @@
                     </RelativeLayout>
 
                 <TextView
-                    android:layout_gravity="right"
+                    android:layout_gravity="right|end"
                     android:id="@+id/spam_comment_menu"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/ic_menu_dashboard"
+                    android:drawableEnd="@drawable/ic_menu_dashboard"
                     android:paddingBottom="@dimen/dp_size_10"
                     android:paddingLeft="@dimen/dp_size_14"
                     android:paddingRight="@dimen/sp_size_24"
                     android:paddingTop="@dimen/dp_size_5" />
-
-
             </FrameLayout>
 
             <LinearLayout
@@ -658,31 +666,41 @@
             android:id="@+id/tv_spam_post_menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_gravity="end|right"
             android:background="@color/white"
             android:drawableRight="@drawable/ic_menu_dashboard"
             android:padding="@dimen/dp_size_16" />
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/spam_message_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:orientation="vertical"
             android:weightSum="@integer/int_value_for_line_1">
+
+            <ImageView
+                android:layout_marginTop="@dimen/dp_size_8"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_spam_post_message"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tv_review_description"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_42"
                 android:layout_marginRight="@dimen/dp_size_42"
-                android:drawableTop="@drawable/ic_spam_post_message"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/ID_NEED_TO_BE_REVIEWED"
                 android:textColor="@color/pure_black"
                 android:textSize="@dimen/sp_size_14" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/li_approve_delete"
