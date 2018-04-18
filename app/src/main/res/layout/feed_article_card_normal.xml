@@ -257,6 +257,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp_size_8"
+                android:visibility="gone"
                 android:drawableRight="@drawable/ic_menu_dashboard"
                 android:paddingBottom="@dimen/dp_size_10" />
 

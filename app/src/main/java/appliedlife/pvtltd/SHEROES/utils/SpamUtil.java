@@ -41,7 +41,6 @@ public class SpamUtil {
                 layoutParams.setMargins(CommonUtil.convertDpToPixel(8, context), CommonUtil.convertDpToPixel(10, context), CommonUtil.convertDpToPixel(8, context), 0);
                 radioButton.setText(spam.getLabel());
                 radioButton.setLayoutParams(layoutParams);
-
                 radioButton.setId(i);
                 radioButton.setTag(spam);
                 radioGroup.addView(radioButton);
@@ -50,12 +49,21 @@ public class SpamUtil {
         }
     }
 
-    //Hide radio button other than the currenly selected
+    //Hide radio button other than the currently selected
     public static void hideSpamReason(RadioGroup radioGroup, int selectedOptionId) {
         for (int i = 0; i < radioGroup.getChildCount(); i++) {
             int id = radioGroup.getChildAt(i).getId();
             if (id != selectedOptionId) {
                 radioGroup.getChildAt(i).setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public static void showAllSpamReason(RadioGroup radioGroup) {
+        for (int i = 0; i < radioGroup.getChildCount(); i++) {
+            int id = radioGroup.getChildAt(i).getId();
+            if (id != -1) {
+                radioGroup.getChildAt(i).setVisibility(View.VISIBLE);
             }
         }
     }

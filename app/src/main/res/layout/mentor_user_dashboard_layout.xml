@@ -68,14 +68,14 @@
 
                     <TextView
                         android:id="@+id/tv_profile_menu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="25dp"
+                        android:padding="@dimen/dp_size_20"
+                        android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:drawableEnd="@drawable/ic_menu_dashboard"
                         android:drawableRight="@drawable/ic_menu_dashboard"
-                        android:padding="@dimen/dp_size_20"
                         android:visibility="visible" />
 
                     <TextView
@@ -84,16 +84,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/dp_size_10"
-                        android:layout_marginStart="@dimen/dp_size_10"
+                        android:layout_marginLeft="@dimen/dp_size_5"
+                        android:layout_marginStart="@dimen/dp_size_5"
                         android:layout_toEndOf="@id/tv_drawer_navigation"
-                        android:layout_toLeftOf="@id/tv_profile_menu"
                         android:layout_toRightOf="@id/tv_drawer_navigation"
                         android:ellipsize="end"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:maxLines="@integer/int_value_for_line_1"
+                        android:layout_marginRight="@dimen/dp_size_20"
+                        android:layout_marginEnd="@dimen/dp_size_20"
                         android:textColor="@color/toolbar_title"
                         android:textSize="@dimen/sp_size_20" />
+
                 </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>

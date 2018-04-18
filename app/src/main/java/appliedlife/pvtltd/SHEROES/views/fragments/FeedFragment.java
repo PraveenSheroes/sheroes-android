@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -34,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences2.Preference;
@@ -985,7 +985,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     switch (item.getItemId()) {
 
                         case R.id.edit:
-                            onArticleCommentClicked(articleObj);
+                            //onArticleCommentClicked(articleObj);
                             return true;
                         case R.id.delete:
                             //onDeleteMenuClicked(userPostObj);
@@ -995,7 +995,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
 
                         case R.id.report_spam :
-                                SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(articleObj, view, mLoggedInUser);
+                               // SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(articleObj, view, mLoggedInUser);
                               //  reportSpamDialog(spamPostRequest);
                                 return true;
 
@@ -1182,10 +1182,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         if(spamList ==null) return;
 
+        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+
         SpamUtil.addRadioToView(getContext(), spamList , spamOptions);
 
         Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
-        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1208,7 +1209,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                                 } else {
                                     reason.setError("Add the reason");
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
