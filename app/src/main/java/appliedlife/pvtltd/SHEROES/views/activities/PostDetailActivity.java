@@ -1006,35 +1006,35 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
         }
 
-        final Dialog mPostNowOrLaterDialog = new Dialog(PostDetailActivity.this);
-        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mPostNowOrLaterDialog.setCancelable(true);
-        mPostNowOrLaterDialog.setContentView(R.layout.dialog_spam_options);
+        final Dialog spamReasonsDialog = new Dialog(PostDetailActivity.this);
+        spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        spamReasonsDialog.setCancelable(true);
+        spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, PostDetailActivity.this), CommonUtil.convertDpToPixel(10, PostDetailActivity.this), 0, 0);
 
-        TextView reasonTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_title);
-        TextView reasonSubTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_sub_title);
+        TextView reasonTitle = spamReasonsDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = spamReasonsDialog.findViewById(R.id.reason_sub_title);
         reasonTitle.setLayoutParams(layoutParams);
         reasonSubTitle.setLayoutParams(layoutParams);
 
-        final RadioGroup spamOptions = mPostNowOrLaterDialog.findViewById(R.id.options_container);
+        final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
         List<Spam> spamList =null;
         if(request.getSpamContentType().equals(SpamContentType.POST)) {
-            spamList = spamReasons.getPost();
+            spamList = spamReasons.getPostTypeSpams();
         } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
-            spamList = spamReasons.getComment();
+            spamList = spamReasons.getCommentTypeSpams();
         }
 
         if(spamList ==null) return;
 
         SpamUtil.addRadioToView(PostDetailActivity.this, spamList , spamOptions);
 
-        Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
-        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+        Button submit = spamReasonsDialog.findViewById(R.id.submit);
+        final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1053,7 +1053,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
                                     request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
                                     mPostDetailPresenter.reportSpamPostOrComment(request); //submit
-                                    mPostNowOrLaterDialog.dismiss();
+                                    spamReasonsDialog.dismiss();
                                 } else {
                                     reason.setError("Add the reason");
                                 }
@@ -1064,14 +1064,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             }
                         } else {
                             mPostDetailPresenter.reportSpamPostOrComment(request);  //submit request
-                            mPostNowOrLaterDialog.dismiss();
+                            spamReasonsDialog.dismiss();
                         }
                     }
                 }
             }
         });
 
-        mPostNowOrLaterDialog.show();
+        spamReasonsDialog.show();
     }
 
 

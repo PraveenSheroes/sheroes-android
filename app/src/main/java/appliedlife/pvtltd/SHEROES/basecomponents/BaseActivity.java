@@ -785,7 +785,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
     }
 
-    public void shareWithMultipleOption(BaseResponse baseResponse) {
+    private void shareWithMultipleOption(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
@@ -804,7 +804,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
-    public void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
+    private void setMenuOptionVisibility(View view, TextView tvEdit, TextView tvDelete, TextView tvShare, TextView tvReport, BaseResponse baseResponse, LinearLayout liFeedMenu) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_article_user_comment_post_menu:
@@ -880,7 +880,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    public void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+    private void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
@@ -891,7 +891,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    public void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+    private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
                 Comment comment = (Comment) baseResponse;

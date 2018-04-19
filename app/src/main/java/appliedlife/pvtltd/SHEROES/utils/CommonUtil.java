@@ -1340,27 +1340,27 @@ public class CommonUtil {
 
     public static void createDialog(Context context, String title, String message) {
 
-        final Dialog mPostNowOrLaterDialog = new Dialog(context);
-        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mPostNowOrLaterDialog.setCancelable(true);
-        mPostNowOrLaterDialog.setContentView(R.layout.dialog_success);
-        mPostNowOrLaterDialog.setTitle(title);
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_success);
+        dialog.setTitle(title);
 
-        TextView titleText = mPostNowOrLaterDialog.findViewById(R.id.title);
+        TextView titleText = dialog.findViewById(R.id.title);
         titleText.setText(title);
 
-        ImageView cross = mPostNowOrLaterDialog.findViewById(R.id.cross);
+        ImageView cross = dialog.findViewById(R.id.cross);
 
         cross.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPostNowOrLaterDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        TextView messageText = mPostNowOrLaterDialog.findViewById(R.id.message);
+        TextView messageText = dialog.findViewById(R.id.message);
         messageText.setText(message);
 
-        mPostNowOrLaterDialog.show();
+        dialog.show();
     }
 }

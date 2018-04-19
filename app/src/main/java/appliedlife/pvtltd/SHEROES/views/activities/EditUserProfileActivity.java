@@ -894,7 +894,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         mUserPreference.get().getUserSummary().setLastName(userSummary.getLastName());
                         mUserPreference.set(userDetailsResponse);
                     } catch (Exception e) {
-                        LogUtils.info("err", e.toString());
+                        LogUtils.error("err", e.toString());
                     }
 
                 } catch (Exception e) {

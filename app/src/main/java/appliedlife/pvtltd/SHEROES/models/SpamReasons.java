@@ -10,37 +10,37 @@ public class SpamReasons {
 
     @SerializedName("user")
     @Expose
-    private List<Spam> user = null;
+    private List<Spam> userTypeSpams = null;
 
     @SerializedName("post")
     @Expose
-    private List<Spam> post = null;
+    private List<Spam> postTypeSpams = null;
 
     @SerializedName("comment")
     @Expose
-    private List<Spam> comment = null;
+    private List<Spam> commentTypeSpams = null;
 
-    public List<Spam> getPost() {
-        return post;
+    public List<Spam> getCommentTypeSpams() {
+        return commentTypeSpams;
     }
 
-    public void setPost(List<Spam> post) {
-        this.post = post;
+    public void setCommentTypeSpams(List<Spam> commentTypeSpams) {
+        this.commentTypeSpams = commentTypeSpams;
     }
 
-    public List<Spam> getComment() {
-        return comment;
+    public List<Spam> getPostTypeSpams() {
+        return postTypeSpams;
     }
 
-    public void setComment(List<Spam> comment) {
-        this.comment = comment;
+    public void setPostTypeSpams(List<Spam> postTypeSpams) {
+        this.postTypeSpams = postTypeSpams;
     }
 
-    public List<Spam> getUser() {
-        return user;
+    public List<Spam> getUserTypeSpams() {
+        return userTypeSpams;
     }
 
-    public void setUser(List<Spam> user) {
-        this.user = user;
+    public void setUserTypeSpams(List<Spam> userTypeSpams) {
+        this.userTypeSpams = userTypeSpams;
     }
 }

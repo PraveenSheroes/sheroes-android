@@ -993,13 +993,12 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        int id = view.getId();
-        if (id == R.id.tv_feed_community_post_user_comment_post_menu) {
+        if (baseResponse instanceof FeedDetail) {
+            communityDetailHandled(view, baseResponse);
+        } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
-        } else if (baseResponse instanceof FeedDetail) {
-            communityDetailHandled(view, baseResponse);
+            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
 
@@ -1856,58 +1855,6 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl()) && !mUserSolarObject.getImageUrl().contains("/default/user.png");
     }
 
-    protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
-        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                popupWindow.dismiss();
-            }
-        });
-
-        final LinearLayout liFeedMenu = popupView.findViewById(R.id.li_feed_menu);
-        final TextView tvEdit = popupView.findViewById(R.id.tv_article_menu_edit);
-        final TextView tvDelete = popupView.findViewById(R.id.tv_article_menu_delete);
-        final TextView tvShare = popupView.findViewById(R.id.tv_article_menu_share);
-        final TextView tvReport = popupView.findViewById(R.id.tv_article_menu_report);
-
-        // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view, -150, -10);
-        tvEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editOperationOnMenu(menuEnum, baseResponse, null);
-                popupWindow.dismiss();
-            }
-        });
-        tvDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteOperationOnMenu(menuEnum, baseResponse, null);
-                popupWindow.dismiss();
-            }
-        });
-        tvShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shareWithMultipleOption(baseResponse);
-                popupWindow.dismiss();
-            }
-        });
-        tvReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                markAsSpam(menuEnum, baseResponse, null);
-                popupWindow.dismiss();
-            }
-        });
-        setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu);
-    }
-
     private void reportSpamDialog(final SpamPostRequest request) {
 
         if(request ==null || ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
@@ -1917,35 +1864,35 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
             spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
         }
 
-        final Dialog mPostNowOrLaterDialog = new Dialog(ProfileActivity.this);
-        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mPostNowOrLaterDialog.setCancelable(true);
-        mPostNowOrLaterDialog.setContentView(R.layout.dialog_spam_options);
+        final Dialog spamReasonsDialog = new Dialog(ProfileActivity.this);
+        spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        spamReasonsDialog.setCancelable(true);
+        spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, ProfileActivity.this), CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0, 0);
 
-        TextView reasonTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_title);
-        TextView reasonSubTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_sub_title);
+        TextView reasonTitle = spamReasonsDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = spamReasonsDialog.findViewById(R.id.reason_sub_title);
         reasonTitle.setLayoutParams(layoutParams);
         reasonSubTitle.setLayoutParams(layoutParams);
 
-        final RadioGroup spamOptions = mPostNowOrLaterDialog.findViewById(R.id.options_container);
+        final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
         List<Spam> spamList =null;
         if(request.getSpamContentType().equals(SpamContentType.USER)) {
-            spamList = spamReasons.getUser();
+            spamList = spamReasons.getUserTypeSpams();
         } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
-            spamList = spamReasons.getComment();
+            spamList = spamReasons.getCommentTypeSpams();
         }
 
         if(spamList ==null) return;
 
         SpamUtil.addRadioToView(ProfileActivity.this, spamList , spamOptions);
 
-        Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
-        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+        Button submit = spamReasonsDialog.findViewById(R.id.submit);
+        final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1964,7 +1911,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
                                     request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
                                     profilePresenter.reportSpamPostOrComment(request); //submit
-                                    mPostNowOrLaterDialog.dismiss();
+                                    spamReasonsDialog.dismiss();
                                 } else {
                                     reason.setError("Add the reason");
                                 }
@@ -1975,14 +1922,14 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                             }
                         } else {
                             profilePresenter.reportSpamPostOrComment(request);  //submit request
-                            mPostNowOrLaterDialog.dismiss();
+                            spamReasonsDialog.dismiss();
                         }
                     }
                 }
             }
         });
 
-        mPostNowOrLaterDialog.show();
+        spamReasonsDialog.show();
     }
 
 }

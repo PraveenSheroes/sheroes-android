@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -354,20 +355,6 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-    public Observable<BaseResponse> getSpamCommentDelete(ApproveSpamPostRequest approveSpamPostRequest) {
-        LogUtils.info(TAG, " Spam comment post  request" + new Gson().toJson(approveSpamPostRequest));
-        return sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
-                .map(new Function<BaseResponse, BaseResponse>() {
-                    @Override
-                    public BaseResponse apply(BaseResponse approveSpamPostResponse) {
-                        return approveSpamPostResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
 
     public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest) {
         LogUtils.info(TAG, " **********Appintro  request" + new Gson().toJson(appIntroScreenRequest));

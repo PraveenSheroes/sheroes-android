@@ -1158,36 +1158,36 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
         }
 
-        final Dialog mPostNowOrLaterDialog = new Dialog(getActivity());
-        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mPostNowOrLaterDialog.setCancelable(true);
-        mPostNowOrLaterDialog.setContentView(R.layout.dialog_spam_options);
+        final Dialog spamReasonsDialog = new Dialog(getActivity());
+        spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        spamReasonsDialog.setCancelable(true);
+        spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, getActivity()), CommonUtil.convertDpToPixel(10, getActivity()), 0, 0);
 
-        TextView reasonTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_title);
-        TextView reasonSubTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_sub_title);
+        TextView reasonTitle = spamReasonsDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = spamReasonsDialog.findViewById(R.id.reason_sub_title);
         reasonTitle.setLayoutParams(layoutParams);
         reasonSubTitle.setLayoutParams(layoutParams);
 
-        final RadioGroup spamOptions = mPostNowOrLaterDialog.findViewById(R.id.options_container);
+        final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
         List<Spam> spamList =null;
         if(request.getSpamContentType().equals(SpamContentType.POST)) {
-            spamList = spamReasons.getPost();
+            spamList = spamReasons.getPostTypeSpams();
         } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
-            spamList = spamReasons.getComment();
+            spamList = spamReasons.getCommentTypeSpams();
         }
 
         if(spamList ==null) return;
 
-        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+        final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
         SpamUtil.addRadioToView(getContext(), spamList , spamOptions);
 
-        Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
+        Button submit = spamReasonsDialog.findViewById(R.id.submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1206,7 +1206,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
                                     request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
                                     mFeedPresenter.reportSpamPostOrComment(request, userPostSolrObj); //submit
-                                    mPostNowOrLaterDialog.dismiss();
+                                    spamReasonsDialog.dismiss();
                                 } else {
                                     reason.setError("Add the reason");
                                 }
@@ -1216,14 +1216,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             }
                         } else {
                             mFeedPresenter.reportSpamPostOrComment(request, userPostSolrObj);  //submit request
-                            mPostNowOrLaterDialog.dismiss();
+                            spamReasonsDialog.dismiss();
                         }
                     }
                 }
             }
         });
 
-        mPostNowOrLaterDialog.show();
+        spamReasonsDialog.show();
     }
 
     @Override

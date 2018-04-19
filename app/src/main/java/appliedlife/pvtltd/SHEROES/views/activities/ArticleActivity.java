@@ -589,15 +589,15 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
                         popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
-                        final Comment comment1 = mCommentsAdapter.getComment(position);
-                        if (comment1 == null) return;
+                        final Comment selectedComment = mCommentsAdapter.getComment(position);
+                        if (selectedComment == null) return;
 
-                        if(comment1.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
+                        if(selectedComment.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
                             popup.getMenu().findItem(R.id.delete).setVisible(true);
                             popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                         } else {
                             popup.getMenu().findItem(R.id.delete).setVisible(false);
-                            if(comment1.isSpamComment()) {
+                            if(selectedComment.isSpamComment()) {
                                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                             } else {
                                 popup.getMenu().findItem(R.id.report_spam).setVisible(true);
@@ -608,18 +608,18 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             public boolean onMenuItemClick(MenuItem item) {
                                 if(item.getItemId() == R.id.report_spam ) {
 
-                                    SpamPostRequest spamPostRequest = SpamUtil.spamArticleCommentRequestBuilder(comment1, currentUserId);
-                                    reportSpamDialog(spamPostRequest, comment1, position);
+                                    SpamPostRequest spamPostRequest = SpamUtil.spamArticleCommentRequestBuilder(selectedComment, currentUserId);
+                                    reportSpamDialog(spamPostRequest, selectedComment, position);
 
                                     return true;
                                 } else  {
                                     final long adminID = adminId;
-                                    if(!comment1.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
-                                        clickedComment = comment1;
-                                        SpamPostRequest spamPostRequest  = SpamUtil.spamArticleCommentRequestBuilder(comment1, currentUserId);
-                                        reportSpamDialog(spamPostRequest, comment1, position);
+                                    if(!selectedComment.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
+                                        clickedComment = selectedComment;
+                                        SpamPostRequest spamPostRequest  = SpamUtil.spamArticleCommentRequestBuilder(selectedComment, currentUserId);
+                                        reportSpamDialog(spamPostRequest, selectedComment, position);
                                     } else{
-                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment1.getEntityId(), comment1.getComment(), false, false, comment1.getId()));
+                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(selectedComment.getEntityId(), selectedComment.getComment(), false, false, selectedComment.getId()));
                                     }
                                     return true;
                                 }
@@ -641,44 +641,44 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         return sb;
     }
 
-    private Dialog reportSpamDialog(final SpamPostRequest request, final Comment comment, final int commentPos) {
+    private void reportSpamDialog(final SpamPostRequest request, final Comment comment, final int commentPos) {
 
-        if(request ==null || ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return null;
+        if(request ==null || ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons = new ConfigData().reasonOfSpamCategory;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
             spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
         }
 
-        final Dialog mPostNowOrLaterDialog = new Dialog(ArticleActivity.this);
-        mPostNowOrLaterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mPostNowOrLaterDialog.setCancelable(true);
-        mPostNowOrLaterDialog.setContentView(R.layout.dialog_spam_options);
+        final Dialog spamReasonsDialog = new Dialog(ArticleActivity.this);
+        spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        spamReasonsDialog.setCancelable(true);
+        spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, ArticleActivity.this), CommonUtil.convertDpToPixel(10, ArticleActivity.this), 0, 0);
 
-        TextView reasonTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_title);
-        TextView reasonSubTitle = mPostNowOrLaterDialog.findViewById(R.id.reason_sub_title);
+        TextView reasonTitle = spamReasonsDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = spamReasonsDialog.findViewById(R.id.reason_sub_title);
         reasonTitle.setLayoutParams(layoutParams);
         reasonSubTitle.setLayoutParams(layoutParams);
 
-        final RadioGroup spamOptions = mPostNowOrLaterDialog.findViewById(R.id.options_container);
+        final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
         List<Spam> spamList =null;
         if(request.getSpamContentType().equals(SpamContentType.USER)) {
-            spamList = spamReasons.getUser();
+            spamList = spamReasons.getUserTypeSpams();
         } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
-            spamList = spamReasons.getComment();
+            spamList = spamReasons.getCommentTypeSpams();
         }
 
-        if(spamList ==null) return null;
+        if (spamList == null) return;
 
         SpamUtil.addRadioToView(ArticleActivity.this, spamList , spamOptions);
 
-        Button submit = mPostNowOrLaterDialog.findViewById(R.id.submit);
-        final EditText reason = mPostNowOrLaterDialog.findViewById(R.id.edit_text_reason);
+        Button submit = spamReasonsDialog.findViewById(R.id.submit);
+        final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -697,7 +697,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
                                     request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
                                     mArticlePresenter.reportSpamPostOrComment(request, comment, commentPos); //submit
-                                    mPostNowOrLaterDialog.dismiss();
+                                    spamReasonsDialog.dismiss();
                                 } else {
                                     reason.setError("Add the reason");
                                 }
@@ -708,15 +708,14 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             }
                         } else {
                             mArticlePresenter.reportSpamPostOrComment(request, comment, commentPos);  //submit request
-                            mPostNowOrLaterDialog.dismiss();
+                            spamReasonsDialog.dismiss();
                         }
                     }
                 }
             }
         });
 
-        mPostNowOrLaterDialog.show();
-        return mPostNowOrLaterDialog;
+        spamReasonsDialog.show();
     }
 
     private void fetchArticle(int articleId, boolean isImageLoaded) {
@@ -1178,7 +1177,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             if(!comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
                 if (clickedComment != null) {
-                    mArticlePresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(clickedComment, true, true, false), position);
+                    mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(clickedComment, true, true, false), position);
                     clickedComment = null;
                 }
             }
