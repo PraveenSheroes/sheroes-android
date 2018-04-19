@@ -255,26 +255,26 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         invalidatePostLike(userPostSolrObj);
 
-        invalidateSpamPost(userPostSolrObj);
-        invalidateSpamLastComment(userPostSolrObj);
+        if (userPostSolrObj.isSpamPost()) {  //Spam Post 
+            spamPostUi.setVisibility(View.VISIBLE);
+        } else {
+            spamPostUi.setVisibility(View.GONE);
 
+            if (CommonUtil.isEmpty(userPostSolrObj.getLastComments())) {
+                return;
+            }
+            Comment comment = userPostSolrObj.getLastComments().get(0);
+            invalidateSpamLastComment(comment);
+        }
     }
 
-    private void invalidateSpamLastComment(UserPostSolrObj userPostSolrObj) {
-        if(userPostSolrObj.isSpamPost()) {
+    private void invalidateSpamLastComment(Comment comment) {
+        if (comment != null && comment.isSpamComment()) {
             spamCommentUi.setVisibility(View.VISIBLE);
             mLastCommentContainer.setVisibility(View.GONE);
         } else {
             spamCommentUi.setVisibility(View.GONE);
             mLastCommentContainer.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void invalidateSpamPost(UserPostSolrObj userPostSolrObj) {
-        if(userPostSolrObj.isSpamPost()) {
-            spamPostUi.setVisibility(View.VISIBLE);
-        } else {
-            spamPostUi.setVisibility(View.GONE);
         }
     }
 

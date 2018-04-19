@@ -462,14 +462,13 @@
 
     <FrameLayout
         android:id="@+id/fl_spam_post_ui"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.2"
+            android:alpha="0.1"
             android:background="@color/white" />
 
         <LinearLayout
