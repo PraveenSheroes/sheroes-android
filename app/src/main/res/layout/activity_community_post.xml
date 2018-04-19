@@ -28,7 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/suggestions_list"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:background="@drawable/user_tagg_border"
+            android:layout_height="150dp" />
         <RelativeLayout
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
@@ -136,6 +141,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:layout_above="@id/upload_image_container"
         android:layout_below="@id/fb_share_container">
 
@@ -190,25 +196,19 @@
                     android:visibility="gone" />
 
             </RelativeLayout>
-
-            <EditText
-                android:id="@+id/et_default_hint_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
+                android:id="@+id/et_view"
                 android:layout_below="@id/user_container"
+                android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:background="@null"
-                android:gravity="top"
-                android:inputType="textMultiLine|textCapSentences"
-                android:scrollHorizontally="false"
-                android:textSize="20sp" />
+                android:layout_marginTop="@dimen/dp_size_16"
+                android:layout_height="match_parent"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_link_render"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/et_default_hint_text"
+                android:layout_below="@id/et_view"
                 android:layout_margin="@dimen/dp_size_10"
                 android:elevation="@dimen/dp_size_5"
                 android:visibility="gone">
@@ -280,6 +280,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_8"
                 android:layout_below="@id/card_link_render">
                 <TextView
                     android:id="@+id/image_count"

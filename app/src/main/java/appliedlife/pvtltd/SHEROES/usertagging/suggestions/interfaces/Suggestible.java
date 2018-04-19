@@ -22,7 +22,7 @@ import android.os.Parcelable;
  * Interface for a model to implement in order for it to be able to be suggested.
  * <p/>
  * Note that the information gathered from the below methods are used in the default layout for the
- * {@link SuggestionsAdapter}.
+ * {@link UserTagSuggestionsAdapter}.
  */
 public interface Suggestible extends Parcelable {
 

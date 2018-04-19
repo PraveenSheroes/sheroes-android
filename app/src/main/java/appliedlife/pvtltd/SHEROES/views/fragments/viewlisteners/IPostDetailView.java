@@ -9,7 +9,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 
 /**
  * Created by ujjwal on 28/04/17.
@@ -48,9 +49,11 @@ public interface IPostDetailView extends BaseMvpView {
     void editLastComment();
 
     void deleteLastComment();
-    void showListOfParticipate(List<UserTaggingPerson>participantLists);
+
 
     String getStreamType();
 
     void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment);
+
+    void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
 }

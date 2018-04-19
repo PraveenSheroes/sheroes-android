@@ -97,6 +97,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -273,6 +274,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private   View articleToolTip;
     private PopupWindow popupWindowArticleTooTip;
     private String streamType;
+    private List<MentionSpan> mentionSpanList;
+    private boolean hasMentions=false;
     //endregion
 
     //region Activity methods
@@ -615,7 +618,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                     if(!selectedComment.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
                                         reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
                                     } else{
-                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(selectedComment.getEntityId(), selectedComment.getComment(), false, false, selectedComment.getId()));
+                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(selectedComment.getEntityId(), selectedComment.getComment(), false, false, selectedComment.getId(),hasMentions,mentionSpanList));
                                     }
                                     return true;
                                 }
@@ -781,7 +784,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public void onSubmitClicked() {
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
-            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false));
+            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false,hasMentions,mentionSpanList));
         }
         mCommentBody.setText("");
         mCommentBody.clearFocus();

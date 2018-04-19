@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/li_social_user"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="No Result Found"
+        android:textColor="@color/recent_post_comment"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textSize="@dimen/sp_size_16"/>
 
     <LinearLayout
+        android:id="@+id/li_social_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -16,16 +27,19 @@
             android:layout_height="@dimen/feed_profile_icon_size"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_12"
-            android:layout_margin="@dimen/dp_size_10"
-            android:src="@drawable/ic_anonomous" />
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginBottom="@dimen/dp_size_8"
+            android:src="@drawable/default_img" />
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_24"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginBottom="@dimen/dp_size_8"
+            android:layout_marginRight="@dimen/dp_size_8"
             android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/comment_text"
@@ -35,13 +49,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/dp_size_8"
+            android:visibility="gone"
             android:layout_marginRight="@dimen/dp_size_16"
             android:drawableRight="@drawable/ic_spinner_icon"
             android:rotation="270" />
     </LinearLayout>
     <View
+        android:id="@+id/view_line"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_0.5"
-        android:background="@color/feed_card_time"/>
+        android:layout_height="0.7dp"
+        android:layout_marginLeft="77dp"
+        android:background="@color/on_board_work"/>
 
 </LinearLayout>

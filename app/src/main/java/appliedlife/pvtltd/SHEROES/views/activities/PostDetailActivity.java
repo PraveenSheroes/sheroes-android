@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -26,12 +28,13 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.text.style.ImageSpan;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -48,9 +51,12 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -81,13 +87,22 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -104,7 +119,7 @@ import butterknife.OnClick;
  * Created by ujjwal on 07/12/17.
  */
 
-public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack {
+public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack, QueryTokenReceiver {
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
@@ -145,7 +160,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     TextView mTitleToolbar;
 
     @Bind(R.id.input_edit_text)
-    EditText mInputText;
+    RichEditorView etView;
 
     @Bind(R.id.user_pic)
     CircleImageView mUserPic;
@@ -161,6 +176,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Bind(R.id.tv_anonymous_post)
     TextView tvAnonymousPost;
+
+    @Bind(R.id.suggestions_list)
+    RecyclerView mSuggestionList;
 
     @BindDimen(R.dimen.dp_size_36)
     int profileSize;
@@ -181,9 +199,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private String mToolbarIconColor = "#90949C";
 
     private int mFromNotification;
-
     LinearLayoutManager mLayoutManager;
-    private ArrayAdapter<UserTaggingPerson> customSocialUserAdapter;
+    private List<MentionSpan> mentionSpanList;
+    List<TaggedUserPojo> mTaggedUserPojoList;
+    private boolean hasMentions = false;
+    private String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
     //endregion
 
     //region activity methods
@@ -196,6 +216,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mPostDetailPresenter.attachView(this);
         mUserPic.setCircularImage(true);
         setIsLoggedInUser();
+        etView.setQueryTokenReceiver(this);
+        etView.setEditTextShouldWrapContent(true);
         Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
@@ -223,7 +245,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
             mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
 
-            if(getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
+            if (getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
                 mStatusBarColorEmpty = true;
             }
 
@@ -236,7 +258,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         mPostDetailPresenter.setUserPost(mUserPostObj, mUserPostId);
         mPostDetailPresenter.fetchUserPost();
-        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
             mUserPic.setCircularImage(true);
             String authorThumborUrl = CommonUtil.getThumborUri(mUserPreference.get().getUserSummary().getPhotoUrl(), profileSize, profileSize);
@@ -245,22 +267,45 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(mUserPostObj!=null&&StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
-            mTitleToolbar.setText(mUserPostObj.getAuthorName()+"'s"+" post");
+        if (mUserPostObj != null && StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
+            if (mUserPostObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                mTitleToolbar.setText(mUserPostObj.getPostCommunityName() + " post");
+            } else {
+                mTitleToolbar.setText(mUserPostObj.getAuthorName() + "'s" + " post");
+            }
         }
-        if(mConfiguration!=null&&mConfiguration.isSet()) {
-            mInputText.setHint(mConfiguration.get().configData.mCommentHolderText);
-        }else
-        {
-            mInputText.setHint("Type your comment here...");
+        if (mConfiguration != null && mConfiguration.isSet()) {
+            etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
+            mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
+        } else {
+            etView.getEditText().setHint("Type your comment here...");
         }
-        setupEditInputText();
         setupToolbarItemsColor();
+        etView.onReceiveSuggestionsListView(mSuggestionList);
+
+        etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!keyboardShown(etView.getRootView())) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    mSuggestionList.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private boolean keyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
     }
 
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareText = "";
             shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareText)) {
@@ -430,11 +475,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
 
-    @Override
-    public void showListOfParticipate(List<UserTaggingPerson> participantLists) {
-        customSocialUserAdapter.addAll(participantLists);
-        customSocialUserAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public String getStreamType() {
@@ -454,7 +494,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void smoothScrollToBottom() {
         mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
-        if(null==mUserPostObj) {
+        if (null == mUserPostObj) {
             UserPostSolrObj userPostSolrObj = mPostDetailPresenter.getUserPostObj();
             if (userPostSolrObj != null && StringUtil.isNotNullOrEmptyString(userPostSolrObj.getAuthorName())) {
                 mTitleToolbar.setText(userPostSolrObj.getAuthorName() + "'s" + " post");
@@ -480,7 +520,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 return;
             }
             if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST) {
-                if ( null != intent.getExtras()) {
+                if (null != intent.getExtras()) {
                     UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
                     mPostDetailPresenter.updateUserPost(userPostSolrObj);
                 }
@@ -520,29 +560,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //endregion
 
     //region private methods
-    private void setupEditInputText() {
-        mInputText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (mInputText.getText().toString().length() == 0) {
-                    mInputText.setMaxLines(SINGLE_LINE);
-                    mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
-                } else {
-                    mInputText.setMaxLines(MAX_LINE);
-                    mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
-                }
-            }
-        });
-    }
 
     private void initAdapter() {
         mPostDetailListAdapter = new PostDetailAdapter(this, this, this);
@@ -817,7 +835,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onCommentButtonClicked() {
-        mInputText.requestFocus();
+        etView.getEditText().requestFocus();
     }
 
     @Override
@@ -874,14 +892,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         if(isDirty && editedComment!=null) {
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), mInputText.getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
+            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
         } else {
-            String message = mInputText.getText().toString().trim();
+            String message = etView.getEditText().getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {
                 mPostDetailPresenter.addComment(message, mIsAnonymous);
             }
         }
-        mInputText.setText("");
+        etView.getEditText().setText("");
+        CommonUtil.hideKeyboard(this);
     }
 
     @Override
@@ -949,7 +968,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId()), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), hasMentions, mentionSpanList), AppConstants.ONE_CONSTANT);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -963,10 +982,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
+        if (comment.isHasCommentMention()) {
+            hasMentions=comment.isHasCommentMention();
+            mentionSpanList = comment.getCommentUserMentionList();
+            editUserMentionWithCommentText(mentionSpanList, comment.getComment());
+        } else {
+            etView.getEditText().setText(comment.getComment());
+            etView.getEditText().setSelection(comment.getComment().length());
+        }
 
         editedComment = comment;
-        mInputText.setText(comment.getComment());
-        mInputText.setSelection(comment.getComment().length());
+        etView.getEditText().setText(comment.getComment());
+        etView.getEditText().setSelection(comment.getComment().length());
 
         int pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
 
@@ -985,6 +1012,24 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 lastEditedComment.put(pos, comment);
                 isDirty = true;
             }
+        }
+    }
+
+    private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
+        if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+            for (int i = 0; i < mentionSpanList.size(); i++) {
+                final MentionSpan mentionSpan = mentionSpanList.get(i);
+                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+            }
+
+            etView.getEditText().setText(editDescText);
+            for (int i = 0; i < mentionSpanList.size(); i++) {
+                final MentionSpan mentionSpan = mentionSpanList.get(i);
+                TaggedUserPojo userMention = mentionSpan.getMention();
+                int index = userMention.getStartIndex();
+                etView.setMentionSelectionText(userMention, index, index + 1);
+            }
+            etView.getEditText().setSelection(etView.getEditText().length());
         }
     }
 
@@ -1116,7 +1161,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if(mStatusBarColorEmpty) {
+            if (mStatusBarColorEmpty) {
                 if (upArrow != null) {
                     upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
                 }
@@ -1129,9 +1174,125 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
     }
-    public void onDestroy()
-    {
+
+    public void onDestroy() {
         super.onDestroy();
         mPostDetailPresenter.detachView();
+    }
+
+    @Override
+    public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
+        if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
+            if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
+                mTaggedUserPojoList = searchUserDataResponse.getParticipantList();
+                List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
+                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+                hasMentions = true;
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                mSuggestionList.setLayoutManager(layoutManager);
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mTaggedUserPojoList));
+            } else {
+                hasMentions = false;
+                mentionSpanList = null;
+                List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+                taggedUserPojoList.add(1, new TaggedUserPojo(0, "", "", "", 0));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                mSuggestionList.setLayoutManager(layoutManager);
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+            }
+        }
+    }
+
+    @Override
+    public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
+       final String searchText=queryToken.getTokenString();
+        if (searchText.contains("@")) {
+            hasMentions = false;
+            mentionSpanList = null;
+            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
+            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
+            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mSuggestionList.setLayoutManager(layoutManager);
+            mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+            mTaggedUserPojoList=taggedUserPojoList;
+
+            //UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+           // etView.onReceiveSuggestionsResult(result, "data");
+            mProgressBar.setVisibility(View.VISIBLE);
+            if (searchText.length() <= 3) {
+                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
+            } else {
+                Timer timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
+                            }
+                        },
+                        2000
+                );
+            }
+        }
+        List<String> buckets = Collections.singletonList("user-history");
+        return buckets;
+    }
+
+    @Override
+    public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
+        this.mentionSpanList = mentionSpanList;
+        return null;
+    }
+
+    @Override
+    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mSuggestionList.setLayoutManager(layoutManager);
+        mSuggestionList.setAdapter(userTagSuggestionsAdapter);
+        return null;
+    }
+
+    @Override
+    public Suggestible onUserTaggedClick(@NonNull Suggestible suggestible, View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.li_social_user:
+                mTaggedUserPojoList.clear();
+                etView.displayHide();
+                TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
+                etView.setInsertion(taggedUserPojo);
+                if(null!=mUserPostObj) {
+                    final HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .postCommentId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
+                                    .taggedIn("COMMENT")
+                                    .taggedUserId(Integer.toString(taggedUserPojo.getUserId()))
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
+                }
+                break;
+            default:
+        }
+
+        return null;
+    }
+
+    @Override
+    public void textChangeListner(Editable editText) {
+        etView.setEditTextShouldWrapContent(true);
+        mRecyclerView.setVisibility(View.VISIBLE);
+        if (editText.length() > 0) {
+            if (editText.toString().length() == 0) {
+                //   etView.setMaxLines(SINGLE_LINE);
+                mSendButton.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
+            } else {
+                //  etView.setMaxLines(MAX_LINE);
+                mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
+            }
+        }
+
     }
 }

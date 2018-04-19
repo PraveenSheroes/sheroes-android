@@ -17,7 +17,6 @@ package appliedlife.pvtltd.SHEROES.usertagging.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.SystemClock;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -28,30 +27,24 @@ import android.text.InputType;
 import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
-import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionsEditable;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsAdapter;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsResult;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.impl.BasicSuggestionsListBuilder;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.OnSuggestionsVisibilityChangeListener;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
@@ -63,6 +56,8 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizer;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizerConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 
 /**
  * Custom view for the RichEditor. Manages three subviews:
@@ -88,7 +83,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     private RecyclerView mSuggestionsList;
 
     private QueryTokenReceiver mHostQueryTokenReceiver;
-    private SuggestionsAdapter mSuggestionsAdapter;
+    private UserTagSuggestionsAdapter mUserTagSuggestionsAdapter;
     private OnSuggestionsVisibilityChangeListener mActionListener;
 
     private ViewGroup.LayoutParams mPrevEditTextParams;
@@ -122,13 +117,18 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     public void init(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         // Inflate view from XML layout file
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.editor_view, this, true);
 
         // Get the inner views
-        mMentionsEditText = findViewById(R.id.text_editor);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if (context instanceof CommunityPostActivity) {
+            inflater.inflate(R.layout.editor_view_for_create_post, this, true);
+            mMentionsEditText = findViewById(R.id.text_editor_create_post);
+        } else {
+            inflater.inflate(R.layout.editer_view_for_comment, this, true);
+            mMentionsEditText = findViewById(R.id.text_editor_comment);
+        }
 
-
+        mMentionsEditText.setRichEditView(this);
         // Get the MentionSpanConfig from custom XML attributes and set it
         MentionSpanConfig mentionSpanConfig = parseMentionSpanConfigFromAttributes(attrs, defStyleAttr);
         mMentionsEditText.setMentionSpanConfig(mentionSpanConfig);
@@ -147,8 +147,8 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
         // Set the suggestions adapter
         SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
-        mSuggestionsAdapter = new SuggestionsAdapter(context, this, listBuilder, this);
-        onSuggestedList(mSuggestionsAdapter);
+        mUserTagSuggestionsAdapter = new UserTagSuggestionsAdapter(context, this, listBuilder, this);
+        onSuggestedList(mUserTagSuggestionsAdapter);
         // Wrap the EditText content height if necessary (ideally, allow this to be controlled via custom XML attribute)
         setEditTextShouldWrapContent(mEditTextShouldWrapContent);
         mPrevEditTextBottomPadding = mMentionsEditText.getPaddingBottom();
@@ -195,11 +195,22 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     }
 
-    public void setInsertion(Mentionable mention) {
+    public void setInsertion(TaggedUserPojo taggedUserPojo) {
         if (mMentionsEditText != null) {
-            mMentionsEditText.insertMention(mention);
-            mSuggestionsAdapter.clear();
+            mMentionsEditText.insertMention(taggedUserPojo);
+            mUserTagSuggestionsAdapter.clear();
         }
+    }
+
+    public MentionsEditText getEditText() {
+        if (mMentionsEditText == null) {
+            if (getContext() instanceof CommunityPostActivity) {
+                mMentionsEditText = findViewById(R.id.text_editor_create_post);
+            } else {
+                mMentionsEditText = findViewById(R.id.text_editor_comment);
+            }
+        }
+        return mMentionsEditText;
     }
 
     /**
@@ -274,7 +285,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      */
     @Override
     public void afterTextChanged(Editable s) {
-        Log.e("Data", "###### editable data  " + s.toString());
         //  TODO: Here we can implement link rendering
         textChangeListner(s);
     }
@@ -292,7 +302,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         // Pass the query token to a host receiver
         if (mHostQueryTokenReceiver != null) {
             buckets = mHostQueryTokenReceiver.onQueryReceived(queryToken);
-            mSuggestionsAdapter.notifyQueryTokenReceived(queryToken, buckets);
+            mUserTagSuggestionsAdapter.notifyQueryTokenReceived(queryToken, buckets);
         }
         return buckets;
     }
@@ -308,11 +318,11 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     }
 
     @Override
-    public SuggestionsAdapter onSuggestedList(@NonNull SuggestionsAdapter suggestionsAdapter) {
-        SuggestionsAdapter adapter = null;
+    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
+        UserTagSuggestionsAdapter adapter = null;
         // Pass the query token to a host receiver
         if (mHostQueryTokenReceiver != null) {
-            adapter = mHostQueryTokenReceiver.onSuggestedList(suggestionsAdapter);
+            adapter = mHostQueryTokenReceiver.onSuggestedList(userTagSuggestionsAdapter);
         }
         return adapter;
     }
@@ -341,14 +351,14 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      * {@inheritDoc}
      */
     @Override
-    public void onReceiveSuggestionsResult(final @NonNull SuggestionsResult result, final @NonNull String bucket) {
+    public void onReceiveSuggestionsResult(final @NonNull UserTagSuggestionsResult result, final @NonNull String bucket) {
         // Add the mentions and notify the editor/dropdown of the changes on the UI thread
         post(new Runnable() {
             @Override
             public void run() {
-                if (mSuggestionsAdapter != null) {
-                    mSuggestionsAdapter.addSuggestions(result, bucket, mMentionsEditText);
-                    onSuggestedList(mSuggestionsAdapter);
+                if (mUserTagSuggestionsAdapter != null) {
+                    mUserTagSuggestionsAdapter.addSuggestions(result, bucket, mMentionsEditText);
+                    onSuggestedList(mUserTagSuggestionsAdapter);
                 }
                 // Make sure the list is scrolled to the top once you receive the first query result
                 if (mWaitingForFirstResult && mSuggestionsList != null) {
@@ -357,6 +367,18 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
                 }
             }
         });
+    }
+    public UserTagSuggestionsAdapter notifyAdapterOnData(List<TaggedUserPojo> taggedUserPojoList) {
+        // Add the mentions and notify the editor/dropdown of the changes on the UI thread
+        SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
+        mUserTagSuggestionsAdapter = new UserTagSuggestionsAdapter(getContext(), this, listBuilder, this);
+        mUserTagSuggestionsAdapter.addUserData(taggedUserPojoList);
+        mUserTagSuggestionsAdapter.notifyDataSetChanged();
+        return mUserTagSuggestionsAdapter;
+    }
+    public void displayHide() {
+        // Add the mentions and notify the editor/dropdown of the changes on the UI thread
+        mUserTagSuggestionsAdapter.displayHide();
     }
 
     public void onReceiveSuggestionsListView(final @NonNull RecyclerView suggestionsList) {
@@ -418,11 +440,12 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         requestLayout();
         invalidate();
     }
+
     /**
      * {@inheritDoc}
      */
     public boolean isDisplayingSuggestions() {
-        if(null!=mSuggestionsList) {
+        if (null != mSuggestionsList) {
             return mSuggestionsList.getVisibility() == View.VISIBLE;
         }
         return false;
@@ -547,19 +570,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     }
 
     /**
-     * Sets the text being displayed within the {@link RichEditorView}. Note that this removes the
-     * {@link TextWatcher} temporarily to avoid changing the text while listening to text changes
-     * (which could result in an infinite loop).
-     *
-     * @param mention the text to display
-     */
-    public void setMentionSelectionText(@NonNull Mentionable mention, int start, int end) {
-        if (mMentionsEditText != null) {
-            mMentionsEditText.editInsertMention(mention, start, end);
-        }
-    }
-
-    /**
      * Sets the text hint to use within the embedded {@link MentionsEditText}.
      *
      * @param hint the text hint to use
@@ -567,6 +577,27 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     public void setHint(final @NonNull CharSequence hint) {
         if (mMentionsEditText != null) {
             mMentionsEditText.setHint(hint);
+        }
+    }
+
+    public void setEditText(final @NonNull String textData, int position) {
+        if (mMentionsEditText != null) {
+            mMentionsEditText.setText(textData);
+            mMentionsEditText.requestFocus();
+            mMentionsEditText.setSelection(position);
+        }
+    }
+
+    /**
+     * Sets the text being displayed within the {@link RichEditorView}. Note that this removes the
+     * {@link TextWatcher} temporarily to avoid changing the text while listening to text changes
+     * (which could result in an infinite loop).
+     *
+     * @param mention the text to display
+     */
+    public void setMentionSelectionText(@NonNull TaggedUserPojo mention, int start, int end) {
+        if (mMentionsEditText != null) {
+            mMentionsEditText.editInsertMention(mention, start, end);
         }
     }
 
@@ -651,7 +682,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     /**
      * Sets the receiver of any tokens generated by the embedded {@link MentionsEditText}. The
      * receive should act on the queries as they are received and call
-     * {@link #onReceiveSuggestionsResult(SuggestionsResult, String)} once the suggestions are ready.
+     * {@link #onReceiveSuggestionsResult(UserTagSuggestionsResult, String)} once the suggestions are ready.
      *
      * @param client the object that can receive {@link QueryToken} objects and generate suggestions from them
      */
@@ -674,9 +705,9 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      * @param suggestionsVisibilityManager the {@link SuggestionsVisibilityManager} to use
      */
     public void setSuggestionsManager(final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager) {
-        if (mMentionsEditText != null && mSuggestionsAdapter != null) {
+        if (mMentionsEditText != null && mUserTagSuggestionsAdapter != null) {
             mMentionsEditText.setSuggestionsVisibilityManager(suggestionsVisibilityManager);
-            mSuggestionsAdapter.setSuggestionsManager(suggestionsVisibilityManager);
+            mUserTagSuggestionsAdapter.setSuggestionsManager(suggestionsVisibilityManager);
         }
     }
 
@@ -686,8 +717,8 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      * @param suggestionsListBuilder the {@link SuggestionsListBuilder} to use
      */
     public void setSuggestionsListBuilder(final @NonNull SuggestionsListBuilder suggestionsListBuilder) {
-        if (mSuggestionsAdapter != null) {
-            mSuggestionsAdapter.setSuggestionsListBuilder(suggestionsListBuilder);
+        if (mUserTagSuggestionsAdapter != null) {
+            mUserTagSuggestionsAdapter.setSuggestionsListBuilder(suggestionsListBuilder);
         }
     }
 

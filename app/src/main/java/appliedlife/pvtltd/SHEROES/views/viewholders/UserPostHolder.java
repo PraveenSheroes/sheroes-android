@@ -44,8 +44,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -369,19 +369,19 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-                String feedTitle = mUserPostObj.getAuthorName();
-                String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS()==null ? "" :mUserPostObj.getChallengeAcceptPostTextS();
-                String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" :mUserPostObj.getPostCommunityName();
-                if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
-                    if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                        if (mUserPostObj.isAuthorMentor()) {
-                            mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
-                        } else {
-                            mAuthorVerifiedIcon.setVisibility(View.GONE);
-                        }
+            String feedTitle = mUserPostObj.getAuthorName();
+            String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS() == null ? "" : mUserPostObj.getChallengeAcceptPostTextS();
+            String feedCommunityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + "Challenge" : mUserPostObj.getPostCommunityName();
+            if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
+                if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
+                    if (mUserPostObj.isAuthorMentor()) {
+                        mAuthorVerifiedIcon.setVisibility(View.VISIBLE);
                     } else {
                         mAuthorVerifiedIcon.setVisibility(View.GONE);
                     }
+                } else {
+                    mAuthorVerifiedIcon.setVisibility(View.GONE);
+                }
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -493,12 +493,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void populatePostText() {
-        if(isWhatappShareOption) {
+        if (isWhatappShareOption) {
             mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
             mShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
-        }
-        else
-        {
+        } else {
             mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
             mShare.setText(mContext.getString(R.string.ID_SHARE));
         }
@@ -510,6 +508,16 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             mPostDescription.setText(hashTagColorInString(listDescription));
             mPostDescription.setVisibility(View.VISIBLE);
+        }
+        if (mUserPostObj.isHasMention()) {
+            List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
+            if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                clickOnUserMentionName(listDescription, mentionSpanList);
+            }else {
+                mPostDescription.setText(hashTagColorInString(listDescription));
+            }
+        } else {
+            mPostDescription.setText(hashTagColorInString(listDescription));
         }
         linkifyURLs(mPostDescription);
     }
@@ -540,7 +548,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         String authorImageUrl = mUserPostObj.getAuthorImageUrl();
         if (StringUtil.isNotNullOrEmptyString(authorImageUrl)) {
             mAuthorIcon.setCircularImage(true);
-            if(mAuthorIcon!=null && CommonUtil.isValidContextForGlide(mAuthorIcon.getContext())){
+            if (mAuthorIcon != null && CommonUtil.isValidContextForGlide(mAuthorIcon.getContext())) {
                 String authorThumborUrl = CommonUtil.getThumborUri(authorImageUrl, authorPicIconSize, authorPicIconSize);
                 mAuthorIcon.bindImage(authorThumborUrl);
             }
@@ -603,10 +611,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ivFirst.setOnClickListener(this);
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
             String firstThumborUrl = firstImage;
-            if(typeOfHolder == 1){
+            if (typeOfHolder == 1) {
                 firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context), imageHeight);
-            }else {
-                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context)/2, imageHeight);
+            } else {
+                firstThumborUrl = CommonUtil.getThumborUri(firstImage, CommonUtil.getWindowWidth(context) / 2, imageHeight);
             }
             Glide.with(context)
                     .load(firstThumborUrl)
@@ -616,10 +624,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(secondImage)) {
             ivSecond.setOnClickListener(this);
             String secondThumborUrl = "";
-            if(typeOfHolder == 2){
+            if (typeOfHolder == 2) {
                 secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight);
-            }else {
-                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            } else {
+                secondThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight / 2);
             }
             Glide.with(context)
                     .load(secondThumborUrl)
@@ -628,7 +636,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
-            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight/2);
+            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight / 2);
             Glide.with(context)
                     .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
@@ -644,7 +652,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.post_menu)
     public void userMenuClick() {
-        if(mUserPostObj.isSpamPost()){
+        if (mUserPostObj.isSpamPost()) {
             return;
         }
         mPostDetailCallback.onPostMenuClicked(mUserPostObj, mPostMenu);
@@ -711,10 +719,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+        if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
             mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
-        }
-        else if (!mUserPostObj.isAnonymous()) {
+        } else if (!mUserPostObj.isAnonymous()) {
             mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
@@ -727,10 +734,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onClick(View textView) {
 
-                if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+                if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
                     mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
-                }
-                else if (!mUserPostObj.isAnonymous()) {
+                } else if (!mUserPostObj.isAnonymous()) {
                     mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 }
             }
@@ -803,7 +809,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void clickOnMentorName(String nameAndCommunity, String feedTitle, String postedIn) {
 
-        SpannableString SpanString = new SpannableString(nameAndCommunity);
+        SpannableString SpanString = new SpannableString(nameAndCommunity+" ");
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
@@ -870,8 +876,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if(mUserPostObj!=null && !mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID)
-                mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+                if (mUserPostObj != null && !mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID)
+                    mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
             }
 
             @Override
@@ -953,6 +959,50 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.likes_count)
     public void onLikeCountClicked() {
         mPostDetailCallback.onLikeCountClicked(mUserPostObj);
+    }
+
+    private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList) {
+        StringBuilder strWithAddExtra = new StringBuilder(description + " ");
+        for (int i = 0; i < mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
+            }
+        }
+        SpannableString spannableString = new SpannableString(strWithAddExtra);
+        for (int i = 0; i < mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                final ClickableSpan postedInClick = new ClickableSpan() {
+                    @Override
+                    public void onClick(View textView) {
+                        UserPostSolrObj userPostSolrObj = mUserPostObj;
+                        userPostSolrObj.setCreatedBy(mentionSpan.getMention().getUserId());
+                        if (mentionSpan.getMention().getUserType() == AppConstants.MENTOR_USER_TYPE_FOR_TAGGING) {
+                            userPostSolrObj.setAuthorMentor(true);
+                        } else {
+                            userPostSolrObj.setAuthorMentor(false);
+                        }
+                        mPostDetailCallback.onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
+                    }
+
+                    @Override
+                    public void updateDrawState(final TextPaint textPaint) {
+                        textPaint.setUnderlineText(false);
+                    }
+                };
+                int start = mentionSpan.getMention().getStartIndex() + i;
+                int end = mentionSpan.getMention().getEndIndex() + i;
+                spannableString.setSpan(postedInClick, start, end + 1, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
+            }
+        }
+
+        mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
+
+        // tvMention.setSelected(true);
     }
 
 }
