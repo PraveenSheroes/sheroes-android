@@ -421,10 +421,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         Comment comment = mPostDetailPresenter.getLastComment();
         if (comment != null) {
             if (adminId == AppConstants.TWO_CONSTANT && !comment.isMyOwnParticipation()) {
-                editedComment = comment;
-                SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(comment, mLoggedInUser);
-                reportSpamDialog(spamPostRequest);
+                // if admin deletes the comment it also need to send reason
+                reportSpamDialog(SpamContentType.COMMENT, null, comment);
             } else {
+                // if own comment directly delete the comment
                 onDeleteMenuClicked(comment);
             }
         }
@@ -664,8 +664,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
                             userPostSolrObj = userPostObj;
                             if(mLoggedInUser != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
-                                SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(userPostObj, view, mLoggedInUser);
-                                reportSpamDialog(spamPostRequest);
+                                reportSpamDialog(SpamContentType.POST, userPostObj, null);
                             } else{
                                 AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
                                 mPostDetailPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(userPostSolrObj.getIdOfEntityOrParticipant()));
@@ -679,8 +678,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             shareWithMultipleOption(userPostObj);
                             return true;
                         case R.id.report_spam:
-                            SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(userPostObj, view, mLoggedInUser);
-                            reportSpamDialog(spamPostRequest);
+                            reportSpamDialog(SpamContentType.POST, userPostObj, null);
                             return true;
 
 
@@ -852,16 +850,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void postOrCommentSpamResponse(SpamResponse spamResponse) {
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             if(adminId == AppConstants.TWO_CONSTANT) {
-                if (editedComment != null) {
-                    mPostDetailPresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(editedComment, true, true, false), editedComment);
-                    editedComment = null;
+                if (comment != null) {
+                    mPostDetailPresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), comment);
                 } else if(userPostSolrObj!=null) {
-                    AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
                     mPostDetailPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
-                    userPostSolrObj = null;
                 }
             }
 
@@ -925,17 +920,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             return true;
                         case R.id.delete:
                             if(adminId == AppConstants.TWO_CONSTANT) {
-                                editedComment = comment;
                                 popup.dismiss();
-                                SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(comment, mLoggedInUser);
-                                reportSpamDialog(spamPostRequest);
+                                reportSpamDialog(SpamContentType.COMMENT, null, comment);
                             } else {
                                 onDeleteMenuClicked(comment);
                             }
                             return true;
                         case R.id.report_spam:
-                            SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(comment, mLoggedInUser);
-                            reportSpamDialog(spamPostRequest);
+                            reportSpamDialog(SpamContentType.COMMENT, null, comment);
                             return true;
                         default:
                             return false;
@@ -961,7 +953,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void onEditMenuClicked(Comment comment) {
-        //todo move this also only when edit submit
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(comment.getId()))
@@ -997,9 +988,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
 
-    private void reportSpamDialog(final SpamPostRequest request) {
+    private void reportSpamDialog(final SpamContentType spamContentType, final UserPostSolrObj userPostSolrObj, final Comment comment) {
 
-        if(request ==null || PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
+        if(PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons = new ConfigData().reasonOfSpamCategory;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
@@ -1023,19 +1014,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
         List<Spam> spamList =null;
-        if(request.getSpamContentType().equals(SpamContentType.POST)) {
+        SpamPostRequest spamRequest = null;
+        if(spamContentType == SpamContentType.POST) {
             spamList = spamReasons.getPostTypeSpams();
-        } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
+            spamRequest = SpamUtil.createSpamPostRequest(userPostSolrObj, false, mLoggedInUser);
+        } else if(spamContentType == SpamContentType.COMMENT) {
             spamList = spamReasons.getCommentTypeSpams();
+            spamRequest = SpamUtil.spamCommentRequestBuilder(comment, mLoggedInUser);
         }
 
-        if(spamList ==null) return;
-
+        if(spamRequest == null || spamList == null) return;
         SpamUtil.addRadioToView(PostDetailActivity.this, spamList , spamOptions);
 
         Button submit = spamReasonsDialog.findViewById(R.id.submit);
         final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
+        final SpamPostRequest finalSpamRequest = spamRequest;
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1044,16 +1038,23 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
-                        request.setSpamReason(spam.getReason());
-                        request.setScore(spam.getScore());
+                        finalSpamRequest.setSpamReason(spam.getReason());
+                        finalSpamRequest.setScore(spam.getScore());
 
-                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                        if (spam.getLabel().equalsIgnoreCase("Others")) { //If reason "other" is selected
                             if (reason.getVisibility() == View.VISIBLE) {
 
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
-                                    request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
-                                    mPostDetailPresenter.reportSpamPostOrComment(request); //submit
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                    mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment); //submit
                                     spamReasonsDialog.dismiss();
+
+                                    if(spamContentType == SpamContentType.POST) {
+                                        AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
+                                    } else if(spamContentType == SpamContentType.COMMENT) {
+                                        AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                    }
+
                                 } else {
                                     reason.setError("Add the reason");
                                 }
@@ -1063,8 +1064,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
                             }
                         } else {
-                            mPostDetailPresenter.reportSpamPostOrComment(request);  //submit request
+                            mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment);  //submit request
                             spamReasonsDialog.dismiss();
+
+                            if(spamContentType == SpamContentType.POST) {
+                                AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
+                            } else if(spamContentType == SpamContentType.COMMENT) {
+                                AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                            }
                         }
                     }
                 }

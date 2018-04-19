@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -73,6 +72,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -84,7 +84,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
-import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
@@ -441,15 +440,11 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
             } else {
                 //hide menu dots for admin
-                int adminId = 0;
-                if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                }
-                if (adminId == AppConstants.TWO_CONSTANT) {
-                    profileToolbarMenu.setVisibility(View.GONE);
-                } else {
-                    profileToolbarMenu.setVisibility(View.VISIBLE);
-                }
+                //int adminId = 0;
+                //if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                //    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                //}
+                profileToolbarMenu.setVisibility(View.VISIBLE);
 
                 followUnFollowMentor();
             }
@@ -737,13 +732,11 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
             }
 
-            final long finalCurrentUserId = currentUserId;
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.report_spam:
-                            SpamPostRequest spamPostRequest = SpamUtil.spamRequestBuilder(userPostObj, tvFeedCommunityPostUserCommentPostMenu, finalCurrentUserId);
-                            reportSpamDialog(spamPostRequest);
+                            reportSpamDialog(SpamContentType.USER, userPostObj);
                         default:
                             return false;
                     }
@@ -1120,12 +1113,12 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     }
 
     @Override
-    public void postOrCommentSpamResponse(SpamResponse spamResponse) {
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
         if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             if(!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
-                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType()));
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
             }
         }
     }
@@ -1855,9 +1848,9 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl()) && !mUserSolarObject.getImageUrl().contains("/default/user.png");
     }
 
-    private void reportSpamDialog(final SpamPostRequest request) {
+    private void reportSpamDialog(final SpamContentType spamContentType, final UserSolrObj userSolrObj) { //Add other type as parameterised object
 
-        if(request ==null || ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
+        if(ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons = new ConfigData().reasonOfSpamCategory;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
@@ -1881,19 +1874,20 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
         List<Spam> spamList =null;
-        if(request.getSpamContentType().equals(SpamContentType.USER)) {
+        SpamPostRequest spamRequest = null;
+        if(spamContentType == SpamContentType.USER) {
             spamList = spamReasons.getUserTypeSpams();
-        } else if(request.getSpamContentType().equals(SpamContentType.COMMENT)) {
-            spamList = spamReasons.getCommentTypeSpams();
+            spamRequest = SpamUtil.createProfileSpamByUser(userSolrObj, loggedInUserId);
         }
 
-        if(spamList ==null) return;
+        if(spamRequest == null || spamList == null) return;
 
         SpamUtil.addRadioToView(ProfileActivity.this, spamList , spamOptions);
 
         Button submit = spamReasonsDialog.findViewById(R.id.submit);
         final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
+        final SpamPostRequest finalSpamRequest = spamRequest;
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1902,16 +1896,20 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
-                        request.setSpamReason(spam.getReason());
-                        request.setScore(spam.getScore());
+                        finalSpamRequest.setSpamReason(spam.getReason());
+                        finalSpamRequest.setScore(spam.getScore());
 
                         if (spam.getLabel().equalsIgnoreCase("Others")) {
                             if (reason.getVisibility() == View.VISIBLE) {
 
                                 if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
-                                    request.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
-                                    profilePresenter.reportSpamPostOrComment(request); //submit
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                    profilePresenter.reportSpamPostOrComment(finalSpamRequest); //submit
                                     spamReasonsDialog.dismiss();
+
+                                    if(spamContentType == SpamContentType.USER) {
+                                        onProfileReported(userSolrObj);   //report the profile
+                                    }
                                 } else {
                                     reason.setError("Add the reason");
                                 }
@@ -1921,8 +1919,12 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
                             }
                         } else {
-                            profilePresenter.reportSpamPostOrComment(request);  //submit request
+                            profilePresenter.reportSpamPostOrComment(finalSpamRequest);  //submit request
                             spamReasonsDialog.dismiss();
+
+                            if(spamContentType == SpamContentType.USER) {
+                                onProfileReported(userSolrObj);   //report the profile
+                            }
                         }
                     }
                 }
@@ -1930,6 +1932,16 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         });
 
         spamReasonsDialog.show();
+    }
+
+    private void onProfileReported(UserSolrObj userSolrObj) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userSolrObj.getNameOrTitle())
+                        .isMentor(userSolrObj.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(Event.PROFILE_REPORTED,getScreenName(), properties);
     }
 
 }

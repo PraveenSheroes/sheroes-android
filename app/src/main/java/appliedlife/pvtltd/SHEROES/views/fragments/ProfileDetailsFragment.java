@@ -509,7 +509,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void postOrCommentSpamResponse(SpamResponse spamResponse) {}
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {}
 }
 
 

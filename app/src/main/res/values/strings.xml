@@ -436,9 +436,9 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
 
-    <string name="spam.status.post">Post</string>
-    <string name="spam.status.comment">Comment</string>
-    <string name="spam.status.user">User</string>
+    <string name="spam.status.post">post</string>
+    <string name="spam.status.comment">comment</string>
+    <string name="spam.status.user">user</string>
 
 
     <string name="contest.status.ongoing">Live</string>

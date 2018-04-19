@@ -22,7 +22,6 @@
         android:id="@+id/reason_sub_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_16"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="9sp"
         android:text="@string/why_is_it_inappropriate"
@@ -30,14 +29,25 @@
         android:textSize="14sp"
         android:textStyle="normal" />
 
-    <RadioGroup
-        android:layout_margin="@dimen/dp_size_8"
-        android:id="@+id/options_container"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_gravity="top"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    </RadioGroup>
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/dp_size_12"
+        android:background="@color/spam_dialog_divider"
+        android:layout_marginBottom="@dimen/dp_size_10"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioGroup
+            android:id="@+id/options_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="vertical"/>
+
+    </ScrollView>
 
     <EditText
         android:id="@+id/edit_text_reason"

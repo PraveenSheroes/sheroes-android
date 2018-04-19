@@ -229,7 +229,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
 
                     @Override
                     public void onNext(SpamResponse spamPostOrCommentResponse) {
-                        getMvpView().postOrCommentSpamResponse(spamPostOrCommentResponse);
+                        getMvpView().onSpamPostOrCommentReported(spamPostOrCommentResponse);
                         getMvpView().stopProgressBar();
                     }
                 });

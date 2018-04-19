@@ -1350,6 +1350,14 @@ public class CommonUtil {
         titleText.setText(title);
 
         ImageView cross = dialog.findViewById(R.id.cross);
+        TextView closeButton = dialog.findViewById(R.id.close_button);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
 
         cross.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1222,7 +1222,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     }
 
 
-    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final UserPostSolrObj userPostSolrObj) {
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final UserPostSolrObj userPostSolrObj) { //add the comment object here when handle article comment
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
             return;
@@ -1248,7 +1248,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
                     @Override
                     public void onNext(SpamResponse spamResponse) {
-                        getMvpView().postOrCommentSpamResponse(spamResponse, userPostSolrObj);
+                        getMvpView().onSpamPostOrCommentReported(spamResponse, userPostSolrObj);
                         getMvpView().stopProgressBar();
                     }
                 });

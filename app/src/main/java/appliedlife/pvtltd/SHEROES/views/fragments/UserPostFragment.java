@@ -615,8 +615,6 @@ public class UserPostFragment extends BaseFragment implements ProfileView {
     }
 
     @Override
-    public void postOrCommentSpamResponse(SpamResponse communityFeedSolrObj) {
-        Toast.makeText(getContext(), "Success:"+communityFeedSolrObj.getStatus(), Toast.LENGTH_SHORT).show();
-    }
+    public void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj) {}
 
 }

@@ -9,17 +9,5 @@ import appliedlife.pvtltd.SHEROES.R;
  */
 
 public enum SpamContentType {
-    POST(R.string.spam_status_post), COMMENT(R.string.spam_status_comment), USER(R.string.spam_status_user);
-
-    @StringRes
-    int statusName;
-
-    SpamContentType(@StringRes int statusName) {
-        this.statusName = statusName;
-    }
-
-    @StringRes
-    public int getStatusName() {
-        return statusName;
-    }
+    POST, COMMENT, ARTICLE_COMMENT, USER;
 }

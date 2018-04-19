@@ -786,7 +786,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     //endregion
 
 
-    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest) {
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final UserPostSolrObj userPostSolrObj, final Comment comment) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
             return;
@@ -811,7 +811,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
                     @Override
                     public void onNext(SpamResponse spamPostOrCommentResponse) {
-                        getMvpView().postOrCommentSpamResponse(spamPostOrCommentResponse);
+                        getMvpView().onSpamPostOrCommentReported(spamPostOrCommentResponse, userPostSolrObj, comment);
                         getMvpView().stopProgressBar();
                     }
                 });

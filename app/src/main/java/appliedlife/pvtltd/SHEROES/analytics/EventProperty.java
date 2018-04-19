@@ -53,7 +53,8 @@ public enum EventProperty {
     COLLECTION_NAME("Collection Name"),
     STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
-    POSITION_OF_CAROUSEL("Position Of Carousel");
+    POSITION_OF_CAROUSEL("Position Of Carousel"),
+    REPORTED_ID("Reported id");
 
     private final String string;
 
@@ -284,6 +285,11 @@ public enum EventProperty {
 
         public Builder streamType(String value){
             put(STREAM_TYPE, value);
+            return this;
+        }
+
+        public Builder reportedId(long reportedId) {
+            put(REPORTED_ID, reportedId);
             return this;
         }
 

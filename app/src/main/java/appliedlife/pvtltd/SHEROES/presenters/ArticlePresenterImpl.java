@@ -565,7 +565,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
                     @Override
                     public void onNext(SpamResponse spamResponse) {
-                        getMvpView().postOrCommentSpamResponse(spamResponse, comment, position);
+                        getMvpView().onSpamPostOrCommentReported(spamResponse, comment, position);
                         getMvpView().stopProgressBar();
                     }
                 });

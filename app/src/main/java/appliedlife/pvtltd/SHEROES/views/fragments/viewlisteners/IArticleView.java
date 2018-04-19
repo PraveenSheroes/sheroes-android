@@ -40,5 +40,5 @@ public interface IArticleView extends BaseMvpView {
 
     String getStreamType();
 
-    void postOrCommentSpamResponse(SpamResponse spamResponse, Comment comment, int pos);
+    void onSpamPostOrCommentReported(SpamResponse spamResponse, Comment comment, int pos);
 }

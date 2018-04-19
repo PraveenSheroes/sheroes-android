@@ -221,7 +221,7 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
     }
 
     @Override
-    public void postOrCommentSpamResponse(SpamResponse communityFeedSolrObj) {}
+    public void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj) {}
 
     public List<CommunityFeedSolrObj> getUsersCommunity(ProfileCommunitiesResponsePojo userCommunities, int mPageNo) {
 

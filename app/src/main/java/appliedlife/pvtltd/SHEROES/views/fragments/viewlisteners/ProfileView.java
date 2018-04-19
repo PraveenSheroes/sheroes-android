@@ -27,6 +27,6 @@ public interface ProfileView extends BaseMvpView {
 
     void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities);
 
-    void postOrCommentSpamResponse(SpamResponse communityFeedSolrObj);
+    void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj);
 
 }

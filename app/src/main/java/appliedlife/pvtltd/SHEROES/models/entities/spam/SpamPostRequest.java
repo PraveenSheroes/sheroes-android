@@ -7,6 +7,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 
 /**
  * Created by ravi on 09/04/18.
+ * Request to report post , profile & comment
  */
 
 public class SpamPostRequest {
@@ -39,7 +40,6 @@ public class SpamPostRequest {
     @Expose
     private int score;
 
-    private SpamContentType spamContentType;
 
     public long getModelId() {
         return modelId;
@@ -95,13 +95,5 @@ public class SpamPostRequest {
 
     public void setScore(int score) {
         this.score = score;
-    }
-
-    public SpamContentType getSpamContentType() {
-        return spamContentType;
-    }
-
-    public void setSpamContentType(SpamContentType spamContentType) {
-        this.spamContentType = spamContentType;
     }
 }

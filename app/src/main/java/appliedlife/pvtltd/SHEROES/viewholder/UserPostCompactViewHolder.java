@@ -14,6 +14,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -133,6 +134,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.last_comment_container)
     RelativeLayout mLastCommentContainer;
 
+    @Bind(R.id.fl_spam_post_ui)
+    FrameLayout spamPostUi;
+
     @Bind(R.id.comment_author_image)
     CircleImageView mCommentAuthorImage;
 
@@ -150,6 +154,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.comment_like)
     TextView mCommentLike;
+
+    @Bind(R.id.spam_comment_ui)
+    RelativeLayout spamCommentUi;
 
     @Bind(R.id.join_conversation_container)
     RelativeLayout mJoinConversationContainer;
@@ -248,6 +255,27 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         invalidatePostLike(userPostSolrObj);
 
+        invalidateSpamPost(userPostSolrObj);
+        invalidateSpamLastComment(userPostSolrObj);
+
+    }
+
+    private void invalidateSpamLastComment(UserPostSolrObj userPostSolrObj) {
+        if(userPostSolrObj.isSpamPost()) {
+            spamCommentUi.setVisibility(View.VISIBLE);
+            mLastCommentContainer.setVisibility(View.GONE);
+        } else {
+            spamCommentUi.setVisibility(View.GONE);
+            mLastCommentContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void invalidateSpamPost(UserPostSolrObj userPostSolrObj) {
+        if(userPostSolrObj.isSpamPost()) {
+            spamPostUi.setVisibility(View.VISIBLE);
+        } else {
+            spamPostUi.setVisibility(View.GONE);
+        }
     }
 
 

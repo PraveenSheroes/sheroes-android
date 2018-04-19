@@ -7,6 +7,7 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
 
@@ -51,5 +52,5 @@ public interface IPostDetailView extends BaseMvpView {
 
     String getStreamType();
 
-    void postOrCommentSpamResponse(SpamResponse baseResponse);
+    void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment);
 }
