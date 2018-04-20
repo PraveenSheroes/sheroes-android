@@ -1040,10 +1040,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         if(PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
 
-        SpamReasons spamReasons = new ConfigData().reasonOfSpamCategory;
+        SpamReasons spamReasons;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
             spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
+        } else {
+            String spamReasonsContent = AppUtils.getStringContent(AppConstants.SPAM_REASONS_FILE); //read spam reasons from local file
+            spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
         }
+
+        if(spamReasons == null) return;
 
         final Dialog spamReasonsDialog = new Dialog(PostDetailActivity.this);
         spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
