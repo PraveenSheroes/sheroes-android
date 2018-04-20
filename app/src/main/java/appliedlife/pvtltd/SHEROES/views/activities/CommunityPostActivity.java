@@ -310,7 +310,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             branchUrlHandle();
         } else {
             isSharedFromOtherApp = false;
-            if (null != mConfiguration && mConfiguration.isSet()) {
+            if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData!=null) {
                 etView.getEditText().setHint(mConfiguration.get().configData.mCreatePostText);
                 mUserTagCreatePostText=mConfiguration.get().configData.mUserTagCreatePostInfoText;
             }

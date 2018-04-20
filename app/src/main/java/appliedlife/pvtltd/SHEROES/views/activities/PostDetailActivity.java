@@ -243,7 +243,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mTitleToolbar.setText(mUserPostObj.getAuthorName() + "'s" + " post");
             }
         }
-        if (mConfiguration != null && mConfiguration.isSet()) {
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData!=null && CommonUtil.isNotEmpty(mConfiguration.get().configData.mCommentHolderText)) {
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
             mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
         } else {
