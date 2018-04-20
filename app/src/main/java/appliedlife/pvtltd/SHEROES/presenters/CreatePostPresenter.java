@@ -1,8 +1,10 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -18,13 +20,23 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
-
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -33,18 +45,21 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREAT
  * Created by ujjwal on 17/10/17.
  */
 
-public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
+public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
     @Inject
     CommunityModel communityModel;
+    private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
+    @Inject
+    AppUtils mAppUtils;
 
     @Inject
-    public CreatePostPresenter() {
-
+    public CreatePostPresenter(AppUtils appUtils) {
+        mAppUtils = appUtils;
     }
 
-    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest){
+    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -64,11 +79,11 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                if(communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
+                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
                     AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
-                }else {
-                    getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                } else {
+                    getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
                     getMvpView().stopProgressBar();
                 }
             }
@@ -77,9 +92,9 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
     }
 
-    public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest){
+    public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -100,17 +115,17 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().stopProgressBar();
-                if(communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
+                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().finishActivity();
                 }
-                    final HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(communityPostCreateResponse.getId()))
-                                    .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
-                                    .communityId("0")
-                                    .type(MoEngageConstants.CHALLENGE_POST)
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(communityPostCreateResponse.getId()))
+                                .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
+                                .communityId("0")
+                                .type(MoEngageConstants.CHALLENGE_POST)
+                                .build();
+                AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
             }
 
         });
@@ -119,7 +134,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
     public void fetchLinkDetails(LinkRequest linkRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -149,7 +164,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
 
     public void editPost(final CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -177,4 +192,58 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView>{
         });
 
     }
+
+    public void userTaggingSearchEditText(final QueryToken queryToken, final String queryData, final CommunityPost communityPost) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        SearchUserDataRequest searchUserDataRequest = null;
+        Long communityId = null;
+        if (null != communityPost && null != communityPost.community) {
+            if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
+                communityId=null;
+            }else {
+                communityId = communityPost.community.id;
+            }
+        }
+        if(queryToken.getTokenString().length()==1)
+        {
+            searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
+        }else
+        {
+            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
+        }
+
+        communityModel.getSearchResult(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
+
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().stopProgressBar();
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+            }
+
+            @Override
+            public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                getMvpView().stopProgressBar();
+                if (null != searchUserDataResponse) {
+                    if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                    } else {
+                        getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
+                    }
+                }
+            }
+
+        });
+
+    }
+
+
 }

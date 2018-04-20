@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="0dp">
     <appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText
-        android:id="@+id/text_editor"
+        android:id="@+id/text_editor_create_post"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
@@ -11,7 +11,6 @@
         android:gravity="top|start"
         android:inputType="textCapSentences|textMultiLine|textAutoCorrect"
         android:scrollbars="vertical"
-        android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_5"
         android:background="@null"
         android:textSize="20sp"

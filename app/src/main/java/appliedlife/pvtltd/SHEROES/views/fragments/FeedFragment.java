@@ -1351,9 +1351,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        noInternet.setVisibility(View.VISIBLE);
-        mFeedRecyclerView.setVisibility(View.GONE);
-        gifLoader.setVisibility(View.GONE);
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            mFeedRecyclerView.setVisibility(View.GONE);
+            gifLoader.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
+        }
     }
 
     @OnClick({R.id.tv_retry_for_internet})

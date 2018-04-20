@@ -53,8 +53,11 @@ public enum EventProperty {
     COLLECTION_NAME("Collection Name"),
     STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
-    CURRENT_VERSION("Current Version"),
-    POSITION_OF_CAROUSEL("Position Of Carousel");
+    POSITION_OF_CAROUSEL("Position Of Carousel"),
+    POST_COMMENT_ID("Post / Comment ID"),
+    TAGGED_IN("Tagged In"),
+    TAGGED_USER_ID("Tagged User ID"),
+    CURRENT_VERSION("Current Version");
 
     private final String string;
 
@@ -91,6 +94,18 @@ public enum EventProperty {
 
         public Builder id(String value){
             put(ID, value);
+            return this;
+        }
+        public Builder postCommentId(String value){
+            put(POST_COMMENT_ID, value);
+            return this;
+        }
+        public Builder taggedUserId(String value){
+            put(TAGGED_USER_ID, value);
+            return this;
+        }
+        public Builder taggedIn(String value){
+            put(TAGGED_IN, value);
             return this;
         }
 

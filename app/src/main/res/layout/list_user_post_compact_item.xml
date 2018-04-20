@@ -310,8 +310,7 @@
                         android:id="@+id/comment_author_image"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginLeft="16dp"
-                        android:src="@color/email" />
+                        android:layout_marginLeft="16dp" />
 
                     <ImageView
                         android:id="@+id/comment_author_verified_icon"

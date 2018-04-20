@@ -391,6 +391,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_4"
+                android:layout_below="@id/tv_feed_article_login_user_name"
                 android:padding="@dimen/dp_size_11"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:background="@drawable/rectangle_comment_background"

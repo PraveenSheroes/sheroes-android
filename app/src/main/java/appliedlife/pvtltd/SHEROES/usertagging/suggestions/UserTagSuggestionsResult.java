@@ -23,12 +23,12 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 /**
  * Class representing the results of a query for suggestions.
  */
-public class SuggestionsResult {
+public class UserTagSuggestionsResult {
 
     private final QueryToken mQueryToken;
     private final List<? extends Suggestible> mSuggestions;
 
-    public SuggestionsResult(QueryToken queryToken, List<? extends Suggestible> suggestions) {
+    public UserTagSuggestionsResult(QueryToken queryToken, List<? extends Suggestible> suggestions) {
         mQueryToken = queryToken;
         mSuggestions = suggestions;
     }

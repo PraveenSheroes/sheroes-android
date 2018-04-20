@@ -32,4 +32,10 @@ public class ConfigData {
 
     @SerializedName("update_version")
     public Integer updateVersion;
+
+    @SerializedName("userTagCreatePostInfoText")
+    public String mUserTagCreatePostInfoText = "You can tag community owners & your followers";
+
+    @SerializedName("userTagCommentInfoText")
+    public String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
 }

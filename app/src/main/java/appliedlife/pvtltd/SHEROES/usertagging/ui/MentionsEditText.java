@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
@@ -103,7 +104,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     private MentionSpanConfig mentionSpanConfig;
     private boolean isLongPressed;
     private CheckLongClickRunnable longClickRunnable;
-
+    RichEditorView richEditView;
     public MentionsEditText(@NonNull Context context) {
         super(context);
         init(null, 0);
@@ -142,9 +143,11 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             mSuggestionsVisibilityManager.displaySuggestions(false);
+            richEditView.setEditTextShouldWrapContent(true);
         }
         return false;
     }
+
     private MentionSpanConfig parseMentionSpanConfigFromAttributes(@Nullable AttributeSet attrs, int defStyleAttr) {
         final Context context = getContext();
         MentionSpanConfig.Builder builder = new MentionSpanConfig.Builder();
@@ -801,8 +804,10 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         for (MentionSpan span : spans) {
             int start = text.getSpanStart(span);
             int end = text.getSpanEnd(span);
-            span.setStartIndex(start);
-            span.setEndIndex(end);
+            TaggedUserPojo taggedUserPojo=span.getMention();
+            taggedUserPojo.setStartIndex(start);
+            taggedUserPojo.setEndIndex(end);
+            span.setMention(taggedUserPojo);
             CharSequence spanText = text.subSequence(start, end).toString();
             Mentionable.MentionDisplayMode displayMode = span.getDisplayMode();
 
@@ -940,11 +945,11 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     }
 
     /**
-     * Inserts a mention into the token being considered currently.
+     * Inserts a taggedUserPojo into the token being considered currently.
      *
-     * @param mention {@link Mentionable} to insert a span for
+     * @param taggedUserPojo {@link Mentionable} to insert a span for
      */
-    public void insertMention(@NonNull Mentionable mention) {
+    public void insertMention(@NonNull TaggedUserPojo taggedUserPojo) {
         if (mTokenizer == null) {
             return;
         }
@@ -958,35 +963,35 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             return;
         }
 
-        insertMentionInternal(mention, text, start, end);
+        insertMentionInternal(taggedUserPojo, text, start, end);
     }
-    public void editInsertMention(@NonNull Mentionable mention,int start,int end) {
+    public void editInsertMention(@NonNull TaggedUserPojo taggedUserPojo,int start,int end) {
 
 
         // Setup variables and ensure they are valid
         Editable text = getEditableText();
-        insertMentionInternal(mention, text, start, end);
+        insertMentionInternal(taggedUserPojo, text, start, end);
     }
 
     /**
-     * Inserts a mention. This will not take any token into consideration. This method is useful
-     * when you want to insert a mention which doesn't have a token.
+     * Inserts a taggedUserPojo. This will not take any token into consideration. This method is useful
+     * when you want to insert a taggedUserPojo which doesn't have a token.
      *
-     * @param mention {@link Mentionable} to insert a span for
+     * @param taggedUserPojo {@link Mentionable} to insert a span for
      */
-    public void insertMentionWithoutToken(@NonNull Mentionable mention) {
+    public void insertMentionWithoutToken(@NonNull TaggedUserPojo taggedUserPojo) {
         // Setup variables and ensure they are valid
         Editable text = getEditableText();
         int index = getSelectionStart();
         index = index > 0 ? index : 0;
 
-        insertMentionInternal(mention, text, index, index);
+        insertMentionInternal(taggedUserPojo, text, index, index);
     }
 
-    private void insertMentionInternal(@NonNull Mentionable mention, @NonNull Editable text, int start, int end) {
+    private void insertMentionInternal(@NonNull TaggedUserPojo taggedUserPojo, @NonNull Editable text, int start, int end) {
         // Insert the span into the editor
-        MentionSpan mentionSpan = mentionSpanFactory.createMentionSpan(mention, mentionSpanConfig);
-        String name = mention.getSuggestiblePrimaryText();
+        MentionSpan mentionSpan = mentionSpanFactory.createMentionSpan(taggedUserPojo, mentionSpanConfig);
+        String name = taggedUserPojo.getSuggestiblePrimaryText();
 
         mBlockCompletion = true;
         text.replace(start, end, name);
@@ -996,9 +1001,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         ensureMentionSpanIntegrity(text);
         mBlockCompletion = false;
 
-        // Notify listeners of added mention
+        // Notify listeners of added taggedUserPojo
         if (mMentionWatchers.size() > 0) {
-            notifyMentionAddedWatchers(mention, text.toString(), start, endOfMention);
+            notifyMentionAddedWatchers(taggedUserPojo, text.toString(), start, endOfMention);
         }
 
         // Hide the suggestions and clear adapter
@@ -1006,7 +1011,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             mSuggestionsVisibilityManager.displaySuggestions(false);
         }
 
-        // Reset input method since text has been changed (updates mention draw states)
+        // Reset input method since text has been changed (updates taggedUserPojo draw states)
         restartInput();
     }
 
@@ -1272,9 +1277,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     public static class MentionSpanFactory {
 
         @NonNull
-        public MentionSpan createMentionSpan(@NonNull Mentionable mention,
+        public MentionSpan createMentionSpan(@NonNull TaggedUserPojo taggedUserPojo,
                                              @Nullable MentionSpanConfig config) {
-            return (config != null) ? new MentionSpan(mention, config) : new MentionSpan(mention);
+            return (config != null) ? new MentionSpan(taggedUserPojo, config) : new MentionSpan(taggedUserPojo);
         }
     }
 
@@ -1391,6 +1396,10 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      */
     public void setAvoidPrefixOnTap(boolean avoidPrefixOnTap) {
         mAvoidPrefixOnTap = avoidPrefixOnTap;
+    }
+
+    public void setRichEditView(RichEditorView richEditView) {
+        this.richEditView = richEditView;
     }
 
     // --------------------------------------------------
