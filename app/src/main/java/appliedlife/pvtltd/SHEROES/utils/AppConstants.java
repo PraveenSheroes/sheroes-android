@@ -415,4 +415,6 @@ public class AppConstants {
     public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
     public static final int MENTOR_USER_TYPE_FOR_TAGGING =7;
 
+    public static final String NEXT_DAY_DATE = "NEXT_DAY_DATE";
+
 }

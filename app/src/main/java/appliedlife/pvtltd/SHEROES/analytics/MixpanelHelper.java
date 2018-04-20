@@ -230,6 +230,9 @@ public class MixpanelHelper {
     }
 
     public static HashMap<String, Object> getPostProperties(FeedDetail feedDetail, String screenName) {
+        if (feedDetail == null) {
+            return null;
+        }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             UserPostSolrObj userPostSolrObj = null;
             if(feedDetail instanceof UserPostSolrObj){

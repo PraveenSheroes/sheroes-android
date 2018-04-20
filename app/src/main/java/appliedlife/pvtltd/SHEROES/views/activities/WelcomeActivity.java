@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.accounts.Account;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -57,6 +58,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -161,6 +163,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public static final int GOOGLE_CALL = 101;
     public static final int FACEBOOK_CALL = 201;
     public static final int NORMAL_CALL = 301;
+    private static final int REQUEST_PERMISSION_EMAIL = 1100;
     private GooglePlusHelper mGooglePlusHelper;
     private GoogleSignInOptions gso;
     private ProgressDialog mProgressDialog;
@@ -177,6 +180,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private boolean isBranchFirstSession = false;
     private String deepLinkUrl = null;
     private String defaultTab = null;
+    private Account[] account;
+    private Pattern pattern;
+    private String googleAccounts;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -190,7 +196,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
         appInstallationHelper.setupAndSaveInstallation(false);
     }
 
@@ -946,7 +952,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager != null) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
         switch (requestCode) {
             case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
                 if (resultCode == Activity.RESULT_OK) {

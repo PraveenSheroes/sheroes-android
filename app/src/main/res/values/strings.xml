@@ -591,6 +591,9 @@
 
     <!--spam region end-->
 
-
+    <string name="later">LATER</string>
+    <string name="update">UPDATE</string>
+    <string name="update.title">New Update Available</string>
+    <string name="update.description">Update now to have an awesome experience</string>
     <string name="searching">Searching...</string>
 </resources>

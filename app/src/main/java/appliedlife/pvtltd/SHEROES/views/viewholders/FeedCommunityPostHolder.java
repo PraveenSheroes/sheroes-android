@@ -920,7 +920,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
         final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
-        double imageRatio = mUserPostObj.getImageRatio().get(0);
+        double imageRatio;
+        if (CommonUtil.isEmpty(mUserPostObj.getImageRatio())) {
+            imageRatio = AppConstants.MAX_IMAGE_RATIO;
+        } else {
+            imageRatio = mUserPostObj.getImageRatio().get(0);
+        }
         if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
             imageRatio = AppConstants.MAX_IMAGE_RATIO;
         }

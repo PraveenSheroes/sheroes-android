@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -207,8 +208,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             String authorThumborUrl = CommonUtil.getThumborUri(userPostSolrObj.getAuthorImageUrl(), authorProfileSize, authorProfileSize);
             mPostAuthorImage.bindImage(authorThumborUrl);
         }
-
-        mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        if (mConfiguration != null && mConfiguration.get() != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        } else {
+            mJoinConversation.setText(new ConfigData().mCommentHolderText);
+        }
 
         String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, userPostSolrObj.getNoOfLikes());
         mPostLikeCount.setText(String.valueOf(userPostSolrObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));

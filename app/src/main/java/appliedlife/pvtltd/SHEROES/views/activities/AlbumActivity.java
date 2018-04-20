@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -348,6 +349,12 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         intent.putExtra(MAIN_ITEM_POSITION, feedDetail.getItemPosition());
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        if (CommonUtil.isEmpty(properties)) {
+            properties = new HashMap<>();
+        }
+        if (feedDetail != null) {
+            properties.putAll(MixpanelHelper.getPostProperties(feedDetail, sourceScreen));
         }
         ActivityCompat.startActivity(fromActivity, intent, null);
     }

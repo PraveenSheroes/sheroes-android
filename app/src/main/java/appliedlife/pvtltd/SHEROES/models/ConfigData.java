@@ -29,6 +29,15 @@ public class ConfigData {
     @SerializedName("spam_reasons")
     public SpamReasons reasonOfSpamCategory;
 
+    @SerializedName("update_title")
+    public String updateTitle;
+
+    @SerializedName("update_description")
+    public String updateDescription;
+
+    @SerializedName("update_version")
+    public Integer updateVersion;
+
     @SerializedName("userTagCreatePostInfoText")
     public String mUserTagCreatePostInfoText = "You can tag community owners & your followers";
 
