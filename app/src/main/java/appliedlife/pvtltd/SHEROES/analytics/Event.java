@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.analytics;
 
 import java.util.Map;
 
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+
 /**
  * Created by Ujjwal on 27-09-2017.
  * Note:
@@ -187,6 +189,23 @@ public enum Event {
     CONTACT_SYNC_ALLOWED(AnalyticsEventType.ALLOWED_CONTACT_SYNC, ""),
     CONTACT_SYNC_DENIED(AnalyticsEventType.DENIED_CONTACT_SYNC, ""),
     //endregion
+
+    APP_UPDATE_YES(AnalyticsEventType.APP, "Update") {
+        @Override
+        public void addProperties(Map<String, Object> properties) {
+            super.addProperties(properties);
+            properties.put(EventProperty.ACTION.getString(), "Yes");
+            properties.put(EventProperty.CURRENT_VERSION.getString(), CommonUtil.getCurrentAppVersion());
+        }
+    },
+    APP_UPDATE_NO(AnalyticsEventType.APP, "Update") {
+        @Override
+        public void addProperties(Map<String, Object> properties) {
+            super.addProperties(properties);
+            properties.put(EventProperty.ACTION.getString(), "No");
+            properties.put(EventProperty.CURRENT_VERSION.getString(), CommonUtil.getCurrentAppVersion());
+        }
+    },
 
     POST_LOAD_MORE_CLICKED(AnalyticsEventType.POST_LOAD_MORE, "Clicked"),
     //region publish related events

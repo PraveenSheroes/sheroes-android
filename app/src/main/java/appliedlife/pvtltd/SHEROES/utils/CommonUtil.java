@@ -12,11 +12,14 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,6 +72,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -608,10 +612,46 @@ public class CommonUtil {
                     @Override
                     public void onNext(Bitmap bmp) {
                         Event event = trackEvent ? eventName : null;
-                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event, properties);
+                        Bitmap topImage = drawableToBitmap(context.getDrawable(R.drawable.challenge_placeholder));
+                        Bitmap newBitmap = combineImages(bmp, topImage);
+                        shareBitmapWhatsApp(context, newBitmap, sourceScreen, url, imageShareText, event, properties);
                     }
                 });
 
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    public static Bitmap combineImages(Bitmap c, Bitmap s) { // can add a 3rd parameter 'String loc' if you want to save the new image - left some code to do that at the bottom
+        Bitmap cs = null;
+
+        int width, height = 0;
+            width = c.getWidth();
+            height = c.getHeight() + s.getHeight();
+
+        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas comboImage = new Canvas(cs);
+
+        comboImage.drawBitmap(c, 0f, 0f, null);
+        comboImage.drawBitmap(s, 0f, c.getHeight(), null);
+        return cs;
     }
 
     public static void shareImageChooser(final Context context, final String imageShareText, final String url) {
@@ -1000,7 +1040,7 @@ public class CommonUtil {
         boolean equalsObject(T t, U u);
     }
 
-    public static boolean isMarshmallow() {
+    public static boolean isMarshmallowAndAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
@@ -1370,5 +1410,69 @@ public class CommonUtil {
         messageText.setText(message);
 
         dialog.show();
+    }
+
+    public static int getCurrentAppVersion() {
+        int currentVersion = 0;
+        try {
+            currentVersion = SheroesApplication.mContext.getPackageManager().getPackageInfo(SheroesApplication.mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return currentVersion;
+    }
+
+    public static boolean isLaterClicked() {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return false;
+        }
+        String reminderDate = prefs.getString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.getCurrentDate()));
+        if (DateUtil.isToday(DateUtil.parseOnlyDate(reminderDate))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static void saveReminderForTomorrow() {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return;
+        }
+        prefs.edit().putString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.addDays(DateUtil.getCurrentDate(), 1))).apply();
+    }
+
+    private static boolean validateDate(Date date) {
+        return date != null;
+    }
+
+
+    public static Date getCurrentDate() {
+        return Calendar.getInstance().getTime();
+    }
+
+    public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {}
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
     }
 }

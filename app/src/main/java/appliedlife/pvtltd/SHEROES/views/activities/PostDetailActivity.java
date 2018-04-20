@@ -275,7 +275,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mTitleToolbar.setText(mUserPostObj.getAuthorName() + "'s" + " post");
             }
         }
-        if (mConfiguration != null && mConfiguration.isSet()) {
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData!=null && CommonUtil.isNotEmpty(mConfiguration.get().configData.mCommentHolderText)) {
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
             mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
         } else {
@@ -605,7 +605,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     // user post detail callbacks
     @Override
     public void loadMoreComments() {
-        MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+        if (mUserPostObj == null) {
+            mUserPostObj = mPostDetailPresenter.getUserPostObj();
+        }
+        if (mUserPostObj != null) {
+            MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+        }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED_CLICKED, getScreenName(), properties);
         mPostDetailPresenter.fetchMoreComments();

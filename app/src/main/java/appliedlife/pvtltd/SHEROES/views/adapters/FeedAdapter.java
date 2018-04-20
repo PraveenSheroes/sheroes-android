@@ -8,12 +8,19 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
@@ -27,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
@@ -42,7 +50,9 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ujjwal on 28/12/17.
@@ -58,6 +68,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region Constructor
@@ -278,10 +291,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
         return null;
     }
 
-    @Override
-    public void bindHeaderViewHolder(HeaderRecyclerViewAdapter.HeaderViewHolder holder) {
-
-    }
     //endregion
 
     //region Public methods
@@ -356,12 +365,43 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     //endregion
 
     //region feedHeaderview
-    public class HeaderViewHolder extends HeaderRecyclerViewAdapter.HeaderViewHolder {
+    public class FeedHeaderViewHolder extends HeaderRecyclerViewAdapter.HeaderViewHolder {
 
-        public HeaderViewHolder(View headerView) {
+        @Bind(R.id.update_later)
+        TextView later;
+        @Bind(R.id.update_now)
+        TextView update;
+        @Bind(R.id.update_title)
+        TextView updateTitle;
+        @Bind(R.id.update_description)
+        TextView updateDescription;
+
+        public FeedHeaderViewHolder(View headerView) {
             super(headerView);
             ButterKnife.bind(this, headerView);
         }
+
+        @OnClick(R.id.update_now)
+        public void onUpdateNowClicked(){
+            if(mBaseHolderInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)mBaseHolderInterface).onUpdateNowClicked();
+            }
+        }
+
+        @OnClick(R.id.update_later)
+        public void onUpdateLaterClicked(){
+            if(mBaseHolderInterface instanceof FeedItemCallback){
+                ((FeedItemCallback)mBaseHolderInterface).onUpdateLaterClicked();
+            }
+        }
+
+    }
+
+    @Override
+    public void bindHeaderViewHolder(HeaderRecyclerViewAdapter.HeaderViewHolder holder) {
+        FeedHeaderViewHolder feedHeaderViewHolder = (FeedHeaderViewHolder) holder;
+        feedHeaderViewHolder.updateTitle.setText((mConfiguration!=null && mConfiguration.isSet() && mConfiguration.get().configData!= null && CommonUtil.isNotEmpty(mConfiguration.get().configData.updateTitle)) ? mConfiguration.get().configData.updateTitle : mContext.getString(R.string.update_title));
+        feedHeaderViewHolder.updateDescription.setText((mConfiguration!=null && mConfiguration.isSet() && mConfiguration.get().configData!= null && CommonUtil.isNotEmpty(mConfiguration.get().configData.updateDescription)) ? mConfiguration.get().configData.updateDescription : mContext.getString(R.string.update_description));
     }
     //endregion
 }

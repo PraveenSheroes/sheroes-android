@@ -56,7 +56,8 @@ public enum EventProperty {
     POSITION_OF_CAROUSEL("Position Of Carousel"),
     POST_COMMENT_ID("Post / Comment ID"),
     TAGGED_IN("Tagged In"),
-    TAGGED_USER_ID("Tagged User ID");
+    TAGGED_USER_ID("Tagged User ID"),
+    CURRENT_VERSION("Current Version");
 
     private final String string;
 
