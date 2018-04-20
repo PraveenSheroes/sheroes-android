@@ -53,7 +53,6 @@ public enum EventProperty {
     COLLECTION_NAME("Collection Name"),
     STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
-    REPORTED_ID("Reported id"),
     POSITION_OF_CAROUSEL("Position Of Carousel"),
     POST_COMMENT_ID("Post / Comment ID"),
     TAGGED_IN("Tagged In"),
@@ -302,11 +301,5 @@ public enum EventProperty {
             put(STREAM_TYPE, value);
             return this;
         }
-
-        public Builder reportedId(long reportedId) {
-            put(REPORTED_ID, reportedId);
-            return this;
-        }
-
     }
 }

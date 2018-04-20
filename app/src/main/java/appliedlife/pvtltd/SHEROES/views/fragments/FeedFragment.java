@@ -657,12 +657,22 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     popup.getMenu().findItem(R.id.edit).setVisible(true);
                 }
 
+                if (userPostObj.communityId == 0 && adminId == AppConstants.TWO_CONSTANT) {
+                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+                }
+
             } else {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
             }
-            if (userPostObj.communityId == 0) {
-                popup.getMenu().findItem(R.id.delete).setVisible(false);
+
+            //Enable delete response for admin in challenge response
+            if(userPostObj.communityId == 0) {
+                if(adminId == AppConstants.TWO_CONSTANT) {
+                    popup.getMenu().findItem(R.id.delete).setVisible(true);
+                } else {
+                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+                }
             }
 
             if (userPostObj.isSpamPost()) {
