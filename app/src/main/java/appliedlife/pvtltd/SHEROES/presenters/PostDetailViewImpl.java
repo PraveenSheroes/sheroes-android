@@ -298,6 +298,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
+        if (mUserPostObj == null) {
+            return;
+        }
         CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous,hasMention,mentionSpanList);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override

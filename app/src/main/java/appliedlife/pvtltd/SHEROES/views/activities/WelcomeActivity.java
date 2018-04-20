@@ -1005,7 +1005,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (callbackManager != null) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
         switch (requestCode) {
             case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
                 if (resultCode == Activity.RESULT_OK) {
