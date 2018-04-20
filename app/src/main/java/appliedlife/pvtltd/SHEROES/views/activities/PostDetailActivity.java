@@ -940,7 +940,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             onEditMenuClicked(comment);
                             return true;
                         case R.id.delete:
-                            if(adminId == AppConstants.TWO_CONSTANT) {
+                            if(!comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
                                 popup.dismiss();
                                 reportSpamDialog(SpamContentType.COMMENT, null, comment);
                             } else {

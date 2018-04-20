@@ -868,12 +868,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
 
-            if (lastComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) {
+            if (viewInterface instanceof FeedItemCallback) {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
             }
-
         } else {
             liFeedCommunityPostUserComments.setVisibility(View.GONE);
             tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
