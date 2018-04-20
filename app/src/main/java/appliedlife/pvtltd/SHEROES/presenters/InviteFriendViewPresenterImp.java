@@ -83,7 +83,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
 
     public void getContactsFromMobile(final Context context) {
         getMvpView().startProgressBar();
-        getPhoneContacts(context).compose(this.<List<UserContactDetail>>bindToLifecycle()).subscribe(new DisposableObserver<List<UserContactDetail>>() {
+        getPhoneContacts(context).compose(this.<List<UserContactDetail>>bindToLifecycle()).compose(this.<List<UserContactDetail>>bindToLifecycle()).subscribe(new DisposableObserver<List<UserContactDetail>>() {
             @Override
             public void onComplete() {
             }
@@ -180,7 +180,9 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
-        getUserDetailListFromServer(contactListSyncRequest, mEndpointUrl).subscribe(new DisposableObserver<AllContactListResponse>() {
+        getUserDetailListFromServer(contactListSyncRequest, mEndpointUrl)
+                .compose(this.<AllContactListResponse>bindToLifecycle())
+        .subscribe(new DisposableObserver<AllContactListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -275,7 +277,9 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
-        getUserDetailListFromServer(contactListSyncRequest, mEndpointUrl).subscribe(new DisposableObserver<AllContactListResponse>() {
+        getUserDetailListFromServer(contactListSyncRequest, mEndpointUrl)
+                .compose(this.<AllContactListResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<AllContactListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

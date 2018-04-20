@@ -301,6 +301,5 @@ public enum EventProperty {
             put(STREAM_TYPE, value);
             return this;
         }
-
     }
 }

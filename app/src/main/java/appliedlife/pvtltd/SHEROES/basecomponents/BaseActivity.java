@@ -751,6 +751,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         final TextView tvDelete = popupView.findViewById(R.id.tv_article_menu_delete);
         final TextView tvShare = popupView.findViewById(R.id.tv_article_menu_share);
         final TextView tvReport = popupView.findViewById(R.id.tv_article_menu_report);
+
         // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
         popupWindow.showAsDropDown(view, -150, -10);
         tvEdit.setOnClickListener(new View.OnClickListener() {
@@ -919,7 +920,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
     }
 
-    private void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
+    public void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
                 Comment comment = (Comment) baseResponse;

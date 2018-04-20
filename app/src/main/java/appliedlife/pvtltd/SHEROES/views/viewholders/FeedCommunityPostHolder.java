@@ -59,9 +59,11 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -95,14 +97,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.fl_spam_post_ui)
     FrameLayout flSpamPostUi;
-    @Bind(R.id.tv_review_description)
-    TextView tvReviewDescription;
+    @Bind(R.id.spam_message_container)
+    LinearLayout spamMessageContainer;
     @Bind(R.id.li_approve_delete)
     LinearLayout liApproveDelete;
     @Bind(R.id.tv_delete_spam_post)
     TextView tvDeleteSpamPost;
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
+
+    @Bind(R.id.spam_comment_ui)
+    FrameLayout spamCommentContainer;
 
     @Bind(R.id.tv_join_conversation)
     TextView mJoinConveration;
@@ -111,10 +116,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.li_community_post_main_layout)
     LinearLayout liCommunityPostMainLayout;
 
-
     //Communitypost handling
     @Bind(R.id.li_feed_community_post_user_comments)
     LinearLayout liFeedCommunityPostUserComments;
+
+    @Bind(R.id.last_comment_container)
+    LinearLayout lastCommentConatiner;
+
+    @Bind(R.id.spam_comment_menu)
+    TextView spamCommentMenu;
 
     @Bind(R.id.comment_like)
     TextView mCommentLike;
@@ -287,16 +297,34 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
+
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
         } else {
             liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             liCommunityPostMainLayout.setAlpha(1f);
             flSpamPostUi.setVisibility(View.GONE);
+            tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             liApproveDelete.setVisibility(View.GONE);
-            tvReviewDescription.setVisibility(View.VISIBLE);
         }
+
+        invalidateSpamComment(mUserPostObj);
         showToolTip(mContext);
+    }
+
+    private void invalidateSpamComment(UserPostSolrObj mUserPostObj) {
+        if(mUserPostObj.getLastComments()!=null && mUserPostObj.getLastComments().size()>0) {
+            Comment comment = mUserPostObj.getLastComments().get(0);
+            //comment.setSpamComment(true);
+            if(comment.isSpamComment()) {
+                spamCommentContainer.setVisibility(View.VISIBLE);
+                lastCommentConatiner.setVisibility(View.GONE);
+            } else {
+                spamCommentContainer.setVisibility(View.GONE);
+                lastCommentConatiner.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     private void showToolTip(Context context) {
@@ -401,6 +429,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_post_link_render)
     public void tvLinkClick() {
+        LogUtils.info("Data","######################## link clcik");
         if (null != mUserPostObj) {
             if (mUserPostObj.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
                 if (!mUserPostObj.getOgRequestedUrlS().contains(AppConstants.USER_YOU_TUBE) || !mUserPostObj.getOgRequestedUrlS().contains(AppConstants.CHANNEL_YOU_TUBE)) {
@@ -838,7 +867,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
                 }
             }
-            if (lastComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) {
+
+            if (viewInterface instanceof FeedItemCallback) {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
@@ -1008,11 +1038,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userCommentClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
-        } else {
+        }  else {
             viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
         }
-
-
     }
 
     @OnClick(R.id.li_feed_community_user_post_images)
@@ -1029,7 +1057,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userMenuClick() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
-        } else {
+        }  else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
         }
     }
@@ -1043,6 +1071,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
+    @OnClick(R.id.spam_comment_menu)
+    public void spamCommentMenuClick() {
+        mUserPostObj.setNoOfOpenings(mItemPosition);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onCommentMenuClicked(mUserPostObj, spamCommentMenu);
+        } else {
+            viewInterface.handleOnClick(mUserPostObj, spamCommentMenu);
+        }
+
+    }
 
     @OnClick(R.id.tv_feed_community_post_user_comment_post_menu)
     public void userCommentMenuClick() {
@@ -1395,28 +1433,34 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
+    //spam post
     private void handlingSpamUi(long userId, int adminId) {
+        tvSpamPostMenu.setVisibility(View.GONE);
+
         if (adminId == AppConstants.TWO_CONSTANT || mUserPostObj.isCommunityOwner()) {
             liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             liCommunityPostMainLayout.setAlpha(1f);
             flSpamPostUi.setVisibility(View.VISIBLE);
             liFeedCommunityPostUserComments.setVisibility(View.GONE);
             liApproveDelete.setVisibility(View.VISIBLE);
-            tvReviewDescription.setVisibility(View.GONE);
+            spamMessageContainer.setVisibility(View.GONE);
+            tvFeedCommunityPostUserMenu.setVisibility(View.GONE);
         } else if (mUserPostObj.getAuthorId() == userId) {
             liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.spam_post));
             liCommunityPostMainLayout.setAlpha(.2f);
             flSpamPostUi.setVisibility(View.VISIBLE);
+            tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             liFeedCommunityPostUserComments.setVisibility(View.GONE);
             liApproveDelete.setVisibility(View.GONE);
-            tvReviewDescription.setVisibility(View.VISIBLE);
+            spamMessageContainer.setVisibility(View.VISIBLE);
         } else {
             liCommunityPostMainLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             liCommunityPostMainLayout.setAlpha(1f);
             flSpamPostUi.setVisibility(View.GONE);
+            tvFeedCommunityPostUserMenu.setVisibility(View.VISIBLE);
             liFeedCommunityPostUserComments.setVisibility(View.VISIBLE);
             liApproveDelete.setVisibility(View.GONE);
-            tvReviewDescription.setVisibility(View.VISIBLE);
+            spamMessageContainer.setVisibility(View.VISIBLE);
         }
 
     }

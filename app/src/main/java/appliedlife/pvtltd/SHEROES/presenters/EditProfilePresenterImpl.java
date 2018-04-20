@@ -1,17 +1,8 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import javax.inject.Inject;
 
@@ -30,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IEditProfileView;
 import io.reactivex.observers.DisposableObserver;
-
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 
@@ -66,7 +56,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getAllUserDetailsromModel().subscribe(new DisposableObserver<UserProfileResponse>() {
+        profileModel.getAllUserDetailsromModel()
+                .compose(this.<UserProfileResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<UserProfileResponse>() {
             @Override
             public void onComplete() {
 
@@ -98,7 +90,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
         }
 
         getMvpView().startProgressBar();
-        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 
@@ -137,7 +131,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 

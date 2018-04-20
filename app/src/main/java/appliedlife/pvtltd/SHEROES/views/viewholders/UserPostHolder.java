@@ -143,7 +143,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.fl_spam_post_ui)
     FrameLayout flSpamPostUi;
 
-
     @Bind(R.id.tv_review_description)
     TextView tvReviewDescription;
 
@@ -156,7 +155,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_delete_spam_post)
     TextView tvDeleteSpamPost;
 
-
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
 
@@ -167,7 +165,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
 
     private long mUserId;
-
     private int mAdminId;
 
     @Inject
@@ -210,6 +207,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
+
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
         } else {
@@ -919,7 +917,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (adminId == AppConstants.TWO_CONSTANT || mUserPostObj.isCommunityOwner()) {
             viewContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             viewContainer.setAlpha(1f);
-            flSpamPostUi.setVisibility(View.VISIBLE);
+            flSpamPostUi.setVisibility(View.GONE);
             liApproveDelete.setVisibility(View.VISIBLE);
             tvReviewDescription.setVisibility(View.GONE);
         } else if (mUserPostObj.getAuthorId() == userId) {

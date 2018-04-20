@@ -6,11 +6,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
-import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,8 +30,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,9 +43,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +72,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -74,6 +80,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
@@ -81,11 +88,14 @@ import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.Spam;
+import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -96,13 +106,18 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -111,6 +126,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -130,7 +146,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements HomeView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class ProfileActivity extends BaseActivity implements  HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
@@ -248,6 +264,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     @Bind(R.id.tv_mentor_toolbar_name)
     TextView tvMentorToolbarName;
 
+    @Bind(R.id.tv_profile_menu)
+    TextView profileToolbarMenu;
+
     @Bind(R.id.tv_mentor_dashboard_follow)
     TextView tvMentorDashBoardFollow;
 
@@ -285,6 +304,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     Preference<LoginResponse> mUserPreference;
 
     @Inject
+    ProfilePresenterImpl profilePresenter;
+
+    @Inject
     AppUtils mAppUtils;
 
     @Inject
@@ -313,6 +335,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.mentor_user_dashboard_layout);
         mHomePresenter.attachView(this);
+        profilePresenter.attachView(this);
         ButterKnife.bind(this);
         setupToolbarItemsColor();
         invalidateOptionsMenu();
@@ -343,6 +366,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
             mUserSolarObject.setEntityOrParticipantId(mChampionId);
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
             mUserSolarObject.setIdOfEntityOrParticipant(mChampionId);
+        }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
         }
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
@@ -406,12 +433,22 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
                 isOwnProfile = true;
-                loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
                 tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
                 tvMentorAskQuestion.setText(getString(R.string.ID_ANSWER_QUESTION));
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
                 viewFooter.setVisibility(View.VISIBLE);
+
+                //hide menu dots
+                profileToolbarMenu.setVisibility(View.GONE);
+
             } else {
+                //hide menu dots for admin
+                //int adminId = 0;
+                //if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                //    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                //}
+                profileToolbarMenu.setVisibility(View.VISIBLE);
+
                 followUnFollowMentor();
             }
         } else {
@@ -666,6 +703,39 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
     }
 
+    @OnClick(R.id.tv_profile_menu)
+    public void onMenuClick() {
+        onProfileMenuClick(mUserSolarObject, profileToolbarMenu);
+    }
+
+    private CharSequence menuIconWithText(Drawable r, String title) {
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
+    }
+
+    public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
+        PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
+
+        if (loggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
+            popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.report_spam:
+                        reportSpamDialog(SpamContentType.USER, userPostObj);
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
+    }
+
     @OnClick(R.id.fab_post)
     public void createNewPost() {
 
@@ -904,10 +974,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         }
     }
 
-
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        int id = view.getId();
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
@@ -915,7 +983,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
              /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
-
     }
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
@@ -964,6 +1031,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
         if (popupWindowFollowTooTip != null && popupWindowFollowTooTip.isShowing()) {
             popupWindowFollowTooTip.dismiss();
         }
+        profilePresenter.detachView();
         mHomePresenter.detachView();
         super.onDestroy();
     }
@@ -998,6 +1066,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     }
 
     @Override
+    public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
+
+    }
+
+    @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
@@ -1015,6 +1088,27 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
 
             if(isMentor) {
                 loaderGif.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
+
+    }
+
+    @Override
+    public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
+
+    }
+
+    @Override
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
+        if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+            if(!spamResponse.isSpamAlreadyReported()) {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
+            } else {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
             }
         }
     }
@@ -1742,6 +1836,107 @@ public class ProfileActivity extends BaseActivity implements HomeView, AppBarLay
     private boolean isUserOrChampionDetailsFilled() {
         return StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription()) &&
                 StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl()) && !mUserSolarObject.getImageUrl().contains("/default/user.png");
+    }
+
+    private void reportSpamDialog(final SpamContentType spamContentType, final UserSolrObj userSolrObj) { //Add other type as parameterised object
+
+        if(ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
+
+        SpamReasons spamReasons;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
+        } else {
+            String spamReasonsContent = AppUtils.getStringContent(AppConstants.SPAM_REASONS_FILE); //read spam reasons from local file
+            spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
+        }
+
+        if(spamReasons == null) return;
+
+        final Dialog spamReasonsDialog = new Dialog(ProfileActivity.this);
+        spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        spamReasonsDialog.setCancelable(true);
+        spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
+
+        RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
+                RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(CommonUtil.convertDpToPixel(16, ProfileActivity.this), CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0, 0);
+
+        TextView reasonTitle = spamReasonsDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = spamReasonsDialog.findViewById(R.id.reason_sub_title);
+        reasonTitle.setLayoutParams(layoutParams);
+        reasonSubTitle.setLayoutParams(layoutParams);
+
+        final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
+
+        List<Spam> spamList =null;
+        SpamPostRequest spamRequest = null;
+        if(spamContentType == SpamContentType.USER) {
+            spamList = spamReasons.getUserTypeSpams();
+            spamRequest = SpamUtil.createProfileSpamByUser(userSolrObj, loggedInUserId);
+        }
+
+        if(spamRequest == null || spamList == null) return;
+
+        SpamUtil.addRadioToView(ProfileActivity.this, spamList , spamOptions);
+
+        Button submit = spamReasonsDialog.findViewById(R.id.submit);
+        final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
+
+        final SpamPostRequest finalSpamRequest = spamRequest;
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+
+                    RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
+                    Spam spam = (Spam) radioButton.getTag();
+                    if (spam != null) {
+                        finalSpamRequest.setSpamReason(spam.getReason());
+                        finalSpamRequest.setScore(spam.getScore());
+
+                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                            if (reason.getVisibility() == View.VISIBLE) {
+
+                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                    profilePresenter.reportSpamPostOrComment(finalSpamRequest); //submit
+                                    spamReasonsDialog.dismiss();
+
+                                    if(spamContentType == SpamContentType.USER) {
+                                        onProfileReported(userSolrObj);   //report the profile
+                                    }
+                                } else {
+                                    reason.setError("Add the reason");
+                                }
+
+                            } else {
+                                reason.setVisibility(View.VISIBLE);
+                                SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
+                            }
+                        } else {
+                            profilePresenter.reportSpamPostOrComment(finalSpamRequest);  //submit request
+                            spamReasonsDialog.dismiss();
+
+                            if(spamContentType == SpamContentType.USER) {
+                                onProfileReported(userSolrObj);   //report the profile
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        spamReasonsDialog.show();
+    }
+
+    private void onProfileReported(UserSolrObj userSolrObj) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userSolrObj.getNameOrTitle())
+                        .isMentor(userSolrObj.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(Event.PROFILE_REPORTED,getScreenName(), properties);
     }
 
 }

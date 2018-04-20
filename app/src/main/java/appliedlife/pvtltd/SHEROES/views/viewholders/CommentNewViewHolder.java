@@ -15,7 +15,9 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -80,6 +82,15 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @Bind(R.id.comment_author_name)
     TextView mCommentAuthorName;
 
+    @Bind(R.id.spam_comment_ui)
+    RelativeLayout spamUiContainer;
+
+    @Bind(R.id.spam_comment_menu)
+    ImageView spamMenu;
+
+    @Bind(R.id.comment_container)
+    RelativeLayout commentContainer;
+
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
 
@@ -111,14 +122,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             mCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
-        if (mComment.isMyOwnParticipation()||mAdminId==AppConstants.TWO_CONSTANT) {
-            mUserCommentListMenu.setVisibility(View.VISIBLE);
-        } else {
-            mUserCommentListMenu.setVisibility(View.GONE);
-        }
         mCommentAuthorName.setText(mComment.getParticipantName());
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(item);
+
+        invalidateSpamComment(item);
+
         if(!((Activity)mContext).isFinishing()){
             if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                 String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
@@ -172,6 +181,22 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         }
     }
 
+    private void invalidateSpamComment(Comment item) {
+        if(item.isSpamComment()) {
+            spamUiContainer.setVisibility(View.VISIBLE);
+            commentContainer.setVisibility(View.GONE);
+        } else  {
+            spamUiContainer.setVisibility(View.GONE);
+            commentContainer.setVisibility(View.VISIBLE);
+        }
+
+        if (!mComment.isSpamComment() && (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT)) { //hide 3 dot of menu
+            spamMenu.setVisibility(View.VISIBLE);
+        } else {
+            spamMenu.setVisibility(View.GONE);
+        }
+    }
+
     private void invalidateLikeView(Comment item) {
         if(item.likeCount > 0){
             mCommentLike.setText(Integer.toString(item.likeCount));
@@ -198,6 +223,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @OnClick(R.id.comment_author_name)
     public void onUserNameClick() {
       mCommentCallback.userProfileNameClick(mComment,  mCommentAuthorName);
+    }
+
+    @OnClick(R.id.spam_comment_ui)
+    public void onSpamCommentMenuClick() {
+        mComment.setItemPosition(getAdapterPosition());
+        mCommentCallback.onCommentMenuClicked(mComment, spamMenu);
     }
 
     @OnClick(R.id.tv_user_comment_list_menu)

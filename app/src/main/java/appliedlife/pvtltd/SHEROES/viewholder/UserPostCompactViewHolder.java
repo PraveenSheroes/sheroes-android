@@ -14,6 +14,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -134,6 +135,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.last_comment_container)
     RelativeLayout mLastCommentContainer;
 
+    @Bind(R.id.fl_spam_post_ui)
+    FrameLayout spamPostUi;
+
     @Bind(R.id.comment_author_image)
     CircleImageView mCommentAuthorImage;
 
@@ -151,6 +155,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.comment_like)
     TextView mCommentLike;
+
+    @Bind(R.id.spam_comment_ui)
+    RelativeLayout spamCommentUi;
 
     @Bind(R.id.join_conversation_container)
     RelativeLayout mJoinConversationContainer;
@@ -262,6 +269,27 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         invalidatePostLike(userPostSolrObj);
 
+        if (userPostSolrObj.isSpamPost()) {  //Spam Post 
+            spamPostUi.setVisibility(View.VISIBLE);
+        } else {
+            spamPostUi.setVisibility(View.GONE);
+
+            if (CommonUtil.isEmpty(userPostSolrObj.getLastComments())) {
+                return;
+            }
+            Comment comment = userPostSolrObj.getLastComments().get(0);
+            invalidateSpamLastComment(comment);
+        }
+    }
+
+    private void invalidateSpamLastComment(Comment comment) {
+        if (comment != null && comment.isSpamComment()) {
+            spamCommentUi.setVisibility(View.VISIBLE);
+            mLastCommentContainer.setVisibility(View.GONE);
+        } else {
+            spamCommentUi.setVisibility(View.GONE);
+            mLastCommentContainer.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -700,6 +728,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         }
 
     }
+
+    @OnClick(R.id.fl_spam_post_ui)
+    public void spamPostCLick() {}
 
     @OnClick(R.id.post_author_image)
     public void onUserPicClick() {

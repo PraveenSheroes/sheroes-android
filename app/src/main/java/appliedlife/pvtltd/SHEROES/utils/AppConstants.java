@@ -244,6 +244,7 @@ public class AppConstants {
     //Community
     public static final String NAV_DRAWER_FILE_NAME = "nav_items";
     public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
+    public static final String SPAM_REASONS_FILE = "spam_reasons";
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY = "SUMMARY";

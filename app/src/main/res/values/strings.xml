@@ -112,6 +112,13 @@
     <string name="ID_APPROVE">Approve</string>
 
     <string name="ID_REPORT">Report as spam</string>
+    <string name="REPORT_SPAM">Report Spam</string>
+    <string name="report_user">Report User</string>
+    <string name="deactivate_user">Deactivate User</string>
+    <string name="banned_user_device">Ban User Device</string>
+
+
+
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
@@ -175,8 +182,8 @@
     <string name="ID_RELACTIONSHIP_HINT"><font size="12">RELATIONSHIP STATUS</font></string>
     <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
     <string name="ID_SAVE">SAVE</string>
-    <string name="ID_NEED_TO_BE_REVIEWED">Hi! Your post is being reviewed by our community moderators. Please check back soon.</string>
-
+    <string name="ID_NEED_TO_BE_REVIEWED">Your post is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
+    <string name="COMMENT_REVIEW_MESSAGE">Your comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
 
@@ -429,6 +436,9 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
 
+    <string name="spam.status.post">post</string>
+    <string name="spam.status.comment">comment</string>
+    <string name="spam.status.user">user</string>
 
 
     <string name="contest.status.ongoing">Live</string>
@@ -567,5 +577,20 @@
     <string name="retry">Retry</string>
     <string name="setting">Go to settings</string>
     <string name="check_internet_Connection">Check your Internet connection and try again</string>
+    <string name="select_a_reason">Select a reason</string>
+    <string name="why_is_it_inappropriate">Why is it inappropriate?</string>
+    <string name="please_elaborate">Please elaborate…</string>
+
+    <!--spam region start-->
+    <string name="spam_confirmation_dialog_title">Thank You for your Feedback!</string>
+    <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and is in review. Thank You!</string>
+
+    <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
+    <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with Sheroes</string>
+
+
+    <!--spam region end-->
+
+
     <string name="searching">Searching...</string>
 </resources>
