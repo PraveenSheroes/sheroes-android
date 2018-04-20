@@ -815,7 +815,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
+                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
+                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
+                }
             }
         }
         SpannableString spannableString = new SpannableString(strWithAddExtra);

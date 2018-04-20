@@ -217,6 +217,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mUserPic.setCircularImage(true);
         setIsLoggedInUser();
         etView.setQueryTokenReceiver(this);
+
         etView.setEditTextShouldWrapContent(true);
         Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
         if (parcelable != null) {
@@ -1184,7 +1185,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-        if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
+      /*  if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
             if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
                 mTaggedUserPojoList = searchUserDataResponse.getParticipantList();
                 List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
@@ -1203,12 +1204,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mSuggestionList.setLayoutManager(layoutManager);
                 mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
             }
-        }
+        }*/
     }
 
     @Override
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
-       final String searchText=queryToken.getTokenString();
+      /* final String searchText=queryToken.getTokenString();
         if (searchText.contains("@")) {
             hasMentions = false;
             mentionSpanList = null;
@@ -1238,22 +1239,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         2000
                 );
             }
-        }
+        }*/
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
     }
 
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        this.mentionSpanList = mentionSpanList;
+        //this.mentionSpanList = mentionSpanList;
         return null;
     }
 
     @Override
     public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        /*LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mSuggestionList.setLayoutManager(layoutManager);
-        mSuggestionList.setAdapter(userTagSuggestionsAdapter);
+        mSuggestionList.setAdapter(userTagSuggestionsAdapter);*/
         return null;
     }
 
