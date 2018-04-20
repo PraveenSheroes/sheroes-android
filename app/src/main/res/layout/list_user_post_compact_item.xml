@@ -318,12 +318,10 @@
                     android:id="@+id/tv_review_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_11"
-                    android:layout_marginRight="@dimen/dp_size_11"
                     android:layout_toEndOf="@id/spam_info_icon"
                     android:layout_toRightOf="@id/spam_info_icon"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:lineSpacingExtra="@dimen/dp_size_3"
+                    android:lineSpacingExtra="@dimen/dp_size_1"
                     android:padding="@dimen/dp_size_8"
                     android:text="@string/COMMENT_REVIEW_MESSAGE"
                     android:textColor="@color/pure_black"
@@ -461,13 +459,14 @@
 
     <FrameLayout
         android:id="@+id/fl_spam_post_ui"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.1"
+            android:alpha="0.8"
             android:background="@color/white" />
 
         <LinearLayout

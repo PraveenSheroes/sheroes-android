@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
@@ -926,6 +927,18 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
                         mBaseResponseList.set(0, mUserPostObj);
                         getMvpView().setData(0, mUserPostObj);
+
+                        //Event for the post comment deleted by admin
+                        HashMap<String, Object> properties =
+                                new EventProperty.Builder()
+                                        .id(Long.toString(comment.getId()))
+                                        .postId(Long.toString(comment.getEntityId()))
+                                        .postType(AnalyticsEventType.ARTICLE.toString())
+                                        .body(comment.getComment())
+                                        .streamType(getMvpView().getStreamType())
+                                        .build();
+                        AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
+
                     }
                 }
             }

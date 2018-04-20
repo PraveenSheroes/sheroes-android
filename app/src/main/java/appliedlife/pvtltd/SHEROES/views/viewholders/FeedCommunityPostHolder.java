@@ -868,11 +868,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
 
-            /*if (lastComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) {
+            if (lastComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT) {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.VISIBLE);
             } else {
                 tvFeedCommunityPostUserCommentPostMenu.setVisibility(View.GONE);
-            }*/
+            }
 
         } else {
             liFeedCommunityPostUserComments.setVisibility(View.GONE);

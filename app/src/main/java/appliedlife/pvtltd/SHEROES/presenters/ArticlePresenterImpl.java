@@ -572,7 +572,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     }
 
     //Approve/Delete of spam comment only for admin
-    public void getSpamCommentApproveOrDeleteByAdmin(final ApproveSpamPostRequest approveSpamPostRequest, final int position) {
+    public void getSpamCommentApproveOrDeleteByAdmin(final ApproveSpamPostRequest approveSpamPostRequest, final int position, final Comment comment) {
         getMvpView().startProgressBar();
         sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
                 .compose(this.<SpamResponse>bindToLifecycle())
@@ -595,6 +595,17 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 if (null != approveSpamPostResponse) {
                     getMvpView().removeAndNotifyComment(position);
                     getMvpView().showMessage(R.string.comment_deleted);
+
+                    //Event for the article comment deleted by admin
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Long.toString(comment.getId()))
+                                    .postId(Long.toString(comment.getEntityId()))
+                                    .postType(AnalyticsEventType.ARTICLE.toString())
+                                    .body(comment.getComment())
+                                    .streamType(getMvpView().getStreamType())
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.REPLY_DELETED,ArticleActivity.SOURCE_SCREEN, properties);
                 }
             }
         });

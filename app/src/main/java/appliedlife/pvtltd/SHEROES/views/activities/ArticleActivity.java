@@ -1199,7 +1199,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
 
             if (comment != null && !comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
-                mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), position);
+                mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), position, comment);
             }
 
             if (!spamResponse.isSpamAlreadyReported()) {

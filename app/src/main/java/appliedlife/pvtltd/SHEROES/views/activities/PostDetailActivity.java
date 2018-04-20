@@ -874,6 +874,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (comment != null) {
                     mPostDetailPresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), comment);
                 } else if(userPostSolrObj!=null) {
+                    AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
                     mPostDetailPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
                 }
             }
@@ -896,6 +897,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         } else {
             String message = etView.getEditText().getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {
+                lastEditedComment.clear();
                 mPostDetailPresenter.addComment(message, mIsAnonymous);
             }
         }

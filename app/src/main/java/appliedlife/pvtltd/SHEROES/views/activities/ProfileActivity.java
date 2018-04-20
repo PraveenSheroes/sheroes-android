@@ -367,6 +367,10 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
             mUserSolarObject.setSolrIgnoreMentorCommunityId(mChampionId);
             mUserSolarObject.setIdOfEntityOrParticipant(mChampionId);
         }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
@@ -429,7 +433,6 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
                 isOwnProfile = true;
-                loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
                 tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
                 tvMentorAskQuestion.setText(getString(R.string.ID_ANSWER_QUESTION));
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
@@ -715,34 +718,21 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
-        long currentUserId = -1;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+
+        if (loggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
+            popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
         }
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            int adminId = 0;
-            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-            }
 
-            if (adminId == AppConstants.TWO_CONSTANT) {
-                //popup.getMenu().add(0, R.id.deactivate_user, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
-                //popup.getMenu().add(0, R.id.ban_user_device, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-            } else if (currentUserId != userPostObj.getIdOfEntityOrParticipant()) {
-                popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
-            }
-
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.report_spam:
-                            reportSpamDialog(SpamContentType.USER, userPostObj);
-                        default:
-                            return false;
-                    }
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.report_spam:
+                        reportSpamDialog(SpamContentType.USER, userPostObj);
+                    default:
+                        return false;
                 }
-            });
-        }
+            }
+        });
         popup.show();
     }
 

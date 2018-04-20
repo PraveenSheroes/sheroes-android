@@ -1453,6 +1453,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     if (spamResponse.getModelType().toLowerCase().contains(SpamContentType.COMMENT.name())) {
                         onDeleteMenuClicked(userPostSolrObj);
                     } else {
+                        AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
                         mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
                     }
                 }

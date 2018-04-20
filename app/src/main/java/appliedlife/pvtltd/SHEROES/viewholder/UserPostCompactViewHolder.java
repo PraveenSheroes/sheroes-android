@@ -729,6 +729,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    @OnClick(R.id.fl_spam_post_ui)
+    public void spamPostCLick() {}
+
     @OnClick(R.id.post_author_image)
     public void onUserPicClick() {
         if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
