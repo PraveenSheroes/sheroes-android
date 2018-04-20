@@ -612,9 +612,7 @@ public class CommonUtil {
                     @Override
                     public void onNext(Bitmap bmp) {
                         Event event = trackEvent ? eventName : null;
-                        Bitmap topImage = drawableToBitmap(context.getDrawable(R.drawable.challenge_placeholder));
-                        Bitmap newBitmap = combineImages(bmp, topImage);
-                        shareBitmapWhatsApp(context, newBitmap, sourceScreen, url, imageShareText, event, properties);
+                        shareBitmapWhatsApp(context, bmp, sourceScreen, url, imageShareText, event, properties);
                     }
                 });
 

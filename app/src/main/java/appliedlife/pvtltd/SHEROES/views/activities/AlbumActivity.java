@@ -350,7 +350,9 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
-        properties.putAll(MixpanelHelper.getPostProperties(feedDetail, sourceScreen));
+        if (feedDetail != null && !CommonUtil.isEmpty(properties)) {
+            properties.putAll(MixpanelHelper.getPostProperties(feedDetail, sourceScreen));
+        }
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
