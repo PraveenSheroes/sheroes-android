@@ -318,6 +318,9 @@ public interface SheroesAppServiceApi {
     @POST("participation/post/spam_report")
     Observable<SpamResponse> reportSpamPostOrComment(@Body SpamPostRequest spamPostRequest);
 
+    @POST("participant/user/spam_report")
+    Observable<SpamResponse> reportProfile(@Body SpamPostRequest spamPostRequest);
+
     @POST("participation/post/approve_or_delete_comment")
     Observable<SpamResponse> approveSpamComment(@Body ApproveSpamPostRequest approveSpamPostRequest);
 
