@@ -76,6 +76,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
@@ -1978,6 +1979,19 @@ public class AppUtils {
         return approveSpamPostRequest;
     }
 
+    public ApproveSpamPostRequest spamCommentApprovedRequestBuilder(Comment comment, boolean isActive, boolean isSpam, boolean isApproved) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ApproveSpamPostRequest approveSpamPostRequest = new ApproveSpamPostRequest();
+        approveSpamPostRequest.setAppVersion(appUtils.getAppVersionName());
+        approveSpamPostRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        approveSpamPostRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        approveSpamPostRequest.setApproved(isApproved);
+        approveSpamPostRequest.setId(comment.getCommentsId());
+        approveSpamPostRequest.setActive(isActive);
+        approveSpamPostRequest.setSpam(isSpam);
+        return approveSpamPostRequest;
+    }
+
     public SelectCommunityRequest selectCommunityRequestBuilder() {
         AppUtils appUtils = AppUtils.getInstance();
         SelectCommunityRequest selectCommunityRequest = new SelectCommunityRequest();
@@ -1999,6 +2013,19 @@ public class AppUtils {
         return bookmarkRequestPojo;
     }
 
+    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        commentReactionRequestPojo.setUserComment(userComment);
+        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
+        commentReactionRequestPojo.setEntityId(entityId);
+        return commentReactionRequestPojo;
+    }
+
     public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
@@ -2012,6 +2039,21 @@ public class AppUtils {
         /*User mention*/
         commentReactionRequestPojo.setHasMentions(hasMention);
         commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        return commentReactionRequestPojo;
+    }
+
+    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
+        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        //TODO:: change rquest data
+        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        commentReactionRequestPojo.setUserComment(userComment);
+        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
+        commentReactionRequestPojo.setIsActive(isActive);
+        commentReactionRequestPojo.setEntityId(entityId);
+        commentReactionRequestPojo.setParticipationId(participationId);
         return commentReactionRequestPojo;
     }
 

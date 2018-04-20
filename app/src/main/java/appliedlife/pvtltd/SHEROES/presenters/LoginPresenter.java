@@ -78,7 +78,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         // getMvpView().startProgressBar();
-        mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp).subscribe(new DisposableObserver<LoginResponse>() {
+        mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp)
+                .compose(this.<LoginResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LoginResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -106,7 +108,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        mLoginModel.getFBVerificationFromModel(loginRequest).subscribe(new DisposableObserver<LoginResponse>() {
+        mLoginModel.getFBVerificationFromModel(loginRequest)
+                .compose(this.<LoginResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LoginResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -136,7 +140,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        mLoginModel.getGoogleTokenExpireInFromModel(tokenExpireUrl).subscribe(new DisposableObserver<ExpireInResponse>() {
+        mLoginModel.getGoogleTokenExpireInFromModel(tokenExpireUrl)
+                .compose(this.<ExpireInResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ExpireInResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -167,7 +173,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        mLoginModel.sendForgetPasswordLinkFromModel(forgotPasswordRequest).subscribe(new DisposableObserver<ForgotPasswordResponse>() {
+        mLoginModel.sendForgetPasswordLinkFromModel(forgotPasswordRequest)
+                .compose(this.<ForgotPasswordResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ForgotPasswordResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -195,7 +203,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             return;
         }
         getMvpView().startProgressBar();
-        mLoginModel.getEmailVerificationFromModel(emailVerificationRequest).subscribe(new DisposableObserver<EmailVerificationResponse>() {
+        mLoginModel.getEmailVerificationFromModel(emailVerificationRequest)
+                .compose(this.<EmailVerificationResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<EmailVerificationResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

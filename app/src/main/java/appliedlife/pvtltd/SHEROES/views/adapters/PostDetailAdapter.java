@@ -100,6 +100,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyItemChanged(position);
     }
 
+    public List<BaseResponse> getItems() {
+        return mFeedDetail;
+    }
+
     @Override
     public int getItemViewType(int position) {
         BaseResponse feedDetail = mFeedDetail.get(position);
@@ -113,8 +117,12 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void addData(BaseResponse response, int indexAt) {
-        mFeedDetail.add(indexAt, response);
-        notifyItemInserted(indexAt);
+        if(indexAt< mFeedDetail.size()) {
+            mFeedDetail.add(indexAt, response);
+            notifyItemInserted(indexAt);
+        } else {
+            addData(response);
+        }
     }
 
     public void addData(BaseResponse baseResponse) {

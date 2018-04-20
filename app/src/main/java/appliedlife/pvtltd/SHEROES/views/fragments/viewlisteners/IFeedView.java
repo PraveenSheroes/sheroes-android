@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 
 /**
  * Created by ujjwal on 04/05/17.
@@ -39,4 +40,6 @@ public interface IFeedView extends BaseMvpView {
     void hideGifLoader();
 
     void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo);
+
+    void onSpamPostOrCommentReported(SpamResponse baseResponse, UserPostSolrObj userPostSolrObj);
 }

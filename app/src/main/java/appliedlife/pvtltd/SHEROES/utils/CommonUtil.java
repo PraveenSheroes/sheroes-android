@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,7 +28,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.text.Html;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -37,11 +38,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -88,7 +90,6 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -1375,6 +1376,40 @@ public class CommonUtil {
             }
         }
         return true;
+    }
+
+    public static void createDialog(Context context, String title, String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_success);
+        dialog.setTitle(title);
+
+        TextView titleText = dialog.findViewById(R.id.title);
+        titleText.setText(title);
+
+        ImageView cross = dialog.findViewById(R.id.cross);
+        TextView closeButton = dialog.findViewById(R.id.close_button);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        cross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        TextView messageText = dialog.findViewById(R.id.message);
+        messageText.setText(message);
+
+        dialog.show();
     }
 
     public static int getCurrentAppVersion() {

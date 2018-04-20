@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -47,13 +48,18 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -61,6 +67,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -75,17 +82,24 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
  */
 
 
-public class UserPostFragment extends BaseFragment {
+public class UserPostFragment extends BaseFragment implements ProfileView {
     private static String SCREEN_LABEL = "User Post Screen";
     private final String TAG = LogUtils.makeLogTag(UserPostFragment.class);
     @Inject
     HomePresenter mHomePresenter;
+
+    @Inject
+    ProfilePresenterImpl profilePresenter;
+
+
     @Bind(R.id.rv_communities_detail_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_communities_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_communities_detail)
     SwipeRefreshLayout mSwipeView;
+
+
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
@@ -116,7 +130,7 @@ public class UserPostFragment extends BaseFragment {
     private FeedDetail mApprovePostFeedDetail;
     private boolean mIsSpam;
     boolean isMentor = false;
-    private long mUserId;
+    private long mUserId = -1;
     private Comment mComment;
     private boolean hideAnonymousPost = true;
 
@@ -144,6 +158,11 @@ public class UserPostFragment extends BaseFragment {
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            mUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
+
         if (null != getArguments()) {
             mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
             if (getArguments().getString(BaseActivity.SOURCE_SCREEN) != null) {
@@ -156,10 +175,6 @@ public class UserPostFragment extends BaseFragment {
                 CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
                 communityFeedSolrObj.setAuthorMentor(mUserMentorObj.isAuthorMentor());
-
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                    mUserId = mUserPreference.get().getUserSummary().getUserId();
-                }
                 isMentor = mUserMentorObj.isAuthorMentor();
 
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
@@ -207,6 +222,7 @@ public class UserPostFragment extends BaseFragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActivity) getActivity());
+                mAdapter.setUserId(mUserId);
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             }
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -309,6 +325,10 @@ public class UserPostFragment extends BaseFragment {
 
 
     @Override
+    public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
+    }
+
+    @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         int totalPostCount = feedResponsePojo.getNumFound();
@@ -389,8 +409,8 @@ public class UserPostFragment extends BaseFragment {
                         data.remove(position - 1);
                     }
                     data.add(feedProgressBar);
-                    mAdapter.setSheroesGenericListData(data);
                     mAdapter.setUserId(mUserId);
+                    mAdapter.setSheroesGenericListData(data);
                     if (mPageNo == AppConstants.TWO_CONSTANT) {
                         mAdapter.notifyDataSetChanged();
                     } else {
@@ -424,6 +444,16 @@ public class UserPostFragment extends BaseFragment {
             mAdapter.notifyDataSetChanged();
         }
         mSwipeView.setRefreshing(false);
+    }
+
+    @Override
+    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
+
+    }
+
+    @Override
+    public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
+
     }
 
 
@@ -585,4 +615,8 @@ public class UserPostFragment extends BaseFragment {
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
+
+    @Override
+    public void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj) {}
+
 }

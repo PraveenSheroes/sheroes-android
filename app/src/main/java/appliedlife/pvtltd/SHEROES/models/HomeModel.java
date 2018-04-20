@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
@@ -39,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -339,6 +341,8 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+
     public Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
         LogUtils.info(TAG, " Spam post  request" + new Gson().toJson(approveSpamPostRequest));
         return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
@@ -351,8 +355,6 @@ public class HomeModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-
 
     public Observable<AppIntroScreenResponse> getAppIntroFromModel(AppIntroScreenRequest appIntroScreenRequest) {
         LogUtils.info(TAG, " **********Appintro  request" + new Gson().toJson(appIntroScreenRequest));

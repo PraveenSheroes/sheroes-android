@@ -32,6 +32,7 @@
     <color name="pure_black">#000000</color>
     <color name="spam_post">#f6f6f6</color>
     <color name="on_board_work">#dcdcdc</color>
+    <color name="spam_dialog_divider">#dcdcdc</color>
     <color name="feed_back_color">#e8e8e8</color>
 
     <color name="black_current">#1a1818</color>

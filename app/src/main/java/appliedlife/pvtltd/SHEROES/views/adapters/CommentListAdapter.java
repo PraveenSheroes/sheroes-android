@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -156,6 +157,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Bind(R.id.cancel)
         RelativeLayout mCancel;
 
+        @Bind(R.id.spam_comment_container)
+        LinearLayout spamContainer;
+
+        @Bind(R.id.spam_article_comment_menu)
+        ImageView spamCommentMenuIcon;
+
         // endregion
 
         public CommentListItemViewHolder(View itemView) {
@@ -171,6 +178,12 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 body.setTextIsSelectable(true);
                 body.setLinkTextColor(ContextCompat.getColor(mContext, R.color.link_color));
                 StringUtil.linkifyURLs(body);
+
+                if(comment.isSpamComment()) {
+                    spamContainer.setVisibility(View.VISIBLE);
+                } else {
+                    spamContainer.setVisibility(View.GONE);
+                }
 
                 if (comment.getPostedDate() != null) {
                     relativeTime.setText(comment.getPostedDate());
@@ -198,6 +211,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 author.setOnClickListener(mOnDeleteClickListener);
                 authorPic.setOnClickListener(mOnDeleteClickListener);
                 delete.setOnClickListener(mOnDeleteClickListener);
+                delete.setVisibility(View.VISIBLE);
 
                 if (comment.isMyOwnParticipation()) {
                     edit.setVisibility(View.VISIBLE);
@@ -222,13 +236,13 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             }));
                         }
                     });
-                    delete.setVisibility(View.VISIBLE);
-                    delete.setOnClickListener(mOnDeleteClickListener);
+                  //  delete.setVisibility(View.VISIBLE);
+                  //  delete.setOnClickListener(mOnDeleteClickListener);
                 } else {
                     edit.setVisibility(View.GONE);
                     edit.setOnClickListener(null);
-                    delete.setVisibility(View.GONE);
-                    delete.setOnClickListener(null);
+                  //  delete.setVisibility(View.GONE);
+                  //  delete.setOnClickListener(null);
                 }
 
             }

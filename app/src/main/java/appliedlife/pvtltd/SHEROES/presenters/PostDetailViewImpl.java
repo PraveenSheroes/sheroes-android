@@ -41,6 +41,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
@@ -51,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
@@ -64,6 +67,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMME
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
@@ -293,6 +297,50 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public void addComment(String commentText, boolean isAnonymous) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
+            return;
+        }
+        CommentReactionRequestPojo  commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
+        addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_COMMENT), ERROR_COMMENT_REACTION);
+            }
+
+            @Override
+            public void onNext(CommentAddDelete commentResponsePojo) {
+                getMvpView().stopProgressBar();
+                if (null != commentResponsePojo) {
+                    Comment comment = commentResponsePojo.getCommentReactionModel();
+                    mBaseResponseList.add(comment);
+                    mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() + 1);
+                    mBaseResponseList.set(0, mUserPostObj);
+                    getMvpView().setData(0, mUserPostObj);
+                    getMvpView().addData(comment);
+                    getMvpView().smoothScrollToBottom();
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
+                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                    .postType(AnalyticsEventType.COMMUNITY.toString())
+                                    .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                    .streamType(CommonUtil.isNotEmpty(mUserPostObj.getStreamType()) ? mUserPostObj.getStreamType() : "")
+                                    .communityId(commentResponsePojo.getCommentReactionModel().getCommunityId())
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.REPLY_CREATED, PostDetailActivity.SCREEN_LABEL, properties);
+                }
+            }
+        });
+
+    }
+
     public void addComment(String commentText, boolean isAnonymous, boolean hasMention, List<MentionSpan> mentionSpanList) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
@@ -375,19 +423,22 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().stopProgressBar();
                 if (commentResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
 
-                    int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
-                    if (pos != RecyclerView.NO_POSITION) {
-                        mBaseResponseList.remove(pos);
-                        getMvpView().removeData(pos);
+                    if (editDeleteId == AppConstants.ONE_CONSTANT) {
+                        int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
+                        if (pos != RecyclerView.NO_POSITION) {
+                            mBaseResponseList.remove(pos);
+                            getMvpView().removeData(pos);
 
-                        mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
-                        mBaseResponseList.set(0, mUserPostObj);
-                        getMvpView().setData(0, mUserPostObj);
+                            mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
+                            mBaseResponseList.set(0, mUserPostObj);
+                            getMvpView().setData(0, mUserPostObj);
+                        }
+                    } else  {
+                         getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
                     }
                 }
             }
         });
-
     }
 
     private Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -402,7 +453,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private static int findCommentPositionById(List<BaseResponse> baseResponses, long id) {
+    public static int findCommentPositionById(List<BaseResponse> baseResponses, long id) {
         if (CommonUtil.isEmpty(baseResponses)) {
             return -1;
         }
@@ -689,17 +740,13 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    if (!approveSpamPostRequest.isApproved() && approveSpamPostRequest.isSpam()) {
-                        // spam post was rejected
+                    if(approveSpamPostResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                         getMvpView().onPostDeleted();
-                    } else if (approveSpamPostRequest.isApproved() && !approveSpamPostRequest.isSpam()) {
-                        // spam post was approved
+                    } else {
                         userPostSolrObj.setSpamPost(false);
                         mBaseResponseList.set(0, userPostSolrObj);
                         getMvpView().setData(0, userPostSolrObj);
-
                     }
-                    //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
                 }
             }
         });
@@ -821,4 +868,84 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
 
     //endregion
+
+
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final UserPostSolrObj userPostSolrObj, final Comment comment) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<SpamResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(SpamResponse spamPostOrCommentResponse) {
+                        getMvpView().onSpamPostOrCommentReported(spamPostOrCommentResponse, userPostSolrObj, comment);
+                        getMvpView().stopProgressBar();
+                    }
+                });
+
+    }
+
+    //Spam Comment for admin
+    public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final Comment comment) {
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest).subscribe(new DisposableObserver<BaseResponse>() {
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+            }
+
+            @Override
+            public void onNext(BaseResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
+                if (null != approveSpamPostResponse) {
+                    int pos = findCommentPositionById(mBaseResponseList, comment.getId());
+                    if (pos != RecyclerView.NO_POSITION) {
+                        mBaseResponseList.remove(pos);
+                        getMvpView().removeData(pos);
+
+                        mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
+                        mBaseResponseList.set(0, mUserPostObj);
+                        getMvpView().setData(0, mUserPostObj);
+
+                        //Event for the post comment deleted by admin
+                        HashMap<String, Object> properties =
+                                new EventProperty.Builder()
+                                        .id(Long.toString(comment.getId()))
+                                        .postId(Long.toString(comment.getEntityId()))
+                                        .postType(AnalyticsEventType.ARTICLE.toString())
+                                        .body(comment.getComment())
+                                        .streamType(getMvpView().getStreamType())
+                                        .build();
+                        AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
+
+                    }
+                }
+            }
+        });
+
+    }
 }

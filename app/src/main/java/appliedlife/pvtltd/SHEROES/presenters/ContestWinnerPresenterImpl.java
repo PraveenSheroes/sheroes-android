@@ -58,7 +58,9 @@ public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView
         }
         final WinnerRequest winnerRequest = mAppUtils.winnerRequestBuilder(contest_id);
         getMvpView().startProgressBar();
-        getWinnersFromModel(winnerRequest).subscribe(new DisposableObserver<WinnerResponse>() {
+        getWinnersFromModel(winnerRequest)
+                .compose(this.<WinnerResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<WinnerResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

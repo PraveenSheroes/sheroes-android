@@ -177,6 +177,7 @@ public enum Event {
     PROFILE_PIC_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Picture Edit Clicked"),
     PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Followers Count Clicked"),
     PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Following Count Clicked"),
+    PROFILE_REPORTED(AnalyticsEventType.PROFILE, "Reported"),
     //region Image related events
     ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
     USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
