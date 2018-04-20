@@ -1188,7 +1188,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if(getActivity() == null || getActivity().isFinishing()) return;
 
         SpamReasons spamReasons;
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {
             spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
         } else {
             String spamReasonsContent = AppUtils.getStringContent(AppConstants.SPAM_REASONS_FILE); //read spam reasons from local file
