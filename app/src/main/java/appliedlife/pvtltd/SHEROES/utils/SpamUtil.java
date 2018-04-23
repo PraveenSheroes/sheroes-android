@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
  * Created by ravi on 13/04/18.
@@ -74,7 +75,9 @@ public class SpamUtil {
         SpamPostRequest spamPostRequest = new SpamPostRequest();
         spamPostRequest.setModelId(comment.getCommentsId());
         spamPostRequest.setSpamReportedBy(currentUserId);
-        spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
+        if(StringUtil.isNotNullOrEmptyString(comment.getCommunityId())) {
+            spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
+        }
         spamPostRequest.setModelType(SpamContentType.COMMENT.name());
         spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
         return spamPostRequest;

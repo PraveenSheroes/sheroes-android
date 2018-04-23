@@ -14,7 +14,7 @@ public class SpamPostRequest {
 
     @SerializedName("model_id")
     @Expose
-    private long modelId;
+    private Long modelId;
 
     @SerializedName("model_type")
     @Expose
@@ -26,15 +26,15 @@ public class SpamPostRequest {
 
     @SerializedName("reported_by_user_id")
     @Expose
-    private long spamReportedBy;
+    private Long spamReportedBy;
 
     @SerializedName("reported_on_user_id")
     @Expose
-    private long spamReportedOn;
+    private Long spamReportedOn;
 
     @SerializedName("community_id")
     @Expose
-    private long communityId;
+    private Long communityId;
 
     @SerializedName("score")
     @Expose
@@ -73,11 +73,11 @@ public class SpamPostRequest {
         this.spamReportedBy = spamReportedBy;
     }
 
-    public long getSpamReportedOn() {
+    public Long getSpamReportedOn() {
         return spamReportedOn;
     }
 
-    public void setSpamReportedOn(long spamReportedOn) {
+    public void setSpamReportedOn(Long spamReportedOn) {
         this.spamReportedOn = spamReportedOn;
     }
 
