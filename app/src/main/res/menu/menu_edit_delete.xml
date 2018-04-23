@@ -8,18 +8,20 @@
     <item
         android:id="@+id/edit"
         android:icon="@drawable/ic_create"
-
         android:title="@string/ID_EDIT" />
 
     <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_delete"
-
         android:title="@string/delete" />
 
     <item
+        android:id="@+id/report_spam"
+        android:icon="@drawable/ic_report_spam"
+        android:title="@string/REPORT_SPAM" />
+
+    <item
         android:id="@+id/top_post"
+        android:icon="@drawable/ic_feature_post"
         android:title="@string/FEATURE_POST" />
-
-
 </menu>

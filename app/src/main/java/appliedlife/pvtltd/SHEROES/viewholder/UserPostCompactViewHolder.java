@@ -14,6 +14,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -134,6 +136,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.last_comment_container)
     RelativeLayout mLastCommentContainer;
 
+    @Bind(R.id.fl_spam_post_ui)
+    FrameLayout spamPostUi;
+
     @Bind(R.id.comment_author_image)
     CircleImageView mCommentAuthorImage;
 
@@ -151,6 +156,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.comment_like)
     TextView mCommentLike;
+
+    @Bind(R.id.spam_comment_ui)
+    RelativeLayout spamCommentUi;
 
     @Bind(R.id.join_conversation_container)
     RelativeLayout mJoinConversationContainer;
@@ -200,8 +208,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             String authorThumborUrl = CommonUtil.getThumborUri(userPostSolrObj.getAuthorImageUrl(), authorProfileSize, authorProfileSize);
             mPostAuthorImage.bindImage(authorThumborUrl);
         }
-
-        mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        if (mConfiguration != null && mConfiguration.get() != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        } else {
+            mJoinConversation.setText(new ConfigData().mCommentHolderText);
+        }
 
         String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, userPostSolrObj.getNoOfLikes());
         mPostLikeCount.setText(String.valueOf(userPostSolrObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
@@ -262,6 +273,27 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         invalidatePostLike(userPostSolrObj);
 
+        if (userPostSolrObj.isSpamPost()) {  //Spam Post 
+            spamPostUi.setVisibility(View.VISIBLE);
+        } else {
+            spamPostUi.setVisibility(View.GONE);
+
+            if (CommonUtil.isEmpty(userPostSolrObj.getLastComments())) {
+                return;
+            }
+            Comment comment = userPostSolrObj.getLastComments().get(0);
+            invalidateSpamLastComment(comment);
+        }
+    }
+
+    private void invalidateSpamLastComment(Comment comment) {
+        if (comment != null && comment.isSpamComment()) {
+            spamCommentUi.setVisibility(View.VISIBLE);
+            mLastCommentContainer.setVisibility(View.GONE);
+        } else {
+            spamCommentUi.setVisibility(View.GONE);
+            mLastCommentContainer.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -701,6 +733,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    @OnClick(R.id.fl_spam_post_ui)
+    public void spamPostCLick() {}
+
     @OnClick(R.id.post_author_image)
     public void onUserPicClick() {
         if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
@@ -784,7 +819,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
+                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
+                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
+                }
             }
         }
         SpannableString spannableString = new SpannableString(strWithAddExtra);

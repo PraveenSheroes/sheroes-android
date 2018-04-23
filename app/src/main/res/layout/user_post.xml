@@ -7,83 +7,42 @@
     <FrameLayout
         android:id="@+id/fl_spam_post_ui"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/spam_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
             android:weightSum="@integer/int_value_for_line_1">
 
             <TextView
-                android:id="@+id/tv_review_description"
-                android:layout_width="0dp"
+                android:id="@+id/tv_spam_post_menu"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_11"
-                android:layout_weight="@integer/int_value_for_line_1"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:background="@color/white"
+                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:padding="@dimen/dp_size_16" />
+
+            <TextView
+                android:id="@+id/tv_review_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_42"
+                android:layout_marginRight="@dimen/dp_size_42"
+                android:drawableTop="@drawable/ic_spam_post_message"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/ID_NEED_TO_BE_REVIEWED"
                 android:textColor="@color/pure_black"
                 android:textSize="@dimen/sp_size_14" />
+        </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_spam_post_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:background="@color/white"
-                android:drawableRight="@drawable/ic_menu_dashboard"
-                android:padding="@dimen/dp_size_15" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/li_approve_delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:padding="@dimen/dp_size_10"
-            android:background="@color/spam_post"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:weightSum="@integer/int_value_for_line_1">
-
-            <TextView
-                android:id="@+id/tv_delete_spam_post"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:gravity="center"
-                android:padding="@dimen/dp_size_10"
-                android:text="@string/ID_DELETE"
-                android:textAllCaps="true"
-                android:textColor="@color/email"
-                android:textSize="@dimen/sp_size_14" />
-
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/dp_size_5"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:background="@color/divide_approve_delete" />
-
-            <TextView
-                android:id="@+id/tv_approve_spam_post"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".5"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:gravity="center"
-                android:padding="@dimen/dp_size_10"
-                android:text="@string/ID_APPROVE"
-                android:textAllCaps="true"
-                android:textColor="@color/approve_admin"
-                android:textSize="@dimen/sp_size_14" />
-
-        </LinearLayout>
     </FrameLayout>
 
 
@@ -92,7 +51,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_below="@+id/fl_spam_post_ui"
         android:baselineAligned="false"
         android:orientation="vertical">
 
@@ -341,6 +299,10 @@
             android:layout_marginTop="@dimen/dp_size_8"
             android:background="@color/feed_card_time" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -403,6 +365,55 @@
                 android:textColor="@color/recent_post_comment"
                 android:textSize="@dimen/sp_size_14"/>
         </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/li_approve_delete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/spam_post"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="@dimen/dp_size_10"
+                android:weightSum="@integer/int_value_for_line_1">
+
+                <TextView
+                    android:id="@+id/tv_delete_spam_post"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".5"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_size_10"
+                    android:text="@string/ID_DELETE"
+                    android:textAllCaps="true"
+                    android:textColor="@color/email"
+                    android:textSize="@dimen/sp_size_14" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dp_size_5"
+                    android:layout_marginTop="@dimen/dp_size_5"
+                    android:background="@color/divide_approve_delete" />
+
+                <TextView
+                    android:id="@+id/tv_approve_spam_post"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".5"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_size_10"
+                    android:text="@string/ID_APPROVE"
+                    android:textAllCaps="true"
+                    android:textColor="@color/approve_admin"
+                    android:textSize="@dimen/sp_size_14" />
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 </RelativeLayout>

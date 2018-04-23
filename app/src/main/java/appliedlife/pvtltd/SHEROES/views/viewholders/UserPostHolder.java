@@ -143,7 +143,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.fl_spam_post_ui)
     FrameLayout flSpamPostUi;
 
-
     @Bind(R.id.tv_review_description)
     TextView tvReviewDescription;
 
@@ -156,7 +155,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_delete_spam_post)
     TextView tvDeleteSpamPost;
 
-
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
 
@@ -167,7 +165,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
 
     private long mUserId;
-
     private int mAdminId;
 
     @Inject
@@ -210,6 +207,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
+
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
         } else {
@@ -562,7 +560,12 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
 
         final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
-        double imageRatio = mUserPostObj.getImageRatio().get(0);
+        double imageRatio;
+        if (CommonUtil.isEmpty(mUserPostObj.getImageRatio())) {
+            imageRatio = AppConstants.MAX_IMAGE_RATIO;
+        } else {
+            imageRatio = mUserPostObj.getImageRatio().get(0);
+        }
         if (imageRatio > AppConstants.MAX_IMAGE_RATIO) {
             imageRatio = AppConstants.MAX_IMAGE_RATIO;
         }
@@ -919,7 +922,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (adminId == AppConstants.TWO_CONSTANT || mUserPostObj.isCommunityOwner()) {
             viewContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
             viewContainer.setAlpha(1f);
-            flSpamPostUi.setVisibility(View.VISIBLE);
+            flSpamPostUi.setVisibility(View.GONE);
             liApproveDelete.setVisibility(View.VISIBLE);
             tvReviewDescription.setVisibility(View.GONE);
         } else if (mUserPostObj.getAuthorId() == userId) {
@@ -968,7 +971,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
+                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
+                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
+                }
             }
         }
         SpannableString spannableString = new SpannableString(strWithAddExtra);
@@ -996,8 +1001,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 };
                 int start = mentionSpan.getMention().getStartIndex() + i;
                 int end = mentionSpan.getMention().getEndIndex() + i;
-                spannableString.setSpan(postedInClick, start, end + 1, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
+                if (end + 1 <= spannableString.length() - 1 && start <= spannableString.length() - 1) {
+                    spannableString.setSpan(postedInClick, start, end + 1, 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
+                }
             }
         }
 

@@ -1,0 +1,93 @@
+ {
+    "post": [
+      {
+        "reason": "SPAM",
+        "score": 3,
+        "label": "This post is a spam"
+      },
+      {
+        "reason": "PRIVACY",
+        "score": 4,
+        "label": "This post contains personal details."
+      },
+      {
+        "reason": "DUDE",
+        "score": 5,
+        "label": "This post has been done by a man!"
+      },
+      {
+        "reason": "FAKE",
+        "score": 3,
+        "label": "This post contains fake/scammy/marketing content."
+      },
+      {
+        "reason": "PORN/ABUSIVE",
+        "score": 5,
+        "label": "The post contains abusive/violent/pornographic content."
+      },
+      {
+        "reason": "OTHERS",
+        "score": 3,
+        "label": "Others"
+      }
+    ],
+    "comment": [
+      {
+        "reason": "SPAM",
+        "score": 3,
+        "label": "This comment is a spam"
+      },
+      {
+        "reason": "PRIVACY",
+        "score": 4,
+        "label": "This comment contains personal details."
+      },
+      {
+        "reason": "DUDE",
+        "score": 5,
+        "label": "This comment has been done by a man!"
+      },
+      {
+        "reason": "FAKE",
+        "score": 3,
+        "label": "This comment contains fake/scammy/marketing content."
+      },
+      {
+        "reason": "PORN/ABUSIVE",
+        "score": 5,
+        "label": "The comment contains abusive/violent/pornographic content."
+      },
+      {
+        "reason": "OTHERS",
+        "score": 3,
+        "label": "Others"
+      }
+    ],
+    "user": [
+      {
+        "reason": "DUDE",
+        "score": 5,
+        "label": "This user is a man."
+      },
+      {
+        "reason": "SPAMMY",
+        "score": 3,
+        "label": "This user posts promotional/spammy content."
+      },
+      {
+        "reason": "FAKE",
+        "score": 4,
+        "label": "This user is fake/fraud."
+      },
+      {
+        "reason": "ABUSIVE",
+        "score": 4,
+        "label": "This user is abusive."
+      },
+      {
+        "reason": "OTHERS",
+        "score": 3,
+        "label": "Others"
+      }
+    ]
+  }

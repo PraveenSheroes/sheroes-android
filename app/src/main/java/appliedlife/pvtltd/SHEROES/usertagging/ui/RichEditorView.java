@@ -142,7 +142,9 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         // Set various delegates on the MentionEditText to the RichEditorView
         mMentionsEditText.setSuggestionsVisibilityManager(this);
         mMentionsEditText.addTextChangedListener(this);
+
         mMentionsEditText.setQueryTokenReceiver(this);
+
         mMentionsEditText.setAvoidPrefixOnTap(true);
 
         // Set the suggestions adapter

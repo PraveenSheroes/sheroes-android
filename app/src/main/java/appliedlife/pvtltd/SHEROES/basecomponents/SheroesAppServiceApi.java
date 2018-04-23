@@ -89,6 +89,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import io.reactivex.Observable;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
@@ -311,6 +313,16 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_user_device")
     Observable<AppInstallation> saveInstallation(@Body AppInstallation appInstallation);
+
+    //Spam Post
+    @POST("participation/post/spam_report")
+    Observable<SpamResponse> reportSpamPostOrComment(@Body SpamPostRequest spamPostRequest);
+
+    @POST("participant/user/spam_report")
+    Observable<SpamResponse> reportProfile(@Body SpamPostRequest spamPostRequest);
+
+    @POST("participation/post/approve_or_delete_comment")
+    Observable<SpamResponse> approveSpamComment(@Body ApproveSpamPostRequest approveSpamPostRequest);
 
     @POST("entity/master/user_mention_suggestions")
     Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);

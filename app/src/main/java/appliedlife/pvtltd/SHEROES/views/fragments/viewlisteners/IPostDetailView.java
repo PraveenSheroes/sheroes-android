@@ -7,6 +7,8 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 
@@ -40,6 +42,8 @@ public interface IPostDetailView extends BaseMvpView {
 
     void setData(int index, BaseResponse baseResponse);
 
+    void updateComment(Comment comment);
+
     void onPostDeleted();
 
     void editLastComment();
@@ -48,6 +52,8 @@ public interface IPostDetailView extends BaseMvpView {
 
 
     String getStreamType();
+
+    void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment);
 
     void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
 }

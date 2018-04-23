@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.json.JSONObject;
+
 /**
  * Created by ujjwal on 19/02/18.
  */
@@ -23,6 +25,18 @@ public class ConfigData {
 
     @SerializedName("thumborKey")
     public String thumborKey;
+
+    @SerializedName("spam_reasons")
+    public SpamReasons reasonOfSpamCategory;
+
+    @SerializedName("update_title")
+    public String updateTitle;
+
+    @SerializedName("update_description")
+    public String updateDescription;
+
+    @SerializedName("update_version")
+    public Integer updateVersion;
 
     @SerializedName("userTagCreatePostInfoText")
     public String mUserTagCreatePostInfoText = "You can tag community owners & your followers";

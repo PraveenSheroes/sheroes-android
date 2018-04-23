@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -28,17 +29,20 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -49,6 +53,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -67,6 +73,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -74,14 +81,21 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.Spam;
+import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -89,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
+import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
@@ -122,6 +137,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private WebViewClickListener webViewClickListener = null;
     public int mCommentCount = 0;
     public boolean mHasFocus = false;
+    private long adminId = 0;
+    private long currentUserId = -1;
 
     //region member variabe
     private VideoEnabledWebChromeClient webChromeClient;
@@ -143,6 +160,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Inject
     Preference<Configuration> mConfiguration;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     @Inject
     AppUtils mAppUtils;
@@ -300,6 +320,17 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 0xaa000000, 8, Gravity.TOP));
 
         setupToolbarItemsColor();
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
+        }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
+
 
         defaultUi = getWindow().getDecorView().getSystemUiVisibility();
         mArticleLayout.setOnScrollChangeListener(this);
@@ -539,7 +570,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentList.setFocusable(false);
         mCommentsAdapter = new CommentListAdapter(this, mArticlePresenter, new View.OnClickListener() {
             @Override
-            public void onClick(View deleteItem) {
+            public void onClick(final View deleteItem) {
                 View recyclerViewItem = (View) deleteItem.getParent();
                 final int position = mCommentList.getChildAdapterPosition(recyclerViewItem);
                 if (position == RecyclerView.NO_POSITION) {
@@ -556,16 +587,41 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         break;
 
                     case R.id.delete:
-                        PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
-                        popup.getMenuInflater().inflate(R.menu.menu_delete, popup.getMenu());
+                        final PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
+
+                        popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+                        popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+
+                        final Comment selectedComment = mCommentsAdapter.getComment(position);
+                        if (selectedComment == null) return;
+
+                        if(selectedComment.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
+                            popup.getMenu().findItem(R.id.delete).setVisible(true);
+                            popup.getMenu().findItem(R.id.report_spam).setVisible(false);
+                        } else {
+                            popup.getMenu().findItem(R.id.delete).setVisible(false);
+                            if(selectedComment.isSpamComment()) {
+                                popup.getMenu().findItem(R.id.report_spam).setVisible(false);
+                            } else {
+                                popup.getMenu().findItem(R.id.report_spam).setVisible(true);
+                            }
+                        }
+
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             public boolean onMenuItemClick(MenuItem item) {
-                                Comment comment = mCommentsAdapter.getComment(position);
-                                if (comment == null) {
+                                if(item.getItemId() == R.id.report_spam ) {
+                                    reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
+
+                                    return true;
+                                } else  {
+                                    final long adminID = adminId;
+                                    if(!selectedComment.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
+                                        reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
+                                    } else{
+                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(selectedComment.getEntityId(), selectedComment.getComment(), false, false, selectedComment.getId(),hasMentions,mentionSpanList));
+                                    }
                                     return true;
                                 }
-                                mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(),hasMentions,mentionSpanList));
-                                return true;
                             }
                         });
                         popup.show();
@@ -574,6 +630,120 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             }
         });
         mCommentList.setAdapter(mCommentsAdapter);
+    }
+
+    private CharSequence menuIconWithText(Drawable r, String title) {
+        r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
+        SpannableString sb = new SpannableString("    " + title);
+        ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
+    }
+
+    private void onCommentReported(Comment comment) {
+        HashMap<String, Object> propertiesDelete =
+                new EventProperty.Builder()
+                        .id(Long.toString(comment.getId()))
+                        .postId(Long.toString(comment.getEntityId()))
+                        .postType(AnalyticsEventType.COMMUNITY.toString())
+                        .communityId(comment.getCommunityId())
+                        .body(comment.getComment())
+                        .streamType(streamType)
+                        .build();
+        trackEvent(Event.REPLY_REPORTED, propertiesDelete);
+    }
+
+
+    private void reportSpamDialog(final SpamContentType spamContentType, final Comment comment, final int commentPos) {
+
+        if(ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
+
+        SpamReasons spamReasons;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {
+            spamReasons = mConfiguration.get().configData.reasonOfSpamCategory;
+        } else {
+            String spamReasonsContent = AppUtils.getStringContent(AppConstants.SPAM_REASONS_FILE); //read spam reasons from local file
+            spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
+        }
+
+        if(spamReasons == null) return;
+
+        final Dialog spamReasonsDialog = new Dialog(ArticleActivity.this);
+        spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        spamReasonsDialog.setCancelable(true);
+        spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
+
+        RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
+                RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(CommonUtil.convertDpToPixel(16, ArticleActivity.this), CommonUtil.convertDpToPixel(10, ArticleActivity.this), 0, 0);
+
+        TextView reasonTitle = spamReasonsDialog.findViewById(R.id.reason_title);
+        TextView reasonSubTitle = spamReasonsDialog.findViewById(R.id.reason_sub_title);
+        reasonTitle.setLayoutParams(layoutParams);
+        reasonSubTitle.setLayoutParams(layoutParams);
+
+        final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
+
+        List<Spam> spamList =null;
+        SpamPostRequest spamRequest = null;
+        if(spamContentType == SpamContentType.ARTICLE_COMMENT) {
+            spamList = spamReasons.getCommentTypeSpams();
+            spamRequest = SpamUtil.spamArticleCommentRequestBuilder(comment, currentUserId);
+        }
+
+        if(spamRequest == null || spamList == null) return;
+
+        SpamUtil.addRadioToView(ArticleActivity.this, spamList , spamOptions);
+
+        Button submit = spamReasonsDialog.findViewById(R.id.submit);
+        final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
+
+        final SpamPostRequest finalSpamRequest = spamRequest;
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+
+                    RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
+                    Spam spam = (Spam) radioButton.getTag();
+                    if (spam != null) {
+                        finalSpamRequest.setSpamReason(spam.getReason());
+                        finalSpamRequest.setScore(spam.getScore());
+
+                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                            if (reason.getVisibility() == View.VISIBLE) {
+
+                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                    mArticlePresenter.reportSpamPostOrComment(finalSpamRequest, comment, commentPos); //submit
+                                    spamReasonsDialog.dismiss();
+
+                                    if(spamContentType == SpamContentType.ARTICLE_COMMENT) {
+                                        onCommentReported(comment);   //report the article comment deleted by admin comment
+                                    }
+
+                                } else {
+                                    reason.setError("Add the reason");
+                                }
+
+                            } else {
+                                reason.setVisibility(View.VISIBLE);
+                                SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
+                            }
+                        } else {
+                            mArticlePresenter.reportSpamPostOrComment(finalSpamRequest, comment, commentPos);  //submit request
+                            spamReasonsDialog.dismiss();
+
+                            if(spamContentType == SpamContentType.ARTICLE_COMMENT) {
+                                onCommentReported(comment);   //report the article comment deleted by admin comment
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        spamReasonsDialog.show();
     }
 
     private void fetchArticle(int articleId, boolean isImageLoaded) {
@@ -1027,6 +1197,22 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     public void startNextScreen() {
 
+    }
+
+    @Override
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse, Comment comment, int position) {
+        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+
+            if (comment != null && !comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
+                mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), position, comment);
+            }
+
+            if (!spamResponse.isSpamAlreadyReported()) {
+                CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
+            } else {
+                CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, SpamContentType.COMMENT.name()));
+            }
+        }
     }
 
     @Override

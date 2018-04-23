@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/deactivate_user"
+        android:icon="@drawable/ic_share_black"
+        android:title="@string/deactivate_user" />
+    <item
+        android:id="@+id/ban_user_device"
+        android:icon="@drawable/ic_create"
+        android:title="@string/banned_user_device" />
+
+    <item
+        android:id="@+id/report_user"
+        android:icon="@drawable/ic_report_spam"
+        android:title="@string/report_user" />
+</menu>

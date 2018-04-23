@@ -1,6 +1,6 @@
 def versionMajor = 6
-def versionMinor = 4
-def versionPatch = 4
+def versionMinor = 5
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -73,12 +73,12 @@ android {
     }
     buildTypes {
         debug {
-            //buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
+            buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
            // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
-            buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
            
             if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
                 buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""

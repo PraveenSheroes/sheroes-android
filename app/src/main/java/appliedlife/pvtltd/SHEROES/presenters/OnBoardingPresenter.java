@@ -83,7 +83,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        onBoardingModel.getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        onBoardingModel.getFeedFromModel(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -113,7 +115,9 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        onBoardingModel.getOnBoardingFromModel(getAllDataRequest).subscribe(new DisposableObserver<GetAllData>() {
+        onBoardingModel.getOnBoardingFromModel(getAllDataRequest)
+                .compose(this.<GetAllData>bindToLifecycle())
+                .subscribe(new DisposableObserver<GetAllData>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -175,7 +179,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             return;
         }
         getMvpView().startProgressBar();
-        onBoardingModel.removeMember(removeMemberRequest).subscribe(new DisposableObserver<MemberListResponse>() {
+        onBoardingModel.removeMember(removeMemberRequest).compose(this.<MemberListResponse>bindToLifecycle()).subscribe(new DisposableObserver<MemberListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

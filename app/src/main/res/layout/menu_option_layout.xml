@@ -77,4 +77,24 @@
         android:textColor="@color/recent_post_comment"
         android:textSize="@dimen/sp_size_12"
         android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/report_spam"
+        android:layout_width="@dimen/dp_size_150"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/menu_selector"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_size_13"
+        android:paddingTop="@dimen/dp_size_13"
+        android:text="@string/REPORT_SPAM"
+        android:drawablePadding="@dimen/dp_size_20"
+        android:paddingLeft="@dimen/dp_size_24"
+        android:paddingRight="@dimen/dp_size_10"
+        android:drawableLeft="@drawable/ic_report_spam"
+        android:textColor="@color/recent_post_comment"
+        android:textSize="@dimen/sp_size_12"
+        android:visibility="gone" />
+
 </LinearLayout>

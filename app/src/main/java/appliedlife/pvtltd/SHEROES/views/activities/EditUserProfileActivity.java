@@ -22,6 +22,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -893,6 +894,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         mUserPreference.get().getUserSummary().setLastName(userSummary.getLastName());
                         mUserPreference.set(userDetailsResponse);
                     } catch (Exception e) {
+                        LogUtils.error("err", e.toString());
                     }
 
                 } catch (Exception e) {

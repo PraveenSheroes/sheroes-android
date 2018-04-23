@@ -310,7 +310,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             branchUrlHandle();
         } else {
             isSharedFromOtherApp = false;
-            if (null != mConfiguration && mConfiguration.isSet()) {
+            if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData!=null) {
                 etView.getEditText().setHint(mConfiguration.get().configData.mCreatePostText);
                 mUserTagCreatePostText=mConfiguration.get().configData.mUserTagCreatePostInfoText;
             }
@@ -1655,15 +1655,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
-        final String searchText=queryToken.getTokenString();
+      /*  final String searchText=queryToken.getTokenString();
         if (searchText.contains("@")) {
             hasMentions=false;
             mentionSpanList=null;
             List<TaggedUserPojo> taggedUserPojoList=new ArrayList<>();
             taggedUserPojoList.add(0, new TaggedUserPojo(1,mUserTagCreatePostText,"","",0));
             taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
-          /*  UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");*/
+            UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            etView.onReceiveSuggestionsResult(result, "data");
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
@@ -1685,28 +1685,28 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         200
                 );
             }
-        }
+        }*/
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
     }
 
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        this.mentionSpanList = mentionSpanList;
+       /* this.mentionSpanList = mentionSpanList;*/
         return null;
     }
 
     @Override
     public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        /*LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mSuggestionList.setLayoutManager(layoutManager);
-        mSuggestionList.setAdapter(userTagSuggestionsAdapter);
+        mSuggestionList.setAdapter(userTagSuggestionsAdapter);*/
         return null;
     }
 
     @Override
     public Suggestible onUserTaggedClick(@NonNull Suggestible suggestible, View view) {
-        int id = view.getId();
+      /*  int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
                 mTaggedUserPojoList.clear();
@@ -1722,7 +1722,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
                 break;
             default:
-        }
+        }*/
 
         return null;
     }
@@ -1751,13 +1751,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         }
                     }
                 }
-                if (editTextDescription.contains("@")) {
+                /*if (editTextDescription.contains("@")) {
                     mAnonymousView.setVisibility(View.GONE);
                     mImageUploadView.setVisibility(View.GONE);
                 } else {
                     mAnonymousView.setVisibility(View.VISIBLE);
                     mImageUploadView.setVisibility(View.VISIBLE);
-                }
+                }*/
             }
 
         }
