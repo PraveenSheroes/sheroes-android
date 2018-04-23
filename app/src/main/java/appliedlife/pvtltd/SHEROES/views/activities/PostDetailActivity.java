@@ -1008,7 +1008,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                                 mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
                             }
                         },
-                        2000
+                        200
                 );
             }
         }

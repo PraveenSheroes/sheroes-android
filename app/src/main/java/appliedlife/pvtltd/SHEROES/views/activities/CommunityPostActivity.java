@@ -1682,7 +1682,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                 mCreatePostPresenter.userTaggingSearchEditText(queryToken, searchText, mCommunityPost);
                             }
                         },
-                        2000
+                        200
                 );
             }
         }

@@ -89,7 +89,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             }
 
         });
-
     }
 
     public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest) {

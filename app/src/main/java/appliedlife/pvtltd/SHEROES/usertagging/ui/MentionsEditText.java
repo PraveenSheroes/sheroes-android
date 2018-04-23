@@ -814,6 +814,28 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             switch (displayMode) {
 
                 case PARTIAL:
+                    String displayString = span.getDisplayString();
+                    if (!displayString.equals(spanText) && start >= 0 && start < end && end <= text.length()) {
+                        // Mention display name does not match what is being shown,
+                        // replace text in span with proper display name
+                        int cursor = getSelectionStart();
+                        int diff = cursor - end;
+                        text.removeSpan(span);
+                        text.replace(start, end, displayString);
+                        if (diff > 0 && start + end + diff < text.length()) {
+                            text.replace(start + end, start + end + diff, "");
+                        }
+                        if (displayString.length() > 0) {
+                            text.setSpan(span, start, start + displayString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+                        // Notify for partially deleted mentions.
+                        if (mMentionWatchers.size() > 0 && displayMode == Mentionable.MentionDisplayMode.PARTIAL) {
+                            notifyMentionPartiallyDeletedWatchers(span.getMention(), displayString, start, end);
+                        }
+                        spanAltered = true;
+                    }
+                    mentionSpanList.remove(span);
+                    break;
                 case FULL:
                     String name = span.getDisplayString();
                     if (!name.equals(spanText) && start >= 0 && start < end && end <= text.length()) {

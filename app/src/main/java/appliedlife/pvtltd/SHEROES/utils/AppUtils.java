@@ -1869,8 +1869,13 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         /*User tagging fields*/
-        communityPostCreateRequest.setHasMentions(hasMention);
-        communityPostCreateRequest.setUserMentionList(userMentionList);
+            if(StringUtil.isNotEmptyCollection(userMentionList)) {
+                communityPostCreateRequest.setHasMentions(hasMention);
+                communityPostCreateRequest.setUserMentionList(userMentionList);
+            }else {
+                communityPostCreateRequest.setHasMentions(false);
+                communityPostCreateRequest.setUserMentionList(null);
+            }
         return communityPostCreateRequest;
     }
 
@@ -1906,8 +1911,13 @@ public class AppUtils {
             challengePostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         /*User tagging fields*/
-        challengePostCreateRequest.setHasMentions(hasMention);
-        challengePostCreateRequest.setUserMentionList(userMentionList);
+        if(StringUtil.isNotEmptyCollection(userMentionList)) {
+            challengePostCreateRequest.setHasMentions(hasMention);
+            challengePostCreateRequest.setUserMentionList(userMentionList);
+        }else {
+            challengePostCreateRequest.setHasMentions(false);
+            challengePostCreateRequest.setUserMentionList(null);
+        }
         return challengePostCreateRequest;
     }
 
@@ -1946,8 +1956,13 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
               /*User tagging fields*/
-        communityPostCreateRequest.setHasMentions(hasMention);
-        communityPostCreateRequest.setUserMentionList(userMentionList);
+        if(StringUtil.isNotEmptyCollection(userMentionList)) {
+            communityPostCreateRequest.setHasMentions(hasMention);
+            communityPostCreateRequest.setUserMentionList(userMentionList);
+        }else {
+            communityPostCreateRequest.setHasMentions(false);
+            communityPostCreateRequest.setUserMentionList(null);
+        }
         return communityPostCreateRequest;
     }
 
