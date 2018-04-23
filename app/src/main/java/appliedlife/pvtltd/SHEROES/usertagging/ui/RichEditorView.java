@@ -602,7 +602,11 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             mMentionsEditText.editInsertMention(mention, start, end);
         }
     }
-
+    public void setCreateEditMentionSelectionText(@NonNull TaggedUserPojo mention, int start, int end) {
+        if (mMentionsEditText != null) {
+            mMentionsEditText.editCreateInsertMention(mention, start, end);
+        }
+    }
     /**
      * Sets the input type of the embedded {@link MentionsEditText}.
      *

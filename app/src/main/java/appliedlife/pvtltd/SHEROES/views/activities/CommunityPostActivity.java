@@ -443,8 +443,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 TaggedUserPojo userMention = mentionSpan.getMention();
                 int index = userMention.getStartIndex();
-                etView.setMentionSelectionText(userMention, index, index + 1);
+                etView.setCreateEditMentionSelectionText(userMention, index, index + 1);
             }
+            etView.getEditText().setSelection(etView.getEditText().length());
         }
     }
 

@@ -1018,7 +1018,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 isDirty = true;
             }
         }
-
+        etView.setEditTextShouldWrapContent(true);
     }
 
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {

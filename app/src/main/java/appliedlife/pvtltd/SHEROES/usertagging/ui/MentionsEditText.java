@@ -991,6 +991,12 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
 
         // Setup variables and ensure they are valid
+        Editable text = getEditableText().replace(0,getEditableText().length()," ");
+        insertMentionInternal(taggedUserPojo, text, start, end);
+    }
+    public void editCreateInsertMention(@NonNull TaggedUserPojo taggedUserPojo,int start,int end) {
+
+        // Setup variables and ensure they are valid
         Editable text = getEditableText();
         insertMentionInternal(taggedUserPojo, text, start, end);
     }
@@ -1016,6 +1022,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         String name = taggedUserPojo.getSuggestiblePrimaryText();
 
         mBlockCompletion = true;
+
         text.replace(start, end, name);
         int endOfMention = start + name.length();
         text.setSpan(mentionSpan, start, endOfMention, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
