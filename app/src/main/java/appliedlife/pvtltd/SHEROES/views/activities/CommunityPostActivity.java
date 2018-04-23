@@ -343,10 +343,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
                     }
                 }
-                RelativeLayout.LayoutParams layoutParams =
+               /* RelativeLayout.LayoutParams layoutParams =
                         (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
                 layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                mUserName.setLayoutParams(layoutParams);
+                mUserName.setLayoutParams(layoutParams);*/
             }
             if (mIsEditPost) {
                 fbShareContainer.setVisibility(View.GONE);
@@ -470,10 +470,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag,0);
                 }
             }
-            RelativeLayout.LayoutParams layoutParams =
+           /* RelativeLayout.LayoutParams layoutParams =
                     (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-            mUserName.setLayoutParams(layoutParams);
+            mUserName.setLayoutParams(layoutParams);*/
         } else {
             fbShareContainer.setVisibility(View.GONE);
             mIsAnonymous = mCommunityPost.isAnonymous;
@@ -1159,7 +1159,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             etView.getEditText().requestFocus();
         } else {
             if (mIsChallengePost) {
-                mCommunityName.setVisibility(View.GONE);
+                mCommunityName.setVisibility(View.VISIBLE);
+                mCommunityName.setText("Challenge");
+                mCommunityName.setEnabled(false);
             }
             if (mCommunityPost != null && mCommunityPost.community != null)
                 mCommunityName.setText(mCommunityPost.community.name);
@@ -1405,11 +1407,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mUserName.setText(CommonUtil.capitalizeString(mCommunityPost.community.name));
             }
         } else {
-            if (mIsChallengePost) {
+            mCommunityName.setVisibility(View.VISIBLE);
+            /*if (mIsChallengePost) {
                 mCommunityName.setVisibility(View.GONE);
             } else {
                 mCommunityName.setVisibility(View.VISIBLE);
-            }
+            }*/
             if (mIsAnonymous) {
                 mUserName.setText("Anonymous");
                 mShareToFacebook.setChecked(false);
