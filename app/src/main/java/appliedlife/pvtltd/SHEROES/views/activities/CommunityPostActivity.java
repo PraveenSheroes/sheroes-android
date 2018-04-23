@@ -1196,11 +1196,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.community.name = userPostObj.getPostCommunityName();
             communityPost.community.isOwner = userPostObj.isCommunityOwner();
             communityPost.isMyPost = userPostObj.isCommunityOwner();
-
             communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+            if(userPostObj.isHasMention()) {
+                communityPost.hasMention=userPostObj.isHasMention();
+                communityPost.userMentionList=userPostObj.getUserMentionList();
+            }
             if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
                 for (String imageUrl : userPostObj.getImageUrls()) {
                     Photo photo = new Photo();
@@ -1239,6 +1242,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+
 //            communityPost.isCompanyAdmin =  userPostObj.grt();
             if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
                 for (String imageUrl : userPostObj.getImageUrls()) {

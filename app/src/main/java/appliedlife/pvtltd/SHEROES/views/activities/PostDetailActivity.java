@@ -901,7 +901,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if(isDirty && editedComment!=null) {
            // mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
             mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId(), hasMentions, mentionSpanList), AppConstants.TWO_CONSTANT);
-
         } else {
             String message = etView.getEditText().getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {

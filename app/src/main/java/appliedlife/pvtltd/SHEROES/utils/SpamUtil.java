@@ -63,7 +63,7 @@ public class SpamUtil {
 
         SpamPostRequest spamPostRequest = new SpamPostRequest();
         spamPostRequest.setModelType(SpamContentType.USER.name());
-        spamPostRequest.setCommunityId(0);
+        spamPostRequest.setCommunityId(Long.parseLong("0"));
         spamPostRequest.setSpamReportedOn(userSolrObj.getIdOfEntityOrParticipant());
         spamPostRequest.setModelId(userSolrObj.getIdOfEntityOrParticipant());
         spamPostRequest.setSpamReportedBy(currentUserId);

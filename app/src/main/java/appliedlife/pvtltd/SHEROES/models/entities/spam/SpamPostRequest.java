@@ -41,11 +41,11 @@ public class SpamPostRequest {
     private int score;
 
 
-    public long getModelId() {
+    public Long getModelId() {
         return modelId;
     }
 
-    public void setModelId(long modelId) {
+    public void setModelId(Long modelId) {
         this.modelId = modelId;
     }
 
@@ -65,11 +65,11 @@ public class SpamPostRequest {
         this.spamReason = spamReason;
     }
 
-    public long getSpamReportedBy() {
+    public Long getSpamReportedBy() {
         return spamReportedBy;
     }
 
-    public void setSpamReportedBy(long spamReportedBy) {
+    public void setSpamReportedBy(Long spamReportedBy) {
         this.spamReportedBy = spamReportedBy;
     }
 
@@ -81,11 +81,11 @@ public class SpamPostRequest {
         this.spamReportedOn = spamReportedOn;
     }
 
-    public long getCommunityId() {
+    public Long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(long communityId) {
+    public void setCommunityId(Long communityId) {
         this.communityId = communityId;
     }
 
