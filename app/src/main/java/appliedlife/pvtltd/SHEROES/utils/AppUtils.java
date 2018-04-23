@@ -2052,8 +2052,13 @@ public class AppUtils {
         commentReactionRequestPojo.setIsAnonymous(isAnonymous);
         commentReactionRequestPojo.setEntityId(entityId);
         /*User mention*/
-        commentReactionRequestPojo.setHasMentions(hasMention);
-        commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+            commentReactionRequestPojo.setHasMentions(hasMention);
+            commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        }else {
+            commentReactionRequestPojo.setHasMentions(false);
+            commentReactionRequestPojo.setUserMentionList(null);
+        }
         return commentReactionRequestPojo;
     }
 
@@ -2085,8 +2090,13 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         commentReactionRequestPojo.setParticipationId(participationId);
         /*User mention*/
-        commentReactionRequestPojo.setHasMentions(hasMention);
-        commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+            commentReactionRequestPojo.setHasMentions(hasMention);
+            commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        }else {
+            commentReactionRequestPojo.setHasMentions(false);
+            commentReactionRequestPojo.setUserMentionList(null);
+        }
         return commentReactionRequestPojo;
     }
 

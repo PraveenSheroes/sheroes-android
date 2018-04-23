@@ -208,7 +208,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             String authorThumborUrl = CommonUtil.getThumborUri(userPostSolrObj.getAuthorImageUrl(), authorProfileSize, authorProfileSize);
             mPostAuthorImage.bindImage(authorThumborUrl);
         }
-        if (mConfiguration != null && mConfiguration.get() != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
         } else {
             mJoinConversation.setText(new ConfigData().mCommentHolderText);
