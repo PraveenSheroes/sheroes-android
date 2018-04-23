@@ -2050,20 +2050,6 @@ public class AppUtils {
         return commentReactionRequestPojo;
     }
 
-    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId) {
-        AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
-        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
-        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
-        //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
-        commentReactionRequestPojo.setUserComment(userComment);
-        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
-        commentReactionRequestPojo.setIsActive(isActive);
-        commentReactionRequestPojo.setEntityId(entityId);
-        commentReactionRequestPojo.setParticipationId(participationId);
-        return commentReactionRequestPojo;
-    }
 
     public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();

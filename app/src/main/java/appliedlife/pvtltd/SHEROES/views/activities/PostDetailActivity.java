@@ -899,7 +899,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         if(isDirty && editedComment!=null) {
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
+           // mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
+            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId(), hasMentions, mentionSpanList), AppConstants.TWO_CONSTANT);
+
         } else {
             String message = etView.getEditText().getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {
@@ -990,7 +992,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
-
+        editedComment = comment;
         if (comment.isHasCommentMention()) {
             hasMentions=comment.isHasCommentMention();
             mentionSpanList = comment.getCommentUserMentionList();
@@ -999,11 +1001,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             etView.getEditText().setText(comment.getComment());
             etView.getEditText().setSelection(comment.getComment().length());
         }
-
-        editedComment = comment;
-        etView.getEditText().setText(comment.getComment());
-        etView.getEditText().setSelection(comment.getComment().length());
-
         int pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
 
         if (mPostDetailListAdapter.getItemCount() > pos) {
@@ -1022,6 +1019,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 isDirty = true;
             }
         }
+
     }
 
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
