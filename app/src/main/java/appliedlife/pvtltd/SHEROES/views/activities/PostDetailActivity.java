@@ -904,7 +904,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             String message = etView.getEditText().getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {
                 lastEditedComment.clear();
-                mPostDetailPresenter.addComment(message, mIsAnonymous);
+                mPostDetailPresenter.addComment(message, mIsAnonymous, hasMentions, mentionSpanList);
             }
         }
         etView.getEditText().setText("");
@@ -1278,6 +1278,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 etView.displayHide();
                 TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
                 etView.setInsertion(taggedUserPojo);
+                etView.setEditTextShouldWrapContent(true);
                 if(null!=mUserPostObj) {
                     final HashMap<String, Object> properties =
                             new EventProperty.Builder()
@@ -1307,6 +1308,5 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
             }
         }
-
     }
 }

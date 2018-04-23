@@ -1544,9 +1544,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
-                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
-                }
+                strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
             }
         }
         SpannableString spannableString = new SpannableString(strWithAddExtra);
@@ -1579,10 +1577,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 };
                 int start=mentionSpan.getMention().getStartIndex()+i;
                 int end=mentionSpan.getMention().getEndIndex()+i;
-                if (end + 1 <= spannableString.length() - 1 && start <= spannableString.length() - 1) {
-                    spannableString.setSpan(postedInClick, start, end + 1, 0);
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
-                }
+                spannableString.setSpan(postedInClick, start, end+1, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
             }
         }
         if(isComment) {
@@ -1592,6 +1588,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostText.setMovementMethod(LinkMovementMethod.getInstance());
             tvFeedCommunityPostText.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
         }
+
         // tvMention.setSelected(true);
     }
 }

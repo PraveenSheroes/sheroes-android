@@ -2028,18 +2028,6 @@ public class AppUtils {
         return bookmarkRequestPojo;
     }
 
-    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous) {
-        AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
-        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
-        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
-        //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
-        commentReactionRequestPojo.setUserComment(userComment);
-        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
-        commentReactionRequestPojo.setEntityId(entityId);
-        return commentReactionRequestPojo;
-    }
 
     public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();

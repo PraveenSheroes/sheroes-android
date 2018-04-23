@@ -297,49 +297,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void addComment(String commentText, boolean isAnonymous) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
-            return;
-        }
-        CommentReactionRequestPojo  commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous);
-        addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_UNABLE_TO_COMMENT), ERROR_COMMENT_REACTION);
-            }
-
-            @Override
-            public void onNext(CommentAddDelete commentResponsePojo) {
-                getMvpView().stopProgressBar();
-                if (null != commentResponsePojo) {
-                    Comment comment = commentResponsePojo.getCommentReactionModel();
-                    mBaseResponseList.add(comment);
-                    mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() + 1);
-                    mBaseResponseList.set(0, mUserPostObj);
-                    getMvpView().setData(0, mUserPostObj);
-                    getMvpView().addData(comment);
-                    getMvpView().smoothScrollToBottom();
-                    HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
-                                    .postType(AnalyticsEventType.COMMUNITY.toString())
-                                    .body(commentResponsePojo.getCommentReactionModel().getComment())
-                                    .streamType(CommonUtil.isNotEmpty(mUserPostObj.getStreamType()) ? mUserPostObj.getStreamType() : "")
-                                    .communityId(commentResponsePojo.getCommentReactionModel().getCommunityId())
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_CREATED, PostDetailActivity.SCREEN_LABEL, properties);
-                }
-            }
-        });
-
-    }
 
     public void addComment(String commentText, boolean isAnonymous, boolean hasMention, List<MentionSpan> mentionSpanList) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
