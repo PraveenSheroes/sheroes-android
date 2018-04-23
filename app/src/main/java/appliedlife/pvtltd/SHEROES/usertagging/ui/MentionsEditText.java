@@ -988,10 +988,16 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         insertMentionInternal(taggedUserPojo, text, start, end);
     }
     public void editInsertMention(@NonNull TaggedUserPojo taggedUserPojo,int start,int end) {
-
-
+        
         // Setup variables and ensure they are valid
-        Editable text = getEditableText().replace(0,getEditableText().length()," ");
+        Editable text;
+        if(start==0)
+        {
+            text = getEditableText().replace(0,getEditableText().length()," ");;
+        }else
+        {
+            text = getEditableText();
+        }
         insertMentionInternal(taggedUserPojo, text, start, end);
     }
     public void editCreateInsertMention(@NonNull TaggedUserPojo taggedUserPojo,int start,int end) {
