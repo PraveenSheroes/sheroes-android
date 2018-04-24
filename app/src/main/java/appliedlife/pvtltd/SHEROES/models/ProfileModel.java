@@ -174,7 +174,7 @@ public class ProfileModel {
     }
 
     public Observable<SpamResponse> reportSpam(SpamPostRequest spamPostRequest) {
-        return sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest).
+        return sheroesAppServiceApi.reportProfile(spamPostRequest).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
