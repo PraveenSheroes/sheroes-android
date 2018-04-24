@@ -86,7 +86,7 @@
 
             <TextView
                 android:id="@+id/tv_user_name_for_post"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_25"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
