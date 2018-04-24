@@ -1304,7 +1304,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
-        HelplineFragment helplineFragment = new HelplineFragment();
+        HelplineFragment helplineFragment = HelplineFragment.createInstance(AppConstants.helpline_desk);
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();

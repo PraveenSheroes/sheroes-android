@@ -556,6 +556,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         if (isSharedFromOtherApp) {
+
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .isOpenedFromExternalApp(String.valueOf(isSharedFromOtherApp))
+                            .build();
+            AnalyticsManager.trackScreenView(getScreenName(), screenName(),  properties);
+
             if (mCommunityPost == null) {
                 mCommunityPost = new CommunityPost();
                 mCommunityPost.isEdit = false;
@@ -717,7 +724,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, hasMentions, mentionSpanList));
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, hasMentions, mentionSpanList), isSharedFromOtherApp);
 
         } else {
             if (mCommunityPost != null) {
@@ -807,7 +814,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (AccessToken.getCurrentAccessToken() != null) {
             accessToken = AccessToken.getCurrentAccessToken().getToken();
         }
-        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, hasMentions, null));
+        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, hasMentions, null), isSharedFromOtherApp);
     }
 
     private boolean validateFields() {

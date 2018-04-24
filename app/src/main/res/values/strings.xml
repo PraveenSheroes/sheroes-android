@@ -582,11 +582,11 @@
     <string name="please_elaborate">Please elaborate…</string>
 
     <!--spam region start-->
-    <string name="spam_confirmation_dialog_title">Thank You for your Feedback!</string>
-    <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and is in review. Thank You!</string>
+    <string name="spam_confirmation_dialog_title">Thank you for your feedback!</string>
+    <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and it is in review. Thank You!</string>
 
     <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
-    <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with Sheroes</string>
+    <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
 
 
     <!--spam region end-->

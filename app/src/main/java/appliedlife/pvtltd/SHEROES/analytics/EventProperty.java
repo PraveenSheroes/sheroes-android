@@ -57,7 +57,10 @@ public enum EventProperty {
     POST_COMMENT_ID("Post / Comment ID"),
     TAGGED_IN("Tagged In"),
     TAGGED_USER_ID("Tagged User ID"),
-    CURRENT_VERSION("Current Version");
+    CURRENT_VERSION("Current Version"),
+    BRANCH_LINK("Branch link"),
+    OPENED_FROM_EXTERNAL_APP("Opened from external app"),
+    SHARED_FROM_EXTERNAL_APP("Shared From External App");
 
     private final String string;
 
@@ -300,6 +303,21 @@ public enum EventProperty {
 
         public Builder streamType(String value){
             put(STREAM_TYPE, value);
+            return this;
+        }
+
+        public Builder branchLink(String value){
+            put(BRANCH_LINK, value);
+            return this;
+        }
+
+        public Builder isSharedFromExternalApp(String value) {
+            put(SHARED_FROM_EXTERNAL_APP, value);
+            return this;
+        }
+
+        public Builder isOpenedFromExternalApp(String value) {
+            put(OPENED_FROM_EXTERNAL_APP, value);
             return this;
         }
     }

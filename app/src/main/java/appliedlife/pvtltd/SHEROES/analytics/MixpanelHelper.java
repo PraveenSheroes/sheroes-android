@@ -221,6 +221,7 @@ public class MixpanelHelper {
                             .title(feedDetail.getNameOrTitle())
                             .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
                             .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .positionInList(feedDetail.getItemPosition())
                             .build();
