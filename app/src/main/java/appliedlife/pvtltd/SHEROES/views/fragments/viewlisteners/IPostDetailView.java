@@ -51,9 +51,9 @@ public interface IPostDetailView extends BaseMvpView {
     void deleteLastComment();
 
 
-    String getStreamType();
+    String getmStreamType();
 
     void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment);
 
-    void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
+    void userMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
 }

@@ -36,7 +36,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -74,7 +73,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
@@ -88,12 +86,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
-import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
@@ -102,7 +98,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -128,10 +123,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
     private long mLoggedInUser = -1;
-    private String streamType;
-    private boolean isDirty = false;
-    private Comment editedComment = null;
-    private Map<Integer, Comment> lastEditedComment = new HashMap<>();
+    private String mStreamType;
+    private boolean mIsDirty = false;
+    private Comment mEditedComment = null;
+    private Map<Integer, Comment> mLastEditedComment = new HashMap<>();
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -200,10 +195,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private int mFromNotification;
     LinearLayoutManager mLayoutManager;
-    private List<MentionSpan> mentionSpanList;
-    List<TaggedUserPojo> mTaggedUserPojoList;
-    private boolean hasMentions = false;
-    private String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
+    private List<MentionSpan> mMentionSpanList;
+    List<UserMentionSuggestionPojo> mUserMentionSuggestionPojoList;
+    private boolean mHasMentions = false;
+    private String mUserTagCommentInfoText;
     //endregion
 
     //region activity methods
@@ -214,6 +209,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setContentView(R.layout.activity_post_detail);
         ButterKnife.bind(this);
         mPostDetailPresenter.attachView(this);
+        mUserTagCommentInfoText =getString(R.string.user_mention_area_at_comment);
         mUserPic.setCircularImage(true);
         setIsLoggedInUser();
         etView.setQueryTokenReceiver(this);
@@ -223,7 +219,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
             mPositionInFeed = mUserPostObj.getItemPosition();
-            streamType = mUserPostObj.getStreamType();
+            mStreamType = mUserPostObj.getStreamType();
             boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
             if (showKeyboard) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -430,10 +426,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void updateComment(Comment comment) {
-        if (isDirty && !lastEditedComment.isEmpty()) {
-            isDirty = false;
-            Map.Entry<Integer, Comment> entry = lastEditedComment.entrySet().iterator().next();
-            lastEditedComment.clear();
+        if (mIsDirty && !mLastEditedComment.isEmpty()) {
+            mIsDirty = false;
+            Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
+            mLastEditedComment.clear();
             mPostDetailListAdapter.addData(comment, entry.getKey());
             mLayoutManager.scrollToPositionWithOffset(entry.getKey(), 0);
         }
@@ -457,7 +453,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void editLastComment() {
         Comment comment = mPostDetailPresenter.getLastComment();
         if (comment != null) {
-            isDirty = true;
+            mIsDirty = true;
             onEditMenuClicked(comment);
         }
     }
@@ -478,8 +474,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
 
     @Override
-    public String getStreamType() {
-        return streamType;
+    public String getmStreamType() {
+        return mStreamType;
     }
 
     @Override
@@ -898,14 +894,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
-        if(isDirty && editedComment!=null) {
-           // mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId(), hasMentions, mentionSpanList), AppConstants.TWO_CONSTANT);
+        if(mIsDirty && mEditedComment !=null) {
+           // mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId()), AppConstants.TWO_CONSTANT);
+            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
         } else {
             String message = etView.getEditText().getText().toString().trim();
             if (!TextUtils.isEmpty(message)) {
-                lastEditedComment.clear();
-                mPostDetailPresenter.addComment(message, mIsAnonymous, hasMentions, mentionSpanList);
+                mLastEditedComment.clear();
+                mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
             }
         }
         etView.getEditText().setText("");
@@ -974,10 +970,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
-                        .streamType(streamType)
+                        .streamType(mStreamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), hasMentions, mentionSpanList), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), mHasMentions, mMentionSpanList), AppConstants.ONE_CONSTANT);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -988,14 +984,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
-                        .streamType(streamType)
+                        .streamType(mStreamType)
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
-        editedComment = comment;
+        mEditedComment = comment;
         if (comment.isHasCommentMention()) {
-            hasMentions=comment.isHasCommentMention();
-            mentionSpanList = comment.getCommentUserMentionList();
-            editUserMentionWithCommentText(mentionSpanList, comment.getComment());
+            mHasMentions =comment.isHasCommentMention();
+            mMentionSpanList = comment.getCommentUserMentionList();
+            editUserMentionWithCommentText(mMentionSpanList, comment.getComment());
         } else {
             etView.getEditText().setText(comment.getComment());
             etView.getEditText().setSelection(comment.getComment().length());
@@ -1005,17 +1001,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (mPostDetailListAdapter.getItemCount() > pos) {
             if (pos != RecyclerView.NO_POSITION) {
 
-                if (isDirty && !lastEditedComment.isEmpty()) {
-                    Map.Entry<Integer, Comment> entry = lastEditedComment.entrySet().iterator().next();
-                    lastEditedComment.clear();
+                if (mIsDirty && !mLastEditedComment.isEmpty()) {
+                    Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
+                    mLastEditedComment.clear();
                     mPostDetailListAdapter.addData(entry.getValue(), entry.getKey());
                     pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
                 }
 
                 mPostDetailListAdapter.removeData(pos);
 
-                lastEditedComment.put(pos, comment);
-                isDirty = true;
+                mLastEditedComment.put(pos, comment);
+                mIsDirty = true;
             }
         }
         etView.setEditTextShouldWrapContent(true);
@@ -1031,7 +1027,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             etView.getEditText().setText(editDescText);
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                TaggedUserPojo userMention = mentionSpan.getMention();
+                UserMentionSuggestionPojo userMention = mentionSpan.getMention();
                 int index = userMention.getStartIndex();
                 etView.setMentionSelectionText(userMention, index, index + 1);
             }
@@ -1192,25 +1188,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-        if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
+    public void userMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
+        if(StringUtil.isNotEmptyCollection(mUserMentionSuggestionPojoList)) {
             if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-                mTaggedUserPojoList = searchUserDataResponse.getParticipantList();
-                List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
-                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-                hasMentions = true;
+                mUserMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
+                List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
+                userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
+                mHasMentions = true;
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 mSuggestionList.setLayoutManager(layoutManager);
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mTaggedUserPojoList));
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
             } else {
-                hasMentions = false;
-                mentionSpanList = null;
-                List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
-                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-                taggedUserPojoList.add(1, new TaggedUserPojo(0, "", "", "", 0));
+                mHasMentions = false;
+                mMentionSpanList = null;
+                List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
+                userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
+                userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
                 LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 mSuggestionList.setLayoutManager(layoutManager);
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+                mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             }
         }
     }
@@ -1219,18 +1215,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
        final String searchText=queryToken.getTokenString();
         if (searchText.contains("@")) {
-            hasMentions = false;
-            mentionSpanList = null;
-            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+            mHasMentions = false;
+            mMentionSpanList = null;
+            List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
+            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(1, mUserTagCommentInfoText, "", "", 0));
+            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(0,getString(R.string.searching),"","",0));
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
-            mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
-            mTaggedUserPojoList=taggedUserPojoList;
+            mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
+            mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
 
-            //UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
+            //UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, userMentionSuggestionPojoList);
            // etView.onReceiveSuggestionsResult(result, "data");
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
@@ -1254,7 +1250,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        this.mentionSpanList = mentionSpanList;
+        this.mMentionSpanList = mentionSpanList;
         return null;
     }
 
@@ -1267,21 +1263,21 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public Suggestible onUserTaggedClick(@NonNull Suggestible suggestible, View view) {
+    public Suggestible onMentionUserClick(@NonNull Suggestible suggestible, View view) {
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
-                mTaggedUserPojoList.clear();
+                mUserMentionSuggestionPojoList.clear();
                 etView.displayHide();
-                TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
-                etView.setInsertion(taggedUserPojo);
+                UserMentionSuggestionPojo userMentionSuggestionPojo = (UserMentionSuggestionPojo) suggestible;
+                etView.setInsertion(userMentionSuggestionPojo);
                 etView.setEditTextShouldWrapContent(true);
                 if(null!=mUserPostObj) {
                     final HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .postCommentId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
                                     .taggedIn("COMMENT")
-                                    .taggedUserId(Integer.toString(taggedUserPojo.getUserId()))
+                                    .taggedUserId(Integer.toString(userMentionSuggestionPojo.getUserId()))
                                     .build();
                     AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
                 }

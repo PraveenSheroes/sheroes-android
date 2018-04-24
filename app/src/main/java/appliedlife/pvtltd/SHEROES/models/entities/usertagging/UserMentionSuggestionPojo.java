@@ -15,23 +15,14 @@
 package appliedlife.pvtltd.SHEROES.models.entities.usertagging;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
-/**
- * Model representing a basic, mentionable city.
- */
-public class TaggedUserPojo implements Mentionable {
+public class UserMentionSuggestionPojo implements Mentionable {
 
     @SerializedName("user_id")
     @Expose
@@ -62,12 +53,12 @@ public class TaggedUserPojo implements Mentionable {
     public long userType;
 
 
-    public TaggedUserPojo(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl,long userType) {
+    public UserMentionSuggestionPojo(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl, long userType) {
         this.userId = userId;
         this.name = name;
         this.userProfileDeepLinkUrl = userProfileDeepLinkUrl;
         this.authorImageUrl = authorImageUrl;
-        this.userType=userType;
+        this.userType = userType;
     }
 
     public int getUserId() {
@@ -164,45 +155,6 @@ public class TaggedUserPojo implements Mentionable {
         this.userType = userType;
     }
 
-    // --------------------------------------------------
-    // PersonLoader Class (loads people from JSON file)
-    // --------------------------------------------------
-
-    public static class TaggUserDataLoader extends MentionsLoader<TaggedUserPojo> {
-        private static final String TAG = TaggUserDataLoader.class.getSimpleName();
-
-        public TaggUserDataLoader(List<TaggedUserPojo> taggedUserPojoList) {
-            super(taggedUserPojoList);
-        }
-
-        @Override
-        public List<TaggedUserPojo> loadData(List<TaggedUserPojo> taggedUserPojoList) {
-            return taggedUserPojoList;
-        }
-
-        // Modified to return suggestions based on both first and last name
-        @Override
-        public List<TaggedUserPojo> getSuggestions(QueryToken queryToken) {
-            String[] namePrefixes = queryToken.getKeywords().toLowerCase().split(" ");
-            List<TaggedUserPojo> suggestions = new ArrayList<>();
-            if (StringUtil.isNotEmptyCollection(mData)) {
-                for (TaggedUserPojo suggestion : mData) {
-                    String firstName = suggestion.getName().toLowerCase();
-                    if (namePrefixes.length == 2) {
-                        if (firstName.startsWith(namePrefixes[0])) {
-                            suggestions.add(suggestion);
-                        }
-                    } else {
-                        if (firstName.startsWith(namePrefixes[0])) {
-                            suggestions.add(suggestion);
-                        }
-                    }
-                }
-            }
-            return suggestions;
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -219,7 +171,7 @@ public class TaggedUserPojo implements Mentionable {
         dest.writeLong(this.userType);
     }
 
-    protected TaggedUserPojo(Parcel in) {
+    protected UserMentionSuggestionPojo(Parcel in) {
         this.userId = in.readInt();
         this.userProfileDeepLinkUrl = in.readString();
         this.authorImageUrl = in.readString();
@@ -229,15 +181,15 @@ public class TaggedUserPojo implements Mentionable {
         this.userType = in.readLong();
     }
 
-    public static final Creator<TaggedUserPojo> CREATOR = new Creator<TaggedUserPojo>() {
+    public static final Creator<UserMentionSuggestionPojo> CREATOR = new Creator<UserMentionSuggestionPojo>() {
         @Override
-        public TaggedUserPojo createFromParcel(Parcel source) {
-            return new TaggedUserPojo(source);
+        public UserMentionSuggestionPojo createFromParcel(Parcel source) {
+            return new UserMentionSuggestionPojo(source);
         }
 
         @Override
-        public TaggedUserPojo[] newArray(int size) {
-            return new TaggedUserPojo[size];
+        public UserMentionSuggestionPojo[] newArray(int size) {
+            return new UserMentionSuggestionPojo[size];
         }
     };
 }

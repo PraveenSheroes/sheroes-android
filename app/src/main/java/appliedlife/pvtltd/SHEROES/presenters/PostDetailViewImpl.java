@@ -4,15 +4,11 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.support.v7.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -38,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -47,11 +42,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequ
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
@@ -59,7 +52,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -258,8 +250,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
                     mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
-                    if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-                        mUserPostObj.setStreamType(getMvpView().getStreamType());
+                    if (CommonUtil.isNotEmpty(getMvpView().getmStreamType())) {
+                        mUserPostObj.setStreamType(getMvpView().getmStreamType());
                     }
                     mBaseResponseList.add(mUserPostObj);
                     getMvpView().addData(0, mUserPostObj);
@@ -739,8 +731,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public void updateUserPost(UserPostSolrObj userPostSolrObj) {
         mUserPostObj = userPostSolrObj;
-        if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-            mUserPostObj.setStreamType(getMvpView().getStreamType());
+        if (CommonUtil.isNotEmpty(getMvpView().getmStreamType())) {
+            mUserPostObj.setStreamType(getMvpView().getmStreamType());
         }
         mBaseResponseList.set(0, userPostSolrObj);
         getMvpView().setData(0, userPostSolrObj);
@@ -801,7 +793,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().stopProgressBar();
                 if (null != searchUserDataResponse) {
                     if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                        getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                        getMvpView().userMentionSuggestionResponse(searchUserDataResponse, queryToken);
                     } else {
                         getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
                     }
@@ -895,7 +887,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                         .postId(Long.toString(comment.getEntityId()))
                                         .postType(AnalyticsEventType.ARTICLE.toString())
                                         .body(comment.getComment())
-                                        .streamType(getMvpView().getStreamType())
+                                        .streamType(getMvpView().getmStreamType())
                                         .build();
                         AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
 

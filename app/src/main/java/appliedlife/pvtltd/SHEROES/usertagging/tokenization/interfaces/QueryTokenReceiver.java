@@ -47,7 +47,7 @@ public interface QueryTokenReceiver {
 
     UserTagSuggestionsAdapter onSuggestedList(final @NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter);
 
-    Suggestible onUserTaggedClick(final @NonNull Suggestible suggestible, View view);
+    Suggestible onMentionUserClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);
 }

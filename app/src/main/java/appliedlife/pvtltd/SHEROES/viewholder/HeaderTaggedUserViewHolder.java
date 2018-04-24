@@ -8,7 +8,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -35,7 +35,7 @@ public class HeaderTaggedUserViewHolder extends BaseViewHolder<Suggestible> {
     @Override
     public void bindData(Suggestible suggestible, Context context, int position) {
         this.suggestible = suggestible;
-        String name = ((TaggedUserPojo) suggestible).getName();
+        String name = ((UserMentionSuggestionPojo) suggestible).getName();
         if (StringUtil.isNotNullOrEmptyString(name)) {
             mTvHeader.setText(name);
         }

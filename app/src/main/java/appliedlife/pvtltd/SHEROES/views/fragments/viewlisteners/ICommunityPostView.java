@@ -15,7 +15,7 @@ public interface ICommunityPostView extends BaseMvpView {
 
     void linkRenderResponse(LinkRenderResponse linkRenderResponse);
 
-    void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
+    void showUserMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
 
     void finishActivity();
 }

@@ -1,13 +1,11 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -37,14 +35,10 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.PublishSubject;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -124,9 +118,8 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 getMvpView().stopProgressBar();
                 if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().finishActivity();
-                }else
-                {
-                    Toast.makeText(SheroesApplication.mContext,communityPostCreateResponse.getFieldErrorMessageMap().get("error"),Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(SheroesApplication.mContext, communityPostCreateResponse.getFieldErrorMessageMap().get("error"), Toast.LENGTH_SHORT).show();
                 }
                 final HashMap<String, Object> properties =
                         new EventProperty.Builder()
@@ -182,31 +175,30 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                getMvpView().stopProgressBar();
-                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                    AnalyticsManager.trackPostAction(Event.POST_EDITED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
-                }else
-                {
-                    Toast.makeText(SheroesApplication.mContext,communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),Toast.LENGTH_SHORT).show();
-                }
-            }
+                    @Override
+                    public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                        getMvpView().stopProgressBar();
+                        if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
+                            AnalyticsManager.trackPostAction(Event.POST_EDITED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                        } else {
+                            Toast.makeText(SheroesApplication.mContext, communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-        });
+                });
 
     }
 
@@ -219,16 +211,14 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         Long communityId = null;
         if (null != communityPost && null != communityPost.community) {
             if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
-                communityId=null;
-            }else {
+                communityId = null;
+            } else {
                 communityId = communityPost.community.id;
             }
         }
-        if(queryToken.getTokenString().length()==1)
-        {
+        if (queryToken.getTokenString().length() == 1) {
             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
-        }else
-        {
+        } else {
             searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
         }
 
@@ -251,7 +241,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 getMvpView().stopProgressBar();
                 if (null != searchUserDataResponse) {
                     if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                        getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                        getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, queryToken);
                     } else {
                         getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
                     }
@@ -274,7 +264,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 .filter(new Predicate<CharSequence>() {
                     @Override
                     public boolean test(CharSequence charSequence) {
-                        return queryData.length() >0;
+                        return queryData.length() > 0;
                     }
                 })
                 .distinctUntilChanged()
@@ -286,16 +276,14 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         Long communityId = null;
                         if (null != communityPost && null != communityPost.community) {
                             if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
-                                communityId=null;
-                            }else {
+                                communityId = null;
+                            } else {
                                 communityId = communityPost.community.id;
                             }
                         }
-                        if(queryData.length()==1)
-                        {
+                        if (queryData.length() == 1) {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
-                        }else
-                        {
+                        } else {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
                         }
 
@@ -329,7 +317,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         getMvpView().stopProgressBar();
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                                getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                                getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, queryToken);
                             } else {
                                 getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
                             }

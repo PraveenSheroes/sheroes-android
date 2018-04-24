@@ -16,7 +16,6 @@ package appliedlife.pvtltd.SHEROES.usertagging.suggestions;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,16 +31,14 @@ import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.UserMentionCardHolder;
 
 /**
  * Adapter class for displaying suggestions.
@@ -139,7 +136,7 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
         notifyDataSetChanged();
     }
-    public void addUserData(List<TaggedUserPojo> suggestions) {
+    public void addUserData(List<UserMentionSuggestionPojo> suggestions) {
         // Add result to proper bucket and remove from waiting
         // If we have suggestions, add them to the adapter and display them
             mSuggestions.clear();
@@ -203,7 +200,7 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
         switch (viewType) {
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
-                return new UserTagCardHolder(view, userTagCallback);
+                return new UserMentionCardHolder(view, userTagCallback);
             case TYPE_HEADER:
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_header_layout, parent, false);
                 return new HeaderTaggedUserViewHolder(header, userTagCallback);
@@ -218,9 +215,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
         }
         switch (holder.getItemViewType()) {
             case TYPE_CONTACT:
-                UserTagCardHolder userTagCardHolder = (UserTagCardHolder) holder;
+                UserMentionCardHolder userMentionCardHolder = (UserMentionCardHolder) holder;
                 Suggestible suggestible1 = mSuggestions.get(position);
-                userTagCardHolder.bindData(suggestible1, mContext, position);
+                userMentionCardHolder.bindData(suggestible1, mContext, position);
                 break;
             case TYPE_HEADER:
                 HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
