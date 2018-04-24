@@ -270,14 +270,15 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         }
 
         RxTextView.textChanges(searchQuestionText)
+                .debounce(2000, TimeUnit.MILLISECONDS)
                 .filter(new Predicate<CharSequence>() {
                     @Override
                     public boolean test(CharSequence charSequence) {
                         return queryData.length() >0;
                     }
                 })
-                .debounce(2000, TimeUnit.MILLISECONDS)
-                .flatMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
+                .distinctUntilChanged()
+                .switchMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
                     @Override
                     public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
 
@@ -335,6 +336,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         }
                     }
                 });
+
     }
 
 
