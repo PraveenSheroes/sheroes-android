@@ -109,7 +109,6 @@ public class AppInstallationHelper {
     private void fillDefaults() {
         fillAppAndDeviceRelatedInfo();
         fillReferrerData();
-        fillInstalledPackage();
         fillUserId();
     }
 
@@ -137,25 +136,6 @@ public class AppInstallationHelper {
         mAppInstallationLocal.platform = "android";
         mAppInstallationLocal.deviceType = "android";
         mAppInstallationLocal.locale = SheroesApplication.mContext.getResources().getConfiguration().locale.toString();
-    }
-
-    private void fillInstalledPackage() {
-        //get a list of installed apps.
-        final PackageManager pm = mContext.getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        ArrayList<String> appList = new ArrayList<>();
-        for (ApplicationInfo packageNames : packages) {
-            if (pm.getLaunchIntentForPackage(packageNames.packageName) != null) {
-                appList.add(packageNames.packageName);
-            }
-        }
-        if (!CommonUtil.isEmpty(appList)) {
-            String installPackages = new Gson().toJson(appList);
-            installPackages = installPackages.replace("\"", "");
-            installPackages = installPackages.replace("[", "");
-            installPackages = installPackages.replace("]", "");
-            mAppInstallationLocal.installedPackages = installPackages;
-        }
     }
 
     private void fillReferrerData() {
