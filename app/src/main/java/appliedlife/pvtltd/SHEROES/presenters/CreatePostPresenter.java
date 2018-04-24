@@ -1,11 +1,13 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -35,10 +37,14 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -204,7 +210,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
     }
 
-    public void userTaggingSearchEditText(final QueryToken queryToken, final String queryData, final CommunityPost communityPost) {
+    public void getUserMentionSuggestion(final QueryToken queryToken, final String queryData, final CommunityPost communityPost) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
@@ -254,6 +260,81 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
         });
 
+
+    }
+
+    public void getUserMentionSuggestion(final QueryToken queryToken, final MentionsEditText searchQuestionText, final String queryData, final CommunityPost communityPost) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+
+        RxTextView.textChanges(searchQuestionText)
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(CharSequence charSequence) {
+                        return queryData.length() >0;
+                    }
+                })
+                .debounce(2000, TimeUnit.MILLISECONDS)
+                .flatMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
+                    @Override
+                    public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
+
+                        SearchUserDataRequest searchUserDataRequest = null;
+                        Long communityId = null;
+                        if (null != communityPost && null != communityPost.community) {
+                            if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
+                                communityId=null;
+                            }else {
+                                communityId = communityPost.community.id;
+                            }
+                        }
+                        if(queryData.length()==1)
+                        {
+                            searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
+                        }else
+                        {
+                            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
+                        }
+
+                        if (searchUserDataRequest == null) {
+                            return Observable.empty();
+                        }
+                        LogUtils.info("data", "########### @final string--->   " + queryData);
+                        return communityModel.getSearchResult(searchUserDataRequest);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .compose(this.<SearchUserDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().stopProgressBar();
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+
+                    }
+
+                    @Override
+                    public void onNext(SearchUserDataResponse searchUserDataResponse) {
+                        LogUtils.info("data", "########### @onNext string--->   ");
+                        getMvpView().stopProgressBar();
+                        if (null != searchUserDataResponse) {
+                            if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                                getMvpView().userTagResponse(searchUserDataResponse, queryToken);
+                            } else {
+                                getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
+                            }
+                        }
+                    }
+                });
     }
 
 

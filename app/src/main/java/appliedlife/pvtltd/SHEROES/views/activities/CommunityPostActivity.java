@@ -47,6 +47,7 @@ import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -116,7 +117,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
@@ -1689,20 +1689,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
             mIsProgressBarVisible = true;
             mProgressBar.setVisibility(View.VISIBLE);
-            if (searchText.length() <= 3) {
-                mCreatePostPresenter.userTaggingSearchEditText(queryToken, searchText, mCommunityPost);
+            mCreatePostPresenter.getUserMentionSuggestion(queryToken,etView.getEditText(),searchText, mCommunityPost);
+           /* if (searchText.length() <= 3) {
+                mCreatePostPresenter.getUserMentionSuggestion(queryToken, searchText, mCommunityPost);
             } else {
                 Timer timer = new Timer();
                 timer.schedule(
                         new TimerTask() {
                             @Override
                             public void run() {
-                                mCreatePostPresenter.userTaggingSearchEditText(queryToken, searchText, mCommunityPost);
+                                mCreatePostPresenter.getUserMentionSuggestion(queryToken, searchText, mCommunityPost);
                             }
                         },
                         200
                 );
-            }
+            }*/
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
