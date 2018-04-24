@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.widget.Toast;
+
 import com.crashlytics.android.Crashlytics;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -116,6 +118,9 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 getMvpView().stopProgressBar();
                 if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().finishActivity();
+                }else
+                {
+                    Toast.makeText(SheroesApplication.mContext,communityPostCreateResponse.getFieldErrorMessageMap().get("error"),Toast.LENGTH_SHORT).show();
                 }
                 final HashMap<String, Object> properties =
                         new EventProperty.Builder()
@@ -186,8 +191,13 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             @Override
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 getMvpView().stopProgressBar();
-                getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                AnalyticsManager.trackPostAction(Event.POST_EDITED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                    getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
+                    AnalyticsManager.trackPostAction(Event.POST_EDITED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                }else
+                {
+                    Toast.makeText(SheroesApplication.mContext,communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),Toast.LENGTH_SHORT).show();
+                }
             }
 
         });

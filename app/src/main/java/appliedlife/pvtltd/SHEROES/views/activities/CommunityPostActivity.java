@@ -334,6 +334,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 fbShareContainer.setVisibility(View.GONE);
                 mAnonymousSelect.setVisibility(View.GONE);
                 mAnonymousView.setVisibility(View.GONE);
+                mCommunityName.setText("Challenge");
                 if(mCommunityPost.hasMention)
                 {
                     mentionSpanList=mCommunityPost.userMentionList;
@@ -461,6 +462,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             fbShareContainer.setVisibility(View.GONE);
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
+            mCommunityName.setText("Challenge");
             if(mCommunityPost.hasMention)
             {
                 hasMentions=true;
@@ -1163,9 +1165,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mCommunityName.setVisibility(View.VISIBLE);
                 mCommunityName.setText("Challenge");
                 mCommunityName.setEnabled(false);
+            }else {
+                if (mCommunityPost != null && mCommunityPost.community != null)
+                    mCommunityName.setText(mCommunityPost.community.name);
             }
-            if (mCommunityPost != null && mCommunityPost.community != null)
-                mCommunityName.setText(mCommunityPost.community.name);
         }
 
     }
@@ -1205,6 +1208,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 communityPost.hasMention=userPostObj.isHasMention();
                 communityPost.userMentionList=userPostObj.getUserMentionList();
             }
+            if(userPostObj.getCommunityId()!=null&&userPostObj.getCommunityId()==0)
+            {
+                communityPost.isChallengeType=true;
+            }
             if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
                 for (String imageUrl : userPostObj.getImageUrls()) {
                     Photo photo = new Photo();
@@ -1238,7 +1245,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.community.name = userPostObj.getPostCommunityName();
             communityPost.community.isOwner = userPostObj.isCommunityOwner();
             communityPost.isMyPost = userPostObj.isCommunityOwner();
-
+            if(userPostObj.getCommunityId()!=null&&userPostObj.getCommunityId()==0)
+            {
+                communityPost.isChallengeType=true;
+            }
             communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
