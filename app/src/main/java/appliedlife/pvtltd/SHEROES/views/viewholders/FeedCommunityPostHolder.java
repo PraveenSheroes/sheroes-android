@@ -1579,7 +1579,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 };
                 int start=mentionSpan.getMention().getStartIndex()+i;
                 int end=mentionSpan.getMention().getEndIndex()+i;
-                if (end + 1 <= spannableString.length() - 1 && start <= spannableString.length() - 1) {
+                if (end + 1 <= spannableString.length()  && start <= spannableString.length() ) {
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
                 }

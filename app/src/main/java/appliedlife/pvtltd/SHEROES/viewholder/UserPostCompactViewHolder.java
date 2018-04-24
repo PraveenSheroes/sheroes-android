@@ -830,7 +830,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (null != mentionSpan&&null!=mentionSpan.getMention()) {
                 int start=mentionSpan.getMention().getStartIndex()+i;
                 int end=mentionSpan.getMention().getEndIndex()+i;
-                if (end + 1 <= spannableString.length() - 1 && start <= spannableString.length() - 1) {
+                if (end + 1 <= spannableString.length()  && start <= spannableString.length() ) {
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
                 }
             }
