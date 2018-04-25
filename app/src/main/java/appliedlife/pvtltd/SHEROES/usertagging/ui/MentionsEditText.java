@@ -986,19 +986,6 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
         insertMentionInternal(userMentionSuggestionPojo, text, start, end);
     }
-    public void editInsertMention(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo, int start, int end) {
-        
-        // Setup variables and ensure they are valid
-        Editable text;
-        if(start==0&&getEditableText().length()<1)
-        {
-            text = getEditableText().replace(0,getEditableText().length()," ");;
-        }else
-        {
-            text = getEditableText();
-        }
-        insertMentionInternal(userMentionSuggestionPojo, text, start, end);
-    }
     public void editCreateInsertMention(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo, int start, int end) {
 
         // Setup variables and ensure they are valid
@@ -1006,20 +993,6 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         insertMentionInternal(userMentionSuggestionPojo, text, start, end);
     }
 
-    /**
-     * Inserts a userMentionSuggestionPojo. This will not take any token into consideration. This method is useful
-     * when you want to insert a userMentionSuggestionPojo which doesn't have a token.
-     *
-     * @param userMentionSuggestionPojo {@link Mentionable} to insert a span for
-     */
-    public void insertMentionWithoutToken(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo) {
-        // Setup variables and ensure they are valid
-        Editable text = getEditableText();
-        int index = getSelectionStart();
-        index = index > 0 ? index : 0;
-
-        insertMentionInternal(userMentionSuggestionPojo, text, index, index);
-    }
 
     private void insertMentionInternal(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo, @NonNull Editable text, int start, int end) {
         // Insert the span into the editor
@@ -1047,16 +1020,6 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
         // Reset input method since text has been changed (updates userMentionSuggestionPojo draw states)
         restartInput();
-    }
-
-    /**
-     * Determines if the {@link Tokenizer} is looking at an explicit token right now.
-     *
-     * @return true if the {@link Tokenizer} is currently considering an explicit query
-     */
-    public boolean isCurrentlyExplicit() {
-        String tokenString = getCurrentTokenString();
-        return tokenString.length() > 0 && mTokenizer != null && mTokenizer.isExplicitChar(tokenString.charAt(0));
     }
 
     /**

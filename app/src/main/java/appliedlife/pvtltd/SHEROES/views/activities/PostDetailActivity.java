@@ -620,7 +620,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, final TextView view) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             Menu menu = popup.getMenu();
             menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
@@ -894,10 +894,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         if(mIsDirty && mEditedComment !=null) {
-           // mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId()), AppConstants.TWO_CONSTANT);
             mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
         } else {
-            String message = etView.getEditText().getText().toString().trim();
+            String message = etView.getEditText().getText().toString();
             if (!TextUtils.isEmpty(message)) {
                 mLastEditedComment.clear();
                 mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
@@ -1017,18 +1016,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
+        StringBuilder modifiedText=new StringBuilder();
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+               /* if(mentionSpan.getMention().getEndIndex()>editDescText.length())
+                {
+                    mentionSpan.getMention().setEndIndex(editDescText.length());
+                }*/
+                modifiedText.append(editDescText.substring(0,mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(),editDescText.length()));
             }
-
-            etView.getEditText().setText(editDescText);
+            etView.getEditText().setText(modifiedText);
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 UserMentionSuggestionPojo userMention = mentionSpan.getMention();
                 int index = userMention.getStartIndex();
-                etView.setMentionSelectionText(userMention, index, index + 1);
+                etView.setCreateEditMentionSelectionText(userMention, index, index + 1);
             }
             etView.getEditText().setSelection(etView.getEditText().length());
         }
@@ -1036,7 +1039,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserPostSolrObj userPostSolrObj, final Comment comment) {
 
-        if(PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
+        if(PostDetailActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {

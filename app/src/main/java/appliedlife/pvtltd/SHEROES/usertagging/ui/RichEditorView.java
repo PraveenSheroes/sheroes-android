@@ -596,11 +596,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      *
      * @param mention the text to display
      */
-    public void setMentionSelectionText(@NonNull UserMentionSuggestionPojo mention, int start, int end) {
-        if (mMentionsEditText != null) {
-            mMentionsEditText.editInsertMention(mention, start, end);
-        }
-    }
     public void setCreateEditMentionSelectionText(@NonNull UserMentionSuggestionPojo mention, int start, int end) {
         if (mMentionsEditText != null) {
             mMentionsEditText.editCreateInsertMention(mention, start, end);
