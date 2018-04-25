@@ -369,6 +369,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             }
         });
     }
+
     public UserTagSuggestionsAdapter notifyAdapterOnData(List<UserMentionSuggestionPojo> userMentionSuggestionPojoList) {
         // Add the mentions and notify the editor/dropdown of the changes on the UI thread
         SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
@@ -377,10 +378,12 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         mUserTagSuggestionsAdapter.notifyDataSetChanged();
         return mUserTagSuggestionsAdapter;
     }
+
     public void notifyData(List<UserMentionSuggestionPojo> userMentionSuggestionPojoList) {
         mUserTagSuggestionsAdapter.addUserData(userMentionSuggestionPojoList);
         mUserTagSuggestionsAdapter.notifyDataSetChanged();
     }
+
     public void displayHide() {
         // Add the mentions and notify the editor/dropdown of the changes on the UI thread
         mUserTagSuggestionsAdapter.displayHide();
@@ -605,6 +608,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             mMentionsEditText.editCreateInsertMention(mention, start, end);
         }
     }
+
     /**
      * Sets the input type of the embedded {@link MentionsEditText}.
      *
@@ -728,6 +732,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     @Override
     public void onSuggestedUserClicked(Suggestible suggestible, View view) {
-        onMentionUserSuggestionClick(suggestible,view);
+        onMentionUserSuggestionClick(suggestible, view);
     }
 }

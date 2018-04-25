@@ -136,16 +136,18 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
         notifyDataSetChanged();
     }
+
     public void addUserData(List<UserMentionSuggestionPojo> suggestions) {
         // Add result to proper bucket and remove from waiting
         // If we have suggestions, add them to the adapter and display them
-            mSuggestions.clear();
-            mSuggestions.addAll(suggestions);
-            mSuggestionsVisibilityManager.displaySuggestions(true);
-            notifyDataSetChanged();
+        mSuggestions.clear();
+        mSuggestions.addAll(suggestions);
+        mSuggestionsVisibilityManager.displaySuggestions(true);
+        notifyDataSetChanged();
     }
+
     public void displayHide() {
-          mSuggestionsVisibilityManager.displaySuggestions(false);
+        mSuggestionsVisibilityManager.displaySuggestions(false);
     }
 
 
@@ -234,11 +236,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0)
-        {
+        if (position == 0) {
             return TYPE_HEADER;
-        }else
-        {
+        } else {
             return TYPE_CONTACT;
         }
     }

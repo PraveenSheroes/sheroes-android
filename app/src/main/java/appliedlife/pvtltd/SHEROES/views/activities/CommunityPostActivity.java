@@ -85,8 +85,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -296,7 +294,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setContentView(R.layout.activity_community_post);
         ButterKnife.bind(this);
         mCreatePostPresenter.attachView(this);
-        mUserTagCreatePostText=getString(R.string.user_mention_area_at_post);
+        mUserTagCreatePostText = getString(R.string.user_mention_area_at_post);
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
@@ -431,11 +429,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
-        StringBuilder modifiedText=new StringBuilder();
+        StringBuilder modifiedText = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                modifiedText.append(editDescText.substring(0,mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(),editDescText.length()));
+                modifiedText.append(editDescText.substring(0, mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(), editDescText.length()));
             }
 
             etView.getEditText().setText(modifiedText);

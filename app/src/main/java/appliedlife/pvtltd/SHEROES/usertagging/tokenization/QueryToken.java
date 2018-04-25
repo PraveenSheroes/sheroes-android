@@ -15,7 +15,6 @@
 package appliedlife.pvtltd.SHEROES.usertagging.tokenization;
 
 
-
 import java.io.Serializable;
 
 /**

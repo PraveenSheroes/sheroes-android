@@ -311,10 +311,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void invalidateSpamComment(UserPostSolrObj mUserPostObj) {
-        if(mUserPostObj.getLastComments()!=null && mUserPostObj.getLastComments().size()>0) {
+        if (mUserPostObj.getLastComments() != null && mUserPostObj.getLastComments().size() > 0) {
             Comment comment = mUserPostObj.getLastComments().get(0);
             //comment.setSpamComment(true);
-            if(comment.isSpamComment()) {
+            if (comment.isSpamComment()) {
                 spamCommentContainer.setVisibility(View.VISIBLE);
                 lastCommentConatiner.setVisibility(View.GONE);
             } else {
@@ -427,7 +427,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_post_link_render)
     public void tvLinkClick() {
-        LogUtils.info("Data","######################## link clcik");
+        LogUtils.info("Data", "######################## link clcik");
         if (null != mUserPostObj) {
             if (mUserPostObj.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
                 if (!mUserPostObj.getOgRequestedUrlS().contains(AppConstants.USER_YOU_TUBE) || !mUserPostObj.getOgRequestedUrlS().contains(AppConstants.CHANNEL_YOU_TUBE)) {
@@ -720,9 +720,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (mUserPostObj.isHasMention()) {
                         List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            showUserMentionName(listDescription, mentionSpanList,false);
-                        }else
-                        {
+                            showUserMentionName(listDescription, mentionSpanList, false);
+                        } else {
                             tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
                         }
                     } else {
@@ -803,7 +802,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (lastComment.isHasCommentMention()) {
                         List<MentionSpan> mentionSpanList = lastComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            showUserMentionName(lastComment.getComment(), mentionSpanList,true);
+                            showUserMentionName(lastComment.getComment(), mentionSpanList, true);
                         }
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -821,7 +820,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (lastComment.isHasCommentMention()) {
                         List<MentionSpan> mentionSpanList = lastComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            showUserMentionName(lastComment.getComment(), mentionSpanList,true);
+                            showUserMentionName(lastComment.getComment(), mentionSpanList, true);
                         }
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -905,8 +904,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(loggedInUser)) {
             tvFeedCommunityPostLoginUserName.setVisibility(View.VISIBLE);
             tvFeedCommunityPostLoginUserName.setText(loggedInUser);
-        }else
-        {
+        } else {
             tvFeedCommunityPostLoginUserName.setVisibility(View.GONE);
         }
 
@@ -1041,7 +1039,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userCommentClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
-        }  else {
+        } else {
             viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
         }
     }
@@ -1060,7 +1058,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     public void userMenuClick() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostMenuClicked(mUserPostObj, tvFeedCommunityPostUserMenu);
-        }  else {
+        } else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserMenu);
         }
     }
@@ -1538,36 +1536,35 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void showUserMentionName(String description, List<MentionSpan> mentionSpanList, boolean isComment) {
-        StringBuilder strWithAddExtra = new StringBuilder(description+" ");
-        for (int i = 0; i <  mentionSpanList.size(); i++) {
+        StringBuilder strWithAddExtra = new StringBuilder(description + " ");
+        for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
-                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex()+i, '@');
+                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() - 1) {
+                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
                 }
             }
         }
         SpannableString spannableString = new SpannableString(strWithAddExtra);
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
-            if (null != mentionSpan&&null!=mentionSpan.getMention()) {
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
                 final ClickableSpan postedInClick = new ClickableSpan() {
                     @Override
                     public void onClick(View textView) {
-                            UserPostSolrObj  userPostSolrObj=mUserPostObj;
-                            userPostSolrObj.setCreatedBy(mentionSpan.getMention().getUserId());
-                            if(mentionSpan.getMention().getUserType()==AppConstants.MENTOR_USER_TYPE_FOR_TAGGING) {
-                                userPostSolrObj.setAuthorMentor(true);
-                            }else
-                            {
-                                userPostSolrObj.setAuthorMentor(false);
-                            }
-                            if (viewInterface instanceof FeedItemCallback) {
-                                ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                            } else {
-                                viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        UserPostSolrObj userPostSolrObj = mUserPostObj;
+                        userPostSolrObj.setCreatedBy(mentionSpan.getMention().getUserId());
+                        if (mentionSpan.getMention().getUserType() == AppConstants.MENTOR_USER_TYPE_FOR_TAGGING) {
+                            userPostSolrObj.setAuthorMentor(true);
+                        } else {
+                            userPostSolrObj.setAuthorMentor(false);
+                        }
+                        if (viewInterface instanceof FeedItemCallback) {
+                            ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        } else {
+                            viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
-                            }
+                        }
                     }
 
                     @Override
@@ -1575,18 +1572,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         textPaint.setUnderlineText(false);
                     }
                 };
-                int start=mentionSpan.getMention().getStartIndex()+i;
-                int end=mentionSpan.getMention().getEndIndex()+i;
-                if (end + 1 <= spannableString.length()  && start <= spannableString.length() ) {
+                int start = mentionSpan.getMention().getStartIndex() + i;
+                int end = mentionSpan.getMention().getEndIndex() + i;
+                if (end + 1 <= spannableString.length() && start <= spannableString.length()) {
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
                 }
             }
         }
-        if(isComment) {
+        if (isComment) {
             tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
-        }else
-        {
+        } else {
             tvFeedCommunityPostText.setMovementMethod(LinkMovementMethod.getInstance());
             tvFeedCommunityPostText.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
         }

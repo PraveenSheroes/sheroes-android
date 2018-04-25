@@ -25,8 +25,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.CharacterStyle;
 
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -139,7 +137,6 @@ public class MentionsEditable extends SpannableStringBuilder implements Parcelab
      * {@link android.widget.EditText}, if it exists. Otherwise, return null.
      *
      * @param index integer offset in text
-     *
      * @return a {@link MentionSpan} located at index in text, or null
      */
     @Nullable
@@ -153,7 +150,6 @@ public class MentionsEditable extends SpannableStringBuilder implements Parcelab
      * starting at that index.
      *
      * @param index integer offset in text
-     *
      * @return a {@link MentionSpan} starting at index in text, or null
      */
     @Nullable
@@ -174,7 +170,6 @@ public class MentionsEditable extends SpannableStringBuilder implements Parcelab
      * ending at that index.
      *
      * @param index integer offset in text
-     *
      * @return a {@link MentionSpan} ending at index in text, or null
      */
     @Nullable

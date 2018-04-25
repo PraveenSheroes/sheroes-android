@@ -52,8 +52,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 

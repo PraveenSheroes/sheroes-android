@@ -49,20 +49,17 @@ public class UserMentionCardHolder extends BaseViewHolder<Suggestible> {
     public void bindData(Suggestible suggestible, Context context, int position) {
         this.suggestible = suggestible;
         int userMentionRowCreater = ((UserMentionSuggestionPojo) suggestible).getUserId();
-        if(userMentionRowCreater== AppConstants.USER_MENTION_NO_RESULT_FOUND)
-        {
+        if (userMentionRowCreater == AppConstants.USER_MENTION_NO_RESULT_FOUND) {
             liSocialUser.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
             String name = ((UserMentionSuggestionPojo) suggestible).getName();
             if (StringUtil.isNotNullOrEmptyString(name)) {
                 mText.setText(name);
-            }else
-            {
+            } else {
                 mText.setText(context.getString(R.string.no_result_found));
             }
-        }else
-        {
+        } else {
             String name = ((UserMentionSuggestionPojo) suggestible).getName();
             liSocialUser.setVisibility(View.VISIBLE);
             mText.setVisibility(View.GONE);

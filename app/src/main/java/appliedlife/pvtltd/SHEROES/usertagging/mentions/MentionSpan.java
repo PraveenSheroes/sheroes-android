@@ -105,8 +105,9 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
     public UserMentionSuggestionPojo getMention() {
         return mention;
     }
+
     public void setMention(UserMentionSuggestionPojo userMentionSuggestionPojo) {
-        mention= userMentionSuggestionPojo;
+        mention = userMentionSuggestionPojo;
     }
 
     public boolean isSelected() {

@@ -30,17 +30,21 @@ public class MentionSpanConfig implements Parcelable {
 
     @SerializedName("NORMAL_TEXT_COLOR")
     @Expose
-    @ColorInt public final int NORMAL_TEXT_COLOR;
+    @ColorInt
+    public final int NORMAL_TEXT_COLOR;
     @SerializedName("NORMAL_TEXT_BACKGROUND_COLOR")
     @Expose
-    @ColorInt public final int NORMAL_TEXT_BACKGROUND_COLOR;
+    @ColorInt
+    public final int NORMAL_TEXT_BACKGROUND_COLOR;
     @SerializedName("SELECTED_TEXT_COLOR")
     @Expose
-    @ColorInt public final int SELECTED_TEXT_COLOR;
+    @ColorInt
+    public final int SELECTED_TEXT_COLOR;
 
     @SerializedName("SELECTED_TEXT_BACKGROUND_COLOR")
     @Expose
-    @ColorInt public final int SELECTED_TEXT_BACKGROUND_COLOR;
+    @ColorInt
+    public final int SELECTED_TEXT_BACKGROUND_COLOR;
 
     MentionSpanConfig(@ColorInt final int normalTextColor,
                       @ColorInt final int normalTextBackgroundColor,
@@ -71,10 +75,14 @@ public class MentionSpanConfig implements Parcelable {
     public static class Builder {
 
         // Default colors
-        @ColorInt private int normalTextColor = Color.parseColor("#2793e7");
-        @ColorInt private int normalTextBackgroundColor = Color.TRANSPARENT;
-        @ColorInt private int selectedTextColor = Color.WHITE;
-        @ColorInt private int selectedTextBackgroundColor = Color.parseColor("#2793e7");
+        @ColorInt
+        private int normalTextColor = Color.parseColor("#2793e7");
+        @ColorInt
+        private int normalTextBackgroundColor = Color.TRANSPARENT;
+        @ColorInt
+        private int selectedTextColor = Color.WHITE;
+        @ColorInt
+        private int selectedTextBackgroundColor = Color.parseColor("#2793e7");
 
         public Builder setMentionTextColor(@ColorInt int normalTextColor) {
             if (normalTextColor != -1) {
@@ -106,7 +114,7 @@ public class MentionSpanConfig implements Parcelable {
 
         public MentionSpanConfig build() {
             return new MentionSpanConfig(normalTextColor, normalTextBackgroundColor,
-                                         selectedTextColor, selectedTextBackgroundColor);
+                    selectedTextColor, selectedTextBackgroundColor);
         }
     }
 
