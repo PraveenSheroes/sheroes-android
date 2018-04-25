@@ -1216,8 +1216,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (searchText.contains("@")) {
 
             List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
-            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(1, mUserTagCommentInfoText, "", "", 0));
-            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(0,getString(R.string.searching),"","",0));
+            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
+            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND,getString(R.string.searching),"","",0));
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);

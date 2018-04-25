@@ -1666,8 +1666,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final String searchText = queryToken.getTokenString();
         if (searchText.contains("@")) {
             List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
-            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(1, mUserTagCreatePostText, "", "", 0));
-            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(0, getString(R.string.searching), "", "", 0));
+            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
           /*  UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, userMentionSuggestionPojoList);
             etView.onReceiveSuggestionsResult(result, "data");*/
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
