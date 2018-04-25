@@ -8,7 +8,7 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -24,7 +24,7 @@ import butterknife.OnClick;
 
 public class UserMentionCardHolder extends BaseViewHolder<Suggestible> {
     private Suggestible suggestible;
-    private UserTagCallback userTagCallback;
+    private UserMentionSuggestionTagCallback userMentionSuggestionTagCallback;
     @Bind(R.id.li_social_user)
     LinearLayout liSocialUser;
     @Bind(R.id.iv_user_pic)
@@ -37,10 +37,10 @@ public class UserMentionCardHolder extends BaseViewHolder<Suggestible> {
     View viewLine;
 
 
-    public UserMentionCardHolder(View itemView, UserTagCallback userTagCallback) {
+    public UserMentionCardHolder(View itemView, UserMentionSuggestionTagCallback userMentionSuggestionTagCallback) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.userTagCallback = userTagCallback;
+        this.userMentionSuggestionTagCallback = userMentionSuggestionTagCallback;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
 
     }
@@ -82,7 +82,7 @@ public class UserMentionCardHolder extends BaseViewHolder<Suggestible> {
 
     @OnClick(R.id.li_social_user)
     public void inviteFriendClicked() {
-        userTagCallback.onSuggestedUserClicked(suggestible, liSocialUser);
+        userMentionSuggestionTagCallback.onSuggestedUserClicked(suggestible, liSocialUser);
     }
 
     @Override

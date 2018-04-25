@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
@@ -74,7 +74,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
  * @attr ref R.styleable#RichEditorView_selectedMentionTextColor
  * @attr ref R.styleable#RichEditorView_selectedMentionTextBackgroundColor
  */
-public class RichEditorView extends RelativeLayout implements TextWatcher, QueryTokenReceiver, SuggestionsResultListener, SuggestionsVisibilityManager, UserTagCallback {
+public class RichEditorView extends RelativeLayout implements TextWatcher, QueryTokenReceiver, SuggestionsResultListener, SuggestionsVisibilityManager, UserMentionSuggestionTagCallback {
 
     private MentionsEditText mMentionsEditText;
     private int mOriginalInputType = InputType.TYPE_CLASS_TEXT; // Default to plain text

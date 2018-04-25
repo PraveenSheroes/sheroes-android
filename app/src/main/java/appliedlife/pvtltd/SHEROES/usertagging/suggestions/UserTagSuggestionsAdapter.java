@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
@@ -50,7 +50,7 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
     private final Context mContext;
     private final Resources mResources;
     private final LayoutInflater mInflater;
-    private final UserTagCallback userTagCallback;
+    private final UserMentionSuggestionTagCallback userMentionSuggestionTagCallback;
     private SuggestionsVisibilityManager mSuggestionsVisibilityManager;
     private SuggestionsListBuilder mSuggestionsListBuilder;
     private final List<Suggestible> mSuggestions;
@@ -60,14 +60,14 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
     private final Map<String, UserTagSuggestionsResult> mResultMap = new HashMap<>();
     private final Map<QueryToken, Set<String>> mWaitingForResults = new HashMap<>();
 
-    public UserTagSuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserTagCallback userTagCallback) {
+    public UserTagSuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserMentionSuggestionTagCallback userMentionSuggestionTagCallback) {
         mContext = context;
         mResources = context.getResources();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSuggestionsVisibilityManager = suggestionsVisibilityManager;
         mSuggestionsListBuilder = suggestionsListBuilder;
         mSuggestions = new ArrayList<>();
-        this.userTagCallback = userTagCallback;
+        this.userMentionSuggestionTagCallback = userMentionSuggestionTagCallback;
     }
     // --------------------------------------------------
     // Public Methods
@@ -200,10 +200,10 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
         switch (viewType) {
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
-                return new UserMentionCardHolder(view, userTagCallback);
+                return new UserMentionCardHolder(view, userMentionSuggestionTagCallback);
             case TYPE_HEADER:
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_header_layout, parent, false);
-                return new HeaderTaggedUserViewHolder(header, userTagCallback);
+                return new HeaderTaggedUserViewHolder(header, userMentionSuggestionTagCallback);
         }
         return null;
     }
