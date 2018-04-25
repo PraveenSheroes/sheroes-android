@@ -720,7 +720,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (mUserPostObj.isHasMention()) {
                         List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            userMentionNameWithClickForProfileDetail(listDescription, mentionSpanList,false);
+                            showUserMentionName(listDescription, mentionSpanList,false);
                         }else
                         {
                             tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
@@ -803,7 +803,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (lastComment.isHasCommentMention()) {
                         List<MentionSpan> mentionSpanList = lastComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            userMentionNameWithClickForProfileDetail(lastComment.getComment(), mentionSpanList,true);
+                            showUserMentionName(lastComment.getComment(), mentionSpanList,true);
                         }
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -821,7 +821,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (lastComment.isHasCommentMention()) {
                         List<MentionSpan> mentionSpanList = lastComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            userMentionNameWithClickForProfileDetail(lastComment.getComment(), mentionSpanList,true);
+                            showUserMentionName(lastComment.getComment(), mentionSpanList,true);
                         }
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -1537,7 +1537,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
-    private void userMentionNameWithClickForProfileDetail(String description, List<MentionSpan> mentionSpanList, boolean isComment) {
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList, boolean isComment) {
         StringBuilder strWithAddExtra = new StringBuilder(description+" ");
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);

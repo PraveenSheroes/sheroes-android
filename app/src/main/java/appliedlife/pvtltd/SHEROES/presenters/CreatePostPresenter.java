@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.jakewharton.rxbinding2.widget.RxTextView;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -26,12 +25,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.RxSearchObservable;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
@@ -41,7 +37,6 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -240,9 +235,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         if (searchUserDataRequest == null) {
                             return Observable.empty();
                         }
-                        return communityModel.getSearchResult(searchUserDataRequest);
+                        return communityModel.getUserMentionSuggestionSearchResult(searchUserDataRequest);
                     }
                 })
+                .compose(this.<SearchUserDataResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<SearchUserDataResponse>() {

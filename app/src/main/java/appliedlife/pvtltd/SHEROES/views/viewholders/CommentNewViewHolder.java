@@ -138,7 +138,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 {
                     List<MentionSpan> mentionSpanList =mComment.getCommentUserMentionList();
                     if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                        userMentionNameWithClickForProfileDetail(mComment.getComment(), mentionSpanList);
+                        showUserMentionName(mComment.getComment(), mentionSpanList);
                     }
                 }else
                 {
@@ -154,7 +154,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     {
                         List<MentionSpan> mentionSpanList =mComment.getCommentUserMentionList();
                         if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            userMentionNameWithClickForProfileDetail(mComment.getComment(), mentionSpanList);
+                            showUserMentionName(mComment.getComment(), mentionSpanList);
                         }
                     }else
                     {
@@ -258,7 +258,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @Override
     public void onClick(View view) {
     }
-    private void userMentionNameWithClickForProfileDetail(String description, List<MentionSpan> mentionSpanList) {
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList) {
         StringBuilder strWithAddExtra = new StringBuilder(description+" ");
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);

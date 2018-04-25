@@ -35,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -43,12 +42,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.RxSearchObservable;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -59,7 +56,6 @@ import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -258,8 +254,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
                     mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
-                    if (CommonUtil.isNotEmpty(getMvpView().getmStreamType())) {
-                        mUserPostObj.setStreamType(getMvpView().getmStreamType());
+                    if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                        mUserPostObj.setStreamType(getMvpView().getStreamType());
                     }
                     mBaseResponseList.add(mUserPostObj);
                     getMvpView().addData(0, mUserPostObj);
@@ -739,8 +735,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     public void updateUserPost(UserPostSolrObj userPostSolrObj) {
         mUserPostObj = userPostSolrObj;
-        if (CommonUtil.isNotEmpty(getMvpView().getmStreamType())) {
-            mUserPostObj.setStreamType(getMvpView().getmStreamType());
+        if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+            mUserPostObj.setStreamType(getMvpView().getStreamType());
         }
         mBaseResponseList.set(0, userPostSolrObj);
         getMvpView().setData(0, userPostSolrObj);
@@ -794,9 +790,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         if (searchUserDataRequest == null) {
                             return Observable.empty();
                         }
-                        return getSearchResult(searchUserDataRequest);
+                        return getUserMentionSuggestionSearchResult(searchUserDataRequest);
                     }
                 })
+                .compose(this.<SearchUserDataResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<SearchUserDataResponse>() {
@@ -814,16 +811,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 });
     }
 
-    private Observable<SearchUserDataResponse> getSearchResult(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
-                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
-                    @Override
-                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
-                        return searchUserDataResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    private Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
+        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest);
     }
 
 
@@ -898,7 +887,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                         .postId(Long.toString(comment.getEntityId()))
                                         .postType(AnalyticsEventType.ARTICLE.toString())
                                         .body(comment.getComment())
-                                        .streamType(getMvpView().getmStreamType())
+                                        .streamType(getMvpView().getStreamType())
                                         .build();
                         AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
 

@@ -148,10 +148,8 @@ public class CommunityModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     //region Private Helper methods
-    public Observable<SearchUserDataResponse> getSearchResult(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
+        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest);
     }
 
 }

@@ -45,8 +45,8 @@ public class RxSearchObservable {
             }
 
             @Override
-            public Suggestible onMentionUserClick(@NonNull Suggestible suggestible, View view) {
-                return mvpView.onMentionUserClick(suggestible, view);
+            public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
+                return mvpView.onMentionUserSuggestionClick(suggestible, view);
             }
 
             @Override
@@ -81,8 +81,8 @@ public class RxSearchObservable {
             }
 
             @Override
-            public Suggestible onMentionUserClick(@NonNull Suggestible suggestible, View view) {
-                return mvpView.onMentionUserClick(suggestible, view);
+            public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
+                return mvpView.onMentionUserSuggestionClick(suggestible, view);
             }
 
             @Override

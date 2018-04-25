@@ -329,11 +329,11 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     }
 
     @Override
-    public Suggestible onMentionUserClick(@NonNull Suggestible suggestible, View view) {
+    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
         Suggestible suggestibleObj = null;
         // Pass the query token to a host receiver
         if (mHostQueryTokenReceiver != null) {
-            suggestibleObj = mHostQueryTokenReceiver.onMentionUserClick(suggestible, view);
+            suggestibleObj = mHostQueryTokenReceiver.onMentionUserSuggestionClick(suggestible, view);
         }
         return suggestibleObj;
     }
@@ -376,6 +376,10 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         mUserTagSuggestionsAdapter.addUserData(userMentionSuggestionPojoList);
         mUserTagSuggestionsAdapter.notifyDataSetChanged();
         return mUserTagSuggestionsAdapter;
+    }
+    public void notifyData(List<UserMentionSuggestionPojo> userMentionSuggestionPojoList) {
+        mUserTagSuggestionsAdapter.addUserData(userMentionSuggestionPojoList);
+        mUserTagSuggestionsAdapter.notifyDataSetChanged();
     }
     public void displayHide() {
         // Add the mentions and notify the editor/dropdown of the changes on the UI thread
@@ -724,6 +728,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     @Override
     public void onSuggestedUserClicked(Suggestible suggestible, View view) {
-        onMentionUserClick(suggestible, view);
+        onMentionUserSuggestionClick(suggestible,view);
     }
 }

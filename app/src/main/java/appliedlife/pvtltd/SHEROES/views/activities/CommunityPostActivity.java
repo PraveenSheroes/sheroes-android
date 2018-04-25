@@ -1533,16 +1533,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mUserMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
                 mUserMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
                 mHasMentions = true;
-
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
+                etView.notifyData(mUserMentionSuggestionPojoList);
             } else {
                 mHasMentions = false;
                 mMentionSpanList = null;
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
                 userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
-
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
+                etView.notifyData(userMentionSuggestionPojoList);
             }
         }
     }
@@ -1695,7 +1693,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public Suggestible onMentionUserClick(@NonNull Suggestible suggestible, View view) {
+    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:

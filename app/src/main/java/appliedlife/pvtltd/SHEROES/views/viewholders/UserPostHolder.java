@@ -512,7 +512,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (mUserPostObj.isHasMention()) {
             List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
             if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                userMentionNameWithClickForProfileDetail(listDescription, mentionSpanList);
+                showUserMentionName(listDescription, mentionSpanList);
             }else {
                 mPostDescription.setText(hashTagColorInString(listDescription));
             }
@@ -966,7 +966,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         mPostDetailCallback.onLikeCountClicked(mUserPostObj);
     }
 
-    private void userMentionNameWithClickForProfileDetail(String description, List<MentionSpan> mentionSpanList) {
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList) {
         StringBuilder strWithAddExtra = new StringBuilder(description + " ");
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);

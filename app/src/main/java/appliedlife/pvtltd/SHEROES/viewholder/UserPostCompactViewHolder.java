@@ -234,7 +234,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.isHasMention()) {
                 List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
                 if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                    userMentionNameWithClickForProfileDetail(listDescription, mentionSpanList);
+                    showUserMentionName(listDescription, mentionSpanList);
                 } else {
                     mPostDescription.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
                 }
@@ -814,7 +814,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
         }
     }
-    private void userMentionNameWithClickForProfileDetail(String description, List<MentionSpan> mentionSpanList) {
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList) {
         StringBuilder strWithAddExtra = new StringBuilder(description+" ");
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);

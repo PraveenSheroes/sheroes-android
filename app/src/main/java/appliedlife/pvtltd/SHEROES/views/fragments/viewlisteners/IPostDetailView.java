@@ -57,7 +57,7 @@ public interface IPostDetailView extends BaseMvpView {
     void deleteLastComment();
 
 
-    String getmStreamType();
+    String getStreamType();
 
     void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment);
 
@@ -70,7 +70,7 @@ public interface IPostDetailView extends BaseMvpView {
 
     UserTagSuggestionsAdapter onSuggestedList(final @NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter);
 
-    Suggestible onMentionUserClick(final @NonNull Suggestible suggestible, View view);
+    Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);
 }

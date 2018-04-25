@@ -473,7 +473,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
 
     @Override
-    public String getmStreamType() {
+    public String getStreamType() {
         return mStreamType;
     }
 
@@ -1197,14 +1197,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
                 mHasMentions = true;
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
+                //mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
+                etView.notifyData(userMentionSuggestionPojoList);
             } else {
                 mHasMentions = false;
                 mMentionSpanList = null;
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
                 userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
+                etView.notifyData(userMentionSuggestionPojoList);
             }
         }
     }
@@ -1240,7 +1241,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public Suggestible onMentionUserClick(@NonNull Suggestible suggestible, View view) {
+    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
@@ -1250,12 +1251,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 etView.setInsertion(userMentionSuggestionPojo);
                 etView.setEditTextShouldWrapContent(true);
                 if(null!=mUserPostObj) {
-                    final HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .postCommentId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
-                                    .taggedIn("COMMENT")
-                                    .taggedUserId(Integer.toString(userMentionSuggestionPojo.getUserId()))
-                                    .build();
+                    final HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mUserPostObj,getScreenName());
+                    properties.put(EventProperty.TAGGED_IN.name(), "COMMENT");
+                    properties.put(EventProperty.TAGGED_USER_ID.name(), Integer.toString(userMentionSuggestionPojo.getUserId()));
                     AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
                 }
                 break;
