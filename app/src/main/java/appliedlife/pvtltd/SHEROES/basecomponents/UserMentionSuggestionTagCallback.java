@@ -9,6 +9,6 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible
  * Created by Praveen on 05/03/18.
  */
 
-public interface UserTagCallback {
+public interface UserMentionSuggestionTagCallback {
     void onSuggestedUserClicked(Suggestible suggestible, View view);
 }

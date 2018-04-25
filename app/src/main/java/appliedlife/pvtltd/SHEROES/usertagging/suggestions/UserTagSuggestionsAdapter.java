@@ -16,7 +16,6 @@ package appliedlife.pvtltd.SHEROES.usertagging.suggestions;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,17 +30,15 @@ import java.util.Map;
 import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.UserTagCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.UserMentionCardHolder;
 
 /**
  * Adapter class for displaying suggestions.
@@ -53,7 +50,7 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
     private final Context mContext;
     private final Resources mResources;
     private final LayoutInflater mInflater;
-    private final UserTagCallback userTagCallback;
+    private final UserMentionSuggestionTagCallback userMentionSuggestionTagCallback;
     private SuggestionsVisibilityManager mSuggestionsVisibilityManager;
     private SuggestionsListBuilder mSuggestionsListBuilder;
     private final List<Suggestible> mSuggestions;
@@ -63,14 +60,14 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
     private final Map<String, UserTagSuggestionsResult> mResultMap = new HashMap<>();
     private final Map<QueryToken, Set<String>> mWaitingForResults = new HashMap<>();
 
-    public UserTagSuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserTagCallback userTagCallback) {
+    public UserTagSuggestionsAdapter(final @NonNull Context context, final @NonNull SuggestionsVisibilityManager suggestionsVisibilityManager, final @NonNull SuggestionsListBuilder suggestionsListBuilder, UserMentionSuggestionTagCallback userMentionSuggestionTagCallback) {
         mContext = context;
         mResources = context.getResources();
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mSuggestionsVisibilityManager = suggestionsVisibilityManager;
         mSuggestionsListBuilder = suggestionsListBuilder;
         mSuggestions = new ArrayList<>();
-        this.userTagCallback = userTagCallback;
+        this.userMentionSuggestionTagCallback = userMentionSuggestionTagCallback;
     }
     // --------------------------------------------------
     // Public Methods
@@ -139,16 +136,18 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
         notifyDataSetChanged();
     }
-    public void addUserData(List<TaggedUserPojo> suggestions) {
+
+    public void addUserData(List<UserMentionSuggestionPojo> suggestions) {
         // Add result to proper bucket and remove from waiting
         // If we have suggestions, add them to the adapter and display them
-            mSuggestions.clear();
-            mSuggestions.addAll(suggestions);
-            mSuggestionsVisibilityManager.displaySuggestions(true);
-            notifyDataSetChanged();
+        mSuggestions.clear();
+        mSuggestions.addAll(suggestions);
+        mSuggestionsVisibilityManager.displaySuggestions(true);
+        notifyDataSetChanged();
     }
+
     public void displayHide() {
-          mSuggestionsVisibilityManager.displaySuggestions(false);
+        mSuggestionsVisibilityManager.displaySuggestions(false);
     }
 
 
@@ -203,10 +202,10 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
         switch (viewType) {
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);
-                return new UserTagCardHolder(view, userTagCallback);
+                return new UserMentionCardHolder(view, userMentionSuggestionTagCallback);
             case TYPE_HEADER:
                 View header = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_header_layout, parent, false);
-                return new HeaderTaggedUserViewHolder(header, userTagCallback);
+                return new HeaderTaggedUserViewHolder(header, userMentionSuggestionTagCallback);
         }
         return null;
     }
@@ -218,9 +217,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
         }
         switch (holder.getItemViewType()) {
             case TYPE_CONTACT:
-                UserTagCardHolder userTagCardHolder = (UserTagCardHolder) holder;
+                UserMentionCardHolder userMentionCardHolder = (UserMentionCardHolder) holder;
                 Suggestible suggestible1 = mSuggestions.get(position);
-                userTagCardHolder.bindData(suggestible1, mContext, position);
+                userMentionCardHolder.bindData(suggestible1, mContext, position);
                 break;
             case TYPE_HEADER:
                 HeaderTaggedUserViewHolder headerTaggedUserViewHolder = ((HeaderTaggedUserViewHolder) holder);
@@ -237,11 +236,9 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0)
-        {
+        if (position == 0) {
             return TYPE_HEADER;
-        }else
-        {
+        } else {
             return TYPE_CONTACT;
         }
     }

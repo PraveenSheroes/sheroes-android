@@ -208,7 +208,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             String authorThumborUrl = CommonUtil.getThumborUri(userPostSolrObj.getAuthorImageUrl(), authorProfileSize, authorProfileSize);
             mPostAuthorImage.bindImage(authorThumborUrl);
         }
-        if (mConfiguration != null && mConfiguration.get() != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             mJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
         } else {
             mJoinConversation.setText(new ConfigData().mCommentHolderText);
@@ -234,7 +234,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.isHasMention()) {
                 List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
                 if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                    clickOnUserMentionName(listDescription, mentionSpanList);
+                    showUserMentionName(listDescription, mentionSpanList);
                 } else {
                     mPostDescription.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
                 }
@@ -243,7 +243,6 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             }
 
         }
-
 
 
         linkifyURLs(mPostDescription);
@@ -305,14 +304,14 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 mImageFirst.setVisibility(View.VISIBLE);
                 mImageSecond.setVisibility(View.VISIBLE);
                 mSecondImageContainer.setVisibility(View.VISIBLE);
-                String imageFirstKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
+                String imageFirstKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(0), CommonUtil.getWindowWidth(mContext) / 2, mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(imageFirstKitUrl)
                         .into(mImageFirst);
 
                 mImageFirst.setVisibility(View.VISIBLE);
-                String imageSecondKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(1), CommonUtil.getWindowWidth(mContext)/2, mAuthorPicSize);
+                String imageSecondKitUrl = CommonUtil.getThumborUri(mUserPostObj.getImageUrls().get(1), CommonUtil.getWindowWidth(mContext) / 2, mAuthorPicSize);
                 Glide.with(mContext)
                         .asBitmap()
                         .load(imageSecondKitUrl)
@@ -422,7 +421,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
                 if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
                     ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
-                } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
                     ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getIdOfEntityOrParticipant());
                 }
             }
@@ -448,9 +447,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         ClickableSpan community = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                   if(!mUserPostObj.isAnonymous() && (mUserPostObj.getCommunityId()!=0 || mUserPostObj.getCommunityId()!=299)) {
-                       ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
-                   }
+                if (!mUserPostObj.isAnonymous() && (mUserPostObj.getCommunityId() != 0 || mUserPostObj.getCommunityId() != 299)) {
+                    ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
+                }
             }
 
             @Override
@@ -503,7 +502,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 if (!mUserPostObj.isAnonymous()) {
                     if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
                         ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
-                    } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                    } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
                         ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                     }
                 }
@@ -520,7 +519,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View textView) {
                 if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
                     ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
-                } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
                     ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                 }
             }
@@ -573,7 +572,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View textView) {
 
-                if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
                     ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                 }
             }
@@ -734,13 +733,14 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     }
 
     @OnClick(R.id.fl_spam_post_ui)
-    public void spamPostCLick() {}
+    public void spamPostCLick() {
+    }
 
     @OnClick(R.id.post_author_image)
     public void onUserPicClick() {
         if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
             ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
-        } else if(!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+        } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
             ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
         }
     }
@@ -814,12 +814,13 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             ((FeedItemCallback) viewInterface).onPostShared(mUserPostObj);
         }
     }
-    private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList) {
-        StringBuilder strWithAddExtra = new StringBuilder(description+" ");
-        for (int i = 0; i <  mentionSpanList.size(); i++) {
+
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList) {
+        StringBuilder strWithAddExtra = new StringBuilder(description + " ");
+        for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
+                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() - 1) {
                     strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
                 }
             }
@@ -827,27 +828,17 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         SpannableString spannableString = new SpannableString(strWithAddExtra);
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
-            if (null != mentionSpan&&null!=mentionSpan.getMention()) {
-                /*final ClickableSpan postedInClick = new ClickableSpan() {
-                    @Override
-                    public void onClick(View textView) {
-
-                    }
-
-                    @Override
-                    public void updateDrawState(final TextPaint textPaint) {
-                        textPaint.setUnderlineText(false);
-                    }
-                };*/
-                int start=mentionSpan.getMention().getStartIndex()+i;
-                int end=mentionSpan.getMention().getEndIndex()+i;
-              //  spannableString.setSpan(postedInClick, start, end+1, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end+1, 0);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                int start = mentionSpan.getMention().getStartIndex() + i;
+                int end = mentionSpan.getMention().getEndIndex() + i;
+                if (end + 1 <= spannableString.length() && start <= spannableString.length()) {
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
+                }
             }
         }
 
-            mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
-            mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
+        mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
         // tvMention.setSelected(true);
     }
 }

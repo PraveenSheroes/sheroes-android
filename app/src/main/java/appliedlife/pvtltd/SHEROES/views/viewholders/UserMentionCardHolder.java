@@ -8,10 +8,10 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
@@ -22,9 +22,9 @@ import butterknife.OnClick;
  * Created by Praveen on 05/03/18.
  */
 
-public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
+public class UserMentionCardHolder extends BaseViewHolder<Suggestible> {
     private Suggestible suggestible;
-    private UserTagCallback userTagCallback;
+    private UserMentionSuggestionTagCallback userMentionSuggestionTagCallback;
     @Bind(R.id.li_social_user)
     LinearLayout liSocialUser;
     @Bind(R.id.iv_user_pic)
@@ -37,10 +37,10 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
     View viewLine;
 
 
-    public UserTagCardHolder(View itemView, UserTagCallback userTagCallback) {
+    public UserMentionCardHolder(View itemView, UserMentionSuggestionTagCallback userMentionSuggestionTagCallback) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.userTagCallback = userTagCallback;
+        this.userMentionSuggestionTagCallback = userMentionSuggestionTagCallback;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
 
     }
@@ -48,22 +48,19 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
     @Override
     public void bindData(Suggestible suggestible, Context context, int position) {
         this.suggestible = suggestible;
-        int userId = ((TaggedUserPojo) suggestible).getUserId();
-        if(userId==0)
-        {
+        int userMentionRowCreater = ((UserMentionSuggestionPojo) suggestible).getUserId();
+        if (userMentionRowCreater == AppConstants.USER_MENTION_NO_RESULT_FOUND) {
             liSocialUser.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
             mText.setVisibility(View.VISIBLE);
-            String name = ((TaggedUserPojo) suggestible).getName();
+            String name = ((UserMentionSuggestionPojo) suggestible).getName();
             if (StringUtil.isNotNullOrEmptyString(name)) {
                 mText.setText(name);
-            }else
-            {
-                mText.setText("No Result Found");
+            } else {
+                mText.setText(context.getString(R.string.no_result_found));
             }
-        }else
-        {
-            String name = ((TaggedUserPojo) suggestible).getName();
+        } else {
+            String name = ((UserMentionSuggestionPojo) suggestible).getName();
             liSocialUser.setVisibility(View.VISIBLE);
             mText.setVisibility(View.GONE);
             viewLine.setVisibility(View.VISIBLE);
@@ -72,7 +69,7 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
                 mTvName.setText(name);
 
             }
-            String imageUrl = ((TaggedUserPojo) suggestible).getAuthorImageUrl();
+            String imageUrl = ((UserMentionSuggestionPojo) suggestible).getAuthorImageUrl();
             if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
                 ivUserPicCircleIcon.setCircularImage(true);
                 ivUserPicCircleIcon.bindImage(imageUrl);
@@ -82,7 +79,7 @@ public class UserTagCardHolder extends BaseViewHolder<Suggestible> {
 
     @OnClick(R.id.li_social_user)
     public void inviteFriendClicked() {
-        userTagCallback.onSuggestedUserClicked(suggestible, liSocialUser);
+        userMentionSuggestionTagCallback.onSuggestedUserClicked(suggestible, liSocialUser);
     }
 
     @Override

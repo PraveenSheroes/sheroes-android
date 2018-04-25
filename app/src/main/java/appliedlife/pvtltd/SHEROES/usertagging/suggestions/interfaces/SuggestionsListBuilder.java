@@ -22,8 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +38,6 @@ public interface SuggestionsListBuilder {
      *
      * @param latestResults      newest {@link UserTagSuggestionsResult} for every bucket
      * @param currentTokenString the most recent token, as typed by the user
-     *
      * @return a list of {@link Suggestible} representing the suggestions in proper order
      */
     @NonNull
@@ -56,7 +53,6 @@ public interface SuggestionsListBuilder {
      * @param context     current {@link Context} within the adapter
      * @param inflater    {@link LayoutInflater} to use
      * @param resources   {@link Resources} to use
-     *
      * @return a view for the corresponding {@link Suggestible} object in the adapter
      */
     @NonNull

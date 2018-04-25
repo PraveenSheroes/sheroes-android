@@ -1870,8 +1870,13 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         /*User tagging fields*/
-        communityPostCreateRequest.setHasMentions(hasMention);
-        communityPostCreateRequest.setUserMentionList(userMentionList);
+            if(StringUtil.isNotEmptyCollection(userMentionList)) {
+                communityPostCreateRequest.setHasMentions(hasMention);
+                communityPostCreateRequest.setUserMentionList(userMentionList);
+            }else {
+                communityPostCreateRequest.setHasMentions(false);
+                communityPostCreateRequest.setUserMentionList(null);
+            }
         return communityPostCreateRequest;
     }
 
@@ -1907,8 +1912,13 @@ public class AppUtils {
             challengePostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         /*User tagging fields*/
-        challengePostCreateRequest.setHasMentions(hasMention);
-        challengePostCreateRequest.setUserMentionList(userMentionList);
+        if(StringUtil.isNotEmptyCollection(userMentionList)) {
+            challengePostCreateRequest.setHasMentions(hasMention);
+            challengePostCreateRequest.setUserMentionList(userMentionList);
+        }else {
+            challengePostCreateRequest.setHasMentions(false);
+            challengePostCreateRequest.setUserMentionList(null);
+        }
         return challengePostCreateRequest;
     }
 
@@ -1947,8 +1957,13 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
               /*User tagging fields*/
-        communityPostCreateRequest.setHasMentions(hasMention);
-        communityPostCreateRequest.setUserMentionList(userMentionList);
+        if(StringUtil.isNotEmptyCollection(userMentionList)) {
+            communityPostCreateRequest.setHasMentions(hasMention);
+            communityPostCreateRequest.setUserMentionList(userMentionList);
+        }else {
+            communityPostCreateRequest.setHasMentions(false);
+            communityPostCreateRequest.setUserMentionList(null);
+        }
         return communityPostCreateRequest;
     }
 
@@ -2013,18 +2028,6 @@ public class AppUtils {
         return bookmarkRequestPojo;
     }
 
-    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous) {
-        AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
-        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
-        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
-        //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
-        commentReactionRequestPojo.setUserComment(userComment);
-        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
-        commentReactionRequestPojo.setEntityId(entityId);
-        return commentReactionRequestPojo;
-    }
 
     public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
@@ -2037,25 +2040,16 @@ public class AppUtils {
         commentReactionRequestPojo.setIsAnonymous(isAnonymous);
         commentReactionRequestPojo.setEntityId(entityId);
         /*User mention*/
-        commentReactionRequestPojo.setHasMentions(hasMention);
-        commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+            commentReactionRequestPojo.setHasMentions(hasMention);
+            commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        }else {
+            commentReactionRequestPojo.setHasMentions(false);
+            commentReactionRequestPojo.setUserMentionList(null);
+        }
         return commentReactionRequestPojo;
     }
 
-    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId) {
-        AppUtils appUtils = AppUtils.getInstance();
-        CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
-        commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
-        commentReactionRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
-        //TODO:: change rquest data
-        commentReactionRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
-        commentReactionRequestPojo.setUserComment(userComment);
-        commentReactionRequestPojo.setIsAnonymous(isAnonymous);
-        commentReactionRequestPojo.setIsActive(isActive);
-        commentReactionRequestPojo.setEntityId(entityId);
-        commentReactionRequestPojo.setParticipationId(participationId);
-        return commentReactionRequestPojo;
-    }
 
     public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId,boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
@@ -2070,8 +2064,13 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         commentReactionRequestPojo.setParticipationId(participationId);
         /*User mention*/
-        commentReactionRequestPojo.setHasMentions(hasMention);
-        commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+            commentReactionRequestPojo.setHasMentions(hasMention);
+            commentReactionRequestPojo.setUserMentionList(mentionSpanList);
+        }else {
+            commentReactionRequestPojo.setHasMentions(false);
+            commentReactionRequestPojo.setUserMentionList(null);
+        }
         return commentReactionRequestPojo;
     }
 

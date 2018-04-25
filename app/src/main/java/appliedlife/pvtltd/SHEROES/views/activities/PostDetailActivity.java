@@ -33,10 +33,9 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,8 +54,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -74,7 +71,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
@@ -88,12 +84,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
-import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
@@ -102,7 +96,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -128,10 +121,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public static final int MAX_LINE = 5;
     public int mPositionInFeed = -1;
     private long mLoggedInUser = -1;
-    private String streamType;
-    private boolean isDirty = false;
-    private Comment editedComment = null;
-    private Map<Integer, Comment> lastEditedComment = new HashMap<>();
+    private String mStreamType;
+    private boolean mIsDirty = false;
+    private Comment mEditedComment = null;
+    private Map<Integer, Comment> mLastEditedComment = new HashMap<>();
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -183,7 +176,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @BindDimen(R.dimen.dp_size_36)
     int profileSize;
 
-    long adminId =0;
+    long adminId = 0;
     private UserPostSolrObj userPostSolrObj;
 
     //endregion
@@ -200,10 +193,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private int mFromNotification;
     LinearLayoutManager mLayoutManager;
-    private List<MentionSpan> mentionSpanList;
-    List<TaggedUserPojo> mTaggedUserPojoList;
-    private boolean hasMentions = false;
-    private String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
+    private List<MentionSpan> mMentionSpanList;
+    List<UserMentionSuggestionPojo> mUserMentionSuggestionPojoList;
+    private boolean mHasMentions = false;
+    private String mUserTagCommentInfoText;
     //endregion
 
     //region activity methods
@@ -214,16 +207,15 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setContentView(R.layout.activity_post_detail);
         ButterKnife.bind(this);
         mPostDetailPresenter.attachView(this);
+        mUserTagCommentInfoText = getString(R.string.user_mention_area_at_comment);
         mUserPic.setCircularImage(true);
         setIsLoggedInUser();
-        etView.setQueryTokenReceiver(this);
-
         etView.setEditTextShouldWrapContent(true);
         Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
         if (parcelable != null) {
             mUserPostObj = Parcels.unwrap(parcelable);
             mPositionInFeed = mUserPostObj.getItemPosition();
-            streamType = mUserPostObj.getStreamType();
+            mStreamType = mUserPostObj.getStreamType();
             boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
             if (showKeyboard) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -275,7 +267,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mTitleToolbar.setText(mUserPostObj.getAuthorName() + "'s" + " post");
             }
         }
-        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData!=null && CommonUtil.isNotEmpty(mConfiguration.get().configData.mCommentHolderText)) {
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.mCommentHolderText)) {
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
             mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
         } else {
@@ -293,6 +285,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         });
+        mPostDetailPresenter.getUserMentionSuggestion(etView, mUserPostObj);
     }
 
     private boolean keyboardShown(View rootView) {
@@ -319,7 +312,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void setIsLoggedInUser() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
         }
     }
@@ -430,10 +423,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void updateComment(Comment comment) {
-        if (isDirty && !lastEditedComment.isEmpty()) {
-            isDirty = false;
-            Map.Entry<Integer, Comment> entry = lastEditedComment.entrySet().iterator().next();
-            lastEditedComment.clear();
+        if (mIsDirty && !mLastEditedComment.isEmpty()) {
+            mIsDirty = false;
+            Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
+            mLastEditedComment.clear();
             mPostDetailListAdapter.addData(comment, entry.getKey());
             mLayoutManager.scrollToPositionWithOffset(entry.getKey(), 0);
         }
@@ -457,7 +450,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void editLastComment() {
         Comment comment = mPostDetailPresenter.getLastComment();
         if (comment != null) {
-            isDirty = true;
+            mIsDirty = true;
             onEditMenuClicked(comment);
         }
     }
@@ -479,7 +472,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public String getStreamType() {
-        return streamType;
+        return mStreamType;
     }
 
     @Override
@@ -625,7 +618,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, final TextView view) {
         PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             Menu menu = popup.getMenu();
             menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
@@ -672,7 +665,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 popup.getMenu().findItem(R.id.share).setVisible(false);
             }
 
-            if (userPostObj.getAuthorId() == mLoggedInUser ||  adminId == AppConstants.TWO_CONSTANT) {
+            if (userPostObj.getAuthorId() == mLoggedInUser || adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
             } else {
                 popup.getMenu().findItem(R.id.report_spam).setVisible(true);
@@ -687,9 +680,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         case R.id.delete:
 
                             userPostSolrObj = userPostObj;
-                            if(mLoggedInUser != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
+                            if (mLoggedInUser != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                                 reportSpamDialog(SpamContentType.POST, userPostObj, null);
-                            } else{
+                            } else {
                                 AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
                                 mPostDetailPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(userPostSolrObj.getIdOfEntityOrParticipant()));
                             }
@@ -876,16 +869,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            if(adminId == AppConstants.TWO_CONSTANT) {
+            if (adminId == AppConstants.TWO_CONSTANT) {
                 if (comment != null) {
                     mPostDetailPresenter.getSpamCommentApproveFromPresenter(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), comment);
-                } else if(userPostSolrObj!=null) {
+                } else if (userPostSolrObj != null) {
                     AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
                     mPostDetailPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
                 }
             }
 
-            if(!spamResponse.isSpamAlreadyReported()) {
+            if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType()));
@@ -898,13 +891,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
-        if(isDirty && editedComment!=null) {
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(editedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, editedComment.getId()), AppConstants.TWO_CONSTANT);
+        if (mIsDirty && mEditedComment != null) {
+            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
         } else {
-            String message = etView.getEditText().getText().toString().trim();
+            String message = etView.getEditText().getText().toString();
             if (!TextUtils.isEmpty(message)) {
-                lastEditedComment.clear();
-                mPostDetailPresenter.addComment(message, mIsAnonymous);
+                mLastEditedComment.clear();
+                mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
             }
         }
         etView.getEditText().setText("");
@@ -915,26 +908,26 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public void onCommentMenuClicked(final Comment comment, final ImageView userCommentListMenu) {
         final PopupMenu popup = new PopupMenu(PostDetailActivity.this, userCommentListMenu);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
+            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
             Menu menu = popup.getMenu();
             menu.add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
             menu.add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             menu.add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
-            if (comment.isMyOwnParticipation() ||  adminId == AppConstants.TWO_CONSTANT) {
-               if(comment.isMyOwnParticipation()) {
-                   popup.getMenu().findItem(R.id.edit).setVisible(true);
-               } else {
-                   popup.getMenu().findItem(R.id.edit).setVisible(false);
-               }
+            if (comment.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
+                if (comment.isMyOwnParticipation()) {
+                    popup.getMenu().findItem(R.id.edit).setVisible(true);
+                } else {
+                    popup.getMenu().findItem(R.id.edit).setVisible(false);
+                }
                 popup.getMenu().findItem(R.id.delete).setVisible(true);
                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
             } else {
                 popup.getMenu().findItem(R.id.edit).setVisible(false);
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
-                if(!comment.isSpamComment()) {
+                if (!comment.isSpamComment()) {
                     popup.getMenu().findItem(R.id.report_spam).setVisible(true);
-                } else{
+                } else {
                     popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                 }
             }
@@ -946,7 +939,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             onEditMenuClicked(comment);
                             return true;
                         case R.id.delete:
-                            if(!comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
+                            if (!comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
                                 popup.dismiss();
                                 reportSpamDialog(SpamContentType.COMMENT, null, comment);
                             } else {
@@ -973,10 +966,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
-                        .streamType(streamType)
+                        .streamType(mStreamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), hasMentions, mentionSpanList), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), mHasMentions, mMentionSpanList), AppConstants.ONE_CONSTANT);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -987,55 +980,56 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
-                        .streamType(streamType)
+                        .streamType(mStreamType)
                         .build();
         trackEvent(Event.REPLY_EDITED, properties);
+        mEditedComment = comment;
         if (comment.isHasCommentMention()) {
-            hasMentions=comment.isHasCommentMention();
-            mentionSpanList = comment.getCommentUserMentionList();
-            editUserMentionWithCommentText(mentionSpanList, comment.getComment());
+            mHasMentions = comment.isHasCommentMention();
+            mMentionSpanList = comment.getCommentUserMentionList();
+            editUserMentionWithCommentText(mMentionSpanList, comment.getComment());
         } else {
             etView.getEditText().setText(comment.getComment());
             etView.getEditText().setSelection(comment.getComment().length());
         }
-
-        editedComment = comment;
-        etView.getEditText().setText(comment.getComment());
-        etView.getEditText().setSelection(comment.getComment().length());
-
         int pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
 
         if (mPostDetailListAdapter.getItemCount() > pos) {
             if (pos != RecyclerView.NO_POSITION) {
 
-                if (isDirty && !lastEditedComment.isEmpty()) {
-                    Map.Entry<Integer, Comment> entry = lastEditedComment.entrySet().iterator().next();
-                    lastEditedComment.clear();
+                if (mIsDirty && !mLastEditedComment.isEmpty()) {
+                    Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
+                    mLastEditedComment.clear();
                     mPostDetailListAdapter.addData(entry.getValue(), entry.getKey());
                     pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
                 }
 
                 mPostDetailListAdapter.removeData(pos);
 
-                lastEditedComment.put(pos, comment);
-                isDirty = true;
+                mLastEditedComment.put(pos, comment);
+                mIsDirty = true;
             }
         }
+        etView.setEditTextShouldWrapContent(true);
     }
 
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
+        StringBuilder modifiedText = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+               /* if(mentionSpan.getMention().getEndIndex()>editDescText.length())
+                {
+                    mentionSpan.getMention().setEndIndex(editDescText.length());
+                }*/
+                modifiedText.append(editDescText.substring(0, mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(), editDescText.length()));
             }
-
-            etView.getEditText().setText(editDescText);
+            etView.getEditText().setText(modifiedText);
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                TaggedUserPojo userMention = mentionSpan.getMention();
+                UserMentionSuggestionPojo userMention = mentionSpan.getMention();
                 int index = userMention.getStartIndex();
-                etView.setMentionSelectionText(userMention, index, index + 1);
+                etView.setCreateEditMentionSelectionText(userMention, index, index + 1);
             }
             etView.getEditText().setSelection(etView.getEditText().length());
         }
@@ -1043,7 +1037,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserPostSolrObj userPostSolrObj, final Comment comment) {
 
-        if(PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
+        if (PostDetailActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {
@@ -1053,7 +1047,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
         }
 
-        if(spamReasons == null) return;
+        if (spamReasons == null) return;
 
         final Dialog spamReasonsDialog = new Dialog(PostDetailActivity.this);
         spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1071,18 +1065,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
-        List<Spam> spamList =null;
+        List<Spam> spamList = null;
         SpamPostRequest spamRequest = null;
-        if(spamContentType == SpamContentType.POST) {
+        if (spamContentType == SpamContentType.POST) {
             spamList = spamReasons.getPostTypeSpams();
             spamRequest = SpamUtil.createSpamPostRequest(userPostSolrObj, false, mLoggedInUser);
-        } else if(spamContentType == SpamContentType.COMMENT) {
+        } else if (spamContentType == SpamContentType.COMMENT) {
             spamList = spamReasons.getCommentTypeSpams();
             spamRequest = SpamUtil.spamCommentRequestBuilder(comment, mLoggedInUser);
         }
 
-        if(spamRequest == null || spamList == null) return;
-        SpamUtil.addRadioToView(PostDetailActivity.this, spamList , spamOptions);
+        if (spamRequest == null || spamList == null) return;
+        SpamUtil.addRadioToView(PostDetailActivity.this, spamList, spamOptions);
 
         Button submit = spamReasonsDialog.findViewById(R.id.submit);
         final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
@@ -1091,7 +1085,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+                if (spamOptions.getCheckedRadioButtonId() != -1) {
 
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
@@ -1102,14 +1096,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         if (spam.getLabel().equalsIgnoreCase("Others")) { //If reason "other" is selected
                             if (reason.getVisibility() == View.VISIBLE) {
 
-                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
-                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment); //submit
                                     spamReasonsDialog.dismiss();
 
-                                    if(spamContentType == SpamContentType.POST) {
+                                    if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
-                                    } else if(spamContentType == SpamContentType.COMMENT) {
+                                    } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
 
@@ -1125,9 +1119,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment);  //submit request
                             spamReasonsDialog.dismiss();
 
-                            if(spamContentType == SpamContentType.POST) {
+                            if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
-                            } else if(spamContentType == SpamContentType.COMMENT) {
+                            } else if (spamContentType == SpamContentType.COMMENT) {
                                 AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                             }
                         }
@@ -1194,96 +1188,70 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void userTagResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-      /*  if(StringUtil.isNotEmptyCollection(mTaggedUserPojoList)) {
+    public void userMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
+        if (StringUtil.isNotEmptyCollection(mUserMentionSuggestionPojoList)) {
             if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-                mTaggedUserPojoList = searchUserDataResponse.getParticipantList();
-                List<TaggedUserPojo> taggedUserPojoList = searchUserDataResponse.getParticipantList();
-                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-                hasMentions = true;
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                mSuggestionList.setLayoutManager(layoutManager);
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(mTaggedUserPojoList));
+                mUserMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
+                List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
+                userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
+                mHasMentions = true;
+                //mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
+                etView.notifyData(userMentionSuggestionPojoList);
             } else {
-                hasMentions = false;
-                mentionSpanList = null;
-                List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
-                taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-                taggedUserPojoList.add(1, new TaggedUserPojo(0, "", "", "", 0));
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                mSuggestionList.setLayoutManager(layoutManager);
-                mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
+                mHasMentions = false;
+                mMentionSpanList = null;
+                List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
+                userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
+                userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
+                etView.notifyData(userMentionSuggestionPojoList);
             }
-        }*/
+        }
     }
 
     @Override
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
-      /* final String searchText=queryToken.getTokenString();
+        final String searchText = queryToken.getTokenString();
         if (searchText.contains("@")) {
-            hasMentions = false;
-            mentionSpanList = null;
-            List<TaggedUserPojo> taggedUserPojoList = new ArrayList<>();
-            taggedUserPojoList.add(0, new TaggedUserPojo(1, mUserTagCommentInfoText, "", "", 0));
-            taggedUserPojoList.add(1, new TaggedUserPojo(0,getString(R.string.searching),"","",0));
+
+            List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
+            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
+            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
-            mSuggestionList.setAdapter(etView.notifyAdapterOnData(taggedUserPojoList));
-            mTaggedUserPojoList=taggedUserPojoList;
-
-            //UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, taggedUserPojoList);
-           // etView.onReceiveSuggestionsResult(result, "data");
+            mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
+            mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
             mProgressBar.setVisibility(View.VISIBLE);
-            if (searchText.length() <= 3) {
-                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
-            } else {
-                Timer timer = new Timer();
-                timer.schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
-                            }
-                        },
-                        2000
-                );
-            }
-        }*/
+        }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
     }
 
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        //this.mentionSpanList = mentionSpanList;
+        this.mMentionSpanList = mentionSpanList;
         return null;
     }
 
     @Override
     public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        /*LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mSuggestionList.setLayoutManager(layoutManager);
-        mSuggestionList.setAdapter(userTagSuggestionsAdapter);*/
         return null;
     }
 
     @Override
-    public Suggestible onUserTaggedClick(@NonNull Suggestible suggestible, View view) {
+    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
-                mTaggedUserPojoList.clear();
+                mUserMentionSuggestionPojoList.clear();
                 etView.displayHide();
-                TaggedUserPojo taggedUserPojo = (TaggedUserPojo) suggestible;
-                etView.setInsertion(taggedUserPojo);
-                if(null!=mUserPostObj) {
-                    final HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .postCommentId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
-                                    .taggedIn("COMMENT")
-                                    .taggedUserId(Integer.toString(taggedUserPojo.getUserId()))
-                                    .build();
+                UserMentionSuggestionPojo userMentionSuggestionPojo = (UserMentionSuggestionPojo) suggestible;
+                etView.setInsertion(userMentionSuggestionPojo);
+                etView.setEditTextShouldWrapContent(true);
+                if (null != mUserPostObj) {
+                    final HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mUserPostObj, getScreenName());
+                    properties.put(EventProperty.TAGGED_IN.name(), "COMMENT");
+                    properties.put(EventProperty.TAGGED_USER_ID.name(), Integer.toString(userMentionSuggestionPojo.getUserId()));
                     AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
                 }
                 break;
@@ -1306,6 +1274,5 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mSendButton.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
             }
         }
-
     }
 }

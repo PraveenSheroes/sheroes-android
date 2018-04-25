@@ -418,4 +418,7 @@ public class AppConstants {
 
     public static final String NEXT_DAY_DATE = "NEXT_DAY_DATE";
 
+    public static final int USER_MENTION_HEADER = 1;
+    public static final int USER_MENTION_NO_RESULT_FOUND = 0;
+
 }

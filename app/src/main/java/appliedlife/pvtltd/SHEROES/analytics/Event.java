@@ -215,7 +215,7 @@ public enum Event {
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
     FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, ""),
-    USER_TAGGED(AnalyticsEventType.USER_TAGGED, "");
+    USER_TAGGED(AnalyticsEventType.USER, "Tagged");
     //endregion
 
     public final AnalyticsEventType type;
