@@ -512,8 +512,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (mUserPostObj.isHasMention()) {
             List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
             if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                clickOnUserMentionName(listDescription, mentionSpanList);
-            }else {
+                showUserMentionName(listDescription, mentionSpanList);
+            } else {
                 mPostDescription.setText(hashTagColorInString(listDescription));
             }
         } else {
@@ -814,7 +814,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void clickOnMentorName(String nameAndCommunity, String feedTitle, String postedIn) {
 
-        SpannableString SpanString = new SpannableString(nameAndCommunity+" ");
+        SpannableString SpanString = new SpannableString(nameAndCommunity + " ");
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
@@ -966,12 +966,12 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         mPostDetailCallback.onLikeCountClicked(mUserPostObj);
     }
 
-    private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList) {
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList) {
         StringBuilder strWithAddExtra = new StringBuilder(description + " ");
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() -1) {
+                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() - 1) {
                     strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
                 }
             }
@@ -1001,7 +1001,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 };
                 int start = mentionSpan.getMention().getStartIndex() + i;
                 int end = mentionSpan.getMention().getEndIndex() + i;
-                if (end + 1 <= spannableString.length() - 1 && start <= spannableString.length() - 1) {
+                if (end + 1 <= spannableString.length() && start <= spannableString.length()) {
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
                 }

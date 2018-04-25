@@ -596,4 +596,8 @@
     <string name="update.title">New Update Available</string>
     <string name="update.description">Update now to have an awesome experience</string>
     <string name="searching">Searching...</string>
+    <string name="no_result_found">No Result Found</string>
+    <string name="user_mention_area_at_post">You can tag community owners &amp; your followers</string>
+    <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
+
 </resources>

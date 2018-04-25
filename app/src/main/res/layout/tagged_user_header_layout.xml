@@ -3,24 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/search_shortcut_icon_color">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_size_10"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_10"
-        android:layout_marginBottom="@dimen/dp_size_10"
-        android:background="@drawable/user_tag_header"/>
+        android:background="@drawable/user_tag_header" />
+
     <TextView
         android:id="@+id/tv_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_30"
-        android:layout_marginTop="@dimen/dp_size_8"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_30"
         android:layout_marginRight="@dimen/dp_size_8"
-        android:textColor="@color/comment_text"
+        android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:textSize="@dimen/sp_size_12"/>
+        android:textColor="@color/comment_text"
+        android:textSize="@dimen/sp_size_12" />
 
 </LinearLayout>

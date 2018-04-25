@@ -148,7 +148,7 @@ public class CommunityModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
     //region Private Helper methods
-    public Observable<SearchUserDataResponse> getSearchResult(SearchUserDataRequest searchUserDataRequest) {
+    public Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
         return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest);
     }
 

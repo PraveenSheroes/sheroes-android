@@ -239,7 +239,6 @@ public class WordTokenizer implements Tokenizer {
      *
      * @param text   String to determine if it is explicit or not
      * @param cursor position of the cursor in text
-     *
      * @return true if the current keywords are explicit (i.e. explicit character typed before cursor)
      */
     public boolean isExplicit(final @NonNull CharSequence text, final int cursor) {
@@ -252,7 +251,6 @@ public class WordTokenizer implements Tokenizer {
      *
      * @param text   String to get the explicit character from
      * @param cursor position of the cursor in text
-     *
      * @return the current explicit character or the null character if not currently explicit
      */
     public char getExplicitChar(final @NonNull CharSequence text, final int cursor) {
@@ -290,7 +288,6 @@ public class WordTokenizer implements Tokenizer {
      * Returns true if the input string contains an explicit character.
      *
      * @param input a {@link CharSequence} to test
-     *
      * @return true if input contains an explicit character
      */
     public boolean containsExplicitChar(final @NonNull CharSequence input) {
@@ -309,7 +306,6 @@ public class WordTokenizer implements Tokenizer {
      * Returns true if the input string contains a word-breaking character.
      *
      * @param input a {@link CharSequence} to test
-     *
      * @return true if input contains a word-breaking character
      */
     public boolean containsWordBreakingChar(final @NonNull CharSequence input) {
@@ -331,7 +327,6 @@ public class WordTokenizer implements Tokenizer {
      * @param input           a {@link CharSequence} to test
      * @param numCharsToCheck number of characters to examine at starting position
      * @param start           starting position within the input string
-     *
      * @return true if the first "numCharsToCheck" at the starting index are either letters or digits
      */
     public boolean onlyLettersOrDigits(final @NonNull CharSequence input, final int numCharsToCheck, final int start) {
@@ -369,7 +364,6 @@ public class WordTokenizer implements Tokenizer {
      *
      * @param text   the {@link Spanned} to examine
      * @param cursor position of the cursor in text
-     *
      * @return the furthest in front of the cursor to search for the current keywords
      */
     protected int getSearchStartIndex(final @NonNull Spanned text, int cursor) {
@@ -404,7 +398,6 @@ public class WordTokenizer implements Tokenizer {
      *
      * @param text   the {@link Spanned} to examine
      * @param cursor position of the cursor in text
-     *
      * @return the furthest behind the cursor to search for the current keywords
      */
     protected int getSearchEndIndex(final @NonNull Spanned text, int cursor) {
@@ -443,7 +436,6 @@ public class WordTokenizer implements Tokenizer {
      *
      * @param text   the {@link Spanned} to check for a word-breaking character before the explicit character
      * @param cursor position of the cursor in text
-     *
      * @return true if there is a space before the explicit character, false otherwise
      */
     protected boolean hasWordBreakingCharBeforeExplicitChar(final @NonNull Spanned text, final int cursor) {

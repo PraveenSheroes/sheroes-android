@@ -34,8 +34,7 @@ public enum AnalyticsEventType {
     PROMO_CARD("Promo Card"),
     POST_LOAD_MORE("Post Load More"),
     FRIEND("Friend"),
-    IMAGE_CARD("Image Card"),
-    USER_TAGGED("User Tagged");
+    IMAGE_CARD("Image Card");
 
     // endregion
 

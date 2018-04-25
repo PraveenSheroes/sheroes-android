@@ -26,8 +26,7 @@ import android.widget.EditText;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.TaggedUserPojo;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 
 /**
@@ -37,7 +36,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 public class MentionSpan extends ClickableSpan implements Parcelable {
     @SerializedName("mention")
     @Expose
-    public TaggedUserPojo mention;
+    public UserMentionSuggestionPojo mention;
     @SerializedName("config")
     @Expose
     public MentionSpanConfig config;
@@ -46,15 +45,15 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
     public boolean isSelected = false;
     @SerializedName("mDisplayMode")
     @Expose
-    public TaggedUserPojo.MentionDisplayMode mDisplayMode = TaggedUserPojo.MentionDisplayMode.FULL;
+    public UserMentionSuggestionPojo.MentionDisplayMode mDisplayMode = UserMentionSuggestionPojo.MentionDisplayMode.FULL;
 
-    public MentionSpan(@NonNull TaggedUserPojo mention) {
+    public MentionSpan(@NonNull UserMentionSuggestionPojo mention) {
         super();
         this.mention = mention;
         this.config = new MentionSpanConfig.Builder().build();
     }
 
-    public MentionSpan(@NonNull TaggedUserPojo mention, @NonNull MentionSpanConfig config) {
+    public MentionSpan(@NonNull UserMentionSuggestionPojo mention, @NonNull MentionSpanConfig config) {
         super();
         this.mention = mention;
         this.config = config;
@@ -103,11 +102,12 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         tp.setUnderlineText(false);
     }
 
-    public TaggedUserPojo getMention() {
+    public UserMentionSuggestionPojo getMention() {
         return mention;
     }
-    public void setMention(TaggedUserPojo taggedUserPojo) {
-        mention= taggedUserPojo;
+
+    public void setMention(UserMentionSuggestionPojo userMentionSuggestionPojo) {
+        mention = userMentionSuggestionPojo;
     }
 
     public boolean isSelected() {
@@ -138,11 +138,11 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         this.config = config;
     }
 
-    public TaggedUserPojo.MentionDisplayMode getmDisplayMode() {
+    public UserMentionSuggestionPojo.MentionDisplayMode getmDisplayMode() {
         return mDisplayMode;
     }
 
-    public void setmDisplayMode(TaggedUserPojo.MentionDisplayMode mDisplayMode) {
+    public void setmDisplayMode(UserMentionSuggestionPojo.MentionDisplayMode mDisplayMode) {
         this.mDisplayMode = mDisplayMode;
     }
 
@@ -160,11 +160,11 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
     }
 
     protected MentionSpan(Parcel in) {
-        this.mention = in.readParcelable(TaggedUserPojo.class.getClassLoader());
+        this.mention = in.readParcelable(UserMentionSuggestionPojo.class.getClassLoader());
         this.config = in.readParcelable(MentionSpanConfig.class.getClassLoader());
         this.isSelected = in.readByte() != 0;
         int tmpMDisplayMode = in.readInt();
-        this.mDisplayMode = tmpMDisplayMode == -1 ? null : TaggedUserPojo.MentionDisplayMode.values()[tmpMDisplayMode];
+        this.mDisplayMode = tmpMDisplayMode == -1 ? null : UserMentionSuggestionPojo.MentionDisplayMode.values()[tmpMDisplayMode];
     }
 
     public static final Creator<MentionSpan> CREATOR = new Creator<MentionSpan>() {

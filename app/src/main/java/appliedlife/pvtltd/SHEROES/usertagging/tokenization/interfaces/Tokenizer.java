@@ -28,7 +28,6 @@ public interface Tokenizer {
      *
      * @param text   the {@link Spanned} to find the token in
      * @param cursor position of the cursor in text
-     *
      * @return index of the first character in the token
      */
     int findTokenStart(final @NonNull Spanned text, final int cursor);
@@ -38,7 +37,6 @@ public interface Tokenizer {
      *
      * @param text   the {@link Spanned} to find the token in
      * @param cursor position of the cursor in text
-     *
      * @return index after the last character in the token
      */
     int findTokenEnd(final @NonNull Spanned text, final int cursor);
@@ -49,7 +47,6 @@ public interface Tokenizer {
      * @param text  the {@link Spanned} to check for a valid token
      * @param start index of the first character in the token (see {@link #findTokenStart(Spanned, int)})
      * @param end   index after the last character in the token (see (see {@link #findTokenEnd(Spanned, int)})
-     *
      * @return true if input is a valid mention
      */
     boolean isValidMention(final @NonNull Spanned text, final int start, final int end);
@@ -58,7 +55,6 @@ public interface Tokenizer {
      * Returns text, modified, to ensure that it ends with a token terminator if necessary.
      *
      * @param text the given {@link Spanned} object to modify if necessary
-     *
      * @return the modified version of the text
      */
     @NonNull
@@ -68,7 +64,6 @@ public interface Tokenizer {
      * Determines if given character is an explicit character according to the current settings of the tokenizer.
      *
      * @param c character to test
-     *
      * @return true if c is an explicit character
      */
     boolean isExplicitChar(final char c);
@@ -77,7 +72,6 @@ public interface Tokenizer {
      * Determines if given character is an word-breaking character according to the current settings of the tokenizer.
      *
      * @param c character to test
-     *
      * @return true if c is an word-breaking character
      */
     boolean isWordBreakingChar(final char c);

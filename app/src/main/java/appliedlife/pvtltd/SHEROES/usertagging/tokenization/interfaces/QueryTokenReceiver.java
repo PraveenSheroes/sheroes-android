@@ -18,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.view.View;
 
-
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
@@ -38,7 +37,6 @@ public interface QueryTokenReceiver {
      * if there are any ongoing queries at a given time.
      *
      * @param queryToken the {@link QueryToken} to process
-     *
      * @return a List of String representing the buckets that will be used when calling {@link SuggestionsResultListener}
      */
     List<String> onQueryReceived(final @NonNull QueryToken queryToken);
@@ -47,7 +45,8 @@ public interface QueryTokenReceiver {
 
     UserTagSuggestionsAdapter onSuggestedList(final @NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter);
 
-    Suggestible onUserTaggedClick(final @NonNull Suggestible suggestible, View view);
+    Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);
+
 }
