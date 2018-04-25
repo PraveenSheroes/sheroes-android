@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
@@ -59,7 +60,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         mAppUtils = appUtils;
     }
 
-    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest) {
+    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest, final boolean isSharedFromExternalApp) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
@@ -83,7 +84,11 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             public void onNext(CreateCommunityResponse communityPostCreateResponse) {
                 if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                    AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                    FeedDetail feedDetail = communityPostCreateResponse.getFeedDetail();
+                    if(feedDetail!=null) {
+                        feedDetail.setSharedFromExternalApp(isSharedFromExternalApp);
+                        AnalyticsManager.trackPostAction(Event.POST_CREATED, feedDetail, CommunityPostActivity.SCREEN_LABEL);
+                    }
                 } else {
                     getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
                     getMvpView().stopProgressBar();

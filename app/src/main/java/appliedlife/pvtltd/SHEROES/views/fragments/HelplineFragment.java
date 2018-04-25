@@ -7,7 +7,6 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -79,6 +78,17 @@ public class HelplineFragment extends BaseFragment {
     private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private long startedTime;
+    private String sourceScreen ;
+
+
+    public static HelplineFragment createInstance(String sourceScreen) {
+        HelplineFragment helplineFragment = new HelplineFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.SOURCE_NAME, sourceScreen);
+        helplineFragment.setArguments(bundle);
+        return helplineFragment;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,6 +100,10 @@ public class HelplineFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
+
+        if(getArguments()!=null) {
+           sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
+        }
 
         if(getActivity() instanceof HomeActivity){
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
@@ -207,7 +221,13 @@ public class HelplineFragment extends BaseFragment {
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
         sendChatButton.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            trackEvent(Event.HELPLINE_MESSAGE_CREATED, null);
+            HashMap<String, Object> screenProperties = null;
+            if (sourceScreen != null) {
+                screenProperties = new EventProperty.Builder()
+                        .sourceScreenId(sourceScreen)
+                        .build();
+            }
+            trackEvent(Event.HELPLINE_MESSAGE_CREATED, screenProperties);
             questionText.setText(AppConstants.EMPTY_STRING);
             AppUtils.hideKeyboard(getView(), TAG);
             refreshChatMethod();

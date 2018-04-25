@@ -36,7 +36,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="@dimen/dp_size_5"
+           android:padding="@dimen/dp_size_2"
             android:src="@drawable/ic_cross" />
 
     </RelativeLayout>
@@ -52,23 +52,9 @@
         android:textColor="#878787"
         android:textSize="14sp"
         android:textStyle="normal"
+        android:layout_marginBottom="@dimen/dp_size_8"
         tools:text="Your response will help us to improve your experience with Sheroes" />
 
-    <TextView
-        android:id="@+id/close_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginEnd="@dimen/dp_size_16"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:gravity="center_horizontal"
-        android:padding="@dimen/dp_size_5"
-        android:text="@string/ID_CLOSE"
-        android:textAllCaps="true"
-        android:textColor="#90949c"
-        android:textSize="@dimen/sp_size_14"
-        tools:text="BACK" />
+
 
 </LinearLayout>

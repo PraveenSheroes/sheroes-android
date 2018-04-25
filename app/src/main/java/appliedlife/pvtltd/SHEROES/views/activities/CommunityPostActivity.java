@@ -84,6 +84,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -561,6 +562,20 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .isOpenedFromExternalApp(String.valueOf(isSharedFromOtherApp))
+                .build();
+        return properties;
+    }
+
     private void setupToolBarItem() {
         switch (mCommunityPost.createPostRequestFrom) {
             case AppConstants.CREATE_POST:
@@ -579,6 +594,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mAction.setTextColor(Color.parseColor(mTitleTextColor));
         }
 
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
     }
 
     // Handle multiple images being sent
@@ -715,7 +735,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList));
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
 
         } else {
             if (mCommunityPost != null) {
@@ -805,7 +825,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (AccessToken.getCurrentAccessToken() != null) {
             accessToken = AccessToken.getCurrentAccessToken().getToken();
         }
-        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, mHasMentions, mMentionSpanList));
+        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
     }
 
     private boolean validateFields() {
