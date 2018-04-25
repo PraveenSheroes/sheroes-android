@@ -59,11 +59,9 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -722,7 +720,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (mUserPostObj.isHasMention()) {
                         List<MentionSpan> mentionSpanList = mUserPostObj.getUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            clickOnUserMentionName(listDescription, mentionSpanList,false);
+                            userMentionNameWithClickForProfileDetail(listDescription, mentionSpanList,false);
                         }else
                         {
                             tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
@@ -805,7 +803,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (lastComment.isHasCommentMention()) {
                         List<MentionSpan> mentionSpanList = lastComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            clickOnUserMentionName(lastComment.getComment(), mentionSpanList,true);
+                            userMentionNameWithClickForProfileDetail(lastComment.getComment(), mentionSpanList,true);
                         }
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -823,7 +821,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     if (lastComment.isHasCommentMention()) {
                         List<MentionSpan> mentionSpanList = lastComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            clickOnUserMentionName(lastComment.getComment(), mentionSpanList,true);
+                            userMentionNameWithClickForProfileDetail(lastComment.getComment(), mentionSpanList,true);
                         }
                     } else {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
@@ -1539,7 +1537,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
-    private void clickOnUserMentionName(String description, List<MentionSpan> mentionSpanList,boolean isComment) {
+    private void userMentionNameWithClickForProfileDetail(String description, List<MentionSpan> mentionSpanList, boolean isComment) {
         StringBuilder strWithAddExtra = new StringBuilder(description+" ");
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);

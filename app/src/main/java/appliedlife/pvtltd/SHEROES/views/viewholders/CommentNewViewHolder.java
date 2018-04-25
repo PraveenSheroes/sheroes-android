@@ -3,8 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -12,10 +10,8 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,10 +25,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
-import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -144,7 +138,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 {
                     List<MentionSpan> mentionSpanList =mComment.getCommentUserMentionList();
                     if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                        clickOnUserMentionName(mComment.getComment(), mentionSpanList);
+                        userMentionNameWithClickForProfileDetail(mComment.getComment(), mentionSpanList);
                     }
                 }else
                 {
@@ -160,7 +154,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     {
                         List<MentionSpan> mentionSpanList =mComment.getCommentUserMentionList();
                         if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
-                            clickOnUserMentionName(mComment.getComment(), mentionSpanList);
+                            userMentionNameWithClickForProfileDetail(mComment.getComment(), mentionSpanList);
                         }
                     }else
                     {
@@ -264,7 +258,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @Override
     public void onClick(View view) {
     }
-    private void clickOnUserMentionName(String description,List<MentionSpan> mentionSpanList) {
+    private void userMentionNameWithClickForProfileDetail(String description, List<MentionSpan> mentionSpanList) {
         StringBuilder strWithAddExtra = new StringBuilder(description+" ");
         for (int i = 0; i <  mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);

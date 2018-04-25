@@ -1529,8 +1529,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mUserMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
                 mUserMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
                 mHasMentions = true;
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                mSuggestionList.setLayoutManager(layoutManager);
+
                 mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
             } else {
                 mHasMentions = false;
@@ -1539,8 +1538,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
                 userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
 
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                mSuggestionList.setLayoutManager(layoutManager);
                 mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             }
         }
@@ -1708,9 +1705,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mSuggestionList.setLayoutManager(layoutManager);
-        mSuggestionList.setAdapter(userTagSuggestionsAdapter);
         return null;
     }
 

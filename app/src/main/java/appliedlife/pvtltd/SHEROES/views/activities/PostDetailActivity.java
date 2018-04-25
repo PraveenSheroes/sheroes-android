@@ -1195,8 +1195,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
                 mHasMentions = true;
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                mSuggestionList.setLayoutManager(layoutManager);
                 mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
             } else {
                 mHasMentions = false;
@@ -1204,8 +1202,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
                 userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                mSuggestionList.setLayoutManager(layoutManager);
                 mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             }
         }
@@ -1256,9 +1252,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mSuggestionList.setLayoutManager(layoutManager);
-        mSuggestionList.setAdapter(userTagSuggestionsAdapter);
         return null;
     }
 
