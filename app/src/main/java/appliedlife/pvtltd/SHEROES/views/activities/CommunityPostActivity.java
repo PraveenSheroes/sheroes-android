@@ -84,6 +84,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -556,18 +557,25 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         if (isSharedFromOtherApp) {
-
-            final HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .isOpenedFromExternalApp(String.valueOf(isSharedFromOtherApp))
-                            .build();
-            AnalyticsManager.trackScreenView(getScreenName(), screenName(),  properties);
-
             if (mCommunityPost == null) {
                 mCommunityPost = new CommunityPost();
                 mCommunityPost.isEdit = false;
             }
         }
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .isOpenedFromExternalApp(String.valueOf(isSharedFromOtherApp))
+                .build();
+        return properties;
     }
 
     private void setupToolBarItem() {
@@ -588,6 +596,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mAction.setTextColor(Color.parseColor(mTitleTextColor));
         }
 
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
     }
 
     // Handle multiple images being sent

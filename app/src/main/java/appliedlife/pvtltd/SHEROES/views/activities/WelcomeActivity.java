@@ -272,21 +272,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                     branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
                                     if (StringUtil.isNotNullOrEmptyString(deepLink)) {
                                         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-                                        SharedPreferences.Editor editor= prefs.edit();
-                                        editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
-                                        editor.apply();
+                                        SharedPreferences.Editor editor= null;
+                                        if (prefs != null) {
+                                            editor = prefs.edit();
+                                            editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
+                                            editor.apply();
+                                        }
                                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(WelcomeActivity.this);
                                         appInstallationHelper.setupAndSaveInstallation(false);
                                         if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
                                             deepLinkUrl = deepLink;
-
-                                            long loggedInUserId = -1;
-                                            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                                                loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
-                                            }
-
-                                            final HashMap<String, Object> properties = new EventProperty.Builder().id(String.valueOf(loggedInUserId)).branchLink(deepLink).build();
-                                            AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
 
                                             if (mInstallUpdatePreference != null) {
                                                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
@@ -413,6 +408,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void openHomeScreen() {
 
         if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+
+            //Event for on-boarding skipping for new user came through branch link
+            final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(deepLinkUrl).build();
+            AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
+
             Uri url = Uri.parse(deepLinkUrl);
             Intent intent = new Intent(WelcomeActivity.this, SheroesDeepLinkingActivity.class);
             Bundle bundle = new Bundle();
