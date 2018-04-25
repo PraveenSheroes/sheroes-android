@@ -50,4 +50,5 @@ public interface QueryTokenReceiver {
     Suggestible onMentionUserClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);
+
 }

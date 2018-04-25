@@ -212,8 +212,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mUserTagCommentInfoText =getString(R.string.user_mention_area_at_comment);
         mUserPic.setCircularImage(true);
         setIsLoggedInUser();
-        etView.setQueryTokenReceiver(this);
-
         etView.setEditTextShouldWrapContent(true);
         Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
         if (parcelable != null) {
@@ -289,6 +287,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         });
+        mPostDetailPresenter.getUserMentionSuggestion(etView, mUserPostObj);
     }
 
     private boolean keyboardShown(View rootView) {
@@ -315,7 +314,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void setIsLoggedInUser() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
         }
     }
@@ -1221,20 +1220,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
             mProgressBar.setVisibility(View.VISIBLE);
-            if (searchText.length() <= 3) {
-                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
-            } else {
-                Timer timer = new Timer();
-                timer.schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);
-                            }
-                        },
-                        200
-                );
-            }
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;

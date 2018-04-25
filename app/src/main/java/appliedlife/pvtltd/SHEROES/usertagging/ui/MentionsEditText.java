@@ -990,7 +990,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         
         // Setup variables and ensure they are valid
         Editable text;
-        if(start==0)
+        if(start==0&&getEditableText().length()<1)
         {
             text = getEditableText().replace(0,getEditableText().length()," ");;
         }else

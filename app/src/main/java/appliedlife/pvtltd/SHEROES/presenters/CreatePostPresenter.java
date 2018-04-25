@@ -28,18 +28,22 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResp
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
+import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.utils.RxSearchObservable;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -203,145 +207,57 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
     }
 
-    public void getUserMentionSuggestion(final QueryToken queryToken, final String queryData, final CommunityPost communityPost) {
-        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
-            return;
-        }
-        SearchUserDataRequest searchUserDataRequest = null;
-        Long communityId = null;
-        if (null != communityPost && null != communityPost.community) {
-            if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
-                communityId = null;
-            } else {
-                communityId = communityPost.community.id;
-            }
-        }
-        if (queryToken.getTokenString().length() == 1) {
-            searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
-        } else {
-            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
-        }
-        LogUtils.info("data", "########### @final string--->   " + queryData);
+    //Debounce for usermention function
 
-        communityModel.getSearchResult(searchUserDataRequest).subscribe(new DisposableObserver<SearchUserDataResponse>() {
-
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().stopProgressBar();
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
-            }
-
-            @Override
-            public void onNext(SearchUserDataResponse searchUserDataResponse) {
-                getMvpView().stopProgressBar();
-                LogUtils.info("data", "########### @onNext string--->   ");
-                if (null != searchUserDataResponse) {
-                    if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                        getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, queryToken);
-                    } else {
-                        getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
-                    }
-                }
-            }
-
-        });
-
-
-    }
-
-    public void getUserMentionSuggestion(final QueryToken queryToken, final MentionsEditText mentionsEditText, final String queryData, final CommunityPost communityPost) {
+    public void getUserMentionSuggestion(final RichEditorView richEditorView, final CommunityPost communityPost) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
 
-        RxTextView.textChanges(mentionsEditText)
-                .debounce(2000, TimeUnit.MILLISECONDS)
-                .filter(new Predicate<CharSequence>() {
+        RxSearchObservable.fromView(richEditorView, getMvpView())
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .switchMap(new Function<String, ObservableSource<SearchUserDataResponse>>() {
                     @Override
-                    public boolean test(CharSequence charSequence) {
-                        return queryData.length() > 0;
-                    }
-                })
-                .distinctUntilChanged()
-                .switchMap(new Function<CharSequence, Observable<SearchUserDataResponse>>() {
-                    @Override
-                    public Observable<SearchUserDataResponse> apply(CharSequence charSequence) {
-
+                    public ObservableSource<SearchUserDataResponse> apply(String query) throws Exception {
                         SearchUserDataRequest searchUserDataRequest = null;
                         Long communityId = null;
                         if (null != communityPost && null != communityPost.community) {
                             if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
-                                communityId = null;
-                            } else {
+                                communityId=null;
+                            }else {
                                 communityId = communityPost.community.id;
                             }
                         }
-                        if (queryData.length() == 1) {
+                        if(query.length()==1)
+                        {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
-                        } else {
-                            searchUserDataRequest = mAppUtils.searchUserDataRequest(queryData.trim().replace("@", ""), communityId, null, null, "POST");
+                        }else
+                        {
+                            searchUserDataRequest = mAppUtils.searchUserDataRequest(query.trim().replace("@", ""), communityId, null, null, "POST");
                         }
 
                         if (searchUserDataRequest == null) {
                             return Observable.empty();
                         }
-                        LogUtils.info("data", "########### @final string--->   " + queryData);
                         return communityModel.getSearchResult(searchUserDataRequest);
                     }
                 })
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .compose(this.<SearchUserDataResponse>bindToLifecycle())
                 .subscribe(new Consumer<SearchUserDataResponse>() {
                     @Override
                     public void accept(SearchUserDataResponse searchUserDataResponse) throws Exception {
-                        LogUtils.info("data", "########### @onNext string--->   ");
                         getMvpView().stopProgressBar();
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                                getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, queryToken);
+                                getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, null);
                             } else {
                                 getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
                             }
                         }
                     }
                 });
-               /* .subscribe(new DisposableObserver<SearchUserDataResponse>() {
-                    @Override
-                    public void onComplete() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getMvpView().stopProgressBar();
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
-
-                    }
-
-                    @Override
-                    public void onNext(SearchUserDataResponse searchUserDataResponse) {
-                        LogUtils.info("data", "########### @onNext string--->   ");
-                        getMvpView().stopProgressBar();
-                        if (null != searchUserDataResponse) {
-                            if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                                getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, queryToken);
-                            } else {
-                                getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
-                            }
-                        }
-                    }
-                });*/
-
     }
 
 

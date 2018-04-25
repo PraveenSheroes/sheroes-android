@@ -297,7 +297,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         ButterKnife.bind(this);
         mCreatePostPresenter.attachView(this);
         mUserTagCreatePostText=getString(R.string.user_mention_area_at_post);
-        etView.setQueryTokenReceiver(this);
         if (getIntent() != null) {
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
@@ -427,6 +426,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }
             }
         });
+
+        mCreatePostPresenter.getUserMentionSuggestion(etView, mCommunityPost);
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
@@ -1665,9 +1666,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
         final String searchText = queryToken.getTokenString();
         if (searchText.contains("@")) {
-            //mHasMentions = false;
-            //mMentionSpanList = null;
-
             List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
             userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(1, mUserTagCreatePostText, "", "", 0));
             userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(0, getString(R.string.searching), "", "", 0));
@@ -1677,24 +1675,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
-
             mIsProgressBarVisible = true;
             mProgressBar.setVisibility(View.VISIBLE);
-            mCreatePostPresenter.getUserMentionSuggestion(queryToken, etView.getEditText(), searchText, mCommunityPost);
-           /* if (searchText.length() <= 3) {
-                mCreatePostPresenter.getUserMentionSuggestion(queryToken, searchText, mCommunityPost);
-            } else {
-                Timer timer = new Timer();
-                timer.schedule(
-                        new TimerTask() {
-                            @Override
-                            public void run() {
-                                mCreatePostPresenter.getUserMentionSuggestion(queryToken, searchText, mCommunityPost);
-                            }
-                        },
-                        2000
-                );
-            }*/
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
