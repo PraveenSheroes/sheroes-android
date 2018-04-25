@@ -1211,8 +1211,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
        final String searchText=queryToken.getTokenString();
         if (searchText.contains("@")) {
-            mHasMentions = false;
-            mMentionSpanList = null;
+
             List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
             userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(1, mUserTagCommentInfoText, "", "", 0));
             userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(0,getString(R.string.searching),"","",0));
@@ -1221,9 +1220,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
-
-            //UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, userMentionSuggestionPojoList);
-           // etView.onReceiveSuggestionsResult(result, "data");
             mProgressBar.setVisibility(View.VISIBLE);
             if (searchText.length() <= 3) {
                 mPostDetailPresenter.userTaggingSearchEditText(queryToken, searchText, mUserPostObj);

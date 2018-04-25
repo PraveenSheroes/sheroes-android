@@ -85,6 +85,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -1663,8 +1665,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
         final String searchText = queryToken.getTokenString();
         if (searchText.contains("@")) {
-            mHasMentions = false;
-            mMentionSpanList = null;
+            //mHasMentions = false;
+            //mMentionSpanList = null;
+
             List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
             userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(1, mUserTagCreatePostText, "", "", 0));
             userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(0, getString(R.string.searching), "", "", 0));
@@ -1689,7 +1692,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                 mCreatePostPresenter.getUserMentionSuggestion(queryToken, searchText, mCommunityPost);
                             }
                         },
-                        200
+                        2000
                 );
             }*/
         }
