@@ -36,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostVi
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -224,16 +223,14 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         Long communityId = null;
                         if (null != communityPost && null != communityPost.community) {
                             if (communityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
-                                communityId=null;
-                            }else {
+                                communityId = null;
+                            } else {
                                 communityId = communityPost.community.id;
                             }
                         }
-                        if(query.length()==1)
-                        {
+                        if (query.length() == 1) {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, null, null, "POST");
-                        }else
-                        {
+                        } else {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest(query.trim().replace("@", ""), communityId, null, null, "POST");
                         }
 
@@ -246,9 +243,22 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 .compose(this.<SearchUserDataResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<SearchUserDataResponse>() {
+                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
+
                     @Override
-                    public void accept(SearchUserDataResponse searchUserDataResponse) throws Exception {
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().stopProgressBar();
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                    }
+
+                    @Override
+                    public void onNext(SearchUserDataResponse searchUserDataResponse) {
                         getMvpView().stopProgressBar();
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
@@ -258,7 +268,9 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                             }
                         }
                     }
+
                 });
+
     }
 
 

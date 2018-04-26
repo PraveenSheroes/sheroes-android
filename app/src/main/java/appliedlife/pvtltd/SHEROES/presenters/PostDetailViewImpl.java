@@ -54,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -768,23 +767,19 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     @Override
                     public ObservableSource<SearchUserDataResponse> apply(String query) throws Exception {
                         SearchUserDataRequest searchUserDataRequest = null;
-                        Long communityId = null,postEntityId=null,postAuthorUserId=null;
+                        Long communityId = null, postEntityId = null, postAuthorUserId = null;
                         if (null != userPostSolrObj) {
-                            if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR)
-                            {
-                                communityId=null;
-                            }else
-                            {
+                            if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                                communityId = null;
+                            } else {
                                 communityId = userPostSolrObj.getCommunityId();
                             }
-                            postEntityId=userPostSolrObj.getEntityOrParticipantId();
-                            postAuthorUserId=userPostSolrObj.getAuthorId();
+                            postEntityId = userPostSolrObj.getEntityOrParticipantId();
+                            postAuthorUserId = userPostSolrObj.getAuthorId();
                         }
-                        if(query.length()==1)
-                        {
+                        if (query.length() == 1) {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, postEntityId, postAuthorUserId, "COMMENT");
-                        }else
-                        {
+                        } else {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest(query.trim().replace("@", ""), communityId, postEntityId, postAuthorUserId, "COMMENT");
                         }
                         if (searchUserDataRequest == null) {
@@ -796,19 +791,34 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .compose(this.<SearchUserDataResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<SearchUserDataResponse>() {
+                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
+
                     @Override
-                    public void accept(SearchUserDataResponse searchUserDataResponse) throws Exception {
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().stopProgressBar();
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
+                    }
+
+                    @Override
+                    public void onNext(SearchUserDataResponse searchUserDataResponse) {
                         getMvpView().stopProgressBar();
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                                 getMvpView().userMentionSuggestionResponse(searchUserDataResponse, null);
                             } else {
-                                getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
+                                getMvpView().showError("No user found", ERROR_COMMENT_REACTION);
                             }
                         }
                     }
+
                 });
+
     }
 
     private Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
