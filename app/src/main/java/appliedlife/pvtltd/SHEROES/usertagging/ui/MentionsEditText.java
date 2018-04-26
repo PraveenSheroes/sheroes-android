@@ -236,6 +236,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      */
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
+        richEditView.setEditTextShouldWrapContent(true);
         final MentionSpan touchedSpan = getTouchedSpan(event);
         boolean superResult = super.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_UP) {
