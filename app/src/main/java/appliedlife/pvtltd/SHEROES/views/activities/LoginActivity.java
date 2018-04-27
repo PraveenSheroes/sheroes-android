@@ -79,12 +79,7 @@ public class LoginActivity extends BaseActivity {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        if (AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage)) {
-            //openFaceBookLogin();
-        } else {
-            showNetworkTimeoutDoalog(true, false, errorMessage);
-        }
-
+        showNetworkTimeoutDoalog(true, false, errorMessage);
     }
 
 
