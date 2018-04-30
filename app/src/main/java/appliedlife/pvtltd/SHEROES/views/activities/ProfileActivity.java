@@ -867,6 +867,12 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     @OnClick(R.id.iv_mentor_full_view_icon)
     public void onImageEditClicked() {
         if(isOwnProfile) {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
+                            .name(mUserPreference.get().getUserSummary().getFirstName())
+                            .build();
+            trackEvent(Event.PROFILE_PIC_EDIT_CLICKED, properties);
             CameraBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
         }
     }

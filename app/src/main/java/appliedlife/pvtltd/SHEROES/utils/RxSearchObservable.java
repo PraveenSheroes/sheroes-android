@@ -30,7 +30,9 @@ public class RxSearchObservable {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 String searchText=queryToken.getTokenString();
-                subject.onNext(searchText);
+                if(searchText.contains("@")) {
+                    subject.onNext(searchText);
+                }
                 return mvpView.onQueryReceived(queryToken);
             }
 
@@ -66,7 +68,9 @@ public class RxSearchObservable {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 String searchText=queryToken.getTokenString();
-                subject.onNext(searchText);
+                if(searchText.contains("@")) {
+                    subject.onNext(searchText);
+                }
                 return mvpView.onQueryReceived(queryToken);
             }
 

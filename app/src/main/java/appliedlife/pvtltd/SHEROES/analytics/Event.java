@@ -185,6 +185,10 @@ public enum Event {
     WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
     // endregion
 
+    //region onboarding
+    ONBOARDING_SKIPPED(AnalyticsEventType.ON_BOARDING, "Skipped"),
+    //end region
+
     //region Contact events
     CONTACT_SYNC_ALLOWED(AnalyticsEventType.ALLOWED_CONTACT_SYNC, ""),
     CONTACT_SYNC_DENIED(AnalyticsEventType.DENIED_CONTACT_SYNC, ""),

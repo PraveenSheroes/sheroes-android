@@ -788,14 +788,16 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @OnClick(R.id.btn_personal_basic_details_save)
     public void Save_Basic_Details() {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
-                        .isOwnProfile(true)
-                        .build();
-        AnalyticsManager.trackEvent(Event.PROFILE_EDITED, getScreenName(), properties);
 
         if (validateUserDetails()) {
+
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
+                            .isOwnProfile(true)
+                            .build();
+            AnalyticsManager.trackEvent(Event.PROFILE_EDITED, getScreenName(), properties);
+
             PersonalBasicDetailsRequest personalBasicDetailsRequest = new PersonalBasicDetailsRequest();
             AppUtils appUtils = AppUtils.getInstance();
             personalBasicDetailsRequest.setAppVersion(appUtils.getAppVersionName());

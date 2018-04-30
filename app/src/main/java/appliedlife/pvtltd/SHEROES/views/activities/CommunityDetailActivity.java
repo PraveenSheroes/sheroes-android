@@ -566,7 +566,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                 if (communityTab.type.equalsIgnoreCase(TabType.FRAGMENT.getName())) {
                     if(communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL) || communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL_COM)){
-                        HelplineFragment helplineFragment = new HelplineFragment();
+
+                        HelplineFragment helplineFragment = HelplineFragment.createInstance(mCommunityFeedSolrObj.getNameOrTitle());
                         mAdapter.addFragment(helplineFragment, communityTab.title);
                         mTabFragments.add(helplineFragment);
                     }

@@ -1453,6 +1453,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void updateItem(FeedDetail updatedFeedDetail) {
+        if(updatedFeedDetail == null) return;
         findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
     }
 

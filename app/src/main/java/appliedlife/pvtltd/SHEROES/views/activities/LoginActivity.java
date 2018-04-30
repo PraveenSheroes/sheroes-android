@@ -7,9 +7,14 @@ import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -96,6 +101,11 @@ public class LoginActivity extends BaseActivity {
         } else {
 
             if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+
+                //Event for on-boarding skipping for new user came through branch link
+                final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(deepLinkUrl).build();
+                AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
+
                 Uri url = Uri.parse(deepLinkUrl);
                 Intent intent = new Intent(LoginActivity.this, SheroesDeepLinkingActivity.class);
                 Bundle bundle = new Bundle();

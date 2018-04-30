@@ -1019,17 +1019,18 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
-        StringBuilder modifiedText = new StringBuilder();
+       // StringBuilder modifiedText = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+           /* for (int i = 0; i < mentionSpanList.size(); i++) {
+                final MentionSpan mentionSpan = mentionSpanList.get(i);
+                modifiedText.append(editDescText.substring(0, mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(), editDescText.length()));
+            }*/
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-               /* if(mentionSpan.getMention().getEndIndex()>editDescText.length())
-                {
-                    mentionSpan.getMention().setEndIndex(editDescText.length());
-                }*/
-                modifiedText.append(editDescText.substring(0, mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(), editDescText.length()));
+                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
             }
-            etView.getEditText().setText(modifiedText);
+
+            etView.getEditText().setText(editDescText);
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 UserMentionSuggestionPojo userMention = mentionSpan.getMention();

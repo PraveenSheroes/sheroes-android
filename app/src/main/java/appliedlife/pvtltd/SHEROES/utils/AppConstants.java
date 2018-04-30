@@ -243,6 +243,7 @@ public class AppConstants {
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
+    public static final String helpline_desk = "Helpline Desk";
     public static final String NAV_DRAWER_FILE_NAME = "nav_items";
     public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
     public static final String SPAM_REASONS_FILE = "spam_reasons";
