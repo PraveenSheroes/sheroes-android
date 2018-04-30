@@ -668,7 +668,18 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        if (StringUtil.isNotNullOrEmptyString(s)) {
+            switch (s) {
+                case AppConstants.HTTP_500_ERROR:
+                    userDeactivatedOrForceLogOutError();
+                    break;
+                default: {
+                    onShowErrorDialog(s,feedParticipationEnum);
+                }
+            }
+        } else {
+            onShowErrorDialog(s,feedParticipationEnum);
+        }
     }
 
     @Override

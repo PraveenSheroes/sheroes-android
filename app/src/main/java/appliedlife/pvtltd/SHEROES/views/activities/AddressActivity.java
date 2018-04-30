@@ -35,7 +35,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.presenters.AddressPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAddressView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -337,7 +339,18 @@ public class AddressActivity extends BaseActivity implements IAddressView {
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        if (StringUtil.isNotNullOrEmptyString(s)) {
+            switch (s) {
+                case AppConstants.HTTP_500_ERROR:
+                    userDeactivatedOrForceLogOutError();
+                    break;
+                default: {
+                    onShowErrorDialog(s,feedParticipationEnum);
+                }
+            }
+        } else {
+            onShowErrorDialog(s,feedParticipationEnum);
+        }
     }
 
     @Override

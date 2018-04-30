@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -75,11 +76,17 @@ public class LoginActivity extends BaseActivity {
         callFirstFragment(R.id.fragment_login, frag);
     }
 
-    public void onErrorOccurence(String errorMessage) {
+    public void onErrorOccurence(String errorMessage,String isDeactivated) {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        showNetworkTimeoutDoalog(true, false, errorMessage);
+        if(StringUtil.isNotNullOrEmptyString(isDeactivated)&&isDeactivated.equalsIgnoreCase("true"))
+        {
+            showErrorDialogOnUserAction(true,false,errorMessage,"true");
+        }else
+        {
+            showNetworkTimeoutDoalog(true, false, errorMessage);
+        }
     }
 
 

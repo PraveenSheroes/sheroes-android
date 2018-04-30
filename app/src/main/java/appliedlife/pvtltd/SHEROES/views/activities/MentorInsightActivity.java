@@ -418,7 +418,16 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        if (StringUtil.isNotNullOrEmptyString(s)) {
+            switch (s) {
+                case AppConstants.HTTP_500_ERROR:
+                    userDeactivatedOrForceLogOutError();
+                    break;
+                default: {
+                    onShowErrorDialog(s,feedParticipationEnum);
+                }
+            }
+        }
     }
 
     @Override

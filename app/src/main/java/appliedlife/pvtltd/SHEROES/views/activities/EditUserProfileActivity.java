@@ -698,8 +698,18 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(s)) {
+            switch (s) {
+                case AppConstants.HTTP_500_ERROR:
+                    userDeactivatedOrForceLogOutError();
+                    break;
+                default: {
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+
+                }
+            }
+        }
         mProgressBar.setVisibility(View.GONE);
-        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
     }
 
     @Override

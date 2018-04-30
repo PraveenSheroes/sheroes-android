@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.app.DialogFragment;
+import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -76,6 +78,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
@@ -118,7 +121,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private ViewPagerAdapter mViewPagerAdapter;
     private ViewPager mViewPager;
     @Inject
-    Preference<LoginResponse> userPreference;
+    Preference<LoginResponse> mUserPreference;
+    @Inject
+    Preference<AppInstallation> mAppInstallation;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
@@ -272,7 +277,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
      *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
      * @return
      */
-    public DialogFragment showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
+    public void showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
+        showErrorDialogOnUserAction(finishParentOnBackOrTryagain,isCancellable,errorMessage,"");
+    }
+    public void showErrorDialogOnUserAction(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage,String isDeactivated)
+    {
         NetworkTimeoutDialog fragment = (NetworkTimeoutDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
         if (fragment == null) {
             fragment = new NetworkTimeoutDialog();
@@ -280,13 +289,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             b.putBoolean(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, finishParentOnBackOrTryagain);
             b.putBoolean(BaseDialogFragment.IS_CANCELABLE, isCancellable);
             b.putString(BaseDialogFragment.ERROR_MESSAGE, errorMessage);
+            b.putString(BaseDialogFragment.USER_DEACTIVATED, isDeactivated);
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             fragment.show(getFragmentManager(), AppConstants.NETWORK_TIMEOUT);
         }
-        return fragment;
     }
+
 
     public void trackEvent(final Event event, final Map<String, Object> properties) {
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
@@ -632,8 +642,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.tv_feed_community_post_card_title:
                 if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (null != mFeedDetail) {
-                        if (null != userPreference && userPreference.isSet() &&  null != userPreference.get().getUserSummary()) {
-                            mUserId = userPreference.get().getUserSummary().getUserId();
+                        if (null != mUserPreference && mUserPreference.isSet() &&  null != mUserPreference.get().getUserSummary()) {
+                            mUserId = mUserPreference.get().getUserSummary().getUserId();
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
@@ -652,8 +662,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case R.id.tv_feed_review_card_title:
                 if (null != mFeedDetail) {
-                    if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
-                        mUserId = userPreference.get().getUserSummary().getUserId();
+                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+                        mUserId = mUserPreference.get().getUserSummary().getUserId();
                         openGenericCardInWebView(mFeedDetail);
                     }
                 }
@@ -818,10 +828,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
                 break;
             case R.id.tv_user_comment_list_menu:
-                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                     int adminId = 0;
-                    if (null != userPreference.get().getUserSummary().getUserBO()) {
-                        adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                    if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                        adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
                     }
                     if (adminId == AppConstants.TWO_CONSTANT) {
                         tvEdit.setVisibility(View.GONE);
@@ -844,11 +854,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case R.id.tv_feed_community_post_user_menu:
                 mFeedDetail = (FeedDetail) baseResponse;
-                if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                     int adminId = 0;
-                    Long userId = userPreference.get().getUserSummary().getUserId();
-                    if (null != userPreference.get().getUserSummary().getUserBO()) {
-                        adminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                    Long userId = mUserPreference.get().getUserSummary().getUserId();
+                    if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                        adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
                     }
                     if (mFeedDetail.getAuthorId() == userId || ((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
@@ -997,7 +1007,33 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void onClick(View view) {
 
     }
+    public void userDeactivatedOrForceLogOutError()
+    {
+        HashMap<String, Object> properties = new EventProperty.Builder().build();
+        AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
+        if(mAppInstallation!=null && mAppInstallation.isSet()){
+            AppInstallation appInstallation = mAppInstallation.get();
+            appInstallation.isLoggedOut = true;
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
+            appInstallationHelper.setAppInstallation(appInstallation);
+            appInstallationHelper.saveInBackground(this, new CommonUtil.Callback() {
+                @Override
+                public void callBack(boolean isShown) {
+                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
+                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    intent.putExtra(AppConstants.HIDE_SPLASH_THEME, true);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+        }
+        mUserPreference.delete();
+        MoEHelper.getInstance(getApplicationContext()).logoutUser();
+        MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+        ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
 
+    }
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {

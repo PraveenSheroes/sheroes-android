@@ -7,7 +7,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Album;
  * Created by ujjwal on 17/10/17.
  */
 
-public interface IAlbumView {
+public interface IAlbumView extends BaseMvpView {
     void showAlbum(Album mAlbum);
 
     void showProgressBar();

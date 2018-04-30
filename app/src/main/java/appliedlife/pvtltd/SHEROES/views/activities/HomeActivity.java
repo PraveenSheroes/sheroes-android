@@ -763,29 +763,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void logOut() {
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
-        HashMap<String, Object> properties = new EventProperty.Builder().build();
-        AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
-        if(mAppInstallation!=null && mAppInstallation.isSet()){
-            AppInstallation appInstallation = mAppInstallation.get();
-            appInstallation.isLoggedOut = true;
-            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
-            appInstallationHelper.setAppInstallation(appInstallation);
-            appInstallationHelper.saveInBackground(this, new CommonUtil.Callback() {
-                @Override
-                public void callBack(boolean isShown) {
-                    Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                    intent.putExtra(AppConstants.HIDE_SPLASH_THEME, true);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-        }
-        mUserPreference.delete();
-        MoEHelper.getInstance(getApplicationContext()).logoutUser();
-        MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
-        ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+        userDeactivatedOrForceLogOutError();
     }
 
     private void challengeIdHandle(String urlOfSharedCard) {
@@ -1766,7 +1744,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        if (StringUtil.isNotNullOrEmptyString(s)) {
+            switch (s) {
+                case AppConstants.HTTP_500_ERROR:
+                    userDeactivatedOrForceLogOutError();
+                    break;
+                default: {
+                    onShowErrorDialog(s,feedParticipationEnum);
+                }
+            }
+        }
     }
 
     @Override

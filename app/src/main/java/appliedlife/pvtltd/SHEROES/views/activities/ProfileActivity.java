@@ -1052,6 +1052,18 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(s)) {
+            switch (s) {
+                case AppConstants.HTTP_500_ERROR:
+                    userDeactivatedOrForceLogOutError();
+                    break;
+                default: {
+                    onShowErrorDialog(s,feedParticipationEnum);
+                }
+            }
+        } else {
+            onShowErrorDialog(s,feedParticipationEnum);
+        }
         loaderGif.setVisibility(View.GONE);
     }
 

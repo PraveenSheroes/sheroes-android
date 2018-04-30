@@ -163,7 +163,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
                         if(getActivity()!=null)
-                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                         break;
                 }
             } else {
@@ -188,7 +188,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 } else {
                     LoginManager.getInstance().logOut();
                     if(getActivity()!=null)
-                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                 }
             }
         }
@@ -351,7 +351,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
                     mProgressDialog = new ProgressDialog(getActivity());
                     mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.setCancelable(true);
                     mProgressDialog.show();
                     break;
                 }

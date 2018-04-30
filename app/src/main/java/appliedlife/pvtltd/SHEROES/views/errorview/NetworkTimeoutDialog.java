@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -26,9 +28,14 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
     TextView mTvNoConnDesc;
     @Bind(R.id.tv_try_again)
     TextView mTvTryAgain;
+    @Bind(R.id.li_user_deactivate)
+    LinearLayout mliUserDeactivate;
+    @Bind(R.id.rl_error_msg)
+    RelativeLayout mRlErrorMsg;
     private boolean finishParent;
     private boolean isCancellable;
     private String errorMessage;
+    private String isUserDeActivated;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_network_timeout, container, false);
@@ -36,20 +43,36 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
         isCancellable = getArguments().getBoolean(IS_CANCELABLE);
+        isUserDeActivated = getArguments().getString(USER_DEACTIVATED);
         errorMessage = getArguments().getString(ERROR_MESSAGE);
-
-        if(AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage)||AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage))
+        if(StringUtil.isNotNullOrEmptyString(isUserDeActivated)&&isUserDeActivated.equalsIgnoreCase("true"))
         {
-            mTvTryAgain.setText(getString(R.string.ID_DONE));
+            mliUserDeactivate.setVisibility(View.VISIBLE);
+            mRlErrorMsg.setVisibility(View.GONE);
         }else
         {
-            mTvTryAgain.setText(getString(R.string.IDS_STR_TRY_AGAIN_TEXT));
+            mliUserDeactivate.setVisibility(View.GONE);
+            mRlErrorMsg.setVisibility(View.VISIBLE);
+            if(AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage)||AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage))
+            {
+                mTvTryAgain.setText(getString(R.string.ID_DONE));
+            }else
+            {
+                mTvTryAgain.setText(getString(R.string.IDS_STR_TRY_AGAIN_TEXT));
+            }
         }
         if(StringUtil.isNotNullOrEmptyString(errorMessage)) {
             mTvNoConnDesc.setText(errorMessage);
         }
         setCancelable(isCancellable);
         return view;
+    }
+
+    @OnClick(R.id.iv_close)
+    public void closeDialog()
+    {
+        dismissAllowingStateLoss();
+        dismiss();
     }
 
     @OnClick(R.id.tv_try_again)
