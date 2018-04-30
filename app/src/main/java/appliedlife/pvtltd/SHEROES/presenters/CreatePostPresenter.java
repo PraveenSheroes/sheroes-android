@@ -75,7 +75,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -113,7 +113,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 

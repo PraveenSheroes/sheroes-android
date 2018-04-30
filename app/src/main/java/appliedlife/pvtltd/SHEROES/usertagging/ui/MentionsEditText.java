@@ -53,9 +53,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
@@ -872,6 +877,12 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
                     break;
             }
         }
+        Collections.sort(mentionSpanList, new Comparator<MentionSpan>() {
+            @Override public int compare(MentionSpan span1, MentionSpan span2) {
+                return span1.getMention().getStartIndex()- span2.getMention().getStartIndex();
+            }
+        });
+
         mQueryTokenReceiver.onMentionReceived(mentionSpanList,text.toString());
         // Reset input method if spans have been changed (updates suggestions)
         if (spanAltered) {

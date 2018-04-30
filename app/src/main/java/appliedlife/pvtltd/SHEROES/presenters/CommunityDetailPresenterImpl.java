@@ -74,7 +74,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
 
             }
 
@@ -115,7 +115,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
@@ -142,58 +142,6 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void fetchContest(FeedRequestPojo feedRequestPojo) {
-       /* if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
-            return;
-        }
-        getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
-
-            }
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                getMvpView().stopProgressBar();
-                // LogUtils.info(TAG, "********response***********");
-                FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
-                ChallengeSolrObj challengeSolrObj = (ChallengeSolrObj) feedDetail;
-                if (null != feedResponsePojo) {
-                    mContest = new Contest();
-                    mContest.title = challengeSolrObj.getChallengeTitle();
-                    mContest.remote_id = (int) challengeSolrObj.getIdOfEntityOrParticipant();
-                    mContest.body = challengeSolrObj.getListDescription();
-                    mContest.createdDateString = challengeSolrObj.getChallengeStartDate();
-                    mContest.endDateString = challengeSolrObj.getChallengeEndDate();
-                    mContest.hasWinner = challengeSolrObj.isChallengeHasWinner();
-                    mContest.isWinner = challengeSolrObj.isChallengeIsWinner();
-                    mContest.authorName = challengeSolrObj.getAuthorName();
-                    mContest.authorType = challengeSolrObj.getChallengeAuthorTypeS();
-                    mContest.authorImageUrl = challengeSolrObj.getAuthorImageUrl();
-                    mContest.submissionCount = challengeSolrObj.getNoOfChallengeAccepted();
-                    mContest.hasMyPost = challengeSolrObj.isChallengeAccepted();
-                    mContest.tag = challengeSolrObj.getChallengeAcceptPostText();
-                    mContest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
-                    mContest.shortUrl = challengeSolrObj.getDeepLinkUrl();
-                    mContest.mWinnerAddress = challengeSolrObj.getWinnerAddress();
-                    mContest.winnerAddressUpdated = challengeSolrObj.winnerAddressUpdated;
-                    mContest.winnerAnnouncementDate = challengeSolrObj.getChallengeAnnouncementDate(); //Fix for winner announcement
-                    getMvpView().showContestFromId(mContest);
-                }
-            }
-        });
-        */
-    }
 
     public void fetchCommunity(String communityId) {
         FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, 1, Long.valueOf(communityId));
@@ -216,7 +164,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 

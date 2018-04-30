@@ -422,6 +422,6 @@ public class AppConstants {
     public static final int USER_MENTION_HEADER = 1;
     public static final int USER_MENTION_NO_RESULT_FOUND = 0;
 
-    public static final String HTTP_500_ERROR = "User deactivated";
+    public static final String HTTP_500_ERROR = "HTTP 500 Server Error";
 
 }
