@@ -327,7 +327,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                    .postId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
+                                    .postCommentId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                     .postType(AnalyticsEventType.COMMUNITY.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                     .streamType(CommonUtil.isNotEmpty(mUserPostObj.getStreamType()) ? mUserPostObj.getStreamType() : "")

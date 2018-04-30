@@ -1711,6 +1711,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
         this.mMentionSpanList = mentionSpanList;
+
         return null;
     }
 
@@ -1744,6 +1745,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void textChangeListner(@NonNull Editable editText) {
+
         if (editText.length() > 0) {
             if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !isLinkRendered) {
                 String editTextDescription = editText.toString().trim();
