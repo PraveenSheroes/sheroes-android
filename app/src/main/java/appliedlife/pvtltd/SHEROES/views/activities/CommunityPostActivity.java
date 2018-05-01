@@ -419,7 +419,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             @Override
             public void onGlobalLayout() {
                 if (!keyboardShown(etView.getRootView())) {
-                    mImageUploadView.setVisibility(View.VISIBLE);
+                    setImageCount();
                     mAnonymousView.setVisibility(View.VISIBLE);
                 }
             }
@@ -1773,7 +1773,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mImageUploadView.setVisibility(View.GONE);
                 } else {
                     mAnonymousView.setVisibility(View.VISIBLE);
-                    mImageUploadView.setVisibility(View.VISIBLE);
+                    setImageCount();
                 }
             }
 
