@@ -301,6 +301,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         if (mUserPostObj == null) {
             return;
         }
+        getMvpView().startProgressBar();
         CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous,hasMention,mentionSpanList);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
@@ -801,14 +802,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        getMvpView().stopProgressBar();
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
                     }
 
                     @Override
                     public void onNext(SearchUserDataResponse searchUserDataResponse) {
-                        getMvpView().stopProgressBar();
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                                 getMvpView().userMentionSuggestionResponse(searchUserDataResponse, null);

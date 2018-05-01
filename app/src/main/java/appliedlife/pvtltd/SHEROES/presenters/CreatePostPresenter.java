@@ -213,7 +213,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
-
         RxSearchObservable.fromView(richEditorView, getMvpView())
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .switchMap(new Function<String, ObservableSource<SearchUserDataResponse>>() {
@@ -252,14 +251,12 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        getMvpView().stopProgressBar();
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                     }
 
                     @Override
                     public void onNext(SearchUserDataResponse searchUserDataResponse) {
-                        getMvpView().stopProgressBar();
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                                 getMvpView().showUserMentionSuggestionResponse(searchUserDataResponse, null);

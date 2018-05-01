@@ -1238,7 +1238,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
-            mProgressBar.setVisibility(View.VISIBLE);
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;

@@ -1707,14 +1707,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
             userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
             userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
-          /*  UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, userMentionSuggestionPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");*/
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
             mIsProgressBarVisible = true;
-            mProgressBar.setVisibility(View.VISIBLE);
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
