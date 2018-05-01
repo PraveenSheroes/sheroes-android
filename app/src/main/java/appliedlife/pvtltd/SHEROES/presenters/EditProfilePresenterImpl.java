@@ -68,7 +68,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -103,7 +103,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override

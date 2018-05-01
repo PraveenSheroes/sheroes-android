@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.views.errorview;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,10 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
     LinearLayout mliUserDeactivate;
     @Bind(R.id.rl_error_msg)
     RelativeLayout mRlErrorMsg;
+    @Bind(R.id.tv_user_deactivate_text)
+    TextView mTvUserDeactivateText;
+    @Bind(R.id.tv_care_sheroes)
+    TextView mTvCareSheroes;
     private boolean finishParent;
     private boolean isCancellable;
     private String errorMessage;
@@ -49,6 +55,12 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
         {
             mliUserDeactivate.setVisibility(View.VISIBLE);
             mRlErrorMsg.setVisibility(View.GONE);
+            if(StringUtil.isNotNullOrEmptyString(errorMessage)) {
+                mTvUserDeactivateText.setText(errorMessage);
+            }
+            SpannableString content = new SpannableString(getString(R.string.care_sheroes));
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            mTvCareSheroes.setText(content);
         }else
         {
             mliUserDeactivate.setVisibility(View.GONE);
@@ -60,10 +72,11 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
             {
                 mTvTryAgain.setText(getString(R.string.IDS_STR_TRY_AGAIN_TEXT));
             }
+            if(StringUtil.isNotNullOrEmptyString(errorMessage)) {
+                mTvNoConnDesc.setText(errorMessage);
+            }
         }
-        if(StringUtil.isNotNullOrEmptyString(errorMessage)) {
-            mTvNoConnDesc.setText(errorMessage);
-        }
+
         setCancelable(isCancellable);
         return view;
     }
@@ -73,6 +86,11 @@ public class NetworkTimeoutDialog extends BaseDialogFragment {
     {
         dismissAllowingStateLoss();
         dismiss();
+    }
+    @OnClick(R.id.tv_care_sheroes)
+    public void careSheroes()
+    {
+
     }
 
     @OnClick(R.id.tv_try_again)

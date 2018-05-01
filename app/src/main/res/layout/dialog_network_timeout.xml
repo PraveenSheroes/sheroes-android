@@ -42,7 +42,6 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:padding="@dimen/dp_size_8"
-            android:text="Your account is deactivated because posting private information of others is unsafe against sheroes community guidelines"
             android:textColor="@color/comment_text"
             android:textSize="@dimen/sp_size_16" />
 
@@ -59,6 +58,7 @@
             android:textSize="@dimen/sp_size_12" />
 
         <TextView
+            android:id="@+id/tv_care_sheroes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

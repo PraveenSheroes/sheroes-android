@@ -129,10 +129,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    public void getMasterDataToPresenter() {
-        super.getMasterDataToAllPresenter(mSheroesApplication, mMasterDataModel, mUserPreferenceMasterData);
-    }
-
     @Override
     public void detachView() {
         super.detachView();
@@ -269,7 +265,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -300,7 +296,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -333,7 +329,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
+                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
 
             }
 
@@ -364,7 +360,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
+                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
 
             }
 
@@ -395,7 +391,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOK_MARK_LIST);
+                getMvpView().showError(e.getMessage(), ERROR_BOOK_MARK_LIST);
 
             }
 
@@ -424,7 +420,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
             }
 
@@ -465,7 +461,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
             }
 
@@ -506,7 +502,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
 
             }
 
@@ -535,7 +531,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
 
             }
 
@@ -566,7 +562,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
 
@@ -603,7 +599,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
             }
@@ -637,7 +633,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
             }
 
@@ -666,7 +662,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
 
             }
 
@@ -695,7 +691,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -725,7 +721,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -754,7 +750,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
+                getMvpView().showError(e.getMessage(), ERROR_SEARCH_DATA);
 
             }
 
@@ -801,7 +797,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
@@ -841,7 +837,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
             }
 
@@ -873,7 +869,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                 getMvpView().invalidateItem(feedDetail);
@@ -927,7 +923,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                // mBaseResponseList.set(0, userPostSolrObj);
@@ -984,7 +980,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
                 userPostSolrObj.getLastComments().set(0, comment);
@@ -1035,7 +1031,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
                 userPostSolrObj.getLastComments().set(0, comment);
@@ -1082,7 +1078,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -1150,7 +1146,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
                         communityFeedSolrObj.setMember(false);
                         getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
@@ -1200,7 +1196,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
                         communityFeedSolrObj.setMember(true);
                         getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
@@ -1242,7 +1238,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         getMvpView().stopProgressBar();
                     }
 

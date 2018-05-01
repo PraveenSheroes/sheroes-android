@@ -202,7 +202,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -244,7 +244,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -443,7 +443,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
                 getMvpView().setData(pos, comment);
@@ -492,7 +492,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
                 getMvpView().setData(pos, comment);
@@ -537,7 +537,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -583,7 +583,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                 mBaseResponseList.set(0, userPostSolrObj);
@@ -627,7 +627,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 mBaseResponseList.set(0, userPostSolrObj);
@@ -686,7 +686,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
@@ -803,7 +803,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     public void onError(Throwable e) {
                         getMvpView().stopProgressBar();
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
+                        getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
                     }
 
                     @Override
@@ -857,7 +857,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         getMvpView().stopProgressBar();
                     }
 
@@ -883,7 +883,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
