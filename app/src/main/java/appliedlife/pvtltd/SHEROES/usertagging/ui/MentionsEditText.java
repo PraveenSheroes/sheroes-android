@@ -72,6 +72,8 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryToken
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
 
+import static appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable.MentionDisplayMode.FULL;
+
 /**
  * Class that overrides {@link EditText} in order to have more control over touch events and selection ranges for use in
  * the {@link RichEditorView}.
@@ -668,7 +670,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
                 Mentionable.MentionDisplayMode displayMode = prevSpan.getDisplayMode();
                 // Determine new DisplayMode given previous DisplayMode and MentionDeleteStyle
                 if (deleteStyle == Mentionable.MentionDeleteStyle.PARTIAL_NAME_DELETE
-                        && displayMode == Mentionable.MentionDisplayMode.FULL) {
+                        && displayMode == FULL) {
                     prevSpan.setDisplayMode(Mentionable.MentionDisplayMode.PARTIAL);
                 } else {
                     prevSpan.setDisplayMode(Mentionable.MentionDisplayMode.NONE);
@@ -803,64 +805,36 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         }
         MentionSpan[] spans = text.getSpans(0, text.length(), MentionSpan.class);
         boolean spanAltered = false;
-        List<MentionSpan> mentionSpanList=new ArrayList<>();
         for (MentionSpan span : spans) {
             int start = text.getSpanStart(span);
             int end = text.getSpanEnd(span);
-            UserMentionSuggestionPojo userMentionSuggestionPojo =span.getMention();
-            userMentionSuggestionPojo.setStartIndex(start);
-            userMentionSuggestionPojo.setEndIndex(end);
-            span.setMention(userMentionSuggestionPojo);
             CharSequence spanText = text.subSequence(start, end).toString();
             Mentionable.MentionDisplayMode displayMode = span.getDisplayMode();
-
             switch (displayMode) {
 
                 case PARTIAL:
-                    String displayString = span.getDisplayString();
-                    if (!displayString.equals(spanText) && start >= 0 && start < end && end <= text.length()) {
-                        // Mention display name does not match what is being shown,
-                        // replace text in span with proper display name
-                        int cursor = getSelectionStart();
-                        int diff = cursor - end;
-                        text.removeSpan(span);
-                        text.replace(start, end, displayString);
-                        if (diff > 0 && start + end + diff < text.length()) {
-                            text.replace(start + end, start + end + diff, "");
-                        }
-                        if (displayString.length() > 0) {
-                            text.setSpan(span, start, start + displayString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
-                        // Notify for partially deleted mentions.
-                        if (mMentionWatchers.size() > 0 && displayMode == Mentionable.MentionDisplayMode.PARTIAL) {
-                            notifyMentionPartiallyDeletedWatchers(span.getMention(), displayString, start, end);
-                        }
-                        spanAltered = true;
-                    }
-                    mentionSpanList.remove(span);
-                    break;
+
                 case FULL:
-                    String name = span.getDisplayString();
-                    if (!name.equals(spanText) && start >= 0 && start < end && end <= text.length()) {
+                    String fullName = span.getDisplayString();
+                    if (!fullName.equals(spanText) && start >= 0 && start < end && end <= text.length()) {
                         // Mention display name does not match what is being shown,
                         // replace text in span with proper display name
                         int cursor = getSelectionStart();
                         int diff = cursor - end;
                         text.removeSpan(span);
-                        text.replace(start, end, name);
+                        text.replace(start, end, fullName);
                         if (diff > 0 && start + end + diff < text.length()) {
                             text.replace(start + end, start + end + diff, "");
                         }
-                        if (name.length() > 0) {
-                            text.setSpan(span, start, start + name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        if (fullName.length() > 0) {
+                            text.setSpan(span, start, start + fullName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
                         // Notify for partially deleted mentions.
                         if (mMentionWatchers.size() > 0 && displayMode == Mentionable.MentionDisplayMode.PARTIAL) {
-                            notifyMentionPartiallyDeletedWatchers(span.getMention(), name, start, end);
+                            notifyMentionPartiallyDeletedWatchers(span.getMention(), fullName, start, end);
                         }
                         spanAltered = true;
                     }
-                    mentionSpanList.add(span);
                     break;
 
                 case NONE:
@@ -877,13 +851,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
                     break;
             }
         }
-        Collections.sort(mentionSpanList, new Comparator<MentionSpan>() {
-            @Override public int compare(MentionSpan span1, MentionSpan span2) {
-                return span1.getMention().getStartIndex()- span2.getMention().getStartIndex();
-            }
-        });
 
-        mQueryTokenReceiver.onMentionReceived(mentionSpanList,text.toString());
         // Reset input method if spans have been changed (updates suggestions)
         if (spanAltered) {
             restartInput();

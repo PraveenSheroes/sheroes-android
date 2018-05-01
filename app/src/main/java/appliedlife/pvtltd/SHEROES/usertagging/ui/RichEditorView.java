@@ -35,6 +35,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -149,7 +151,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         // Set the suggestions adapter
         SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
         mUserTagSuggestionsAdapter = new UserTagSuggestionsAdapter(context, this, listBuilder, this);
-        onSuggestedList(mUserTagSuggestionsAdapter);
         // Wrap the EditText content height if necessary (ideally, allow this to be controlled via custom XML attribute)
         setEditTextShouldWrapContent(mEditTextShouldWrapContent);
         mPrevEditTextBottomPadding = mMentionsEditText.getPaddingBottom();
@@ -219,7 +220,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      */
     @NonNull
     public List<MentionSpan> getMentionSpans() {
-        return (mMentionsEditText != null) ? mMentionsEditText.getMentionsText().getMentionSpans() : new ArrayList<MentionSpan>();
+        return(mMentionsEditText != null) ? mMentionsEditText.getMentionsText().getMentionSpans() : new ArrayList<MentionSpan>();
     }
 
     /**
@@ -309,26 +310,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     }
 
     @Override
-    public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        List<MentionSpan> mentionSpans = null;
-        // Pass the query token to a host receiver
-        if (mHostQueryTokenReceiver != null) {
-            mentionSpans = mHostQueryTokenReceiver.onMentionReceived(mentionSpanList, allText);
-        }
-        return mentionSpans;
-    }
-
-    @Override
-    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        UserTagSuggestionsAdapter adapter = null;
-        // Pass the query token to a host receiver
-        if (mHostQueryTokenReceiver != null) {
-            adapter = mHostQueryTokenReceiver.onSuggestedList(userTagSuggestionsAdapter);
-        }
-        return adapter;
-    }
-
-    @Override
     public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
         Suggestible suggestibleObj = null;
         // Pass the query token to a host receiver
@@ -359,7 +340,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             public void run() {
                 if (mUserTagSuggestionsAdapter != null) {
                     mUserTagSuggestionsAdapter.addSuggestions(result, bucket, mMentionsEditText);
-                    onSuggestedList(mUserTagSuggestionsAdapter);
+
                 }
                 // Make sure the list is scrolled to the top once you receive the first query result
                 if (mWaitingForFirstResult && mSuggestionsList != null) {

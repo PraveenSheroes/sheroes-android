@@ -51,6 +51,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResp
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
@@ -896,6 +896,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
+        mMentionSpanList = etView.getMentionSpans();
+        modifySpanIndexing();
+
         if (mIsDirty && mEditedComment != null) {
             mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
         } else {
@@ -907,6 +910,23 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         etView.getEditText().setText("");
         CommonUtil.hideKeyboard(this);
+    }
+
+    private void modifySpanIndexing() {
+        for (MentionSpan mentionSpan : mMentionSpanList) {
+            UserMentionSuggestionPojo userMentionSuggestionPojo = mentionSpan.getMention();
+            Editable editable = etView.getEditText().getEditableText();
+            userMentionSuggestionPojo.setStartIndex(editable.getSpanStart(mentionSpan));
+            userMentionSuggestionPojo.setEndIndex(editable.getSpanEnd(mentionSpan));
+            userMentionSuggestionPojo.setName(mentionSpan.getDisplayString());
+            mentionSpan.setMention(userMentionSuggestionPojo);
+        }
+        Collections.sort(mMentionSpanList, new Comparator<MentionSpan>() {
+            @Override
+            public int compare(MentionSpan span1, MentionSpan span2) {
+                return span1.getMention().getStartIndex() - span2.getMention().getStartIndex();
+            }
+        });
     }
 
     @Override
@@ -1019,17 +1039,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void editUserMentionWithCommentText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
-       // StringBuilder modifiedText = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-           /* for (int i = 0; i < mentionSpanList.size(); i++) {
-                final MentionSpan mentionSpan = mentionSpanList.get(i);
-                modifiedText.append(editDescText.substring(0, mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(), editDescText.length()));
-            }*/
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+                editDescText = editDescText.replace(mentionSpan.getMention().getName(), " ");
             }
-
             etView.getEditText().setText(editDescText);
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
@@ -1200,12 +1214,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mUserMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
-                mHasMentions = true;
                 //mSuggestionList.setAdapter(etView.notifyAdapterOnData(mUserMentionSuggestionPojoList));
                 etView.notifyData(userMentionSuggestionPojoList);
             } else {
-                mHasMentions = false;
-                mMentionSpanList = null;
                 List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
                 userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
                 userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
@@ -1231,17 +1242,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
-    }
-
-    @Override
-    public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        this.mMentionSpanList = mentionSpanList;
-        return null;
-    }
-
-    @Override
-    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        return null;
     }
 
     @Override
