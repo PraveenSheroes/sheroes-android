@@ -738,17 +738,21 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @OnClick(R.id.fab_post)
     public void createNewPost() {
-
-        if (mFeedDetail instanceof UserSolrObj) {
-            UserSolrObj userPostSolrObj = (UserSolrObj) mFeedDetail;
+        /*if (mFeedDetail instanceof UserSolrObj) {
+            UserSolrObj userSolrObj = (UserSolrObj) mFeedDetail;
             CommunityPost mentorPost = new CommunityPost();
             mentorPost.community = new Community();
-            mentorPost.community.id = userPostSolrObj.getSolrIgnoreMentorCommunityId();
-            mentorPost.community.name = userPostSolrObj.getNameOrTitle();
+            mentorPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
+            mentorPost.community.name =userSolrObj.getNameOrTitle();
             mentorPost.isEdit = false;
-            mentorPost.isCompanyAdmin =  userPostSolrObj.getCompanyAdmin();
+            mentorPost.isCompanyAdmin =  userSolrObj.getCompanyAdmin();
             CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
-        }
+        }*/
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+
     }
 
     @OnClick(R.id.li_follower)
@@ -1387,27 +1391,30 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                     break;
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
+                    FeedDetail feedDetailObj=null;
                     if (AppUtils.isFragmentUIActive(mFragment)) {
                         Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
                         if (parcelable != null) {
                             UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
                             isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                            mFeedDetail = userPostSolrObj;
+                            feedDetailObj = userPostSolrObj;
                         }
-                        if (isPostDeleted) {
-                            if (mFragment instanceof UserPostFragment) {
-                                ((UserPostFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                            } else {
-                                ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                        if(null!=feedDetailObj) {
+                            if (isPostDeleted) {
+                                if (mFragment instanceof UserPostFragment) {
+                                    ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                                } else {
+                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
-                            }
-                        } else {
-                            if (mFragment instanceof UserPostFragment) {
-                                ((UserPostFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                                }
                             } else {
-                                ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                                isMentorQARefresh = true;
-                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
+                                if (mFragment instanceof UserPostFragment) {
+                                    ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
+                                } else {
+                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
+                                    isMentorQARefresh = true;
+                                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
+                                }
                             }
                         }
                     }
