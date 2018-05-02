@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.PostDetailViewImpl;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
@@ -1028,7 +1029,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                editDescText = editDescText.replace(mentionSpan.getMention().getName(), " ");
+                if (mentionSpan.getDisplayMode() == Mentionable.MentionDisplayMode.PARTIAL) {
+                    editDescText = editDescText.replace(mentionSpan.getMention().getName(), " ");
+                } else {
+                    editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+                }
             }
             etView.getEditText().setText(editDescText);
             for (int i = 0; i < mentionSpanList.size(); i++) {
