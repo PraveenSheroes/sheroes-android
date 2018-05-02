@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_24"
-            android:src="@drawable/ic_user_deactivate" />
+            android:src="@drawable/vector_user_deactivated" />
 
         <TextView
             android:id="@+id/tv_user_deactivate_text"

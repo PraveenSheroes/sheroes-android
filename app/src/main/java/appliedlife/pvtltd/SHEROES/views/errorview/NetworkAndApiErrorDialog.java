@@ -74,6 +74,7 @@ public class NetworkAndApiErrorDialog extends BaseDialogFragment {
                 mTvNoConnDesc.setText(errorMessage);
             }
         }
+
         setCancelable(isCancellable);
         return view;
     }
