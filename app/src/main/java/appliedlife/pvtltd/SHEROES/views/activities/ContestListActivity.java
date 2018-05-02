@@ -37,7 +37,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ContestsListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestListView;
@@ -217,19 +216,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(s)) {
-            switch (s) {
-                case AppConstants.HTTP_500_ERROR:
-                    logOutUser();
-                    break;
-                default: {
-                    onShowErrorDialog(s,feedParticipationEnum);
-                }
-            }
-        } else {
-            onShowErrorDialog(s,feedParticipationEnum);
-        }
-
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

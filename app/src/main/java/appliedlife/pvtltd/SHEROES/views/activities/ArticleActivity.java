@@ -105,7 +105,6 @@ import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
@@ -150,7 +149,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public Article mArticle;
     private long mScrollPercentage = 0;
     private boolean isScrollingDown = false;
+
     public enum State {EXPANDED, COLLAPSED}
+
     private State mCurrentState = State.EXPANDED;
     private boolean mIsTransition = false;
     private FeedDetail mFeedDetail;
@@ -271,11 +272,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @BindDimen(R.dimen.article_image_height_tmp)
     int articleImageHeight;
 
-    private   View articleToolTip;
+    private View articleToolTip;
     private PopupWindow popupWindowArticleTooTip;
     private String streamType;
     private List<MentionSpan> mentionSpanList;
-    private boolean hasMentions=false;
+    private boolean hasMentions = false;
     //endregion
 
     //region Activity methods
@@ -464,19 +465,19 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             menu.findItem(R.id.like).setIcon(mArticlePresenter.getLikeDrawable(mArticle));
             menu.findItem(R.id.bookmark).setIcon(mArticlePresenter.getBookmarkDrawable(mArticle));
 
-                if (mCurrentState == State.COLLAPSED) {
-                    menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
-                    menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+            if (mCurrentState == State.COLLAPSED) {
+                menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
+                menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
 
-                    final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
-                    getSupportActionBar().setHomeAsUpIndicator(upArrow);
+                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
 
-                } else if (mCurrentState == State.EXPANDED) {
-                    menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                    menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                    final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
-                    getSupportActionBar().setHomeAsUpIndicator(upArrow);
-                }
+            } else if (mCurrentState == State.EXPANDED) {
+                menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
+                getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            }
 
             itemLike.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
             itemBookmark.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
@@ -595,12 +596,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         final Comment selectedComment = mCommentsAdapter.getComment(position);
                         if (selectedComment == null) return;
 
-                        if(selectedComment.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
+                        if (selectedComment.isMyOwnParticipation() || adminId == AppConstants.TWO_CONSTANT) {
                             popup.getMenu().findItem(R.id.delete).setVisible(true);
                             popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                         } else {
                             popup.getMenu().findItem(R.id.delete).setVisible(false);
-                            if(selectedComment.isSpamComment()) {
+                            if (selectedComment.isSpamComment()) {
                                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
                             } else {
                                 popup.getMenu().findItem(R.id.report_spam).setVisible(true);
@@ -609,16 +610,16 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             public boolean onMenuItemClick(MenuItem item) {
-                                if(item.getItemId() == R.id.report_spam ) {
+                                if (item.getItemId() == R.id.report_spam) {
                                     reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
 
                                     return true;
-                                } else  {
+                                } else {
                                     final long adminID = adminId;
-                                    if(!selectedComment.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
+                                    if (!selectedComment.isMyOwnParticipation() && adminID == AppConstants.TWO_CONSTANT) {
                                         reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
-                                    } else{
-                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(selectedComment.getEntityId(), selectedComment.getComment(), false, false, selectedComment.getId(),hasMentions,mentionSpanList));
+                                    } else {
+                                        mArticlePresenter.onDeleteCommentClicked(position, AppUtils.editCommentRequestBuilder(selectedComment.getEntityId(), selectedComment.getComment(), false, false, selectedComment.getId(), hasMentions, mentionSpanList));
                                     }
                                     return true;
                                 }
@@ -656,7 +657,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     private void reportSpamDialog(final SpamContentType spamContentType, final Comment comment, final int commentPos) {
 
-        if(ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
+        if (ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {
@@ -666,7 +667,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
         }
 
-        if(spamReasons == null) return;
+        if (spamReasons == null) return;
 
         final Dialog spamReasonsDialog = new Dialog(ArticleActivity.this);
         spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -684,16 +685,16 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
         final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
-        List<Spam> spamList =null;
+        List<Spam> spamList = null;
         SpamPostRequest spamRequest = null;
-        if(spamContentType == SpamContentType.ARTICLE_COMMENT) {
+        if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
             spamList = spamReasons.getCommentTypeSpams();
             spamRequest = SpamUtil.spamArticleCommentRequestBuilder(comment, currentUserId);
         }
 
-        if(spamRequest == null || spamList == null) return;
+        if (spamRequest == null || spamList == null) return;
 
-        SpamUtil.addRadioToView(ArticleActivity.this, spamList , spamOptions);
+        SpamUtil.addRadioToView(ArticleActivity.this, spamList, spamOptions);
 
         Button submit = spamReasonsDialog.findViewById(R.id.submit);
         final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
@@ -702,7 +703,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+                if (spamOptions.getCheckedRadioButtonId() != -1) {
 
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
@@ -713,12 +714,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         if (spam.getLabel().equalsIgnoreCase("Others")) {
                             if (reason.getVisibility() == View.VISIBLE) {
 
-                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
-                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mArticlePresenter.reportSpamPostOrComment(finalSpamRequest, comment, commentPos); //submit
                                     spamReasonsDialog.dismiss();
 
-                                    if(spamContentType == SpamContentType.ARTICLE_COMMENT) {
+                                    if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
                                         onCommentReported(comment);   //report the article comment deleted by admin comment
                                     }
 
@@ -734,7 +735,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             mArticlePresenter.reportSpamPostOrComment(finalSpamRequest, comment, commentPos);  //submit request
                             spamReasonsDialog.dismiss();
 
-                            if(spamContentType == SpamContentType.ARTICLE_COMMENT) {
+                            if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
                                 onCommentReported(comment);   //report the article comment deleted by admin comment
                             }
                         }
@@ -789,7 +790,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public void onSubmitClicked() {
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
-            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false,hasMentions,mentionSpanList));
+            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false, hasMentions, mentionSpanList));
         }
         mCommentBody.setText("");
         mCommentBody.clearFocus();
@@ -929,7 +930,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
             String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
             long createdDate = mDateUtil.getTimeInMillis(article.createdAt, AppConstants.DATE_FORMAT);
-            String dateInWord  = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+            String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
             String likesViews = "";
             if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 if (mConfiguration.get().configData.showArticleViews) {
@@ -1044,7 +1045,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentCount++;
         updateTitleCommentCountView();
         mCommentsAdapter.addDataAndNotify(comment);
-        if(null!=mFeedDetail) {
+        if (null != mFeedDetail) {
             if (mFeedDetail instanceof ArticleSolrObj) {
                 if (CommonUtil.isEmpty(mFeedDetail.getLastComments())) {
                     List<Comment> comments = new ArrayList<>();
@@ -1216,22 +1217,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
-            switch (errorMsg) {
-                case AppConstants.HTTP_500_ERROR:
-                    logOutUser();
-                    break;
-                case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                    break;
-                case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    break;
-                default:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-            }
-        }
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

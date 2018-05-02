@@ -148,10 +148,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         } */ else {
             return;
         }
-       if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
-          if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION) == AppConstants.ALBUM_SESSION) {
+            if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
                 toolTipForPictureShare();
-           }
+            }
         }
     }
 
@@ -297,11 +297,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
                     albumToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowAlbumTooTip = new PopupWindow(albumToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowAlbumTooTip.setOutsideTouchable(false);
-                    if(width<750) {
+                    if (width < 750) {
                         popupWindowAlbumTooTip.showAsDropDown(mToolbar, 40, -10);
-                    }else
-                    {
-                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, width-200, -10);
+                    } else {
+                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, width - 200, -10);
                     }
                     final ImageView ivArrow = albumToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -467,18 +466,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(s)) {
-            switch (s) {
-                case AppConstants.HTTP_500_ERROR:
-                    logOutUser();
-                    break;
-                default: {
-                    onShowErrorDialog(s,feedParticipationEnum);
-                }
-            }
-        } else {
-            onShowErrorDialog(s,feedParticipationEnum);
-        }
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -129,27 +128,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-
-        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
-            switch (errorReason) {
-                case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                    break;
-                case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    break;
-                default: {
-                    if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    } else {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-                    }
-                }
-            }
-        } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-        }
+    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

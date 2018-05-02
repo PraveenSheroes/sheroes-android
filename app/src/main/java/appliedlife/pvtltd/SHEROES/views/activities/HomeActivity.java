@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
-
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -57,7 +56,6 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 import com.tooltip.Tooltip;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -337,15 +335,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         try {
             if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
                 if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
-                     Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
-                    .setCancelable(true)
-                    .setDismissOnClick(true)
-                    .setGravity(Gravity.BOTTOM)
-                    .setText(R.string.tool_tip_notification);
-            builder.show();
+                    Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
+                            .setCancelable(true)
+                            .setDismissOnClick(true)
+                            .setGravity(Gravity.BOTTOM)
+                            .setText(R.string.tool_tip_notification);
+                    builder.show();
 
                 }
-           }
+            }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -548,7 +546,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
         Intent intent = new Intent();
-       // Branch branch = Branch.getInstance(getApplicationContext());
+        // Branch branch = Branch.getInstance(getApplicationContext());
         //JSONObject sessionParams = branch.getFirstReferringParams();
         try {
             // JSONObject firstSession = branch.getLatestReferringParams();
@@ -1730,16 +1728,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(s)) {
-            switch (s) {
-                case AppConstants.HTTP_500_ERROR:
-                    logOutUser();
-                    break;
-                default: {
-                    onShowErrorDialog(s,feedParticipationEnum);
-                }
-            }
-        }
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override
@@ -1757,8 +1746,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
-                    if(mAppInstallation!=null && mAppInstallation.isSet()){
-                        AppInstallation appInstallation = mAppInstallation.get() ;
+                    if (mAppInstallation != null && mAppInstallation.isSet()) {
+                        AppInstallation appInstallation = mAppInstallation.get();
                         appInstallation.gcmId = registrationId;
                         mAppInstallation.set(appInstallation);
                     }

@@ -60,7 +60,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -175,6 +174,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         setupToolbarItemsColor();
         setConfigurableShareOption(isWhatsAppShare());
     }
+
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
@@ -188,6 +188,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         }
         return isWhatsappShare;
     }
+
     private void initializeAllViews() {
         setupViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -241,7 +242,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                   // Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
+                    // Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     mContest.submissionCount++;
                     mContest.hasMyPost = true;
                     mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
@@ -323,7 +324,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         bundle.putBoolean(IS_CHALLENGE, true);
         bundle.putString(AppConstants.SCREEN_NAME, "Challenge Responses");
         String endPointUrl = "participant/feed/community_feed?sub_type=P&source_entity_id=" + mContest.remote_id;
-        HashMap<String, Object>properties =
+        HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Integer.toString(mContest.remote_id))
                         .challengeId(Integer.toString(mContest.remote_id))
@@ -379,6 +380,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     protected boolean trackScreenTime() {
         return true;
     }
+
     @Override
     public void onBackPressed() {
         Intent upIntent = NavUtils.getParentActivityIntent(this);
@@ -553,23 +555,8 @@ public class ContestActivity extends BaseActivity implements IContestView {
     }
 
     @Override
-    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
-            switch (errorMsg) {
-                case AppConstants.HTTP_500_ERROR:
-                    logOutUser();
-                    break;
-                case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                    break;
-                case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    break;
-                default:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-
-            }
-        }
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override
@@ -708,14 +695,13 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             if (!comment.isAnonymous()) {
-                championDetailActivity(comment.getParticipantId(), 0,  comment.isVerifiedMentor(), SOURCE_SCREEN);
+                championDetailActivity(comment.getParticipantId(), 0, comment.isVerifiedMentor(), SOURCE_SCREEN);
             }
         } else if (mValue == AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             if (mUserId != -1) {
                 championDetailActivity(mUserId, 1, isMentor, SOURCE_SCREEN); //self profile
             }
-        }
-        else if (baseResponse instanceof UserPostSolrObj) {
+        } else if (baseResponse instanceof UserPostSolrObj) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             if (!postDetails.isAnonymous()) {
                 championDetailActivity(postDetails.getCreatedBy(), 0, postDetails.isAuthorMentor(), SOURCE_SCREEN);

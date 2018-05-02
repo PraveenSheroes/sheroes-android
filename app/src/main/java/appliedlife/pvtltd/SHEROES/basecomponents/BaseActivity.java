@@ -74,7 +74,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
@@ -83,10 +82,10 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import io.reactivex.functions.Consumer;
 
@@ -147,7 +146,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 boolean isFromMoengage = getIntent().getExtras().getBoolean(AppConstants.IS_MOENGAGE, false);
                 String title = getIntent().getExtras().getString(AppConstants.TITLE);
                 boolean isFromPushNotification = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_PUSH, false);
-                if(isFromPushNotification){
+                if (isFromPushNotification) {
                     HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).isMonengage(isFromMoengage).title(title).build();
                     trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
                 }
@@ -156,7 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
 
             boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
-            if(isShareDeeplink){
+            if (isShareDeeplink) {
                 initShare(getIntent());
             }
         }
@@ -182,32 +181,32 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         String shareDialog = intent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE);
         String shareChannel = intent.getExtras().getString(AppConstants.SHARE_CHANNEL);
         Boolean isShareImage = false;
-        if(CommonUtil.isNotEmpty(shareImage)){
+        if (CommonUtil.isNotEmpty(shareImage)) {
             isShareImage = true;
         }
-        if(CommonUtil.isNotEmpty(shareChannel)){
-            if(shareChannel.equalsIgnoreCase(ANDROID_DEFAULT)){
-                if(isShareImage){
+        if (CommonUtil.isNotEmpty(shareChannel)) {
+            if (shareChannel.equalsIgnoreCase(ANDROID_DEFAULT)) {
+                if (isShareImage) {
                     CommonUtil.shareImageChooser(this, shareText, shareImage);
-                }else {
+                } else {
                     CommonUtil.shareCardViaSocial(this, shareDeeplLink);
                 }
-            }else if(shareChannel.equalsIgnoreCase(SHARE_WHATSAPP)){
+            } else if (shareChannel.equalsIgnoreCase(SHARE_WHATSAPP)) {
                 if (isShareImage) {
                     CommonUtil.shareImageWhatsApp(this, shareText, shareImage, getScreenName(), true, null, null);
-                }else {
+                } else {
                     CommonUtil.shareLinkToWhatsApp(this, shareText);
                 }
-            }else if(shareChannel.equalsIgnoreCase(SHARE_FACEBOOK)){
-                if(isShareImage){
+            } else if (shareChannel.equalsIgnoreCase(SHARE_FACEBOOK)) {
+                if (isShareImage) {
                     CommonUtil.facebookImageShare(this, shareImage);
-                }else {
+                } else {
                     CommonUtil.shareFacebookLink(this, shareText);
                 }
-            }else {
+            } else {
                 ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
             }
-        }else {
+        } else {
             ShareBottomSheetFragment.showDialog(this, shareText, shareImage, shareDeeplLink, "", isShareImage, shareDeeplLink, false, false, false, shareDialog);
         }
     }
@@ -278,10 +277,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
      * @return
      */
     public void showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
-        showErrorDialogOnUserAction(finishParentOnBackOrTryagain,isCancellable,errorMessage,"");
+        showErrorDialogOnUserAction(finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
     }
-    public void showErrorDialogOnUserAction(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage,String isDeactivated)
-    {
+
+    public void showErrorDialogOnUserAction(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage, String isDeactivated) {
         NetworkTimeoutDialog fragment = (NetworkTimeoutDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
         if (fragment == null) {
             fragment = new NetworkTimeoutDialog();
@@ -437,10 +436,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if(requestCode == BRANCH_REQUEST_CODE){
-            if(intent!=null && intent.getExtras()!=null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)){
+        if (requestCode == BRANCH_REQUEST_CODE) {
+            if (intent != null && intent.getExtras() != null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)) {
                 boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
-                if(isShareDeeplink){
+                if (isShareDeeplink) {
                     initShare(intent);
                 }
             }
@@ -642,12 +641,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.tv_feed_community_post_card_title:
                 if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (null != mFeedDetail) {
-                        if (null != mUserPreference && mUserPreference.isSet() &&  null != mUserPreference.get().getUserSummary()) {
+                        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                             mUserId = mUserPreference.get().getUserSummary().getUserId();
                             openGenericCardInWebView(mFeedDetail);
                         }
                     }
-                }  else {
+                } else {
                     if (mFeedDetail instanceof UserPostSolrObj) {
                         if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
                             ContestActivity.navigateTo(this, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
@@ -951,15 +950,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                        if (mFragment instanceof UserPostFragment) {
-                            if (AppUtils.isFragmentUIActive(mFragment)) {
-                                ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
-                            }
-                        } else {
-                            if (AppUtils.isFragmentUIActive(mFragment)) {
-                                ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
-                            }
+                    if (mFragment instanceof UserPostFragment) {
+                        if (AppUtils.isFragmentUIActive(mFragment)) {
+                            ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
                         }
+                    } else {
+                        if (AppUtils.isFragmentUIActive(mFragment)) {
+                            ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
+                        }
+                    }
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
@@ -1007,11 +1006,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void onClick(View view) {
 
     }
-    public void logOutUser()
-    {
+
+    public void logOutUser() {
         HashMap<String, Object> properties = new EventProperty.Builder().build();
         AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
-        if(mAppInstallation!=null && mAppInstallation.isSet()){
+        if (mAppInstallation != null && mAppInstallation.isSet()) {
             AppInstallation appInstallation = mAppInstallation.get();
             appInstallation.isLoggedOut = true;
             AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
@@ -1034,6 +1033,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
 
     }
+
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
@@ -1041,20 +1041,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 case AppConstants.CHECK_NETWORK_CONNECTION:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
+                case AppConstants.HTTP_500_ERROR:
+                    logOutUser();
+                    break;
                 case AppConstants.MARK_AS_SPAM:
                     showNetworkTimeoutDoalog(true, false, errorReason);
                     break;
+                case AppConstants.HTTP_401_UNAUTHORIZED:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    break;
                 default: {
-                    if (AppConstants.BAD_RQUEST.contains(errorReason)) {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_BAD_RQUEST));
-                    } else if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
-                        if (this instanceof HomeActivity) {
-                            ((HomeActivity) this).logOut();
-                        }
-                    } else {
-                        showNetworkTimeoutDoalog(true, false, errorReason);
-                    }
+                    showNetworkTimeoutDoalog(true, false, errorReason);
                 }
             }
         } else {
@@ -1081,9 +1078,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     }
 
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse){
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
+
     public String screenName() {
         String sourceScreen = "";
         if (getSupportFragmentManager() != null && !CommonUtil.isEmpty(getSupportFragmentManager().getFragments())) {
@@ -1104,7 +1102,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     protected abstract SheroesPresenter getPresenter();
 
     public void onReferrerReceived(Boolean isReceived) {
-        if (isReceived!=null && isReceived) {
+        if (isReceived != null && isReceived) {
             AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
             appInstallationHelper.setupAndSaveInstallation(false);
         }
