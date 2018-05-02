@@ -70,7 +70,7 @@ public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                getMvpView().showError(e.getMessage(), null);
 
             }
 

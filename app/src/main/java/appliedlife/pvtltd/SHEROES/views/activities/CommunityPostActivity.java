@@ -82,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,11 +111,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
@@ -275,14 +276,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String actionDefault = "#dc4541";
     private boolean mHasPermission = false;
     CallbackManager mCallbackManager;
-    private List<MentionSpan> mMentionSpanList;
     private boolean mHasMentions = false;
     private String mUserTagCreatePostText;
-
+    private List<MentionSpan> mMentionSpanList;
     //new images and deleted images are send when user edit the post
     private List<String> mNewEncodedImages = new ArrayList<>();
     private List<Long> mDeletedImageIdList = new ArrayList<>();
-    List<UserMentionSuggestionPojo> mUserMentionSuggestionPojoList;
+    List<Mention> mMentionList;
     @Inject
     Preference<Configuration> mConfiguration;
     //endregion
@@ -430,21 +430,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
-       // StringBuilder modifiedText = new StringBuilder();
         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
-           /* for (int i = 0; i < mentionSpanList.size(); i++) {
-                final MentionSpan mentionSpan = mentionSpanList.get(i);
-                modifiedText.append(editDescText.substring(0, mentionSpan.getMention().getStartIndex())).append(" ").append(editDescText.substring(mentionSpan.getMention().getEndIndex(), editDescText.length()));
-            }*/
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+                if (mentionSpan.getDisplayMode() == Mentionable.MentionDisplayMode.PARTIAL) {
+                    editDescText = editDescText.replace(mentionSpan.getMention().getName(), " ");
+                } else {
+                    editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
+                }
             }
 
             etView.getEditText().setText(editDescText);
+
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
-                UserMentionSuggestionPojo userMention = mentionSpan.getMention();
+                Mention userMention = mentionSpan.getMention();
                 int index = userMention.getStartIndex();
                 etView.setCreateEditMentionSelectionText(userMention, index, index + 1);
             }
@@ -732,6 +732,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
 
+        mMentionSpanList = etView.getMentionSpans();
+        addMentionSpanDetail();
         if (mIsChallengePost) {
             mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
         } else if (!mIsEditPost) {
@@ -748,6 +750,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
+    private void addMentionSpanDetail() {
+        for (MentionSpan mentionSpan : mMentionSpanList) {
+            Mention mention = mentionSpan.getMention();
+            Editable editable = etView.getEditText().getEditableText();
+            mention.setStartIndex(editable.getSpanStart(mentionSpan));
+            mention.setEndIndex(editable.getSpanEnd(mentionSpan));
+            mention.setName(mentionSpan.getDisplayString());
+            mentionSpan.setMention(mention);
+        }
+        Collections.sort(mMentionSpanList, new Comparator<MentionSpan>() {
+            @Override
+            public int compare(MentionSpan span1, MentionSpan span2) {
+                return span1.getMention().getStartIndex() - span2.getMention().getStartIndex();
+            }
+        });
+    }
 
     private void selectPostNowOrLater() {
         if (mPostNowOrLaterDialog != null) {
@@ -825,6 +843,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void postForAdmin(String scheduledTime) {
+        mMentionSpanList = etView.getMentionSpans();
+        addMentionSpanDetail();
         String accessToken = "";
         if (AccessToken.getCurrentAccessToken() != null) {
             accessToken = AccessToken.getCurrentAccessToken().getToken();
@@ -948,17 +968,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        switch (errorMsg) {
-            case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                break;
-            case AppConstants.HTTP_401_UNAUTHORIZED:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                break;
-            default:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-        }
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
     }
 
     protected final void scheduleConfirmation(final String formattedDate, String formattedMessage) {
@@ -1550,19 +1561,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void showUserMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-        if (StringUtil.isNotEmptyCollection(mUserMentionSuggestionPojoList)) {
+        if (StringUtil.isNotEmptyCollection(mMentionList)) {
             if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-                mUserMentionSuggestionPojoList = searchUserDataResponse.getParticipantList();
-                mUserMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-                mHasMentions = true;
-                etView.notifyData(mUserMentionSuggestionPojoList);
+                mMentionList = searchUserDataResponse.getParticipantList();
+                mMentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+                etView.notifyData(mMentionList);
             } else {
-                mHasMentions = false;
-                mMentionSpanList = null;
-                List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
-                userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-                userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
-                etView.notifyData(userMentionSuggestionPojoList);
+                List<Mention> mentionList = new ArrayList<>();
+                mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+                mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
+                etView.notifyData(mentionList);
             }
         }
     }
@@ -1687,31 +1695,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
         final String searchText = queryToken.getTokenString();
         if (searchText.contains("@")) {
-            List<UserMentionSuggestionPojo> userMentionSuggestionPojoList = new ArrayList<>();
-            userMentionSuggestionPojoList.add(0, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-            userMentionSuggestionPojoList.add(1, new UserMentionSuggestionPojo(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
-          /*  UserTagSuggestionsResult result = new UserTagSuggestionsResult(queryToken, userMentionSuggestionPojoList);
-            etView.onReceiveSuggestionsResult(result, "data");*/
+            List<Mention> mentionList = new ArrayList<>();
+            mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+            mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
-            mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
-            mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
-            mIsProgressBarVisible = true;
-            mProgressBar.setVisibility(View.VISIBLE);
+            mSuggestionList.setAdapter(etView.notifyAdapterOnData(mentionList));
+            mMentionList = mentionList;
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
-    }
-
-    @Override
-    public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        this.mMentionSpanList = mentionSpanList;
-        return null;
-    }
-
-    @Override
-    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        return null;
     }
 
     @Override
@@ -1719,15 +1712,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         int id = view.getId();
         switch (id) {
             case R.id.li_social_user:
-                mUserMentionSuggestionPojoList.clear();
+                mMentionList.clear();
                 etView.displayHide();
-                UserMentionSuggestionPojo userMentionSuggestionPojo = (UserMentionSuggestionPojo) suggestible;
-                etView.setInsertion(userMentionSuggestionPojo);
+                Mention mention = (Mention) suggestible;
+                etView.setInsertion(mention);
                 final HashMap<String, Object> properties =
                         new EventProperty.Builder()
                                 .postId(Integer.toString(mCommunityPost.remote_id))
                                 .taggedIn("POST")
-                                .taggedUserId(Integer.toString(userMentionSuggestionPojo.getUserId()))
+                                .taggedUserId(Integer.toString(mention.getUserId()))
                                 .build();
                 AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
                 break;
@@ -1739,6 +1732,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void textChangeListner(@NonNull Editable editText) {
+
         if (editText.length() > 0) {
             if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !isLinkRendered) {
                 String editTextDescription = editText.toString().trim();

@@ -39,7 +39,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionsEditable;
@@ -149,7 +149,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         // Set the suggestions adapter
         SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
         mUserTagSuggestionsAdapter = new UserTagSuggestionsAdapter(context, this, listBuilder, this);
-        onSuggestedList(mUserTagSuggestionsAdapter);
         // Wrap the EditText content height if necessary (ideally, allow this to be controlled via custom XML attribute)
         setEditTextShouldWrapContent(mEditTextShouldWrapContent);
         mPrevEditTextBottomPadding = mMentionsEditText.getPaddingBottom();
@@ -196,9 +195,9 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
 
     }
 
-    public void setInsertion(UserMentionSuggestionPojo userMentionSuggestionPojo) {
+    public void setInsertion(Mention mention) {
         if (mMentionsEditText != null) {
-            mMentionsEditText.insertMention(userMentionSuggestionPojo);
+            mMentionsEditText.insertMention(mention);
             mUserTagSuggestionsAdapter.clear();
         }
     }
@@ -219,7 +218,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      */
     @NonNull
     public List<MentionSpan> getMentionSpans() {
-        return (mMentionsEditText != null) ? mMentionsEditText.getMentionsText().getMentionSpans() : new ArrayList<MentionSpan>();
+        return(mMentionsEditText != null) ? mMentionsEditText.getMentionsText().getMentionSpans() : new ArrayList<MentionSpan>();
     }
 
     /**
@@ -309,26 +308,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
     }
 
     @Override
-    public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-        List<MentionSpan> mentionSpans = null;
-        // Pass the query token to a host receiver
-        if (mHostQueryTokenReceiver != null) {
-            mentionSpans = mHostQueryTokenReceiver.onMentionReceived(mentionSpanList, allText);
-        }
-        return mentionSpans;
-    }
-
-    @Override
-    public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-        UserTagSuggestionsAdapter adapter = null;
-        // Pass the query token to a host receiver
-        if (mHostQueryTokenReceiver != null) {
-            adapter = mHostQueryTokenReceiver.onSuggestedList(userTagSuggestionsAdapter);
-        }
-        return adapter;
-    }
-
-    @Override
     public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
         Suggestible suggestibleObj = null;
         // Pass the query token to a host receiver
@@ -359,7 +338,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             public void run() {
                 if (mUserTagSuggestionsAdapter != null) {
                     mUserTagSuggestionsAdapter.addSuggestions(result, bucket, mMentionsEditText);
-                    onSuggestedList(mUserTagSuggestionsAdapter);
+
                 }
                 // Make sure the list is scrolled to the top once you receive the first query result
                 if (mWaitingForFirstResult && mSuggestionsList != null) {
@@ -370,17 +349,17 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         });
     }
 
-    public UserTagSuggestionsAdapter notifyAdapterOnData(List<UserMentionSuggestionPojo> userMentionSuggestionPojoList) {
+    public UserTagSuggestionsAdapter notifyAdapterOnData(List<Mention> mentionList) {
         // Add the mentions and notify the editor/dropdown of the changes on the UI thread
         SuggestionsListBuilder listBuilder = new BasicSuggestionsListBuilder();
         mUserTagSuggestionsAdapter = new UserTagSuggestionsAdapter(getContext(), this, listBuilder, this);
-        mUserTagSuggestionsAdapter.addUserData(userMentionSuggestionPojoList);
+        mUserTagSuggestionsAdapter.addUserData(mentionList);
         mUserTagSuggestionsAdapter.notifyDataSetChanged();
         return mUserTagSuggestionsAdapter;
     }
 
-    public void notifyData(List<UserMentionSuggestionPojo> userMentionSuggestionPojoList) {
-        mUserTagSuggestionsAdapter.addUserData(userMentionSuggestionPojoList);
+    public void notifyData(List<Mention> mentionList) {
+        mUserTagSuggestionsAdapter.addUserData(mentionList);
         mUserTagSuggestionsAdapter.notifyDataSetChanged();
     }
 
@@ -603,7 +582,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      *
      * @param mention the text to display
      */
-    public void setCreateEditMentionSelectionText(@NonNull UserMentionSuggestionPojo mention, int start, int end) {
+    public void setCreateEditMentionSelectionText(@NonNull Mention mention, int start, int end) {
         if (mMentionsEditText != null) {
             mMentionsEditText.editCreateInsertMention(mention, start, end);
         }

@@ -80,16 +80,17 @@ public class LoginActivity extends BaseActivity {
         callFirstFragment(R.id.fragment_login, frag);
     }
 
-    public void onErrorOccurence(String errorMessage) {
+    public void onErrorOccurence(String errorMessage,String isDeactivated) {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        if (AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage)) {
-            //openFaceBookLogin();
-        } else {
+        if(StringUtil.isNotNullOrEmptyString(isDeactivated)&&isDeactivated.equalsIgnoreCase("true"))
+        {
+            showErrorDialogOnUserAction(true,false,errorMessage,"true");
+        }else
+        {
             showNetworkTimeoutDoalog(true, false, errorMessage);
         }
-
     }
 
 
@@ -127,27 +128,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-
-        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
-            switch (errorReason) {
-                case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                    break;
-                case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    break;
-                default: {
-                    if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    } else {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-                    }
-                }
-            }
-        } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-        }
+    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

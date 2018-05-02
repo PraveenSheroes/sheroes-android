@@ -36,6 +36,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,8 +49,10 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Album;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
@@ -145,10 +148,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         } */ else {
             return;
         }
-       if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION)== AppConstants.ALBUM_SESSION) {
-          if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
+        if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION) == AppConstants.ALBUM_SESSION) {
+            if (CommonUtil.ensureFirstTime(AppConstants.PICTURE_SHARE_PREF)) {
                 toolTipForPictureShare();
-           }
+            }
         }
     }
 
@@ -294,11 +297,10 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
                     albumToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                     popupWindowAlbumTooTip = new PopupWindow(albumToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     popupWindowAlbumTooTip.setOutsideTouchable(false);
-                    if(width<750) {
+                    if (width < 750) {
                         popupWindowAlbumTooTip.showAsDropDown(mToolbar, 40, -10);
-                    }else
-                    {
-                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, width-200, -10);
+                    } else {
+                        popupWindowAlbumTooTip.showAsDropDown(mToolbar, width - 200, -10);
                     }
                     final ImageView ivArrow = albumToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -445,6 +447,31 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
             popupWindowAlbumTooTip.dismiss();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
 
     //endregion

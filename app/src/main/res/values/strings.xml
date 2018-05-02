@@ -599,5 +599,7 @@
     <string name="no_result_found">No Result Found</string>
     <string name="user_mention_area_at_post">You can tag community owners &amp; your followers</string>
     <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
+    <string name="reactivate_your_account">To reactivate your account write to us</string>
+    <string name="care_sheroes">care@sheroes.in</string>
 
 </resources>

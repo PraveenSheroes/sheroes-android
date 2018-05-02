@@ -71,7 +71,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                getMvpView().showError(e.getMessage(), null);
 
             }
 
@@ -116,7 +116,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
+                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
 
             }
 
@@ -174,7 +174,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
                         communityFeedSolrObj.setMember(false);
                         getMvpView().showCommunityJoinResponse(communityFeedSolrObj, carouselViewHolder);
@@ -225,7 +225,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
                         communityFeedSolrObj.setMember(true);
                         getMvpView().showCommunityJoinResponse(communityFeedSolrObj, carouselViewHolder);

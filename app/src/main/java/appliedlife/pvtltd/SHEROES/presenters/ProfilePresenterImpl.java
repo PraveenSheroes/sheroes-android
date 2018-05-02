@@ -80,10 +80,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-               // getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+               getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -115,10 +115,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -150,10 +150,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -186,15 +186,14 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
             public void onNext(ProfileCommunitiesResponsePojo userCommunities) {
-                LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if(userCommunities.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().getUsersCommunities(userCommunities);
@@ -223,7 +222,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         getMvpView().stopProgressBar();
                     }
 

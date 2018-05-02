@@ -69,10 +69,10 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                     }
 
                     @Override
-                    public void onError(Throwable throwable) {
-                        Crashlytics.getInstance().core.logException(throwable);
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
                     }
 
                     @Override

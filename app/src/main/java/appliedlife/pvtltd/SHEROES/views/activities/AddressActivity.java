@@ -16,8 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
-
 
 import org.parceler.Parcels;
 
@@ -34,7 +32,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.presenters.AddressPresenterImpl;
-import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAddressView;
 import butterknife.Bind;
@@ -56,7 +53,6 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     //region View variables
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
 
 
     @Bind(R.id.name_container)
@@ -162,6 +158,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -201,7 +198,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             mNameViewContainer.requestFocus();
             mNameViewContainer.setError(mErrorNameString);
         } else {
-            mNameViewContainer.setErrorEnabled(false );
+            mNameViewContainer.setErrorEnabled(false);
             mNameViewContainer.setError(null);
         }
 
@@ -337,7 +334,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

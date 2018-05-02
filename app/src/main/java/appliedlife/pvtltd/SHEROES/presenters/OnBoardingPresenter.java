@@ -73,10 +73,6 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
         return super.isViewAttached();
     }
 
-    public void getMasterDataToPresenter() {
-        super.getMasterDataToAllPresenter(mSheroesApplication, mMasterDataModel, mUserPreferenceMasterData);
-    }
-
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
@@ -95,7 +91,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -127,7 +123,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_ON_ONBOARDING);
+                getMvpView().showError(e.getMessage(), ERROR_ON_ONBOARDING);
             }
 
             @Override
@@ -158,7 +154,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
             }
 
             @Override
@@ -188,7 +184,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 
@@ -221,7 +217,7 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 

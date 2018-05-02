@@ -31,7 +31,7 @@ import java.util.Set;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserMentionSuggestionTagCallback;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
@@ -137,7 +137,7 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
         notifyDataSetChanged();
     }
 
-    public void addUserData(List<UserMentionSuggestionPojo> suggestions) {
+    public void addUserData(List<Mention> suggestions) {
         // Add result to proper bucket and remove from waiting
         // If we have suggestions, add them to the adapter and display them
         mSuggestions.clear();

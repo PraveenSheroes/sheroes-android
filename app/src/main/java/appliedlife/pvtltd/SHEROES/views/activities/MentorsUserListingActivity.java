@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -40,7 +40,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -90,6 +89,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     private UserSolrObj mUserSolrObj;
     @Bind(R.id.empty_view)
     View emptyView;
+
     //endregion
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +102,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MENTOR_LISTING, AppConstants.NO_REACTION_CONSTANT);
         mentorSearchInListPagination(mFragmentListRefreshData);
     }
+
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -126,6 +127,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             @Override
             public void onShow() {
             }
+
             @Override
             public void dismissReactions() {
             }
@@ -139,27 +141,29 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         });
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_CHAMPION_LISTING));
     }
+
     private void refreshFeedMethod() {
         mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, mFragmentListRefreshData.getPageNo()));
     }
+
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         int id = view.getId();
         if (baseResponse instanceof FeedDetail) {
             switch (id) {
                 case R.id.tv_mentor_follow:
-                    followUnFollowRequest((UserSolrObj)baseResponse);
+                    followUnFollowRequest((UserSolrObj) baseResponse);
                     break;
                 case R.id.tv_mentor_ask_question:
                     CommunityPost mentorPost = new CommunityPost();
                     mFeedDetail = (FeedDetail) baseResponse;
-                    if(mFeedDetail instanceof UserSolrObj) {
-                        UserSolrObj userSolrObj=(UserSolrObj)mFeedDetail;
+                    if (mFeedDetail instanceof UserSolrObj) {
+                        UserSolrObj userSolrObj = (UserSolrObj) mFeedDetail;
                         mentorPost.community = new Community();
-                        mentorPost.community.id=userSolrObj.getSolrIgnoreMentorCommunityId();
+                        mentorPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
                         mentorPost.community.name = userSolrObj.getNameOrTitle();
                         mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                         mentorPost.isEdit = false;
@@ -181,9 +185,9 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
 
     private void openMentorProfileDetail(BaseResponse baseResponse) { //form mentor card in feed only for mentor
-        UserSolrObj userSolrObj=(UserSolrObj)baseResponse;
+        UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         mFeedDetail = userSolrObj;
-        ProfileActivity.navigateTo(this,userSolrObj.getIdOfEntityOrParticipant(), true, 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL,userSolrObj);
+        ProfileActivity.navigateTo(this, userSolrObj.getIdOfEntityOrParticipant(), true, 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, userSolrObj);
     }
 
     @Override
@@ -192,24 +196,25 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
-                    case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
-                        if (null != intent.getExtras()) {
-                            UserSolrObj  userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                            if(null!=userSolrObj) {
-                                mAdapter.setMentoreDataOnPosition(userSolrObj, userSolrObj.currentItemPosition);
-                                mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
-                            }
+                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                    if (null != intent.getExtras()) {
+                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                        if (null != userSolrObj) {
+                            mAdapter.setMentoreDataOnPosition(userSolrObj, userSolrObj.currentItemPosition);
+                            mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
                         }
+                    }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     setResult(RESULT_OK, intent);
-                   // finish();
+                    // finish();
                     break;
                 default:
             }
         }
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -219,6 +224,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         }
         return true;
     }
+
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -246,7 +252,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override
@@ -262,17 +268,17 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(0, 0);
-        mProgressBar.setLayoutParams(params );
-        List<FeedDetail> feedDetailList=feedResponsePojo.getFeedDetails();
-        if(StringUtil.isNotEmptyCollection(feedDetailList)&&mAdapter!=null) {
+        mProgressBar.setLayoutParams(params);
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
-            List<FeedDetail> data=null;
-            FeedDetail feedProgressBar=new FeedDetail();
+            List<FeedDetail> data = null;
+            FeedDetail feedProgressBar = new FeedDetail();
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-            data=mPullRefreshList.getFeedResponses();
-            int position=data.size()- feedDetailList.size();
+            data = mPullRefreshList.getFeedResponses();
+            int position = data.size() - feedDetailList.size();
             if (position > 0) {
                 data.remove(position - 1);
             }
@@ -281,38 +287,38 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
             mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
             mAdapter.notifyDataSetChanged();
             mSwipeView.setRefreshing(false);
-        }
-        else  if(StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())&&mAdapter!=null)
-        {
-            List<FeedDetail> data=mPullRefreshList.getFeedResponses();
-            data.remove(data.size()-1);
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
             mAdapter.notifyDataSetChanged();
-        }else
-        {
+        } else {
             mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
         }
     }
+
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest,userSolrObj);
+            mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
             unFollowUserEvent(userSolrObj);
         } else {
-            mHomePresenter.getFollowFromPresenter(publicProfileListRequest,userSolrObj);
+            mHomePresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
             followUserEvent(userSolrObj);
         }
     }
+
     private void followUserEvent(UserSolrObj mUserSolarObject) {
-        Event event =  Event.PROFILE_FOLLOWED ;
+        Event event = Event.PROFILE_FOLLOWED;
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(mUserSolarObject.isAuthorMentor())
                         .build();
-        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
+
     private void unFollowUserEvent(UserSolrObj mUserSolarObject) {
         Event event = Event.PROFILE_UNFOLLOWED;
         HashMap<String, Object> properties =
@@ -321,8 +327,9 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(mUserSolarObject.isAuthorMentor())
                         .build();
-        AnalyticsManager.trackEvent(event,getScreenName(), properties);
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
+
     @Override
     public void showHomeFeedList(List<FeedDetail> feedDetailList) {
 
@@ -331,13 +338,12 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
-        switch (feedParticipationEnum)
-        {
+        switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
-                 mUserSolrObj =(UserSolrObj)baseResponse;
+                mUserSolrObj = (UserSolrObj) baseResponse;
                 mAdapter.notifyItemChanged(mUserSolrObj.getItemPosition(), mUserSolrObj);
                 break;
-                default:
+            default:
         }
 
     }

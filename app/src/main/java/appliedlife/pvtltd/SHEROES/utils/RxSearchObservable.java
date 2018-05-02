@@ -37,16 +37,6 @@ public class RxSearchObservable {
             }
 
             @Override
-            public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-                return mvpView.onMentionReceived(mentionSpanList, allText);
-            }
-
-            @Override
-            public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-                return mvpView.onSuggestedList(userTagSuggestionsAdapter);
-            }
-
-            @Override
             public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
                 return mvpView.onMentionUserSuggestionClick(suggestible, view);
             }
@@ -72,16 +62,6 @@ public class RxSearchObservable {
                     subject.onNext(searchText);
                 }
                 return mvpView.onQueryReceived(queryToken);
-            }
-
-            @Override
-            public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-                return mvpView.onMentionReceived(mentionSpanList, allText);
-            }
-
-            @Override
-            public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-                return mvpView.onSuggestedList(userTagSuggestionsAdapter);
             }
 
             @Override

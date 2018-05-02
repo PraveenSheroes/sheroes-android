@@ -14,7 +14,6 @@ import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -45,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.errorview.OnBoardingMsgDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -112,15 +110,15 @@ public class OnBoardingActivity extends BaseActivity {
     }
 
     public void onBoardingFragment() {
-        tvNameUser.setText("Welcome "+userPreference.get().getUserSummary().getFirstName()+"!");
+        tvNameUser.setText("Welcome " + userPreference.get().getUserSummary().getFirstName() + "!");
         String description = getString(R.string.ID_BOARDING_COMMUNITIES);
         isJoinCount = 0;
         SpannableString spannableString = new SpannableString(description);
         if (StringUtil.isNotNullOrEmptyString(description)) {
             //spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 34, 42, 0);
-           // spannableString.setSpan(new StyleSpan(Typeface.BOLD), 34, 42, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length() - 30, description.length()-18, 0);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length() - 30, description.length()-18, 0);
+            // spannableString.setSpan(new StyleSpan(Typeface.BOLD), 34, 42, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length() - 30, description.length() - 18, 0);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length() - 30, description.length() - 18, 0);
             tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
             tvDescription.setText(spannableString, TextView.BufferType.SPANNABLE);
             tvDescription.setSelected(true);
@@ -190,17 +188,8 @@ public class OnBoardingActivity extends BaseActivity {
 
 
     @Override
-    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        switch (errorReason) {
-            case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                break;
-            case AppConstants.HTTP_401_UNAUTHORIZED:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
-                break;
-            default:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-        }
+    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @OnClick(R.id.tv_on_boarding_finish)
@@ -220,7 +209,7 @@ public class OnBoardingActivity extends BaseActivity {
             if (fragment == null) {
                 fragment = new OnBoardingMsgDialog();
                 Bundle b = new Bundle();
-               // b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
+                // b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
                 fragment.setArguments(b);
             }
             if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {

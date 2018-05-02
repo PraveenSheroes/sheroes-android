@@ -388,7 +388,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
+                        getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
 
                     }
 
@@ -433,7 +433,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                     }
 
@@ -472,7 +472,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                     }
 
                     @Override
@@ -537,7 +537,7 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
-                        getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                     }
 
                     @Override
