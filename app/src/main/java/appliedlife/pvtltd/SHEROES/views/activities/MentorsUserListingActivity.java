@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -249,7 +248,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
         if (StringUtil.isNotNullOrEmptyString(s)) {
             switch (s) {
                 case AppConstants.HTTP_500_ERROR:
-                    userDeactivatedOrForceLogOutError();
+                    logOutUser();
                     break;
                 default: {
                     onShowErrorDialog(s,feedParticipationEnum);

@@ -53,15 +53,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserMentionSuggestionPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
@@ -944,11 +939,11 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     }
 
     /**
-     * Inserts a userMentionSuggestionPojo into the token being considered currently.
+     * Inserts a mention into the token being considered currently.
      *
-     * @param userMentionSuggestionPojo {@link Mentionable} to insert a span for
+     * @param mention {@link Mentionable} to insert a span for
      */
-    public void insertMention(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo) {
+    public void insertMention(@NonNull Mention mention) {
         if (mTokenizer == null) {
             return;
         }
@@ -962,20 +957,20 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             return;
         }
 
-        insertMentionInternal(userMentionSuggestionPojo, text, start, end);
+        insertMentionInternal(mention, text, start, end);
     }
-    public void editCreateInsertMention(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo, int start, int end) {
+    public void editCreateInsertMention(@NonNull Mention mention, int start, int end) {
 
         // Setup variables and ensure they are valid
         Editable text = getEditableText();
-        insertMentionInternal(userMentionSuggestionPojo, text, start, end);
+        insertMentionInternal(mention, text, start, end);
     }
 
 
-    private void insertMentionInternal(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo, @NonNull Editable text, int start, int end) {
+    private void insertMentionInternal(@NonNull Mention mention, @NonNull Editable text, int start, int end) {
         // Insert the span into the editor
-        MentionSpan mentionSpan = mentionSpanFactory.createMentionSpan(userMentionSuggestionPojo, mentionSpanConfig);
-        String name = userMentionSuggestionPojo.getSuggestiblePrimaryText();
+        MentionSpan mentionSpan = mentionSpanFactory.createMentionSpan(mention, mentionSpanConfig);
+        String name = mention.getSuggestiblePrimaryText();
 
         mBlockCompletion = true;
 
@@ -986,9 +981,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         ensureMentionSpanIntegrity(text);
         mBlockCompletion = false;
 
-        // Notify listeners of added userMentionSuggestionPojo
+        // Notify listeners of added mention
         if (mMentionWatchers.size() > 0) {
-            notifyMentionAddedWatchers(userMentionSuggestionPojo, text.toString(), start, endOfMention);
+            notifyMentionAddedWatchers(mention, text.toString(), start, endOfMention);
         }
 
         // Hide the suggestions and clear adapter
@@ -996,7 +991,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             mSuggestionsVisibilityManager.displaySuggestions(false);
         }
 
-        // Reset input method since text has been changed (updates userMentionSuggestionPojo draw states)
+        // Reset input method since text has been changed (updates mention draw states)
         restartInput();
     }
 
@@ -1252,9 +1247,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     public static class MentionSpanFactory {
 
         @NonNull
-        public MentionSpan createMentionSpan(@NonNull UserMentionSuggestionPojo userMentionSuggestionPojo,
+        public MentionSpan createMentionSpan(@NonNull Mention mention,
                                              @Nullable MentionSpanConfig config) {
-            return (config != null) ? new MentionSpan(userMentionSuggestionPojo, config) : new MentionSpan(userMentionSuggestionPojo);
+            return (config != null) ? new MentionSpan(mention, config) : new MentionSpan(mention);
         }
     }
 

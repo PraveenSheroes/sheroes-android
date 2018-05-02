@@ -14,7 +14,6 @@ import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
@@ -45,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.errorview.OnBoardingMsgDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -196,7 +194,7 @@ public class OnBoardingActivity extends BaseActivity {
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                 break;
             case AppConstants.HTTP_500_ERROR:
-                userDeactivatedOrForceLogOutError();
+                logOutUser();
                 break;
             case AppConstants.HTTP_401_UNAUTHORIZED:
                 showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));

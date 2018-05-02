@@ -22,7 +22,7 @@ import com.google.gson.annotations.SerializedName;
 
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 
-public class UserMentionSuggestionPojo implements Mentionable {
+public class Mention implements Mentionable {
 
     @SerializedName("user_id")
     @Expose
@@ -53,7 +53,7 @@ public class UserMentionSuggestionPojo implements Mentionable {
     public long userType;
 
 
-    public UserMentionSuggestionPojo(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl, long userType) {
+    public Mention(int userId, String name, String userProfileDeepLinkUrl, String authorImageUrl, long userType) {
         this.userId = userId;
         this.name = name;
         this.userProfileDeepLinkUrl = userProfileDeepLinkUrl;
@@ -171,7 +171,7 @@ public class UserMentionSuggestionPojo implements Mentionable {
         dest.writeLong(this.userType);
     }
 
-    protected UserMentionSuggestionPojo(Parcel in) {
+    protected Mention(Parcel in) {
         this.userId = in.readInt();
         this.userProfileDeepLinkUrl = in.readString();
         this.authorImageUrl = in.readString();
@@ -181,15 +181,15 @@ public class UserMentionSuggestionPojo implements Mentionable {
         this.userType = in.readLong();
     }
 
-    public static final Creator<UserMentionSuggestionPojo> CREATOR = new Creator<UserMentionSuggestionPojo>() {
+    public static final Creator<Mention> CREATOR = new Creator<Mention>() {
         @Override
-        public UserMentionSuggestionPojo createFromParcel(Parcel source) {
-            return new UserMentionSuggestionPojo(source);
+        public Mention createFromParcel(Parcel source) {
+            return new Mention(source);
         }
 
         @Override
-        public UserMentionSuggestionPojo[] newArray(int size) {
-            return new UserMentionSuggestionPojo[size];
+        public Mention[] newArray(int size) {
+            return new Mention[size];
         }
     };
 }

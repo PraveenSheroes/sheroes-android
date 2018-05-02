@@ -72,7 +72,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -1065,7 +1064,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         if (StringUtil.isNotNullOrEmptyString(s)) {
             switch (s) {
                 case AppConstants.HTTP_500_ERROR:
-                    userDeactivatedOrForceLogOutError();
+                    logOutUser();
                     break;
                 default: {
                     onShowErrorDialog(s,feedParticipationEnum);

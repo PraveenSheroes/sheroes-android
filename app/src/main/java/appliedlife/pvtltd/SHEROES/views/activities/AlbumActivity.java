@@ -470,7 +470,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         if (StringUtil.isNotNullOrEmptyString(s)) {
             switch (s) {
                 case AppConstants.HTTP_500_ERROR:
-                    userDeactivatedOrForceLogOutError();
+                    logOutUser();
                     break;
                 default: {
                     onShowErrorDialog(s,feedParticipationEnum);

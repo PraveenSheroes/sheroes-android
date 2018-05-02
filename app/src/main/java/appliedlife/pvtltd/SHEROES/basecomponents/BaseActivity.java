@@ -1007,7 +1007,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public void onClick(View view) {
 
     }
-    public void userDeactivatedOrForceLogOutError()
+    public void logOutUser()
     {
         HashMap<String, Object> properties = new EventProperty.Builder().build();
         AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);

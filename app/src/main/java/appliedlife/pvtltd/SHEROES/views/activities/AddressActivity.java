@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
 import org.parceler.Parcels;
@@ -34,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.presenters.AddressPresenterImpl;
-import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -342,7 +340,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         if (StringUtil.isNotNullOrEmptyString(s)) {
             switch (s) {
                 case AppConstants.HTTP_500_ERROR:
-                    userDeactivatedOrForceLogOutError();
+                    logOutUser();
                     break;
                 default: {
                     onShowErrorDialog(s,feedParticipationEnum);

@@ -39,7 +39,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -672,7 +671,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (StringUtil.isNotNullOrEmptyString(s)) {
             switch (s) {
                 case AppConstants.HTTP_500_ERROR:
-                    userDeactivatedOrForceLogOutError();
+                    logOutUser();
                     break;
                 default: {
                     onShowErrorDialog(s,feedParticipationEnum);

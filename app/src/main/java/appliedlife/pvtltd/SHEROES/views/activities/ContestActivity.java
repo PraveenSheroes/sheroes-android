@@ -557,7 +557,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
             switch (errorMsg) {
                 case AppConstants.HTTP_500_ERROR:
-                    userDeactivatedOrForceLogOutError();
+                    logOutUser();
                     break;
                 case AppConstants.CHECK_NETWORK_CONNECTION:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
