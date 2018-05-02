@@ -79,7 +79,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
-import appliedlife.pvtltd.SHEROES.views.errorview.NetworkTimeoutDialog;
+import appliedlife.pvtltd.SHEROES.views.errorview.NetworkAndApiErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
@@ -281,9 +281,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     public void showErrorDialogOnUserAction(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage, String isDeactivated) {
-        NetworkTimeoutDialog fragment = (NetworkTimeoutDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
+        NetworkAndApiErrorDialog fragment = (NetworkAndApiErrorDialog) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
         if (fragment == null) {
-            fragment = new NetworkTimeoutDialog();
+            fragment = new NetworkAndApiErrorDialog();
             Bundle b = new Bundle();
             b.putBoolean(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, finishParentOnBackOrTryagain);
             b.putBoolean(BaseDialogFragment.IS_CANCELABLE, isCancellable);
