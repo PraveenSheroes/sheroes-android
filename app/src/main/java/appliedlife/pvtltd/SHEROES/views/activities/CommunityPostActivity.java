@@ -1711,7 +1711,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(userMentionSuggestionPojoList));
             mUserMentionSuggestionPojoList = userMentionSuggestionPojoList;
-            mIsProgressBarVisible = true;
         }
         List<String> buckets = Collections.singletonList("user-history");
         return buckets;
