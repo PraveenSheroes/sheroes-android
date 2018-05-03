@@ -1041,17 +1041,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 case AppConstants.CHECK_NETWORK_CONNECTION:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
-                case AppConstants.HTTP_500_ERROR:
-                    logOutUser();
-                    break;
                 case AppConstants.MARK_AS_SPAM:
                     showNetworkTimeoutDoalog(true, false, errorReason);
                     break;
                 case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                     break;
                 default: {
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
                 }
             }
         } else {

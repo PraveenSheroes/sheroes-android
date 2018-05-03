@@ -128,8 +128,17 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
-        super.onShowErrorDialog(s, feedParticipationEnum);
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorReason)) {
+            switch (errorReason) {
+                case AppConstants.HTTP_401_UNAUTHORIZED:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    break;
+                default: {
+                    super.onShowErrorDialog(errorReason,feedParticipationEnum);
+                }
+            }
+        }
     }
 
     @Override
