@@ -96,7 +96,7 @@ import butterknife.OnClick;
  * User Profile Edit Screen
  */
 
-public class EditUserProfileActivity extends BaseActivity implements IEditProfileView, AdapterView.OnItemSelectedListener {
+public class EditUserProfileActivity extends BaseActivity implements IEditProfileView {
 
     private static final String SCREEN_LABEL = "Edit Profile Screen";
     private static final String TAG = EditUserProfileActivity.class.getName();
@@ -199,7 +199,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
         editProfilePresenter.getALLUserDetails();
 
-        relationshipStatus.setOnItemSelectedListener(this);
         location.setOnClickListener(this);
         userImage.setOnClickListener(this);
 
@@ -249,33 +248,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             mobileContainer.setError(message.toUpperCase());
             requestFocus(mobileNumber);
             mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String relationshipStatusValue = (String) parent.getItemAtPosition(position);
-        LogUtils.info(TAG, relationshipStatusValue);
-        if (relationshipStatusValue.equalsIgnoreCase("unmarried")) {
-            resetNoOfChildrenField(false);
-        } else {
-            resetNoOfChildrenField(true);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    private void resetNoOfChildrenField(boolean isEnabled) {
-        if (!isEnabled) {
-            noOfChildren.setText("0");
-            noOfChildren.setEnabled(false);
-            noOfChildren.setClickable(false);
-        } else {
-            noOfChildren.setEnabled(true);
-            noOfChildren.setClickable(true);
         }
     }
 
@@ -763,7 +735,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateUserDetails() {
-        return validateName() && validateLocation() && validateDOB() && validateMobile();
+        return validateName();
     }
 
     private void setupToolbarItemsColor() {
@@ -799,7 +771,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
             //USer Bio region
-            //if(!aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
+            if(StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
             UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
             userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
             userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
@@ -808,12 +780,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             userSummaryRequest.setScreenName(AppConstants.STRING);
             userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
             userSummaryRequest.setType(AppConstants.SUMMARY);
-            String aboutMeValue = StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) ? aboutMe.getText().toString() : "";
             userSummaryRequest.setSummary(aboutMeValue);
             userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
 
             editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
-            //}
+            }
             //end region
 
             String userFullName = name.getText().toString().trim();
@@ -849,7 +820,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItem().toString());
+
+            if(relationshipStatus.getSelectedItemPosition()>0) {
+                personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItem().toString());
+            }
+
             if (StringUtil.isNotNullOrEmptyString(noOfChildren.getText().toString())) {
                 personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(noOfChildren.getText().toString()));
             }

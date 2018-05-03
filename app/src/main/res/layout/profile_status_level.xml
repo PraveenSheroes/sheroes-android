@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="@dimen/dp_size_10"
+            android:layout_marginBottom="@dimen/dp_size_16"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.06"
             android:textAllCaps="true"
@@ -96,6 +97,7 @@
 
     <TextView
         android:id="@+id/filled_left"
+        android:layout_marginTop="@dimen/dp_size_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/tick"

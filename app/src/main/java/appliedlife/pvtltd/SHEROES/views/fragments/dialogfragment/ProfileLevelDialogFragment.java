@@ -18,7 +18,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashedProgressBar;
 import butterknife.Bind;
@@ -57,6 +56,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     @Bind(R.id.tick)
     ImageView addIcon;
 
+    @Bind(R.id.message)
+    TextView message;
+
     @Bind(R.id.buttonPanel)
     Button nextLevel;
 
@@ -87,11 +89,14 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     private void invalidateUserDetails(ProfileLevelType profileLevelType) {
         String fields = unfilledFields(profileLevelType);
 
+        boolean isAllFieldsDone = false;
+
         if (StringUtil.isNotNullOrEmptyString(fields)) {
             filledLeft.setText(fields);
             CommonUtil.setImageSource(getActivity(), addIcon, R.drawable.ic_add);
             addIcon.setEnabled(true);
             addIcon.setClickable(true);
+            isAllFieldsDone = false;
 
         } else {
             CommonUtil.setImageSource(getActivity(), addIcon, R.drawable.green_tick);
@@ -99,9 +104,10 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             filledLeft.setText(names);
             addIcon.setEnabled(false);
             addIcon.setClickable(false);
+            isAllFieldsDone = true;
         }
 
-        updateDetails(profileLevelType);
+        updateDetails(profileLevelType, isAllFieldsDone);
     }
 
     @OnClick(R.id.cross)
@@ -130,7 +136,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         ((ProfileActivity) getActivity()).navigateToProfileEditing();
     }
 
-    private void updateDetails(ProfileLevelType profileLevelType) {
+    private void updateDetails(ProfileLevelType profileLevelType, boolean isRequiredFieldsFilled) {
 
         switch (profileLevelType) {
             case BEGINNER:
@@ -143,6 +149,16 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.ic_profile_level_intermediate);
                 profileStatusLevel.setText("Intermediate");
                 nextLevel.setText("Next level");
+
+                if (isRequiredFieldsFilled) {
+                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.");
+                    message.setText(mutualCommunityText);
+                } else {
+                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.");
+
+                    message.setText(mutualCommunityText);
+                }
+
                 break;
 
             case COMPLETED:
@@ -150,6 +166,17 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.ic_profile_level_all_star);
                 profileStatusLevel.setText("All star");
                 nextLevel.setText("Got it");
+
+                if(isRequiredFieldsFilled) {
+                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.");
+                    message.setText(mutualCommunityText);
+                    ..
+
+                } else {
+                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.");
+                    message.setText(mutualCommunityText);
+                }
+
                 break;
         }
     }
