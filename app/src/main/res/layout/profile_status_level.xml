@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:minWidth="@dimen/dialog_profile_level_width">
+
+    <RelativeLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_150"
+        android:background="@color/profile_level_header_background"
+        android:paddingEnd="@dimen/dp_size_1"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:paddingRight="@dimen/dp_size_1"
+        android:paddingStart="@dimen/dp_size_16">
+
+        <TextView
+            android:id="@+id/profile_status_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.06"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            tools:text="BEGINNER" />
+
+        <ImageView
+            android:id="@+id/crown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/profile_status_level"
+            android:src="@drawable/crown_icon" />
+
+        <ImageView
+            android:id="@+id/cross"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_dialog_close_dark" />
+
+        <ImageView
+            android:id="@+id/user_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="0dp"
+            android:layout_toLeftOf="@id/cross" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_container"
+        android:fontFamily="sans-serif"
+        android:lineSpacingExtra="6sp"
+        android:padding="@dimen/dp_size_16"
+        android:text="Hey Anupriya! You’re on your way now. Each time you add to your profile, it improves your overall experience on the platform and is likely to get you more followers and faster replies."
+        android:textColor="#878787"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <include
+        android:id="@+id/progress_bar"
+        layout="@layout/profile_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/message"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16" />
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_1"
+        android:layout_below="@id/progress_bar"
+        android:layout_marginBottom="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:background="@color/divider" />
+
+    <ImageView
+        android:id="@+id/tick"
+        android:layout_width="@dimen/dp_size_32"
+        android:layout_height="@dimen/dp_size_32"
+        android:layout_below="@id/divider"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_8" />
+
+
+    <TextView
+        android:id="@+id/filled_left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tick"
+        android:layout_below="@id/divider"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/tick"
+        android:gravity="center_vertical" />
+
+    <Button
+        android:id="@+id/buttonPanel"
+        android:layout_width="@dimen/dp_size_160"
+        android:layout_height="@dimen/dp_size_36"
+        android:layout_below="@+id/filled_left"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_size_24"
+        android:layout_marginTop="@dimen/dp_size_42"
+        android:background="@drawable/border_new_feature"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

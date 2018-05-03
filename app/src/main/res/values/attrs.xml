@@ -134,4 +134,11 @@
     <attr name="selectedMentionTextBackgroundColor"/>
   </declare-styleable>
 
+    <declare-styleable name="DashedProgressBar">
+      <attr name="goalReachedColor" format="color"/>
+      <attr name="unfilledSectionColor" format="color"/>
+      <attr name="barThickness" format="dimension"/>
+    </declare-styleable>
+
+
 </resources>

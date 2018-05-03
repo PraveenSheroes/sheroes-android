@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_size_8"
+    android:gravity="center_vertical">
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.DashedProgressBar
+        android:id="@+id/progressBar2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_20"
+        android:layout_centerVertical="true"
+        app:barThickness="@dimen/dp_size_10" />
+
+    <TextView
+        android:id="@+id/beginner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_level_complete" />
+
+    <TextView
+        android:id="@+id/seprator"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/intermediate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_40"
+        android:layout_marginStart="@dimen/dp_size_40"
+        android:layout_toEndOf="@id/seprator"
+        android:layout_toRightOf="@id/seprator"
+        android:background="@drawable/ic_level_incomplete" />
+
+    <TextView
+        android:id="@+id/expert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_all_level_incomplete" />
+
+</RelativeLayout>

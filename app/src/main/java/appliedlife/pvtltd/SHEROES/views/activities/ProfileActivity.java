@@ -23,6 +23,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -72,7 +73,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -121,10 +121,12 @@ import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashedProgressBar;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileLevelDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -169,7 +171,6 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     private long loggedInUserId = -1;
     private FragmentOpen mFragmentOpen;
     private Fragment mFragment;
-    private UserPostSolrObj mUserPostForCommunity;
     private UserSolrObj mUserSolarObject;
     private int itemPosition;
     boolean isFollowEvent;
@@ -285,6 +286,12 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     @Bind(R.id.iv_mentor_verified)
     ImageView verifiedIcon;
 
+    @Bind(R.id.profile_level)
+    TextView profileLevel;
+
+    @Bind(R.id.progress_bar_holder)
+    ViewGroup progressbarContainer;
+
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
 
@@ -323,6 +330,8 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     @Bind(R.id.view_tool_follow)
     View viewToolTipFollow;
 
+    @Bind(R.id.progressBar2)
+    DashedProgressBar dashedProgressBar;
 
     private boolean isMentorQARefresh = false;
     private PopupWindow popupWindowFollowTooTip;
@@ -438,15 +447,16 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
                 viewFooter.setVisibility(View.VISIBLE);
 
+                progressbarContainer.setVisibility(View.VISIBLE);
+                setProfileLevel();
+                profileLevel.setVisibility(View.VISIBLE);
+                dashedProgressBar.setProgress(mUserSolarObject.getProfileWeighing(), false);
                 //hide menu dots
                 profileToolbarMenu.setVisibility(View.GONE);
 
             } else {
-                //hide menu dots for admin
-                //int adminId = 0;
-                //if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                //    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                //}
+                progressbarContainer.setVisibility(View.GONE);
+                profileLevel.setVisibility(View.GONE);
                 profileToolbarMenu.setVisibility(View.VISIBLE);
 
                 followUnFollowMentor();
@@ -640,6 +650,34 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 .setAspectRatio(1, 1)
                 .setAllowRotation(true)
                 .start(this);
+    }
+
+
+    private void setProfileLevel() {
+        if (mUserSolarObject.getProfileWeighing() > 0 && mUserSolarObject.getProfileWeighing() <= 20) {
+            profileLevel.setText("Profile Strength : Beginner");
+        } else if (mUserSolarObject.getProfileWeighing() > 85 && mUserSolarObject.getProfileWeighing() <= 100) {
+            profileLevel.setText("Profile Strength : All Star");
+        } else {
+            profileLevel.setText("Profile Strength : Intermediate");
+        }
+    }
+
+    @OnClick({R.id.beginner, R.id.intermediate, R.id.expert})
+    protected void  openBiggnerDialog() {
+
+        if(mUserSolarObject == null) return;
+
+        ProfileLevelDialogFragment profileLevelDialogFragment = new ProfileLevelDialogFragment(); //make singleton
+        profileLevelDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+        if (!profileLevelDialogFragment.isVisible() && !mIsDestroyed) {
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(mUserSolarObject);
+            bundle.putParcelable(AppConstants.USER, parcelable);
+            profileLevelDialogFragment.setArguments(bundle);
+            profileLevelDialogFragment.show(getFragmentManager(), ProfileLevelDialogFragment.class.getName());
+        }
     }
 
     private void followUnFollowMentor() {
@@ -993,8 +1031,6 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
-        mUserPostForCommunity = userPostSolrObj;
-        int id = view.getId();
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         setFragment(mFragment);
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
