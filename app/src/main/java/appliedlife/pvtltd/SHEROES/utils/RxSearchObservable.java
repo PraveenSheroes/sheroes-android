@@ -30,18 +30,10 @@ public class RxSearchObservable {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 String searchText=queryToken.getTokenString();
-                subject.onNext(searchText);
+                if(searchText.contains("@")) {
+                    subject.onNext(searchText);
+                }
                 return mvpView.onQueryReceived(queryToken);
-            }
-
-            @Override
-            public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-                return mvpView.onMentionReceived(mentionSpanList, allText);
-            }
-
-            @Override
-            public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-                return mvpView.onSuggestedList(userTagSuggestionsAdapter);
             }
 
             @Override
@@ -66,18 +58,10 @@ public class RxSearchObservable {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 String searchText=queryToken.getTokenString();
-                subject.onNext(searchText);
+                if(searchText.contains("@")) {
+                    subject.onNext(searchText);
+                }
                 return mvpView.onQueryReceived(queryToken);
-            }
-
-            @Override
-            public List<MentionSpan> onMentionReceived(@NonNull List<MentionSpan> mentionSpanList, String allText) {
-                return mvpView.onMentionReceived(mentionSpanList, allText);
-            }
-
-            @Override
-            public UserTagSuggestionsAdapter onSuggestedList(@NonNull UserTagSuggestionsAdapter userTagSuggestionsAdapter) {
-                return mvpView.onSuggestedList(userTagSuggestionsAdapter);
             }
 
             @Override

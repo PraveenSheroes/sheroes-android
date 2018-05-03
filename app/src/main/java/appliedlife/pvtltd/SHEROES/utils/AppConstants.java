@@ -36,6 +36,7 @@ public class AppConstants {
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
     public static final String INAVLID_DATA = "INVALID_DATA";
+    public static final String IS_DEACTIVATED = "IS_DEACTIVATED";
     public static final String COUNTRY_NAME = "India";
     public static final String ERROR = "error";
     public static final String EXTRA_IMAGE = "extraImage";
@@ -420,5 +421,7 @@ public class AppConstants {
 
     public static final int USER_MENTION_HEADER = 1;
     public static final int USER_MENTION_NO_RESULT_FOUND = 0;
+
+    public static final String HTTP_500_ERROR = "HTTP 500 Server Error";
 
 }

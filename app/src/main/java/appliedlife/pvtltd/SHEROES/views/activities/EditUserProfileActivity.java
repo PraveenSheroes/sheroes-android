@@ -22,7 +22,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -698,8 +697,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
         mProgressBar.setVisibility(View.GONE);
-        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
     }
 
     @Override

@@ -151,7 +151,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
                         moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
-                        if (null != loginResponse.getUserSummary()) {
+                        if (getActivity()!=null&&null != loginResponse.getUserSummary()) {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
@@ -162,7 +162,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
-                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                        if(getActivity()!=null)
+                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                         break;
                 }
             } else {
@@ -176,6 +177,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
+                    if(getActivity()!=null)
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     AnalyticsManager.initializeMixpanel(getContext());
@@ -185,7 +187,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
                 } else {
                     LoginManager.getInstance().logOut();
-                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA));
+                    if(getActivity()!=null)
+                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                 }
             }
         }
@@ -348,7 +351,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
                     mProgressDialog = new ProgressDialog(getActivity());
                     mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                    mProgressDialog.setCancelable(false);
+                    mProgressDialog.setCancelable(true);
                     mProgressDialog.show();
                     break;
                 }

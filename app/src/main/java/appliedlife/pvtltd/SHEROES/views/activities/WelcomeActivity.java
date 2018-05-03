@@ -254,7 +254,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             openHomeScreen();
         } else { //Get Branch Details for First Install
             Bundle bundle = getIntent().getExtras();
-            if(bundle!=null && bundle.getBoolean(AppConstants.HIDE_SPLASH_THEME)) {
+            if (bundle != null && bundle.getBoolean(AppConstants.HIDE_SPLASH_THEME)) {
                 setUpView();
             } else {
                 final Branch branch = Branch.getInstance();
@@ -272,7 +272,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                     branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
                                     if (StringUtil.isNotNullOrEmptyString(deepLink)) {
                                         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-                                        SharedPreferences.Editor editor= null;
+                                        SharedPreferences.Editor editor = null;
                                         if (prefs != null) {
                                             editor = prefs.edit();
                                             editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
@@ -419,7 +419,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             bundle.putString(CommunityDetailActivity.TAB_KEY, "");
             bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
             bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
-            if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
+            if (StringUtil.isNotNullOrEmptyString(defaultTab)) {
                 bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
             }
             intent.putExtras(bundle);
@@ -520,17 +520,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     @Override
-    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        switch (errorReason) {
-            case AppConstants.CHECK_NETWORK_CONNECTION:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                break;
-            case AppConstants.HTTP_401_UNAUTHORIZED:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                break;
-            default:
-                showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-        }
+    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
     }
 
     /**
@@ -610,7 +601,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             return;
         }
         doubleBackToExitPressedOnce = true;
-        if(null!=clWelcome) {
+        if (null != clWelcome) {
             Snackbar.make(clWelcome, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
         }
         new Handler().postDelayed(new Runnable() {
@@ -669,7 +660,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        if(mHandler != null && mRunnable != null) {
+        if (mHandler != null && mRunnable != null) {
             mHandler.postDelayed(mRunnable, 10000);
         }
     }
@@ -677,7 +668,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     protected void onPause() {
         super.onPause();
-        if(mHandler != null && mRunnable != null) {
+        if (mHandler != null && mRunnable != null) {
             mHandler.removeCallbacks(mRunnable);
         }
     }
@@ -763,7 +754,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             switch (id) {
                 case CustomSocialDialog.LOGGING_IN_DIALOG: {
 
-                    if(isFinishing()) return;
+                    if (isFinishing()) return;
 
                     mProgressDialog = new ProgressDialog(WelcomeActivity.this);
                     mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
@@ -983,7 +974,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     public void dismissDialog() {
         try {
-            if (mProgressDialog != null&&mProgressDialog.isShowing()) {
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         } catch (IllegalArgumentException e) {
@@ -1108,11 +1099,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     initializeAllDataAfterGCMId();
                     break;
                 default:
+                    onShowErrorDialog(errorMsg, feedParticipationEnum);
 
             }
         }
 
     }
-    
+
 }
 

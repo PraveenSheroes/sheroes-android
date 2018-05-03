@@ -54,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -203,7 +202,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_CREATE_COMMUNITY);
+                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
                 getMvpView().stopProgressBar();
             }
 
@@ -245,7 +244,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -302,6 +301,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         if (mUserPostObj == null) {
             return;
         }
+        getMvpView().startProgressBar();
         CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous,hasMention,mentionSpanList);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
@@ -328,7 +328,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                    .postId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
+                                    .postCommentId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                     .postType(AnalyticsEventType.COMMUNITY.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                     .streamType(CommonUtil.isNotEmpty(mUserPostObj.getStreamType()) ? mUserPostObj.getStreamType() : "")
@@ -443,7 +444,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
                 getMvpView().setData(pos, comment);
@@ -492,7 +493,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
                 getMvpView().setData(pos, comment);
@@ -537,7 +538,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -583,7 +584,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                 mBaseResponseList.set(0, userPostSolrObj);
@@ -627,7 +628,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 mBaseResponseList.set(0, userPostSolrObj);
@@ -686,7 +687,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override
@@ -768,23 +769,19 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     @Override
                     public ObservableSource<SearchUserDataResponse> apply(String query) throws Exception {
                         SearchUserDataRequest searchUserDataRequest = null;
-                        Long communityId = null,postEntityId=null,postAuthorUserId=null;
+                        Long communityId = null, postEntityId = null, postAuthorUserId = null;
                         if (null != userPostSolrObj) {
-                            if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR)
-                            {
-                                communityId=null;
-                            }else
-                            {
+                            if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                                communityId = null;
+                            } else {
                                 communityId = userPostSolrObj.getCommunityId();
                             }
-                            postEntityId=userPostSolrObj.getEntityOrParticipantId();
-                            postAuthorUserId=userPostSolrObj.getAuthorId();
+                            postEntityId = userPostSolrObj.getEntityOrParticipantId();
+                            postAuthorUserId = userPostSolrObj.getAuthorId();
                         }
-                        if(query.length()==1)
-                        {
+                        if (query.length() == 1) {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, postEntityId, postAuthorUserId, "COMMENT");
-                        }else
-                        {
+                        } else {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest(query.trim().replace("@", ""), communityId, postEntityId, postAuthorUserId, "COMMENT");
                         }
                         if (searchUserDataRequest == null) {
@@ -796,23 +793,44 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .compose(this.<SearchUserDataResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<SearchUserDataResponse>() {
+                .subscribe(new DisposableObserver<SearchUserDataResponse>() {
+
                     @Override
-                    public void accept(SearchUserDataResponse searchUserDataResponse) throws Exception {
-                        getMvpView().stopProgressBar();
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
+                    }
+
+                    @Override
+                    public void onNext(SearchUserDataResponse searchUserDataResponse) {
                         if (null != searchUserDataResponse) {
                             if (searchUserDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                                 getMvpView().userMentionSuggestionResponse(searchUserDataResponse, null);
                             } else {
-                                getMvpView().showError("No user found", ERROR_CREATE_COMMUNITY);
+                                getMvpView().showError("No user found", ERROR_COMMENT_REACTION);
                             }
                         }
                     }
+
                 });
+
     }
 
     private Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest);
+        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
+                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
+                    @Override
+                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
+                        return searchUserDataResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
@@ -838,7 +856,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
                         getMvpView().stopProgressBar();
                     }
 
@@ -864,7 +882,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
             }
 
             @Override

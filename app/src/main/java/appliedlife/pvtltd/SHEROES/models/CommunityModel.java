@@ -149,7 +149,16 @@ public class CommunityModel {
     }
     //region Private Helper methods
     public Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest);
+         return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
+                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
+                    @Override
+                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
+                        return searchUserDataResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
     }
 
 }

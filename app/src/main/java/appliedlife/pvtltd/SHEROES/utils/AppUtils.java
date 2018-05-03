@@ -1871,7 +1871,7 @@ public class AppUtils {
         }
         /*User tagging fields*/
             if(StringUtil.isNotEmptyCollection(userMentionList)) {
-                communityPostCreateRequest.setHasMentions(hasMention);
+                communityPostCreateRequest.setHasMentions(true);
                 communityPostCreateRequest.setUserMentionList(userMentionList);
             }else {
                 communityPostCreateRequest.setHasMentions(false);
@@ -1913,7 +1913,7 @@ public class AppUtils {
         }
         /*User tagging fields*/
         if(StringUtil.isNotEmptyCollection(userMentionList)) {
-            challengePostCreateRequest.setHasMentions(hasMention);
+            challengePostCreateRequest.setHasMentions(true);
             challengePostCreateRequest.setUserMentionList(userMentionList);
         }else {
             challengePostCreateRequest.setHasMentions(false);
@@ -1958,7 +1958,7 @@ public class AppUtils {
         }
               /*User tagging fields*/
         if(StringUtil.isNotEmptyCollection(userMentionList)) {
-            communityPostCreateRequest.setHasMentions(hasMention);
+            communityPostCreateRequest.setHasMentions(true);
             communityPostCreateRequest.setUserMentionList(userMentionList);
         }else {
             communityPostCreateRequest.setHasMentions(false);
@@ -2041,7 +2041,7 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         /*User mention*/
         if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
-            commentReactionRequestPojo.setHasMentions(hasMention);
+            commentReactionRequestPojo.setHasMentions(true);
             commentReactionRequestPojo.setUserMentionList(mentionSpanList);
         }else {
             commentReactionRequestPojo.setHasMentions(false);
@@ -2065,7 +2065,7 @@ public class AppUtils {
         commentReactionRequestPojo.setParticipationId(participationId);
         /*User mention*/
         if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
-            commentReactionRequestPojo.setHasMentions(hasMention);
+            commentReactionRequestPojo.setHasMentions(true);
             commentReactionRequestPojo.setUserMentionList(mentionSpanList);
         }else {
             commentReactionRequestPojo.setHasMentions(false);

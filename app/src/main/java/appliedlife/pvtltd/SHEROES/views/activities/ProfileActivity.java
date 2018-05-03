@@ -148,7 +148,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements  HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
@@ -485,7 +485,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
         invalidateProfileButton();
 
-        if(isOwnProfile) {
+        if (isOwnProfile) {
             verifiedIcon.setVisibility(View.GONE);
             editProfileOverlayContainer.setVisibility(View.GONE);
             editIcon.setVisibility(View.VISIBLE);
@@ -534,7 +534,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         }
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
-            if(!isFinishing()) {
+            if (!isFinishing()) {
                 String authorThumborUrl = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), profileSize, profileSize);
                 mProfileIcon.setCircularImage(true);
                 mProfileIcon.bindImage(authorThumborUrl);
@@ -616,11 +616,11 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
             ivArrow.setLayoutParams(imageParams);
             final LinearLayout llToolTipBg = popupFollowToolTip.findViewById(R.id.ll_tool_tip_bg);
             RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, ProfileActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
-            llParams.setMargins(CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0,0,0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            llParams.setMargins(CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
             llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
             llToolTipBg.setLayoutParams(llParams);
-            final TextView tvGotIt =  popupFollowToolTip.findViewById(R.id.got_it);
-            final TextView tvTitle =  popupFollowToolTip.findViewById(R.id.title);
+            final TextView tvGotIt = popupFollowToolTip.findViewById(R.id.got_it);
+            final TextView tvTitle = popupFollowToolTip.findViewById(R.id.title);
             tvTitle.setText(getString(R.string.tool_tip_follower));
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -704,9 +704,9 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         secondImageLayout.weight = 1;
         if (isMentor) {
             if (CommonUtil.forGivenCountOnly(AppConstants.ASK_QUESTION_SESSION_SHARE_PREF, AppConstants.ASK_QUESTION_SESSION) == AppConstants.ASK_QUESTION_SESSION) {
-               if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
+                if (CommonUtil.ensureFirstTime(AppConstants.ASK_QUESTION_SHARE_PREF)) {
                     toolTipForAskQuestion();
-               }
+                }
             }
         }
         if (CommonUtil.ensureFirstTime(AppConstants.FOLLOWER_SHARE_PREF)) {
@@ -720,7 +720,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
-            if(isOwnProfile) {
+            if (isOwnProfile) {
                 createPost.setVisibility(View.VISIBLE);
             } else {
                 createPost.setVisibility(View.GONE);
@@ -776,17 +776,21 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @OnClick(R.id.fab_post)
     public void createNewPost() {
-
-        if (mFeedDetail instanceof UserSolrObj) {
-            UserSolrObj userPostSolrObj = (UserSolrObj) mFeedDetail;
+        /*if (mFeedDetail instanceof UserSolrObj) {
+            UserSolrObj userSolrObj = (UserSolrObj) mFeedDetail;
             CommunityPost mentorPost = new CommunityPost();
             mentorPost.community = new Community();
-            mentorPost.community.id = userPostSolrObj.getSolrIgnoreMentorCommunityId();
-            mentorPost.community.name = userPostSolrObj.getNameOrTitle();
+            mentorPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
+            mentorPost.community.name =userSolrObj.getNameOrTitle();
             mentorPost.isEdit = false;
-            mentorPost.isCompanyAdmin =  userPostSolrObj.getCompanyAdmin();
+            mentorPost.isCompanyAdmin =  userSolrObj.getCompanyAdmin();
             CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
-        }
+        }*/
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+
     }
 
     @OnClick(R.id.li_follower)
@@ -802,7 +806,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
 
-        if(StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
+        if (StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
             FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWERS, null);
         }
     }
@@ -818,7 +822,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                         .isOwnProfile(isOwnProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
-        if(StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
+        if (StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
             FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING, null);
         }
     }
@@ -878,7 +882,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 mentorPost.community.name = mUserSolarObject.getNameOrTitle();
                 mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                 mentorPost.isEdit = false;
-                mentorPost.isCompanyAdmin =  mUserSolarObject.getCompanyAdmin();
+                mentorPost.isCompanyAdmin = mUserSolarObject.getCompanyAdmin();
                 CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         }
@@ -904,7 +908,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @OnClick(R.id.iv_mentor_full_view_icon)
     public void onImageEditClicked() {
-        if(isOwnProfile) {
+        if (isOwnProfile) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(mUserPreference.get().getUserSummary().getUserId()))
@@ -966,11 +970,11 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof UserPostFragment) {
-        if (tabName.equalsIgnoreCase("Profile - Posts") && isOwnProfile) {
-            createPost.setVisibility(View.VISIBLE);
-        } else {
-            createPost.setVisibility(View.GONE);
-        }
+            if (tabName.equalsIgnoreCase("Profile - Posts") && isOwnProfile) {
+                createPost.setVisibility(View.VISIBLE);
+            } else {
+                createPost.setVisibility(View.GONE);
+            }
         } else if (fragment instanceof MentorQADetailFragment) {
             createPost.setVisibility(View.GONE);
         } else {
@@ -1007,7 +1011,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     private void onActivtyResultOfParentRefresh() {
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
-        if(mUserSolarObject!=null){
+        if (mUserSolarObject != null) {
             mUserSolarObject.currentItemPosition = itemPosition;
             Parcelable parcelableMentorDetail = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
@@ -1094,6 +1098,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
         loaderGif.setVisibility(View.GONE);
     }
 
@@ -1128,7 +1133,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 setProfileNameData(mUserSolarObject);
             }
 
-            if(isMentor) {
+            if (isMentor) {
                 loaderGif.setVisibility(View.GONE);
             }
         }
@@ -1146,8 +1151,8 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
-        if(spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            if(!spamResponse.isSpamAlreadyReported()) {
+        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+            if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
@@ -1202,7 +1207,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                 final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
                 RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                if(isUserOrChampionDetailsFilled()) {
+                if (isUserOrChampionDetailsFilled()) {
                     imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(150, ProfileActivity.this), 0);
                 } else {
                     imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(18, ProfileActivity.this), 0);
@@ -1237,7 +1242,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getPostShortBranchUrls())) {
             branchPostDeepLink = mUserSolarObject.getPostShortBranchUrls();
         } else {
-            if(isMentor) {
+            if (isMentor) {
                 branchPostDeepLink = mUserSolarObject.getMentorDeepLinkUrl();
             } else {
                 branchPostDeepLink = mUserSolarObject.getDeepLinkUrl();
@@ -1361,7 +1366,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
-        }  else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+        } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
         } else if (baseResponse instanceof FeedDetail) {
@@ -1390,7 +1395,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                     //  refetchCommunity()
                     break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
-                    if(null!=mViewPagerAdapter) {
+                    if (null != mViewPagerAdapter) {
                         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
                         if (AppUtils.isFragmentUIActive(fragment)) {
                             if (fragment instanceof UserPostFragment) {
@@ -1400,7 +1405,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                     }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    if(null!=mViewPagerAdapter) {
+                    if (null != mViewPagerAdapter) {
                         Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
                         if (AppUtils.isFragmentUIActive(activeFragment)) {
                             if (activeFragment instanceof MentorQADetailFragment) {
@@ -1411,27 +1416,30 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                     break;
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
+                    FeedDetail feedDetailObj = null;
                     if (AppUtils.isFragmentUIActive(mFragment)) {
                         Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
                         if (parcelable != null) {
                             UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
                             isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                            mFeedDetail = userPostSolrObj;
+                            feedDetailObj = userPostSolrObj;
                         }
-                        if (isPostDeleted) {
-                            if (mFragment instanceof UserPostFragment) {
-                                ((UserPostFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                            } else {
-                                ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                        if (null != feedDetailObj) {
+                            if (isPostDeleted) {
+                                if (mFragment instanceof UserPostFragment) {
+                                    ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
+                                } else {
+                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
-                            }
-                        } else {
-                            if (mFragment instanceof UserPostFragment) {
-                                ((UserPostFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
+                                }
                             } else {
-                                ((MentorQADetailFragment) mFragment).commentListRefresh(mFeedDetail, FeedParticipationEnum.COMMENT_REACTION);
-                                isMentorQARefresh = true;
-                                mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
+                                if (mFragment instanceof UserPostFragment) {
+                                    ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
+                                } else {
+                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
+                                    isMentorQARefresh = true;
+                                    mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
+                                }
                             }
                         }
                     }
@@ -1484,7 +1492,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
             LoginResponse userDetailsResponse = null;
-            if(mUserPreference!=null && mUserPreference.isSet()){
+            if (mUserPreference != null && mUserPreference.isSet()) {
                 userDetailsResponse = mUserPreference.get();
             }
             if (userDetailsResponse != null) {
@@ -1551,23 +1559,23 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     }
 
     private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
-        if(StringUtil.isNotNullOrEmptyString(name)) {
+        if (StringUtil.isNotNullOrEmptyString(name)) {
             name = CommonUtil.camelCaseString(name);
             userName.setText(name);
             tvMentorToolbarName.setText(name);
         }
 
-        if(StringUtil.isNotNullOrEmptyString(location)) {
+        if (StringUtil.isNotNullOrEmptyString(location)) {
             tvLoc.setText(location);
         }
 
-        if(StringUtil.isNotNullOrEmptyString(userBio)) {
+        if (StringUtil.isNotNullOrEmptyString(userBio)) {
             userDescription.setText(userBio);
             mUserSolarObject.setDescription(userBio);
         }
     }
 
-    public void refreshImageView(String imageUrl){
+    public void refreshImageView(String imageUrl) {
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
             String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, profileSize, profileSize);
@@ -1612,7 +1620,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
 
     public void setProfileTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCount) {
-        if(profileTopSectionCount.getStatus().equals(AppConstants.SUCCESS)) {
+        if (profileTopSectionCount.getStatus().equals(AppConstants.SUCCESS)) {
             setUsersPostCount(profileTopSectionCount.getPostCount());
             setUsersFollowerCount(profileTopSectionCount.getFollowerCount());
             setUsersFollowingCount(profileTopSectionCount.getFollowingCount());
@@ -1825,7 +1833,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
     }
 
     private void invalidateProfileButton() {
-        if(isOwnProfile) {
+        if (isOwnProfile) {
             shareProfile.setVisibility(View.VISIBLE);
             if (isUserOrChampionDetailsFilled()) {
 
@@ -1882,7 +1890,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserSolrObj userSolrObj) { //Add other type as parameterised object
 
-        if(ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
+        if (ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
 
         SpamReasons spamReasons;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {
@@ -1892,7 +1900,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
             spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
         }
 
-        if(spamReasons == null) return;
+        if (spamReasons == null) return;
 
         final Dialog spamReasonsDialog = new Dialog(ProfileActivity.this);
         spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1910,16 +1918,16 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
 
         final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
-        List<Spam> spamList =null;
+        List<Spam> spamList = null;
         SpamPostRequest spamRequest = null;
-        if(spamContentType == SpamContentType.USER) {
+        if (spamContentType == SpamContentType.USER) {
             spamList = spamReasons.getUserTypeSpams();
             spamRequest = SpamUtil.createProfileSpamByUser(userSolrObj, loggedInUserId);
         }
 
-        if(spamRequest == null || spamList == null) return;
+        if (spamRequest == null || spamList == null) return;
 
-        SpamUtil.addRadioToView(ProfileActivity.this, spamList , spamOptions);
+        SpamUtil.addRadioToView(ProfileActivity.this, spamList, spamOptions);
 
         Button submit = spamReasonsDialog.findViewById(R.id.submit);
         final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
@@ -1928,7 +1936,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+                if (spamOptions.getCheckedRadioButtonId() != -1) {
 
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
@@ -1939,12 +1947,12 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                         if (spam.getLabel().equalsIgnoreCase("Others")) {
                             if (reason.getVisibility() == View.VISIBLE) {
 
-                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
-                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     profilePresenter.reportSpamPostOrComment(finalSpamRequest); //submit
                                     spamReasonsDialog.dismiss();
 
-                                    if(spamContentType == SpamContentType.USER) {
+                                    if (spamContentType == SpamContentType.USER) {
                                         onProfileReported(userSolrObj);   //report the profile
                                     }
                                 } else {
@@ -1959,7 +1967,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                             profilePresenter.reportSpamPostOrComment(finalSpamRequest);  //submit request
                             spamReasonsDialog.dismiss();
 
-                            if(spamContentType == SpamContentType.USER) {
+                            if (spamContentType == SpamContentType.USER) {
                                 onProfileReported(userSolrObj);   //report the profile
                             }
                         }
@@ -1978,7 +1986,7 @@ public class ProfileActivity extends BaseActivity implements  HomeView, ProfileV
                         .name(userSolrObj.getNameOrTitle())
                         .isMentor(userSolrObj.isAuthorMentor())
                         .build();
-        AnalyticsManager.trackEvent(Event.PROFILE_REPORTED,getScreenName(), properties);
+        AnalyticsManager.trackEvent(Event.PROFILE_REPORTED, getScreenName(), properties);
     }
 
 }

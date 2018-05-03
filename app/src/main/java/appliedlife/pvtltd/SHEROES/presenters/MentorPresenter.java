@@ -56,10 +56,6 @@ public class MentorPresenter extends BasePresenter<MentorView> {
 
     }
 
-    public void getMasterDataToPresenter() {
-        super.getMasterDataToAllPresenter(mSheroesApplication, mMasterDataModel, mUserPreferenceMasterData);
-    }
-
     @Override
     public void detachView() {
         super.detachView();
@@ -87,7 +83,7 @@ public class MentorPresenter extends BasePresenter<MentorView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
