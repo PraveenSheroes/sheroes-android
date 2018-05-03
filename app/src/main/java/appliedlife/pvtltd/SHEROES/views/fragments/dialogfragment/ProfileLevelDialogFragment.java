@@ -170,7 +170,6 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 if(isRequiredFieldsFilled) {
                     String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.");
                     message.setText(mutualCommunityText);
-                    ..
 
                 } else {
                     String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.");
