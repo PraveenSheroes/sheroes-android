@@ -35,7 +35,6 @@ public class DashedProgressBar extends View {
 
     private void init(AttributeSet attrs) {
         progressPaint = new Paint();
-        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.DashedProgressBar, 0, 0);
         try {
@@ -57,27 +56,28 @@ public class DashedProgressBar extends View {
         int progressEndX = (int) (getWidth() * progress / 100f);
 
         // draw the filled portion of the bar
+        progressPaint.reset();
+        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         progressPaint.setStrokeWidth(barThickness);
         int color = R.color.dark_green;
-
         progressPaint.setPathEffect(effects);
-        if (progress <= progressEndX) {
-            // horizontal
-            progressPaint.setColor(ContextCompat.getColor(getContext(), color));
-            path.moveTo(0, halfHeight);
-            path.lineTo(progressEndX, halfHeight);
-            canvas.drawPath(path, progressPaint);
 
-            path.reset();
-            color = R.color.progress_unfilled;
-            progressPaint.setColor(ContextCompat.getColor(getContext(), color));
-            progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-            progressPaint.setPathEffect(effects);
+        // horizontal
+        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
+        path.moveTo(0, halfHeight);
+        path.lineTo(progressEndX, halfHeight);
+        canvas.drawPath(path, progressPaint);
 
-            path.moveTo(progressEndX, halfHeight);
-            path.lineTo(getWidth(), halfHeight);
-            canvas.drawPath(path, progressPaint);
-        }
+        path.reset();
+        color = R.color.progress_unfilled;
+        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
+        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        progressPaint.setPathEffect(effects);
+
+        path.moveTo(progressEndX, halfHeight);
+        path.lineTo(getWidth(), halfHeight);
+        canvas.drawPath(path, progressPaint);
+
     }
 
     @Override

@@ -30,7 +30,7 @@ import butterknife.OnClick;
 
 public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
-    enum ProfileLevelType {
+    public enum ProfileLevelType {
         BEGINNER, INTERMEDIATE, COMPLETED
     }
 
@@ -38,7 +38,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     private String mIntermediateFields[] = {"Location", "Mobile Number", "Bio"};
     private String mCompletedFields[] = {"Profile Pic", "DOB", "Relationship Status"};
 
-    @Bind(R.id.progressBar2)
+    @Bind(R.id.dashed_progressbar)
     DashedProgressBar dashedProgressBar;
 
     @Bind(R.id.profile_status_level)
@@ -62,6 +62,15 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     @Bind(R.id.buttonPanel)
     Button nextLevel;
 
+    @Bind(R.id.beginner)
+    TextView beginnerTick;
+
+    @Bind(R.id.intermediate)
+    TextView intermediateTick;
+
+    @Bind(R.id.expert)
+    TextView allStarTick;
+
     private UserSolrObj mUserMentorObj;
     private ProfileLevelType profileLevelType;
 
@@ -76,9 +85,18 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             mUserMentorObj = Parcels.unwrap(parcelable);
         }
 
+        if (getArguments() != null && getArguments().getSerializable("PROFILE_LEVEL") != null) {
+            profileLevelType = (ProfileLevelType) getArguments().getSerializable("PROFILE_LEVEL");
+        } else {
+            if (mUserMentorObj != null) {
+                profileLevelType = userLevel(mUserMentorObj);
+            }
+        }
+
         if (mUserMentorObj != null) {
-            profileLevelType = userLevel(mUserMentorObj);
             dashedProgressBar.setProgress(mUserMentorObj.getProfileWeighing(), false);
+
+            invalidateProfileProgressBar(mUserMentorObj.getProfileWeighing());
 
             invalidateUserDetails(profileLevelType);
         }
@@ -86,10 +104,40 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         return view;
     }
 
+    private void invalidateProfileProgressBar(int progressPercentage) {
+        if (progressPercentage > 0 && progressPercentage <= 20) {
+            if (mUserMentorObj.getProfileWeighing() >= 20) {
+                beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            } else {
+                beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            }
+            intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+
+        } else if (progressPercentage > 85 && progressPercentage <= 100) {
+            if (mUserMentorObj.getProfileWeighing() >= 85) {
+                allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
+            } else {
+                allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            }
+            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+
+        } else {
+            if (mUserMentorObj.getProfileWeighing() >= 60) {
+                intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            } else {
+                intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            }
+            allStarTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+        }
+    }
+
     private void invalidateUserDetails(ProfileLevelType profileLevelType) {
         String fields = unfilledFields(profileLevelType);
 
-        boolean isAllFieldsDone = false;
+        boolean isAllFieldsDone;
 
         if (StringUtil.isNotNullOrEmptyString(fields)) {
             filledLeft.setText(fields);
@@ -143,6 +191,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 crownIcon.setVisibility(View.VISIBLE);
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.profile_level_beginner_user);
                 profileStatusLevel.setText("Beginner");
+                nextLevel.setText("Next level");
                 break;
             case INTERMEDIATE:
                 crownIcon.setVisibility(View.VISIBLE);
@@ -222,20 +271,22 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         }
         String unfilledSections = mUserMentorObj.getUnfilledProfileFields();
 
-        int length = options.length;
-        for (int i = 0; i < length; i++) {
+        if(StringUtil.isNotNullOrEmptyString(unfilledSections)) {
+            int length = options.length;
+            for (int i = 0; i < length; i++) {
 
-            String name = options[i];
-            if (unfilledSections.contains(name)) {
-                if (i == 0) {
-                    message.append("Add");
-                    message.append(AppConstants.SPACE);
-                }
-                message.append(name);
+                String name = options[i];
+                if (unfilledSections.contains(name)) {
+                    if (i == 0) {
+                        message.append("Add");
+                        message.append(AppConstants.SPACE);
+                    }
+                    message.append(name);
 
-                if (i < length - 1) {
-                    message.append(AppConstants.COMMA);
-                    message.append(AppConstants.SPACE);
+                    if (i < length - 1) {
+                        message.append(AppConstants.COMMA);
+                        message.append(AppConstants.SPACE);
+                    }
                 }
             }
         }

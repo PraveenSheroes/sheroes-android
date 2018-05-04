@@ -295,6 +295,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
 
+    @Bind(R.id.beginner)
+    TextView beginnerTick;
+
+    @Bind(R.id.intermediate)
+    TextView intermediateTick;
+
+    @Bind(R.id.expert)
+    TextView allStarTick;
+
     @Bind(R.id.fab_post)
     FloatingActionButton createPost;
 
@@ -330,7 +339,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.view_tool_follow)
     View viewToolTipFollow;
 
-    @Bind(R.id.progressBar2)
+    @Bind(R.id.dashed_progressbar)
     DashedProgressBar dashedProgressBar;
 
     private boolean isMentorQARefresh = false;
@@ -656,17 +665,61 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private void setProfileLevel() {
         if (mUserSolarObject.getProfileWeighing() > 0 && mUserSolarObject.getProfileWeighing() <= 20) {
             profileLevel.setText("Profile Strength : Beginner");
+
+            if (mUserSolarObject.getProfileWeighing() == 20) {
+                beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            } else {
+                beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            }
+            intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+
         } else if (mUserSolarObject.getProfileWeighing() > 85 && mUserSolarObject.getProfileWeighing() <= 100) {
             profileLevel.setText("Profile Strength : All Star");
+
+            if (mUserSolarObject.getProfileWeighing() > 85) {
+                allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
+            } else {
+                allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            }
+            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+
         } else {
             profileLevel.setText("Profile Strength : Intermediate");
+
+            if (mUserSolarObject.getProfileWeighing() >= 60) {
+                intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            } else {
+                intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            }
+            allStarTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+
         }
     }
 
-    @OnClick({R.id.beginner, R.id.intermediate, R.id.expert})
-    protected void  openBiggnerDialog() {
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        openProfileProfileLevelDialog(ProfileLevelDialogFragment.ProfileLevelType.BEGINNER);
+    }
 
-        if(mUserSolarObject == null) return;
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        openProfileProfileLevelDialog(ProfileLevelDialogFragment.ProfileLevelType.INTERMEDIATE);
+    }
+
+
+    @OnClick(R.id.expert)
+    protected void openAllStarProgressDialog() {
+        openProfileProfileLevelDialog(ProfileLevelDialogFragment.ProfileLevelType.COMPLETED);
+    }
+
+
+    private void openProfileProfileLevelDialog(ProfileLevelDialogFragment.ProfileLevelType profileLevelType) {
+
+        if (mUserSolarObject == null) return;
 
         ProfileLevelDialogFragment profileLevelDialogFragment = new ProfileLevelDialogFragment(); //make singleton
         profileLevelDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
@@ -675,6 +728,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
+            bundle.putSerializable("PROFILE_LEVEL", profileLevelType);
             profileLevelDialogFragment.setArguments(bundle);
             profileLevelDialogFragment.show(getFragmentManager(), ProfileLevelDialogFragment.class.getName());
         }
@@ -1386,7 +1440,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
-                    refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"), bundle.getString("BIO"), bundle.getString("IMAGE_URL"));
+                    refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"), bundle.getString("BIO"), bundle.getString("IMAGE_URL"),
+                            bundle.getString("FILLED_FIELDS"), bundle.getString("UNFILLED_FIELDS"), bundle.getInt("PROGRESSBAR_WEIGHT"));
                 }
             }
 
@@ -1499,6 +1554,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 try {
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
+                        //update progress
+
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
@@ -1558,7 +1615,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
+    private void refreshUserDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, int progressPercentage) {
         if (StringUtil.isNotNullOrEmptyString(name)) {
             name = CommonUtil.camelCaseString(name);
             userName.setText(name);
@@ -1573,6 +1630,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             userDescription.setText(userBio);
             mUserSolarObject.setDescription(userBio);
         }
+
+        if(progressPercentage !=-1) {
+            mUserSolarObject.setProfileWeighing(progressPercentage);
+            dashedProgressBar.setProgress(progressPercentage, false);
+        }
+        mUserSolarObject.setFilledProfileFields(filledFields);
+        mUserSolarObject.setUnfilledProfileFields(unfilledFields);
+
     }
 
     public void refreshImageView(String imageUrl) {

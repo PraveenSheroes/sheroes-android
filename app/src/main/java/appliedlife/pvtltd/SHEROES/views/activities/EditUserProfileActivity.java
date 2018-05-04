@@ -135,6 +135,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Bind(R.id.et_full_name_container)
     TextInputLayout fullNameContainer;
 
+    @Bind(R.id.et_about_me_container)
+    TextInputLayout bioContainer;
+
+
     @Bind(R.id.et_mobile_container)
     TextInputLayout mobileContainer;
 
@@ -176,6 +180,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @BindDimen(R.dimen.dp_size_80)
     int authorProfileSize;
+
+
+    private int profileProgress = -1;
+    private String filledDetails ;
+    private String unfilledDetails;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -397,6 +406,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             bundle.putString("BIO", summary.getUserBO().getUserSummary());
             bundle.putString("LOCATION", summary.getUserBO().getCityMaster());
             bundle.putString("IMAGE_URL", summary.getPhotoUrl());
+
+            bundle.putInt("PROGRESSBAR_WEIGHT", profileProgress);
+            bundle.putString("UNFILLED_FIELDS", unfilledDetails);
+            bundle.putString("FILLED_FIELDS", filledDetails);
+
             intent.putExtras(bundle);
             setResult(AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE, intent);
         }
@@ -709,33 +723,32 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         return true;
     }
 
-    private boolean validateDOB() {
-        if (!StringUtil.isNotNullOrEmptyString(dateOfBirth.getText().toString())) {
-            dateOfBirth.setError("Please enter date of birth");
-            requestFocus(dateOfBirth);
-            return false;
-        } else {
-            dateOfBirth.setError(null);
-        }
-        scrollFragmentEdit.scrollTo(0, dateOfBirth.getBottom());
-        return true;
-    }
-
     private boolean validateMobile() {
-
-        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) || mobileNumber.getText().length() < 10) {
-            mobileContainer.setError("Please enter valid mobile number");
+        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
+            mobileContainer.setError("Please enter your mobile number");
             requestFocus(mobileNumber);
             return false;
         } else {
             mobileContainer.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, mobileContainer.getBottom());
+        scrollFragmentEdit.scrollTo(0, mobileNumber.getBottom());
+        return true;
+    }
+
+    private boolean validateBio() {
+        if (!StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString())) {
+            bioContainer.setError("Please write something about you");
+            requestFocus(aboutMe);
+            return false;
+        } else {
+            bioContainer.setError(null);
+        }
+        scrollFragmentEdit.scrollTo(0, bioContainer.getBottom());
         return true;
     }
 
     private boolean validateUserDetails() {
-        return validateName();
+        return validateName() && validateBio() && validateLocation() && validateMobile();
     }
 
     private void setupToolbarItemsColor() {
@@ -770,8 +783,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
-            //USer Bio region
-            if(StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
+            //User Bio region
+            if(StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString())) {
             UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
             userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
             userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
@@ -780,7 +793,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             userSummaryRequest.setScreenName(AppConstants.STRING);
             userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
             userSummaryRequest.setType(AppConstants.SUMMARY);
-            userSummaryRequest.setSummary(aboutMeValue);
+            userSummaryRequest.setSummary(aboutMe.getText().toString());
             userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
 
             editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
@@ -841,6 +854,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             if (userDetailsResponse != null) {
 
                 try {
+                    //update the progressbar weightage and filled , unfilled fields
+                    filledDetails = boardingDataResponse.getFeedDetails().getFilledProfileFields();
+                    unfilledDetails = boardingDataResponse.getFeedDetails().getUnfilledProfileFields();
+                    profileProgress = boardingDataResponse.getFeedDetails().getProfileWeighing();
+
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
                     String userName = name.getText().toString().trim();
 
@@ -887,8 +905,15 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
             if (userDetailsResponse != null) {
                 try {
+
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
+
+                        //update the progressbar weightage and filled , unfilled fields
+                        filledDetails = boardingDataResponse.getFeedDetails().getFilledProfileFields();
+                        unfilledDetails = boardingDataResponse.getFeedDetails().getUnfilledProfileFields();
+                        profileProgress = boardingDataResponse.getFeedDetails().getProfileWeighing();
+
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
