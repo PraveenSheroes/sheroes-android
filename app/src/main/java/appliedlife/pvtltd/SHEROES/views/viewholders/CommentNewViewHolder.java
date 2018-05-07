@@ -292,7 +292,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     }
                 };
 
-                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 < spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <=spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
                     int start = mentionSpan.getMention().getStartIndex() + i;
                     int end = mentionSpan.getMention().getEndIndex() + i;
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
