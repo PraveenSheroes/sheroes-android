@@ -166,6 +166,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private Uri mImageCaptureUri;
 
     private Dialog dialog = null;
+    private ProfileLevelDialogFragment profileLevelDialogFragment = null;
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
     private long loggedInUserId = -1;
@@ -433,6 +434,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (dialog != null) {
             dialog.dismiss();
         }
+
+        if(profileLevelDialogFragment!=null && profileLevelDialogFragment.isVisible()) {
+            profileLevelDialogFragment.dismiss();
+        }
         super.onStop();
     }
 
@@ -459,6 +464,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 progressbarContainer.setVisibility(View.VISIBLE);
                 setProfileLevel();
                 profileLevel.setVisibility(View.VISIBLE);
+
+                dashedProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 dashedProgressBar.setProgress(mUserSolarObject.getProfileWeighing(), false);
                 //hide menu dots
                 profileToolbarMenu.setVisibility(View.GONE);
@@ -664,7 +671,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private void setProfileLevel() {
         if (mUserSolarObject.getProfileWeighing() > 0 && mUserSolarObject.getProfileWeighing() <= 20) {
-            profileLevel.setText("Profile Strength : Beginner");
+            profileLevel.setText(R.string.progress_status_beginner);
 
             if (mUserSolarObject.getProfileWeighing() == 20) {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
@@ -675,7 +682,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
 
         } else if (mUserSolarObject.getProfileWeighing() > 85 && mUserSolarObject.getProfileWeighing() <= 100) {
-            profileLevel.setText("Profile Strength : All Star");
+            profileLevel.setText(R.string.progress_status_all_star);
 
             if (mUserSolarObject.getProfileWeighing() > 85) {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
@@ -686,7 +693,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
 
         } else {
-            profileLevel.setText("Profile Strength : Intermediate");
+            profileLevel.setText(R.string.progress_level_status_intermediate);
 
             if (mUserSolarObject.getProfileWeighing() >= 60) {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
@@ -721,14 +728,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (mUserSolarObject == null) return;
 
-        ProfileLevelDialogFragment profileLevelDialogFragment = new ProfileLevelDialogFragment(); //make singleton
+        if(profileLevelDialogFragment!=null && profileLevelDialogFragment.isVisible()) {
+            profileLevelDialogFragment.dismiss();
+        }
+
+        profileLevelDialogFragment = new ProfileLevelDialogFragment();
         profileLevelDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
         if (!profileLevelDialogFragment.isVisible() && !mIsDestroyed) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
-            bundle.putSerializable("PROFILE_LEVEL", profileLevelType);
+            bundle.putSerializable(ProfileLevelDialogFragment.PROFILE_LEVEL, profileLevelType);
             profileLevelDialogFragment.setArguments(bundle);
             profileLevelDialogFragment.show(getFragmentManager(), ProfileLevelDialogFragment.class.getName());
         }
@@ -1554,7 +1565,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 try {
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
-                        //update progress
+
+                        //update progress bar
+                        if(mUserSolarObject!=null) {
+                            mUserSolarObject.setFilledProfileFields(boardingDataResponse.getFeedDetails().getFilledProfileFields());
+                            mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getFeedDetails().getUnfilledProfileFields());
+                            mUserSolarObject.setProfileWeighing(boardingDataResponse.getFeedDetails().getProfileWeighing());
+
+                            dashedProgressBar.setProgress(boardingDataResponse.getFeedDetails().getProfileWeighing(), false);
+                        }
 
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());

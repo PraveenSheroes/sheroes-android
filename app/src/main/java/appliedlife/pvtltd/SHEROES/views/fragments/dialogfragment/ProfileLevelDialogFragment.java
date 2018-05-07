@@ -26,9 +26,17 @@ import butterknife.OnClick;
 
 /**
  * Created by ravi on 02/05/18.
+ * Dialog to display the different profile completion level
  */
 
 public class ProfileLevelDialogFragment extends BaseDialogFragment {
+
+    public static final String PROFILE_LEVEL = "PROFILE_LEVEL";
+    private static final int BEGINNER_START_LIMIT = 0;
+    private static final int BEGINNER_END_LIMIT = 20;
+    private static final int INTERMEDIATE_END_LIMIT = 60;
+    private static final int ALL_STAR_START_LIMIT = 85;
+    private static final int ALL_STAR_END_LIMIT = 100;
 
     public enum ProfileLevelType {
         BEGINNER, INTERMEDIATE, COMPLETED
@@ -49,6 +57,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
     @Bind(R.id.user_image)
     ImageView userImage;
+
+    @Bind(R.id.level_achieved)
+    TextView levelAchieved;
 
     @Bind(R.id.filled_left)
     TextView filledLeft;
@@ -85,8 +96,8 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             mUserMentorObj = Parcels.unwrap(parcelable);
         }
 
-        if (getArguments() != null && getArguments().getSerializable("PROFILE_LEVEL") != null) {
-            profileLevelType = (ProfileLevelType) getArguments().getSerializable("PROFILE_LEVEL");
+        if (getArguments() != null && getArguments().getSerializable(PROFILE_LEVEL) != null) {
+            profileLevelType = (ProfileLevelType) getArguments().getSerializable(PROFILE_LEVEL);
         } else {
             if (mUserMentorObj != null) {
                 profileLevelType = userLevel(mUserMentorObj);
@@ -94,6 +105,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         }
 
         if (mUserMentorObj != null) {
+            dashedProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             dashedProgressBar.setProgress(mUserMentorObj.getProfileWeighing(), false);
 
             invalidateProfileProgressBar(mUserMentorObj.getProfileWeighing());
@@ -105,8 +117,8 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     }
 
     private void invalidateProfileProgressBar(int progressPercentage) {
-        if (progressPercentage > 0 && progressPercentage <= 20) {
-            if (mUserMentorObj.getProfileWeighing() >= 20) {
+        if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
+            if (mUserMentorObj.getProfileWeighing() >= BEGINNER_END_LIMIT) {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -114,8 +126,8 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
             allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
 
-        } else if (progressPercentage > 85 && progressPercentage <= 100) {
-            if (mUserMentorObj.getProfileWeighing() >= 85) {
+        } else if (progressPercentage > ALL_STAR_START_LIMIT && progressPercentage <= ALL_STAR_END_LIMIT) {
+            if (mUserMentorObj.getProfileWeighing() >= ALL_STAR_START_LIMIT) {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
             } else {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
@@ -124,7 +136,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
 
         } else {
-            if (mUserMentorObj.getProfileWeighing() >= 60) {
+            if (mUserMentorObj.getProfileWeighing() >= INTERMEDIATE_END_LIMIT) {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -145,7 +157,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             addIcon.setEnabled(true);
             addIcon.setClickable(true);
             isAllFieldsDone = false;
-
+            levelAchieved.setVisibility(View.INVISIBLE);
         } else {
             CommonUtil.setImageSource(getActivity(), addIcon, R.drawable.green_tick);
             String names = filledFieldsMessage(profileLevelType);
@@ -153,6 +165,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             addIcon.setEnabled(false);
             addIcon.setClickable(false);
             isAllFieldsDone = true;
+            levelAchieved.setVisibility(View.VISIBLE);
         }
 
         updateDetails(profileLevelType, isAllFieldsDone);
@@ -190,41 +203,40 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             case BEGINNER:
                 crownIcon.setVisibility(View.VISIBLE);
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.profile_level_beginner_user);
-                profileStatusLevel.setText("Beginner");
-                nextLevel.setText("Next level");
+                profileStatusLevel.setText(R.string.beginner);
+                nextLevel.setText(R.string.next_level);
+                String beginnerMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.beginner_message));
+                message.setText(beginnerMessage);
                 break;
+
             case INTERMEDIATE:
                 crownIcon.setVisibility(View.VISIBLE);
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.ic_profile_level_intermediate);
-                profileStatusLevel.setText("Intermediate");
-                nextLevel.setText("Next level");
+                profileStatusLevel.setText(R.string.intermediate);
+                nextLevel.setText(R.string.next_level);
 
                 if (isRequiredFieldsFilled) {
-                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.");
-                    message.setText(mutualCommunityText);
+                    String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.intermediate_filled));
+                    message.setText(intermediateMessage);
                 } else {
-                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.");
-
-                    message.setText(mutualCommunityText);
+                    String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.intermediate_unfilled));
+                    message.setText(intermediateMessage);
                 }
-
                 break;
 
             case COMPLETED:
                 crownIcon.setVisibility(View.GONE);
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.ic_profile_level_all_star);
-                profileStatusLevel.setText("All star");
-                nextLevel.setText("Got it");
+                profileStatusLevel.setText(R.string.all_star);
+                nextLevel.setText(R.string.got_it);
 
-                if(isRequiredFieldsFilled) {
-                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.");
-                    message.setText(mutualCommunityText);
-
+                if (isRequiredFieldsFilled) {
+                    String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.all_star_filled));
+                    message.setText(allStarMessage);
                 } else {
-                    String mutualCommunityText = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), "Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.");
-                    message.setText(mutualCommunityText);
+                    String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.all_star_unfilled));
+                    message.setText(allStarMessage);
                 }
-
                 break;
         }
     }
@@ -244,14 +256,13 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
         int length = options.length;
         for (int i = 0; i < length; i++) {
-
-            String name = options[i];
-            message.append(name);
-
-            if (i < length - 1) {
+            if (i > 0) {
                 message.append(AppConstants.COMMA);
                 message.append(AppConstants.SPACE);
             }
+            String name = options[i];
+            message.append(name);
+
         }
 
         return message.toString();
@@ -271,22 +282,20 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         }
         String unfilledSections = mUserMentorObj.getUnfilledProfileFields();
 
-        if(StringUtil.isNotNullOrEmptyString(unfilledSections)) {
+        if (StringUtil.isNotNullOrEmptyString(unfilledSections)) {
             int length = options.length;
             for (int i = 0; i < length; i++) {
 
                 String name = options[i];
                 if (unfilledSections.contains(name)) {
                     if (i == 0) {
-                        message.append("Add");
+                        message.append(getString(R.string.add));
                         message.append(AppConstants.SPACE);
-                    }
-                    message.append(name);
-
-                    if (i < length - 1) {
+                    } else {
                         message.append(AppConstants.COMMA);
                         message.append(AppConstants.SPACE);
                     }
+                    message.append(name);
                 }
             }
         }
@@ -298,9 +307,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     private ProfileLevelType userLevel(UserSolrObj userSolrObj) {
         ProfileLevelType profileType;
 
-        if (userSolrObj.getProfileWeighing() > 0 && userSolrObj.getProfileWeighing() <= 20) {
+        if (userSolrObj.getProfileWeighing() > BEGINNER_START_LIMIT && userSolrObj.getProfileWeighing() <= BEGINNER_END_LIMIT) {
             profileType = ProfileLevelType.BEGINNER;
-        } else if (userSolrObj.getProfileWeighing() > 85 && userSolrObj.getProfileWeighing() <= 100) {
+        } else if (userSolrObj.getProfileWeighing() > ALL_STAR_START_LIMIT && userSolrObj.getProfileWeighing() <= ALL_STAR_END_LIMIT) {
             profileType = ProfileLevelType.COMPLETED;
         } else {
             profileType = ProfileLevelType.INTERMEDIATE;

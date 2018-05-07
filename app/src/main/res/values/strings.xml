@@ -606,5 +606,19 @@
     <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
     <string name="reactivate_your_account">To reactivate your account write to us</string>
     <string name="care_sheroes">care@sheroes.in</string>
+    <string name="achieved">( Achieved )</string>
+    <string name="beginner">Beginner</string>
+    <string name="next_level">Next level</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="all_star">All star</string>
+    <string name="progress_status_beginner">Profile Strength : Beginner</string>
+    <string name="progress_status_all_star">Profile Strength : All Star</string>
+    <string name="progress_level_status_intermediate">Profile Strength : Intermediate</string>
+    <string name="add">Add</string>
+    <string name="all_star_filled">Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.</string>
+    <string name="all_star_unfilled">Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.</string>
+    <string name="intermediate_filled">Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.</string>
+    <string name="intermediate_unfilled">Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.</string>
+    <string name="beginner_message">You’re on your way now. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers and faster replies.</string>
 
 </resources>

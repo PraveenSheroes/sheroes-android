@@ -137,7 +137,7 @@
 
     <dimen name="community_compact_card_width">300dp</dimen>
     <dimen name="community_compact_card_height">212dp</dimen>
-    <dimen name="dialog_profile_level_width">213dp</dimen>
+    <dimen name="dialog_profile_level_width">312dp</dimen>
     <dimen name="community_join_width">78dp</dimen>
     <dimen name="community_join_height">30dp</dimen>
     <dimen name="my_community_container_width">111dp</dimen>

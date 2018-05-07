@@ -81,6 +81,7 @@
     <color name="comment_text">#3c3c3c</color>
     <color name="feed_title">#3c3c3c</color>
     <color name="toolbar_title">#3c3c3c</color>
+    <color name="profile_progress_dialog_section">#3c3c3c</color>
 
     <!--colors set through priyanka-->
 

@@ -43,8 +43,8 @@ public class DashedProgressBar extends View {
             path = new Path();
             path.reset();
 
-            //Dashed line effects - 100 solid line 20 space
-            effects = new DashPathEffect(new float[]{100, 20, 100, 20}, 0);
+            //Dashed line effects - 120 solid line 10 space
+            effects = new DashPathEffect(new float[]{120, 10, 120, 10}, 0);
         } finally {
             typedArray.recycle();
         }
