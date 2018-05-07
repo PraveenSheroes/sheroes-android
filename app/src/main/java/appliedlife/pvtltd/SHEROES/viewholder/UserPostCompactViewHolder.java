@@ -820,7 +820,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                if (mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() - 1) {
+                if (mentionSpan.getMention().getStartIndex()>=0&&mentionSpan.getMention().getStartIndex() + i <= strWithAddExtra.length() - 1) {
                     strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
                 }
             }
@@ -829,9 +829,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                int start = mentionSpan.getMention().getStartIndex() + i;
-                int end = mentionSpan.getMention().getEndIndex() + i;
-                if (end + 1 <= spannableString.length() && start <= spannableString.length()) {
+                if (mentionSpan.getMention().getStartIndex()>=0&&mentionSpan.getMention().getEndIndex()>0&&mentionSpan.getMention().getEndIndex() + i + 1 <= spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
+                    int start = mentionSpan.getMention().getStartIndex() + i;
+                    int end = mentionSpan.getMention().getEndIndex() + i;
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
                 }
             }
