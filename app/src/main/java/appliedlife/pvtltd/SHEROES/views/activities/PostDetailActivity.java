@@ -225,8 +225,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 mStreamType = mUserPostObj.getStreamType();
                 boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
                 if (showKeyboard) {
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                    mPostDetailPresenter.smoothScrollOnList(true);
+                    if (mUserPostObj.isRecentCommentClicked) {
+                        mPostDetailPresenter.smoothScrollOnList(true);
+                    } else {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                        mPostDetailPresenter.smoothScrollOnList(true);
+                    }
+
                 } else {
                     mPostDetailPresenter.smoothScrollOnList(false);
                 }
@@ -235,7 +240,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (!CommonUtil.isNotEmpty(mUserPostId)) {
                     return;
                 }
-                mPostDetailPresenter.smoothScrollOnList(true);
             }
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);

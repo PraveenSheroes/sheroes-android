@@ -17,6 +17,8 @@ public class UserPostSolrObj extends FeedDetail {
     public static final String USER_POST_OBJ = "USER_POST_OBJ";
     public static final String USER_POST_ID = "USER_POST_ID";
 
+    public boolean isRecentCommentClicked =false;
+
     public Boolean isTextExpanded = false;
 
     @SerializedName(value = "search_id_post_image")
