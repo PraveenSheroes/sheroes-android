@@ -111,7 +111,7 @@ public class DashProgressBar extends View {
             }
         } else {
             this.progress = progress;
-            invalidate();
+            postInvalidate();
         }
     }
 
