@@ -15,7 +15,7 @@
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
-    <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
+    <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
     <string name="ID_TODAY">Today</string>
