@@ -623,5 +623,6 @@
     <string name="city_error_msg">Invalid city name, please select again</string>
     <string name="city_error_response">wrong id sent for city</string>
     <string name="mobile_response_err">mobile number already registered with us</string>
+    <string name="add_more_to_bio">Add Bio (Complete your Bio)</string>
 
 </resources>

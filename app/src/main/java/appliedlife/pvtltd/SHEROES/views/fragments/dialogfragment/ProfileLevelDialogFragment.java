@@ -3,12 +3,12 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
@@ -45,13 +45,13 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     private String mBeginnerFields[] = {"Email Id", "Name"};
     private String mIntermediateFields[] = {"Location", "Mobile Number", "Bio"};
     private String mCompletedFields[] = {"Profile Pic", "DOB", "Relationship Status"};
-    private UserSolrObj mUserMentorObj;
+    private UserSolrObj mUserSolrObj;
     private ProfileLevelType profileLevelType;
     //endregion
 
     //region enum
     public enum ProfileLevelType {
-        BEGINNER, INTERMEDIATE, COMPLETED
+        BEGINNER, INTERMEDIATE, ALLSTAR
     }
     //endregion
 
@@ -91,6 +91,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
     @Bind(R.id.expert)
     TextView allStarTick;
+
+    @Bind(R.id.bio_unfilled_container)
+    LinearLayout bioUnfilledContainer;
     //endregion
 
     //region Fragment methods
@@ -102,22 +105,21 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         Parcelable parcelable = getArguments().getParcelable(AppConstants.USER);
         ButterKnife.bind(this, view);
         if (null != parcelable) {
-            mUserMentorObj = Parcels.unwrap(parcelable);
+            mUserSolrObj = Parcels.unwrap(parcelable);
         }
 
         if (getArguments() != null && getArguments().getSerializable(PROFILE_LEVEL) != null) {
             profileLevelType = (ProfileLevelType) getArguments().getSerializable(PROFILE_LEVEL);
         } else {
-            if (mUserMentorObj != null) {
-                profileLevelType = userLevel(mUserMentorObj);
+            if (mUserSolrObj != null) {
+                profileLevelType = userLevel(mUserSolrObj);
             }
         }
 
-        if (mUserMentorObj != null) {
-            dashProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            dashProgressBar.setProgress(mUserMentorObj.getProfileCompletionWeight(), false);
+        if (mUserSolrObj != null) {
+            dashProgressBar.setProgress(mUserSolrObj.getProfileCompletionWeight(), false);
 
-            invalidateProfileProgressBar(mUserMentorObj.getProfileCompletionWeight());
+            invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
 
             invalidateUserDetails(profileLevelType);
         }
@@ -139,15 +141,14 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             profileLevelType = ProfileLevelType.INTERMEDIATE;
             invalidateUserDetails(profileLevelType);
         } else if (profileLevelType == ProfileLevelType.INTERMEDIATE) {
-            profileLevelType = ProfileLevelType.COMPLETED;
+            profileLevelType = ProfileLevelType.ALLSTAR;
             invalidateUserDetails(profileLevelType);
         } else {
             dismiss();
         }
     }
 
-
-    @OnClick(R.id.tick)
+    @OnClick({R.id.tick, R.id.add})
     public void onaddFields() {
         dismiss();
         ((ProfileActivity) getActivity()).navigateToProfileEditing();
@@ -157,7 +158,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     //region Private methods
     private void invalidateProfileProgressBar(int progressPercentage) {
         if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
-            if (mUserMentorObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
+            if (mUserSolrObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -166,7 +167,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
 
         } else if (progressPercentage > ALL_STAR_START_LIMIT && progressPercentage <= ALL_STAR_END_LIMIT) {
-            if (mUserMentorObj.getProfileCompletionWeight() >= ALL_STAR_START_LIMIT) {
+            if (mUserSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT && mUserSolrObj.isBioFullyFilled()) {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
             } else {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
@@ -175,7 +176,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
 
         } else {
-            if (mUserMentorObj.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
+            if (mUserSolrObj.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -204,7 +205,16 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             addIcon.setEnabled(false);
             addIcon.setClickable(false);
             isAllFieldsDone = true;
-            levelAchieved.setVisibility(View.VISIBLE);
+
+            if (profileLevelType == ProfileLevelType.ALLSTAR) {
+                if (mUserSolrObj.isBioFullyFilled()) {
+                    levelAchieved.setVisibility(View.VISIBLE);
+                } else {
+                    levelAchieved.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                levelAchieved.setVisibility(View.VISIBLE);
+            }
         }
 
         updateDetails(profileLevelType, isAllFieldsDone);
@@ -218,8 +228,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.vector_profile_beginner_user);
                 profileStatusLevel.setText(R.string.beginner);
                 nextLevel.setText(R.string.next_level);
-                String beginnerMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.beginner_message));
+                String beginnerMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.beginner_message));
                 message.setText(beginnerMessage);
+                bioUnfilledContainer.setVisibility(View.GONE);
                 break;
 
             case INTERMEDIATE:
@@ -228,26 +239,38 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 profileStatusLevel.setText(R.string.intermediate);
                 nextLevel.setText(R.string.next_level);
 
+                if(!mUserSolrObj.isBioFullyFilled()) {
+                    bioUnfilledContainer.setVisibility(View.VISIBLE);
+                } else {
+                    bioUnfilledContainer.setVisibility(View.GONE);
+                }
+
                 if (isRequiredFieldsFilled) {
-                    String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.intermediate_filled));
+                    String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.intermediate_filled));
                     message.setText(intermediateMessage);
                 } else {
-                    String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.intermediate_unfilled));
+                    String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.intermediate_unfilled));
                     message.setText(intermediateMessage);
                 }
                 break;
 
-            case COMPLETED:
+            case ALLSTAR:
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.vector_profile_allstar_user);
                 profileStatusLevel.setText(R.string.all_star);
                 nextLevel.setText(R.string.got_it);
                 crownIcon.setVisibility(View.GONE);
 
+                if(!mUserSolrObj.isBioFullyFilled()) {
+                    bioUnfilledContainer.setVisibility(View.VISIBLE);
+                } else {
+                    bioUnfilledContainer.setVisibility(View.GONE);
+                }
+
                 if (isRequiredFieldsFilled) {
-                    String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.all_star_filled));
+                    String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.all_star_filled));
                     message.setText(allStarMessage);
                 } else {
-                    String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.all_star_unfilled));
+                    String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.all_star_unfilled));
                     message.setText(allStarMessage);
                 }
                 break;
@@ -269,13 +292,22 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
         int length = options.length;
         for (int i = 0; i < length; i++) {
-            if (i > 0) {
-                message.append(AppConstants.COMMA);
-                message.append(AppConstants.SPACE);
-            }
-            String name = options[i];
-            message.append(name);
 
+            String name = options[i];
+
+            if(!mUserSolrObj.isBioFullyFilled() && !name.equalsIgnoreCase("Bio")) {
+                if (i > 0) {
+                    message.append(AppConstants.COMMA);
+                    message.append(AppConstants.SPACE);
+                }
+                message.append(name);
+            } else if(mUserSolrObj.isBioFullyFilled()){
+                if (i > 0) {
+                    message.append(AppConstants.COMMA);
+                    message.append(AppConstants.SPACE);
+                }
+                message.append(name);
+            }
         }
 
         return message.toString();
@@ -293,7 +325,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         } else {
             options = mCompletedFields;
         }
-        String unfilledSections = mUserMentorObj.getUnfilledProfileFields();
+        String unfilledSections = mUserSolrObj.getUnfilledProfileFields();
 
         if (StringUtil.isNotNullOrEmptyString(unfilledSections)) {
             int length = options.length;
@@ -323,7 +355,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         if (userSolrObj.getProfileCompletionWeight() > BEGINNER_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= BEGINNER_END_LIMIT) {
             profileType = ProfileLevelType.BEGINNER;
         } else if (userSolrObj.getProfileCompletionWeight() > ALL_STAR_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= ALL_STAR_END_LIMIT) {
-            profileType = ProfileLevelType.COMPLETED;
+            profileType = ProfileLevelType.ALLSTAR;
         } else {
             profileType = ProfileLevelType.INTERMEDIATE;
         }

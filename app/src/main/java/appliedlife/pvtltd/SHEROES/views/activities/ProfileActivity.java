@@ -136,7 +136,6 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
@@ -687,7 +686,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         } else if (mUserSolarObject.getProfileCompletionWeight() > ProfileLevelDialogFragment.ALL_STAR_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() <= ProfileLevelDialogFragment.ALL_STAR_END_LIMIT) {
             profileLevel.setText(R.string.progress_status_all_star);
 
-            if (mUserSolarObject.getProfileCompletionWeight() > ProfileLevelDialogFragment.ALL_STAR_START_LIMIT) {
+            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileLevelDialogFragment.ALL_STAR_END_LIMIT && mUserSolarObject.isBioFullyFilled()) {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
             } else {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
@@ -723,7 +722,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.expert)
     protected void openAllStarProgressDialog() {
-        openProfileProfileLevelDialog(ProfileLevelDialogFragment.ProfileLevelType.COMPLETED);
+        openProfileProfileLevelDialog(ProfileLevelDialogFragment.ProfileLevelType.ALLSTAR);
     }
 
 
