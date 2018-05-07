@@ -81,6 +81,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     private int headerCount = 0;
     private int pageNumber = 1;
     private Comment lastComment;
+    private boolean mIsScrollAllowed;
 
 
     @Inject
@@ -94,6 +95,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     //region Presenter methods
+
+    public void smoothScrollOnList(boolean isScrollAllowed) {
+        this.mIsScrollAllowed = isScrollAllowed;
+    }
 
     public void setUserPost(UserPostSolrObj userPostSolrObj, String userPostId) {
         this.mUserPostObj = userPostSolrObj;
@@ -144,7 +149,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
             @Override
             public void onNext(CommentReactionResponsePojo commentResponsePojo) {
-                boolean smoothScrollToBottom = false;
                 getMvpView().stopProgressBar();
                 getMvpView().commentFinishedLoading();
                 if (pageNumber == 1 && commentResponsePojo.getNumFound() > AppConstants.PAGE_SIZE_FOR_COMMENTS) {
@@ -163,9 +167,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         mBaseResponseList.remove(1);
                         getMvpView().setHasMoreComments(false);
                     }
-                    smoothScrollToBottom = false;
+                    mIsScrollAllowed = false;
                 } else {
-                    smoothScrollToBottom = true;
                     if (mUserPostObj.getIsEditOrDelete() == 1) {
                         mUserPostObj.setIsEditOrDelete(0);
                         mBaseResponseList.set(0, mUserPostObj);
@@ -177,7 +180,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         getMvpView().deleteLastComment();
                     }
                 }
-                if (smoothScrollToBottom) {
+                if (mIsScrollAllowed) {
                     getMvpView().smoothScrollToBottom();
                 }
                 pageNumber++;
@@ -302,7 +305,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous,hasMention,mentionSpanList);
+        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous, hasMention, mentionSpanList);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
@@ -387,8 +390,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             mBaseResponseList.set(0, mUserPostObj);
                             getMvpView().setData(0, mUserPostObj);
                         }
-                    } else  {
-                         getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
+                    } else {
+                        getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
                     }
                 }
             }
@@ -694,7 +697,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    if(approveSpamPostResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                    if (approveSpamPostResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                         getMvpView().onPostDeleted();
                     } else {
                         userPostSolrObj.setSpamPost(false);

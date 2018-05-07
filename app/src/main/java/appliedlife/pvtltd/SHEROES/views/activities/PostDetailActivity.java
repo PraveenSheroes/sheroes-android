@@ -211,37 +211,37 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mUserPic.setCircularImage(true);
         setIsLoggedInUser();
         etView.setEditTextShouldWrapContent(true);
-        Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-        if (parcelable != null) {
-            mUserPostObj = Parcels.unwrap(parcelable);
-            mPositionInFeed = mUserPostObj.getItemPosition();
-            mStreamType = mUserPostObj.getStreamType();
-            boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
-            if (showKeyboard) {
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-            }
-        } else {
-            mUserPostId = getIntent().getStringExtra(UserPostSolrObj.USER_POST_ID);
-            if (!CommonUtil.isNotEmpty(mUserPostId)) {
-                return;
-            }
-        }
-
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
         }
-
         if (null != getIntent() && getIntent().getExtras() != null) {
+            Parcelable parcelable = getIntent().getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+            if (parcelable != null) {
+                mUserPostObj = Parcels.unwrap(parcelable);
+                mPositionInFeed = mUserPostObj.getItemPosition();
+                mStreamType = mUserPostObj.getStreamType();
+                boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
+                if (showKeyboard) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    mPostDetailPresenter.smoothScrollOnList(true);
+                } else {
+                    mPostDetailPresenter.smoothScrollOnList(false);
+                }
+            } else {
+                mUserPostId = getIntent().getStringExtra(UserPostSolrObj.USER_POST_ID);
+                if (!CommonUtil.isNotEmpty(mUserPostId)) {
+                    return;
+                }
+                mPostDetailPresenter.smoothScrollOnList(true);
+            }
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
             mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
-
             if (getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
                 mStatusBarColorEmpty = true;
             }
-
         }
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
