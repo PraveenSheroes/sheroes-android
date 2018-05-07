@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -42,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.http.Url;
 
 /**
  * Created by ravi on 21/11/17.
@@ -156,7 +158,13 @@ public class NavigateToWebViewFragment extends BaseFragment {
                         }
                     }
                      else {
-                        webPagesView.loadUrl(url, getCustomHeaders(url));
+                        if(CommonUtil.isSheroesValidLink(Uri.parse(url))){
+                            webPagesView.loadUrl(url, getCustomHeaders(url));
+                        }else {
+                            AppUtils.openChromeTabForce(getActivity(), Uri.parse(url));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(intent);
+                        }
                     }
                     return true;
                 } else {
