@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.Space;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashedProgressBar;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,23 +32,32 @@ import butterknife.OnClick;
 
 public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
+    //region private member variable
     public static final String PROFILE_LEVEL = "PROFILE_LEVEL";
-    private static final int BEGINNER_START_LIMIT = 0;
-    private static final int BEGINNER_END_LIMIT = 20;
-    private static final int INTERMEDIATE_END_LIMIT = 60;
-    private static final int ALL_STAR_START_LIMIT = 85;
-    private static final int ALL_STAR_END_LIMIT = 100;
+    public static final int BEGINNER_START_LIMIT = 0;
+    public static final int BEGINNER_END_LIMIT = 20;
+    public static final int INTERMEDIATE_END_LIMIT = 60;
+    public static final int ALL_STAR_START_LIMIT = 85;
+    public static final int ALL_STAR_END_LIMIT = 100;
+    //endregion
 
-    public enum ProfileLevelType {
-        BEGINNER, INTERMEDIATE, COMPLETED
-    }
-
+    //region private member variable
     private String mBeginnerFields[] = {"Email Id", "Name"};
     private String mIntermediateFields[] = {"Location", "Mobile Number", "Bio"};
     private String mCompletedFields[] = {"Profile Pic", "DOB", "Relationship Status"};
+    private UserSolrObj mUserMentorObj;
+    private ProfileLevelType profileLevelType;
+    //endregion
 
+    //region enum
+    public enum ProfileLevelType {
+        BEGINNER, INTERMEDIATE, COMPLETED
+    }
+    //endregion
+
+    //region Bind view variables
     @Bind(R.id.dashed_progressbar)
-    DashedProgressBar dashedProgressBar;
+    DashProgressBar dashProgressBar;
 
     @Bind(R.id.profile_status_level)
     TextView profileStatusLevel;
@@ -81,10 +91,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
     @Bind(R.id.expert)
     TextView allStarTick;
+    //endregion
 
-    private UserSolrObj mUserMentorObj;
-    private ProfileLevelType profileLevelType;
-
+    //region Fragment methods
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -105,20 +114,50 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         }
 
         if (mUserMentorObj != null) {
-            dashedProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            dashedProgressBar.setProgress(mUserMentorObj.getProfileWeighing(), false);
+            dashProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            dashProgressBar.setProgress(mUserMentorObj.getProfileCompletionWeight(), false);
 
-            invalidateProfileProgressBar(mUserMentorObj.getProfileWeighing());
+            invalidateProfileProgressBar(mUserMentorObj.getProfileCompletionWeight());
 
             invalidateUserDetails(profileLevelType);
         }
 
         return view;
     }
+    //endregion
 
+    //region onclick method
+    @OnClick(R.id.cross)
+    protected void crossClick() {
+        dismiss();
+    }
+
+    @OnClick(R.id.buttonPanel)
+    public void nextClick() {
+
+        if (profileLevelType == ProfileLevelType.BEGINNER) {
+            profileLevelType = ProfileLevelType.INTERMEDIATE;
+            invalidateUserDetails(profileLevelType);
+        } else if (profileLevelType == ProfileLevelType.INTERMEDIATE) {
+            profileLevelType = ProfileLevelType.COMPLETED;
+            invalidateUserDetails(profileLevelType);
+        } else {
+            dismiss();
+        }
+    }
+
+
+    @OnClick(R.id.tick)
+    public void onaddFields() {
+        dismiss();
+        ((ProfileActivity) getActivity()).navigateToProfileEditing();
+    }
+    //endregion
+
+    //region Private methods
     private void invalidateProfileProgressBar(int progressPercentage) {
         if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
-            if (mUserMentorObj.getProfileWeighing() >= BEGINNER_END_LIMIT) {
+            if (mUserMentorObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -127,7 +166,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
 
         } else if (progressPercentage > ALL_STAR_START_LIMIT && progressPercentage <= ALL_STAR_END_LIMIT) {
-            if (mUserMentorObj.getProfileWeighing() >= ALL_STAR_START_LIMIT) {
+            if (mUserMentorObj.getProfileCompletionWeight() >= ALL_STAR_START_LIMIT) {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
             } else {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
@@ -136,7 +175,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
             intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
 
         } else {
-            if (mUserMentorObj.getProfileWeighing() >= INTERMEDIATE_END_LIMIT) {
+            if (mUserMentorObj.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -171,32 +210,6 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         updateDetails(profileLevelType, isAllFieldsDone);
     }
 
-    @OnClick(R.id.cross)
-    protected void crossClick() {
-        dismiss();
-    }
-
-    @OnClick(R.id.buttonPanel)
-    public void nextClick() {
-
-        if (profileLevelType == ProfileLevelType.BEGINNER) {
-            profileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(profileLevelType);
-        } else if (profileLevelType == ProfileLevelType.INTERMEDIATE) {
-            profileLevelType = ProfileLevelType.COMPLETED;
-            invalidateUserDetails(profileLevelType);
-        } else {
-            dismiss();
-        }
-    }
-
-
-    @OnClick(R.id.tick)
-    public void onaddFields() {
-        dismiss();
-        ((ProfileActivity) getActivity()).navigateToProfileEditing();
-    }
-
     private void updateDetails(ProfileLevelType profileLevelType, boolean isRequiredFieldsFilled) {
 
         switch (profileLevelType) {
@@ -225,10 +238,10 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
                 break;
 
             case COMPLETED:
-                crownIcon.setVisibility(View.GONE);
                 CommonUtil.setImageSource(getActivity(), userImage, R.drawable.vector_profile_allstar_user);
                 profileStatusLevel.setText(R.string.all_star);
                 nextLevel.setText(R.string.got_it);
+                crownIcon.setVisibility(View.GONE);
 
                 if (isRequiredFieldsFilled) {
                     String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.all_star_filled));
@@ -307,9 +320,9 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
     private ProfileLevelType userLevel(UserSolrObj userSolrObj) {
         ProfileLevelType profileType;
 
-        if (userSolrObj.getProfileWeighing() > BEGINNER_START_LIMIT && userSolrObj.getProfileWeighing() <= BEGINNER_END_LIMIT) {
+        if (userSolrObj.getProfileCompletionWeight() > BEGINNER_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= BEGINNER_END_LIMIT) {
             profileType = ProfileLevelType.BEGINNER;
-        } else if (userSolrObj.getProfileWeighing() > ALL_STAR_START_LIMIT && userSolrObj.getProfileWeighing() <= ALL_STAR_END_LIMIT) {
+        } else if (userSolrObj.getProfileCompletionWeight() > ALL_STAR_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= ALL_STAR_END_LIMIT) {
             profileType = ProfileLevelType.COMPLETED;
         } else {
             profileType = ProfileLevelType.INTERMEDIATE;
@@ -317,5 +330,6 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
         return profileType;
     }
+    //endregion
 
 }

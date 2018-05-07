@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/header_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_150"
+        android:layout_height="@dimen/dp_size_160"
         android:background="@color/profile_level_header_background"
         android:paddingEnd="@dimen/dp_size_1"
         android:paddingLeft="@dimen/dp_size_16"
@@ -32,35 +32,36 @@
                 android:id="@+id/profile_status_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_5"
+                android:layout_marginTop="@dimen/dp_size_2"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:letterSpacing="0.06"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="normal"
                 tools:text="BEGINNER" />
 
             <TextView
                 android:id="@+id/level_achieved"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_4"
-                android:layout_marginBottom="@dimen/dp_size_8"
-                android:fontFamily="sans-serif"
+                android:layout_marginBottom="@dimen/dp_size_6"
+                android:layout_marginTop="@dimen/dp_size_2"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="@string/achieved"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_size_14"
-                android:textStyle="normal"
                 android:visibility="invisible" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/cross"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_size_20"
+            android:layout_height="@dimen/dp_size_20"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/dp_size_8"
+            android:layout_marginRight="@dimen/dp_size_8"
+            android:layout_marginTop="@dimen/dp_size_8"
             android:src="@drawable/ic_dialog_close_dark" />
 
         <ImageView
@@ -68,8 +69,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@id/cross"
-            android:layout_toStartOf="@id/cross"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/cross"
+            android:paddingStart="@dimen/dp_size_8"
+            android:paddingLeft="@dimen/dp_size_8"
+            android:paddingRight="@dimen/dp_size_1"
+            android:paddingEnd="@dimen/dp_size_1"
+            android:layout_marginEnd="@dimen/dp_size_10"
+            android:layout_marginRight="@dimen/dp_size_10"
+            android:src="@drawable/vector_profile_intermediate_user" />
+
     </RelativeLayout>
 
     <TextView
@@ -80,10 +90,10 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="6sp"
         android:padding="@dimen/dp_size_16"
-        tools:text="Hey Anupriya! You’re on your way now. Each time you add to your profile, it improves your overall experience on the platform and is likely to get you more followers and faster replies."
         android:textColor="#878787"
         android:textSize="14sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        tools:text="Hey Anupriya! You’re on your way now. Each time you add to your profile, it improves your overall experience on the platform and is likely to get you more followers and faster replies." />
 
     <include
         android:id="@+id/progress_bar"
@@ -108,24 +118,24 @@
         android:layout_width="@dimen/dp_size_32"
         android:layout_height="@dimen/dp_size_32"
         android:layout_below="@id/divider"
+        android:layout_marginEnd="@dimen/dp_size_8"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginStart="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_8"
-        android:layout_marginEnd="@dimen/dp_size_8"/>
+        android:layout_marginStart="@dimen/dp_size_16" />
 
     <TextView
         android:id="@+id/filled_left"
-        android:layout_marginTop="@dimen/dp_size_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/tick"
         android:layout_below="@id/divider"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:textColor="@color/profile_progress_dialog_section"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/tick"
+        android:layout_marginTop="@dimen/dp_size_5"
         android:layout_toEndOf="@id/tick"
-        android:gravity="center_vertical" />
+        android:layout_toRightOf="@id/tick"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:gravity="center_vertical"
+        android:textColor="@color/profile_progress_dialog_section" />
 
     <Button
         android:id="@+id/buttonPanel"

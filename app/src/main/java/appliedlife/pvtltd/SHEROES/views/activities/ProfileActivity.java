@@ -121,7 +121,7 @@ import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashedProgressBar;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -136,6 +136,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
@@ -166,7 +167,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private Uri mImageCaptureUri;
 
     private Dialog dialog = null;
-    private ProfileLevelDialogFragment profileLevelDialogFragment = null;
+    private ProfileLevelDialogFragment mProfileCompletionDialogFragment = null;
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
     private long loggedInUserId = -1;
@@ -179,6 +180,26 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private String userNameTitle;
     private boolean isProfileClicked = false;
     private File localImageSaveForChallenge;
+    private boolean isMentorQARefresh = false;
+    private PopupWindow popupWindowFollowTooTip;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    ProfilePresenterImpl profilePresenter;
+
+    @Inject
+    AppUtils mAppUtils;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
+
+    @Inject
+    HomePresenter mHomePresenter;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -317,36 +338,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @BindDimen(R.dimen.dp_size_87)
     int profileSizeSmall;
 
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    ProfilePresenterImpl profilePresenter;
-
-    @Inject
-    AppUtils mAppUtils;
-
-    @Inject
-    Preference<Configuration> mConfiguration;
-
-    @Inject
-    HomePresenter mHomePresenter;
-
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
 
     @Bind(R.id.view_profile)
     View toolTipProfile;
+
     @Bind(R.id.view_tool_follow)
     View viewToolTipFollow;
 
     @Bind(R.id.dashed_progressbar)
-    DashedProgressBar dashedProgressBar;
+    DashProgressBar dashProgressBar;
 
-    private boolean isMentorQARefresh = false;
-    private PopupWindow popupWindowFollowTooTip;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -435,8 +438,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             dialog.dismiss();
         }
 
-        if(profileLevelDialogFragment!=null && profileLevelDialogFragment.isVisible()) {
-            profileLevelDialogFragment.dismiss();
+        if(mProfileCompletionDialogFragment !=null && mProfileCompletionDialogFragment.isVisible()) {
+            mProfileCompletionDialogFragment.dismiss();
         }
         super.onStop();
     }
@@ -465,8 +468,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 setProfileLevel();
                 profileLevel.setVisibility(View.VISIBLE);
 
-                dashedProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                dashedProgressBar.setProgress(mUserSolarObject.getProfileWeighing(), false);
+                dashProgressBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                dashProgressBar.setProgress(mUserSolarObject.getProfileCompletionWeight(), false);
                 //hide menu dots
                 profileToolbarMenu.setVisibility(View.GONE);
 
@@ -670,10 +673,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
 
     private void setProfileLevel() {
-        if (mUserSolarObject.getProfileWeighing() > 0 && mUserSolarObject.getProfileWeighing() <= 20) {
+        if (mUserSolarObject.getProfileCompletionWeight() > ProfileLevelDialogFragment.BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() <= ProfileLevelDialogFragment.BEGINNER_END_LIMIT) {
             profileLevel.setText(R.string.progress_status_beginner);
 
-            if (mUserSolarObject.getProfileWeighing() == 20) {
+            if (mUserSolarObject.getProfileCompletionWeight() == ProfileLevelDialogFragment.BEGINNER_END_LIMIT) {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -681,10 +684,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
             allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
 
-        } else if (mUserSolarObject.getProfileWeighing() > 85 && mUserSolarObject.getProfileWeighing() <= 100) {
+        } else if (mUserSolarObject.getProfileCompletionWeight() > ProfileLevelDialogFragment.ALL_STAR_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() <= ProfileLevelDialogFragment.ALL_STAR_END_LIMIT) {
             profileLevel.setText(R.string.progress_status_all_star);
 
-            if (mUserSolarObject.getProfileWeighing() > 85) {
+            if (mUserSolarObject.getProfileCompletionWeight() > ProfileLevelDialogFragment.ALL_STAR_START_LIMIT) {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
             } else {
                 allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
@@ -695,7 +698,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         } else {
             profileLevel.setText(R.string.progress_level_status_intermediate);
 
-            if (mUserSolarObject.getProfileWeighing() >= 60) {
+            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileLevelDialogFragment.INTERMEDIATE_END_LIMIT) {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
             } else {
                 intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
@@ -728,20 +731,20 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (mUserSolarObject == null) return;
 
-        if(profileLevelDialogFragment!=null && profileLevelDialogFragment.isVisible()) {
-            profileLevelDialogFragment.dismiss();
+        if(mProfileCompletionDialogFragment !=null && mProfileCompletionDialogFragment.isVisible()) {
+            mProfileCompletionDialogFragment.dismiss();
         }
 
-        profileLevelDialogFragment = new ProfileLevelDialogFragment();
-        profileLevelDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        mProfileCompletionDialogFragment = new ProfileLevelDialogFragment();
+        mProfileCompletionDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!profileLevelDialogFragment.isVisible() && !mIsDestroyed) {
+        if (!mProfileCompletionDialogFragment.isVisible() && !mIsDestroyed) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
             bundle.putSerializable(ProfileLevelDialogFragment.PROFILE_LEVEL, profileLevelType);
-            profileLevelDialogFragment.setArguments(bundle);
-            profileLevelDialogFragment.show(getFragmentManager(), ProfileLevelDialogFragment.class.getName());
+            mProfileCompletionDialogFragment.setArguments(bundle);
+            mProfileCompletionDialogFragment.show(getFragmentManager(), ProfileLevelDialogFragment.class.getName());
         }
     }
 
@@ -1451,8 +1454,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
-                    refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"), bundle.getString("BIO"), bundle.getString("IMAGE_URL"),
-                            bundle.getString("FILLED_FIELDS"), bundle.getString("UNFILLED_FIELDS"), bundle.getInt("PROGRESSBAR_WEIGHT"));
+                    refreshUserDetails(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
+                            bundle.getString(EditUserProfileActivity.FILLED_FIELDS), bundle.getString(EditUserProfileActivity.UNFILLED_FIELDS), bundle.getInt(EditUserProfileActivity.PROFILE_COMPLETION_WEIGHT));
                 }
             }
 
@@ -1570,9 +1573,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         if(mUserSolarObject!=null) {
                             mUserSolarObject.setFilledProfileFields(boardingDataResponse.getFeedDetails().getFilledProfileFields());
                             mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getFeedDetails().getUnfilledProfileFields());
-                            mUserSolarObject.setProfileWeighing(boardingDataResponse.getFeedDetails().getProfileWeighing());
+                            mUserSolarObject.setProfileCompletionWeight(boardingDataResponse.getFeedDetails().getProfileCompletionWeight());
 
-                            dashedProgressBar.setProgress(boardingDataResponse.getFeedDetails().getProfileWeighing(), false);
+                            dashProgressBar.setProgress(boardingDataResponse.getFeedDetails().getProfileCompletionWeight(), false);
                         }
 
                         //Save image
@@ -1651,12 +1654,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
 
         if(progressPercentage !=-1) {
-            mUserSolarObject.setProfileWeighing(progressPercentage);
-            dashedProgressBar.setProgress(progressPercentage, false);
+            mUserSolarObject.setProfileCompletionWeight(progressPercentage);
+            dashProgressBar.setProgress(progressPercentage, false);
+            mUserSolarObject.setFilledProfileFields(filledFields);
+            mUserSolarObject.setUnfilledProfileFields(unfilledFields);
+            setProfileLevel();
         }
-        mUserSolarObject.setFilledProfileFields(filledFields);
-        mUserSolarObject.setUnfilledProfileFields(unfilledFields);
 
+        if(imageUrl!=null) {
+            refreshImageView(imageUrl);
+        }
     }
 
     public void refreshImageView(String imageUrl) {

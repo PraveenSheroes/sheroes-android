@@ -620,5 +620,8 @@
     <string name="intermediate_filled">Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.</string>
     <string name="intermediate_unfilled">Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.</string>
     <string name="beginner_message">You’re on your way now. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers and faster replies.</string>
+    <string name="city_error_msg">Invalid city name, please select again</string>
+    <string name="city_error_response">wrong id sent for city</string>
+    <string name="mobile_response_err">mobile number already registered with us</string>
 
 </resources>

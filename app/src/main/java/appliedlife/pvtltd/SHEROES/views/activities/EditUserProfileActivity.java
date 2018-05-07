@@ -25,7 +25,6 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -98,6 +97,7 @@ import butterknife.OnClick;
 
 public class EditUserProfileActivity extends BaseActivity implements IEditProfileView {
 
+    //region private variable
     private static final String SCREEN_LABEL = "Edit Profile Screen";
     private static final String TAG = EditUserProfileActivity.class.getName();
 
@@ -108,12 +108,26 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private Uri mImageCaptureUri;
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private DatePickerDialog fromDatePickerDialog;
-    private String locationName;
     private int cityId;
     private File localImageSaveForChallenge;
     private String aboutMeValue = "";
     private LoginResponse userDetailsResponse;
+    private int profileProgress = -1;
+    private String filledDetails ;
+    private String unfilledDetails;
+    //endregion
 
+    //region public variables
+    public static final String USER_NAME = "NAME";
+    public static final String USER_DESCRIPTION = "BIO";
+    public static final String LOCATION = "LOCATION";
+    public static final String IMAGE_URL = "IMAGE_URL";
+    public static final String PROFILE_COMPLETION_WEIGHT = "PROGRESSBAR_WEIGHT";
+    public static final String UNFILLED_FIELDS = "UNFILLED_FIELDS";
+    public static final String FILLED_FIELDS = "FILLED_FIELDS";
+    //endregion
+
+    //region bind variables
     @Bind(R.id.title_toolbar)
     TextView toolbarTitle;
 
@@ -137,7 +151,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Bind(R.id.et_about_me_container)
     TextInputLayout bioContainer;
-
 
     @Bind(R.id.et_mobile_container)
     TextInputLayout mobileContainer;
@@ -180,12 +193,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @BindDimen(R.dimen.dp_size_80)
     int authorProfileSize;
+    //endregion
 
-
-    private int profileProgress = -1;
-    private String filledDetails ;
-    private String unfilledDetails;
-
+    //region activity method
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,6 +242,71 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     @Override
+    public void onBackPressed() {
+        setResult();
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_GALLERY:
+                    mImageCaptureUri = intent.getData();
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
+                    imageCropping(intent);
+                    break;
+
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                        try {
+                            File file = new File(result.getUri().getPath());
+                            Bitmap photo = CompressImageUtil.decodeFile(file);
+                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        requestForUpdateProfileImage();
+
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
+
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        } else {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        }
+
+    }
+    //endregion
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
@@ -248,14 +323,19 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void showError(int error) {
-
     }
 
     @Override
     public void errorMessage(String message) {
-        if (StringUtil.isNotNullOrEmptyString(message) && message.contains("mobile number already registered with us")) {
+        if (StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.mobile_response_err))) {
             mobileContainer.setError(message.toUpperCase());
-            requestFocus(mobileNumber);
+            requestFocus(mobileContainer);
+            scrollFragmentEdit.scrollTo(0, (int) mobileNumber.getY());
+            mProgressBar.setVisibility(View.GONE);
+        } else if(StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.city_error_response))) {
+            location.setError(getString(R.string.city_error_msg));
+            requestFocus(location);
+            scrollFragmentEdit.scrollTo(0, location.getScrollY());
             mProgressBar.setVisibility(View.GONE);
         }
     }
@@ -325,7 +405,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             emailAddress.setText(email);
         }
 
-        locationName = locationValue;  //initially set value from preferenece
         cityId = (int) userSummary.getUserBO().getCityMasterId();
 
         String mobile = userSummary.getMobile();
@@ -385,16 +464,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     @Override
-    public void onBackPressed() {
-        setResult();
-        finish();
-    }
-
-    @Override
     protected SheroesPresenter getPresenter() {
         return editProfilePresenter;
     }
-
 
     private void setResult() {
         imageLoader.setVisibility(View.GONE);
@@ -402,14 +474,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             Intent intent = new Intent();
             UserSummary summary = userDetailsResponse.getUserSummary();
             Bundle bundle = new Bundle();
-            bundle.putString("NAME", summary.getFirstName() + AppConstants.SPACE + summary.getLastName());
-            bundle.putString("BIO", summary.getUserBO().getUserSummary());
-            bundle.putString("LOCATION", summary.getUserBO().getCityMaster());
-            bundle.putString("IMAGE_URL", summary.getPhotoUrl());
+            bundle.putString(USER_NAME, summary.getFirstName() + AppConstants.SPACE + summary.getLastName());
+            bundle.putString(USER_DESCRIPTION, summary.getUserBO().getUserSummary());
+            bundle.putString(LOCATION, summary.getUserBO().getCityMaster());
+            bundle.putString(IMAGE_URL, summary.getPhotoUrl());
 
-            bundle.putInt("PROGRESSBAR_WEIGHT", profileProgress);
-            bundle.putString("UNFILLED_FIELDS", unfilledDetails);
-            bundle.putString("FILLED_FIELDS", filledDetails);
+            bundle.putInt(PROFILE_COMPLETION_WEIGHT, profileProgress);
+            bundle.putString(UNFILLED_FIELDS, unfilledDetails);
+            bundle.putString(FILLED_FIELDS, filledDetails);
 
             intent.putExtras(bundle);
             setResult(AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE, intent);
@@ -458,7 +530,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void submitLocation(String cityId, String city) {
-        locationName = city;
         this.cityId = Integer.valueOf(cityId);
         location.setText(city);
         if (null != city) {
@@ -498,64 +569,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         return profileImageDialogFragment;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
-        if (null != intent) {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_GALLERY:
-                    mImageCaptureUri = intent.getData();
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_CAMERA:
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
-                    imageCropping(intent);
-                    break;
-
-                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            File file = new File(result.getUri().getPath());
-                            Bitmap photo = CompressImageUtil.decodeFile(file);
-                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        requestForUpdateProfileImage();
-
-                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                    }
-
-                    break;
-
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-            }
-        } else {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_CAMERA:
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
-                    }
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-            }
-        }
-
-    }
-
     private void cropingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
@@ -589,7 +602,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             e.printStackTrace();
         }
     }
-
 
     public void selectImageFrmGallery() {
         CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
@@ -784,7 +796,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
             //User Bio region
-            if(StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString())) {
+            if(StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !aboutMeValue.equalsIgnoreCase(aboutMe.getText().toString())) {
             UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
             userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
             userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
@@ -854,10 +866,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             if (userDetailsResponse != null) {
 
                 try {
-                    //update the progressbar weightage and filled , unfilled fields
+                    //update the progressbar weight and filled , unfilled fields
                     filledDetails = boardingDataResponse.getFeedDetails().getFilledProfileFields();
                     unfilledDetails = boardingDataResponse.getFeedDetails().getUnfilledProfileFields();
-                    profileProgress = boardingDataResponse.getFeedDetails().getProfileWeighing();
+                    profileProgress = boardingDataResponse.getFeedDetails().getProfileCompletionWeight();
 
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
                     String userName = name.getText().toString().trim();
@@ -912,7 +924,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         //update the progressbar weightage and filled , unfilled fields
                         filledDetails = boardingDataResponse.getFeedDetails().getFilledProfileFields();
                         unfilledDetails = boardingDataResponse.getFeedDetails().getUnfilledProfileFields();
-                        profileProgress = boardingDataResponse.getFeedDetails().getProfileWeighing();
+                        profileProgress = boardingDataResponse.getFeedDetails().getProfileCompletionWeight();
 
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());

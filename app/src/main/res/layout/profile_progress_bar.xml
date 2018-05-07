@@ -5,17 +5,29 @@
     android:layout_marginTop="@dimen/dp_size_8"
     android:gravity="center_vertical">
 
-    <appliedlife.pvtltd.SHEROES.views.cutomeviews.DashedProgressBar
+    <TextView
+        android:id="@+id/expert"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_all_level_complete" />
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar
         android:id="@+id/dashed_progressbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_20"
+        android:layout_toRightOf="@id/expert"
+        android:layout_toEndOf="@id/expert"
+        android:layerType="software"
         android:layout_centerVertical="true"
         app:barThickness="@dimen/dp_size_10" />
 
     <TextView
         android:id="@+id/beginner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="@dimen/dp_size_40"
         android:layout_marginStart="@dimen/dp_size_40"
         android:background="@drawable/ic_level_complete" />
@@ -28,20 +40,13 @@
 
     <TextView
         android:id="@+id/intermediate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="@dimen/dp_size_15"
         android:layout_marginStart="@dimen/dp_size_15"
         android:layout_toEndOf="@id/seprator"
         android:layout_toRightOf="@id/seprator"
         android:background="@drawable/ic_level_incomplete" />
 
-    <TextView
-        android:id="@+id/expert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ic_all_level_incomplete" />
 
 </RelativeLayout>

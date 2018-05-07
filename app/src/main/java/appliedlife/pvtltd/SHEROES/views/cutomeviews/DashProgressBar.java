@@ -19,7 +19,7 @@ import appliedlife.pvtltd.SHEROES.R;
  * Created by Ravi on 01-05-2018.
  * This class render the dashed progress bar
  */
-public class DashedProgressBar extends View {
+public class DashProgressBar extends View {
 
     private Paint progressPaint;
     private int progress;
@@ -28,7 +28,7 @@ public class DashedProgressBar extends View {
     private PathEffect effects;
 
 
-    public DashedProgressBar(Context context, AttributeSet attrs) {
+    public DashProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
     }
@@ -36,9 +36,9 @@ public class DashedProgressBar extends View {
     private void init(AttributeSet attrs) {
         progressPaint = new Paint();
 
-        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.DashedProgressBar, 0, 0);
+        TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.DashProgressBar, 0, 0);
         try {
-            setBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashedProgressBar_barThickness, 4));
+            setBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashProgressBar_barThickness, 4));
 
             path = new Path();
             path.reset();
@@ -111,7 +111,7 @@ public class DashedProgressBar extends View {
             }
         } else {
             this.progress = progress;
-            postInvalidate();
+            invalidate();
         }
     }
 

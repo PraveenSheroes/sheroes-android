@@ -114,6 +114,8 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                         if(boardingDataResponse.getFieldErrorMessageMap().containsKey(AppConstants.INAVLID_DATA)) {
                             String errorMessage = boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
                             getMvpView().errorMessage(errorMessage);
+                        } else {
+                            getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
                         }
                     } else if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                         getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
@@ -143,14 +145,20 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                //getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
                 getMvpView().stopProgressBar();
                 if (null != boardingDataResponse) {
-                    getMvpView().getUserSummaryResponse(boardingDataResponse);
+                    if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        getMvpView().getUserSummaryResponse(boardingDataResponse);
+                    } else {
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                    }
+                } else {
+                    getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
                 }
             }
         });
