@@ -202,7 +202,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
         switch (profileLevelType) {
             case BEGINNER:
                 crownIcon.setVisibility(View.VISIBLE);
-                CommonUtil.setImageSource(getActivity(), userImage, R.drawable.profile_level_beginner_user);
+                CommonUtil.setImageSource(getActivity(), userImage, R.drawable.vector_profile_beginner_user);
                 profileStatusLevel.setText(R.string.beginner);
                 nextLevel.setText(R.string.next_level);
                 String beginnerMessage = getResources().getString(R.string.profile_progress_message, mUserMentorObj.getNameOrTitle(), getString(R.string.beginner_message));
@@ -211,7 +211,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
             case INTERMEDIATE:
                 crownIcon.setVisibility(View.VISIBLE);
-                CommonUtil.setImageSource(getActivity(), userImage, R.drawable.ic_profile_level_intermediate);
+                CommonUtil.setImageSource(getActivity(), userImage, R.drawable.vector_profile_intermediate_user);
                 profileStatusLevel.setText(R.string.intermediate);
                 nextLevel.setText(R.string.next_level);
 
@@ -226,7 +226,7 @@ public class ProfileLevelDialogFragment extends BaseDialogFragment {
 
             case COMPLETED:
                 crownIcon.setVisibility(View.GONE);
-                CommonUtil.setImageSource(getActivity(), userImage, R.drawable.ic_profile_level_all_star);
+                CommonUtil.setImageSource(getActivity(), userImage, R.drawable.vector_profile_allstar_user);
                 profileStatusLevel.setText(R.string.all_star);
                 nextLevel.setText(R.string.got_it);
 

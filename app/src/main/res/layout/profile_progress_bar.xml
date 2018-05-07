@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_40"
+        android:layout_marginStart="@dimen/dp_size_40"
         android:background="@drawable/ic_level_complete" />
 
     <TextView
@@ -29,8 +30,8 @@
         android:id="@+id/intermediate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_20"
-        android:layout_marginStart="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/dp_size_15"
+        android:layout_marginStart="@dimen/dp_size_15"
         android:layout_toEndOf="@id/seprator"
         android:layout_toRightOf="@id/seprator"
         android:background="@drawable/ic_level_incomplete" />
