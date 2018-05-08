@@ -96,7 +96,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     //region Presenter methods
 
-    public void smoothScrollOnList(boolean isScrollAllowed) {
+    public void smoothScrollOnComment(boolean isScrollAllowed) {
         this.mIsScrollAllowed = isScrollAllowed;
     }
 

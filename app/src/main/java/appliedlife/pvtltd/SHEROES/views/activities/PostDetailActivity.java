@@ -227,14 +227,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (showKeyboard) {
                     if (mUserPostObj.isRecentCommentClicked) {
                         mUserPostObj.isRecentCommentClicked=false;
-                        mPostDetailPresenter.smoothScrollOnList(true);
+                        mPostDetailPresenter.smoothScrollOnComment(true);
                     } else {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                        mPostDetailPresenter.smoothScrollOnList(true);
+                        mPostDetailPresenter.smoothScrollOnComment(true);
                     }
 
                 } else {
-                    mPostDetailPresenter.smoothScrollOnList(false);
+                    mPostDetailPresenter.smoothScrollOnComment(false);
                 }
             } else {
                 mUserPostId = getIntent().getStringExtra(UserPostSolrObj.USER_POST_ID);

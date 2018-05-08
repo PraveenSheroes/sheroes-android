@@ -1038,15 +1038,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         });
 
     }
+
     @OnClick({R.id.tv_feed_community_post_user_comment_post})
     public void recentCommentOnPostClicked() {
-        mUserPostObj.isRecentCommentClicked =true;
+        mUserPostObj.isRecentCommentClicked = true;
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onUserPostCommentClicked(mUserPostObj);
         } else {
             viewInterface.handleOnClick(mUserPostObj, mJoinConveration);
         }
     }
+
     @OnClick({R.id.tv_feed_community_post_user_comment})
     public void userCommentClicked() {
         if (viewInterface instanceof FeedItemCallback) {
