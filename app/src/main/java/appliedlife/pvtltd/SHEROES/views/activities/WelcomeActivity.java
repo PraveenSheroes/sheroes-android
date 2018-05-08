@@ -874,8 +874,16 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         signOut();
                         LoginManager.getInstance().logOut();
                         String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
+                        String deactivated = loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED);
                         if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                            showFaceBookError(errorMessage);
+                            if (StringUtil.isNotNullOrEmptyString(deactivated) && deactivated.equalsIgnoreCase("true")) {
+
+                                showErrorDialogOnUserAction(true, false, errorMessage, "true");
+
+                            } else {
+
+                                showFaceBookError(errorMessage);
+                            }
                         } else {
                             errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
                             showFaceBookError(errorMessage);
