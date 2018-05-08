@@ -226,6 +226,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
                 if (showKeyboard) {
                     if (mUserPostObj.isRecentCommentClicked) {
+                        mUserPostObj.isRecentCommentClicked=false;
                         mPostDetailPresenter.smoothScrollOnList(true);
                     } else {
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
