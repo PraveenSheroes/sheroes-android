@@ -110,9 +110,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private DatePickerDialog fromDatePickerDialog;
     private int cityId;
     private File localImageSaveForChallenge;
-    private String aboutMeValue = "";
+    private String aboutMeValue;
     private LoginResponse userDetailsResponse;
-    private int profileProgress = -1;
+    private float profileProgress = -1;
     private String filledDetails ;
     private String unfilledDetails;
     //endregion
@@ -460,7 +460,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             bundle.putString(LOCATION, summary.getUserBO().getCityMaster());
             bundle.putString(IMAGE_URL, summary.getPhotoUrl());
 
-            bundle.putInt(PROFILE_COMPLETION_WEIGHT, profileProgress);
+            bundle.putFloat(PROFILE_COMPLETION_WEIGHT, profileProgress);
             bundle.putString(UNFILLED_FIELDS, unfilledDetails);
             bundle.putString(FILLED_FIELDS, filledDetails);
 
@@ -727,7 +727,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateBio() {
-        if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && aboutMe.getText().length() > 80) {
+        if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && aboutMe.getText().length() >= 80) {
             aboutMe.setError(null);
         } else {
             aboutMe.setError(getString(R.string.bio_min_char_limit_msg));
@@ -807,9 +807,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 e.printStackTrace();
             }
 
-            if (relationshipStatus.getSelectedItemPosition() > 0) {
-                personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItem().toString());
-            }
+            personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItemPosition() > 0 ? relationshipStatus.getSelectedItem().toString(): "");
 
             if (StringUtil.isNotNullOrEmptyString(noOfChildren.getText().toString())) {
                 personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(noOfChildren.getText().toString()));

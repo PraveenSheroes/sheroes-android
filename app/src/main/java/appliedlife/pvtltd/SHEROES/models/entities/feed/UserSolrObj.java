@@ -170,7 +170,7 @@ public class UserSolrObj extends FeedDetail {
     private int userCommentsCount;
 
     @SerializedName("solr_ignore_profile_weight_count")
-    private int profileCompletionWeight;
+    private float profileCompletionWeight;
 
     @SerializedName("solr_ignore_profile_filled_fields_name")
     private String filledProfileFields;
@@ -615,11 +615,11 @@ public class UserSolrObj extends FeedDetail {
         this.userCommentsCount = userCommentsCount;
     }
 
-    public int getProfileCompletionWeight() {
+    public float getProfileCompletionWeight() {
         return profileCompletionWeight;
     }
 
-    public void setProfileCompletionWeight(int profileCompletionWeight) {
+    public void setProfileCompletionWeight(float profileCompletionWeight) {
         this.profileCompletionWeight = profileCompletionWeight;
     }
 

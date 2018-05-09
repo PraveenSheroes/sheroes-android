@@ -15,9 +15,13 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -26,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -37,9 +41,10 @@ import butterknife.OnClick;
  * Dialog to display the different profile completion level
  */
 
-public class ProfileCompletionDialogFragment extends BaseDialogFragment implements ProgressbarView {
+public class ProfileProgressDialog extends BaseDialogFragment implements ProgressbarView {
 
     //region private member variable
+    public static final String SCREEN_NAME = "Profile Progress Dialog";
     public static final String PROFILE_LEVEL = "PROFILE_LEVEL";
     public static final int BEGINNER_START_LIMIT = 0;
     public static final int BEGINNER_END_LIMIT = 20;
@@ -48,6 +53,7 @@ public class ProfileCompletionDialogFragment extends BaseDialogFragment implemen
     public static final int ALL_STAR_END_LIMIT = 100;
     public static final int BEGINNER_TICK_START_INDEX = 2;
     public static final int INTERMEDIATE_TICK_START_INDEX = 5;
+    public static final int MAX_DASH = 8;
     //endregion
 
     //region private member variable
@@ -111,7 +117,7 @@ public class ProfileCompletionDialogFragment extends BaseDialogFragment implemen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        if(getActivity() == null) return null;
+        if (getActivity() == null) return null;
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.profile_status_level, container, false);
@@ -130,12 +136,31 @@ public class ProfileCompletionDialogFragment extends BaseDialogFragment implemen
         }
 
         if (mUserSolrObj != null) {
+
             dashProgressBar.setListener(this);
             dashProgressBar.setProgress(mUserSolrObj.getProfileCompletionWeight(), false);
+
+            if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                dashProgressBar.setMaxDash(mConfiguration.get().configData.maxDash);
+            } else {
+                dashProgressBar.setMaxDash(MAX_DASH);
+            }
 
             invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
 
             invalidateUserDetails(profileLevelType);
+
+            //Add analytics screen open Event
+            if (getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {
+                String strengthLevel = userLevel(mUserSolrObj).name();
+                String sourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .isMentor(mUserSolrObj.isAuthorMentor())
+                                .profileStrength(strengthLevel)
+                                .build();
+                AnalyticsManager.trackScreenView(SCREEN_NAME, sourceScreenName, properties);
+            }
         }
 
         return view;
@@ -160,17 +185,26 @@ public class ProfileCompletionDialogFragment extends BaseDialogFragment implemen
         } else {
             dismiss();
         }
+
     }
 
     @OnClick({R.id.tick})
     public void onAddFieldsClick() {
         dismiss();
-        ((ProfileActivity) getActivity()).navigateToProfileEditing();
+
+        //Analytics Event for edit profile open
+        String strengthLevel = userLevel(mUserSolrObj).name();
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .isMentor(mUserSolrObj.isAuthorMentor())
+                        .profileStrength(strengthLevel)
+                        .build();
+        EditUserProfileActivity.navigateTo(getActivity(), SCREEN_NAME, mUserSolrObj.getImageUrl(), properties, 1);
     }
     //endregion
 
     //region Private methods
-    private void invalidateProfileProgressBar(int progressPercentage) {
+    private void invalidateProfileProgressBar(float progressPercentage) {
         if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
                 beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
@@ -229,6 +263,17 @@ public class ProfileCompletionDialogFragment extends BaseDialogFragment implemen
             } else {
                 levelAchieved.setVisibility(View.VISIBLE);
             }
+        }
+
+        //Add analytics screen open Event
+        if (getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {
+            String strengthLevel = userLevel(mUserSolrObj).name();
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .isMentor(mUserSolrObj.isAuthorMentor())
+                            .profileStrength(strengthLevel)
+                            .build();
+            AnalyticsManager.trackScreenView(SCREEN_NAME, properties);
         }
 
         updateDetails(profileLevelType, isAllFieldsDone);
@@ -363,13 +408,19 @@ public class ProfileCompletionDialogFragment extends BaseDialogFragment implemen
 
     @Override
     public void onViewRendered(float dashWidth) {
+        int beginnerTickIndex = BEGINNER_TICK_START_INDEX;
+        int intermediateTickIndex = INTERMEDIATE_TICK_START_INDEX;
 
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
+            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
+        }
         RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        buttonLayoutParams.setMargins((int) dashWidth * 2, 0, 0, 0);
+        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
         beginnerTick.setLayoutParams(buttonLayoutParams);
 
         RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        intermediateLayoutParams.setMargins((int) dashWidth * 5, 0, 0, 0);
+        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
         intermediateTick.setLayoutParams(intermediateLayoutParams);
     }
 }

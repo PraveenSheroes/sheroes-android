@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
  */
 public class DashProgressBar extends View {
 
+    private static final int SPACE_WIDTH = 10;
     private Paint progressPaint;
     private float progress = 0.0f;
     private int barThickness;
@@ -55,13 +56,13 @@ public class DashProgressBar extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         int halfHeight = getHeight() / 2;
-        float progressEndX = ((float) getWidth()) * (progress / (float)100);
+        float progressEndX = ((float) getWidth()) * (progress / (float) 100);
         progressPaint.setStrokeWidth(barThickness);
 
         // draw the un-filled dashes
-        float dashWidth = (float) getWidth() / (float) 8; //todo - add to config file
-        float tempDashWidth = dashWidth - 10;
-        PathEffect effects = new DashPathEffect(new float[]{tempDashWidth, 10, tempDashWidth, 10}, 0);
+        float dashWidth = (float) getWidth() / (float) getMaxDash();
+        float dashWidthWithoutSpace = dashWidth - SPACE_WIDTH;
+        PathEffect effects = new DashPathEffect(new float[]{dashWidthWithoutSpace, SPACE_WIDTH, dashWidthWithoutSpace, SPACE_WIDTH}, 0);
 
         int color = R.color.progress_unfilled;
         progressPaint.setColor(ContextCompat.getColor(getContext(), color));
@@ -84,11 +85,10 @@ public class DashProgressBar extends View {
 
         canvas.drawPath(path, progressPaint);
 
-       if(mProgressBarListener!=null) {
-            mProgressBarListener.onViewRendered(tempDashWidth);
+        if (mProgressBarListener != null) {
+            mProgressBarListener.onViewRendered(dashWidthWithoutSpace);
             mProgressBarListener = null;
         }
-
     }
 
     @Override
@@ -98,7 +98,7 @@ public class DashProgressBar extends View {
         setMeasuredDimension(width, height);
     }
 
-    public void setProgress(final int progress, boolean animate) {
+    public void setProgress(final float progress, boolean animate) {
         if (animate) {
             ValueAnimator barAnimator = ValueAnimator.ofFloat(0, 1);
 

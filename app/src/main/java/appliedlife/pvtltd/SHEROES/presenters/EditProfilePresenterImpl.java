@@ -104,6 +104,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+                        getPersonalBasicDetails(personalBasicDetailsRequest); //if summary api failed call the another api for saving user details
                     }
 
                     @Override
