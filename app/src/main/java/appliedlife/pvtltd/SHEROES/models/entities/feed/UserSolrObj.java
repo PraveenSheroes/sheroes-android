@@ -178,9 +178,6 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_profile_unfilled_fields_name")
     private String unfilledProfileFields;
 
-    @SerializedName("solr_ignore_is_profile_summary")
-    private boolean isBioFullyFilled;
-
     public int getTotalExperience() {
         return totalExperience;
     }
@@ -637,13 +634,5 @@ public class UserSolrObj extends FeedDetail {
 
     public void setFilledProfileFields(String filledProfileFields) {
         this.filledProfileFields = filledProfileFields;
-    }
-
-    public boolean isBioFullyFilled() {
-        return isBioFullyFilled;
-    }
-
-    public void setBioFullyFilled(boolean bioFullyFilled) {
-        isBioFullyFilled = bioFullyFilled;
     }
 }

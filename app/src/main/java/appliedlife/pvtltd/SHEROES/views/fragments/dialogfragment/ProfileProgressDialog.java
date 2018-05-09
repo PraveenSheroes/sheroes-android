@@ -136,7 +136,6 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         }
 
         if (mUserSolrObj != null) {
-
             dashProgressBar.setListener(this);
             dashProgressBar.setProgress(mUserSolrObj.getProfileCompletionWeight(), false);
 
@@ -253,16 +252,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
             addIcon.setEnabled(false);
             addIcon.setClickable(false);
             isAllFieldsDone = true;
-
-            if (profileLevelType == ProfileLevelType.ALLSTAR) {
-                if (mUserSolrObj.isBioFullyFilled()) {
-                    levelAchieved.setVisibility(View.VISIBLE);
-                } else {
-                    levelAchieved.setVisibility(View.INVISIBLE);
-                }
-            } else {
-                levelAchieved.setVisibility(View.VISIBLE);
-            }
+            levelAchieved.setVisibility(View.VISIBLE);
         }
 
         //Add analytics screen open Event
