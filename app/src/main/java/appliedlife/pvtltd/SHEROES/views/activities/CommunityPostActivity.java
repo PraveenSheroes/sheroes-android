@@ -434,7 +434,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 if (mentionSpan.getDisplayMode() == Mentionable.MentionDisplayMode.PARTIAL) {
-                    editDescText = editDescText.replace(mentionSpan.getMention().getName(), " ");
+                    editDescText = editDescText.replaceFirst(mentionSpan.getMention().getName(), " ");
+
                 } else {
                     editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
                 }

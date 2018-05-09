@@ -12,10 +12,12 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {UserPostSolrObj.class,FeedDetail.class})
+@Parcel(analyze = {UserPostSolrObj.class, FeedDetail.class})
 public class UserPostSolrObj extends FeedDetail {
     public static final String USER_POST_OBJ = "USER_POST_OBJ";
     public static final String USER_POST_ID = "USER_POST_ID";
+
+    public boolean isRecentCommentClicked = false;
 
     public Boolean isTextExpanded = false;
 
@@ -65,7 +67,7 @@ public class UserPostSolrObj extends FeedDetail {
     private long communityTypeId;
 
 
-    @SerializedName(value="solr_ignore_is_community_owner")
+    @SerializedName(value = "solr_ignore_is_community_owner")
     private boolean isCommunityOwner;
 
     @SerializedName(value = "post_image_width_is")
@@ -73,15 +75,15 @@ public class UserPostSolrObj extends FeedDetail {
     @SerializedName(value = "post_image_height_is")
     private List<Integer> imageHeight;
     @SerializedName(value = "post_image_dimention_ratio_ds")
-    private List<Double>  imageRatio;
+    private List<Double> imageRatio;
 
-    @SerializedName(value="community_type_id_l")
+    @SerializedName(value = "community_type_id_l")
     private Long commTypeId;
 
-    @SerializedName(value="source_type_s")
+    @SerializedName(value = "source_type_s")
     private String sourceType;
 
-    @SerializedName(value="user_post_source_entity_id_l")
+    @SerializedName(value = "user_post_source_entity_id_l")
     private Long userPostSourceEntityId;
 
     @SerializedName("challenge_accept_post_text_s")
